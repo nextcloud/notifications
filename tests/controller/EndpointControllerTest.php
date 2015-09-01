@@ -104,10 +104,10 @@ class EndpointControllerTest extends TestCase {
 			],
 			[
 				[
-					$this->getMockBuilder('OCP\Notification\INotification')
+					1 => $this->getMockBuilder('OCP\Notification\INotification')
 						->disableOriginalConstructor()
 						->getMock(),
-					$this->getMockBuilder('OCP\Notification\INotification')
+					3 => $this->getMockBuilder('OCP\Notification\INotification')
 						->disableOriginalConstructor()
 						->getMock(),
 				],
@@ -115,7 +115,7 @@ class EndpointControllerTest extends TestCase {
 			],
 			[
 				[
-					$this->getMockBuilder('OCP\Notification\INotification')
+					42 => $this->getMockBuilder('OCP\Notification\INotification')
 						->disableOriginalConstructor()
 						->getMock(),
 				],
@@ -161,8 +161,8 @@ class EndpointControllerTest extends TestCase {
 
 	public function dataNotificationToArray() {
 		return [
-			['app1', 'user1', 1234, 'type1', 42, 'subject1', 'message1', 'link1', 'icon1', [], []],
-			['app2', 'user2', 1337, 'type2', 21, 'subject2', 'message2', 'link2', 'icon2', [
+			[42, 'app1', 'user1', 1234, 'type1', 42, 'subject1', 'message1', 'link1', 'icon1', [], []],
+			[1337, 'app2', 'user2', 1337, 'type2', 21, 'subject2', 'message2', 'link2', 'icon2', [
 				$this->getMockBuilder('OCP\Notification\IAction')
 					->disableOriginalConstructor()
 					->getMock(),
@@ -176,6 +176,7 @@ class EndpointControllerTest extends TestCase {
 	/**
 	 * @dataProvider dataNotificationToArray
 	 *
+	 * @param int $id
 	 * @param string $app
 	 * @param string $user
 	 * @param int $timestamp
@@ -187,7 +188,7 @@ class EndpointControllerTest extends TestCase {
 	 * @param string $icon
 	 * @param array $actions
 	 */
-	public function testNotificationToArray($app, $user, $timestamp, $type, $id, $subject, $message, $link, $icon, array $actions, array $actionsExpected) {
+	public function testNotificationToArray($id, $app, $user, $timestamp, $type, $id, $subject, $message, $link, $icon, array $actions, array $actionsExpected) {
 		$notification = $this->getMockBuilder('OCP\Notification\INotification')
 			->disableOriginalConstructor()
 			->getMock();
@@ -240,6 +241,7 @@ class EndpointControllerTest extends TestCase {
 			->willReturn('action');
 
 		$this->assertEquals([
+			'notification_id' => $id,
 			'app' => $app,
 			'user' => $user,
 			'timestamp' => $timestamp,
@@ -251,7 +253,7 @@ class EndpointControllerTest extends TestCase {
 			'icon' => $icon,
 			'actions' => $actionsExpected,
 			],
-			$this->invokePrivate($controller, 'notificationToArray', [$notification])
+			$this->invokePrivate($controller, 'notificationToArray', [$id, $notification])
 		);
 	}
 

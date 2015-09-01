@@ -71,20 +71,22 @@ class EndpointController extends Controller {
 		$notifications = $this->handler->get($filter);
 
 		$data = [];
-		foreach ($notifications as $notification) {
+		foreach ($notifications as $notificationId => $notification) {
 			$this->manager->prepare($notification, $language);
-			$data[] = $this->notificationToArray($notification);
+			$data[] = $this->notificationToArray($notificationId, $notification);
 		}
 
 		return new JSONResponse($data);
 	}
 
 	/**
+	 * @param int $notificationId
 	 * @param INotification $notification
 	 * @return array
 	 */
-	protected function notificationToArray(INotification $notification) {
+	protected function notificationToArray($notificationId, INotification $notification) {
 		$data = [
+			'notification_id' => $notificationId,
 			'app' => $notification->getApp(),
 			'user' => $notification->getUser(),
 			'timestamp' => $notification->getTimestamp(),

@@ -94,7 +94,7 @@ class Handler {
 	 * Return the notifications matching the given Notification
 	 *
 	 * @param INotification $notification
-	 * @return INotification[]
+	 * @return array [notification_id => INotification]
 	 */
 	public function get(INotification $notification) {
 		$sql = $this->connection->getQueryBuilder();
@@ -106,7 +106,7 @@ class Handler {
 
 		$notifications = [];
 		while ($row = $statement->fetch()) {
-			$notifications[] = $this->notificationFromRow($row);
+			$notifications[(int) $row['notification_id']] = $this->notificationFromRow($row);
 		}
 		$statement->closeCursor();
 
