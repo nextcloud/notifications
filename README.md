@@ -60,9 +60,9 @@ with it, we want to remove the notification again.
   using a `\Closure`:
     ```php
     $manager = \OC::$server->getNotificationManager();
-    $manager->createNotification(function() {
+    $manager->registerNotifier(function() {
         return new \OCA\Files_Sharing\Notifier(
-            \OC::$server->getLanguageFactory()
+            \OC::$server->getL10NFactory()
         );
     });
     ```
@@ -94,7 +94,7 @@ with it, we want to remove the notification again.
             // Deal with known subjects
             case 'remote_share':
                 $notification->setParsedSubject(
-                    $l->t('You received the remote share "%s"', $notification->getSubjectParameters())
+                    (string) $l->t('You received the remote share "%s"', $notification->getSubjectParameters())
                 );
                 
                 // Deal with the actions for a known subject
@@ -102,13 +102,13 @@ with it, we want to remove the notification again.
                     switch ($action->getLabel()) {
                         case 'accept':
                             $action->setParsedLabel(
-                                $l->t('Accept');
+                                (string) $l->t('Accept')
                             );
                         break;
  
                         case 'decline':
                             $action->setParsedLabel(
-                                $l->t('Decline');
+                                (string) $l->t('Decline')
                             );
                         break;
                     }
