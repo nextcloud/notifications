@@ -19,16 +19,15 @@
  *
  */
 
-namespace OCA\Notifications\AppInfo;
+namespace OCA\Notifications\Tests;
 
-use OCA\Notifications\App;
-use OCA\Notifications\Handler;
-
-\OC::$server->getNotificationManager()->registerApp(function() {
-	return new App(
-		new Handler(
-			\OC::$server->getDatabaseConnection(),
-			\OC::$server->getNotificationManager()
-		)
-	);
-});
+class RoutesTest extends TestCase {
+	public function testRoutes() {
+		$routes = include(__DIR__ . '/../../appinfo/routes.php');
+		$this->assertInternalType('array', $routes);
+		$this->assertCount(1, $routes);
+		$this->assertArrayHasKey('routes', $routes);
+		$this->assertInternalType('array', $routes['routes']);
+		$this->assertGreaterThanOrEqual(1, sizeof($routes['routes']));
+	}
+}

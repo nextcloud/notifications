@@ -25,14 +25,23 @@ namespace OCA\Notifications;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\Notification\IAction;
+use OCP\Notification\IManager;
 use OCP\Notification\INotification;
 
 class Handler {
 	/** @var IDBConnection */
 	protected $connection;
 
-	public function __construct(IDBConnection $connection) {
+	/** @var IManager */
+	protected $manager;
+
+	/**
+	 * @param IDBConnection $connection
+	 * @param IManager $manager
+	 */
+	public function __construct(IDBConnection $connection, IManager $manager) {
 		$this->connection = $connection;
+		$this->manager = $manager;
 	}
 
 	/**
@@ -79,6 +88,29 @@ class Handler {
 		$sql->delete('notifications');
 		$this->sqlWhere($sql, $notification);
 		$sql->execute();
+	}
+
+	/**
+	 * Return the notifications matching the given Notification
+	 *
+	 * @param INotification $notification
+	 * @return INotification[]
+	 */
+	public function get(INotification $notification) {
+		$sql = $this->connection->getQueryBuilder();
+		$sql->select('*')
+			->from('notifications');
+
+		$this->sqlWhere($sql, $notification);
+		$statement = $sql->execute();
+
+		$notifications = [];
+		while ($row = $statement->fetch()) {
+			$notifications[] = $this->notificationFromRow($row);
+		}
+		$statement->closeCursor();
+
+		return $notifications;
 	}
 
 	/**
@@ -181,5 +213,41 @@ class Handler {
 		}
 		$sql->setValue('actions', $sql->createParameter('actions'))
 			->setParameter('actions', json_encode($actions));
+	}
+
+	/**
+	 * Turn a database row into a INotification
+	 *
+	 * @param array $row
+	 * @return INotification
+	 */
+	protected function notificationFromRow(array $row) {
+		$notification = $this->manager->createNotification();
+		$notification->setApp($row['app'])
+			->setUser($row['user'])
+			->setTimestamp((int) $row['timestamp'])
+			->setObject($row['object_type'], (int) $row['object_id'])
+			->setSubject($row['subject'], (array) json_decode($row['subject_parameters'], true));
+
+		if ($row['message']) {
+			$notification->setMessage($row['message'], (array) json_decode($row['message_parameters'], true));
+		}
+		if ($row['link']) {
+			$notification->setLink($row['link']);
+		}
+		if ($row['icon']) {
+			$notification->setIcon($row['icon']);
+		}
+
+		$actions = (array) json_decode($row['actions'], true);
+		foreach ($actions as $actionData) {
+			$action = $notification->createAction();
+			$action->setLabel($actionData['label'])
+				->setLink($actionData['link'], $actionData['type']);
+			if ($actionData['icon']) {
+				$action->setIcon($actionData['icon']);
+			}
+			$notification->addAction($action);
+		}
 	}
 }

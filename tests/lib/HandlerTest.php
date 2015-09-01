@@ -33,8 +33,13 @@ class HandlerTest extends TestCase {
 		parent::setUp();
 
 		$this->handler = new Handler(
-			\OC::$server->getDatabaseConnection()
+			\OC::$server->getDatabaseConnection(),
+			\OC::$server->getNotificationManager()
 		);
+
+		$this->handler->delete($this->getNotification([
+			'getApp' => 'testing_notifications',
+		]));
 	}
 
 	public function testFull() {
@@ -59,13 +64,23 @@ class HandlerTest extends TestCase {
 				]
 			],
 		]);
+		$limitedNotification = $this->getNotification([
+			'getApp' => 'testing_notifications',
+			'getUser' => 'test_user',
+		]);
 
 		// Make sure there is no notification
 		$this->assertSame(0, $this->handler->count($notification));
+		$notifications = $this->handler->get($limitedNotification);
+		$this->assertCount(0, $notifications);
 
 		// Add and count
 		$this->handler->add($notification);
 		$this->assertSame(1, $this->handler->count($notification));
+
+		// Get and count
+		$notifications = $this->handler->get($limitedNotification);
+		$this->assertCount(1, $notifications);
 
 		// Delete and count again
 		$this->handler->delete($notification);
@@ -103,6 +118,47 @@ class HandlerTest extends TestCase {
 					->method($method)
 					->willReturn($returnValue);
 			}
+		}
+
+		$defaultValues = [
+			'getApp' => '',
+			'getUser' => '',
+			'getTimestamp' => 0,
+			'getObjectType' => '',
+			'getObjectId' => 0,
+			'getSubject' => '',
+			'getSubjectParameters' => [],
+			'getMessage' => '',
+			'getMessageParameters' => [],
+			'getLink' => '',
+			'getIcon' => '',
+			'getActions' => [],
+		];
+		foreach ($defaultValues as $method => $returnValue) {
+			if (isset($values[$method])) {
+				continue;
+			}
+
+			$notification->expects($this->any())
+				->method($method)
+				->willReturn($returnValue);
+		}
+
+		$defaultValues = [
+			'setApp',
+			'setUser',
+			'setTimestamp',
+			'setObject',
+			'setSubject',
+			'setMessage',
+			'setLink',
+			'setIcon',
+			'addAction',
+		];
+		foreach ($defaultValues as $method) {
+			$notification->expects($this->any())
+				->method($method)
+				->willReturnSelf();
 		}
 
 		return $notification;
