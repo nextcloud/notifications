@@ -229,13 +229,13 @@ class Handler {
 			->setObject($row['object_type'], (int) $row['object_id'])
 			->setSubject($row['subject'], (array) json_decode($row['subject_parameters'], true));
 
-		if ($row['message']) {
+		if ($row['message'] !== '') {
 			$notification->setMessage($row['message'], (array) json_decode($row['message_parameters'], true));
 		}
-		if ($row['link']) {
+		if ($row['link'] !== '') {
 			$notification->setLink($row['link']);
 		}
-		if ($row['icon']) {
+		if ($row['icon'] !== '') {
 			$notification->setIcon($row['icon']);
 		}
 
@@ -249,5 +249,7 @@ class Handler {
 			}
 			$notification->addAction($action);
 		}
+
+		return $notification;
 	}
 }
