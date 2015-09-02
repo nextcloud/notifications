@@ -27,7 +27,10 @@ use OC\Notification\INotification;
 use OCA\Notifications\Handler;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Controller;
+<<<<<<< HEAD
 use OCP\AppFramework\Http\Response;
+=======
+>>>>>>> 29db962... First attempt at frontend
 use OCP\IConfig;
 use OCP\IRequest;
 
@@ -72,6 +75,7 @@ class EndpointController extends Controller {
 		$notifications = $this->handler->get($filter);
 
 		$data = [];
+<<<<<<< HEAD
 		foreach ($notifications as $notificationId => $notification) {
 			$notification = $this->manager->prepare($notification, $language);
 			$data[] = $this->notificationToArray($notificationId, $notification);
@@ -99,6 +103,47 @@ class EndpointController extends Controller {
 	protected function notificationToArray($notificationId, INotification $notification) {
 		$data = [
 			'notification_id' => $notificationId,
+=======
+		foreach ($notifications as $notification) {
+			$this->manager->prepare($notification, $language);
+			$data[] = $this->notificationToArray($notification);
+		}
+
+		return new JSONResponse([[
+		'notification_id' => 123,
+		'app' => 'testing',
+		'user' => 'user',
+		'timestamp' => time(),
+		'object_type' => 'type',
+		'object_id' => 1337,
+		'subject' => 'I\'m a short subject',
+		'message' => 'Maybe we need longer descriptions later, no usecase in mind at the moment',
+		'link' => '/get/request/when/subject/or/message/is/clicked',
+		'icon' => 'testing-app-icon',
+		'actions' => [
+			[
+				'label' => 'Action',
+				'icon' => 'testing-app-icon-action',
+				'link' => '/post/request/sending',
+				'type' => 'POST',
+			],
+			[
+				'label' => 'No Action',
+				'icon' => 'testing-app-icon-no',
+				'link' => '/delete/request/sending',
+				'type' => 'DELETE',
+			],
+		],
+	]]);
+	}
+
+	/**
+	 * @param INotification $notification
+	 * @return array
+	 */
+	protected function notificationToArray(INotification $notification) {
+		$data = [
+>>>>>>> 29db962... First attempt at frontend
 			'app' => $notification->getApp(),
 			'user' => $notification->getUser(),
 			'timestamp' => $notification->getTimestamp(),
@@ -125,9 +170,15 @@ class EndpointController extends Controller {
 	protected function actionToArray(IAction $action) {
 		return [
 			'label' => $action->getParsedLabel(),
+<<<<<<< HEAD
 			'link' => $action->getLink(),
 			'type' => $action->getRequestType(),
 			'icon' => $action->getIcon(),
+=======
+			'icon' => $action->getIcon(),
+			'link' => $action->getLink(),
+			'type' => $action->getRequestType(),
+>>>>>>> 29db962... First attempt at frontend
 		];
 	}
 }

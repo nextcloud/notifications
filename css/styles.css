@@ -1,0 +1,58 @@
+div.notification {
+    display: block;
+    padding: 5px;
+    border-bottom: 1px solid #cccccc;
+}
+
+div.notification-container {
+    background-color: white;
+    display: none;
+    position: absolute;
+    right: 50px;
+    top: 45px;
+    width: 300px; height: 200px;
+    border-radius: 3px;
+    border: 1px solid grey;
+    overflow: scroll;
+}
+
+div.notification {
+    color: black;
+}
+
+div.notification:hover div.notification-delete{
+    display: block !important;
+    position: absolute;
+    top: 1px;
+    right: 6px;
+}
+
+div.notifications-button {
+    position: relative;
+    float: right;
+    width: 20px;
+    height: 20px;
+    display: block;
+    background: transparent url('../img/actions/star.svg') no-repeat 6px center;
+}
+
+div.notification div.notification-subject {
+
+}
+
+div.notification div.actions {
+    float: none;
+}
+
+div.notification div.actions a {
+    display: inline;
+    margin-right: 10px;
+    background-color: #eeeeee;
+    border-radius: 3px;
+    padding: 4px 8px;
+    color: black;
+}
+
+div.notification-subject, div.notification-message {
+    padding-left: 6px;
+}

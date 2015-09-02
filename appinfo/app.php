@@ -32,3 +32,7 @@ use OCA\Notifications\Handler;
 		)
 	);
 });
+
+\OCP\Util::addScript('notifications', 'app');
+\OCP\Util::addScript('notifications', 'notification');
+\OCP\Util::addStyle('notifications', 'styles');
