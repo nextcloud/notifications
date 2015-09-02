@@ -45,7 +45,7 @@ class HandlerTest extends TestCase {
 	public function testFull() {
 		$notification = $this->getNotification([
 			'getApp' => 'testing_notifications',
-			'getUser' => 'test_user',
+			'getUser' => 'test_user1',
 			'getTimestamp' => time(),
 			'getObjectType' => 'notification',
 			'getObjectId' => 1337,
@@ -64,33 +64,44 @@ class HandlerTest extends TestCase {
 				]
 			],
 		]);
-		$limitedNotification = $this->getNotification([
+		$limitedNotification1 = $this->getNotification([
 			'getApp' => 'testing_notifications',
-			'getUser' => 'test_user',
+			'getUser' => 'test_user1',
+		]);
+		$limitedNotification2 = $this->getNotification([
+			'getApp' => 'testing_notifications',
+			'getUser' => 'test_user2',
 		]);
 
 		// Make sure there is no notification
-		$this->assertSame(0, $this->handler->count($notification));
-		$notifications = $this->handler->get($limitedNotification);
-		$this->assertCount(0, $notifications);
+		$this->assertSame(0, $this->handler->count($limitedNotification1), 'Wrong notification count for user1 before adding');
+		$notifications = $this->handler->get($limitedNotification1);
+		$this->assertCount(0, $notifications, 'Wrong notification count for user1 before beginning');
+		$this->assertSame(0, $this->handler->count($limitedNotification2), 'Wrong notification count for user2 before adding');
+		$notifications = $this->handler->get($limitedNotification2);
+		$this->assertCount(0, $notifications, 'Wrong notification count for user2 before beginning');
 
 		// Add and count
 		$this->handler->add($notification);
-		$this->assertSame(1, $this->handler->count($notification));
+		$this->assertSame(1, $this->handler->count($limitedNotification1), 'Wrong notification count for user1 after adding');
+		$this->assertSame(0, $this->handler->count($limitedNotification2), 'Wrong notification count for user2 after adding');
 
 		// Get and count
-		$notifications = $this->handler->get($limitedNotification);
-		$this->assertCount(1, $notifications);
+		$notifications = $this->handler->get($limitedNotification1);
+		$this->assertCount(1, $notifications, 'Wrong notification get for user1 after adding');
+		$notifications = $this->handler->get($limitedNotification2);
+		$this->assertCount(0, $notifications, 'Wrong notification get for user2 after adding');
 
 		// Delete and count again
 		$this->handler->delete($notification);
-		$this->assertSame(0, $this->handler->count($notification));
+		$this->assertSame(0, $this->handler->count($limitedNotification1), 'Wrong notification count for user1 after deleting');
+		$this->assertSame(0, $this->handler->count($limitedNotification2), 'Wrong notification count for user2 after deleting');
 	}
 
 	public function testDeleteById() {
 		$notification = $this->getNotification([
 			'getApp' => 'testing_notifications',
-			'getUser' => 'test_user',
+			'getUser' => 'test_user1',
 			'getTimestamp' => time(),
 			'getObjectType' => 'notification',
 			'getObjectId' => 1337,
@@ -111,7 +122,7 @@ class HandlerTest extends TestCase {
 		]);
 		$limitedNotification = $this->getNotification([
 			'getApp' => 'testing_notifications',
-			'getUser' => 'test_user',
+			'getUser' => 'test_user1',
 		]);
 
 		// Make sure there is no notification
@@ -121,7 +132,7 @@ class HandlerTest extends TestCase {
 
 		// Add and count
 		$this->handler->add($notification);
-		$this->assertSame(1, $this->handler->count($notification));
+		$this->assertSame(1, $this->handler->count($limitedNotification));
 
 		// Get and count
 		$notifications = $this->handler->get($limitedNotification);
@@ -130,12 +141,12 @@ class HandlerTest extends TestCase {
 		$notificationId = key($notifications);
 
 		// Delete with wrong user
-		$this->handler->deleteById($notificationId, 'test_user1');
-		$this->assertSame(1, $this->handler->count($notification));
+		$this->handler->deleteById($notificationId, 'test_user2');
+		$this->assertSame(1, $this->handler->count($limitedNotification), 'Wrong notification count for user1 after trying to delete for user2');
 
 		// Delete and count
-		$this->handler->deleteById($notificationId, 'test_user');
-		$this->assertSame(0, $this->handler->count($notification));
+		$this->handler->deleteById($notificationId, 'test_user1');
+		$this->assertSame(0, $this->handler->count($limitedNotification), 'Wrong notification count for user1 after deleting');
 	}
 
 	/**
