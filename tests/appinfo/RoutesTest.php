@@ -28,6 +28,6 @@ class RoutesTest extends TestCase {
 		$this->assertCount(1, $routes);
 		$this->assertArrayHasKey('routes', $routes);
 		$this->assertInternalType('array', $routes['routes']);
-		$this->assertGreaterThanOrEqual(1, sizeof($routes['routes']));
+		$this->assertCount(2, $routes['routes']);
 	}
 }
