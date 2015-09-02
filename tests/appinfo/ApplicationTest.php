@@ -19,9 +19,10 @@
  *
  */
 
-namespace OCA\Notifications\Tests;
+namespace OCA\Notifications\Tests\AppInfo;
 
 use OCA\Notifications\AppInfo\Application;
+use OCA\Notifications\Tests\TestCase;
 
 class ApplicationTest extends TestCase {
 	/** @var \OCA\Notifications\AppInfo\Application */
@@ -44,6 +45,7 @@ class ApplicationTest extends TestCase {
 	public function dataContainerQuery() {
 		return array(
 			array('EndpointController', 'OCA\Notifications\Controller\EndpointController'),
+			array('Capabilities', 'OCA\Notifications\Capabilities'),
 		);
 	}
 

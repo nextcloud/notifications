@@ -36,6 +36,7 @@ use OCA\Activity\ParameterHelper;
 use OCA\Activity\UserSettings;
 use OCA\AnnouncementCenter\Controller\PageController;
 use OCA\AnnouncementCenter\Manager;
+use OCA\Notifications\Capabilities;
 use OCA\Notifications\Controller\EndPointController;
 use OCA\Notifications\Handler;
 use OCP\AppFramework\App;
@@ -64,6 +65,12 @@ class Application extends App {
 				$this->getCurrentUser($server->getUserSession())
 			);
 		});
+
+		$container->registerService('Capabilities', function(IContainer $c) {
+			return new Capabilities();
+		});
+
+		$container->registerCapability('Capabilities');
 	}
 
 	/**

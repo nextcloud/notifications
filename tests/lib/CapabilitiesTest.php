@@ -19,17 +19,23 @@
  *
  */
 
-namespace OCA\Notifications\Tests\AppInfo;
+namespace OCA\Notifications\Tests\Lib;
 
+use OCA\Notifications\Capabilities;
 use OCA\Notifications\Tests\TestCase;
 
-class RoutesTest extends TestCase {
-	public function testRoutes() {
-		$routes = include(__DIR__ . '/../../appinfo/routes.php');
-		$this->assertInternalType('array', $routes);
-		$this->assertCount(1, $routes);
-		$this->assertArrayHasKey('routes', $routes);
-		$this->assertInternalType('array', $routes['routes']);
-		$this->assertCount(2, $routes['routes']);
+class CapabilitiesTest extends TestCase {
+
+	public function testGetCapabilities() {
+		$capabilities = new Capabilities();
+
+		$this->assertSame([
+			'notifications' => [
+				'endpoints' => [
+					'get',
+					'delete',
+				],
+			],
+		], $capabilities->getCapabilities());
 	}
 }
