@@ -18,6 +18,8 @@
 
         notifications: [],
 
+        pollInterval: 30000,
+
         open: false,
 
         initialise: function() {
@@ -25,7 +27,7 @@
 
             // Setup elements
             var $notifications = $('<div class="notifications"></div>');
-            var $button = $('<div class="notifications-button svg"></div>');
+            var $button = $('<div class="notifications-button"><img class="svg" alt="Dismiss" src="/core/img/actions/info-white.svg"></div>');
             var $container = $('<div class="notification-container"></div>');
             var $wrapper = $('<div class="notification-wrapper"></div>');
             $notifications.append($button);
@@ -42,6 +44,9 @@
 
             // Bind the button click event
             $button.on('click', this._onNotificationsButtonClick);
+
+            // Setup the background checker
+            setInterval(this.backgroundFetch, this.pollInterval);
         },
 
         /**
@@ -62,8 +67,8 @@
                         $('div.notification-wrapper').prepend(n.renderElement());
                     });
                     // Check if we have any, and notify the UI
-                    if(OCA.Notifications.notifications.length) {
-                        OCA.Notifications._onHaveNotifications;
+                    if(OCA.Notifications.notifications.length != undefined) {
+                        OCA.Notifications._onHaveNotifications();
                     }
                 },
                 function(jqXHR) {
@@ -99,7 +104,13 @@
          */
         _onHaveNotifications: function() {
             // Add the button, title, etc
-            alert('woop we have notifications');
+            // TODO if still laoding the page, wait until done then flash
+            $('div.notifications-button')
+            .animate({opacity: 0.5})
+            .animate({opacity: 1})
+            .animate({opacity: 0.5})
+            .animate({opacity: 1})
+            .animate({opacity: 0.7});
         },
 
         /**
