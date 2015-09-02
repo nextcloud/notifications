@@ -140,6 +140,9 @@ class EndpointControllerTest extends TestCase {
 		$this->manager->expects($this->once())
 			->method('createNotification')
 			->willReturn($filter);
+		$this->manager->expects($this->exactly(sizeof($notifications)))
+			->method('prepare')
+			->willReturnArgument(0);
 
 		$this->handler->expects($this->once())
 			->method('get')

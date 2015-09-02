@@ -73,7 +73,7 @@ class EndpointController extends Controller {
 
 		$data = [];
 		foreach ($notifications as $notificationId => $notification) {
-			$this->manager->prepare($notification, $language);
+			$notification = $this->manager->prepare($notification, $language);
 			$data[] = $this->notificationToArray($notificationId, $notification);
 		}
 
@@ -125,9 +125,9 @@ class EndpointController extends Controller {
 	protected function actionToArray(IAction $action) {
 		return [
 			'label' => $action->getParsedLabel(),
-			'icon' => $action->getIcon(),
 			'link' => $action->getLink(),
 			'type' => $action->getRequestType(),
+			'icon' => $action->getIcon(),
 		];
 	}
 }
