@@ -87,6 +87,57 @@ class HandlerTest extends TestCase {
 		$this->assertSame(0, $this->handler->count($notification));
 	}
 
+	public function testDeleteById() {
+		$notification = $this->getNotification([
+			'getApp' => 'testing_notifications',
+			'getUser' => 'test_user',
+			'getTimestamp' => time(),
+			'getObjectType' => 'notification',
+			'getObjectId' => 1337,
+			'getSubject' => 'subject',
+			'getSubjectParameters' => [],
+			'getMessage' => 'message',
+			'getMessageParameters' => [],
+			'getLink' => 'link',
+			'getIcon' => 'icon',
+			'getActions' => [
+				[
+					'getLabel' => 'action_label',
+					'getIcon' => 'action_icon',
+					'getLink' => 'action_link',
+					'getRequestType' => 'GET',
+				]
+			],
+		]);
+		$limitedNotification = $this->getNotification([
+			'getApp' => 'testing_notifications',
+			'getUser' => 'test_user',
+		]);
+
+		// Make sure there is no notification
+		$this->assertSame(0, $this->handler->count($limitedNotification));
+		$notifications = $this->handler->get($limitedNotification);
+		$this->assertCount(0, $notifications);
+
+		// Add and count
+		$this->handler->add($notification);
+		$this->assertSame(1, $this->handler->count($notification));
+
+		// Get and count
+		$notifications = $this->handler->get($limitedNotification);
+		$this->assertCount(1, $notifications);
+		reset($notifications);
+		$notificationId = key($notifications);
+
+		// Delete with wrong user
+		$this->handler->deleteById($notificationId, 'test_user1');
+		$this->assertSame(1, $this->handler->count($notification));
+
+		// Delete and count
+		$this->handler->deleteById($notificationId, 'test_user');
+		$this->assertSame(0, $this->handler->count($notification));
+	}
+
 	/**
 	 * @param array $values
 	 * @return \OCP\Notification\INotification|\PHPUnit_Framework_MockObject_MockObject

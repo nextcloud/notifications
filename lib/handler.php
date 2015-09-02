@@ -91,6 +91,23 @@ class Handler {
 	}
 
 	/**
+	 * Delete the notifications matching the given id
+	 *
+	 * @param int $id
+	 * @param string $user
+	 * @return null
+	 */
+	public function deleteById($id, $user) {
+		$sql = $this->connection->getQueryBuilder();
+		$sql->delete('notifications')
+			->where($sql->expr()->eq('notification_id', $sql->createParameter('id')))
+			->setParameter('id', $id)
+			->andWhere($sql->expr()->eq('user', $sql->createParameter('user')))
+			->setParameter('user', $user);
+		$sql->execute();
+	}
+
+	/**
 	 * Return the notifications matching the given Notification
 	 *
 	 * @param INotification $notification

@@ -22,15 +22,8 @@
 namespace OCA\Notifications\Tests\Controller;
 
 use OCA\Notifications\Controller\EndpointController;
-use OCA\Notifications\Handler;
 use OCA\Notifications\Tests\TestCase;
-use OCP\AppFramework\Http\JSONResponse;
-use OCP\AppFramework\Controller;
-use OCP\IConfig;
-use OCP\IRequest;
-use OCP\Notification\IAction;
-use OCP\Notification\IManager;
-use OCP\Notification\INotification;
+use OCP\AppFramework\Http;
 
 class EndpointControllerTest extends TestCase {
 	/** @var \OCP\IRequest|\PHPUnit_Framework_MockObject_MockObject */
@@ -72,7 +65,7 @@ class EndpointControllerTest extends TestCase {
 			->getMock();
 	}
 
-	protected function getController(array $methods = []) {
+	protected function getController(array $methods = [], $username = 'username') {
 		if (empty($methods)) {
 			return new EndpointController(
 				'notifications',
@@ -80,7 +73,7 @@ class EndpointControllerTest extends TestCase {
 				$this->handler,
 				$this->manager,
 				$this->config,
-				'username'
+				$username
 			);
 		} else {
 			return $this->getMockBuilder('OCA\Notifications\Controller\EndpointController')
@@ -90,7 +83,7 @@ class EndpointControllerTest extends TestCase {
 					$this->handler,
 					$this->manager,
 					$this->config,
-					'username'
+					$username
 				])
 				->setMethods($methods)
 				->getMock();
@@ -159,6 +152,31 @@ class EndpointControllerTest extends TestCase {
 		$this->assertSame($expectedData, $response->getData());
 	}
 
+	public function dataDelete() {
+		return [
+			[42, 'username1'],
+			[21, 'username2'],
+		];
+	}
+
+	/**
+	 * @dataProvider dataDelete
+	 * @param int $id
+	 * @param string $username
+	 */
+	public function testDelete($id, $username) {
+		$controller = $this->getController([], $username);
+
+		$this->handler->expects($this->once())
+			->method('deleteById')
+			->with($id, $username);
+
+		$response = $controller->delete($id);
+		$this->assertInstanceOf('OCP\AppFramework\Http\Response', $response);
+
+		$this->assertSame(Http::STATUS_OK, $response->getStatus());
+	}
+
 	public function dataNotificationToArray() {
 		return [
 			[42, 'app1', 'user1', 1234, 'type1', 42, 'subject1', 'message1', 'link1', 'icon1', [], []],
@@ -187,6 +205,7 @@ class EndpointControllerTest extends TestCase {
 	 * @param string $link
 	 * @param string $icon
 	 * @param array $actions
+	 * @param array $actionsExpected
 	 */
 	public function testNotificationToArray($id, $app, $user, $timestamp, $type, $id, $subject, $message, $link, $icon, array $actions, array $actionsExpected) {
 		$notification = $this->getMockBuilder('OCP\Notification\INotification')
@@ -301,65 +320,5 @@ class EndpointControllerTest extends TestCase {
 			],
 			$this->invokePrivate($this->getController(), 'actionToArray', [$action])
 		);
-	}
-
-	/**
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 *
-	 * @return JSONResponse
-	 */
-	public function get() {
-		$filter = $this->manager->createNotification();
-		$filter->setUser($this->user);
-		$language = $this->config->getUserValue($this->user, 'core', 'lang', null);
-
-		$notifications = $this->handler->get($filter);
-
-		$data = [];
-		foreach ($notifications as $notification) {
-			$this->manager->prepare($notification, $language);
-			$data[] = $this->notificationToArray($notification);
-		}
-
-		return new JSONResponse($data);
-	}
-
-	/**
-	 * @param INotification $notification
-	 * @return array
-	 */
-	protected function notificationToArray(INotification $notification) {
-		$data = [
-			'app' => $notification->getApp(),
-			'user' => $notification->getUser(),
-			'timestamp' => $notification->getTimestamp(),
-			'object_type' => $notification->getObjectType(),
-			'object_id' => $notification->getObjectId(),
-			'subject' => $notification->getParsedSubject(),
-			'message' => $notification->getParsedMessage(),
-			'link' => $notification->getLink(),
-			'icon' => $notification->getIcon(),
-			'actions' => [],
-		];
-
-		foreach ($notification->getParsedActions() as $action) {
-			$data['actions'][] = $this->actionToArray($action);
-		}
-
-		return $data;
-	}
-
-	/**
-	 * @param IAction $action
-	 * @return array
-	 */
-	protected function actionToArray(IAction $action) {
-		return [
-			'label' => $action->getParsedLabel(),
-			'icon' => $action->getIcon(),
-			'link' => $action->getLink(),
-			'type' => $action->getRequestType(),
-		];
 	}
 }

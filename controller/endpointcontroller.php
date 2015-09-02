@@ -24,6 +24,7 @@ namespace OCA\Notifications\Controller;
 use OCA\Notifications\Handler;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Controller;
+use OCP\AppFramework\Http\Response;
 use OCP\IConfig;
 use OCP\IRequest;
 use OCP\Notification\IAction;
@@ -77,6 +78,17 @@ class EndpointController extends Controller {
 		}
 
 		return new JSONResponse($data);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 *
+	 * @param int $id
+	 * @return Response
+	 */
+	public function delete($id) {
+		$this->handler->deleteById($id, $this->user);
+		return new Response();
 	}
 
 	/**

@@ -20,5 +20,6 @@
 return [
 	'routes' => [
 		['name' => 'endpoint#get', 'url' => '/', 'verb' => 'GET'],
+		['name' => 'endpoint#delete', 'url' => '/{id}', 'verb' => 'DELETE'],
 	]
 ];
