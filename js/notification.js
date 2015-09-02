@@ -81,7 +81,7 @@
         },
 
         getEl: function() {
-            return $('div.notification[data-id='+this.getId()+']');
+            return $('div.notification[data-id='+escapeHTML(this.getId())+']');
         },
 
         getApp: function() {
@@ -93,15 +93,15 @@
          */
         renderElement: function() {
             var el = $('<div class="notification"></div>');
-            el.attr('data-id', this.getId());
-            el.attr('data-timestamp', this.getTimestamp());
-            el.append('<div class="notification-app">'+this.getApp()+'</div><div class="notification-subject">> '+this.getSubject()+'</div>');
-            el.append('<div class="notification-message">'+this.getMessage()+'</div>');
+            el.attr('data-id', escapeHTML(this.getId()));
+            el.attr('data-timestamp', escapeHTML(this.getTimestamp()));
+            el.append('<div class="notification-app">'+escapeHTML(this.getApp())+'</div><div class="notification-subject">> '+escapeHTML(this.getSubject())+'</div>');
+            el.append('<div class="notification-message">'+escapeHTML(this.getMessage())+'</div>');
             // Add actions
             var actions = $('<div class="actions"></div>');
             var actionsData = this.getActions();
             $.each(actionsData, function(index) {
-                actions.append('<div class="button"><a href="'+actionsData[index].link+'">'+actionsData[index].label+'</a></div>');
+                actions.append('<div class="button"><a href="'+escapeHTML(actionsData[index].link)+'">'+escapeHTML(actionsData[index].label)+'</a></div>');
                 // TODO create event handler on click for given action type
             });
             el.append(actions);

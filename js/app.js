@@ -127,7 +127,7 @@
          * Handles removing the Notification from the UI when no longer in JSON
          */
         _onRemoveNotification: function(n) {
-            $('div.notification[data-id='+n.getId()+']').remove();
+            $('div.notification[data-id='+escapeHTML(n.getId())+']').remove();
             delete OCA.Notifications.notifications[n.getId()];
             OCA.Notifications.num--;
         },
