@@ -19,7 +19,7 @@
  *
  */
 
-namespace OCA\Notification\Tests;
+namespace OCA\Notifications\Tests;
 
 use OCA\Notifications\Tests\TestCase;
 
