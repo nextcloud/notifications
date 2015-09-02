@@ -116,7 +116,8 @@ class Handler {
 	public function get(INotification $notification) {
 		$sql = $this->connection->getQueryBuilder();
 		$sql->select('*')
-			->from('notifications');
+			->from('notifications')
+			->orderBy('notification_id', 'DESC');
 
 		$this->sqlWhere($sql, $notification);
 		$statement = $sql->execute();
