@@ -16,9 +16,11 @@
 
     var App = {
 
-        notifications: [],
+        notifications: {},
 
-        pollInterval: 30000,
+        num: 0,
+
+        pollInterval: 10000,
 
         open: false,
 
@@ -63,12 +65,16 @@
                     // Fill Array
                     $.each(data, function(index) {
                         var n = new OCA.Notifications.Notif(data[index]);
-                        OCA.Notifications.notifications.push(n);
-                        $('div.notification-wrapper').prepend(n.renderElement());
+                        OCA.Notifications.notifications[n.getId()] = n;
+                        OCA.Notifications.addToUI(n);
+                        OCA.Notifications.num++;
+                        // TODO sort by time
                     });
                     // Check if we have any, and notify the UI
-                    if(OCA.Notifications.notifications.length != undefined) {
+                    if(OCA.Notifications.numNotifications() != 0) {
                         OCA.Notifications._onHaveNotifications();
+                    } else {
+                        OCA.Notifications._onHaveNoNotifications();
                     }
                 },
                 function(jqXHR) {
@@ -81,22 +87,70 @@
          * Background fetch handler
          */
         backgroundFetch: function() {
-            this.fetch(
+            OCA.Notifications.fetch(
                 function(data) {
+                    var inJson = [];
+                    var oldNum = OCA.Notifications.numNotifications();
                     $.each(data, function(index) {
                         var n = new OCA.Notifications.Notif(data[index]);
+                        inJson.push(n.getId());
                         if(!OCA.Notifications.getNotification(n.getId())){
                             // New notification!
                             OCA.Notifications._onNewNotification(n);
                         }
                     });
                     // TODO check if any removed from JSON
+                    for(var n in OCA.Notifications.getNotifications()) {
+                        if(inJson.indexOf(OCA.Notifications.getNotifications()[n].getId()) == -1) {
+                            // Not in JSON, remove from UI
+                            OCA.Notifications._onRemoveNotification(OCA.Notifications.getNotifications()[n]);
+                        }
+                    }
+
+                    // Now check if we suddenly have notifs, or now none
+                    if(oldNum == 0 && OCA.Notifications.numNotifications() != 0) {
+                        // We now have some!
+                        OCA.Notifications._onHaveNotifications();
+                    } else if(oldNum != 0 && OCA.Notifications.numNotifications() == 0) {
+                        // Now we have none
+                        OCA.Notifications._onHaveNoNotifications();
+                    }
                 },
                 function(jqXHR) {
                     // Bad
                     console.log('Failed to fetch notifications');
                 }
-            )
+            );
+        },
+
+        /**
+         * Handles removing the Notification from the UI when no longer in JSON
+         */
+        _onRemoveNotification: function(n) {
+            $('div.notification[data-id='+n.getId()+']').remove();
+            delete OCA.Notifications.notifications[n.getId()];
+            OCA.Notifications.num--;
+        },
+
+        /**
+         * Handle new notification received
+         * @param OCA.Notifications.Notification
+         */
+        _onNewNotification: function(notification) {
+            OCA.Notifications.num++;
+            // Add it to the array
+            OCA.Notifications.notifications[notification.getId()] = notification;
+            // Add to the UI
+            OCA.Notifications.addToUI(notification);
+            // TODO make a noise? Anything else?
+        },
+
+        /**
+         * Adds the notification to the UI
+         */
+        addToUI: function(notification) {
+            // TODO sort via timestamp
+            $('div.notification-wrapper').prepend(notification.renderElement());
         },
 
         /**
@@ -106,11 +160,20 @@
             // Add the button, title, etc
             // TODO if still laoding the page, wait until done then flash
             $('div.notifications-button')
+            .addClass('hasNotifications')
             .animate({opacity: 0.5})
             .animate({opacity: 1})
             .animate({opacity: 0.5})
             .animate({opacity: 1})
             .animate({opacity: 0.7});
+        },
+
+        /**
+         * Handle when all dismissed
+         */
+        _onHaveNoNotifications: function() {
+            // Remove the border
+            $('div.notifications-button').removeClass('hasNotifications');
         },
 
         /**
@@ -121,9 +184,7 @@
                 url: OC.generateUrl('/apps/notifications'),
                 type: 'GET'
             });
-
             request.success(success);
-
             request.fail(failure);
         },
 
@@ -131,11 +192,18 @@
          * Retrieves a notification object by id
          */
         getNotification: function(id) {
-            if(this.notifications[id] != undefined) {
-                return this.notifications[id];
+            if(OCA.Notifications.notifications[id] != undefined) {
+                return OCA.Notifications.notifications[id];
             } else {
                 return false;
             }
+        },
+
+        /**
+         * Returns all notification objects
+         */
+        getNotifications: function() {
+            return this.notifications;
         },
 
         /**
@@ -146,15 +214,12 @@
         },
 
         /**
-         * Handle new notification received
-         * @param OCA.Notifications.Notification
+         * Returns how many notifications in the UI
          */
-        _onNewNotification: function(notification) {
-            // Add it to the array
-            OCA.Notifications.notifications.push(notification);
-            // Update the notification numbers
-            $('notification-button').text(OCA.Notifications.notifications.length);
+        numNotifications: function() {
+            return OCA.Notifications.num;
         }
+
     }
 
     OCA.Notifications = App;
