@@ -32,7 +32,7 @@ class EndpointControllerTest extends TestCase {
 	/** @var \OCA\Notifications\Handler|\PHPUnit_Framework_MockObject_MockObject */
 	protected $handler;
 
-	/** @var \OCP\Notification\IManager|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var \OC\Notification\IManager|\PHPUnit_Framework_MockObject_MockObject */
 	protected $manager;
 
 	/** @var \OCP\IConfig|\PHPUnit_Framework_MockObject_MockObject */
@@ -54,8 +54,8 @@ class EndpointControllerTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
-		/** @var \OCP\Notification\IManager|\PHPUnit_Framework_MockObject_MockObject */
-		$this->manager = $this->getMockBuilder('OCP\Notification\IManager')
+		/** @var \OC\Notification\IManager|\PHPUnit_Framework_MockObject_MockObject */
+		$this->manager = $this->getMockBuilder('OC\Notification\IManager')
 			->disableOriginalConstructor()
 			->getMock();
 
@@ -97,10 +97,10 @@ class EndpointControllerTest extends TestCase {
 			],
 			[
 				[
-					1 => $this->getMockBuilder('OCP\Notification\INotification')
+					1 => $this->getMockBuilder('OC\Notification\INotification')
 						->disableOriginalConstructor()
 						->getMock(),
-					3 => $this->getMockBuilder('OCP\Notification\INotification')
+					3 => $this->getMockBuilder('OC\Notification\INotification')
 						->disableOriginalConstructor()
 						->getMock(),
 				],
@@ -108,7 +108,7 @@ class EndpointControllerTest extends TestCase {
 			],
 			[
 				[
-					42 => $this->getMockBuilder('OCP\Notification\INotification')
+					42 => $this->getMockBuilder('OC\Notification\INotification')
 						->disableOriginalConstructor()
 						->getMock(),
 				],
@@ -130,7 +130,7 @@ class EndpointControllerTest extends TestCase {
 			->method('notificationToArray')
 			->willReturn('$notification');
 
-		$filter = $this->getMockBuilder('OCP\Notification\INotification')
+		$filter = $this->getMockBuilder('OC\Notification\INotification')
 			->disableOriginalConstructor()
 			->getMock();
 		$filter->expects($this->once())
@@ -184,10 +184,10 @@ class EndpointControllerTest extends TestCase {
 		return [
 			[42, 'app1', 'user1', 1234, 'type1', 42, 'subject1', 'message1', 'link1', 'icon1', [], []],
 			[1337, 'app2', 'user2', 1337, 'type2', 21, 'subject2', 'message2', 'link2', 'icon2', [
-				$this->getMockBuilder('OCP\Notification\IAction')
+				$this->getMockBuilder('OC\Notification\IAction')
 					->disableOriginalConstructor()
 					->getMock(),
-				$this->getMockBuilder('OCP\Notification\IAction')
+				$this->getMockBuilder('OC\Notification\IAction')
 					->disableOriginalConstructor()
 					->getMock(),
 			], ['action', 'action']],
@@ -211,7 +211,7 @@ class EndpointControllerTest extends TestCase {
 	 * @param array $actionsExpected
 	 */
 	public function testNotificationToArray($id, $app, $user, $timestamp, $type, $id, $subject, $message, $link, $icon, array $actions, array $actionsExpected) {
-		$notification = $this->getMockBuilder('OCP\Notification\INotification')
+		$notification = $this->getMockBuilder('OC\Notification\INotification')
 			->disableOriginalConstructor()
 			->getMock();
 
@@ -295,7 +295,7 @@ class EndpointControllerTest extends TestCase {
 	 * @param string $icon
 	 */
 	public function testActionToArray($label, $link, $requestType, $icon) {
-		$action = $this->getMockBuilder('OCP\Notification\IAction')
+		$action = $this->getMockBuilder('OC\Notification\IAction')
 			->disableOriginalConstructor()
 			->getMock();
 

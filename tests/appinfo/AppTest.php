@@ -24,13 +24,13 @@ namespace OCA\Notifications\Tests\AppInfo;
 use OCA\Notifications\Tests\TestCase;
 
 class AppTest extends TestCase {
-	/** @var \OCP\Notification\IManager|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var \OC\Notification\IManager|\PHPUnit_Framework_MockObject_MockObject */
 	protected $manager;
 
 	protected function setUp() {
 		parent::setUp();
 
-		$this->manager = $this->getMockBuilder('OCP\Notification\IManager')
+		$this->manager = $this->getMockBuilder('OC\Notification\IManager')
 			->disableOriginalConstructor()
 			->getMock();
 
