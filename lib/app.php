@@ -22,8 +22,8 @@
 namespace OCA\Notifications;
 
 
-use OCP\Notification\IApp;
-use OCP\Notification\INotification;
+use OC\Notification\IApp;
+use OC\Notification\INotification;
 
 class App implements IApp {
 	/** @var Handler */

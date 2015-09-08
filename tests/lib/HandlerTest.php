@@ -151,10 +151,10 @@ class HandlerTest extends TestCase {
 
 	/**
 	 * @param array $values
-	 * @return \OCP\Notification\INotification|\PHPUnit_Framework_MockObject_MockObject
+	 * @return \OC\Notification\INotification|\PHPUnit_Framework_MockObject_MockObject
 	 */
 	protected function getNotification(array $values = []) {
-		$notification = $this->getMockBuilder('OCP\Notification\INotification')
+		$notification = $this->getMockBuilder('OC\Notification\INotification')
 			->disableOriginalConstructor()
 			->getMock();
 
@@ -162,7 +162,7 @@ class HandlerTest extends TestCase {
 			if ($method === 'getActions') {
 				$actions = [];
 				foreach ($returnValue as $actionData) {
-					$action = $this->getMockBuilder('OCP\Notification\IAction')
+					$action = $this->getMockBuilder('OC\Notification\IAction')
 						->disableOriginalConstructor()
 						->getMock();
 					foreach ($actionData as $actionMethod => $actionValue) {
