@@ -201,8 +201,8 @@ class EndpointControllerTest extends TestCase {
 	 * @param string $app
 	 * @param string $user
 	 * @param int $timestamp
-	 * @param string $type
-	 * @param int $id
+	 * @param string $objectType
+	 * @param int $objectId
 	 * @param string $subject
 	 * @param string $message
 	 * @param string $link
@@ -210,7 +210,7 @@ class EndpointControllerTest extends TestCase {
 	 * @param array $actions
 	 * @param array $actionsExpected
 	 */
-	public function testNotificationToArray($id, $app, $user, $timestamp, $type, $id, $subject, $message, $link, $icon, array $actions, array $actionsExpected) {
+	public function testNotificationToArray($id, $app, $user, $timestamp, $objectType, $objectId, $subject, $message, $link, $icon, array $actions, array $actionsExpected) {
 		$notification = $this->getMockBuilder('OC\Notification\INotification')
 			->disableOriginalConstructor()
 			->getMock();
@@ -229,11 +229,11 @@ class EndpointControllerTest extends TestCase {
 
 		$notification->expects($this->once())
 			->method('getObjectType')
-			->willReturn($type);
+			->willReturn($objectType);
 
 		$notification->expects($this->once())
 			->method('getObjectId')
-			->willReturn($id);
+			->willReturn($objectId);
 
 		$notification->expects($this->once())
 			->method('getParsedSubject')
@@ -267,8 +267,8 @@ class EndpointControllerTest extends TestCase {
 			'app' => $app,
 			'user' => $user,
 			'timestamp' => $timestamp,
-			'object_type' => $type,
-			'object_id' => $id,
+			'object_type' => $objectType,
+			'object_id' => $objectId,
 			'subject' => $subject,
 			'message' => $message,
 			'link' => $link,
