@@ -93,7 +93,7 @@ class EndpointControllerTest extends TestCase {
 	public function dataGet() {
 		return [
 			[
-				[], [],
+				[], md5(json_encode([])), [],
 			],
 			[
 				[
@@ -104,6 +104,7 @@ class EndpointControllerTest extends TestCase {
 						->disableOriginalConstructor()
 						->getMock(),
 				],
+				md5(json_encode([1, 3])),
 				['$notification', '$notification'],
 			],
 			[
@@ -112,6 +113,7 @@ class EndpointControllerTest extends TestCase {
 						->disableOriginalConstructor()
 						->getMock(),
 				],
+				md5(json_encode([42])),
 				['$notification'],
 			],
 		];
@@ -120,9 +122,10 @@ class EndpointControllerTest extends TestCase {
 	/**
 	 * @dataProvider dataGet
 	 * @param array $notifications
+	 * @param string $expectedETag
 	 * @param array $expectedData
 	 */
-	public function testGet(array $notifications, array $expectedData) {
+	public function testGet(array $notifications, $expectedETag, array $expectedData) {
 		$controller = $this->getController([
 			'notificationToArray',
 		]);
@@ -152,6 +155,7 @@ class EndpointControllerTest extends TestCase {
 		$response = $controller->get();
 		$this->assertInstanceOf('OCP\AppFramework\Http\JSONResponse', $response);
 
+		$this->assertSame($expectedETag, $response->getETag());
 		$this->assertSame($expectedData, $response->getData());
 	}
 

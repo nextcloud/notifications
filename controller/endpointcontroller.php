@@ -77,7 +77,9 @@ class EndpointController extends Controller {
 			$data[] = $this->notificationToArray($notificationId, $notification);
 		}
 
-		return new JSONResponse($data);
+		$response = new JSONResponse($data);
+		$response->setETag($this->generateEtag($notifications));
+		return $response;
 	}
 
 	/**
@@ -89,6 +91,16 @@ class EndpointController extends Controller {
 	public function delete($id) {
 		$this->handler->deleteById($id, $this->user);
 		return new Response();
+	}
+
+	/**
+	 * Get an Etag for the notification ids
+	 * @param array $notifications
+	 * @return string
+	 */
+	protected function generateEtag(array $notifications) {
+		$ids = array_keys($notifications);
+		return md5(json_encode($ids));
 	}
 
 	/**
