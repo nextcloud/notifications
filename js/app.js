@@ -56,7 +56,7 @@
          */
         _onNotificationsButtonClick: function(e) {
             // Show a popup
-            $('div.notification-container').slideToggle(200);
+            $('div.notification-container').slideToggle(OC.menuSpeed);
         },
 
         initialFetch: function() {
@@ -220,7 +220,7 @@
             return OCA.Notifications.num;
         }
 
-    }
+    };
 
     OCA.Notifications = App;
 
