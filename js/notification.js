@@ -8,12 +8,12 @@
  * @copyright Tom Needham 2015
  */
 
- (function() {
+(function() {
 
-     /**
-      * Initialise the notification
-      */
- 	var Notif = function(jsonData){
+    /**
+     * Initialise the notification
+     */
+    var Notif = function(jsonData){
         // TODO handle defaults
         this.app = jsonData.app;
         this.user = jsonData.user;
@@ -26,9 +26,9 @@
         this.icon = jsonData.icon;
         this.actions = jsonData.actions; // TODO some parsing here?
         this.notification_id = jsonData.notification_id;
- 	};
+    };
 
- 	Notif.prototype = {
+    Notif.prototype = {
 
         app: null,
 
