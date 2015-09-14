@@ -1,10 +1,10 @@
-div.notification {
+.notification {
     display: block;
     border-bottom: 1px solid rgb(238, 238, 238);
     padding: 7px 15px 50px 15px;
 }
 
-div.notification-container {
+.notification-container {
     background-color: white;
     display: none;
     position: absolute;
@@ -18,17 +18,17 @@ div.notification-container {
 
 /* Fill width on mobile */
 @media (max-width: 500px) {
-    div.notification-container {
+    .notification-container {
         right: 0;
         width: 100%;
     }
 }
 
-div.notification {
+.notification {
     color: black;
 }
 
-div.notification:hover > div.notification-delete{
+.notification:hover > .notification-delete{
     display: block !important;
     position: absolute;
     top: 4px;
@@ -36,15 +36,15 @@ div.notification:hover > div.notification-delete{
     opacity: 0.3;
 }
 
-div.notification:hover {
+.notification:hover {
     background-color: #f8f8f8;
 }
 
-div.notification-delete:hover {
+.notification-delete:hover {
     opacity: 0.8 !important;
 }
 
-div.notifications-button {
+.notifications-button {
     position: relative;
     float: right;
     width: 21px;
@@ -57,48 +57,48 @@ div.notifications-button {
 
 }
 
-div.notifications-button.hasNotifications {
+.notifications-button.hasNotifications {
     border: 2px solid white;
     width: 25px;
     height: 25px;
     margin-top: 8px;
 }
 
-div.notifications-button:hover {
+.notifications-button:hover {
     /* TODO cursor */
     opacity: 1;
 }
 
-div.notification div.button {
+.notification .button {
     border: 1px solid rgba(240,240,240,.9) !important;
     margin-left: 5px;
     padding: 0 10px;
 }
 
-div.notification div.actions {
+.notification .actions {
     float:right;
     padding: 0;
 }
 
-div.notification div.actions:first-child {
+.notification .actions:first-child {
     margin-left: auto;
 }
 
-div.notification div.notification-subject, div.notification-app {
+.notification .notification-subject, .notification-app {
     display: inline-block;
 }
 
-div.notification div.notification-app {
+.notification .notification-app {
     font-weight: 600;
     margin-right: 5px;
 }
 
-div.notification div.notification-message {
+.notification .notification-message {
     line-height: 20px;
     padding-bottom: 5px;
 }
 
-div.notification-container {
+.notification-container {
     box-shadow: 0 1px 10px rgba(50, 50, 50, .7);
     overflow: scroll;
     overflow-x: hidden;
