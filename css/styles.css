@@ -84,13 +84,8 @@
     margin-left: auto;
 }
 
-.notification .notification-subject, .notification-app {
+.notification .notification-subject {
     display: inline-block;
-}
-
-.notification .notification-app {
-    font-weight: 600;
-    margin-right: 5px;
 }
 
 .notification .notification-message {

@@ -95,7 +95,7 @@
             var el = $('<div class="notification"></div>');
             el.attr('data-id', escapeHTML(this.getId()));
             el.attr('data-timestamp', escapeHTML(this.getTimestamp()));
-            el.append('<div class="notification-app">'+escapeHTML(this.getApp())+'</div><div class="notification-subject">> '+escapeHTML(this.getSubject())+'</div>');
+            el.append('<div class="notification-subject"> '+escapeHTML(this.getSubject())+'</div>');
             el.append('<div class="notification-message">'+escapeHTML(this.getMessage())+'</div>');
             // Add actions
             var actions = $('<div class="actions"></div>');
