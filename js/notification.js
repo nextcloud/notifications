@@ -52,10 +52,6 @@
 
         notification_id: null,
 
-        getActions: function() {
-            return this.actions;
-        },
-
         getSubject: function() {
             return this.subject;
         },
@@ -116,7 +112,7 @@
 
         }
 
-    }
+    };
 
     OCA.Notifications.Notif = Notif;
 
