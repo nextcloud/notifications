@@ -114,9 +114,10 @@
 
 		_removeNotification: function(id) {
 			var $notification = this.$container.find('.notification').filterAttr('id', id);
+            delete OCA.Notifications.notifications[id];
 
 			$notification.remove();
-			if (!this.$container.find('.notifications').length) {
+			if (_.keys(OCA.Notifications.notifications).length === 0) {
 				this._onHaveNoNotifications();
 			}
 		},
@@ -140,7 +141,7 @@
                         OCA.Notifications.num++;
                     });
                     // Check if we have any, and notify the UI
-                    if(OCA.Notifications.numNotifications() != 0) {
+                    if(OCA.Notifications.numNotifications() !== 0) {
                         OCA.Notifications._onHaveNotifications();
                     } else {
                         OCA.Notifications._onHaveNoNotifications();
@@ -170,17 +171,17 @@
                     });
                     // TODO check if any removed from JSON
                     for(var n in OCA.Notifications.getNotifications()) {
-                        if(inJson.indexOf(OCA.Notifications.getNotifications()[n].getId()) == -1) {
+                        if(inJson.indexOf(OCA.Notifications.getNotifications()[n].getId()) === -1) {
                             // Not in JSON, remove from UI
                             OCA.Notifications._onRemoveNotification(OCA.Notifications.getNotifications()[n]);
                         }
                     }
 
                     // Now check if we suddenly have notifs, or now none
-                    if(oldNum == 0 && OCA.Notifications.numNotifications() != 0) {
+                    if(oldNum == 0 && OCA.Notifications.numNotifications() !== 0) {
                         // We now have some!
                         OCA.Notifications._onHaveNotifications();
-                    } else if(oldNum != 0 && OCA.Notifications.numNotifications() == 0) {
+                    } else if(oldNum != 0 && OCA.Notifications.numNotifications() === 0) {
                         // Now we have none
                         OCA.Notifications._onHaveNoNotifications();
                     }
