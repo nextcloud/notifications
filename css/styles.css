@@ -62,17 +62,12 @@
     display: block;
     border-radius: 50%;
     text-align: center;
-    margin-top: 10px;
-    margin-left: 10px;
+    padding: 10px;
     opacity: 0.7;
     cursor: pointer;
 }
-
 .notifications-button.hasNotifications {
-    border: 2px solid white;
-    width: 25px;
-    height: 25px;
-    margin-top: 8px;
+    opacity: 1 !important;
 }
 
 .notifications-button:hover {
@@ -81,7 +76,7 @@
 
 .notification .button {
     border: 1px solid rgba(240,240,240,.9) !important;
-    margin-left: 5px;
+    margin-left: 5px !important;
     padding: 0 10px;
 }
 
@@ -106,6 +101,6 @@
 
 .notification-container {
     box-shadow: 0 1px 10px rgba(50, 50, 50, .7);
-    overflow: scroll;
+    overflow: auto;
     overflow-x: hidden;
 }
