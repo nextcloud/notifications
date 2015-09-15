@@ -56,7 +56,7 @@
         /**
          * Handles the notification button click event
          */
-        _onNotificationsButtonClick: function(e) {
+        _onNotificationsButtonClick: function() {
             // Show a popup
             OC.showMenu(null, OCA.Notifications.$container);
         },
@@ -127,16 +127,17 @@
 
         /**
          * Handles removing the Notification from the UI when no longer in JSON
+         * @param {OCA.Notifications.Notification} notification
          */
-        _onRemoveNotification: function(n) {
-            $('div.notification[data-id='+escapeHTML(n.getId())+']').remove();
-            delete OCA.Notifications.notifications[n.getId()];
+        _onRemoveNotification: function(notification) {
+            $('div.notification[data-id='+escapeHTML(notification.getId())+']').remove();
+            delete OCA.Notifications.notifications[notification.getId()];
             OCA.Notifications.num--;
         },
 
         /**
          * Handle new notification received
-         * @param OCA.Notifications.Notification
+         * @param {OCA.Notifications.Notification} notification
          */
         _onNewNotification: function(notification) {
             OCA.Notifications.num++;
@@ -149,6 +150,7 @@
 
         /**
          * Adds the notification to the UI
+         * @param {OCA.Notifications.Notification} notification
          */
         addToUI: function(notification) {
             // TODO sort via timestamp
@@ -180,6 +182,8 @@
 
         /**
          * Performs the AJAX request to retrieve the notifications
+         * @param {Function} success
+         * @param {Function} failure
          */
         fetch: function(success, failure){
             var request = $.ajax({
@@ -192,6 +196,7 @@
 
         /**
          * Retrieves a notification object by id
+         * @param {int} id
          */
         getNotification: function(id) {
             if(OCA.Notifications.notifications[id] != undefined) {
@@ -210,6 +215,7 @@
 
         /**
          * Handles the returned data from the AJAX call
+         * @param {object} responseData
          */
         parseNotifications: function(responseData) {
 
