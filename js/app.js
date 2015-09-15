@@ -29,9 +29,10 @@
 
             // Setup elements
             var $notifications = $('<div class="notifications"></div>');
-            var $button = $('<div class="notifications-button"><img class="svg" alt="Dismiss" src="/core/img/actions/info-white.svg"></div>');
+            var $button = $('<div class="notifications-button"><img class="svg" alt="Dismiss" src="' + OC.imagePath('core', 'actions/info-white') + '"></div>');
             var $container = $('<div class="notification-container"></div>');
             var $wrapper = $('<div class="notification-wrapper"></div>');
+
             $notifications.append($button);
             $notifications.append($container);
             $container.append($wrapper);

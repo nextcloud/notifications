@@ -101,7 +101,7 @@
                 // TODO create event handler on click for given action type
             });
             el.append(actions);
-            el.append('<div style="display: none;" class="notification-delete"><img class="svg" alt="Dismiss" src="/core/img/actions/close.svg"></div>');
+            el.append('<div style="display: none;" class="notification-delete"><img class="svg" alt="Dismiss" src="' + OC.imagePath('core', 'actions/close') + '"></div>');
             return el;
         },
 
