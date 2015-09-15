@@ -20,7 +20,7 @@
 
         num: 0,
 
-        pollInterval: 10000,
+        pollInterval: 30000, // milliseconds
 
         open: false,
 
