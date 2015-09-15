@@ -24,6 +24,8 @@
 
         open: false,
 
+        $button: null,
+
         $container: null,
 
         initialise: function() {
@@ -31,7 +33,7 @@
 
             // Setup elements
             var $notifications = $('<div class="notifications"></div>');
-            var $button = $('<div class="notifications-button menutoggle"><img class="svg" alt="Dismiss" src="' + OC.imagePath('core', 'actions/info-white') + '"></div>');
+            this.$button = $('<div class="notifications-button menutoggle"><img class="svg" alt="Dismiss" src="' + OC.imagePath('notifications', 'notifications') + '"></div>');
             this.$container = $('<div class="notification-container"></div>');
             var $wrapper = $('<div class="notification-wrapper"></div>');
 
@@ -42,7 +44,7 @@
             $emptyContent.append($headLine);
             this.$container.append($emptyContent);
 
-            $notifications.append($button);
+            $notifications.append(this.$button);
             $notifications.append(this.$container);
             this.$container.append($wrapper);
 
@@ -53,8 +55,8 @@
             this.initialFetch();
 
             // Bind the button click event
-            OC.registerMenu($button, this.$container);
-            $button.on('click', this._onNotificationsButtonClick);
+            OC.registerMenu(this.$button, this.$container);
+            this.$button.on('click', this._onNotificationsButtonClick);
 
             // Setup the background checker
             setInterval(this.backgroundFetch, this.pollInterval);
@@ -175,6 +177,7 @@
             .animate({opacity: 1})
             .animate({opacity: 0.7});
             $('div.notifications .emptycontent').addClass('hidden');
+            this.$button.find('img').attr('src', OC.imagePath('notifications', 'notifications-new'));
         },
 
         /**
@@ -184,6 +187,7 @@
             // Remove the border
             $('div.notifications-button').removeClass('hasNotifications');
             $('div.notifications .emptycontent').removeClass('hidden');
+            this.$button.find('img').attr('src', OC.imagePath('notifications', 'notifications'));
         },
 
         /**
