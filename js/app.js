@@ -58,69 +58,69 @@
             OC.registerMenu(this.$button, this.$container);
             this.$button.on('click', this._onNotificationsButtonClick);
 
-			this.$container.on('click', '.action-button', _.bind(this._onClickAction, this));
-			this.$container.on('click', '.notification-delete', _.bind(this._onClickDismissNotification, this));
+            this.$container.on('click', '.action-button', _.bind(this._onClickAction, this));
+            this.$container.on('click', '.notification-delete', _.bind(this._onClickDismissNotification, this));
 
             // Setup the background checker
             setInterval(this.backgroundFetch, this.pollInterval);
         },
 
-		_onClickDismissNotification: function(event) {
-			event.preventDefault();
-			var $target = $(event.target);
-			var $notification = $target.closest('.notification');
-			var id = $notification.attr('data-id');
+        _onClickDismissNotification: function(event) {
+            event.preventDefault();
+            var $target = $(event.target);
+            var $notification = $target.closest('.notification');
+            var id = $notification.attr('data-id');
 
-			$notification.fadeOut(OC.menuSpeed);
+            $notification.fadeOut(OC.menuSpeed);
 
             $.ajax({
-				url: OC.generateUrl('/apps/notifications/' + id),
+                url: OC.generateUrl('/apps/notifications/' + id),
                 type: 'DELETE',
                 success: function(data) {
-					self._removeNotification(id);
+                    self._removeNotification(id);
                 },
-				error: function() {
-					$notification.fadeIn(OC.menuSpeed);
+                error: function() {
+                    $notification.fadeIn(OC.menuSpeed);
                     OC.Notification.showTemporary('Failed to perform action');
                 }
             });
 
-			this._removeNotification($notification.attr('data-id'));
-		},
+            this._removeNotification($notification.attr('data-id'));
+        },
 
-		_onClickAction: function(event) {
-			event.preventDefault();
-			var self = this;
-			var $target = $(event.target);
-			var $notification = $target.closest('.notification');
-			var actionType = $target.attr('data-type') || 'GET';
-			var actionUrl = $target.attr('data-href');
+        _onClickAction: function(event) {
+            event.preventDefault();
+            var self = this;
+            var $target = $(event.target);
+            var $notification = $target.closest('.notification');
+            var actionType = $target.attr('data-type') || 'GET';
+            var actionUrl = $target.attr('data-href');
 
-			$notification.fadeOut(OC.menuSpeed);
+            $notification.fadeOut(OC.menuSpeed);
 
             $.ajax({
                 url: actionUrl,
                 type: actionType,
                 success: function(data) {
-					self._removeNotification($notification.attr('data-id'));
+                    self._removeNotification($notification.attr('data-id'));
                 },
-				error: function() {
-					$notification.fadeIn(OC.menuSpeed);
+                error: function() {
+                    $notification.fadeIn(OC.menuSpeed);
                     OC.Notification.showTemporary('Failed to perform action');
                 }
             });
 
-		},
+        },
 
-		_removeNotification: function(id) {
-			var $notification = this.$container.find('.notification').filterAttr('id', id);
+        _removeNotification: function(id) {
+            var $notification = this.$container.find('.notification').filterAttr('id', id);
             delete OCA.Notifications.notifications[id];
 
-			$notification.remove();
-			if (_.keys(OCA.Notifications.notifications).length === 0) {
-				this._onHaveNoNotifications();
-			}
-		},
+            $notification.remove();
+            if (_.keys(OCA.Notifications.notifications).length === 0) {
+                this._onHaveNoNotifications();
+            }
+        },
 
         /**
          * Handles the notification button click event
