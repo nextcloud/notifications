@@ -70,7 +70,6 @@
                         OCA.Notifications.notifications[n.getId()] = n;
                         OCA.Notifications.addToUI(n);
                         OCA.Notifications.num++;
-                        // TODO sort by time
                     });
                     // Check if we have any, and notify the UI
                     if(OCA.Notifications.numNotifications() != 0) {
@@ -153,7 +152,6 @@
          * @param {OCA.Notifications.Notification} notification
          */
         addToUI: function(notification) {
-            // TODO sort via timestamp
             $('div.notification-wrapper').prepend(notification.renderElement());
         },
 
