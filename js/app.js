@@ -24,32 +24,33 @@
 
         open: false,
 
+        $container: null,
+
         initialise: function() {
             // Go!
 
             // Setup elements
             var $notifications = $('<div class="notifications"></div>');
-            var $button = $('<div class="notifications-button"><img class="svg" alt="Dismiss" src="' + OC.imagePath('core', 'actions/info-white') + '"></div>');
-            var $container = $('<div class="notification-container"></div>');
+            var $button = $('<div class="notifications-button menutoggle"><img class="svg" alt="Dismiss" src="' + OC.imagePath('core', 'actions/info-white') + '"></div>');
+            this.$container = $('<div class="notification-container"></div>');
             var $wrapper = $('<div class="notification-wrapper"></div>');
 
             $notifications.append($button);
-            $notifications.append($container);
-            $container.append($wrapper);
+            $notifications.append(this.$container);
+            this.$container.append($wrapper);
 
             // Add to the UI
             $('form.searchbox').before($notifications);
-
-            // Setup the background timer for polling the server
 
             // Inital call to the notification endpoint
             this.initialFetch();
 
             // Bind the button click event
+            OC.registerMenu($button, this.$container);
             $button.on('click', this._onNotificationsButtonClick);
 
             // Setup the background checker
-            setInterval(this.backgroundFetch, this.pollInterval);
+            setInterval(this.backgroundFetch(), this.pollInterval);
         },
 
         /**
@@ -57,7 +58,7 @@
          */
         _onNotificationsButtonClick: function(e) {
             // Show a popup
-            $('div.notification-container').slideToggle(OC.menuSpeed);
+            OC.showMenu(null, OCA.Notifications.$container);
         },
 
         initialFetch: function() {
