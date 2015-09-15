@@ -42,6 +42,11 @@
 
 .notification-delete:hover {
     opacity: 0.8 !important;
+    cursor: pointer;
+}
+
+.notification-delete img, .notifications-button img {
+    cursor: pointer;
 }
 
 .notifications-button {
@@ -54,7 +59,7 @@
     text-align: center;
     margin-top: 10px;
     opacity: 0.7;
-
+    cursor: pointer;
 }
 
 .notifications-button.hasNotifications {
