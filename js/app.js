@@ -162,7 +162,6 @@
          */
         _onHaveNotifications: function() {
             // Add the button, title, etc
-            // TODO if still laoding the page, wait until done then flash
             $('div.notifications-button')
             .addClass('hasNotifications')
             .animate({opacity: 0.5})
