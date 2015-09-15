@@ -59,40 +59,61 @@
             this.$button.on('click', this._onNotificationsButtonClick);
 
 			this.$container.on('click', '.action-button', _.bind(this._onClickAction, this));
+			this.$container.on('click', '.notification-delete', _.bind(this._onClickDismissNotification, this));
 
             // Setup the background checker
             setInterval(this.backgroundFetch, this.pollInterval);
         },
 
+		_onClickDismissNotification: function(event) {
+			event.preventDefault();
+			var $target = $(event.target);
+			var $notification = $target.closest('.notification');
+			var id = $notification.attr('data-id');
+
+			$notification.fadeOut(OC.menuSpeed);
+
+            $.ajax({
+				url: OC.generateUrl('/apps/notifications/' + id),
+                type: 'DELETE',
+                success: function(data) {
+					self._removeNotification(id);
+                },
+				error: function() {
+					$notification.fadeIn(OC.menuSpeed);
+                    OC.Notification.showTemporary('Failed to perform action');
+                }
+            });
+
+			this._removeNotification($notification.attr('data-id'));
+		},
+
 		_onClickAction: function(event) {
 			event.preventDefault();
+			var self = this;
 			var $target = $(event.target);
 			var $notification = $target.closest('.notification');
 			var actionType = $target.attr('data-type') || 'GET';
 			var actionUrl = $target.attr('data-href');
 
+			$notification.fadeOut(OC.menuSpeed);
+
             $.ajax({
                 url: actionUrl,
                 type: actionType,
                 success: function(data) {
-                    // Fill Array
-                    $.each(data, function(index) {
-                        var n = new OCA.Notifications.Notif(data[index]);
-                        OCA.Notifications.notifications[n.getId()] = n;
-                        OCA.Notifications.addToUI(n);
-                        OCA.Notifications.num++;
-                    });
-                    // Check if we have any, and notify the UI
-                    if(OCA.Notifications.numNotifications() != 0) {
-                        OCA.Notifications._onHaveNotifications();
-                    } else {
-                        OCA.Notifications._onHaveNoNotifications();
-                    }
+					self._removeNotification($notification.attr('data-id'));
                 },
 				error: function() {
+					$notification.fadeIn(OC.menuSpeed);
                     OC.Notification.showTemporary('Failed to perform action');
                 }
             });
+
+		},
+
+		_removeNotification: function(id) {
+			var $notification = this.$container.find('.notification').filterAttr('id', id);
 
 			$notification.remove();
 			if (!this.$container.find('.notifications').length) {
