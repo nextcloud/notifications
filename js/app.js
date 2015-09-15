@@ -58,9 +58,47 @@
             OC.registerMenu(this.$button, this.$container);
             this.$button.on('click', this._onNotificationsButtonClick);
 
+			this.$container.on('click', '.action-button', _.bind(this._onClickAction, this));
+
             // Setup the background checker
             setInterval(this.backgroundFetch, this.pollInterval);
         },
+
+		_onClickAction: function(event) {
+			event.preventDefault();
+			var $target = $(event.target);
+			var $notification = $target.closest('.notification');
+			var actionType = $target.attr('data-type') || 'GET';
+			var actionUrl = $target.attr('data-href');
+
+            $.ajax({
+                url: actionUrl,
+                type: actionType,
+                success: function(data) {
+                    // Fill Array
+                    $.each(data, function(index) {
+                        var n = new OCA.Notifications.Notif(data[index]);
+                        OCA.Notifications.notifications[n.getId()] = n;
+                        OCA.Notifications.addToUI(n);
+                        OCA.Notifications.num++;
+                    });
+                    // Check if we have any, and notify the UI
+                    if(OCA.Notifications.numNotifications() != 0) {
+                        OCA.Notifications._onHaveNotifications();
+                    } else {
+                        OCA.Notifications._onHaveNoNotifications();
+                    }
+                },
+				error: function() {
+                    OC.Notification.showTemporary('Failed to perform action');
+                }
+            });
+
+			$notification.remove();
+			if (!this.$container.find('.notifications').length) {
+				this._onHaveNoNotifications();
+			}
+		},
 
         /**
          * Handles the notification button click event
@@ -88,7 +126,7 @@
                     }
                 },
                 function() {
-                    console.log('Failed to perform initial request for notifications');
+                    OC.Notification.showTemporary('Failed to perform initial request for notifications');
                 }
             );
         },
