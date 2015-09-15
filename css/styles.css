@@ -66,6 +66,9 @@
     opacity: 0.7;
     cursor: pointer;
 }
+.notifications-button.hasNotifications {
+    opacity: 1 !important;
+}
 
 .notifications-button:hover {
     opacity: 1;
