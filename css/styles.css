@@ -28,6 +28,10 @@
     color: black;
 }
 
+.notification .notification-empty {
+    color: #999;
+}
+
 .notification:hover > .notification-delete{
     display: block !important;
     position: absolute;

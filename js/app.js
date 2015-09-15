@@ -35,6 +35,13 @@
             this.$container = $('<div class="notification-container"></div>');
             var $wrapper = $('<div class="notification-wrapper"></div>');
 
+            // Empty content dropdown
+            var $headLine = $('<h2></h2>');
+            $headLine.text(t('notifications', 'No notifications'));
+            var $emptyContent = $('<div class="emptycontent"></div>');
+            $emptyContent.append($headLine);
+            this.$container.append($emptyContent);
+
             $notifications.append($button);
             $notifications.append(this.$container);
             this.$container.append($wrapper);
@@ -50,7 +57,7 @@
             $button.on('click', this._onNotificationsButtonClick);
 
             // Setup the background checker
-            setInterval(this.backgroundFetch(), this.pollInterval);
+            setInterval(this.backgroundFetch, this.pollInterval);
         },
 
         /**
@@ -167,6 +174,7 @@
             .animate({opacity: 0.5})
             .animate({opacity: 1})
             .animate({opacity: 0.7});
+            $('div.notifications .emptycontent').addClass('hidden');
         },
 
         /**
@@ -175,6 +183,7 @@
         _onHaveNoNotifications: function() {
             // Remove the border
             $('div.notifications-button').removeClass('hasNotifications');
+            $('div.notifications .emptycontent').removeClass('hidden');
         },
 
         /**
