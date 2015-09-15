@@ -88,6 +88,7 @@
          * Generates the HTML for the notification
          */
         renderElement: function() {
+			// FIXME: use handlebars template
             var el = $('<div class="notification"></div>');
             el.attr('data-id', escapeHTML(this.getId()));
             el.attr('data-timestamp', escapeHTML(this.getTimestamp()));
@@ -96,8 +97,14 @@
             // Add actions
             var actions = $('<div class="actions"></div>');
             var actionsData = this.getActions();
-            $.each(actionsData, function(index) {
-                actions.append('<div class="button"><a href="'+escapeHTML(actionsData[index].link)+'">'+escapeHTML(actionsData[index].label)+'</a></div>');
+            _.each(actionsData, function(actionData) {
+				// FIXME: use handlebars template
+                actions.append(
+					'<div class="button">' +
+					'<a class="action-button" href="#" data-type="' + escapeHTML(actionData.type) + '" ' +
+					'data-href="'+escapeHTML(actionData.link)+'">'+escapeHTML(actionData.label)+'</a>' +
+					'</div>'
+				);
                 // TODO create event handler on click for given action type
             });
             el.append(actions);

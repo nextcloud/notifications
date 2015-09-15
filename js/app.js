@@ -58,8 +58,68 @@
             OC.registerMenu(this.$button, this.$container);
             this.$button.on('click', this._onNotificationsButtonClick);
 
+            this.$container.on('click', '.action-button', _.bind(this._onClickAction, this));
+            this.$container.on('click', '.notification-delete', _.bind(this._onClickDismissNotification, this));
+
             // Setup the background checker
             setInterval(this.backgroundFetch, this.pollInterval);
+        },
+
+        _onClickDismissNotification: function(event) {
+            event.preventDefault();
+            var $target = $(event.target);
+            var $notification = $target.closest('.notification');
+            var id = $notification.attr('data-id');
+
+            $notification.fadeOut(OC.menuSpeed);
+
+            $.ajax({
+                url: OC.generateUrl('/apps/notifications/' + id),
+                type: 'DELETE',
+                success: function(data) {
+                    self._removeNotification(id);
+                },
+                error: function() {
+                    $notification.fadeIn(OC.menuSpeed);
+                    OC.Notification.showTemporary('Failed to perform action');
+                }
+            });
+
+            this._removeNotification($notification.attr('data-id'));
+        },
+
+        _onClickAction: function(event) {
+            event.preventDefault();
+            var self = this;
+            var $target = $(event.target);
+            var $notification = $target.closest('.notification');
+            var actionType = $target.attr('data-type') || 'GET';
+            var actionUrl = $target.attr('data-href');
+
+            $notification.fadeOut(OC.menuSpeed);
+
+            $.ajax({
+                url: actionUrl,
+                type: actionType,
+                success: function(data) {
+                    self._removeNotification($notification.attr('data-id'));
+                },
+                error: function() {
+                    $notification.fadeIn(OC.menuSpeed);
+                    OC.Notification.showTemporary('Failed to perform action');
+                }
+            });
+
+        },
+
+        _removeNotification: function(id) {
+            var $notification = this.$container.find('.notification').filterAttr('id', id);
+            delete OCA.Notifications.notifications[id];
+
+            $notification.remove();
+            if (_.keys(OCA.Notifications.notifications).length === 0) {
+                this._onHaveNoNotifications();
+            }
         },
 
         /**
@@ -81,14 +141,14 @@
                         OCA.Notifications.num++;
                     });
                     // Check if we have any, and notify the UI
-                    if(OCA.Notifications.numNotifications() != 0) {
+                    if(OCA.Notifications.numNotifications() !== 0) {
                         OCA.Notifications._onHaveNotifications();
                     } else {
                         OCA.Notifications._onHaveNoNotifications();
                     }
                 },
                 function() {
-                    console.log('Failed to perform initial request for notifications');
+                    OC.Notification.showTemporary('Failed to perform initial request for notifications');
                 }
             );
         },
@@ -111,17 +171,17 @@
                     });
                     // TODO check if any removed from JSON
                     for(var n in OCA.Notifications.getNotifications()) {
-                        if(inJson.indexOf(OCA.Notifications.getNotifications()[n].getId()) == -1) {
+                        if(inJson.indexOf(OCA.Notifications.getNotifications()[n].getId()) === -1) {
                             // Not in JSON, remove from UI
                             OCA.Notifications._onRemoveNotification(OCA.Notifications.getNotifications()[n]);
                         }
                     }
 
                     // Now check if we suddenly have notifs, or now none
-                    if(oldNum == 0 && OCA.Notifications.numNotifications() != 0) {
+                    if(oldNum == 0 && OCA.Notifications.numNotifications() !== 0) {
                         // We now have some!
                         OCA.Notifications._onHaveNotifications();
-                    } else if(oldNum != 0 && OCA.Notifications.numNotifications() == 0) {
+                    } else if(oldNum != 0 && OCA.Notifications.numNotifications() === 0) {
                         // Now we have none
                         OCA.Notifications._onHaveNoNotifications();
                     }

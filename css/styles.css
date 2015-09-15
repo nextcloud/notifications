@@ -26,6 +26,7 @@
 
 .notification {
     color: black;
+    position: relative;
 }
 
 .notification .notification-empty {
@@ -62,6 +63,7 @@
     border-radius: 50%;
     text-align: center;
     margin-top: 10px;
+    margin-left: 10px;
     opacity: 0.7;
     cursor: pointer;
 }
@@ -74,7 +76,6 @@
 }
 
 .notifications-button:hover {
-    /* TODO cursor */
     opacity: 1;
 }
 
@@ -95,6 +96,7 @@
 
 .notification .notification-subject {
     display: inline-block;
+    margin-right: 10px;
 }
 
 .notification .notification-message {
