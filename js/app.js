@@ -14,7 +14,7 @@
         OCA.Notifications = {};
     }
 
-    var App = {
+    OCA.Notifications = {
 
         notifications: {},
 
@@ -79,7 +79,7 @@
                         OCA.Notifications._onHaveNoNotifications();
                     }
                 },
-                function(jqXHR) {
+                function() {
                     console.log('Failed to perform initial request for notifications');
                 }
             );
@@ -118,7 +118,7 @@
                         OCA.Notifications._onHaveNoNotifications();
                     }
                 },
-                function(jqXHR) {
+                function() {
                     // Bad
                     console.log('Failed to fetch notifications');
                 }
@@ -229,9 +229,6 @@
         }
 
     };
-
-    OCA.Notifications = App;
-
 })();
 
 $(document).ready(function () {
