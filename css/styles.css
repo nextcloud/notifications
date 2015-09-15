@@ -67,13 +67,6 @@
     cursor: pointer;
 }
 
-.notifications-button.hasNotifications {
-    border: 2px solid white;
-    width: 25px;
-    height: 25px;
-    margin-top: 8px;
-}
-
 .notifications-button:hover {
     opacity: 1;
 }
