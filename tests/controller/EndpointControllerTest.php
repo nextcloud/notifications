@@ -159,6 +159,66 @@ class EndpointControllerTest extends TestCase {
 		$this->assertSame($expectedData, $response->getData());
 	}
 
+	public function dataGetThrows() {
+		return [
+			[
+				[
+					1 => $this->getMockBuilder('OC\Notification\INotification')
+						->disableOriginalConstructor()
+						->getMock(),
+					3 => $this->getMockBuilder('OC\Notification\INotification')
+						->disableOriginalConstructor()
+						->getMock(),
+				],
+				md5(json_encode([3])),
+				['$notification'],
+			],
+		];
+	}
+
+	/**
+	 * @dataProvider dataGetThrows
+	 * @param array $notifications
+	 * @param string $expectedETag
+	 * @param array $expectedData
+	 */
+	public function testGetThrows(array $notifications, $expectedETag, array $expectedData) {
+		$controller = $this->getController([
+			'notificationToArray',
+		]);
+		$controller->expects($this->exactly(1))
+			->method('notificationToArray')
+			->willReturn('$notification');
+
+		$filter = $this->getMockBuilder('OC\Notification\INotification')
+			->disableOriginalConstructor()
+			->getMock();
+		$filter->expects($this->once())
+			->method('setUser')
+			->willReturn('username');
+
+		$this->manager->expects($this->once())
+			->method('createNotification')
+			->willReturn($filter);
+		$this->manager->expects($this->at(1))
+			->method('prepare')
+			->willThrowException(new \InvalidArgumentException());
+		$this->manager->expects($this->at(2))
+			->method('prepare')
+			->willReturnArgument(0);
+
+		$this->handler->expects($this->once())
+			->method('get')
+			->with($filter)
+			->willReturn($notifications);
+
+		$response = $controller->get();
+		$this->assertInstanceOf('OCP\AppFramework\Http\JSONResponse', $response);
+
+		$this->assertSame($expectedETag, $response->getETag());
+		$this->assertSame($expectedData, $response->getData());
+	}
+
 	public function dataDelete() {
 		return [
 			[42, 'username1'],

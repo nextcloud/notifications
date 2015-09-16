@@ -72,13 +72,21 @@ class EndpointController extends Controller {
 		$notifications = $this->handler->get($filter);
 
 		$data = [];
+		$notificationIds = [];
 		foreach ($notifications as $notificationId => $notification) {
-			$notification = $this->manager->prepare($notification, $language);
+			try {
+				$notification = $this->manager->prepare($notification, $language);
+			} catch (\InvalidArgumentException $e) {
+				// The app was disabled, skip the notification
+				continue;
+			}
+
+			$notificationIds[] = $notificationId;
 			$data[] = $this->notificationToArray($notificationId, $notification);
 		}
 
 		$response = new JSONResponse($data);
-		$response->setETag($this->generateEtag($notifications));
+		$response->setETag($this->generateEtag($notificationIds));
 		return $response;
 	}
 
@@ -95,12 +103,12 @@ class EndpointController extends Controller {
 
 	/**
 	 * Get an Etag for the notification ids
+	 *
 	 * @param array $notifications
 	 * @return string
 	 */
 	protected function generateEtag(array $notifications) {
-		$ids = array_keys($notifications);
-		return md5(json_encode($ids));
+		return md5(json_encode($notifications));
 	}
 
 	/**
