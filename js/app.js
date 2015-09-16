@@ -28,11 +28,15 @@
 
         $container: null,
 
+        $notifications: null,
+
+        interval: null,
+
         initialise: function() {
             // Go!
 
             // Setup elements
-            var $notifications = $('<div class="notifications"></div>');
+            this.$notifications = $('<div class="notifications"></div>');
             this.$button = $('<div class="notifications-button menutoggle"><img class="svg" alt="Dismiss" src="' + OC.imagePath('notifications', 'notifications') + '"></div>');
             this.$container = $('<div class="notification-container"></div>');
             var $wrapper = $('<div class="notification-wrapper"></div>');
@@ -44,12 +48,12 @@
             $emptyContent.append($headLine);
             this.$container.append($emptyContent);
 
-            $notifications.append(this.$button);
-            $notifications.append(this.$container);
+            this.$notifications.append(this.$button);
+            this.$notifications.append(this.$container);
             this.$container.append($wrapper);
 
             // Add to the UI
-            $('form.searchbox').before($notifications);
+            $('form.searchbox').before(this.$notifications);
 
             // Inital call to the notification endpoint
             this.initialFetch();
@@ -62,7 +66,7 @@
             this.$container.on('click', '.notification-delete', _.bind(this._onClickDismissNotification, this));
 
             // Setup the background checker
-            setInterval(this.backgroundFetch, this.pollInterval);
+            this.interval = setInterval(_.bind(this.backgroundFetch, this), this.pollInterval);
         },
 
         _onClickDismissNotification: function(event) {
@@ -131,25 +135,25 @@
         },
 
         initialFetch: function() {
+            var self = this;
+
             this.fetch(
                 function(data) {
                     // Fill Array
                     $.each(data, function(index) {
-                        var n = new OCA.Notifications.Notif(data[index]);
-                        OCA.Notifications.notifications[n.getId()] = n;
-                        OCA.Notifications.addToUI(n);
-                        OCA.Notifications.num++;
+                        var n = new self.Notif(data[index]);
+                        self.notifications[n.getId()] = n;
+                        self.addToUI(n);
+                        self.num++;
                     });
                     // Check if we have any, and notify the UI
-                    if(OCA.Notifications.numNotifications() !== 0) {
-                        OCA.Notifications._onHaveNotifications();
+                    if (self.numNotifications() !== 0) {
+                        self._onHaveNotifications();
                     } else {
-                        OCA.Notifications._onHaveNoNotifications();
+                        self._onHaveNoNotifications();
                     }
                 },
-                function() {
-                    OC.Notification.showTemporary('Failed to perform initial request for notifications');
-                }
+                _.bind(self._onFetchError, self)
             );
         },
 
@@ -157,40 +161,55 @@
          * Background fetch handler
          */
         backgroundFetch: function() {
-            OCA.Notifications.fetch(
+            var self = this;
+
+            this.fetch(
                 function(data) {
                     var inJson = [];
-                    var oldNum = OCA.Notifications.numNotifications();
+                    var oldNum = self.numNotifications();
                     $.each(data, function(index) {
-                        var n = new OCA.Notifications.Notif(data[index]);
+                        var n = new self.Notif(data[index]);
                         inJson.push(n.getId());
-                        if(!OCA.Notifications.getNotification(n.getId())){
+                        if (!self.getNotification(n.getId())){
                             // New notification!
-                            OCA.Notifications._onNewNotification(n);
+                            self._onNewNotification(n);
                         }
                     });
                     // TODO check if any removed from JSON
-                    for(var n in OCA.Notifications.getNotifications()) {
-                        if(inJson.indexOf(OCA.Notifications.getNotifications()[n].getId()) === -1) {
+                    for (var n in self.getNotifications()) {
+                        if (inJson.indexOf(self.getNotifications()[n].getId()) === -1) {
                             // Not in JSON, remove from UI
-                            OCA.Notifications._onRemoveNotification(OCA.Notifications.getNotifications()[n]);
+                            self._onRemoveNotification(self.getNotifications()[n]);
                         }
                     }
 
                     // Now check if we suddenly have notifs, or now none
-                    if(oldNum == 0 && OCA.Notifications.numNotifications() !== 0) {
+                    if (oldNum == 0 && self.numNotifications() !== 0) {
                         // We now have some!
-                        OCA.Notifications._onHaveNotifications();
-                    } else if(oldNum != 0 && OCA.Notifications.numNotifications() === 0) {
+                        self._onHaveNotifications();
+                    } else if (oldNum != 0 && self.numNotifications() === 0) {
                         // Now we have none
-                        OCA.Notifications._onHaveNoNotifications();
+                        self._onHaveNoNotifications();
                     }
                 },
-                function() {
-                    // Bad
-                    console.log('Failed to fetch notifications');
-                }
+                _.bind(self._onFetchError, self)
             );
+        },
+
+        /**
+         * Handles removing the Notification from the UI when no longer in JSON
+         * @param {XMLHttpRequest} xhr
+         */
+        _onFetchError: function(xhr) {
+            if (xhr.status === 404) {
+                // 404 Not Found
+                // The app was disabled or has no notifiers, so we can stop polling
+                // And hide the UI as well
+                window.clearInterval(this.interval);
+                this.$notifications.addClass('hidden');
+            } else {
+                OC.Notification.showTemporary('Failed to perform request for notifications');
+            }
         },
 
         /**
@@ -260,7 +279,8 @@
                 url: OC.generateUrl('/apps/notifications'),
                 type: 'GET'
             });
-            request.success(success);
+
+            request.done(success);
             request.fail(failure);
         },
 
