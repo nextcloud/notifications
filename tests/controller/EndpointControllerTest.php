@@ -141,6 +141,9 @@ class EndpointControllerTest extends TestCase {
 			->willReturn('username');
 
 		$this->manager->expects($this->once())
+			->method('hasNotifiers')
+			->willReturn(true);
+		$this->manager->expects($this->once())
 			->method('createNotification')
 			->willReturn($filter);
 		$this->manager->expects($this->exactly(sizeof($notifications)))
@@ -198,12 +201,15 @@ class EndpointControllerTest extends TestCase {
 			->willReturn('username');
 
 		$this->manager->expects($this->once())
+			->method('hasNotifiers')
+			->willReturn(true);
+		$this->manager->expects($this->once())
 			->method('createNotification')
 			->willReturn($filter);
-		$this->manager->expects($this->at(1))
+		$this->manager->expects($this->at(2))
 			->method('prepare')
 			->willThrowException(new \InvalidArgumentException());
-		$this->manager->expects($this->at(2))
+		$this->manager->expects($this->at(3))
 			->method('prepare')
 			->willReturnArgument(0);
 
@@ -217,6 +223,18 @@ class EndpointControllerTest extends TestCase {
 
 		$this->assertSame($expectedETag, $response->getETag());
 		$this->assertSame($expectedData, $response->getData());
+	}
+
+	public function testGetNoNotifiers() {
+		$controller = $this->getController();
+		$this->manager->expects($this->once())
+			->method('hasNotifiers')
+			->willReturn(false);
+
+		$response = $controller->get();
+		$this->assertInstanceOf('OCP\AppFramework\Http\Response', $response);
+
+		$this->assertSame(Http::STATUS_NOT_FOUND, $response->getStatus());
 	}
 
 	public function dataDelete() {
