@@ -10,17 +10,23 @@
     position: absolute;
     right: 50px;
     top: 45px;
-    width: 400px;
-    height: 260px;
-    border-radius: 3px;
+    width: 350px;
+    min-height: 100px;
+    max-height: 260px;
+    border-radius: 0 0 3px 3px;
     border: 1px solid rgb(238, 238, 238);;
+}
+
+.notification-container .emptycontent h2 {
+    font-weight: 300;
+    font-size: 16px;
 }
 
 /* Fill width on mobile */
 @media (max-width: 500px) {
     .notification-container {
-        right: 0;
-        width: 100%;
+        right: 5%;
+        width: 90%;
     }
 }
 
