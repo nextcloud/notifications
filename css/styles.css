@@ -90,9 +90,6 @@
     float:right;
     padding: 0;
 }
-.notification .actions .button {
-    float: right !important;
-}
 
 .notification .actions:first-child {
     margin-left: auto;
