@@ -25,6 +25,7 @@ use OC\Notification\IAction;
 use OC\Notification\IManager;
 use OC\Notification\INotification;
 use OCA\Notifications\Handler;
+use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\Response;
@@ -65,6 +66,14 @@ class EndpointController extends Controller {
 	 * @return JSONResponse
 	 */
 	public function get() {
+		// When there are no apps registered that use the notifications
+		// We stop polling for them.
+		if (!$this->manager->hasNotifiers()) {
+			$response = new Response();
+			$response->setStatus(Http::STATUS_NOT_FOUND);
+			return $response;
+		}
+
 		$filter = $this->manager->createNotification();
 		$filter->setUser($this->user);
 		$language = $this->config->getUserValue($this->user, 'core', 'lang', null);
