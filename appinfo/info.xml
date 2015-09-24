@@ -13,6 +13,8 @@
 		<filesystem/>
 	</types>
 
+	<default_enable/>
+
 	<dependencies>
 		<owncloud min-version="8.2" />
 		<owncloud max-version="8.3" />
