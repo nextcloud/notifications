@@ -22,12 +22,15 @@
 namespace OCA\Notifications\Tests\AppInfo;
 
 use OCA\Notifications\Tests\TestCase;
+use OCP\IUser;
 
 class AppTest extends TestCase {
 	/** @var \OC\Notification\IManager|\PHPUnit_Framework_MockObject_MockObject */
 	protected $manager;
 	/** @var \OCP\IRequest|\PHPUnit_Framework_MockObject_MockObject */
 	protected $request;
+	/** @var \OCP\IUserSession|\PHPUnit_Framework_MockObject_MockObject */
+	protected $session;
 
 	protected function setUp() {
 		parent::setUp();
@@ -40,13 +43,19 @@ class AppTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
+		$this->session = $this->getMockBuilder('OC\User\Session')
+			->disableOriginalConstructor()
+			->getMock();
+
 		$this->overwriteService('NotificationManager', $this->manager);
 		$this->overwriteService('Request', $this->request);
+		$this->overwriteService('UserSession', $this->session);
 	}
 
 	protected function tearDown() {
 		$this->restoreService('NotificationManager');
 		$this->restoreService('Request');
+		$this->restoreService('UserSession');
 
 		parent::tearDown();
 	}
@@ -64,10 +73,15 @@ class AppTest extends TestCase {
 	}
 
 	public function dataLoadingJSAndCSS() {
+		$user = $this->getMockBuilder('OCP\IUser')
+			->disableOriginalClone()
+			->getMock();
+
 		return [
-			['/index.php', '/apps/files', true],
-			['/remote.php', '/webdav', false],
-			['/index.php', '/s/1234567890123', false],
+			['/index.php', '/apps/files', $user, true],
+			['/index.php', '/apps/files', null, false],
+			['/remote.php', '/webdav', $user, false],
+			['/index.php', '/s/1234567890123', $user, false],
 		];
 	}
 
@@ -75,15 +89,19 @@ class AppTest extends TestCase {
 	 * @dataProvider dataLoadingJSAndCSS
 	 * @param string $scriptName
 	 * @param string $pathInfo
+	 * @param IUser|null $user
 	 * @param bool $scriptsAdded
 	 */
-	public function testLoadingJSAndCSS($scriptName, $pathInfo, $scriptsAdded) {
+	public function testLoadingJSAndCSS($scriptName, $pathInfo, $user, $scriptsAdded) {
 		$this->request->expects($this->any())
 			->method('getScriptName')
 			->willReturn($scriptName);
 		$this->request->expects($this->any())
 			->method('getPathInfo')
 			->willReturn($pathInfo);
+		$this->session->expects($this->once())
+			->method('getUser')
+			->willReturn($user);
 
 		\OC_Util::$scripts = [];
 		\OC_Util::$styles = [];
