@@ -26,6 +26,8 @@ use OCA\Notifications\Tests\TestCase;
 class AppTest extends TestCase {
 	/** @var \OC\Notification\IManager|\PHPUnit_Framework_MockObject_MockObject */
 	protected $manager;
+	/** @var \OCP\IRequest|\PHPUnit_Framework_MockObject_MockObject */
+	protected $request;
 
 	protected function setUp() {
 		parent::setUp();
@@ -34,11 +36,17 @@ class AppTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
+		$this->request = $this->getMockBuilder('OCP\IRequest')
+			->disableOriginalConstructor()
+			->getMock();
+
 		$this->overwriteService('NotificationManager', $this->manager);
+		$this->overwriteService('Request', $this->request);
 	}
 
 	protected function tearDown() {
 		$this->restoreService('NotificationManager');
+		$this->restoreService('Request');
 
 		parent::tearDown();
 	}
@@ -53,5 +61,41 @@ class AppTest extends TestCase {
 			});
 
 		include(__DIR__ . '/../../appinfo/app.php');
+	}
+
+	public function dataLoadingJSAndCSS() {
+		return [
+			['/index.php', '/apps/files', true],
+			['/remote.php', '/webdav', false],
+			['/index.php', '/s/1234567890123', false],
+		];
+	}
+
+	/**
+	 * @dataProvider dataLoadingJSAndCSS
+	 * @param string $scriptName
+	 * @param string $pathInfo
+	 * @param bool $scriptsAdded
+	 */
+	public function testLoadingJSAndCSS($scriptName, $pathInfo, $scriptsAdded) {
+		$this->request->expects($this->any())
+			->method('getScriptName')
+			->willReturn($scriptName);
+		$this->request->expects($this->any())
+			->method('getPathInfo')
+			->willReturn($pathInfo);
+
+		\OC_Util::$scripts = [];
+		\OC_Util::$styles = [];
+
+		include(__DIR__ . '/../../appinfo/app.php');
+
+		if ($scriptsAdded) {
+			$this->assertNotEmpty(\OC_Util::$scripts);
+			$this->assertNotEmpty(\OC_Util::$styles);
+		} else {
+			$this->assertEmpty(\OC_Util::$scripts);
+			$this->assertEmpty(\OC_Util::$styles);
+		}
 	}
 }
