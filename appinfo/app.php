@@ -23,6 +23,7 @@ namespace OCA\Notifications\AppInfo;
 
 use OCA\Notifications\App;
 use OCA\Notifications\Handler;
+use OCP\Util;
 
 \OC::$server->getNotificationManager()->registerApp(function() {
 	return new App(
@@ -33,6 +34,11 @@ use OCA\Notifications\Handler;
 	);
 });
 
-\OCP\Util::addScript('notifications', 'app');
-\OCP\Util::addScript('notifications', 'notification');
-\OCP\Util::addStyle('notifications', 'styles');
+// Only display the app on index.php except for public shares
+$request = \OC::$server->getRequest();
+if (substr($request->getScriptName(), 0 - strlen('/index.php')) === '/index.php'
+	&& substr($request->getPathInfo(), 0, strlen('/s/')) !== '/s/') {
+	Util::addScript('notifications', 'app');
+	Util::addScript('notifications', 'notification');
+	Util::addStyle('notifications', 'styles');
+}
