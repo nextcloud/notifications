@@ -45,7 +45,7 @@ class Handler {
 	}
 
 	/**
-	 * Count the notifications matching the given Notification
+	 * Add a new notification to the database
 	 *
 	 * @param INotification $notification
 	 * @return int
@@ -180,7 +180,7 @@ class Handler {
 	}
 
 	/**
-	 * Add where statements to a query builder matching the given notification
+	 * Turn a notification into an input statement
 	 *
 	 * @param IQueryBuilder $sql
 	 * @param INotification $notification
