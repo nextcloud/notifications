@@ -1,6 +1,6 @@
 # Notifications
 
-An app that notifies the user about import events of other apps.
+An app that notifies the user about important events of other apps.
 
 ## QA metrics on master branch:
 
