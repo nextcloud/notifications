@@ -55,7 +55,7 @@
             // Add to the UI
             $('form.searchbox').before(this.$notifications);
 
-            // Inital call to the notification endpoint
+            // Initial call to the notification endpoint
             this.initialFetch();
 
             // Bind the button click event

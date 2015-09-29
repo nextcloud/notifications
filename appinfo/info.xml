@@ -2,7 +2,7 @@
 <info>
 	<id>notifications</id>
 	<name>Notifications</name>
-	<description>An app that notifies the user about import events of other apps.</description>
+	<description>An app that notifies the user about important events of other apps.</description>
 
 	<licence>AGPL</licence>
 	<author>Joas Schilling</author>
