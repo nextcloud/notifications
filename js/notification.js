@@ -64,6 +64,10 @@
             return this.object_id;
         },
 
+        getLink: function() {
+            return this.link;
+        },
+
         getActions: function() {
             return this.actions;
         },
@@ -92,7 +96,12 @@
             var el = $('<div class="notification"></div>');
             el.attr('data-id', escapeHTML(this.getId()));
             el.attr('data-timestamp', escapeHTML(this.getTimestamp()));
-            el.append('<div class="notification-subject"> '+escapeHTML(this.getSubject())+'</div>');
+
+            if (this.getLink()) {
+                el.append('<a href="'+this.getLink()+'" class="notification-subject"> '+escapeHTML(this.getSubject())+'</a>');
+            } else {
+                el.append('<div class="notification-subject"> '+escapeHTML(this.getSubject())+'</div>');
+            }
             el.append('<div class="notification-message">'+escapeHTML(this.getMessage())+'</div>');
             // Add actions
             var actions = $('<div class="actions"></div>');
