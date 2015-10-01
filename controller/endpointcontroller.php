@@ -70,7 +70,7 @@ class EndpointController extends Controller {
 		// We stop polling for them.
 		if (!$this->manager->hasNotifiers()) {
 			$response = new Response();
-			$response->setStatus(Http::STATUS_NOT_FOUND);
+			$response->setStatus(Http::STATUS_NO_CONTENT);
 			return $response;
 		}
 

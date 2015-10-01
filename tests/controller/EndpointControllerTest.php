@@ -234,7 +234,7 @@ class EndpointControllerTest extends TestCase {
 		$response = $controller->get();
 		$this->assertInstanceOf('OCP\AppFramework\Http\Response', $response);
 
-		$this->assertSame(Http::STATUS_NOT_FOUND, $response->getStatus());
+		$this->assertSame(Http::STATUS_NO_CONTENT, $response->getStatus());
 	}
 
 	public function dataDelete() {
