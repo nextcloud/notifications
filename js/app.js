@@ -201,7 +201,7 @@
          * @param {XMLHttpRequest} xhr
          */
         _onFetchError: function(xhr) {
-            if (xhr.status === 404) {
+            if (xhr.status === 404 || xhr.status === 204) {
                 // 404 Not Found
                 // The app was disabled or has no notifiers, so we can stop polling
                 // And hide the UI as well
