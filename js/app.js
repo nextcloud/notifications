@@ -201,12 +201,9 @@
          * @param {XMLHttpRequest} xhr
          */
         _onFetchError: function(xhr) {
-            if (xhr.status === 404 || xhr.status === 204) {
-                // 404 Not Found
-                // The app was disabled or has no notifiers, so we can stop polling
-                // And hide the UI as well
-                window.clearInterval(this.interval);
-                this.$notifications.addClass('hidden');
+            if (xhr.status === 404) {
+                // 404 Not Found - stop polling
+                this._shutDownNotifications();
             } else {
                 OC.Notification.showTemporary('Failed to perform request for notifications');
             }
@@ -233,6 +230,13 @@
             // Add to the UI
             OCA.Notifications.addToUI(notification);
             // TODO make a noise? Anything else?
+        },
+
+        _shutDownNotifications: function() {
+            // The app was disabled or has no notifiers, so we can stop polling
+            // And hide the UI as well
+            window.clearInterval(this.interval);
+            this.$notifications.addClass('hidden');
         },
 
         /**
@@ -275,12 +279,21 @@
          * @param {Function} failure
          */
         fetch: function(success, failure){
+            var self = this;
             var request = $.ajax({
                 url: OC.generateUrl('/apps/notifications'),
                 type: 'GET'
             });
 
-            request.done(success);
+
+            request.done(function(data, statusText, xhr) {
+                if (xhr.status === 204) {
+                    // 204 No Content - Intercept when no notifiers are there.
+                    self._shutDownNotifications();
+                } else {
+                    success(data, statusText, xhr);
+                }
+            });
             request.fail(failure);
         },
 
