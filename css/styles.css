@@ -84,11 +84,18 @@
     border: 1px solid rgba(240,240,240,.9) !important;
     margin-left: 5px !important;
     padding: 0 10px;
+	box-shadow: none;
+	margin: 0;
+	float: left;
 }
 
 .notification .actions {
     float:right;
     padding: 0;
+}
+
+.notification .action-button {
+	color: #555;
 }
 
 .notification .actions:first-child {
@@ -110,3 +117,4 @@
     overflow: auto;
     overflow-x: hidden;
 }
+
