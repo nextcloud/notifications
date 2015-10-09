@@ -21,23 +21,8 @@
 
 namespace OCA\Notifications\AppInfo;
 
-use OC\Files\View;
-use OCA\Activity\Consumer;
-use OCA\Activity\Controller\Activities;
-use OCA\Activity\Controller\Feed;
-use OCA\Activity\Controller\Settings;
-use OCA\Activity\Data;
-use OCA\Activity\DataHelper;
-use OCA\Activity\GroupHelper;
-use OCA\Activity\FilesHooks;
-use OCA\Activity\MailQueueHandler;
-use OCA\Activity\Navigation;
-use OCA\Activity\ParameterHelper;
-use OCA\Activity\UserSettings;
-use OCA\AnnouncementCenter\Controller\PageController;
-use OCA\AnnouncementCenter\Manager;
 use OCA\Notifications\Capabilities;
-use OCA\Notifications\Controller\EndPointController;
+use OCA\Notifications\Controller\EndpointController;
 use OCA\Notifications\Handler;
 use OCP\AppFramework\App;
 use OCP\IContainer;
