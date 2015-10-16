@@ -82,7 +82,6 @@
 
 .notification .button {
     border: 1px solid rgba(240,240,240,.9) !important;
-    margin-left: 5px !important;
     padding: 0 10px;
 	box-shadow: none;
 	margin: 0;
@@ -118,3 +117,6 @@
     overflow-x: hidden;
 }
 
+.notifications .emptycontent {
+    margin: 50px 0;
+}
