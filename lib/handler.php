@@ -91,7 +91,7 @@ class Handler {
 	}
 
 	/**
-	 * Delete the notifications matching the given id
+	 * Delete the notification matching the given id
 	 *
 	 * @param int $id
 	 * @param string $user
@@ -105,6 +105,32 @@ class Handler {
 			->andWhere($sql->expr()->eq('user', $sql->createParameter('user')))
 			->setParameter('user', $user);
 		$sql->execute();
+	}
+
+	/**
+	 * Get the notification matching the given id
+	 *
+	 * @param int $id
+	 * @param string $user
+	 * @return null|INotification
+	 */
+	public function getById($id, $user) {
+		$sql = $this->connection->getQueryBuilder();
+		$sql->select('*')
+			->from('notifications')
+			->where($sql->expr()->eq('notification_id', $sql->createParameter('id')))
+			->setParameter('id', $id)
+			->andWhere($sql->expr()->eq('user', $sql->createParameter('user')))
+			->setParameter('user', $user);
+		$statement = $sql->execute();
+
+		$notification = null;
+		if ($row = $statement->fetch()) {
+			$notification = $this->notificationFromRow($row);
+		}
+		$statement->closeCursor();
+
+		return $notification;
 	}
 
 	/**

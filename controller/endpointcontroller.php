@@ -102,6 +102,44 @@ class EndpointController extends Controller {
 
 	/**
 	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 *
+	 * @param array $parameters
+	 * @return \OC_OCS_Result
+	 */
+	public function getNotification(array $parameters) {
+		if (!$this->manager->hasNotifiers()) {
+			return new \OC_OCS_Result(null, Http::STATUS_NOT_FOUND);
+		}
+
+		if (!isset($parameters['id'])) {
+			return new \OC_OCS_Result(null, HTTP::STATUS_NOT_FOUND);
+		}
+		$id = (int) $parameters['id'];
+
+		$notification = $this->handler->getById($id, $this->getCurrentUser());
+
+		if (!($notification instanceof INotification)) {
+			return new \OC_OCS_Result(null, HTTP::STATUS_NOT_FOUND);
+		}
+
+		$language = $this->config->getUserValue($this->getCurrentUser(), 'core', 'lang', null);
+
+		try {
+			$notification = $this->manager->prepare($notification, $language);
+		} catch (\InvalidArgumentException $e) {
+			// The app was disabled
+			return new \OC_OCS_Result(null, HTTP::STATUS_NOT_FOUND);
+		}
+
+		return new \OC_OCS_Result(
+			$this->notificationToArray($id, $notification),
+			100 // HTTP::STATUS_OK TODO: <status>failure</status><statuscode>200</statuscode>
+		);
+	}
+
+	/**
+	 * @NoAdminRequired
 	 *
 	 * @param array $parameters
 	 * @return \OC_OCS_Result
