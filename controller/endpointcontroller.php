@@ -136,7 +136,7 @@ class EndpointController extends Controller {
 			'notification_id' => $notificationId,
 			'app' => $notification->getApp(),
 			'user' => $notification->getUser(),
-			'timestamp' => $notification->getTimestamp(),
+			'datetime' => date('c', $notification->getTimestamp()),
 			'object_type' => $notification->getObjectType(),
 			'object_id' => $notification->getObjectId(),
 			'subject' => $notification->getParsedSubject(),

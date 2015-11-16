@@ -380,16 +380,16 @@ class EndpointControllerTest extends TestCase {
 			->willReturn('action');
 
 		$this->assertEquals([
-			'notification_id' => $id,
-			'app' => $app,
-			'user' => $user,
-			'timestamp' => $timestamp,
-			'object_type' => $objectType,
-			'object_id' => $objectId,
-			'subject' => $subject,
-			'message' => $message,
-			'link' => $link,
-			'actions' => $actionsExpected,
+				'notification_id' => $id,
+				'app' => $app,
+				'user' => $user,
+				'datetime' => date('c', $timestamp),
+				'object_type' => $objectType,
+				'object_id' => $objectId,
+				'subject' => $subject,
+				'message' => $message,
+				'link' => $link,
+				'actions' => $actionsExpected,
 			],
 			$this->invokePrivate($controller, 'notificationToArray', [$id, $notification])
 		);
