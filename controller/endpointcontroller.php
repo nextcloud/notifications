@@ -26,11 +26,11 @@ use OC\Notification\IManager;
 use OC\Notification\INotification;
 use OCA\Notifications\Handler;
 use OCP\AppFramework\Http;
-use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http\Response;
 use OCP\IConfig;
 use OCP\IRequest;
+use OCP\IUser;
+use OCP\IUserSession;
 
 class EndpointController extends Controller {
 	/** @var Handler */
@@ -39,8 +39,8 @@ class EndpointController extends Controller {
 	/** @var IManager */
 	private $manager;
 
-	/** @var string */
-	private $user;
+	/** @var IUserSession */
+	private $session;
 
 	/**
 	 * @param string $appName
@@ -48,35 +48,33 @@ class EndpointController extends Controller {
 	 * @param Handler $handler
 	 * @param IManager $manager
 	 * @param IConfig $config
-	 * @param string $userId
+	 * @param IUserSession $session
 	 */
-	public function __construct($appName, IRequest $request, Handler $handler, IManager $manager, IConfig $config, $userId) {
+	public function __construct($appName, IRequest $request, Handler $handler, IManager $manager, IConfig $config, IUserSession $session) {
 		parent::__construct($appName, $request);
 
 		$this->handler = $handler;
 		$this->manager = $manager;
 		$this->config = $config;
-		$this->user = $userId;
+		$this->session = $session;
 	}
 
 	/**
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 *
-	 * @return JSONResponse
+	 * @return \OC_OCS_Result
 	 */
-	public function get() {
+	public function listNotifications() {
 		// When there are no apps registered that use the notifications
 		// We stop polling for them.
 		if (!$this->manager->hasNotifiers()) {
-			$response = new Response();
-			$response->setStatus(Http::STATUS_NO_CONTENT);
-			return $response;
+			return new \OC_OCS_Result(null, Http::STATUS_NO_CONTENT);
 		}
 
 		$filter = $this->manager->createNotification();
-		$filter->setUser($this->user);
-		$language = $this->config->getUserValue($this->user, 'core', 'lang', null);
+		$filter->setUser($this->getCurrentUser());
+		$language = $this->config->getUserValue($this->getCurrentUser(), 'core', 'lang', null);
 
 		$notifications = $this->handler->get($filter);
 
@@ -94,20 +92,28 @@ class EndpointController extends Controller {
 			$data[] = $this->notificationToArray($notificationId, $notification);
 		}
 
-		$response = new JSONResponse($data);
-		$response->setETag($this->generateEtag($notificationIds));
-		return $response;
+		return new \OC_OCS_Result(
+			$data,
+			100, // HTTP::STATUS_OK, TODO: <status>failure</status><statuscode>200</statuscode>
+			null,
+			['ETag' => $this->generateEtag($notificationIds)]
+		);
 	}
 
 	/**
 	 * @NoAdminRequired
 	 *
-	 * @param int $id
-	 * @return Response
+	 * @param array $parameters
+	 * @return \OC_OCS_Result
 	 */
-	public function delete($id) {
-		$this->handler->deleteById($id, $this->user);
-		return new Response();
+	public function deleteNotification(array $parameters) {
+		if (!isset($parameters['id'])) {
+			return new \OC_OCS_Result(null, HTTP::STATUS_NOT_FOUND);
+		}
+		$id = (int) $parameters['id'];
+
+		$this->handler->deleteById($id, $this->getCurrentUser());
+		return new \OC_OCS_Result();
 	}
 
 	/**
@@ -158,5 +164,17 @@ class EndpointController extends Controller {
 			'type' => $action->getRequestType(),
 			'icon' => $action->getIcon(),
 		];
+	}
+
+	/**
+	 * @return string
+	 */
+	protected function getCurrentUser() {
+		$user = $this->session->getUser();
+		if ($user instanceof IUser) {
+			$user = $user->getUID();
+		}
+
+		return (string) $user;
 	}
 }

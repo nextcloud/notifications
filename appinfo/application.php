@@ -47,7 +47,7 @@ class Application extends App {
 				),
 				$server->getNotificationManager(),
 				$server->getConfig(),
-				$this->getCurrentUser($server->getUserSession())
+				$server->getUserSession()
 			);
 		});
 
