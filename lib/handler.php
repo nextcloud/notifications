@@ -111,13 +111,15 @@ class Handler {
 	 * Return the notifications matching the given Notification
 	 *
 	 * @param INotification $notification
+	 * @param int $limit
 	 * @return array [notification_id => INotification]
 	 */
-	public function get(INotification $notification) {
+	public function get(INotification $notification, $limit = 25) {
 		$sql = $this->connection->getQueryBuilder();
 		$sql->select('*')
 			->from('notifications')
-			->orderBy('notification_id', 'DESC');
+			->orderBy('notification_id', 'DESC')
+			->setMaxResults($limit);
 
 		$this->sqlWhere($sql, $notification);
 		$statement = $sql->execute();
