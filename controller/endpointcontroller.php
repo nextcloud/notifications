@@ -142,7 +142,6 @@ class EndpointController extends Controller {
 			'subject' => $notification->getParsedSubject(),
 			'message' => $notification->getParsedMessage(),
 			'link' => $notification->getLink(),
-			'icon' => $notification->getIcon(),
 			'actions' => [],
 		];
 
@@ -162,7 +161,6 @@ class EndpointController extends Controller {
 			'label' => $action->getParsedLabel(),
 			'link' => $action->getLink(),
 			'type' => $action->getRequestType(),
-			'icon' => $action->getIcon(),
 		];
 	}
 

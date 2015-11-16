@@ -304,8 +304,8 @@ class EndpointControllerTest extends TestCase {
 
 	public function dataNotificationToArray() {
 		return [
-			[42, 'app1', 'user1', 1234, 'type1', 42, 'subject1', 'message1', 'link1', 'icon1', [], []],
-			[1337, 'app2', 'user2', 1337, 'type2', 21, 'subject2', 'message2', 'link2', 'icon2', [
+			[42, 'app1', 'user1', 1234, 'type1', 42, 'subject1', 'message1', 'link1', [], []],
+			[1337, 'app2', 'user2', 1337, 'type2', 21, 'subject2', 'message2', 'link2', [
 				$this->getMockBuilder('OC\Notification\IAction')
 					->disableOriginalConstructor()
 					->getMock(),
@@ -328,11 +328,10 @@ class EndpointControllerTest extends TestCase {
 	 * @param string $subject
 	 * @param string $message
 	 * @param string $link
-	 * @param string $icon
 	 * @param array $actions
 	 * @param array $actionsExpected
 	 */
-	public function testNotificationToArray($id, $app, $user, $timestamp, $objectType, $objectId, $subject, $message, $link, $icon, array $actions, array $actionsExpected) {
+	public function testNotificationToArray($id, $app, $user, $timestamp, $objectType, $objectId, $subject, $message, $link, array $actions, array $actionsExpected) {
 		$notification = $this->getMockBuilder('OC\Notification\INotification')
 			->disableOriginalConstructor()
 			->getMock();
@@ -370,10 +369,6 @@ class EndpointControllerTest extends TestCase {
 			->willReturn($link);
 
 		$notification->expects($this->once())
-			->method('getIcon')
-			->willReturn($icon);
-
-		$notification->expects($this->once())
 			->method('getParsedActions')
 			->willReturn($actions);
 
@@ -394,7 +389,6 @@ class EndpointControllerTest extends TestCase {
 			'subject' => $subject,
 			'message' => $message,
 			'link' => $link,
-			'icon' => $icon,
 			'actions' => $actionsExpected,
 			],
 			$this->invokePrivate($controller, 'notificationToArray', [$id, $notification])
@@ -403,8 +397,8 @@ class EndpointControllerTest extends TestCase {
 
 	public function dataActionToArray() {
 		return [
-			['label1', 'link1', 'GET', 'icon1'],
-			['label2', 'link2', 'POST', 'icon2'],
+			['label1', 'link1', 'GET'],
+			['label2', 'link2', 'POST'],
 		];
 	}
 
@@ -414,9 +408,8 @@ class EndpointControllerTest extends TestCase {
 	 * @param string $label
 	 * @param string $link
 	 * @param string $requestType
-	 * @param string $icon
 	 */
-	public function testActionToArray($label, $link, $requestType, $icon) {
+	public function testActionToArray($label, $link, $requestType) {
 		$action = $this->getMockBuilder('OC\Notification\IAction')
 			->disableOriginalConstructor()
 			->getMock();
@@ -433,13 +426,8 @@ class EndpointControllerTest extends TestCase {
 			->method('getRequestType')
 			->willReturn($requestType);
 
-		$action->expects($this->once())
-			->method('getIcon')
-			->willReturn($icon);
-
 		$this->assertEquals([
 				'label' => $label,
-				'icon' => $icon,
 				'link' => $link,
 				'type' => $requestType,
 			],
