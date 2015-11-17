@@ -22,7 +22,7 @@
 namespace OCA\Notifications\Tests\Lib;
 
 use OCA\Notifications\Capabilities;
-use OCA\Notifications\Tests\TestCase;
+use OCA\Notifications\Tests\Unit\TestCase;
 
 class CapabilitiesTest extends TestCase {
 

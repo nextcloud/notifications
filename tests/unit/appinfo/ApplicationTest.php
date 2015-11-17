@@ -22,7 +22,7 @@
 namespace OCA\Notifications\Tests\AppInfo;
 
 use OCA\Notifications\AppInfo\Application;
-use OCA\Notifications\Tests\TestCase;
+use OCA\Notifications\Tests\Unit\TestCase;
 
 class ApplicationTest extends TestCase {
 	/** @var \OCA\Notifications\AppInfo\Application */

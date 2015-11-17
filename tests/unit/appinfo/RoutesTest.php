@@ -21,12 +21,12 @@
 
 namespace OCA\Notifications\Tests\AppInfo;
 
-use OCA\Notifications\Tests\TestCase;
+use OCA\Notifications\Tests\Unit\TestCase;
 
 class RoutesTest extends TestCase {
 	public function testRoutes() {
 		// Execute so we know that no error occurred
-		include(__DIR__ . '/../../appinfo/routes.php');
+		include(__DIR__ . '/../../../appinfo/routes.php');
 		$this->assertTrue(true);
 	}
 }
