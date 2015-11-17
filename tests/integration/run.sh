@@ -8,5 +8,8 @@ echo $PHPPID
 
 export TEST_SERVER_URL="http://localhost:8080/ocs/"
 vendor/bin/behat -f junit -f pretty
+RESULT=$?
 
 kill $PHPPID
+
+exit $RESULT
