@@ -199,6 +199,7 @@ class EndpointController extends Controller {
 			'label' => $action->getParsedLabel(),
 			'link' => $action->getLink(),
 			'type' => $action->getRequestType(),
+			'primary' => $action->isPrimary(),
 		];
 	}
 

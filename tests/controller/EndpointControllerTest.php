@@ -483,8 +483,8 @@ class EndpointControllerTest extends TestCase {
 
 	public function dataActionToArray() {
 		return [
-			['label1', 'link1', 'GET'],
-			['label2', 'link2', 'POST'],
+			['label1', 'link1', 'GET', false],
+			['label2', 'link2', 'POST', true],
 		];
 	}
 
@@ -494,8 +494,9 @@ class EndpointControllerTest extends TestCase {
 	 * @param string $label
 	 * @param string $link
 	 * @param string $requestType
+	 * @param bool $isPrimary
 	 */
-	public function testActionToArray($label, $link, $requestType) {
+	public function testActionToArray($label, $link, $requestType, $isPrimary) {
 		$action = $this->getMockBuilder('OC\Notification\IAction')
 			->disableOriginalConstructor()
 			->getMock();
@@ -512,10 +513,15 @@ class EndpointControllerTest extends TestCase {
 			->method('getRequestType')
 			->willReturn($requestType);
 
+		$action->expects($this->once())
+			->method('isPrimary')
+			->willReturn($isPrimary);
+
 		$this->assertEquals([
 				'label' => $label,
 				'link' => $link,
 				'type' => $requestType,
+				'primary' => $isPrimary,
 			],
 			$this->invokePrivate($this->getController(), 'actionToArray', [$action])
 		);

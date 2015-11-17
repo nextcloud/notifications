@@ -200,11 +200,6 @@ class Handler {
 			$sql->andWhere($sql->expr()->eq('link', $sql->createParameter('link')))
 				->setParameter('link', $notification->getLink());
 		}
-
-		if ($notification->getIcon() !== '') {
-			$sql->andWhere($sql->expr()->eq('icon', $sql->createParameter('icon')))
-				->setParameter('icon', $notification->getIcon());
-		}
 	}
 
 	/**
@@ -244,17 +239,14 @@ class Handler {
 		$sql->setValue('link', $sql->createParameter('link'))
 			->setParameter('link', $notification->getLink());
 
-		$sql->setValue('icon', $sql->createParameter('icon'))
-			->setParameter('icon', $notification->getIcon());
-
 		$actions = [];
 		foreach ($notification->getActions() as $action) {
 			/** @var IAction $action */
 			$actions[] = [
 				'label' => $action->getLabel(),
-				'icon' => $action->getIcon(),
 				'link' => $action->getLink(),
 				'type' => $action->getRequestType(),
+				'primary' => $action->isPrimary(),
 			];
 		}
 		$sql->setValue('actions', $sql->createParameter('actions'))
@@ -281,17 +273,14 @@ class Handler {
 		if ($row['link'] !== '') {
 			$notification->setLink($row['link']);
 		}
-		if ($row['icon'] !== '') {
-			$notification->setIcon($row['icon']);
-		}
 
 		$actions = (array) json_decode($row['actions'], true);
 		foreach ($actions as $actionData) {
 			$action = $notification->createAction();
 			$action->setLabel($actionData['label'])
 				->setLink($actionData['link'], $actionData['type']);
-			if ($actionData['icon']) {
-				$action->setIcon($actionData['icon']);
+			if (isset($actionData['primary'])) {
+				$action->setPrimary($actionData['primary']);
 			}
 			$notification->addAction($action);
 		}

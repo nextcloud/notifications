@@ -54,13 +54,12 @@ class HandlerTest extends TestCase {
 			'getMessage' => 'message',
 			'getMessageParameters' => [],
 			'getLink' => 'link',
-			'getIcon' => 'icon',
 			'getActions' => [
 				[
 					'getLabel' => 'action_label',
-					'getIcon' => 'action_icon',
 					'getLink' => 'action_link',
 					'getRequestType' => 'GET',
+					'isPrimary' => false,
 				]
 			],
 		]);
@@ -110,13 +109,12 @@ class HandlerTest extends TestCase {
 			'getMessage' => 'message',
 			'getMessageParameters' => [],
 			'getLink' => 'link',
-			'getIcon' => 'icon',
 			'getActions' => [
 				[
 					'getLabel' => 'action_label',
-					'getIcon' => 'action_icon',
 					'getLink' => 'action_link',
 					'getRequestType' => 'GET',
+					'isPrimary' => true,
 				]
 			],
 		]);
@@ -201,7 +199,6 @@ class HandlerTest extends TestCase {
 			'getMessage' => '',
 			'getMessageParameters' => [],
 			'getLink' => '',
-			'getIcon' => '',
 			'getActions' => [],
 		];
 		foreach ($defaultValues as $method => $returnValue) {
@@ -222,7 +219,6 @@ class HandlerTest extends TestCase {
 			'setSubject',
 			'setMessage',
 			'setLink',
-			'setIcon',
 			'addAction',
 		];
 		foreach ($defaultValues as $method) {
