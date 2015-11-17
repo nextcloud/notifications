@@ -31,7 +31,8 @@ class CapabilitiesTest extends TestCase {
 
 		$this->assertSame([
 			'notifications' => [
-				'endpoints' => [
+				'ocs-endpoints' => [
+					'list',
 					'get',
 					'delete',
 				],

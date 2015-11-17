@@ -38,8 +38,14 @@ class EndpointControllerTest extends TestCase {
 	/** @var \OCP\IConfig|\PHPUnit_Framework_MockObject_MockObject */
 	protected $config;
 
+	/** @var \OCP\IUserSession|\PHPUnit_Framework_MockObject_MockObject */
+	protected $session;
+
 	/** @var EndpointController */
 	protected $controller;
+
+	/** @var \OCP\IUser|\PHPUnit_Framework_MockObject_MockObject */
+	protected $user;
 
 	protected function setUp() {
 		parent::setUp();
@@ -63,9 +69,27 @@ class EndpointControllerTest extends TestCase {
 		$this->config = $this->getMockBuilder('OCP\IConfig')
 			->disableOriginalConstructor()
 			->getMock();
+
+		/** @var \OCP\IUserSession|\PHPUnit_Framework_MockObject_MockObject */
+		$this->session = $this->getMockBuilder('OCP\IUserSession')
+			->disableOriginalConstructor()
+			->getMock();
+
+		/** @var \OCP\IUser|\PHPUnit_Framework_MockObject_MockObject */
+		$this->user = $this->getMockBuilder('OCP\IUser')
+			->disableOriginalConstructor()
+			->getMock();
+
+		$this->session->expects($this->any())
+			->method('getUser')
+			->willReturn($this->user);
 	}
 
 	protected function getController(array $methods = [], $username = 'username') {
+		$this->user->expects($this->any())
+			->method('getUID')
+			->willReturn($username);
+
 		if (empty($methods)) {
 			return new EndpointController(
 				'notifications',
@@ -73,7 +97,7 @@ class EndpointControllerTest extends TestCase {
 				$this->handler,
 				$this->manager,
 				$this->config,
-				$username
+				$this->session
 			);
 		} else {
 			return $this->getMockBuilder('OCA\Notifications\Controller\EndpointController')
@@ -83,14 +107,14 @@ class EndpointControllerTest extends TestCase {
 					$this->handler,
 					$this->manager,
 					$this->config,
-					$username
+					$this->session
 				])
 				->setMethods($methods)
 				->getMock();
 		}
 	}
 
-	public function dataGet() {
+	public function dataListNotifications() {
 		return [
 			[
 				[], md5(json_encode([])), [],
@@ -120,12 +144,12 @@ class EndpointControllerTest extends TestCase {
 	}
 
 	/**
-	 * @dataProvider dataGet
+	 * @dataProvider dataListNotifications
 	 * @param array $notifications
 	 * @param string $expectedETag
 	 * @param array $expectedData
 	 */
-	public function testGet(array $notifications, $expectedETag, array $expectedData) {
+	public function testListNotifications(array $notifications, $expectedETag, array $expectedData) {
 		$controller = $this->getController([
 			'notificationToArray',
 		]);
@@ -155,14 +179,16 @@ class EndpointControllerTest extends TestCase {
 			->with($filter)
 			->willReturn($notifications);
 
-		$response = $controller->get();
-		$this->assertInstanceOf('OCP\AppFramework\Http\JSONResponse', $response);
+		$response = $controller->listNotifications();
+		$this->assertInstanceOf('OC_OCS_Result', $response);
 
-		$this->assertSame($expectedETag, $response->getETag());
+		$headers = $response->getHeaders();
+		$this->assertArrayHasKey('ETag', $headers);
+		$this->assertSame($expectedETag, $headers['ETag']);
 		$this->assertSame($expectedData, $response->getData());
 	}
 
-	public function dataGetThrows() {
+	public function dataListNotificationsThrows() {
 		return [
 			[
 				[
@@ -180,12 +206,12 @@ class EndpointControllerTest extends TestCase {
 	}
 
 	/**
-	 * @dataProvider dataGetThrows
+	 * @dataProvider dataListNotificationsThrows
 	 * @param array $notifications
 	 * @param string $expectedETag
 	 * @param array $expectedData
 	 */
-	public function testGetThrows(array $notifications, $expectedETag, array $expectedData) {
+	public function testListNotificationsThrows(array $notifications, $expectedETag, array $expectedData) {
 		$controller = $this->getController([
 			'notificationToArray',
 		]);
@@ -218,26 +244,114 @@ class EndpointControllerTest extends TestCase {
 			->with($filter)
 			->willReturn($notifications);
 
-		$response = $controller->get();
-		$this->assertInstanceOf('OCP\AppFramework\Http\JSONResponse', $response);
+		$response = $controller->listNotifications();
+		$this->assertInstanceOf('OC_OCS_Result', $response);
 
-		$this->assertSame($expectedETag, $response->getETag());
+		$headers = $response->getHeaders();
+		$this->assertArrayHasKey('ETag', $headers);
+		$this->assertSame($expectedETag, $headers['ETag']);
 		$this->assertSame($expectedData, $response->getData());
 	}
 
-	public function testGetNoNotifiers() {
+	public function testListNotificationsNoNotifiers() {
 		$controller = $this->getController();
 		$this->manager->expects($this->once())
 			->method('hasNotifiers')
 			->willReturn(false);
 
-		$response = $controller->get();
-		$this->assertInstanceOf('OCP\AppFramework\Http\Response', $response);
+		$response = $controller->listNotifications();
+		$this->assertInstanceOf('OC_OCS_Result', $response);
 
-		$this->assertSame(Http::STATUS_NO_CONTENT, $response->getStatus());
+		$this->assertSame(Http::STATUS_NO_CONTENT, $response->getStatusCode());
 	}
 
-	public function dataDelete() {
+	public function dataGetNotification() {
+		return [
+			[42, 'username1', ['$notification']],
+			[21, 'username2', ['$notification']],
+		];
+	}
+
+	/**
+	 * @dataProvider dataGetNotification
+	 * @param int $id
+	 * @param string $username
+	 */
+	public function testGetNotification($id, $username) {
+		$controller = $this->getController([
+			'notificationToArray',
+		], $username);
+
+		$notification = $this->getMockBuilder('OC\Notification\INotification')
+			->disableOriginalConstructor()
+			->getMock();
+
+		$this->manager->expects($this->once())
+			->method('hasNotifiers')
+			->willReturn(true);
+		$this->manager->expects($this->once() )
+			->method('prepare')
+			->with($notification)
+			->willReturn($notification);
+
+		$this->handler->expects($this->once())
+			->method('getById')
+			->with($id, $username)
+			->willReturn($notification);
+
+		$controller->expects($this->exactly(1))
+			->method('notificationToArray')
+			->with($id, $notification)
+			->willReturn('$notification');
+
+		$response = $controller->getNotification(['id' => (string) $id]);
+		$this->assertInstanceOf('OC_OCS_Result', $response);
+
+		$this->assertSame(100, $response->getStatusCode());
+	}
+
+	public function dataGetNotificationNoId() {
+		$notification = $this->getMockBuilder('OC\Notification\INotification')
+			->disableOriginalConstructor()
+			->getMock();
+
+		return [
+			[false, [], false, null], // No notifiers
+			[true, [], false, null], // No id
+			[true, ['id' => 42], true, null], // Not found in database
+			[true, ['id' => 42], true, $notification], // Not handled on prepare
+		];
+	}
+
+	/**
+	 * @dataProvider dataGetNotificationNoId
+	 * @param bool $hasNotifiers
+	 * @param array $parameters
+	 * @param bool $called
+	 * @param null|\OC\Notification\INotification $notification
+	 */
+	public function testGetNotificationNoId($hasNotifiers, array $parameters, $called, $notification) {
+		$controller = $this->getController();
+
+		$this->manager->expects($this->once())
+			->method('hasNotifiers')
+			->willReturn($hasNotifiers);
+
+		$this->handler->expects($called ? $this->once() : $this->never())
+			->method('getById')
+			->willReturn($notification);
+
+		$this->manager->expects($called && $notification ? $this->once() : $this->never())
+			->method('prepare')
+			->willThrowException(new \InvalidArgumentException());
+
+		$response = $controller->getNotification($parameters);
+		$this->assertInstanceOf('OC_OCS_Result', $response);
+
+		$this->assertSame(404, $response->getStatusCode());
+	}
+
+	public function dataDeleteNotification() {
 		return [
 			[42, 'username1'],
 			[21, 'username2'],
@@ -245,27 +359,39 @@ class EndpointControllerTest extends TestCase {
 	}
 
 	/**
-	 * @dataProvider dataDelete
+	 * @dataProvider dataDeleteNotification
 	 * @param int $id
 	 * @param string $username
 	 */
-	public function testDelete($id, $username) {
+	public function testDeleteNotification($id, $username) {
 		$controller = $this->getController([], $username);
 
 		$this->handler->expects($this->once())
 			->method('deleteById')
 			->with($id, $username);
 
-		$response = $controller->delete($id);
-		$this->assertInstanceOf('OCP\AppFramework\Http\Response', $response);
+		$response = $controller->deleteNotification(['id' => (string) $id]);
+		$this->assertInstanceOf('OC_OCS_Result', $response);
 
-		$this->assertSame(Http::STATUS_OK, $response->getStatus());
+		$this->assertSame(100, $response->getStatusCode());
+	}
+
+	public function testDeleteNotificationNoId() {
+		$controller = $this->getController();
+
+		$this->handler->expects($this->never())
+			->method('deleteById');
+
+		$response = $controller->deleteNotification([]);
+		$this->assertInstanceOf('OC_OCS_Result', $response);
+
+		$this->assertSame(404, $response->getStatusCode());
 	}
 
 	public function dataNotificationToArray() {
 		return [
-			[42, 'app1', 'user1', 1234, 'type1', 42, 'subject1', 'message1', 'link1', 'icon1', [], []],
-			[1337, 'app2', 'user2', 1337, 'type2', 21, 'subject2', 'message2', 'link2', 'icon2', [
+			[42, 'app1', 'user1', 1234, 'type1', 42, 'subject1', 'message1', 'link1', [], []],
+			[1337, 'app2', 'user2', 1337, 'type2', 21, 'subject2', 'message2', 'link2', [
 				$this->getMockBuilder('OC\Notification\IAction')
 					->disableOriginalConstructor()
 					->getMock(),
@@ -288,11 +414,10 @@ class EndpointControllerTest extends TestCase {
 	 * @param string $subject
 	 * @param string $message
 	 * @param string $link
-	 * @param string $icon
 	 * @param array $actions
 	 * @param array $actionsExpected
 	 */
-	public function testNotificationToArray($id, $app, $user, $timestamp, $objectType, $objectId, $subject, $message, $link, $icon, array $actions, array $actionsExpected) {
+	public function testNotificationToArray($id, $app, $user, $timestamp, $objectType, $objectId, $subject, $message, $link, array $actions, array $actionsExpected) {
 		$notification = $this->getMockBuilder('OC\Notification\INotification')
 			->disableOriginalConstructor()
 			->getMock();
@@ -330,10 +455,6 @@ class EndpointControllerTest extends TestCase {
 			->willReturn($link);
 
 		$notification->expects($this->once())
-			->method('getIcon')
-			->willReturn($icon);
-
-		$notification->expects($this->once())
 			->method('getParsedActions')
 			->willReturn($actions);
 
@@ -345,17 +466,16 @@ class EndpointControllerTest extends TestCase {
 			->willReturn('action');
 
 		$this->assertEquals([
-			'notification_id' => $id,
-			'app' => $app,
-			'user' => $user,
-			'timestamp' => $timestamp,
-			'object_type' => $objectType,
-			'object_id' => $objectId,
-			'subject' => $subject,
-			'message' => $message,
-			'link' => $link,
-			'icon' => $icon,
-			'actions' => $actionsExpected,
+				'notification_id' => $id,
+				'app' => $app,
+				'user' => $user,
+				'datetime' => date('c', $timestamp),
+				'object_type' => $objectType,
+				'object_id' => $objectId,
+				'subject' => $subject,
+				'message' => $message,
+				'link' => $link,
+				'actions' => $actionsExpected,
 			],
 			$this->invokePrivate($controller, 'notificationToArray', [$id, $notification])
 		);
@@ -363,8 +483,8 @@ class EndpointControllerTest extends TestCase {
 
 	public function dataActionToArray() {
 		return [
-			['label1', 'link1', 'GET', 'icon1'],
-			['label2', 'link2', 'POST', 'icon2'],
+			['label1', 'link1', 'GET', false],
+			['label2', 'link2', 'POST', true],
 		];
 	}
 
@@ -374,9 +494,9 @@ class EndpointControllerTest extends TestCase {
 	 * @param string $label
 	 * @param string $link
 	 * @param string $requestType
-	 * @param string $icon
+	 * @param bool $isPrimary
 	 */
-	public function testActionToArray($label, $link, $requestType, $icon) {
+	public function testActionToArray($label, $link, $requestType, $isPrimary) {
 		$action = $this->getMockBuilder('OC\Notification\IAction')
 			->disableOriginalConstructor()
 			->getMock();
@@ -394,14 +514,14 @@ class EndpointControllerTest extends TestCase {
 			->willReturn($requestType);
 
 		$action->expects($this->once())
-			->method('getIcon')
-			->willReturn($icon);
+			->method('isPrimary')
+			->willReturn($isPrimary);
 
 		$this->assertEquals([
 				'label' => $label,
-				'icon' => $icon,
 				'link' => $link,
 				'type' => $requestType,
+				'primary' => $isPrimary,
 			],
 			$this->invokePrivate($this->getController(), 'actionToArray', [$action])
 		);

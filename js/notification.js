@@ -17,13 +17,12 @@
         // TODO handle defaults
         this.app = jsonData.app;
         this.user = jsonData.user;
-        this.timestamp = jsonData.timestamp;
+        this.timestamp = moment(jsonData.datetime).format('X');
         this.object_type = jsonData.object_type;
         this.object_id = jsonData.object_id;
         this.subject = jsonData.subject;
         this.message = jsonData.message;
         this.link = jsonData.link;
-        this.icon = jsonData.icon;
         this.actions = jsonData.actions; // TODO some parsing here?
         this.notification_id = jsonData.notification_id;
     };
@@ -45,8 +44,6 @@
         message: null,
 
         link: null,
-
-        icon: null,
 
         actions: [],
 

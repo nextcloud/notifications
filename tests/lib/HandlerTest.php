@@ -54,13 +54,12 @@ class HandlerTest extends TestCase {
 			'getMessage' => 'message',
 			'getMessageParameters' => [],
 			'getLink' => 'link',
-			'getIcon' => 'icon',
 			'getActions' => [
 				[
 					'getLabel' => 'action_label',
-					'getIcon' => 'action_icon',
 					'getLink' => 'action_link',
 					'getRequestType' => 'GET',
+					'isPrimary' => false,
 				]
 			],
 		]);
@@ -110,13 +109,12 @@ class HandlerTest extends TestCase {
 			'getMessage' => 'message',
 			'getMessageParameters' => [],
 			'getLink' => 'link',
-			'getIcon' => 'icon',
 			'getActions' => [
 				[
 					'getLabel' => 'action_label',
-					'getIcon' => 'action_icon',
 					'getLink' => 'action_link',
 					'getRequestType' => 'GET',
+					'isPrimary' => true,
 				]
 			],
 		]);
@@ -140,9 +138,17 @@ class HandlerTest extends TestCase {
 		reset($notifications);
 		$notificationId = key($notifications);
 
+		// Get with wrong user
+		$getNotification = $this->handler->getById($notificationId, 'test_user2');
+		$this->assertSame(null, $getNotification);
+
 		// Delete with wrong user
 		$this->handler->deleteById($notificationId, 'test_user2');
 		$this->assertSame(1, $this->handler->count($limitedNotification), 'Wrong notification count for user1 after trying to delete for user2');
+
+		// Get with correct user
+		$getNotification = $this->handler->getById($notificationId, 'test_user1');
+		$this->assertInstanceOf('OC\Notification\INotification', $getNotification);
 
 		// Delete and count
 		$this->handler->deleteById($notificationId, 'test_user1');
@@ -193,7 +199,6 @@ class HandlerTest extends TestCase {
 			'getMessage' => '',
 			'getMessageParameters' => [],
 			'getLink' => '',
-			'getIcon' => '',
 			'getActions' => [],
 		];
 		foreach ($defaultValues as $method => $returnValue) {
@@ -214,7 +219,6 @@ class HandlerTest extends TestCase {
 			'setSubject',
 			'setMessage',
 			'setLink',
-			'setIcon',
 			'addAction',
 		];
 		foreach ($defaultValues as $method) {

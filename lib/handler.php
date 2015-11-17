@@ -91,7 +91,7 @@ class Handler {
 	}
 
 	/**
-	 * Delete the notifications matching the given id
+	 * Delete the notification matching the given id
 	 *
 	 * @param int $id
 	 * @param string $user
@@ -108,16 +108,44 @@ class Handler {
 	}
 
 	/**
-	 * Return the notifications matching the given Notification
+	 * Get the notification matching the given id
 	 *
-	 * @param INotification $notification
-	 * @return array [notification_id => INotification]
+	 * @param int $id
+	 * @param string $user
+	 * @return null|INotification
 	 */
-	public function get(INotification $notification) {
+	public function getById($id, $user) {
 		$sql = $this->connection->getQueryBuilder();
 		$sql->select('*')
 			->from('notifications')
-			->orderBy('notification_id', 'DESC');
+			->where($sql->expr()->eq('notification_id', $sql->createParameter('id')))
+			->setParameter('id', $id)
+			->andWhere($sql->expr()->eq('user', $sql->createParameter('user')))
+			->setParameter('user', $user);
+		$statement = $sql->execute();
+
+		$notification = null;
+		if ($row = $statement->fetch()) {
+			$notification = $this->notificationFromRow($row);
+		}
+		$statement->closeCursor();
+
+		return $notification;
+	}
+
+	/**
+	 * Return the notifications matching the given Notification
+	 *
+	 * @param INotification $notification
+	 * @param int $limit
+	 * @return array [notification_id => INotification]
+	 */
+	public function get(INotification $notification, $limit = 25) {
+		$sql = $this->connection->getQueryBuilder();
+		$sql->select('*')
+			->from('notifications')
+			->orderBy('notification_id', 'DESC')
+			->setMaxResults($limit);
 
 		$this->sqlWhere($sql, $notification);
 		$statement = $sql->execute();
@@ -172,11 +200,6 @@ class Handler {
 			$sql->andWhere($sql->expr()->eq('link', $sql->createParameter('link')))
 				->setParameter('link', $notification->getLink());
 		}
-
-		if ($notification->getIcon() !== '') {
-			$sql->andWhere($sql->expr()->eq('icon', $sql->createParameter('icon')))
-				->setParameter('icon', $notification->getIcon());
-		}
 	}
 
 	/**
@@ -216,17 +239,14 @@ class Handler {
 		$sql->setValue('link', $sql->createParameter('link'))
 			->setParameter('link', $notification->getLink());
 
-		$sql->setValue('icon', $sql->createParameter('icon'))
-			->setParameter('icon', $notification->getIcon());
-
 		$actions = [];
 		foreach ($notification->getActions() as $action) {
 			/** @var IAction $action */
 			$actions[] = [
 				'label' => $action->getLabel(),
-				'icon' => $action->getIcon(),
 				'link' => $action->getLink(),
 				'type' => $action->getRequestType(),
+				'primary' => $action->isPrimary(),
 			];
 		}
 		$sql->setValue('actions', $sql->createParameter('actions'))
@@ -253,17 +273,14 @@ class Handler {
 		if ($row['link'] !== '') {
 			$notification->setLink($row['link']);
 		}
-		if ($row['icon'] !== '') {
-			$notification->setIcon($row['icon']);
-		}
 
 		$actions = (array) json_decode($row['actions'], true);
 		foreach ($actions as $actionData) {
 			$action = $notification->createAction();
 			$action->setLabel($actionData['label'])
 				->setLink($actionData['link'], $actionData['type']);
-			if ($actionData['icon']) {
-				$action->setIcon($actionData['icon']);
+			if (isset($actionData['primary'])) {
+				$action->setPrimary($actionData['primary']);
 			}
 			$notification->addAction($action);
 		}

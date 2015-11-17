@@ -78,7 +78,7 @@
             $notification.fadeOut(OC.menuSpeed);
 
             $.ajax({
-                url: OC.generateUrl('/apps/notifications/' + id),
+                url: OC.linkToOCS('notifications', 2) + 'v1/' + id + '?format=json',
                 type: 'DELETE',
                 success: function(data) {
                     self._removeNotification(id);
@@ -281,17 +281,17 @@
         fetch: function(success, failure){
             var self = this;
             var request = $.ajax({
-                url: OC.generateUrl('/apps/notifications'),
+                url: OC.linkToOCS('notifications', 2) + 'v1?format=json',
                 type: 'GET'
             });
 
 
             request.done(function(data, statusText, xhr) {
-                if (xhr.status === 204) {
+                if (xhr.status === 204 || data.ocs.meta.statuscode === 204) {
                     // 204 No Content - Intercept when no notifiers are there.
                     self._shutDownNotifications();
                 } else {
-                    success(data, statusText, xhr);
+                    success(data.ocs.data, statusText, xhr);
                 }
             });
             request.fail(failure);
