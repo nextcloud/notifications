@@ -54,3 +54,6 @@ nbproject
 /tests/coverage*
 /tests/clover.xml
 /tests/js/node_modules
+
+/tests/integration/vendor
+/tests/integration/output
