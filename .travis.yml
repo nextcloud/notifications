@@ -41,17 +41,20 @@ script:
   - cd apps/$APP_NAME/
 
   # Run phpunit tests
-  - cd tests/
+  - cd tests/unit
   - sh -c "if [ '$JSTESTS' != '1' -a '$CODECHECK' != '1' -a '$CODECHECK' != '2' ]; then phpunit --configuration phpunit.xml; fi"
+  - cd ../..
 
   # Integration tests
   - cd tests/integration
   - sh -c "if [ '$INTEGRATION' = '1' ]; then bash run.sh; fi"
+  - cd ../..
 
   # Create coverage report
+  - cd tests/unit
   - sh -c "if [ '$JSTESTS' != '1' -a '$CODECHECK' != '1' -a '$CODECHECK' != '2' -a '$TRAVIS_PHP_VERSION' != 'hhvm' ]; then wget https://scrutinizer-ci.com/ocular.phar; fi"
   - sh -c "if [ '$JSTESTS' != '1' -a '$CODECHECK' != '1' -a '$CODECHECK' != '2' -a '$TRAVIS_PHP_VERSION' != 'hhvm' ]; then php ocular.phar code-coverage:upload --format=php-clover clover.xml; fi"
-  - cd ../
+  - cd ../..
 
   # Run Javascript unit tests
 #  - cd tests/js
