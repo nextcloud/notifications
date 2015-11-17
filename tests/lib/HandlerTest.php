@@ -148,7 +148,7 @@ class HandlerTest extends TestCase {
 		$this->handler->deleteById($notificationId, 'test_user2');
 		$this->assertSame(1, $this->handler->count($limitedNotification), 'Wrong notification count for user1 after trying to delete for user2');
 
-		// Get with wrong user
+		// Get with correct user
 		$getNotification = $this->handler->getById($notificationId, 'test_user1');
 		$this->assertInstanceOf('OC\Notification\INotification', $getNotification);
 
