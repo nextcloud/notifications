@@ -1,4 +1,4 @@
-Feature: notification
+Feature: notifications
   Background:
     Given using api version "1"
 
