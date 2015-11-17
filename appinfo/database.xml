@@ -76,12 +76,6 @@
 				<length>4000</length>
 			</field>
 			<field>
-				<name>icon</name>
-				<type>text</type>
-				<notnull>false</notnull>
-				<length>64</length>
-			</field>
-			<field>
 				<name>actions</name>
 				<type>clob</type>
 				<notnull>false</notnull>
