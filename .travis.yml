@@ -30,19 +30,26 @@ before_install:
   - ./occ app:enable $APP_NAME
   - ./occ app:list
 
+  # Setup behat for integration tests
+  - cd apps/$APP_NAME/
+  - cd tests/integration/
+  - sh -c "if [ '$INTEGRATION' = '1' ]; then composer install; fi"
+  - cd ../../
+  - cd ../../
+
 script:
   - cd apps/$APP_NAME/
 
   # Test the app
-  - sh -c "if [ '$JSTESTS' != '1' -a '$CODECHECK' = '1' ]; then find . -name \*.php -exec php -l \"{}\" \;; fi"
+  - sh -c "if [ '$CODECHECK' = '1' ]; then find . -name \*.php -exec php -l \"{}\" \;; fi"
   - cd ../../
-  - sh -c "if [ '$JSTESTS' != '1' -a '$CODECHECK' = '1' ]; then ./occ app:check-code $APP_NAME -c private -c strong-comparison; fi"
-  - sh -c "if [ '$JSTESTS' != '1' -a '$CODECHECK' = '2' ]; then ./occ app:check-code $APP_NAME -c deprecation; fi"
+  - sh -c "if [ '$CODECHECK' = '1' ]; then ./occ app:check-code $APP_NAME -c private -c strong-comparison; fi"
+  - sh -c "if [ '$CODECHECK' = '2' ]; then ./occ app:check-code $APP_NAME -c deprecation; fi"
   - cd apps/$APP_NAME/
 
   # Run phpunit tests
   - cd tests/unit
-  - sh -c "if [ '$JSTESTS' != '1' -a '$CODECHECK' != '1' -a '$CODECHECK' != '2' ]; then phpunit --configuration phpunit.xml; fi"
+  - sh -c "if [ '$INTEGRATION' != '1' -a '$JSTESTS' != '1' -a '$CODECHECK' != '1' -a '$CODECHECK' != '2' ]; then phpunit --configuration phpunit.xml; fi"
   - cd ../..
 
   # Integration tests
@@ -52,8 +59,8 @@ script:
 
   # Create coverage report
   - cd tests/unit
-  - sh -c "if [ '$JSTESTS' != '1' -a '$CODECHECK' != '1' -a '$CODECHECK' != '2' -a '$TRAVIS_PHP_VERSION' != 'hhvm' ]; then wget https://scrutinizer-ci.com/ocular.phar; fi"
-  - sh -c "if [ '$JSTESTS' != '1' -a '$CODECHECK' != '1' -a '$CODECHECK' != '2' -a '$TRAVIS_PHP_VERSION' != 'hhvm' ]; then php ocular.phar code-coverage:upload --format=php-clover clover.xml; fi"
+  - sh -c "if [ '$INTEGRATION' != '1' -a '$JSTESTS' != '1' -a '$CODECHECK' != '1' -a '$CODECHECK' != '2' -a '$TRAVIS_PHP_VERSION' != 'hhvm' ]; then wget https://scrutinizer-ci.com/ocular.phar; fi"
+  - sh -c "if [ '$INTEGRATION' != '1' -a '$JSTESTS' != '1' -a '$CODECHECK' != '1' -a '$CODECHECK' != '2' -a '$TRAVIS_PHP_VERSION' != 'hhvm' ]; then php ocular.phar code-coverage:upload --format=php-clover clover.xml; fi"
   - cd ../..
 
   # Run Javascript unit tests
