@@ -46,7 +46,7 @@ class HandlerTest extends TestCase {
 		$notification = $this->getNotification([
 			'getApp' => 'testing_notifications',
 			'getUser' => 'test_user1',
-			'getTimestamp' => time(),
+			'getDateTime' => new \DateTime(),
 			'getObjectType' => 'notification',
 			'getObjectId' => 1337,
 			'getSubject' => 'subject',
@@ -101,7 +101,7 @@ class HandlerTest extends TestCase {
 		$notification = $this->getNotification([
 			'getApp' => 'testing_notifications',
 			'getUser' => 'test_user1',
-			'getTimestamp' => time(),
+			'getDateTime' => new \DateTime(),
 			'getObjectType' => 'notification',
 			'getObjectId' => 1337,
 			'getSubject' => 'subject',
@@ -188,10 +188,12 @@ class HandlerTest extends TestCase {
 			}
 		}
 
+		$defaultDateTime = new \DateTime();
+		$defaultDateTime->setTimestamp(0);
 		$defaultValues = [
 			'getApp' => '',
 			'getUser' => '',
-			'getTimestamp' => 0,
+			'getDateTime' => $defaultDateTime,
 			'getObjectType' => '',
 			'getObjectId' => 0,
 			'getSubject' => '',
@@ -214,7 +216,7 @@ class HandlerTest extends TestCase {
 		$defaultValues = [
 			'setApp',
 			'setUser',
-			'setTimestamp',
+			'setDateTime',
 			'setObject',
 			'setSubject',
 			'setMessage',

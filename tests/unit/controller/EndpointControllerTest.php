@@ -430,9 +430,11 @@ class EndpointControllerTest extends TestCase {
 			->method('getUser')
 			->willReturn($user);
 
+		$dateTime = new \DateTime();
+		$dateTime->setTimestamp($timestamp);
 		$notification->expects($this->once())
-			->method('getTimestamp')
-			->willReturn($timestamp);
+			->method('getDateTime')
+			->willReturn($dateTime);
 
 		$notification->expects($this->once())
 			->method('getObjectType')

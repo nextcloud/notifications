@@ -176,6 +176,11 @@ class Handler {
 				->setParameter('user', $notification->getUser());
 		}
 
+		if ($notification->getDateTime()->getTimestamp() !== 0) {
+			$sql->andWhere($sql->expr()->eq('timestamp', $sql->createParameter('timestamp')))
+				->setParameter('timestamp', $notification->getDateTime()->getTimestamp());
+		}
+
 		if ($notification->getObjectType() !== '') {
 			$sql->andWhere($sql->expr()->eq('object_type', $sql->createParameter('objectType')))
 				->setParameter('objectType', $notification->getObjectType());
@@ -216,7 +221,7 @@ class Handler {
 			->setParameter('user', $notification->getUser());
 
 		$sql->setValue('timestamp', $sql->createParameter('timestamp'))
-			->setParameter('timestamp', $notification->getTimestamp());
+			->setParameter('timestamp', $notification->getDateTime()->getTimestamp());
 
 		$sql->setValue('object_type', $sql->createParameter('objectType'))
 			->setParameter('objectType', $notification->getObjectType());
@@ -260,10 +265,13 @@ class Handler {
 	 * @return INotification
 	 */
 	protected function notificationFromRow(array $row) {
+		$dateTime = new \DateTime();
+		$dateTime->setTimestamp((int) $row['timestamp']);
+
 		$notification = $this->manager->createNotification();
 		$notification->setApp($row['app'])
 			->setUser($row['user'])
-			->setTimestamp((int) $row['timestamp'])
+			->setDateTime($dateTime)
 			->setObject($row['object_type'], (int) $row['object_id'])
 			->setSubject($row['subject'], (array) json_decode($row['subject_parameters'], true));
 
