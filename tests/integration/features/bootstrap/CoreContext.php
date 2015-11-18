@@ -880,30 +880,30 @@ class CoreContext implements Context, SnippetAcceptingContext {
 		}
 	}
 
-	/**
-	 * @BeforeSuite
-	 */
-	public static function addFilesToSkeleton(){
-		for ($i=0; $i<5; $i++){
-			file_put_contents("../../core/skeleton/" . "textfile" . "$i" . ".txt", "ownCloud test text file\n");
-		}
-		if (!file_exists("../../core/skeleton/FOLDER")) {
-			mkdir("../../core/skeleton/FOLDER", 0777, true);
-		}
-
-	}
-
-	/**
-	 * @AfterSuite
-	 */
-	public static function removeFilesFromSkeleton(){
-		for ($i=0; $i<5; $i++){
-			self::removeFile("../../core/skeleton/", "textfile" . "$i" . ".txt");
-		}
-		if (!is_dir("../../core/skeleton/FOLDER")) {
-			rmdir("../../core/skeleton/FOLDER");
-		}
-	}
+//	/**
+//	 * @BeforeSuite
+//	 */
+//	public static function addFilesToSkeleton(){
+//		for ($i=0; $i<5; $i++){
+//			file_put_contents("../../core/skeleton/" . "textfile" . "$i" . ".txt", "ownCloud test text file\n");
+//		}
+//		if (!file_exists("../../core/skeleton/FOLDER")) {
+//			mkdir("../../core/skeleton/FOLDER", 0777, true);
+//		}
+//
+//	}
+//
+//	/**
+//	 * @AfterSuite
+//	 */
+//	public static function removeFilesFromSkeleton(){
+//		for ($i=0; $i<5; $i++){
+//			self::removeFile("../../core/skeleton/", "textfile" . "$i" . ".txt");
+//		}
+//		if (!is_dir("../../core/skeleton/FOLDER")) {
+//			rmdir("../../core/skeleton/FOLDER");
+//		}
+//	}
 
 	/**
 	 * @BeforeScenario
