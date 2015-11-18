@@ -2,7 +2,7 @@
 
 composer install
 
-php -S localhost:8080 -t ../../.. &
+php -S localhost:8080 -t ../../../.. &
 PHPPID=$!
 echo $PHPPID
 
