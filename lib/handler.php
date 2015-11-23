@@ -186,7 +186,7 @@ class Handler {
 				->setParameter('objectType', $notification->getObjectType());
 		}
 
-		if ($notification->getObjectId() !== 0) {
+		if ($notification->getObjectId() !== '') {
 			$sql->andWhere($sql->expr()->eq('object_id', $sql->createParameter('objectId')))
 				->setParameter('objectId', $notification->getObjectId());
 		}
@@ -272,7 +272,7 @@ class Handler {
 		$notification->setApp($row['app'])
 			->setUser($row['user'])
 			->setDateTime($dateTime)
-			->setObject($row['object_type'], (int) $row['object_id'])
+			->setObject($row['object_type'], $row['object_id'])
 			->setSubject($row['subject'], (array) json_decode($row['subject_parameters'], true));
 
 		if ($row['message'] !== '') {
