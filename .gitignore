@@ -51,6 +51,9 @@ nbproject
 /.buildpath
 
 # Tests - auto-generated files
-/tests/coverage*
-/tests/clover.xml
-/tests/js/node_modules
+/tests/unit/coverage*
+/tests/unit/clover.xml
+/tests/unit/js/node_modules
+
+/tests/integration/vendor
+/tests/integration/output

@@ -19,24 +19,20 @@
  *
  */
 
-namespace OCA\Notifications\Tests\Lib;
-
-use OCA\Notifications\Capabilities;
-use OCA\Notifications\Tests\TestCase;
-
-class CapabilitiesTest extends TestCase {
-
-	public function testGetCapabilities() {
-		$capabilities = new Capabilities();
-
-		$this->assertSame([
-			'notifications' => [
-				'ocs-endpoints' => [
-					'list',
-					'get',
-					'delete',
-				],
-			],
-		], $capabilities->getCapabilities());
-	}
+if (!defined('PHPUNIT_RUN')) {
+	define('PHPUNIT_RUN', 1);
 }
+
+require_once __DIR__ . '/../../../../lib/base.php';
+
+// Fix for "Autoload path not allowed: .../tests/lib/testcase.php"
+\OC::$loader->addValidRoot(OC::$SERVERROOT . '/tests');
+
+// Fix for "Autoload path not allowed: .../notifications/tests/testcase.php"
+\OC_App::loadApp('notifications');
+
+if(!class_exists('PHPUnit_Framework_TestCase')) {
+	require_once('PHPUnit/Autoload.php');
+}
+
+OC_Hook::clear();

@@ -19,14 +19,24 @@
  *
  */
 
-namespace OCA\Notifications\Tests\AppInfo;
+namespace OCA\Notifications\Tests\Lib;
 
-use OCA\Notifications\Tests\TestCase;
+use OCA\Notifications\Capabilities;
+use OCA\Notifications\Tests\Unit\TestCase;
 
-class RoutesTest extends TestCase {
-	public function testRoutes() {
-		// Execute so we know that no error occurred
-		include(__DIR__ . '/../../appinfo/routes.php');
-		$this->assertTrue(true);
+class CapabilitiesTest extends TestCase {
+
+	public function testGetCapabilities() {
+		$capabilities = new Capabilities();
+
+		$this->assertSame([
+			'notifications' => [
+				'ocs-endpoints' => [
+					'list',
+					'get',
+					'delete',
+				],
+			],
+		], $capabilities->getCapabilities());
 	}
 }

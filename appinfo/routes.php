@@ -23,19 +23,19 @@ $application = new \OCA\Notifications\AppInfo\Application();
 
 \OCP\API::register(
 	'get',
-	'/notifications/v1',
+	'/apps/notifications/api/v1/notifications',
 	[$application->getContainer()->query('EndpointController'), 'listNotifications'],
 	'notifications'
 );
 \OCP\API::register(
 	'get',
-	'/notifications/v1/{id}',
+	'/apps/notifications/api/v1/notifications/{id}',
 	[$application->getContainer()->query('EndpointController'), 'getNotification'],
 	'notifications'
 );
 \OCP\API::register(
 	'delete',
-	'/notifications/v1/{id}',
+	'/apps/notifications/api/v1/notifications/{id}',
 	[$application->getContainer()->query('EndpointController'), 'deleteNotification'],
 	'notifications'
 );

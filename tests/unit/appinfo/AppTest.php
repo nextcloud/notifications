@@ -21,7 +21,7 @@
 
 namespace OCA\Notifications\Tests\AppInfo;
 
-use OCA\Notifications\Tests\TestCase;
+use OCA\Notifications\Tests\Unit\TestCase;
 use OCP\IUser;
 
 class AppTest extends TestCase {
@@ -69,7 +69,7 @@ class AppTest extends TestCase {
 				$this->assertInstanceOf('\OCA\Notifications\App', $navigation);
 			});
 
-		include(__DIR__ . '/../../appinfo/app.php');
+		include(__DIR__ . '/../../../appinfo/app.php');
 	}
 
 	public function dataLoadingJSAndCSS() {
@@ -106,7 +106,7 @@ class AppTest extends TestCase {
 		\OC_Util::$scripts = [];
 		\OC_Util::$styles = [];
 
-		include(__DIR__ . '/../../appinfo/app.php');
+		include(__DIR__ . '/../../../appinfo/app.php');
 
 		if ($scriptsAdded) {
 			$this->assertNotEmpty(\OC_Util::$scripts);

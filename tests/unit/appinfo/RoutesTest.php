@@ -19,20 +19,14 @@
  *
  */
 
-if (!defined('PHPUNIT_RUN')) {
-	define('PHPUNIT_RUN', 1);
+namespace OCA\Notifications\Tests\AppInfo;
+
+use OCA\Notifications\Tests\Unit\TestCase;
+
+class RoutesTest extends TestCase {
+	public function testRoutes() {
+		// Execute so we know that no error occurred
+		include(__DIR__ . '/../../../appinfo/routes.php');
+		$this->assertTrue(true);
+	}
 }
-
-require_once __DIR__.'/../../../lib/base.php';
-
-// Fix for "Autoload path not allowed: .../tests/lib/testcase.php"
-\OC::$loader->addValidRoot(OC::$SERVERROOT . '/tests');
-
-// Fix for "Autoload path not allowed: .../notifications/tests/testcase.php"
-\OC_App::loadApp('notifications');
-
-if(!class_exists('PHPUnit_Framework_TestCase')) {
-	require_once('PHPUnit/Autoload.php');
-}
-
-OC_Hook::clear();

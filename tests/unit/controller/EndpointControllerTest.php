@@ -22,7 +22,7 @@
 namespace OCA\Notifications\Tests\Controller;
 
 use OCA\Notifications\Controller\EndpointController;
-use OCA\Notifications\Tests\TestCase;
+use OCA\Notifications\Tests\Unit\TestCase;
 use OCP\AppFramework\Http;
 
 class EndpointControllerTest extends TestCase {

@@ -12,11 +12,11 @@
 	<!-- filters for code coverage -->
 	<filter>
 		<whitelist>
-			<directory suffix=".php">../../notifications</directory>
+			<directory suffix=".php">../../../notifications</directory>
 			<exclude>
-				<directory suffix=".php">../../notifications/l10n</directory>
-				<directory suffix=".php">../../notifications/templates</directory>
-				<directory suffix=".php">../../notifications/tests</directory>
+				<directory suffix=".php">../../../notifications/l10n</directory>
+				<directory suffix=".php">../../../notifications/templates</directory>
+				<directory suffix=".php">../../../notifications/tests</directory>
 			</exclude>
 		</whitelist>
 	</filter>
