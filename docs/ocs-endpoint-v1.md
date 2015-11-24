@@ -69,7 +69,7 @@ The user needs to be identified/logged in by the server. Then you can just run a
 }
 ```
 
-**Note:** In case the Request return status code `204` (No content), you can slow down the polling to once per hour. This status code means that there is no app, that can generate notifications.
+**Note:** If the HTTP status code is `204` (No content), you can slow down the polling to once per hour. This status code means that there is no app that can generate notifications.
 
 ### Specification
 
@@ -89,7 +89,7 @@ app | string | Name of the app that triggered the notification
 user | string | User id of the user that receives the notification
 datetime | string | ISO 8601 date and time when the notification was published
 object_type | string | Type of the object the notification is about, that can be used in php to mark a notification as resolved
-object_id | string | Type of the object the notification is about, that can be used in php to mark a notification as resolved
+object_id | string | ID of the object the notification is about, that can be used in php to mark a notification as resolved
 subject | string | Translated short subject that should be presented to the user
 message | string | (Optional) Translated potentially longer message that should be presented to the user
 link | string | (Optional) A link that should be followed when the subject/message is clicked

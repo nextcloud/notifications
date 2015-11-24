@@ -1,9 +1,9 @@
-# Notification Workflow as an App that sends Notifications
+# Notification Workflow for an App that sends Notifications
 
 ## Example story
 
 Let's assume the following example scenario. Our app is the files_sharing app. We want
-to notify the user when a remote share has to be accepted/decline. If the user has dealt
+to notify the user when a remote share has to be accepted/declined. If the user has dealt
 with it, we want to remove the notification again.
 
 ### Creating a new Notification
@@ -117,7 +117,7 @@ with it, we want to remove the notification again.
 
 ### Marking a notification as read/deleted/processed/obsoleted
 
-Now in case the user accepted the share or the share was removed/unshared, we want to remove
+If the user accepted the share or the share was removed/unshared, we want to remove
 the notification, because no user action is needed anymore. To do this, we simply have to
 call the `markProcessed()` method on the manager with the neccessary information on a
 notification object:
@@ -130,7 +130,7 @@ $notification->setApp('files_sharing')
 $manager->markProcessed($notification);
 ```
 
-Thereby only the app name is mandatory: so if you don't set the user, the notification
+Only the app name is mandatory: so if you don't set the user, the notification
 will be marked as processed for all users that have it. So the following example will
 remove all notifications for the app files_sharing on the object "remote #1337":
 
