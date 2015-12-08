@@ -66,5 +66,11 @@ if (\OC::$server->getConfig()->getAppValue('notifications', 'debug')) {
 		[$controller, 'reset'],
 		'notifications'
 	);
+	\OCP\API::register(
+		'post',
+		'/apps/notifications/testing/notifications',
+		[$controller, 'addNotification'],
+		'notifications'
+	);
 }
 // @codeCoverageIgnoreEnd

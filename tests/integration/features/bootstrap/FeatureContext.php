@@ -32,6 +32,35 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
+	 * @Given /^user "([^"]*)" has notifications$/
+	 */
+	public function hasNotifications($user) {
+		if ($user === 'test1') {
+			$response = $this->setTestingValue('POST', 'apps/notifications/testing/notifications', null);
+			PHPUnit_Framework_Assert::assertEquals(200, $response->getStatusCode());
+			PHPUnit_Framework_Assert::assertEquals(200, (int) $this->getOCSResponse($response));
+		}
+	}
+
+	/**
+	 * @Then /^list of notifications has (\d+) entries$/
+	 */
+	public function checkNumNotifications($numNotifications) {
+		$notifications = $this->getArrayOfNotificationsResponded($this->response);
+		PHPUnit_Framework_Assert::assertCount((int) $numNotifications, $notifications);
+	}
+
+	/**
+	 * Parses the xml answer to get the array of users returned.
+	 * @param ResponseInterface $resp
+	 * @return array
+	 */
+	public function getArrayOfNotificationsResponded($resp) {
+		$jsonResponse = json_decode($resp->getBody()->getContents(), 1);
+		return $jsonResponse['ocs']['data'];
+	}
+
+	/**
 	 * @BeforeSuite
 	 */
 	public static function addFilesToSkeleton() {

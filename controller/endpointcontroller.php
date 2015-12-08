@@ -62,9 +62,16 @@ class EndpointController extends Controller {
 	/**
 	 * @return bool
 	 */
+	protected function isDebugMode() {
+		return $this->config->getAppValue('notifications', 'debug', '') !== '';
+	}
+
+	/**
+	 * @return bool
+	 */
 	protected function hasNotifiers() {
 		// @codeCoverageIgnoreStart
-		if ($this->config->getAppValue('notifications', 'forceHasNotifiers', '') !== '') {
+		if ($this->isDebugMode() && $this->config->getAppValue('notifications', 'forceHasNotifiers', '') !== '') {
 			return $this->config->getAppValue('notifications', 'forceHasNotifiers') === 'true';
 		}
 		// @codeCoverageIgnoreEnd
@@ -94,6 +101,7 @@ class EndpointController extends Controller {
 		$data = [];
 		$notificationIds = [];
 		foreach ($notifications as $notificationId => $notification) {
+			/** @var INotification $notification */
 			try {
 				$notification = $this->manager->prepare($notification, $language);
 			} catch (\InvalidArgumentException $e) {

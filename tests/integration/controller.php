@@ -80,10 +80,38 @@ class Controller extends \OCP\AppFramework\Controller {
 	 *
 	 * @return \OC_OCS_Result
 	 */
+	public function addNotification() {
+		if (!$this->config->getAppValue('notifications', 'debug')) {
+			return new \OC_OCS_Result(null, Http::STATUS_FORBIDDEN);
+		}
+
+		$notification = $this->manager->createNotification();
+		$notification->setApp('testing')
+			->setDateTime(\DateTime::createFromFormat('U', 1449585176)) // 2015-12-08T14:32:56+00:00
+			->setUser('test1')
+			->setSubject('testing')
+			->setLink('https://www.owncloud.org/')
+			->setMessage('message')
+			->setObject('object', 23);
+
+		$this->manager->notify($notification);
+
+		return new \OC_OCS_Result();
+	}
+
+	/**
+	 * @NoCSRFRequired
+	 *
+	 * @return \OC_OCS_Result
+	 */
 	public function reset() {
 		if (!$this->config->getAppValue('notifications', 'debug')) {
 			return new \OC_OCS_Result(null, Http::STATUS_FORBIDDEN);
 		}
+
+		$notification = $this->manager->createNotification();
+		$notification->setApp('testing');
+		$this->manager->markProcessed($notification);
 
 		$this->config->deleteAppValue('notifications', 'forceHasNotifiers');
 		return new \OC_OCS_Result();
