@@ -8,8 +8,6 @@ default:
       contexts:
         - FeatureContext:
             baseUrl:  http://localhost:8080/ocs/
-        - CoreContext:
-            baseUrl:  http://localhost:8080/ocs/
             admin:
               - admin
               - admin
