@@ -1,6 +1,5 @@
 <?php
 
-require __DIR__ . '/../../vendor/autoload.php';
 require __DIR__ . '/../../../../../../build/integration/features/bootstrap/BasicStructure.php';
 require __DIR__ . '/../../../../../../build/integration/features/bootstrap/Provisioning.php';
 

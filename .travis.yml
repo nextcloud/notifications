@@ -31,10 +31,8 @@ before_install:
   - ./occ app:list
 
   # Setup behat for integration tests
-  - cd apps/$APP_NAME/
-  - cd tests/integration/
+  - cd build/integration/
   - sh -c "if [ '$INTEGRATION' = '1' ]; then composer install; fi"
-  - cd ../../
   - cd ../../
 
 script:

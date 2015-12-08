@@ -55,5 +55,4 @@ nbproject
 /tests/unit/clover.xml
 /tests/unit/js/node_modules
 
-/tests/integration/vendor
 /tests/integration/output

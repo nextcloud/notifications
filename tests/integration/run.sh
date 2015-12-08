@@ -1,13 +1,18 @@
 #!/usr/bin/env bash
 
-composer install
+APP_INTEGRATION_DIR=$PWD
+ROOT_DIR=../../../..
 
-php -S localhost:8080 -t ../../../.. &
+cd ${ROOT_DIR}/build/integration
+composer install
+cd ${APP_INTEGRATION_DIR}
+
+php -S localhost:8080 -t ${ROOT_DIR} &
 PHPPID=$!
 echo $PHPPID
 
 export TEST_SERVER_URL="http://localhost:8080/ocs/"
-vendor/bin/behat -f junit -f pretty
+${ROOT_DIR}/build/integration/vendor/bin/behat -f junit -f pretty
 RESULT=$?
 
 kill $PHPPID
