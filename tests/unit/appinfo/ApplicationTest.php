@@ -24,6 +24,12 @@ namespace OCA\Notifications\Tests\AppInfo;
 use OCA\Notifications\AppInfo\Application;
 use OCA\Notifications\Tests\Unit\TestCase;
 
+/**
+ * Class ApplicationTest
+ *
+ * @group DB
+ * @package OCA\Notifications\Tests\AppInfo
+ */
 class ApplicationTest extends TestCase {
 	/** @var \OCA\Notifications\AppInfo\Application */
 	protected $app;

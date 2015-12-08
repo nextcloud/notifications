@@ -25,6 +25,12 @@ namespace OCA\Notifications\Tests\Lib;
 use OCA\Notifications\Handler;
 use OCA\Notifications\Tests\Unit\TestCase;
 
+/**
+ * Class HandlerTest
+ *
+ * @group DB
+ * @package OCA\Notifications\Tests\Lib
+ */
 class HandlerTest extends TestCase {
 	/** @var \OCA\Notifications\Handler */
 	protected $handler;
