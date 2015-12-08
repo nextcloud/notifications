@@ -23,6 +23,12 @@ namespace OCA\Notifications\Tests\AppInfo;
 
 use OCA\Notifications\Tests\Unit\TestCase;
 
+/**
+ * Class RoutesTest
+ *
+ * @group DB
+ * @package OCA\Notifications\Tests\AppInfo
+ */
 class RoutesTest extends TestCase {
 	public function testRoutes() {
 		// Execute so we know that no error occurred

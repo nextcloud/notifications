@@ -24,6 +24,12 @@ namespace OCA\Notifications\Tests\AppInfo;
 use OCA\Notifications\Tests\Unit\TestCase;
 use OCP\IUser;
 
+/**
+ * Class AppTest
+ *
+ * @group DB
+ * @package OCA\Notifications\Tests\AppInfo
+ */
 class AppTest extends TestCase {
 	/** @var \OC\Notification\IManager|\PHPUnit_Framework_MockObject_MockObject */
 	protected $manager;
