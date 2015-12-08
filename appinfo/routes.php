@@ -39,3 +39,32 @@ $application = new \OCA\Notifications\AppInfo\Application();
 	[$application->getContainer()->query('EndpointController'), 'deleteNotification'],
 	'notifications'
 );
+
+// @codeCoverageIgnoreStart
+if (\OC::$server->getConfig()->getAppValue('notifications', 'debug')) {
+	$controller = new \OCA\Notifications\Tests\Integration\Controller(
+		'notifications',
+		\OC::$server->getRequest(),
+		\OC::$server->getConfig(),
+		\OC::$server->getNotificationManager()
+	);
+	\OCP\API::register(
+		'post',
+		'/apps/notifications/testing/notifiers',
+		[$controller, 'fillNotifiers'],
+		'notifications'
+	);
+	\OCP\API::register(
+		'delete',
+		'/apps/notifications/testing/notifiers',
+		[$controller, 'clearNotifiers'],
+		'notifications'
+	);
+	\OCP\API::register(
+		'delete',
+		'/apps/notifications/testing',
+		[$controller, 'reset'],
+		'notifications'
+	);
+}
+// @codeCoverageIgnoreEnd

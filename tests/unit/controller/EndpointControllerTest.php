@@ -69,6 +69,10 @@ class EndpointControllerTest extends TestCase {
 		$this->config = $this->getMockBuilder('OCP\IConfig')
 			->disableOriginalConstructor()
 			->getMock();
+		$this->config->expects($this->any())
+			->method('getAppValue')
+			->with('notifications', 'forceHasNotifiers', $this->anything())
+			->willReturnArgument(2);
 
 		/** @var \OCP\IUserSession|\PHPUnit_Framework_MockObject_MockObject */
 		$this->session = $this->getMockBuilder('OCP\IUserSession')
