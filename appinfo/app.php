@@ -35,11 +35,13 @@ use OCP\Util;
 	);
 });
 
+// @codeCoverageIgnoreStart
 \OC::$server->getNotificationManager()->registerNotifier(function() {
 	return new Notifier(
 		\OC::$server->getConfig()
 	);
 });
+// @codeCoverageIgnoreEnd
 
 // Only display the app on index.php except for public shares
 $request = \OC::$server->getRequest();

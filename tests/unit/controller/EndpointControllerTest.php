@@ -71,7 +71,7 @@ class EndpointControllerTest extends TestCase {
 			->getMock();
 		$this->config->expects($this->any())
 			->method('getAppValue')
-			->with('notifications', 'forceHasNotifiers', $this->anything())
+			->with('notifications', $this->matchesRegularExpression('(forceHasNotifiers|debug)'), $this->anything())
 			->willReturnArgument(2);
 
 		/** @var \OCP\IUserSession|\PHPUnit_Framework_MockObject_MockObject */
