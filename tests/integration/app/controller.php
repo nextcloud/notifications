@@ -21,9 +21,9 @@
 
 namespace OCA\NotificationsIntegrationTesting;
 
-use OC\Notification\IManager;
 use OCP\AppFramework\Http;
 use OCP\IRequest;
+use OCP\Notification\IManager;
 
 class Controller extends \OCP\AppFramework\Controller {
 

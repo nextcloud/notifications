@@ -31,7 +31,7 @@ use OCP\IUser;
  * @package OCA\Notifications\Tests\AppInfo
  */
 class AppTest extends TestCase {
-	/** @var \OC\Notification\IManager|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var \OCP\Notification\IManager|\PHPUnit_Framework_MockObject_MockObject */
 	protected $manager;
 	/** @var \OCP\IRequest|\PHPUnit_Framework_MockObject_MockObject */
 	protected $request;
@@ -41,7 +41,7 @@ class AppTest extends TestCase {
 	protected function setUp() {
 		parent::setUp();
 
-		$this->manager = $this->getMockBuilder('OC\Notification\IManager')
+		$this->manager = $this->getMockBuilder('OCP\Notification\IManager')
 			->disableOriginalConstructor()
 			->getMock();
 

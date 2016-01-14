@@ -154,7 +154,7 @@ class HandlerTest extends TestCase {
 
 		// Get with correct user
 		$getNotification = $this->handler->getById($notificationId, 'test_user1');
-		$this->assertInstanceOf('OC\Notification\INotification', $getNotification);
+		$this->assertInstanceOf('OCP\Notification\INotification', $getNotification);
 
 		// Delete and count
 		$this->handler->deleteById($notificationId, 'test_user1');
@@ -163,10 +163,10 @@ class HandlerTest extends TestCase {
 
 	/**
 	 * @param array $values
-	 * @return \OC\Notification\INotification|\PHPUnit_Framework_MockObject_MockObject
+	 * @return \OCP\Notification\INotification|\PHPUnit_Framework_MockObject_MockObject
 	 */
 	protected function getNotification(array $values = []) {
-		$notification = $this->getMockBuilder('OC\Notification\INotification')
+		$notification = $this->getMockBuilder('OCP\Notification\INotification')
 			->disableOriginalConstructor()
 			->getMock();
 
@@ -174,7 +174,7 @@ class HandlerTest extends TestCase {
 			if ($method === 'getActions') {
 				$actions = [];
 				foreach ($returnValue as $actionData) {
-					$action = $this->getMockBuilder('OC\Notification\IAction')
+					$action = $this->getMockBuilder('OCP\Notification\IAction')
 						->disableOriginalConstructor()
 						->getMock();
 					foreach ($actionData as $actionMethod => $actionValue) {

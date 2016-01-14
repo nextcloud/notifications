@@ -22,11 +22,11 @@
 namespace OCA\Notifications;
 
 
-use OC\Notification\IAction;
-use OC\Notification\IManager;
-use OC\Notification\INotification;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
+use OCP\Notification\IAction;
+use OCP\Notification\IManager;
+use OCP\Notification\INotification;
 
 class Handler {
 	/** @var IDBConnection */

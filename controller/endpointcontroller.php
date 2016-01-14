@@ -21,9 +21,6 @@
 
 namespace OCA\Notifications\Controller;
 
-use OC\Notification\IAction;
-use OC\Notification\IManager;
-use OC\Notification\INotification;
 use OCA\Notifications\Handler;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Controller;
@@ -31,6 +28,9 @@ use OCP\IConfig;
 use OCP\IRequest;
 use OCP\IUser;
 use OCP\IUserSession;
+use OCP\Notification\IAction;
+use OCP\Notification\IManager;
+use OCP\Notification\INotification;
 
 class EndpointController extends Controller {
 	/** @var Handler */
