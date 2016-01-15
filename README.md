@@ -26,7 +26,7 @@ accessible.
 ## Notification workflow
 
 For information how to make your app interact with the notifications app, see
-[Sending and processing/"mark as read" notifications as an ownCloud App](https://github.com/owncloud/notifications/wiki/Notification-Workflow-as-an-App-that-sends-Notifications)
+[Sending and processing/"mark as read" notifications as an ownCloud App](https://github.com/owncloud/notifications/blob/master/docs/notification-workflow.md)
 in the wiki.
 
-If you want to present notifications as a client, see [Reading and deleting notifications as an ownCloud Client](https://github.com/owncloud/notifications/wiki/Reading-and-deleting-notifications-as-a-Client).
+If you want to present notifications as a client, see [Reading and deleting notifications as an ownCloud Client](https://github.com/owncloud/notifications/blob/master/docs/ocs-endpoint-v1.md).
