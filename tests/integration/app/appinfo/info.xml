@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<info>
+	<id>notificationsintegrationtesting</id>
+	<name>Notifications Integration Testing</name>
+	<description/>
+
+	<licence>AGPL</licence>
+	<author>Joas Schilling</author>
+	<version>0.2.3</version>
+
+	<types>
+		<logging/>
+	</types>
+
+	<dependencies>
+		<owncloud min-version="9.0" />
+		<owncloud max-version="9.0" />
+	</dependencies>
+</info>

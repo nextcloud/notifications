@@ -19,35 +19,20 @@
  *
  */
 
-if (\OC::$server->getConfig()->getAppValue('notifications', 'debug')) {
-	$controller = new \OCA\NotificationsIntegrationTesting\Controller(
-		'notifications',
-		\OC::$server->getRequest(),
-		\OC::$server->getConfig(),
-		\OC::$server->getNotificationManager()
-	);
-	\OCP\API::register(
-		'post',
-		'/apps/notifications/testing/notifiers',
-		[$controller, 'fillNotifiers'],
-		'notifications'
-	);
-	\OCP\API::register(
-		'delete',
-		'/apps/notifications/testing/notifiers',
-		[$controller, 'clearNotifiers'],
-		'notifications'
-	);
-	\OCP\API::register(
-		'delete',
-		'/apps/notifications/testing',
-		[$controller, 'reset'],
-		'notifications'
-	);
-	\OCP\API::register(
-		'post',
-		'/apps/notifications/testing/notifications',
-		[$controller, 'addNotification'],
-		'notifications'
-	);
-}
+$controller = new \OCA\NotificationsIntegrationTesting\Controller(
+	'notificationsintegrationtesting',
+	\OC::$server->getRequest(),
+	\OC::$server->getNotificationManager()
+);
+\OCP\API::register(
+	'delete',
+	'/apps/notificationsintegrationtesting',
+	[$controller, 'reset'],
+	'notifications'
+);
+\OCP\API::register(
+	'post',
+	'/apps/notificationsintegrationtesting/notifications',
+	[$controller, 'addNotification'],
+	'notifications'
+);

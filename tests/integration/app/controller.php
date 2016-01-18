@@ -23,13 +23,9 @@ namespace OCA\NotificationsIntegrationTesting;
 
 use OC\Notification\IManager;
 use OCP\AppFramework\Http;
-use OCP\IConfig;
 use OCP\IRequest;
 
 class Controller extends \OCP\AppFramework\Controller {
-
-	/** @var IConfig */
-	private $config;
 
 	/** @var IManager */
 	private $manager;
@@ -37,13 +33,11 @@ class Controller extends \OCP\AppFramework\Controller {
 	/**
 	 * @param string $appName
 	 * @param IRequest $request
-	 * @param IConfig $config
 	 * @param IManager $manager
 	 */
-	public function __construct($appName, IRequest $request, IConfig $config, IManager $manager) {
+	public function __construct($appName, IRequest $request, IManager $manager) {
 		parent::__construct($appName, $request);
 
-		$this->config = $config;
 		$this->manager = $manager;
 	}
 
@@ -52,39 +46,7 @@ class Controller extends \OCP\AppFramework\Controller {
 	 *
 	 * @return \OC_OCS_Result
 	 */
-	public function fillNotifiers() {
-		if (!$this->config->getAppValue('notifications', 'debug')) {
-			return new \OC_OCS_Result(null, Http::STATUS_FORBIDDEN);
-		}
-
-		$this->config->setAppValue('notifications', 'forceHasNotifiers', 'true');
-		return new \OC_OCS_Result();
-	}
-
-	/**
-	 * @NoCSRFRequired
-	 *
-	 * @return \OC_OCS_Result
-	 */
-	public function clearNotifiers() {
-		if (!$this->config->getAppValue('notifications', 'debug')) {
-			return new \OC_OCS_Result(null, Http::STATUS_FORBIDDEN);
-		}
-
-		$this->config->setAppValue('notifications', 'forceHasNotifiers', 'false');
-		return new \OC_OCS_Result();
-	}
-
-	/**
-	 * @NoCSRFRequired
-	 *
-	 * @return \OC_OCS_Result
-	 */
 	public function addNotification() {
-		if (!$this->config->getAppValue('notifications', 'debug')) {
-			return new \OC_OCS_Result(null, Http::STATUS_FORBIDDEN);
-		}
-
 		$notification = $this->manager->createNotification();
 		$notification->setApp('notificationsintegrationtesting')
 			->setDateTime(\DateTime::createFromFormat('U', 1449585176)) // 2015-12-08T14:32:56+00:00
@@ -105,15 +67,10 @@ class Controller extends \OCP\AppFramework\Controller {
 	 * @return \OC_OCS_Result
 	 */
 	public function reset() {
-		if (!$this->config->getAppValue('notifications', 'debug')) {
-			return new \OC_OCS_Result(null, Http::STATUS_FORBIDDEN);
-		}
-
 		$notification = $this->manager->createNotification();
-		$notification->setApp('testing');
+		$notification->setApp('notificationsintegrationtesting');
 		$this->manager->markProcessed($notification);
 
-		$this->config->deleteAppValue('notifications', 'forceHasNotifiers');
 		return new \OC_OCS_Result();
 	}
 }

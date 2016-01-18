@@ -19,25 +19,10 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	/** @var int */
 	protected $deletedNotification;
 
+	protected $adminUser;
+
 	use BasicStructure;
 	use Provisioning;
-
-	/**
-	 * @Given /^list of notifiers (is|is not) empty$/
-	 *
-	 * @param string $noNotifiers
-	 */
-	public function hasNotifiers($noNotifiers) {
-		if ($noNotifiers === 'is') {
-			$response = $this->setTestingValue('DELETE', 'apps/notifications/testing/notifiers', null);
-			PHPUnit_Framework_Assert::assertEquals(200, $response->getStatusCode());
-			PHPUnit_Framework_Assert::assertEquals(200, (int) $this->getOCSResponse($response));
-		} else {
-			$response = $this->setTestingValue('POST', 'apps/notifications/testing/notifiers', null);
-			PHPUnit_Framework_Assert::assertEquals(200, $response->getStatusCode());
-			PHPUnit_Framework_Assert::assertEquals(200, (int) $this->getOCSResponse($response));
-		}
-	}
 
 	/**
 	 * @Given /^user "([^"]*)" has notifications$/
@@ -46,7 +31,7 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	 */
 	public function hasNotifications($user) {
 		if ($user === 'test1') {
-			$response = $this->setTestingValue('POST', 'apps/notifications/testing/notifications', null);
+			$response = $this->setTestingValue('POST', 'apps/notificationsintegrationtesting/notifications', null);
 			PHPUnit_Framework_Assert::assertEquals(200, $response->getStatusCode());
 			PHPUnit_Framework_Assert::assertEquals(200, (int) $this->getOCSResponse($response));
 		}
@@ -147,7 +132,7 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	 * @AfterScenario
 	 */
 	public function removeDebugConfigs() {
-		$response = $this->setTestingValue('DELETE', 'apps/notifications/testing', null);
+		$response = $this->setTestingValue('DELETE', 'apps/notificationsintegrationtesting', null);
 		PHPUnit_Framework_Assert::assertEquals(200, $response->getStatusCode());
 		PHPUnit_Framework_Assert::assertEquals(200, (int) $this->getOCSResponse($response));
 	}

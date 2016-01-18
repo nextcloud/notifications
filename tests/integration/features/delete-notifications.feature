@@ -5,7 +5,6 @@ Feature: delete-notifications
     Given As an "test1"
 
   Scenario: Delete first notification
-    Given list of notifiers is not empty
     Given user "test1" has notifications
     Given user "test1" has notifications
     Given user "test1" has notifications
@@ -14,7 +13,6 @@ Feature: delete-notifications
     And user "test1" has 2 notifications missing the first one
 
   Scenario: Delete last notification
-    Given list of notifiers is not empty
     Given user "test1" has notifications
     Given user "test1" has notifications
     Given user "test1" has notifications
