@@ -42,6 +42,9 @@ class EndpointController extends Controller {
 	/** @var IUserSession */
 	private $session;
 
+	/** @var IConfig */
+	private $config;
+
 	/**
 	 * @param string $appName
 	 * @param IRequest $request
@@ -60,26 +63,6 @@ class EndpointController extends Controller {
 	}
 
 	/**
-	 * @return bool
-	 */
-	protected function isDebugMode() {
-		return $this->config->getAppValue('notifications', 'debug', '') !== '';
-	}
-
-	/**
-	 * @return bool
-	 */
-	protected function hasNotifiers() {
-		// @codeCoverageIgnoreStart
-		if ($this->isDebugMode() && $this->config->getAppValue('notifications', 'forceHasNotifiers', '') !== '') {
-			return $this->config->getAppValue('notifications', 'forceHasNotifiers') === 'true';
-		}
-		// @codeCoverageIgnoreEnd
-
-		return $this->manager->hasNotifiers();
-	}
-
-	/**
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 *
@@ -88,7 +71,7 @@ class EndpointController extends Controller {
 	public function listNotifications() {
 		// When there are no apps registered that use the notifications
 		// We stop polling for them.
-		if (!$this->hasNotifiers()) {
+		if (!$this->manager->hasNotifiers()) {
 			return new \OC_OCS_Result(null, Http::STATUS_NO_CONTENT);
 		}
 
@@ -129,7 +112,7 @@ class EndpointController extends Controller {
 	 * @return \OC_OCS_Result
 	 */
 	public function getNotification(array $parameters) {
-		if (!$this->hasNotifiers()) {
+		if (!$this->manager->hasNotifiers()) {
 			return new \OC_OCS_Result(null, Http::STATUS_NOT_FOUND);
 		}
 

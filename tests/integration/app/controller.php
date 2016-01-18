@@ -2,7 +2,7 @@
 /**
  * @author Joas Schilling <nickvergessen@owncloud.com>
  *
- * @copyright Copyright (c) 2015, ownCloud, Inc.
+ * @copyright Copyright (c) 2016, ownCloud, Inc.
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
  *
  */
 
-namespace OCA\Notifications\Tests\Integration;
+namespace OCA\NotificationsIntegrationTesting;
 
 use OC\Notification\IManager;
 use OCP\AppFramework\Http;
@@ -86,7 +86,7 @@ class Controller extends \OCP\AppFramework\Controller {
 		}
 
 		$notification = $this->manager->createNotification();
-		$notification->setApp('testing')
+		$notification->setApp('notificationsintegrationtesting')
 			->setDateTime(\DateTime::createFromFormat('U', 1449585176)) // 2015-12-08T14:32:56+00:00
 			->setUser('test1')
 			->setSubject('testing')

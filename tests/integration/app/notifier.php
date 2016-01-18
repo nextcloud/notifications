@@ -2,7 +2,7 @@
 /**
  * @author Joas Schilling <nickvergessen@owncloud.com>
  *
- * @copyright Copyright (c) 2015, ownCloud, Inc.
+ * @copyright Copyright (c) 2016, ownCloud, Inc.
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -19,33 +19,13 @@
  *
  */
 
-namespace OCA\Notifications\Tests\Integration;
+namespace OCA\NotificationsIntegrationTesting;
+
 
 use OC\Notification\INotification;
 use OC\Notification\INotifier;
-use OCP\IConfig;
 
 class Notifier implements INotifier {
-
-	/** @var IConfig */
-	private $config;
-
-	/**
-	 * @param IConfig $config
-	 */
-	public function __construct(IConfig $config) {
-		$this->config = $config;
-	}
-
-	/**
-	 * @return bool
-	 */
-	protected function isDebugMode() {
-		if ($this->config->getAppValue('notifications', 'debug', '') !== '' && $this->config->getAppValue('notifications', 'forceHasNotifiers', '') !== '') {
-			return $this->config->getAppValue('notifications', 'forceHasNotifiers') === 'true';
-		}
-		return false;
-	}
 
 	/**
 	 * @param INotification $notification
@@ -54,7 +34,7 @@ class Notifier implements INotifier {
 	 * @throws \InvalidArgumentException When the notification was not prepared by a notifier
 	 */
 	public function prepare(INotification $notification, $languageCode) {
-		if ($this->isDebugMode() && $notification->getApp() === 'testing') {
+		if ($notification->getApp() === 'notificationsintegrationtesting') {
 			$notification->setParsedSubject($notification->getSubject());
 			$notification->setParsedMessage($notification->getMessage());
 			return $notification;

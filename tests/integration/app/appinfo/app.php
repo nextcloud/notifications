@@ -2,7 +2,7 @@
 /**
  * @author Joas Schilling <nickvergessen@owncloud.com>
  *
- * @copyright Copyright (c) 2015, ownCloud, Inc.
+ * @copyright Copyright (c) 2016, ownCloud, Inc.
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -19,23 +19,10 @@
  *
  */
 
-$application = new \OCA\Notifications\AppInfo\Application();
+namespace OCA\NotificationsIntegrationTesting\AppInfo;
 
-\OCP\API::register(
-	'get',
-	'/apps/notifications/api/v1/notifications',
-	[$application->getContainer()->query('EndpointController'), 'listNotifications'],
-	'notifications'
-);
-\OCP\API::register(
-	'get',
-	'/apps/notifications/api/v1/notifications/{id}',
-	[$application->getContainer()->query('EndpointController'), 'getNotification'],
-	'notifications'
-);
-\OCP\API::register(
-	'delete',
-	'/apps/notifications/api/v1/notifications/{id}',
-	[$application->getContainer()->query('EndpointController'), 'deleteNotification'],
-	'notifications'
-);
+use OCA\NotificationsIntegrationTesting\Notifier;
+
+\OC::$server->getNotificationManager()->registerNotifier(function() {
+	return new Notifier();
+});
