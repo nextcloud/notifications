@@ -6,11 +6,10 @@
 
 	<licence>AGPL</licence>
 	<author>Joas Schilling</author>
-	<version>0.2.2</version>
+	<version>0.2.3</version>
 
-	<!-- FIXME -->
 	<types>
-		<filesystem/>
+		<logging/>
 	</types>
 
 	<default_enable/>
