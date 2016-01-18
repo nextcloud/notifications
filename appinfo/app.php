@@ -23,7 +23,6 @@ namespace OCA\Notifications\AppInfo;
 
 use OCA\Notifications\App;
 use OCA\Notifications\Handler;
-use OCA\Notifications\Tests\Integration\Notifier;
 use OCP\Util;
 
 \OC::$server->getNotificationManager()->registerApp(function() {
