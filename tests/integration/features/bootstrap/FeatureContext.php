@@ -103,6 +103,29 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
+	 * @Then /^(first|last) notification matches$/
+	 *
+	 * @param \Behat\Gherkin\Node\TableNode|null $formData
+	 */
+	public function matchNotification($notification, $formData) {
+		$lastNotifications = end($this->notificationIds);
+		if ($notification === 'first') {
+			$notificationId = reset($lastNotifications);
+		} else/* if ($notification === 'last')*/ {
+			$notificationId = end($lastNotifications);
+		}
+
+		$this->sendingTo('GET', '/apps/notifications/api/v1/notifications/' . $notificationId . '?format=json');
+		PHPUnit_Framework_Assert::assertEquals(200, $this->response->getStatusCode());
+		$response = json_decode($this->response->getBody()->getContents(), true);
+
+		foreach ($formData->getRowsHash() as $key => $value) {
+			PHPUnit_Framework_Assert::assertArrayHasKey($key, $response['ocs']['data']);
+			PHPUnit_Framework_Assert::assertEquals($value, $response['ocs']['data'][$key]);
+		}
+	}
+
+	/**
 	 * @Then /^delete (first|last) notification$/
 	 *
 	 * @param string $firstOrLast
