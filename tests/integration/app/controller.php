@@ -66,9 +66,8 @@ class Controller extends \OCP\AppFramework\Controller {
 	 *
 	 * @return \OC_OCS_Result
 	 */
-	public function reset() {
+	public function deleteNotifications() {
 		$notification = $this->manager->createNotification();
-		$notification->setApp('notificationsintegrationtesting');
 		$this->manager->markProcessed($notification);
 
 		return new \OC_OCS_Result();

@@ -129,9 +129,10 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
+	 * @BeforeScenario
 	 * @AfterScenario
 	 */
-	public function removeDebugConfigs() {
+	public function clearNotifications() {
 		$response = $this->setTestingValue('DELETE', 'apps/notificationsintegrationtesting', null);
 		PHPUnit_Framework_Assert::assertEquals(200, $response->getStatusCode());
 		PHPUnit_Framework_Assert::assertEquals(200, (int) $this->getOCSResponse($response));

@@ -27,7 +27,7 @@ $controller = new \OCA\NotificationsIntegrationTesting\Controller(
 \OCP\API::register(
 	'delete',
 	'/apps/notificationsintegrationtesting',
-	[$controller, 'reset'],
+	[$controller, 'deleteNotifications'],
 	'notifications'
 );
 \OCP\API::register(
