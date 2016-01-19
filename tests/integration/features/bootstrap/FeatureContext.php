@@ -38,6 +38,20 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
+	 * @Given /^user "([^"]*)" receives notification with$/
+	 *
+	 * @param string $user
+	 * @param \Behat\Gherkin\Node\TableNode|null $formData
+	 */
+	public function receiveNotification($user, \Behat\Gherkin\Node\TableNode $formData) {
+		if ($user === 'test1') {
+			$response = $this->setTestingValue('POST', 'apps/notificationsintegrationtesting/notifications', $formData);
+			PHPUnit_Framework_Assert::assertEquals(200, $response->getStatusCode());
+			PHPUnit_Framework_Assert::assertEquals(200, (int) $this->getOCSResponse($response));
+		}
+	}
+
+	/**
 	 * @Then /^list of notifications has (\d+) entries$/
 	 *
 	 * @param int $numNotifications
@@ -138,6 +152,12 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 		PHPUnit_Framework_Assert::assertEquals(200, (int) $this->getOCSResponse($response));
 	}
 
+	/**
+	 * @param $verb
+	 * @param $url
+	 * @param $body
+	 * @return \GuzzleHttp\Message\FutureResponse|ResponseInterface|null
+	 */
 	protected function setTestingValue($verb, $url, $body) {
 		$fullUrl = $this->baseUrl . "v2.php/" . $url;
 		$client = new Client();

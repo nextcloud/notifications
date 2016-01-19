@@ -48,13 +48,13 @@ class Controller extends \OCP\AppFramework\Controller {
 	 */
 	public function addNotification() {
 		$notification = $this->manager->createNotification();
-		$notification->setApp('notificationsintegrationtesting')
-			->setDateTime(\DateTime::createFromFormat('U', 1449585176)) // 2015-12-08T14:32:56+00:00
-			->setUser('test1')
-			->setSubject('testing')
-			->setLink('https://www.owncloud.org/')
-			->setMessage('message')
-			->setObject('object', 23);
+		$notification->setApp($this->request->getParam('app', 'notificationsintegrationtesting'))
+			->setDateTime(\DateTime::createFromFormat('U', $this->request->getParam('timestamp', 1449585176))) // 2015-12-08T14:32:56+00:00
+			->setUser($this->request->getParam('user', 'test1'))
+			->setSubject($this->request->getParam('subject', 'testing'))
+			->setLink($this->request->getParam('link', 'https://www.owncloud.org/'))
+			->setMessage($this->request->getParam('message', 'message'))
+			->setObject($this->request->getParam('object_type', 'object'), $this->request->getParam('object_id', 23));
 
 		$this->manager->notify($notification);
 
