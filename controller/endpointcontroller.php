@@ -42,6 +42,9 @@ class EndpointController extends Controller {
 	/** @var IUserSession */
 	private $session;
 
+	/** @var IConfig */
+	private $config;
+
 	/**
 	 * @param string $appName
 	 * @param IRequest $request
@@ -81,6 +84,7 @@ class EndpointController extends Controller {
 		$data = [];
 		$notificationIds = [];
 		foreach ($notifications as $notificationId => $notification) {
+			/** @var INotification $notification */
 			try {
 				$notification = $this->manager->prepare($notification, $language);
 			} catch (\InvalidArgumentException $e) {
