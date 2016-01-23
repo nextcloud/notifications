@@ -29,7 +29,7 @@ class AppTest extends TestCase {
 	/** @var \OCA\Notifications\Handler|\PHPUnit_Framework_MockObject_MockObject */
 	protected $handler;
 
-	/** @var \OC\Notification\INotification|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var \OCP\Notification\INotification|\PHPUnit_Framework_MockObject_MockObject */
 	protected $notification;
 
 	/** @var \OCA\Notifications\App */
@@ -42,7 +42,7 @@ class AppTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
-		$this->notification = $this->getMockBuilder('OC\Notification\INotification')
+		$this->notification = $this->getMockBuilder('OCP\Notification\INotification')
 			->disableOriginalConstructor()
 			->getMock();
 

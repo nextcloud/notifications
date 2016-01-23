@@ -25,4 +25,9 @@ use OCA\NotificationsIntegrationTesting\Notifier;
 
 \OC::$server->getNotificationManager()->registerNotifier(function() {
 	return new Notifier();
+}, function() {
+	return [
+		'id' => 'testing',
+		'name' => 'testing',
+	];
 });
