@@ -175,7 +175,7 @@
                             self._onNewNotification(n);
                         }
                     });
-                    // TODO check if any removed from JSON
+
                     for (var n in self.getNotifications()) {
                         if (inJson.indexOf(self.getNotifications()[n].getId()) === -1) {
                             // Not in JSON, remove from UI
@@ -229,7 +229,41 @@
             OCA.Notifications.notifications[notification.getId()] = notification;
             // Add to the UI
             OCA.Notifications.addToUI(notification);
-            // TODO make a noise? Anything else?
+
+            // Trigger browsers web notification
+            // https://github.com/owncloud/notifications/issues/1
+            if ("Notification" in window) {
+                if (Notification.permission === "granted") {
+                    // If it's okay let's create a notification
+                    OCA.Notifications.createWebNotification(notification);
+                }
+
+                // Otherwise, we need to ask the user for permission
+                else if (Notification.permission !== 'denied') {
+                    Notification.requestPermission(function (permission) {
+                        // If the user accepts, let's create a notification
+                        if (permission === "granted") {
+                            OCA.Notifications.createWebNotification(notification);
+                        }
+                    });
+                }
+            }
+        },
+
+        /**
+         * Create a browser notification
+         *
+         * @see https://developer.mozilla.org/en/docs/Web/API/notification
+         * @param {OCA.Notifications.Notification} notification
+         */
+        createWebNotification: function (notification) {
+            var n = new Notification(notification.getSubject(), {
+                title: notification.getSubject(),
+                lang: OC.getLocale(),
+                body: notification.getMessage(),
+                tag: notification.getId()
+            });
+            setTimeout(n.close.bind(n), 5000);
         },
 
         _shutDownNotifications: function() {
