@@ -15,7 +15,6 @@
 	<default_enable/>
 
 	<dependencies>
-		<owncloud min-version="9.0" />
-		<owncloud max-version="9.0" />
+		<owncloud min-version="9.0" max-version="9.0"/>
 	</dependencies>
 </info>
