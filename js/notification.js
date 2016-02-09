@@ -10,123 +10,121 @@
 
 (function() {
 
-    /**
-     * Initialise the notification
-     */
-    var Notif = function(jsonData){
-        // TODO handle defaults
-        this.app = jsonData.app;
-        this.user = jsonData.user;
-        this.timestamp = moment(jsonData.datetime).format('X');
-        this.object_type = jsonData.object_type;
-        this.object_id = jsonData.object_id;
-        this.subject = jsonData.subject;
-        this.message = jsonData.message;
-        this.link = jsonData.link;
-        this.actions = jsonData.actions; // TODO some parsing here?
-        this.notification_id = jsonData.notification_id;
-    };
+	/**
+	 * Initialise the notification
+	 */
+	var Notif = function(jsonData){
+		// TODO handle defaults
+		this.app = jsonData.app;
+		this.user = jsonData.user;
+		this.timestamp = moment(jsonData.datetime).format('X');
+		this.object_type = jsonData.object_type;
+		this.object_id = jsonData.object_id;
+		this.subject = jsonData.subject;
+		this.message = jsonData.message;
+		this.link = jsonData.link;
+		this.actions = jsonData.actions; // TODO some parsing here?
+		this.notification_id = jsonData.notification_id;
+	};
 
-    Notif.prototype = {
+	Notif.prototype = {
 
-        app: null,
+		app: null,
 
-        user: null,
+		user: null,
 
-        timestamp: null,
+		timestamp: null,
 
-        object_type: null,
+		object_type: null,
 
-        object_id: null,
+		object_id: null,
 
-        subject: null,
+		subject: null,
 
-        message: null,
+		message: null,
 
-        link: null,
+		link: null,
 
-        actions: [],
+		actions: [],
 
-        notification_id: null,
+		notification_id: null,
 
-        getSubject: function() {
-            return this.subject;
-        },
+		getSubject: function() {
+			return this.subject;
+		},
 
-        getTimestamp: function() {
-            return this.timestamp;
-        },
+		getTimestamp: function() {
+			return this.timestamp;
+		},
 
-        getObjectId: function() {
-            return this.object_id;
-        },
+		getObjectId: function() {
+			return this.object_id;
+		},
 
-        getLink: function() {
-            return this.link;
-        },
+		getLink: function() {
+			return this.link;
+		},
 
-        getActions: function() {
-            return this.actions;
-        },
+		getActions: function() {
+			return this.actions;
+		},
 
-        getId: function() {
-            return this.notification_id;
-        },
+		getId: function() {
+			return this.notification_id;
+		},
 
-        getMessage: function() {
-            return this.message;
-        },
+		getMessage: function() {
+			return this.message;
+		},
 
-        getEl: function() {
-            return $('div.notification[data-id='+escapeHTML(this.getId())+']');
-        },
+		getEl: function() {
+			return $('div.notification[data-id='+escapeHTML(this.getId())+']');
+		},
 
-        getApp: function() {
-            return this.app;
-        },
+		getApp: function() {
+			return this.app;
+		},
 
-        /**
-         * Generates the HTML for the notification
-         */
-        renderElement: function() {
+		/**
+		 * Generates the HTML for the notification
+		 */
+		renderElement: function() {
 			// FIXME: use handlebars template
-            var el = $('<div class="notification"></div>');
-            el.attr('data-id', escapeHTML(this.getId()));
-            el.attr('data-timestamp', escapeHTML(this.getTimestamp()));
+			var el = $('<div class="notification"></div>');
+			el.attr('data-id', escapeHTML(this.getId()));
+			el.attr('data-timestamp', escapeHTML(this.getTimestamp()));
 
-            if (this.getLink()) {
-                el.append('<a href="'+this.getLink()+'" class="notification-subject"> '+escapeHTML(this.getSubject())+'</a>');
-            } else {
-                el.append('<div class="notification-subject"> '+escapeHTML(this.getSubject())+'</div>');
-            }
-            el.append('<div class="notification-message">'+escapeHTML(this.getMessage())+'</div>');
-            // Add actions
-            var actions = $('<div class="actions"></div>');
-            var actionsData = this.getActions();
-            _.each(actionsData, function(actionData) {
+			if (this.getLink()) {
+				el.append('<a href="'+this.getLink()+'" class="notification-subject"> '+escapeHTML(this.getSubject())+'</a>');
+			} else {
+				el.append('<div class="notification-subject"> '+escapeHTML(this.getSubject())+'</div>');
+			}
+			el.append('<div class="notification-message">'+escapeHTML(this.getMessage())+'</div>');
+			// Add actions
+			var actions = $('<div class="notification-actions"></div>');
+			var actionsData = this.getActions();
+			_.each(actionsData, function(actionData) {
 				// FIXME: use handlebars template
-                actions.append(
-					'<div class="button">' +
-					'<a class="action-button" href="#" data-type="' + escapeHTML(actionData.type) + '" ' +
-					'data-href="'+escapeHTML(actionData.link)+'">'+escapeHTML(actionData.label)+'</a>' +
-					'</div>'
+				actions.append(
+					'<button class="action-button' + (actionData.primary ? ' primary': '') + '" data-type="' + escapeHTML(actionData.type) + '" ' +
+					'data-href="'+escapeHTML(actionData.link)+'">'+escapeHTML(actionData.label)+'</button>'
 				);
-                // TODO create event handler on click for given action type
-            });
-            el.append(actions);
-            el.append('<div style="display: none;" class="notification-delete"><img class="svg" alt="Dismiss" src="' + OC.imagePath('core', 'actions/close') + '"></div>');
-            return el;
-        },
+				// TODO create event handler on click for given action type
+			});
+			el.append(actions);
+			el.append('<div style="display: none;" class="notification-delete"><img class="svg" alt="Dismiss" src="' + OC.imagePath('core', 'actions/close') + '"></div>');
+			return el;
+		},
 
-        /**
-         * Register notification Binds
-         */
-        bindNotificationEvents: function() {
+		/**
+		 * Register notification Binds
+		 */
+		bindNotificationEvents: function() {
 
-        }
+		}
 
-    };
+	};
 
-    OCA.Notifications.Notif = Notif;
+	OCA.Notifications.Notif = Notif;
 
 })();
