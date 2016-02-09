@@ -107,6 +107,13 @@
                 type: actionType,
                 success: function(data) {
                     self._removeNotification($notification.attr('data-id'));
+					$('body').trigger(new $.Event('OCA.Notification.Action', {
+						notification: self.notifications[$notification.attr('data-id')],
+						action: {
+							url: actionUrl,
+							type: actionType
+						}
+					}));
                 },
                 error: function() {
                     $notification.fadeIn(OC.menuSpeed);
