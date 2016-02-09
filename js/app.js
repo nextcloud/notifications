@@ -10,103 +10,103 @@
 
 (function() {
 
-    if (!OCA.Notifications) {
-        OCA.Notifications = {};
-    }
+	if (!OCA.Notifications) {
+		OCA.Notifications = {};
+	}
 
-    OCA.Notifications = {
+	OCA.Notifications = {
 
-        notifications: {},
+		notifications: {},
 
-        num: 0,
+		num: 0,
 
-        pollInterval: 30000, // milliseconds
+		pollInterval: 30000, // milliseconds
 
-        open: false,
+		open: false,
 
-        $button: null,
+		$button: null,
 
-        $container: null,
+		$container: null,
 
-        $notifications: null,
+		$notifications: null,
 
-        interval: null,
+		interval: null,
 
-        initialise: function() {
-            // Go!
+		initialise: function() {
+			// Go!
 
-            // Setup elements
-            this.$notifications = $('<div class="notifications"></div>');
-            this.$button = $('<div class="notifications-button menutoggle"><img class="svg" alt="Dismiss" src="' + OC.imagePath('notifications', 'notifications') + '"></div>');
-            this.$container = $('<div class="notification-container"></div>');
-            var $wrapper = $('<div class="notification-wrapper"></div>');
+			// Setup elements
+			this.$notifications = $('<div class="notifications"></div>');
+			this.$button = $('<div class="notifications-button menutoggle"><img class="svg" alt="Dismiss" src="' + OC.imagePath('notifications', 'notifications') + '"></div>');
+			this.$container = $('<div class="notification-container"></div>');
+			var $wrapper = $('<div class="notification-wrapper"></div>');
 
-            // Empty content dropdown
-            var $headLine = $('<h2></h2>');
-            $headLine.text(t('notifications', 'No notifications'));
-            var $emptyContent = $('<div class="emptycontent"></div>');
-            $emptyContent.append($headLine);
-            this.$container.append($emptyContent);
+			// Empty content dropdown
+			var $headLine = $('<h2></h2>');
+			$headLine.text(t('notifications', 'No notifications'));
+			var $emptyContent = $('<div class="emptycontent"></div>');
+			$emptyContent.append($headLine);
+			this.$container.append($emptyContent);
 
-            this.$notifications.append(this.$button);
-            this.$notifications.append(this.$container);
-            this.$container.append($wrapper);
+			this.$notifications.append(this.$button);
+			this.$notifications.append(this.$container);
+			this.$container.append($wrapper);
 
-            // Add to the UI
-            $('form.searchbox').before(this.$notifications);
+			// Add to the UI
+			$('form.searchbox').before(this.$notifications);
 
-            // Initial call to the notification endpoint
-            this.initialFetch();
+			// Initial call to the notification endpoint
+			this.initialFetch();
 
-            // Bind the button click event
-            OC.registerMenu(this.$button, this.$container);
-            this.$button.on('click', this._onNotificationsButtonClick);
+			// Bind the button click event
+			OC.registerMenu(this.$button, this.$container);
+			this.$button.on('click', this._onNotificationsButtonClick);
 
-            this.$container.on('click', '.action-button', _.bind(this._onClickAction, this));
-            this.$container.on('click', '.notification-delete', _.bind(this._onClickDismissNotification, this));
+			this.$container.on('click', '.action-button', _.bind(this._onClickAction, this));
+			this.$container.on('click', '.notification-delete', _.bind(this._onClickDismissNotification, this));
 
-            // Setup the background checker
-            this.interval = setInterval(_.bind(this.backgroundFetch, this), this.pollInterval);
-        },
+			// Setup the background checker
+			this.interval = setInterval(_.bind(this.backgroundFetch, this), this.pollInterval);
+		},
 
-        _onClickDismissNotification: function(event) {
-            event.preventDefault();
-            var $target = $(event.target);
-            var $notification = $target.closest('.notification');
-            var id = $notification.attr('data-id');
+		_onClickDismissNotification: function(event) {
+			event.preventDefault();
+			var $target = $(event.target);
+			var $notification = $target.closest('.notification');
+			var id = $notification.attr('data-id');
 
-            $notification.fadeOut(OC.menuSpeed);
+			$notification.fadeOut(OC.menuSpeed);
 
-            $.ajax({
-                url: OC.linkToOCS('apps/notifications/api/v1', 2) + 'notifications/' + id + '?format=json',
-                type: 'DELETE',
-                success: function(data) {
-                    self._removeNotification(id);
-                },
-                error: function() {
-                    $notification.fadeIn(OC.menuSpeed);
-                    OC.Notification.showTemporary('Failed to perform action');
-                }
-            });
+			$.ajax({
+				url: OC.linkToOCS('apps/notifications/api/v1', 2) + 'notifications/' + id + '?format=json',
+				type: 'DELETE',
+				success: function(data) {
+					self._removeNotification(id);
+				},
+				error: function() {
+					$notification.fadeIn(OC.menuSpeed);
+					OC.Notification.showTemporary('Failed to perform action');
+				}
+			});
 
-            this._removeNotification($notification.attr('data-id'));
-        },
+			this._removeNotification($notification.attr('data-id'));
+		},
 
-        _onClickAction: function(event) {
-            event.preventDefault();
-            var self = this;
-            var $target = $(event.target);
-            var $notification = $target.closest('.notification');
-            var actionType = $target.attr('data-type') || 'GET';
-            var actionUrl = $target.attr('data-href');
+		_onClickAction: function(event) {
+			event.preventDefault();
+			var self = this;
+			var $target = $(event.target);
+			var $notification = $target.closest('.notification');
+			var actionType = $target.attr('data-type') || 'GET';
+			var actionUrl = $target.attr('data-href');
 
-            $notification.fadeOut(OC.menuSpeed);
+			$notification.fadeOut(OC.menuSpeed);
 
-            $.ajax({
-                url: actionUrl,
-                type: actionType,
-                success: function(data) {
-                    self._removeNotification($notification.attr('data-id'));
+			$.ajax({
+				url: actionUrl,
+				type: actionType,
+				success: function(data) {
+					self._removeNotification($notification.attr('data-id'));
 					$('body').trigger(new $.Event('OCA.Notification.Action', {
 						notification: self.notifications[$notification.attr('data-id')],
 						action: {
@@ -114,267 +114,267 @@
 							type: actionType
 						}
 					}));
-                },
-                error: function() {
-                    $notification.fadeIn(OC.menuSpeed);
-                    OC.Notification.showTemporary('Failed to perform action');
-                }
-            });
+				},
+				error: function() {
+					$notification.fadeIn(OC.menuSpeed);
+					OC.Notification.showTemporary('Failed to perform action');
+				}
+			});
 
-        },
+		},
 
-        _removeNotification: function(id) {
-            var $notification = this.$container.find('.notification').filterAttr('id', id);
-            delete OCA.Notifications.notifications[id];
+		_removeNotification: function(id) {
+			var $notification = this.$container.find('.notification').filterAttr('id', id);
+			delete OCA.Notifications.notifications[id];
 
-            $notification.remove();
-            if (_.keys(OCA.Notifications.notifications).length === 0) {
-                this._onHaveNoNotifications();
-            }
-        },
+			$notification.remove();
+			if (_.keys(OCA.Notifications.notifications).length === 0) {
+				this._onHaveNoNotifications();
+			}
+		},
 
-        /**
-         * Handles the notification button click event
-         */
-        _onNotificationsButtonClick: function() {
-            // Show a popup
-            OC.showMenu(null, OCA.Notifications.$container);
-        },
+		/**
+		 * Handles the notification button click event
+		 */
+		_onNotificationsButtonClick: function() {
+			// Show a popup
+			OC.showMenu(null, OCA.Notifications.$container);
+		},
 
-        initialFetch: function() {
-            var self = this;
+		initialFetch: function() {
+			var self = this;
 
-            this.fetch(
-                function(data) {
-                    // Fill Array
-                    $.each(data, function(index) {
-                        var n = new self.Notif(data[index]);
-                        self.notifications[n.getId()] = n;
-                        self.addToUI(n);
-                        self.num++;
-                    });
-                    // Check if we have any, and notify the UI
-                    if (self.numNotifications() !== 0) {
-                        self._onHaveNotifications();
-                    } else {
-                        self._onHaveNoNotifications();
-                    }
-                },
-                _.bind(self._onFetchError, self)
-            );
-        },
+			this.fetch(
+				function(data) {
+					// Fill Array
+					$.each(data, function(index) {
+						var n = new self.Notif(data[index]);
+						self.notifications[n.getId()] = n;
+						self.addToUI(n);
+						self.num++;
+					});
+					// Check if we have any, and notify the UI
+					if (self.numNotifications() !== 0) {
+						self._onHaveNotifications();
+					} else {
+						self._onHaveNoNotifications();
+					}
+				},
+				_.bind(self._onFetchError, self)
+			);
+		},
 
-        /**
-         * Background fetch handler
-         */
-        backgroundFetch: function() {
-            var self = this;
+		/**
+		 * Background fetch handler
+		 */
+		backgroundFetch: function() {
+			var self = this;
 
-            this.fetch(
-                function(data) {
-                    var inJson = [];
-                    var oldNum = self.numNotifications();
-                    $.each(data, function(index) {
-                        var n = new self.Notif(data[index]);
-                        inJson.push(n.getId());
-                        if (!self.getNotification(n.getId())){
-                            // New notification!
-                            self._onNewNotification(n);
-                        }
-                    });
+			this.fetch(
+				function(data) {
+					var inJson = [];
+					var oldNum = self.numNotifications();
+					$.each(data, function(index) {
+						var n = new self.Notif(data[index]);
+						inJson.push(n.getId());
+						if (!self.getNotification(n.getId())){
+							// New notification!
+							self._onNewNotification(n);
+						}
+					});
 
-                    for (var n in self.getNotifications()) {
-                        if (inJson.indexOf(self.getNotifications()[n].getId()) === -1) {
-                            // Not in JSON, remove from UI
-                            self._onRemoveNotification(self.getNotifications()[n]);
-                        }
-                    }
+					for (var n in self.getNotifications()) {
+						if (inJson.indexOf(self.getNotifications()[n].getId()) === -1) {
+							// Not in JSON, remove from UI
+							self._onRemoveNotification(self.getNotifications()[n]);
+						}
+					}
 
-                    // Now check if we suddenly have notifs, or now none
-                    if (oldNum == 0 && self.numNotifications() !== 0) {
-                        // We now have some!
-                        self._onHaveNotifications();
-                    } else if (oldNum != 0 && self.numNotifications() === 0) {
-                        // Now we have none
-                        self._onHaveNoNotifications();
-                    }
-                },
-                _.bind(self._onFetchError, self)
-            );
-        },
+					// Now check if we suddenly have notifs, or now none
+					if (oldNum == 0 && self.numNotifications() !== 0) {
+						// We now have some!
+						self._onHaveNotifications();
+					} else if (oldNum != 0 && self.numNotifications() === 0) {
+						// Now we have none
+						self._onHaveNoNotifications();
+					}
+				},
+				_.bind(self._onFetchError, self)
+			);
+		},
 
-        /**
-         * Handles removing the Notification from the UI when no longer in JSON
-         * @param {XMLHttpRequest} xhr
-         */
-        _onFetchError: function(xhr) {
-            if (xhr.status === 404) {
-                // 404 Not Found - stop polling
-                this._shutDownNotifications();
-            } else {
-                OC.Notification.showTemporary('Failed to perform request for notifications');
-            }
-        },
+		/**
+		 * Handles removing the Notification from the UI when no longer in JSON
+		 * @param {XMLHttpRequest} xhr
+		 */
+		_onFetchError: function(xhr) {
+			if (xhr.status === 404) {
+				// 404 Not Found - stop polling
+				this._shutDownNotifications();
+			} else {
+				OC.Notification.showTemporary('Failed to perform request for notifications');
+			}
+		},
 
-        /**
-         * Handles removing the Notification from the UI when no longer in JSON
-         * @param {OCA.Notifications.Notification} notification
-         */
-        _onRemoveNotification: function(notification) {
-            $('div.notification[data-id='+escapeHTML(notification.getId())+']').remove();
-            delete OCA.Notifications.notifications[notification.getId()];
-            OCA.Notifications.num--;
-        },
+		/**
+		 * Handles removing the Notification from the UI when no longer in JSON
+		 * @param {OCA.Notifications.Notification} notification
+		 */
+		_onRemoveNotification: function(notification) {
+			$('div.notification[data-id='+escapeHTML(notification.getId())+']').remove();
+			delete OCA.Notifications.notifications[notification.getId()];
+			OCA.Notifications.num--;
+		},
 
-        /**
-         * Handle new notification received
-         * @param {OCA.Notifications.Notification} notification
-         */
-        _onNewNotification: function(notification) {
-            OCA.Notifications.num++;
-            // Add it to the array
-            OCA.Notifications.notifications[notification.getId()] = notification;
-            // Add to the UI
-            OCA.Notifications.addToUI(notification);
+		/**
+		 * Handle new notification received
+		 * @param {OCA.Notifications.Notification} notification
+		 */
+		_onNewNotification: function(notification) {
+			OCA.Notifications.num++;
+			// Add it to the array
+			OCA.Notifications.notifications[notification.getId()] = notification;
+			// Add to the UI
+			OCA.Notifications.addToUI(notification);
 
-            // Trigger browsers web notification
-            // https://github.com/owncloud/notifications/issues/1
-            if ("Notification" in window) {
-                if (Notification.permission === "granted") {
-                    // If it's okay let's create a notification
-                    OCA.Notifications.createWebNotification(notification);
-                }
+			// Trigger browsers web notification
+			// https://github.com/owncloud/notifications/issues/1
+			if ("Notification" in window) {
+				if (Notification.permission === "granted") {
+					// If it's okay let's create a notification
+					OCA.Notifications.createWebNotification(notification);
+				}
 
-                // Otherwise, we need to ask the user for permission
-                else if (Notification.permission !== 'denied') {
-                    Notification.requestPermission(function (permission) {
-                        // If the user accepts, let's create a notification
-                        if (permission === "granted") {
-                            OCA.Notifications.createWebNotification(notification);
-                        }
-                    });
-                }
-            }
-        },
+				// Otherwise, we need to ask the user for permission
+				else if (Notification.permission !== 'denied') {
+					Notification.requestPermission(function (permission) {
+						// If the user accepts, let's create a notification
+						if (permission === "granted") {
+							OCA.Notifications.createWebNotification(notification);
+						}
+					});
+				}
+			}
+		},
 
-        /**
-         * Create a browser notification
-         *
-         * @see https://developer.mozilla.org/en/docs/Web/API/notification
-         * @param {OCA.Notifications.Notification} notification
-         */
-        createWebNotification: function (notification) {
-            var n = new Notification(notification.getSubject(), {
-                title: notification.getSubject(),
-                lang: OC.getLocale(),
-                body: notification.getMessage(),
-                tag: notification.getId()
-            });
-            setTimeout(n.close.bind(n), 5000);
-        },
+		/**
+		 * Create a browser notification
+		 *
+		 * @see https://developer.mozilla.org/en/docs/Web/API/notification
+		 * @param {OCA.Notifications.Notification} notification
+		 */
+		createWebNotification: function (notification) {
+			var n = new Notification(notification.getSubject(), {
+				title: notification.getSubject(),
+				lang: OC.getLocale(),
+				body: notification.getMessage(),
+				tag: notification.getId()
+			});
+			setTimeout(n.close.bind(n), 5000);
+		},
 
-        _shutDownNotifications: function() {
-            // The app was disabled or has no notifiers, so we can stop polling
-            // And hide the UI as well
-            window.clearInterval(this.interval);
-            this.$notifications.addClass('hidden');
-        },
+		_shutDownNotifications: function() {
+			// The app was disabled or has no notifiers, so we can stop polling
+			// And hide the UI as well
+			window.clearInterval(this.interval);
+			this.$notifications.addClass('hidden');
+		},
 
-        /**
-         * Adds the notification to the UI
-         * @param {OCA.Notifications.Notification} notification
-         */
-        addToUI: function(notification) {
-            $('div.notification-wrapper').prepend(notification.renderElement());
-        },
+		/**
+		 * Adds the notification to the UI
+		 * @param {OCA.Notifications.Notification} notification
+		 */
+		addToUI: function(notification) {
+			$('div.notification-wrapper').prepend(notification.renderElement());
+		},
 
-        /**
-         * Handle event when we have notifications (and didnt before)
-         */
-        _onHaveNotifications: function() {
-            // Add the button, title, etc
-            $('div.notifications-button')
-            .addClass('hasNotifications')
-            .animate({opacity: 0.5})
-            .animate({opacity: 1})
-            .animate({opacity: 0.5})
-            .animate({opacity: 1})
-            .animate({opacity: 0.7});
-            $('div.notifications .emptycontent').addClass('hidden');
-            this.$button.find('img').attr('src', OC.imagePath('notifications', 'notifications-new'));
-        },
+		/**
+		 * Handle event when we have notifications (and didnt before)
+		 */
+		_onHaveNotifications: function() {
+			// Add the button, title, etc
+			$('div.notifications-button')
+			.addClass('hasNotifications')
+			.animate({opacity: 0.5})
+			.animate({opacity: 1})
+			.animate({opacity: 0.5})
+			.animate({opacity: 1})
+			.animate({opacity: 0.7});
+			$('div.notifications .emptycontent').addClass('hidden');
+			this.$button.find('img').attr('src', OC.imagePath('notifications', 'notifications-new'));
+		},
 
-        /**
-         * Handle when all dismissed
-         */
-        _onHaveNoNotifications: function() {
-            // Remove the border
-            $('div.notifications-button').removeClass('hasNotifications');
-            $('div.notifications .emptycontent').removeClass('hidden');
-            this.$button.find('img').attr('src', OC.imagePath('notifications', 'notifications'));
-        },
+		/**
+		 * Handle when all dismissed
+		 */
+		_onHaveNoNotifications: function() {
+			// Remove the border
+			$('div.notifications-button').removeClass('hasNotifications');
+			$('div.notifications .emptycontent').removeClass('hidden');
+			this.$button.find('img').attr('src', OC.imagePath('notifications', 'notifications'));
+		},
 
-        /**
-         * Performs the AJAX request to retrieve the notifications
-         * @param {Function} success
-         * @param {Function} failure
-         */
-        fetch: function(success, failure){
-            var self = this;
-            var request = $.ajax({
-                url: OC.linkToOCS('apps/notifications/api/v1', 2) + 'notifications?format=json',
-                type: 'GET'
-            });
+		/**
+		 * Performs the AJAX request to retrieve the notifications
+		 * @param {Function} success
+		 * @param {Function} failure
+		 */
+		fetch: function(success, failure){
+			var self = this;
+			var request = $.ajax({
+				url: OC.linkToOCS('apps/notifications/api/v1', 2) + 'notifications?format=json',
+				type: 'GET'
+			});
 
 
-            request.done(function(data, statusText, xhr) {
-                if (xhr.status === 204 || data.ocs.meta.statuscode === 204) {
-                    // 204 No Content - Intercept when no notifiers are there.
-                    self._shutDownNotifications();
-                } else {
-                    success(data.ocs.data, statusText, xhr);
-                }
-            });
-            request.fail(failure);
-        },
+			request.done(function(data, statusText, xhr) {
+				if (xhr.status === 204 || data.ocs.meta.statuscode === 204) {
+					// 204 No Content - Intercept when no notifiers are there.
+					self._shutDownNotifications();
+				} else {
+					success(data.ocs.data, statusText, xhr);
+				}
+			});
+			request.fail(failure);
+		},
 
-        /**
-         * Retrieves a notification object by id
-         * @param {int} id
-         */
-        getNotification: function(id) {
-            if(OCA.Notifications.notifications[id] != undefined) {
-                return OCA.Notifications.notifications[id];
-            } else {
-                return false;
-            }
-        },
+		/**
+		 * Retrieves a notification object by id
+		 * @param {int} id
+		 */
+		getNotification: function(id) {
+			if(OCA.Notifications.notifications[id] != undefined) {
+				return OCA.Notifications.notifications[id];
+			} else {
+				return false;
+			}
+		},
 
-        /**
-         * Returns all notification objects
-         */
-        getNotifications: function() {
-            return this.notifications;
-        },
+		/**
+		 * Returns all notification objects
+		 */
+		getNotifications: function() {
+			return this.notifications;
+		},
 
-        /**
-         * Handles the returned data from the AJAX call
-         * @param {object} responseData
-         */
-        parseNotifications: function(responseData) {
+		/**
+		 * Handles the returned data from the AJAX call
+		 * @param {object} responseData
+		 */
+		parseNotifications: function(responseData) {
 
-        },
+		},
 
-        /**
-         * Returns how many notifications in the UI
-         */
-        numNotifications: function() {
-            return OCA.Notifications.num;
-        }
+		/**
+		 * Returns how many notifications in the UI
+		 */
+		numNotifications: function() {
+			return OCA.Notifications.num;
+		}
 
-    };
+	};
 })();
 
 $(document).ready(function () {
-    OCA.Notifications.initialise();
+	OCA.Notifications.initialise();
 });

@@ -1,118 +1,118 @@
 .notification {
-    display: block;
-    border-bottom: 1px solid rgb(238, 238, 238);
-    padding: 7px 15px 50px 15px;
+	display: block;
+	border-bottom: 1px solid rgb(238, 238, 238);
+	padding: 7px 15px 50px 15px;
 }
 
 .notification-container {
-    background-color: white;
-    display: none;
-    position: absolute;
-    right: 50px;
-    top: 45px;
-    width: 350px;
-    min-height: 100px;
-    max-height: 260px;
-    border-radius: 0 0 3px 3px;
-    border: 1px solid rgb(238, 238, 238);;
+	background-color: white;
+	display: none;
+	position: absolute;
+	right: 50px;
+	top: 45px;
+	width: 350px;
+	min-height: 100px;
+	max-height: 260px;
+	border-radius: 0 0 3px 3px;
+	border: 1px solid rgb(238, 238, 238);;
 }
 
 .notification-container .emptycontent h2 {
-    font-weight: 300;
-    font-size: 16px;
+	font-weight: 300;
+	font-size: 16px;
 }
 
 /* Fill width on mobile */
 @media (max-width: 500px) {
-    .notification-container {
-        right: 5%;
-        width: 90%;
-    }
+	.notification-container {
+		right: 5%;
+		width: 90%;
+	}
 }
 
 .notification {
-    color: black;
-    position: relative;
+	color: black;
+	position: relative;
 }
 
 .notification .notification-empty {
-    color: #999;
+	color: #999;
 }
 
 .notification:hover > .notification-delete{
-    display: block !important;
-    position: absolute;
-    top: 4px;
-    right: 9px;
-    opacity: 0.3;
+	display: block !important;
+	position: absolute;
+	top: 4px;
+	right: 9px;
+	opacity: 0.3;
 }
 
 .notification:hover {
-    background-color: #f8f8f8;
+	background-color: #f8f8f8;
 }
 
 .notification-delete:hover {
-    opacity: 0.8 !important;
-    cursor: pointer;
+	opacity: 0.8 !important;
+	cursor: pointer;
 }
 
 .notification-delete img, .notifications-button img {
-    cursor: pointer;
+	cursor: pointer;
 }
 
 .notifications-button {
-    position: relative;
-    float: right;
-    width: 21px;
-    height: 21px;
-    display: block;
-    border-radius: 50%;
-    text-align: center;
-    padding: 10px;
-    opacity: 0.7;
-    cursor: pointer;
+	position: relative;
+	float: right;
+	width: 21px;
+	height: 21px;
+	display: block;
+	border-radius: 50%;
+	text-align: center;
+	padding: 10px;
+	opacity: 0.7;
+	cursor: pointer;
 }
 .notifications-button.hasNotifications {
-    opacity: 1 !important;
+	opacity: 1 !important;
 }
 
 .notifications-button:hover {
-    opacity: 1;
+	opacity: 1;
 }
 
 .notification .button {
-    border: 1px solid rgba(240,240,240,.9) !important;
-    padding: 0 10px;
+	border: 1px solid rgba(240,240,240,.9) !important;
+	padding: 0 10px;
 	box-shadow: none;
 	margin: 0;
 	float: left;
 }
 
 .notification .notification-actions {
-    float:right;
-    padding: 0;
+	float:right;
+	padding: 0;
 }
 
 .notification .notification-actions:first-child {
-    margin-left: auto;
+	margin-left: auto;
 }
 
 .notification .notification-subject {
-    display: inline-block;
-    margin-right: 10px;
+	display: inline-block;
+	margin-right: 10px;
 }
 
 .notification .notification-message {
-    line-height: 20px;
-    padding-bottom: 5px;
+	line-height: 20px;
+	padding-bottom: 5px;
 }
 
 .notification-container {
-    box-shadow: 0 1px 10px rgba(50, 50, 50, .7);
-    overflow: auto;
-    overflow-x: hidden;
+	box-shadow: 0 1px 10px rgba(50, 50, 50, .7);
+	overflow: auto;
+	overflow-x: hidden;
 }
 
 .notifications .emptycontent {
-    margin: 50px 0;
+	margin: 50px 0;
 }
