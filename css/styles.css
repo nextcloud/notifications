@@ -88,16 +88,12 @@
 	float: left;
 }
 
-.notification .actions {
+.notification .notification-actions {
     float:right;
     padding: 0;
 }
 
-.notification .action-button {
-	color: #555;
-}
-
-.notification .actions:first-child {
+.notification .notification-actions:first-child {
     margin-left: auto;
 }
 

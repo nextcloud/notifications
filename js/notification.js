@@ -101,15 +101,13 @@
             }
             el.append('<div class="notification-message">'+escapeHTML(this.getMessage())+'</div>');
             // Add actions
-            var actions = $('<div class="actions"></div>');
+            var actions = $('<div class="notification-actions"></div>');
             var actionsData = this.getActions();
             _.each(actionsData, function(actionData) {
 				// FIXME: use handlebars template
                 actions.append(
-					'<div class="button">' +
-					'<a class="action-button" href="#" data-type="' + escapeHTML(actionData.type) + '" ' +
-					'data-href="'+escapeHTML(actionData.link)+'">'+escapeHTML(actionData.label)+'</a>' +
-					'</div>'
+					'<button class="action-button' + (actionData.primary ? ' primary': '') + '" data-type="' + escapeHTML(actionData.type) + '" ' +
+					'data-href="'+escapeHTML(actionData.link)+'">'+escapeHTML(actionData.label)+'</button>'
 				);
                 // TODO create event handler on click for given action type
             });
