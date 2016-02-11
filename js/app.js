@@ -37,7 +37,7 @@
 
 			// Setup elements
 			this.$notifications = $('<div class="notifications"></div>');
-			this.$button = $('<div class="notifications-button menutoggle"><img class="svg" alt="Dismiss" src="' + OC.imagePath('notifications', 'notifications') + '"></div>');
+			this.$button = $('<div class="notifications-button menutoggle"><img class="svg" alt="' + t('notifications', 'Notifications') + '" src="' + OC.imagePath('notifications', 'notifications') + '"></div>');
 			this.$container = $('<div class="notification-container"></div>');
 			var $wrapper = $('<div class="notification-wrapper"></div>');
 
@@ -71,9 +71,10 @@
 
 		_onClickDismissNotification: function(event) {
 			event.preventDefault();
-			var $target = $(event.target);
-			var $notification = $target.closest('.notification');
-			var id = $notification.attr('data-id');
+			var self = this,
+				$target = $(event.target),
+				$notification = $target.closest('.notification'),
+				id = $notification.attr('data-id');
 
 			$notification.fadeOut(OC.menuSpeed);
 
@@ -88,8 +89,6 @@
 					OC.Notification.showTemporary('Failed to perform action');
 				}
 			});
-
-			this._removeNotification($notification.attr('data-id'));
 		},
 
 		_onClickAction: function(event) {
@@ -124,7 +123,7 @@
 		},
 
 		_removeNotification: function(id) {
-			var $notification = this.$container.find('.notification').filterAttr('id', id);
+			var $notification = this.$container.find('.notification[data-id=' + id + ']');
 			delete OCA.Notifications.notifications[id];
 
 			$notification.remove();
@@ -151,7 +150,6 @@
 						var n = new self.Notif(data[index]);
 						self.notifications[n.getId()] = n;
 						self.addToUI(n);
-						self.num++;
 					});
 					// Check if we have any, and notify the UI
 					if (self.numNotifications() !== 0) {
@@ -223,7 +221,6 @@
 		_onRemoveNotification: function(notification) {
 			$('div.notification[data-id='+escapeHTML(notification.getId())+']').remove();
 			delete OCA.Notifications.notifications[notification.getId()];
-			OCA.Notifications.num--;
 		},
 
 		/**
@@ -231,7 +228,6 @@
 		 * @param {OCA.Notifications.Notification} notification
 		 */
 		_onNewNotification: function(notification) {
-			OCA.Notifications.num++;
 			// Add it to the array
 			OCA.Notifications.notifications[notification.getId()] = notification;
 			// Add to the UI
@@ -293,15 +289,14 @@
 		 */
 		_onHaveNotifications: function() {
 			// Add the button, title, etc
-			$('div.notifications-button')
-			.addClass('hasNotifications')
-			.animate({opacity: 0.5})
-			.animate({opacity: 1})
-			.animate({opacity: 0.5})
-			.animate({opacity: 1})
-			.animate({opacity: 0.7});
-			$('div.notifications .emptycontent').addClass('hidden');
-			this.$button.find('img').attr('src', OC.imagePath('notifications', 'notifications-new'));
+			this.$button.addClass('hasNotifications');
+			this.$button.find('img').attr('src', OC.imagePath('notifications', 'notifications-new'))
+				.animate({opacity: 0.5}, 600)
+				.animate({opacity: 1}, 600)
+				.animate({opacity: 0.5}, 600)
+				.animate({opacity: 1}, 600)
+				.animate({opacity: 0.7}, 600);
+			this.$container.find('.emptycontent').addClass('hidden');
 		},
 
 		/**
@@ -369,7 +364,7 @@
 		 * Returns how many notifications in the UI
 		 */
 		numNotifications: function() {
-			return OCA.Notifications.num;
+			return _.keys(this.notifications).length;
 		}
 
 	};
