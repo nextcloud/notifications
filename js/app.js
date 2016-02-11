@@ -289,15 +289,14 @@
 		 */
 		_onHaveNotifications: function() {
 			// Add the button, title, etc
-			$('div.notifications-button')
-			.addClass('hasNotifications')
-			.animate({opacity: 0.5})
-			.animate({opacity: 1})
-			.animate({opacity: 0.5})
-			.animate({opacity: 1})
-			.animate({opacity: 0.7});
-			$('div.notifications .emptycontent').addClass('hidden');
-			this.$button.find('img').attr('src', OC.imagePath('notifications', 'notifications-new'));
+			this.$button.addClass('hasNotifications');
+			this.$button.find('img').attr('src', OC.imagePath('notifications', 'notifications-new'))
+				.animate({opacity: 0.5}, 600)
+				.animate({opacity: 1}, 600)
+				.animate({opacity: 0.5}, 600)
+				.animate({opacity: 1}, 600)
+				.animate({opacity: 0.7}, 600);
+			this.$container.find('.emptycontent').addClass('hidden');
 		},
 
 		/**
