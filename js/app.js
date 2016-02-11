@@ -37,7 +37,7 @@
 
 			// Setup elements
 			this.$notifications = $('<div class="notifications"></div>');
-			this.$button = $('<div class="notifications-button menutoggle"><img class="svg" alt="Dismiss" src="' + OC.imagePath('notifications', 'notifications') + '"></div>');
+			this.$button = $('<div class="notifications-button menutoggle"><img class="svg" alt="' + t('notifications', 'Notifications') + '" src="' + OC.imagePath('notifications', 'notifications') + '"></div>');
 			this.$container = $('<div class="notification-container"></div>');
 			var $wrapper = $('<div class="notification-wrapper"></div>');
 
