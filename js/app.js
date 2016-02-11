@@ -71,9 +71,10 @@
 
 		_onClickDismissNotification: function(event) {
 			event.preventDefault();
-			var $target = $(event.target);
-			var $notification = $target.closest('.notification');
-			var id = $notification.attr('data-id');
+			var self = this,
+				$target = $(event.target),
+				$notification = $target.closest('.notification'),
+				id = $notification.attr('data-id');
 
 			$notification.fadeOut(OC.menuSpeed);
 
@@ -88,8 +89,6 @@
 					OC.Notification.showTemporary('Failed to perform action');
 				}
 			});
-
-			this._removeNotification($notification.attr('data-id'));
 		},
 
 		_onClickAction: function(event) {
@@ -124,7 +123,7 @@
 		},
 
 		_removeNotification: function(id) {
-			var $notification = this.$container.find('.notification').filterAttr('id', id);
+			var $notification = this.$container.find('.notification[data-id=' + id + ']');
 			delete OCA.Notifications.notifications[id];
 
 			$notification.remove();
@@ -151,7 +150,6 @@
 						var n = new self.Notif(data[index]);
 						self.notifications[n.getId()] = n;
 						self.addToUI(n);
-						self.num++;
 					});
 					// Check if we have any, and notify the UI
 					if (self.numNotifications() !== 0) {
@@ -223,7 +221,6 @@
 		_onRemoveNotification: function(notification) {
 			$('div.notification[data-id='+escapeHTML(notification.getId())+']').remove();
 			delete OCA.Notifications.notifications[notification.getId()];
-			OCA.Notifications.num--;
 		},
 
 		/**
@@ -231,7 +228,6 @@
 		 * @param {OCA.Notifications.Notification} notification
 		 */
 		_onNewNotification: function(notification) {
-			OCA.Notifications.num++;
 			// Add it to the array
 			OCA.Notifications.notifications[notification.getId()] = notification;
 			// Add to the UI
@@ -369,7 +365,7 @@
 		 * Returns how many notifications in the UI
 		 */
 		numNotifications: function() {
-			return OCA.Notifications.num;
+			return _.keys(this.notifications).length;
 		}
 
 	};
