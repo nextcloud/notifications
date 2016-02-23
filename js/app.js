@@ -36,7 +36,7 @@
 			// Go!
 
 			// Setup elements
-			this.$notifications = $('<div class="notifications"></div>');
+			this.$notifications = $('<div class="notifications hidden"></div>');
 			this.$button = $('<div class="notifications-button menutoggle"><img class="svg" alt="' + t('notifications', 'Notifications') + '" src="' + OC.imagePath('notifications', 'notifications') + '"></div>');
 			this.$container = $('<div class="notification-container"></div>');
 			var $wrapper = $('<div class="notification-wrapper"></div>');
@@ -297,6 +297,8 @@
 				.animate({opacity: 1}, 600)
 				.animate({opacity: 0.7}, 600);
 			this.$container.find('.emptycontent').addClass('hidden');
+
+			this.$notifications.removeClass('hidden');
 		},
 
 		/**
@@ -307,6 +309,8 @@
 			$('div.notifications-button').removeClass('hasNotifications');
 			$('div.notifications .emptycontent').removeClass('hidden');
 			this.$button.find('img').attr('src', OC.imagePath('notifications', 'notifications'));
+
+			this.$notifications.addClass('hidden');
 		},
 
 		/**
