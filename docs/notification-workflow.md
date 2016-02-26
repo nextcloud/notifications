@@ -115,6 +115,8 @@ with it, we want to remove the notification again.
     }
     ```
 
+    **Note:** currently no markup is allowed.
+
 ### Marking a notification as read/deleted/processed/obsoleted
 
 If the user accepted the share or the share was removed/unshared, we want to remove
