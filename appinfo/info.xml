@@ -6,7 +6,7 @@
 
 	<licence>AGPL</licence>
 	<author>Joas Schilling</author>
-	<version>0.2.3</version>
+	<version>0.3.0</version>
 
 	<types>
 		<logging/>
@@ -15,6 +15,6 @@
 	<default_enable/>
 
 	<dependencies>
-		<owncloud min-version="9.0" max-version="9.0"/>
+		<owncloud min-version="9.1" max-version="9.1" />
 	</dependencies>
 </info>
