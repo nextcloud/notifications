@@ -74,7 +74,25 @@
 		},
 
 		getMessage: function() {
-			return this.message;
+			var message = this.message;
+
+			/**
+			 * Trim on word end after 100 chars or hard 120 chars
+			 */
+			if (message.length > 120) {
+				var spacePosition = message.indexOf(' ', 100);
+				if (spacePosition !== -1 && spacePosition <= 120) {
+					message = message.substring(0, spacePosition);
+				} else {
+					message = message.substring(0, 120);
+				}
+				message += t('notifications', '…');
+			}
+
+			message = escapeHTML(message);
+			message = message.replace(new RegExp("\n", 'g'), ' ');
+
+			return message;
 		},
 
 		getEl: function() {
@@ -99,7 +117,7 @@
 			} else {
 				el.append('<div class="notification-subject"> '+escapeHTML(this.getSubject())+'</div>');
 			}
-			el.append('<div class="notification-message">'+escapeHTML(this.getMessage())+'</div>');
+			el.append('<div class="notification-message">'+this.getMessage()+'</div>');
 			// Add actions
 			var actions = $('<div class="notification-actions"></div>');
 			var actionsData = this.getActions();
@@ -112,7 +130,7 @@
 				// TODO create event handler on click for given action type
 			});
 			el.append(actions);
-			el.append('<div style="display: none;" class="notification-delete"><img class="svg" alt="Dismiss" src="' + OC.imagePath('core', 'actions/close') + '"></div>');
+			el.append('<div style="display: none;" class="notification-delete"><img class="svg" alt="' + t('notifications', 'Dismiss') + '" src="' + OC.imagePath('core', 'actions/close') + '"></div>');
 			return el;
 		},
 
