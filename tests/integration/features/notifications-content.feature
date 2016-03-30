@@ -1,8 +1,7 @@
 Feature: notifications-content
   Background:
-    Given using api version "2"
     Given user "test1" exists
-    Given As an "test1"
+    Given As user "test1"
 
   Scenario: Create notification
     Given user "test1" receives notification with

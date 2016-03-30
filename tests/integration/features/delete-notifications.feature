@@ -1,8 +1,7 @@
 Feature: delete-notifications
   Background:
-    Given using api version "2"
     Given user "test1" exists
-    Given As an "test1"
+    Given As user "test1"
 
   Scenario: Delete first notification
     Given user "test1" has notifications

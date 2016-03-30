@@ -19,8 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
-require __DIR__ . '/../../../../../../build/integration/features/bootstrap/BasicStructure.php';
-require __DIR__ . '/../../../../../../build/integration/features/bootstrap/Provisioning.php';
+require __DIR__ . '/../../vendor/autoload.php';
 
 use Behat\Behat\Context\Context;
 use Behat\Behat\Context\SnippetAcceptingContext;
@@ -38,10 +37,22 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	/** @var int */
 	protected $deletedNotification;
 
-	protected $adminUser;
+	/** @var string */
+	protected $currentUser;
 
-	use BasicStructure;
-	use Provisioning;
+	/** @var ResponseInterface */
+	private $response = null;
+
+	/** @var \GuzzleHttp\Cookie\CookieJar */
+	private $cookieJar;
+
+	/**
+	 * FeatureContext constructor.
+	 */
+	public function __construct() {
+		$this->cookieJar = new \GuzzleHttp\Cookie\CookieJar();
+		$this->baseUrl = getenv('TEST_SERVER_URL');
+	}
 
 	/**
 	 * @Given /^user "([^"]*)" has notifications$/
@@ -171,20 +182,6 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
-	 * @BeforeSuite
-	 */
-	public static function addFilesToSkeleton() {
-		// The path to the skeleton files does not match, and we don't need them
-	}
-
-	/**
-	 * @AfterSuite
-	 */
-	public static function removeFilesFromSkeleton() {
-		// The path to the skeleton files does not match, and we don't need them
-	}
-
-	/**
 	 * @BeforeScenario
 	 * @AfterScenario
 	 */
@@ -201,10 +198,10 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	 * @return \GuzzleHttp\Message\FutureResponse|ResponseInterface|null
 	 */
 	protected function setTestingValue($verb, $url, $body) {
-		$fullUrl = $this->baseUrl . "v2.php/" . $url;
+		$fullUrl = $this->baseUrl . 'ocs/v2.php/' . $url;
 		$client = new Client();
 		$options = [
-			'auth' => $this->adminUser,
+			'auth' => ['admin', 'admin'],
 		];
 		if ($body instanceof \Behat\Gherkin\Node\TableNode) {
 			$fd = $body->getRowsHash();
@@ -216,5 +213,126 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 		} catch (\GuzzleHttp\Exception\ClientException $ex) {
 			return $ex->getResponse();
 		}
+	}
+
+	/*
+	 * User management
+	 */
+
+	/**
+	 * @Given /^As user "([^"]*)"$/
+	 * @param string $user
+	 */
+	public function setCurrentUser($user) {
+		$this->currentUser = $user;
+	}
+
+	/**
+	 * @Given /^user "([^"]*)" exists$/
+	 * @param string $user
+	 */
+	public function assureUserExists($user) {
+		try {
+			$this->userExists($user);
+		} catch (\GuzzleHttp\Exception\ClientException $ex) {
+			$this->createUser($user);
+		}
+		$this->userExists($user);
+		PHPUnit_Framework_Assert::assertEquals(200, $this->response->getStatusCode());
+
+	}
+
+	private function userExists($user) {
+		$client = new Client();
+		$options = ['auth' => ['admin', 'admin']];
+		$this->response = $client->get($this->baseUrl . 'ocs/v2.php/cloud/users/' . $user, $options);
+	}
+
+	private function createUser($user) {
+		$previous_user = $this->currentUser;
+		$this->currentUser = "admin";
+
+		$userProvisioningUrl = $this->baseUrl . 'ocs/v2.php/cloud/users';
+		$client = new Client();
+		$options = [
+			'auth' => ['admin', 'admin'],
+			'body' => [
+				'userid' => $user,
+				'password' => '123456'
+			],
+		];
+		$this->response = $client->send($client->createRequest('POST', $userProvisioningUrl, $options));
+
+		//Quick hack to login once with the current user
+		$options2 = ['auth' => [$user, '123456']];
+		$client->send($client->createRequest('GET', $userProvisioningUrl . '/' . $user, $options2));
+
+		$this->currentUser = $previous_user;
+	}
+
+	/*
+	 * Requests
+	 */
+
+	/**
+	 * @When /^sending "([^"]*)" to "([^"]*)"$/
+	 * @param string $verb
+	 * @param string $url
+	 */
+	public function sendingTo($verb, $url) {
+		$this->sendingToWith($verb, $url, null);
+	}
+
+	/**
+	 * @When /^sending "([^"]*)" to "([^"]*)" with$/
+	 * @param string $verb
+	 * @param string $url
+	 * @param \Behat\Gherkin\Node\TableNode $body
+	 */
+	public function sendingToWith($verb, $url, $body) {
+		$fullUrl = $this->baseUrl . 'ocs/v2.php' . $url;
+		$client = new Client();
+		$options = [];
+		if ($this->currentUser === 'admin') {
+			$options['auth'] = ['admin', 'admin'];
+		} else {
+			$options['auth'] = [$this->currentUser, '123456'];
+		}
+		if ($body instanceof \Behat\Gherkin\Node\TableNode) {
+			$fd = $body->getRowsHash();
+			$options['body'] = $fd;
+		}
+
+		try {
+			$this->response = $client->send($client->createRequest($verb, $fullUrl, $options));
+		} catch (\GuzzleHttp\Exception\ClientException $ex) {
+			$this->response = $ex->getResponse();
+		}
+	}
+
+	/**
+	 * Parses the xml answer to get ocs response which doesn't match with
+	 * http one in v1 of the api.
+	 * @param ResponseInterface $response
+	 * @return string
+	 */
+	private function getOCSResponse($response) {
+		return $response->xml()->meta[0]->statuscode;
+	}
+
+	/**
+	 * @Then /^the OCS status code should be "([^"]*)"$/
+	 * @param int $statusCode
+	 */
+	public function theOCSStatusCodeShouldBe($statusCode) {
+		PHPUnit_Framework_Assert::assertEquals($statusCode, $this->getOCSResponse($this->response));
+	}
+
+	/**
+	 * @Then /^the HTTP status code should be "([^"]*)"$/
+	 * @param int $statusCode
+	 */
+	public function theHTTPStatusCodeShouldBe($statusCode) {
+		PHPUnit_Framework_Assert::assertEquals($statusCode, $this->response->getStatusCode());
 	}
 }
