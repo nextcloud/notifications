@@ -31,13 +31,12 @@ before_install:
   - ./occ app:list
 
   # Setup behat for integration tests
-  - cd build/integration/
+  - cd apps/$APP_NAME/
+  - cd tests/integration/
   - sh -c "if [ '$INTEGRATION' = '1' ]; then composer install; fi"
   - cd ../../
 
 script:
-  - cd apps/$APP_NAME/
-
   # Test the app
   - sh -c "if [ '$CODECHECK' = '1' ]; then find . -name \*.php -exec php -l \"{}\" \;; fi"
   - cd ../../
