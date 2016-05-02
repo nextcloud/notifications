@@ -20,7 +20,7 @@
  *
  */
 
-namespace OCA\Notifications\Tests\AppInfo;
+namespace OCA\Notifications\Tests\Unit\AppInfo;
 
 use OCA\Notifications\Tests\Unit\TestCase;
 use OCP\IUser;

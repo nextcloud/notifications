@@ -20,10 +20,9 @@
  *
  */
 
-namespace OCA\Notifications\Tests\Lib;
+namespace OCA\Notifications\Tests\Unit;
 
 use OCA\Notifications\Capabilities;
-use OCA\Notifications\Tests\Unit\TestCase;
 
 class CapabilitiesTest extends TestCase {
 

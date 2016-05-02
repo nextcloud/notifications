@@ -20,7 +20,7 @@
  *
  */
 
-namespace OCA\Notifications\Tests\Controller;
+namespace OCA\Notifications\Tests\Unit\Controller;
 
 use OCA\Notifications\Controller\EndpointController;
 use OCA\Notifications\Tests\Unit\TestCase;

@@ -7,17 +7,13 @@
 		 timeoutForLargeTests="900"
 		>
 	<testsuite name='ownCloud - Notifications App Tests'>
-		<directory suffix='.php'>.</directory>
+		<directory suffix='Test.php'>.</directory>
 	</testsuite>
 	<!-- filters for code coverage -->
 	<filter>
 		<whitelist>
-			<directory suffix=".php">../../../notifications</directory>
-			<exclude>
-				<directory suffix=".php">../../../notifications/l10n</directory>
-				<directory suffix=".php">../../../notifications/templates</directory>
-				<directory suffix=".php">../../../notifications/tests</directory>
-			</exclude>
+			<directory suffix=".php">../../../notifications/lib</directory>
+			<directory suffix=".php">../../../notifications/appinfo</directory>
 		</whitelist>
 	</filter>
 	<logging>

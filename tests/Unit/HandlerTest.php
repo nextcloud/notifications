@@ -20,11 +20,10 @@
  *
  */
 
-namespace OCA\Notifications\Tests\Lib;
+namespace OCA\Notifications\Tests\Unit;
 
 
 use OCA\Notifications\Handler;
-use OCA\Notifications\Tests\Unit\TestCase;
 
 /**
  * Class HandlerTest
