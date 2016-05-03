@@ -1,7 +1,5 @@
 filter:
     excluded_paths:
-        - '3rdparty/*'
-        - 'js/jquery*'
         - 'l10n/*'
         - 'tests/*'
 

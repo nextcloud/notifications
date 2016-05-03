@@ -20,11 +20,10 @@
  *
  */
 
-namespace OCA\Notifications\Tests\Lib;
+namespace OCA\Notifications\Tests\Unit;
 
 
 use OCA\Notifications\App;
-use OCA\Notifications\Tests\Unit\TestCase;
 
 class AppTest extends TestCase {
 	/** @var \OCA\Notifications\Handler|\PHPUnit_Framework_MockObject_MockObject */

@@ -51,10 +51,10 @@ nbproject
 /.buildpath
 
 # Tests - auto-generated files
-/tests/unit/coverage*
-/tests/unit/clover.xml
-/tests/unit/js/node_modules
+/tests/Unit/coverage*
+/tests/Unit/clover.xml
+/tests/Unit/js/node_modules
 
-/tests/integration/composer.lock
-/tests/integration/output
-/tests/integration/vendor
+/tests/Integration/composer.lock
+/tests/Integration/output
+/tests/Integration/vendor

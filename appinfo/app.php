@@ -20,8 +20,6 @@
  *
  */
 
-namespace OCA\Notifications\AppInfo;
-
 use OCA\Notifications\App;
 use OCA\Notifications\Handler;
 use OCP\Util;
