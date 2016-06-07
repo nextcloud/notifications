@@ -202,7 +202,7 @@
 		},
 
 		/**
-		 * Handles removing the Notification from the UI when no longer in JSON
+		 * Handles errors when requesting the notifications
 		 * @param {XMLHttpRequest} xhr
 		 */
 		_onFetchError: function(xhr) {
@@ -210,7 +210,7 @@
 				// 404 Not Found - stop polling
 				this._shutDownNotifications();
 			} else {
-				OC.Notification.showTemporary('Failed to perform request for notifications');
+				OC.Notification.showTemporary('Failed to request notifications. Please try to refresh the page manually.');
 			}
 		},
 
