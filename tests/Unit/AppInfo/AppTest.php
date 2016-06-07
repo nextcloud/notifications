@@ -89,6 +89,7 @@ class AppTest extends TestCase {
 			['/index.php', '/apps/files', null, false],
 			['/remote.php', '/webdav', $user, false],
 			['/index.php', '/s/1234567890123', $user, false],
+			['/index.php', '/login/selectchallenge', $user, false],
 		];
 	}
 
