@@ -37,7 +37,8 @@ use OCP\Util;
 $request = \OC::$server->getRequest();
 if (\OC::$server->getUserSession()->getUser() !== null
 	&& substr($request->getScriptName(), 0 - strlen('/index.php')) === '/index.php'
-	&& substr($request->getPathInfo(), 0, strlen('/s/')) !== '/s/') {
+	&& substr($request->getPathInfo(), 0, strlen('/s/')) !== '/s/'
+	&& substr($request->getPathInfo(), 0, strlen('/login/')) !== '/login/') {
 	Util::addScript('notifications', 'app');
 	Util::addScript('notifications', 'notification');
 	Util::addStyle('notifications', 'styles');
