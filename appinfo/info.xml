@@ -14,9 +14,9 @@
 
 	<default_enable/>
 
-	<website>https://github.com/owncloud/notifications</website>
-	<bugs>https://github.com/owncloud/notifications/issues</bugs>
-	<repository type="git">https://github.com/owncloud/notifications.git</repository>
+	<website>https://github.com/nextcloud/notifications</website>
+	<bugs>https://github.com/nextcloud/notifications/issues</bugs>
+	<repository type="git">https://github.com/nextcloud/notifications.git</repository>
 
 	<dependencies>
 		<owncloud min-version="9.1" max-version="9.1" />
