@@ -6,7 +6,7 @@
 		 timeoutForMediumTests="900"
 		 timeoutForLargeTests="900"
 		>
-	<testsuite name='ownCloud - Notifications App Tests'>
+	<testsuite name='Notifications App Tests'>
 		<directory suffix='.php'>.</directory>
 	</testsuite>
 	<!-- filters for code coverage -->
