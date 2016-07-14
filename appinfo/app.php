@@ -1,6 +1,6 @@
 <?php
 /**
- * @author Joas Schilling <nickvergessen@owncloud.com>
+ * @author Joas Schilling <coding@schilljs.com>
  * @author Tom Needham <tom@owncloud.com>
  *
  * @copyright Copyright (c) 2016, ownCloud, Inc.
