@@ -86,7 +86,7 @@
 				} else {
 					message = message.substring(0, 120);
 				}
-				message += t('notifications', '…');
+				message += '…';
 			}
 
 			message = escapeHTML(message);
