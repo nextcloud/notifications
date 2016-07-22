@@ -1,0 +1,9 @@
+[main]
+host = https://www.transifex.com
+lang_map = ja_JP: ja
+
+[nextcloud.notifications]
+file_filter = <lang>/notifications.po
+source_file = templates/notifications.pot
+source_lang = en
+type = PO
