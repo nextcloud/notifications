@@ -1,0 +1,6 @@
+{ "translations": {
+    "Notifications" : "Bildirimler",
+    "No notifications" : "Bildirimler kapalı",
+    "Dismiss" : "İptal et"
+},"pluralForm" :"nplurals=2; plural=(n > 1);"
+}
