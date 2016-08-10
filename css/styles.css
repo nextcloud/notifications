@@ -1,6 +1,7 @@
 .notification {
 	display: block;
 	padding: 7px 15px 50px 15px;
+	line-height: normal;
 }
 .notification:not(:last-child) {
 	border-bottom: 1px solid rgb(238, 238, 238);
@@ -49,10 +50,6 @@
 	opacity: 0.3;
 }
 
-.notification:hover {
-	background-color: #f8f8f8;
-}
-
 .notification-delete:hover {
 	opacity: 0.8 !important;
 	cursor: pointer;
@@ -95,6 +92,10 @@
 	padding: 0;
 }
 
+.notification .notification-actions .action-button.primary{
+	color: #fff;
+}
+
 .notification .notification-actions:first-child {
 	margin-left: auto;
 }
@@ -102,6 +103,9 @@
 .notification .notification-subject {
 	display: inline-block;
 	margin-right: 10px;
+}
+.notification .notification-subject:hover {
+	background-color: #f8f8f8;
 }
 
 .notification .notification-message {
