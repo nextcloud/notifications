@@ -45,8 +45,8 @@
 .notification:hover > .notification-delete{
 	display: block !important;
 	position: absolute;
-	top: 4px;
-	right: 9px;
+	top: 7px;
+	right: 14px;
 	opacity: 0.3;
 }
 
@@ -103,9 +103,10 @@
 .notification .notification-subject {
 	display: inline-block;
 	margin-right: 10px;
+	opacity: .57;
 }
 .notification .notification-subject:hover {
-	background-color: #f8f8f8;
+	opacity: 1;
 }
 
 .notification .notification-message {
