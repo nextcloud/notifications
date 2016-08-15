@@ -4,7 +4,6 @@ php:
   - 5.5
   - 5.6
   - 7
-  - hhvm
 
 env:
   global:
@@ -60,11 +59,6 @@ script:
   - sh -c "if [ '$INTEGRATION' != '1' -a '$JSTESTS' != '1' -a '$CODECHECK' != '1' -a '$CODECHECK' != '2' -a '$TRAVIS_PHP_VERSION' != 'hhvm' ]; then php ocular.phar code-coverage:upload --format=php-clover clover.xml; fi"
   - cd ../..
 
-  # Run Javascript unit tests
-#  - cd tests/js
-#  - sh -c "if [ '$JSTESTS' = '1' ]; then npm install --deps; node_modules/karma/bin/karma start karma.config.js --single-run; fi"
-#  - cd ../
-
 matrix:
   include:
     - php: 5.4
@@ -79,9 +73,6 @@ matrix:
       env: DB=mysql;CODECHECK=2
     - php: 5.4
       env: DB=mysql;INTEGRATION=1
-#    - php: 5.4
-#      env: DB=mysql;JSTESTS=1
   allow_failures:
-    - php: hhvm
     - env: DB=mysql;CODECHECK=2
   fast_finish: true
