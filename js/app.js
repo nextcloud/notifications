@@ -289,8 +289,14 @@
 		 */
 		_onHaveNotifications: function() {
 			// Add the button, title, etc
+			var icon;
+			if (OCA.Theming && OCA.Theming.inverted) {
+				icon = 'notifications-new-dark';
+			} else {
+				icon = 'notifications-new';
+			}
 			this.$button.addClass('hasNotifications');
-			this.$button.find('img').attr('src', OC.imagePath('notifications', 'notifications-new'))
+			this.$button.find('img').attr('src', OC.imagePath('notifications', icon))
 				.animate({opacity: 0.5}, 600)
 				.animate({opacity: 1}, 600)
 				.animate({opacity: 0.5}, 600)
