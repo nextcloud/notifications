@@ -124,7 +124,7 @@
 			_.each(actionsData, function(actionData) {
 				// FIXME: use handlebars template
 				actions.append(
-					'<button class="action-button' + (actionData.primary ? ' primary pull-right': '') + '" data-type="' + escapeHTML(actionData.type) + '" ' +
+					'<button class="action-button pull-right' + (actionData.primary ? ' primary': '') + '" data-type="' + escapeHTML(actionData.type) + '" ' +
 					'data-href="'+escapeHTML(actionData.link)+'">'+escapeHTML(actionData.label)+'</button>'
 				);
 				// TODO create event handler on click for given action type
