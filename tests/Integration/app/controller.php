@@ -52,7 +52,7 @@ class Controller extends \OCP\AppFramework\Controller {
 			->setDateTime(\DateTime::createFromFormat('U', $this->request->getParam('timestamp', 1449585176))) // 2015-12-08T14:32:56+00:00
 			->setUser($this->request->getParam('user', 'test1'))
 			->setSubject($this->request->getParam('subject', 'testing'))
-			->setLink($this->request->getParam('link', 'https://www.owncloud.org/'))
+			->setLink($this->request->getParam('link', 'https://example.tld/'))
 			->setMessage($this->request->getParam('message', 'message'))
 			->setObject($this->request->getParam('object_type', 'object'), $this->request->getParam('object_id', 23));
 

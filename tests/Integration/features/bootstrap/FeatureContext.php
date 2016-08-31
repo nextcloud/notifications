@@ -46,6 +46,9 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	/** @var \GuzzleHttp\Cookie\CookieJar */
 	private $cookieJar;
 
+	/** @var string */
+	protected $baseUrl;
+
 	/**
 	 * FeatureContext constructor.
 	 */
@@ -220,7 +223,7 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	 */
 
 	/**
-	 * @Given /^As user "([^"]*)"$/
+	 * @Given /^as user "([^"]*)"$/
 	 * @param string $user
 	 */
 	public function setCurrentUser($user) {
@@ -237,15 +240,20 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 		} catch (\GuzzleHttp\Exception\ClientException $ex) {
 			$this->createUser($user);
 		}
-		$this->userExists($user);
-		PHPUnit_Framework_Assert::assertEquals(200, $this->response->getStatusCode());
+		$response = $this->userExists($user);
+		PHPUnit_Framework_Assert::assertEquals(200, $response->getStatusCode());
 
 	}
 
 	private function userExists($user) {
 		$client = new Client();
-		$options = ['auth' => ['admin', 'admin']];
-		$this->response = $client->get($this->baseUrl . 'ocs/v2.php/cloud/users/' . $user, $options);
+		$options = [
+			'auth' => ['admin', 'admin'],
+			'headers' => [
+				'OCS-APIREQUEST' => 'true',
+			],
+		];
+		return $client->get($this->baseUrl . 'ocs/v2.php/cloud/users/' . $user, $options);
 	}
 
 	private function createUser($user) {
@@ -260,11 +268,19 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 				'userid' => $user,
 				'password' => '123456'
 			],
+			'headers' => [
+				'OCS-APIREQUEST' => 'true',
+			],
 		];
-		$this->response = $client->send($client->createRequest('POST', $userProvisioningUrl, $options));
+		$client->send($client->createRequest('POST', $userProvisioningUrl, $options));
 
 		//Quick hack to login once with the current user
-		$options2 = ['auth' => [$user, '123456']];
+		$options2 = [
+			'auth' => [$user, '123456'],
+			'headers' => [
+				'OCS-APIREQUEST' => 'true',
+			],
+		];
 		$client->send($client->createRequest('GET', $userProvisioningUrl . '/' . $user, $options2));
 
 		$this->currentUser = $previous_user;

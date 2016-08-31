@@ -28,11 +28,11 @@ $controller = new \OCA\NotificationsIntegrationTesting\Controller(
 	'delete',
 	'/apps/notificationsintegrationtesting',
 	[$controller, 'deleteNotifications'],
-	'notifications'
+	'notificationsintegrationtesting'
 );
 \OCP\API::register(
 	'post',
 	'/apps/notificationsintegrationtesting/notifications',
 	[$controller, 'addNotification'],
-	'notifications'
+	'notificationsintegrationtesting'
 );
