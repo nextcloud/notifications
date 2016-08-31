@@ -1,7 +1,7 @@
 Feature: delete-notifications
   Background:
     Given user "test1" exists
-    Given As user "test1"
+    Given as user "test1"
 
   Scenario: Delete first notification
     Given user "test1" has notifications

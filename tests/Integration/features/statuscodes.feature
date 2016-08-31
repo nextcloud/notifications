@@ -1,7 +1,7 @@
 Feature: statuscodes
   Background:
     Given user "test1" exists
-    Given As user "test1"
+    Given as user "test1"
 
   Scenario: Status code when reading notifications with notifiers and without notifications
     When sending "GET" to "/apps/notifications/api/v1/notifications?format=json"
