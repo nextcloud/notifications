@@ -159,7 +159,7 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
-	 * @Then /^delete (first|last) notification$/
+	 * @Then /^delete (first|last|same) notification$/
 	 *
 	 * @param string $firstOrLast
 	 */
@@ -168,10 +168,21 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 		$lastNotificationIds = end($this->notificationIds);
 		if ($firstOrLast === 'first') {
 			$this->deletedNotification = end($lastNotificationIds);
-		} else {
+		} else if ($firstOrLast === 'last') {
 			$this->deletedNotification = reset($lastNotificationIds);
 		}
 		$this->sendingTo('DELETE', '/apps/notifications/api/v1/notifications/' . $this->deletedNotification);
+	}
+
+	/**
+	 * @Then /^status code is ([0-9]*) and ocs code ([0-9]*)$/
+	 *
+	 * @param int $status
+	 * @param int $ocs
+	 */
+	public function assertStatusCode($status, $ocs) {
+		PHPUnit_Framework_Assert::assertEquals($status, $this->response->getStatusCode());
+		PHPUnit_Framework_Assert::assertEquals($ocs, $this->getOCSResponse($this->response));
 	}
 
 	/**
