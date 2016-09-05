@@ -319,6 +319,10 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 			$options['body'] = $fd;
 		}
 
+		$options['headers'] = [
+			'OCS-APIREQUEST' => 'true',
+		];
+
 		try {
 			$this->response = $client->send($client->createRequest($verb, $fullUrl, $options));
 		} catch (\GuzzleHttp\Exception\ClientException $ex) {
