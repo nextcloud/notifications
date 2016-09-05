@@ -87,7 +87,7 @@ class HandlerTest extends TestCase {
 		$this->assertCount(0, $notifications, 'Wrong notification count for user2 before beginning');
 
 		// Add and count
-		$this->handler->add($notification);
+		$this->assertGreaterThan($this->handler->add($notification), 0);
 		$this->assertSame(1, $this->handler->count($limitedNotification1), 'Wrong notification count for user1 after adding');
 		$this->assertSame(0, $this->handler->count($limitedNotification2), 'Wrong notification count for user2 after adding');
 
