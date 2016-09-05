@@ -1,7 +1,6 @@
 <?php
 /**
  * @author Joas Schilling <coding@schilljs.com>
- * @author Tom Needham <tom@owncloud.com>
  *
  * @copyright Copyright (c) 2016, ownCloud, Inc.
  * @license AGPL-3.0
@@ -20,26 +19,5 @@
  *
  */
 
-use OCA\Notifications\App;
-use OCA\Notifications\Handler;
-use OCP\Util;
-
-\OC::$server->getNotificationManager()->registerApp(function() {
-	return new App(
-		new Handler(
-			\OC::$server->getDatabaseConnection(),
-			\OC::$server->getNotificationManager()
-		)
-	);
-});
-
-// Only display the app on index.php except for public shares
-$request = \OC::$server->getRequest();
-if (\OC::$server->getUserSession()->getUser() !== null
-	&& substr($request->getScriptName(), 0 - strlen('/index.php')) === '/index.php'
-	&& substr($request->getPathInfo(), 0, strlen('/s/')) !== '/s/'
-	&& substr($request->getPathInfo(), 0, strlen('/login/')) !== '/login/') {
-	Util::addScript('notifications', 'app');
-	Util::addScript('notifications', 'notification');
-	Util::addStyle('notifications', 'styles');
-}
+$application = new \OCA\Notifications\AppInfo\Application();
+$application->register();
