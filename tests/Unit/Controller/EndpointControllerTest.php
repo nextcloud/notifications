@@ -25,6 +25,7 @@ namespace OCA\Notifications\Tests\Unit\Controller;
 use OCA\Notifications\Controller\EndpointController;
 use OCA\Notifications\Tests\Unit\TestCase;
 use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\DataResponse;
 
 class EndpointControllerTest extends TestCase {
 	/** @var \OCP\IRequest|\PHPUnit_Framework_MockObject_MockObject */
@@ -181,7 +182,8 @@ class EndpointControllerTest extends TestCase {
 			->willReturn($notifications);
 
 		$response = $controller->listNotifications();
-		$this->assertInstanceOf('OC_OCS_Result', $response);
+		$this->assertInstanceOf(DataResponse::class, $response);
+		$this->assertSame(Http::STATUS_OK, $response->getStatus());
 
 		$headers = $response->getHeaders();
 		$this->assertArrayHasKey('ETag', $headers);
@@ -246,7 +248,8 @@ class EndpointControllerTest extends TestCase {
 			->willReturn($notifications);
 
 		$response = $controller->listNotifications();
-		$this->assertInstanceOf('OC_OCS_Result', $response);
+		$this->assertInstanceOf(DataResponse::class, $response);
+		$this->assertSame(Http::STATUS_OK, $response->getStatus());
 
 		$headers = $response->getHeaders();
 		$this->assertArrayHasKey('ETag', $headers);
@@ -261,9 +264,8 @@ class EndpointControllerTest extends TestCase {
 			->willReturn(false);
 
 		$response = $controller->listNotifications();
-		$this->assertInstanceOf('OC_OCS_Result', $response);
-
-		$this->assertSame(Http::STATUS_NO_CONTENT, $response->getStatusCode());
+		$this->assertInstanceOf(DataResponse::class, $response);
+		$this->assertSame(Http::STATUS_NO_CONTENT, $response->getStatus());
 	}
 
 	public function dataGetNotification() {
@@ -305,10 +307,9 @@ class EndpointControllerTest extends TestCase {
 			->with($id, $notification)
 			->willReturn('$notification');
 
-		$response = $controller->getNotification(['id' => (string) $id]);
-		$this->assertInstanceOf('OC_OCS_Result', $response);
-
-		$this->assertSame(100, $response->getStatusCode());
+		$response = $controller->getNotification($id);
+		$this->assertInstanceOf(DataResponse::class, $response);
+		$this->assertSame(Http::STATUS_OK, $response->getStatus());
 	}
 
 	public function dataGetNotificationNoId() {
@@ -317,21 +318,21 @@ class EndpointControllerTest extends TestCase {
 			->getMock();
 
 		return [
-			[false, [], false, null], // No notifiers
-			[true, [], false, null], // No id
-			[true, ['id' => 42], true, null], // Not found in database
-			[true, ['id' => 42], true, $notification], // Not handled on prepare
+			[false, null, false, null], // No notifiers
+			[true, null, false, null], // No id
+			[true, 42, true, null], // Not found in database
+			[true, 42, true, $notification], // Not handled on prepare
 		];
 	}
 
 	/**
 	 * @dataProvider dataGetNotificationNoId
 	 * @param bool $hasNotifiers
-	 * @param array $parameters
+	 * @param mixed $id
 	 * @param bool $called
 	 * @param null|\OCP\Notification\INotification $notification
 	 */
-	public function testGetNotificationNoId($hasNotifiers, array $parameters, $called, $notification) {
+	public function testGetNotificationNoId($hasNotifiers, $id, $called, $notification) {
 		$controller = $this->getController();
 
 		$this->manager->expects($this->once())
@@ -346,10 +347,9 @@ class EndpointControllerTest extends TestCase {
 			->method('prepare')
 			->willThrowException(new \InvalidArgumentException());
 
-		$response = $controller->getNotification($parameters);
-		$this->assertInstanceOf('OC_OCS_Result', $response);
-
-		$this->assertSame(404, $response->getStatusCode());
+		$response = $controller->getNotification($id);
+		$this->assertInstanceOf(DataResponse::class, $response);
+		$this->assertSame(Http::STATUS_NOT_FOUND, $response->getStatus());
 	}
 
 	public function dataDeleteNotification() {
@@ -371,10 +371,9 @@ class EndpointControllerTest extends TestCase {
 			->method('deleteById')
 			->with($id, $username);
 
-		$response = $controller->deleteNotification(['id' => (string) $id]);
-		$this->assertInstanceOf('OC_OCS_Result', $response);
-
-		$this->assertSame(100, $response->getStatusCode());
+		$response = $controller->deleteNotification($id);
+		$this->assertInstanceOf(DataResponse::class, $response);
+		$this->assertSame(Http::STATUS_OK, $response->getStatus());
 	}
 
 	public function testDeleteNotificationNoId() {
@@ -384,9 +383,8 @@ class EndpointControllerTest extends TestCase {
 			->method('deleteById');
 
 		$response = $controller->deleteNotification([]);
-		$this->assertInstanceOf('OC_OCS_Result', $response);
-
-		$this->assertSame(404, $response->getStatusCode());
+		$this->assertInstanceOf(DataResponse::class, $response);
+		$this->assertSame(Http::STATUS_NOT_FOUND, $response->getStatus());
 	}
 
 	public function dataNotificationToArray() {
