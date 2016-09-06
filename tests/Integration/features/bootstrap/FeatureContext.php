@@ -105,8 +105,7 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	 * @return array
 	 */
 	protected function getArrayOfNotificationsResponded(ResponseInterface $response) {
-		$jsonResponse = json_decode($response->getBody()->getContents(), 1);
-		return $jsonResponse['ocs']['data'];
+		return $response->json()['ocs']['data'];
 	}
 
 	/**
@@ -159,7 +158,7 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 
 		$this->sendingTo('GET', '/apps/notifications/api/v1/notifications/' . $notificationId . '?format=json');
 		$this->assertStatusCode($this->response, 200);
-		$response = json_decode($this->response->getBody()->getContents(), true);
+		$response = $this->response->json();
 
 		foreach ($formData->getRowsHash() as $key => $value) {
 			PHPUnit_Framework_Assert::assertArrayHasKey($key, $response['ocs']['data']);
@@ -168,17 +167,19 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
-	 * @Then /^delete (first|last|same) notification$/
+	 * @Then /^delete (first|last|same|faulty) notification$/
 	 *
-	 * @param string $firstOrLast
+	 * @param string $toDelete
 	 */
-	public function deleteNotification($firstOrLast) {
+	public function deleteNotification($toDelete) {
 		PHPUnit_Framework_Assert::assertNotEmpty($this->notificationIds);
 		$lastNotificationIds = end($this->notificationIds);
-		if ($firstOrLast === 'first') {
+		if ($toDelete === 'first') {
 			$this->deletedNotification = end($lastNotificationIds);
-		} else if ($firstOrLast === 'last') {
+		} else if ($toDelete === 'last') {
 			$this->deletedNotification = reset($lastNotificationIds);
+		} else if ($toDelete === 'faulty') {
+			$this->deletedNotification = 'faulty';
 		}
 		$this->sendingTo('DELETE', '/apps/notifications/api/v1/notifications/' . $this->deletedNotification);
 	}
@@ -337,21 +338,10 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
-	 * Parses the xml answer to get ocs response which doesn't match with
-	 * http one in v1 of the api.
-	 * @param ResponseInterface $response
-	 * @return string
-	 */
-	private function getOCSResponse($response) {
-		return $response->xml()->meta[0]->statuscode;
-	}
-
-	/**
 	 * @param ResponseInterface $response
 	 * @param int $statusCode
 	 */
 	protected function assertStatusCode(ResponseInterface $response, $statusCode) {
 		PHPUnit_Framework_Assert::assertEquals($statusCode, $response->getStatusCode());
-		//PHPUnit_Framework_Assert::assertEquals($statusCode, $this->getOCSResponse($response));
 	}
 }
