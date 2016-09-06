@@ -24,6 +24,8 @@ namespace OCA\Notifications\Tests\Unit;
 
 
 use OCA\Notifications\Handler;
+use OCP\Notification\IAction;
+use OCP\Notification\INotification;
 
 /**
  * Class HandlerTest
@@ -32,7 +34,7 @@ use OCA\Notifications\Handler;
  * @package OCA\Notifications\Tests\Lib
  */
 class HandlerTest extends TestCase {
-	/** @var \OCA\Notifications\Handler */
+	/** @var Handler */
 	protected $handler;
 
 	protected function setUp() {
@@ -154,7 +156,7 @@ class HandlerTest extends TestCase {
 
 		// Get with correct user
 		$getNotification = $this->handler->getById($notificationId, 'test_user1');
-		$this->assertInstanceOf('OCP\Notification\INotification', $getNotification);
+		$this->assertInstanceOf(INotification::class, $getNotification);
 
 		// Delete and count
 		$this->handler->deleteById($notificationId, 'test_user1');
@@ -163,19 +165,17 @@ class HandlerTest extends TestCase {
 
 	/**
 	 * @param array $values
-	 * @return \OCP\Notification\INotification|\PHPUnit_Framework_MockObject_MockObject
+	 * @return INotification|\PHPUnit_Framework_MockObject_MockObject
 	 */
 	protected function getNotification(array $values = []) {
-		$notification = $this->getMockBuilder('OCP\Notification\INotification')
-			->disableOriginalConstructor()
+		$notification = $this->getMockBuilder(INotification::class)
 			->getMock();
 
 		foreach ($values as $method => $returnValue) {
 			if ($method === 'getActions') {
 				$actions = [];
 				foreach ($returnValue as $actionData) {
-					$action = $this->getMockBuilder('OCP\Notification\IAction')
-						->disableOriginalConstructor()
+					$action = $this->getMockBuilder(IAction::class)
 						->getMock();
 					foreach ($actionData as $actionMethod => $actionValue) {
 						$action->expects($this->any())

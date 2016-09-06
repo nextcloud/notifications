@@ -28,6 +28,7 @@ use OCA\Notifications\Capabilities;
 use OCA\Notifications\Controller\EndpointController;
 use OCA\Notifications\Handler;
 use OCA\Notifications\Tests\Unit\TestCase;
+use OCP\AppFramework\IAppContainer;
 use OCP\AppFramework\OCSController;
 use OCP\Notification\IApp;
 
@@ -38,10 +39,10 @@ use OCP\Notification\IApp;
  * @package OCA\Notifications\Tests\AppInfo
  */
 class ApplicationTest extends TestCase {
-	/** @var \OCA\Notifications\AppInfo\Application */
+	/** @var Application */
 	protected $app;
 
-	/** @var \OCP\AppFramework\IAppContainer */
+	/** @var IAppContainer */
 	protected $container;
 
 	protected function setUp() {

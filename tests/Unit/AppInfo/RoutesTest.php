@@ -32,8 +32,11 @@ use OCA\Notifications\Tests\Unit\TestCase;
  */
 class RoutesTest extends TestCase {
 	public function testRoutes() {
-		// Execute so we know that no error occurred
-		include(__DIR__ . '/../../../appinfo/routes.php');
-		$this->assertTrue(true);
+		$routes = include(__DIR__ . '/../../../appinfo/routes.php');
+		$this->assertInternalType('array', $routes);
+		$this->assertCount(1, $routes);
+		$this->assertArrayHasKey('ocs', $routes);
+		$this->assertInternalType('array', $routes['ocs']);
+		$this->assertGreaterThanOrEqual(3, sizeof($routes['ocs']));
 	}
 }
