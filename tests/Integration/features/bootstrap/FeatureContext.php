@@ -49,6 +49,9 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	/** @var string */
 	protected $baseUrl;
 
+	/** @var string */
+	protected $lastEtag;
+
 	/**
 	 * FeatureContext constructor.
 	 */
@@ -80,6 +83,21 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 			$response = $this->setTestingValue('POST', 'apps/notificationsintegrationtesting/notifications', $formData);
 			$this->assertStatusCode($response, 200);
 		}
+	}
+
+	/**
+	 * @When /^getting notifications(| with different etag| with matching etag)$/
+	 */
+	public function gettingNotifications($etag) {
+		$headers = [];
+		if ($etag === ' with different etag') {
+			$headers['ETag'] = md5($this->lastEtag);
+		} else if ($etag === ' with matching etag') {
+			$headers['ETag'] = $this->lastEtag;
+		}
+
+		$this->sendingToWith('GET', '/apps/notifications/api/v1/notifications?format=json', null, $headers);
+		$this->lastEtag = $this->response->getHeader('ETag');
 	}
 
 	/**
@@ -311,8 +329,9 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	 * @param string $verb
 	 * @param string $url
 	 * @param \Behat\Gherkin\Node\TableNode $body
+	 * @param array $headers
 	 */
-	public function sendingToWith($verb, $url, $body) {
+	public function sendingToWith($verb, $url, $body, array $headers = []) {
 		$fullUrl = $this->baseUrl . 'ocs/v2.php' . $url;
 		$client = new Client();
 		$options = [];
@@ -326,9 +345,9 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 			$options['body'] = $fd;
 		}
 
-		$options['headers'] = [
+		$options['headers'] = array_merge($headers, [
 			'OCS-APIREQUEST' => 'true',
-		];
+		]);
 
 		try {
 			$this->response = $client->send($client->createRequest($verb, $fullUrl, $options));

@@ -97,7 +97,15 @@ class EndpointController extends OCSController {
 			$data[] = $this->notificationToArray($notificationId, $notification);
 		}
 
-		return new DataResponse($data, Http::STATUS_OK, ['ETag' => $this->generateEtag($notificationIds)]);
+		$etag = $this->generateEtag($notificationIds);
+		/**
+		 * Not documented yet, check with clients
+		if ($this->request->getHeader('ETag') === $etag) {
+			return new DataResponse($data, Http::STATUS_NOT_MODIFIED);
+		}
+		 */
+
+		return new DataResponse($data, Http::STATUS_OK, ['ETag' => $etag]);
 	}
 
 	/**
