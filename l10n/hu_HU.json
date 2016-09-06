@@ -1,0 +1,6 @@
+{ "translations": {
+    "Notifications" : "Értesítések",
+    "No notifications" : "Nincsenek értesítések",
+    "Dismiss" : "Elutasít"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}
