@@ -35,7 +35,6 @@ class App implements IApp {
 
 	/**
 	 * @param INotification $notification
-	 * @return null
 	 * @throws \InvalidArgumentException When the notification is not valid
 	 * @since 8.2.0
 	 */
@@ -54,7 +53,6 @@ class App implements IApp {
 
 	/**
 	 * @param INotification $notification
-	 * @return null
 	 * @since 8.2.0
 	 */
 	public function markProcessed(INotification $notification) {

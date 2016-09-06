@@ -24,25 +24,27 @@ namespace OCA\Notifications\Tests\Unit;
 
 
 use OCA\Notifications\App;
+use OCA\Notifications\Handler;
+use OCP\Notification\INotification;
 
 class AppTest extends TestCase {
-	/** @var \OCA\Notifications\Handler|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var Handler|\PHPUnit_Framework_MockObject_MockObject */
 	protected $handler;
 
-	/** @var \OCP\Notification\INotification|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var INotification|\PHPUnit_Framework_MockObject_MockObject */
 	protected $notification;
 
-	/** @var \OCA\Notifications\App */
+	/** @var App */
 	protected $app;
 
 	protected function setUp() {
 		parent::setUp();
 
-		$this->handler = $this->getMockBuilder('OCA\Notifications\Handler')
+		$this->handler = $this->getMockBuilder(Handler::class)
 			->disableOriginalConstructor()
 			->getMock();
 
-		$this->notification = $this->getMockBuilder('OCP\Notification\INotification')
+		$this->notification = $this->getMockBuilder(INotification::class)
 			->disableOriginalConstructor()
 			->getMock();
 

@@ -2,6 +2,7 @@
 <info>
 	<id>notificationsintegrationtesting</id>
 	<name>Notifications Integration Testing</name>
+	<namespace>NotificationsIntegrationTesting</namespace>
 	<description/>
 
 	<licence>AGPL</licence>

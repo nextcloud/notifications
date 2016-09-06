@@ -22,8 +22,12 @@
 
 namespace OCA\Notifications\Tests\Unit\AppInfo;
 
+use OCA\Notifications\App;
 use OCA\Notifications\Tests\Unit\TestCase;
+use OCP\IRequest;
 use OCP\IUser;
+use OCP\IUserSession;
+use OCP\Notification\IManager;
 
 /**
  * Class AppTest
@@ -32,26 +36,23 @@ use OCP\IUser;
  * @package OCA\Notifications\Tests\AppInfo
  */
 class AppTest extends TestCase {
-	/** @var \OCP\Notification\IManager|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var IManager|\PHPUnit_Framework_MockObject_MockObject */
 	protected $manager;
-	/** @var \OCP\IRequest|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var IRequest|\PHPUnit_Framework_MockObject_MockObject */
 	protected $request;
-	/** @var \OCP\IUserSession|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var IUserSession|\PHPUnit_Framework_MockObject_MockObject */
 	protected $session;
 
 	protected function setUp() {
 		parent::setUp();
 
-		$this->manager = $this->getMockBuilder('OCP\Notification\IManager')
-			->disableOriginalConstructor()
+		$this->manager = $this->getMockBuilder(IManager::class)
 			->getMock();
 
-		$this->request = $this->getMockBuilder('OCP\IRequest')
-			->disableOriginalConstructor()
+		$this->request = $this->getMockBuilder(IRequest::class)
 			->getMock();
 
-		$this->session = $this->getMockBuilder('OC\User\Session')
-			->disableOriginalConstructor()
+		$this->session = $this->getMockBuilder(IUserSession::class)
 			->getMock();
 
 		$this->overwriteService('NotificationManager', $this->manager);
@@ -71,17 +72,16 @@ class AppTest extends TestCase {
 		$this->manager->expects($this->once())
 			->method('registerApp')
 			->willReturnCallback(function($closure) {
-				$this->assertInstanceOf('\Closure', $closure);
+				$this->assertInstanceOf(\Closure::class, $closure);
 				$navigation = $closure();
-				$this->assertInstanceOf('\OCA\Notifications\App', $navigation);
+				$this->assertInstanceOf(App::class, $navigation);
 			});
 
 		include(__DIR__ . '/../../../appinfo/app.php');
 	}
 
 	public function dataLoadingJSAndCSS() {
-		$user = $this->getMockBuilder('OCP\IUser')
-			->disableOriginalClone()
+		$user = $this->getMockBuilder(IUser::class)
 			->getMock();
 
 		return [

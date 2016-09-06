@@ -21,53 +21,45 @@
 
 namespace OCA\Notifications\AppInfo;
 
+use OCA\Notifications\App;
 use OCA\Notifications\Capabilities;
 use OCA\Notifications\Controller\EndpointController;
-use OCA\Notifications\Handler;
-use OCP\AppFramework\App;
-use OCP\IContainer;
-use OCP\IUser;
-use OCP\IUserSession;
+use OCP\Util;
 
-class Application extends App {
-	public function __construct (array $urlParams = array()) {
-		parent::__construct('notifications', $urlParams);
+class Application extends \OCP\AppFramework\App {
+	public function __construct() {
+		parent::__construct('notifications');
 		$container = $this->getContainer();
 
-		$container->registerService('EndpointController', function(IContainer $c) {
-			/** @var \OC\Server $server */
-			$server = $c->query('ServerContainer');
-
-			return new EndpointController(
-				$c->query('AppName'),
-				$server->getRequest(),
-				new Handler(
-					$server->getDatabaseConnection(),
-					$server->getNotificationManager()
-				),
-				$server->getNotificationManager(),
-				$server->getConfig(),
-				$server->getUserSession()
-			);
-		});
-
-		$container->registerService('Capabilities', function(IContainer $c) {
-			return new Capabilities();
-		});
-
-		$container->registerCapability('Capabilities');
+		$container->registerAlias('EndpointController', EndpointController::class);
+		$container->registerCapability(Capabilities::class);
 	}
 
-	/**
-	 * @param IUserSession $session
-	 * @return string
-	 */
-	protected function getCurrentUser(IUserSession $session) {
-		$user = $session->getUser();
-		if ($user instanceof IUser) {
-			$user = $user->getUID();
+	public function register() {
+		$this->registerNotificationApp();
+		$this->registerUserInterface();
+	}
+
+	protected function registerNotificationApp() {
+		$container = $this->getContainer();
+		$container->getServer()->getNotificationManager()->registerApp(function() use($container) {
+			return $container->query(App::class);
+		});
+	}
+
+	protected function registerUserInterface() {
+		// Only display the app on index.php except for public shares
+		$server = $this->getContainer()->getServer();
+		$request = $server->getRequest();
+
+		if ($server->getUserSession()->getUser() !== null
+			&& substr($request->getScriptName(), 0 - strlen('/index.php')) === '/index.php'
+			&& substr($request->getPathInfo(), 0, strlen('/s/')) !== '/s/'
+			&& substr($request->getPathInfo(), 0, strlen('/login/')) !== '/login/') {
+			Util::addScript('notifications', 'app');
+			Util::addScript('notifications', 'notification');
+			Util::addStyle('notifications', 'styles');
 		}
 
-		return (string) $user;
 	}
 }

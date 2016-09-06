@@ -19,20 +19,9 @@
  *
  */
 
-$controller = new \OCA\NotificationsIntegrationTesting\Controller(
-	'notificationsintegrationtesting',
-	\OC::$server->getRequest(),
-	\OC::$server->getNotificationManager()
-);
-\OCP\API::register(
-	'delete',
-	'/apps/notificationsintegrationtesting',
-	[$controller, 'deleteNotifications'],
-	'notificationsintegrationtesting'
-);
-\OCP\API::register(
-	'post',
-	'/apps/notificationsintegrationtesting/notifications',
-	[$controller, 'addNotification'],
-	'notificationsintegrationtesting'
-);
+return [
+	'ocs' => [
+		['name' => 'Endpoint#deleteNotifications', 'url' => '', 'verb' => 'DELETE'],
+		['name' => 'Endpoint#addNotification', 'url' => '/notifications', 'verb' => 'POST'],
+	],
+];

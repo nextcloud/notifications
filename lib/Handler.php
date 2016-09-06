@@ -55,6 +55,8 @@ class Handler {
 		$sql->insert('notifications');
 		$this->sqlInsert($sql, $notification);
 		$sql->execute();
+
+		return $sql->getLastInsertId();
 	}
 
 	/**
@@ -81,7 +83,6 @@ class Handler {
 	 * Delete the notifications matching the given Notification
 	 *
 	 * @param INotification $notification
-	 * @return null
 	 */
 	public function delete(INotification $notification) {
 		$sql = $this->connection->getQueryBuilder();
@@ -95,7 +96,6 @@ class Handler {
 	 *
 	 * @param int $id
 	 * @param string $user
-	 * @return null
 	 */
 	public function deleteById($id, $user) {
 		$sql = $this->connection->getQueryBuilder();

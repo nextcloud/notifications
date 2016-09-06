@@ -22,8 +22,15 @@
 
 namespace OCA\Notifications\Tests\Unit\AppInfo;
 
+use OCA\Notifications\App;
 use OCA\Notifications\AppInfo\Application;
+use OCA\Notifications\Capabilities;
+use OCA\Notifications\Controller\EndpointController;
+use OCA\Notifications\Handler;
 use OCA\Notifications\Tests\Unit\TestCase;
+use OCP\AppFramework\IAppContainer;
+use OCP\AppFramework\OCSController;
+use OCP\Notification\IApp;
 
 /**
  * Class ApplicationTest
@@ -32,10 +39,10 @@ use OCA\Notifications\Tests\Unit\TestCase;
  * @package OCA\Notifications\Tests\AppInfo
  */
 class ApplicationTest extends TestCase {
-	/** @var \OCA\Notifications\AppInfo\Application */
+	/** @var Application */
 	protected $app;
 
-	/** @var \OCP\AppFramework\IAppContainer */
+	/** @var IAppContainer */
 	protected $container;
 
 	protected function setUp() {
@@ -51,8 +58,17 @@ class ApplicationTest extends TestCase {
 
 	public function dataContainerQuery() {
 		return array(
-			array('EndpointController', 'OCA\Notifications\Controller\EndpointController'),
-			array('Capabilities', 'OCA\Notifications\Capabilities'),
+			// lib/
+			array(App::class),
+			array(App::class, IApp::class),
+			array(Capabilities::class),
+			array(Handler::class),
+
+			// Controller/
+			array('EndpointController', EndpointController::class),
+			array('EndpointController', OCSController::class),
+			array(EndpointController::class),
+			array(EndpointController::class, OCSController::class),
 		);
 	}
 
@@ -61,37 +77,10 @@ class ApplicationTest extends TestCase {
 	 * @param string $service
 	 * @param string $expected
 	 */
-	public function testContainerQuery($service, $expected) {
+	public function testContainerQuery($service, $expected = null) {
+		if ($expected === null) {
+			$expected = $service;
+		}
 		$this->assertTrue($this->container->query($service) instanceof $expected);
-	}
-
-	public function dataGetCurrentUser() {
-		$user = $this->getMockBuilder('OCP\IUser')
-			->disableOriginalConstructor()
-			->getMock();
-		$user->expects($this->any())
-			->method('getUID')
-			->willReturn('uid');
-
-		return [
-			[$user, 'uid'],
-			[null, ''],
-		];
-	}
-
-	/**
-	 * @dataProvider dataGetCurrentUser
-	 * @param mixed $user
-	 * @param string $expected
-	 */
-	public function testGetCurrentUser($user, $expected) {
-		$session = $this->getMockBuilder('OCP\IUserSession')
-			->disableOriginalConstructor()
-			->getMock();
-		$session->expects($this->any())
-			->method('getUser')
-			->willReturn($user);
-
-		$this->assertSame($expected, $this->invokePrivate($this->app, 'getCurrentUser', [$session]));
 	}
 }

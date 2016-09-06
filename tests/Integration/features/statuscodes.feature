@@ -4,20 +4,42 @@ Feature: statuscodes
     Given as user "test1"
 
   Scenario: Status code when reading notifications with notifiers and without notifications
-    When sending "GET" to "/apps/notifications/api/v1/notifications?format=json"
-    Then the HTTP status code should be "200"
+    When getting notifications
+    Then status code is 200
     And list of notifications has 0 entries
 
   Scenario: Status code when reading notifications with notifiers and notification
     Given user "test1" has notifications
-    When sending "GET" to "/apps/notifications/api/v1/notifications?format=json"
-    Then the HTTP status code should be "200"
+    When getting notifications
+    Then status code is 200
     And list of notifications has 1 entries
 
   Scenario: Status code when reading notifications with notifiers and notifications
     Given user "test1" has notifications
     Given user "test1" has notifications
     Given user "test1" has notifications
-    When sending "GET" to "/apps/notifications/api/v1/notifications?format=json"
-    Then the HTTP status code should be "200"
+    When getting notifications
+    Then status code is 200
     And list of notifications has 3 entries
+
+  Scenario: Status code when reading notifications with different etag
+    Given user "test1" has notifications
+    Given user "test1" has notifications
+    Given user "test1" has notifications
+    When getting notifications
+    Then status code is 200
+    And list of notifications has 3 entries
+    When getting notifications with different etag
+    Then status code is 200
+    And list of notifications has 3 entries
+
+  Scenario: Status code when reading notifications with matching etag
+    Given user "test1" has notifications
+    Given user "test1" has notifications
+    Given user "test1" has notifications
+    When getting notifications
+    Then status code is 200
+    And list of notifications has 3 entries
+    When getting notifications with matching etag
+    Then status code is 200
+    # Then status code is 304 - Disabled because it's not listed in the API specs

@@ -19,12 +19,8 @@
  *
  */
 
-namespace OCA\NotificationsIntegrationTesting\AppInfo;
-
-use OCA\NotificationsIntegrationTesting\Notifier;
-
 \OC::$server->getNotificationManager()->registerNotifier(function() {
-	return new Notifier();
+	return new \OCA\NotificationsIntegrationTesting\Notifier();
 }, function() {
 	return [
 		'id' => 'testing',

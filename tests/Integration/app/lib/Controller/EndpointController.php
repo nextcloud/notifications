@@ -19,13 +19,14 @@
  *
  */
 
-namespace OCA\NotificationsIntegrationTesting;
+namespace OCA\NotificationsIntegrationTesting\Controller;
 
-use OCP\AppFramework\Http;
+use OCP\AppFramework\OCSController;
+use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
 use OCP\Notification\IManager;
 
-class Controller extends \OCP\AppFramework\Controller {
+class EndpointController extends OCSController {
 
 	/** @var IManager */
 	private $manager;
@@ -37,14 +38,13 @@ class Controller extends \OCP\AppFramework\Controller {
 	 */
 	public function __construct($appName, IRequest $request, IManager $manager) {
 		parent::__construct($appName, $request);
-
 		$this->manager = $manager;
 	}
 
 	/**
 	 * @NoCSRFRequired
 	 *
-	 * @return \OC_OCS_Result
+	 * @return DataResponse
 	 */
 	public function addNotification() {
 		$notification = $this->manager->createNotification();
@@ -58,18 +58,18 @@ class Controller extends \OCP\AppFramework\Controller {
 
 		$this->manager->notify($notification);
 
-		return new \OC_OCS_Result();
+		return new DataResponse();
 	}
 
 	/**
 	 * @NoCSRFRequired
 	 *
-	 * @return \OC_OCS_Result
+	 * @return DataResponse
 	 */
 	public function deleteNotifications() {
 		$notification = $this->manager->createNotification();
 		$this->manager->markProcessed($notification);
 
-		return new \OC_OCS_Result();
+		return new DataResponse();
 	}
 }

@@ -49,6 +49,9 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	/** @var string */
 	protected $baseUrl;
 
+	/** @var string */
+	protected $lastEtag;
+
 	/**
 	 * FeatureContext constructor.
 	 */
@@ -65,8 +68,7 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	public function hasNotifications($user) {
 		if ($user === 'test1') {
 			$response = $this->setTestingValue('POST', 'apps/notificationsintegrationtesting/notifications', null);
-			PHPUnit_Framework_Assert::assertEquals(200, $response->getStatusCode());
-			PHPUnit_Framework_Assert::assertEquals(200, (int) $this->getOCSResponse($response));
+			$this->assertStatusCode($response, 200);
 		}
 	}
 
@@ -79,9 +81,23 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	public function receiveNotification($user, \Behat\Gherkin\Node\TableNode $formData) {
 		if ($user === 'test1') {
 			$response = $this->setTestingValue('POST', 'apps/notificationsintegrationtesting/notifications', $formData);
-			PHPUnit_Framework_Assert::assertEquals(200, $response->getStatusCode());
-			PHPUnit_Framework_Assert::assertEquals(200, (int) $this->getOCSResponse($response));
+			$this->assertStatusCode($response, 200);
 		}
+	}
+
+	/**
+	 * @When /^getting notifications(| with different etag| with matching etag)$/
+	 */
+	public function gettingNotifications($etag) {
+		$headers = [];
+		if ($etag === ' with different etag') {
+			$headers['ETag'] = md5($this->lastEtag);
+		} else if ($etag === ' with matching etag') {
+			$headers['ETag'] = $this->lastEtag;
+		}
+
+		$this->sendingToWith('GET', '/apps/notifications/api/v1/notifications?format=json', null, $headers);
+		$this->lastEtag = $this->response->getHeader('ETag');
 	}
 
 	/**
@@ -102,6 +118,15 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
+	 * Parses the xml answer to get the array of users returned.
+	 * @param ResponseInterface $response
+	 * @return array
+	 */
+	protected function getArrayOfNotificationsResponded(ResponseInterface $response) {
+		return $response->json()['ocs']['data'];
+	}
+
+	/**
 	 * @Then /^user "([^"]*)" has (\d+) notifications(| missing the last one| missing the first one)$/
 	 *
 	 * @param string $user
@@ -111,7 +136,7 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	public function userNumNotifications($user, $numNotifications, $missingLast) {
 		if ($user === 'test1') {
 			$this->sendingTo('GET', '/apps/notifications/api/v1/notifications?format=json');
-			PHPUnit_Framework_Assert::assertEquals(200, $this->response->getStatusCode());
+			$this->assertStatusCode($this->response, 200);
 
 			$previousNotificationIds = [];
 			if ($missingLast) {
@@ -138,6 +163,7 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	/**
 	 * @Then /^(first|last) notification matches$/
 	 *
+	 * @param string $notification
 	 * @param \Behat\Gherkin\Node\TableNode|null $formData
 	 */
 	public function matchNotification($notification, $formData) {
@@ -149,8 +175,8 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 		}
 
 		$this->sendingTo('GET', '/apps/notifications/api/v1/notifications/' . $notificationId . '?format=json');
-		PHPUnit_Framework_Assert::assertEquals(200, $this->response->getStatusCode());
-		$response = json_decode($this->response->getBody()->getContents(), true);
+		$this->assertStatusCode($this->response, 200);
+		$response = $this->response->json();
 
 		foreach ($formData->getRowsHash() as $key => $value) {
 			PHPUnit_Framework_Assert::assertArrayHasKey($key, $response['ocs']['data']);
@@ -159,29 +185,30 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
-	 * @Then /^delete (first|last) notification$/
+	 * @Then /^delete (first|last|same|faulty) notification$/
 	 *
-	 * @param string $firstOrLast
+	 * @param string $toDelete
 	 */
-	public function deleteNotification($firstOrLast) {
+	public function deleteNotification($toDelete) {
 		PHPUnit_Framework_Assert::assertNotEmpty($this->notificationIds);
 		$lastNotificationIds = end($this->notificationIds);
-		if ($firstOrLast === 'first') {
+		if ($toDelete === 'first') {
 			$this->deletedNotification = end($lastNotificationIds);
-		} else {
+		} else if ($toDelete === 'last') {
 			$this->deletedNotification = reset($lastNotificationIds);
+		} else if ($toDelete === 'faulty') {
+			$this->deletedNotification = 'faulty';
 		}
 		$this->sendingTo('DELETE', '/apps/notifications/api/v1/notifications/' . $this->deletedNotification);
 	}
 
 	/**
-	 * Parses the xml answer to get the array of users returned.
-	 * @param ResponseInterface $resp
-	 * @return array
+	 * @Then /^status code is ([0-9]*)$/
+	 *
+	 * @param int $statusCode
 	 */
-	public function getArrayOfNotificationsResponded(ResponseInterface $resp) {
-		$jsonResponse = json_decode($resp->getBody()->getContents(), 1);
-		return $jsonResponse['ocs']['data'];
+	public function isStatusCode($statusCode) {
+		$this->assertStatusCode($this->response, $statusCode);
 	}
 
 	/**
@@ -190,8 +217,7 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	 */
 	public function clearNotifications() {
 		$response = $this->setTestingValue('DELETE', 'apps/notificationsintegrationtesting', null);
-		PHPUnit_Framework_Assert::assertEquals(200, $response->getStatusCode());
-		PHPUnit_Framework_Assert::assertEquals(200, (int) $this->getOCSResponse($response));
+		$this->assertStatusCode($response, 200);
 	}
 
 	/**
@@ -241,8 +267,7 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 			$this->createUser($user);
 		}
 		$response = $this->userExists($user);
-		PHPUnit_Framework_Assert::assertEquals(200, $response->getStatusCode());
-
+		$this->assertStatusCode($response, 200);
 	}
 
 	private function userExists($user) {
@@ -304,8 +329,9 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	 * @param string $verb
 	 * @param string $url
 	 * @param \Behat\Gherkin\Node\TableNode $body
+	 * @param array $headers
 	 */
-	public function sendingToWith($verb, $url, $body) {
+	public function sendingToWith($verb, $url, $body, array $headers = []) {
 		$fullUrl = $this->baseUrl . 'ocs/v2.php' . $url;
 		$client = new Client();
 		$options = [];
@@ -319,6 +345,10 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 			$options['body'] = $fd;
 		}
 
+		$options['headers'] = array_merge($headers, [
+			'OCS-APIREQUEST' => 'true',
+		]);
+
 		try {
 			$this->response = $client->send($client->createRequest($verb, $fullUrl, $options));
 		} catch (\GuzzleHttp\Exception\ClientException $ex) {
@@ -327,28 +357,10 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
-	 * Parses the xml answer to get ocs response which doesn't match with
-	 * http one in v1 of the api.
 	 * @param ResponseInterface $response
-	 * @return string
-	 */
-	private function getOCSResponse($response) {
-		return $response->xml()->meta[0]->statuscode;
-	}
-
-	/**
-	 * @Then /^the OCS status code should be "([^"]*)"$/
 	 * @param int $statusCode
 	 */
-	public function theOCSStatusCodeShouldBe($statusCode) {
-		PHPUnit_Framework_Assert::assertEquals($statusCode, $this->getOCSResponse($this->response));
-	}
-
-	/**
-	 * @Then /^the HTTP status code should be "([^"]*)"$/
-	 * @param int $statusCode
-	 */
-	public function theHTTPStatusCodeShouldBe($statusCode) {
-		PHPUnit_Framework_Assert::assertEquals($statusCode, $this->response->getStatusCode());
+	protected function assertStatusCode(ResponseInterface $response, $statusCode) {
+		PHPUnit_Framework_Assert::assertEquals($statusCode, $response->getStatusCode());
 	}
 }
