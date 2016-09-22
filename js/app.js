@@ -81,7 +81,7 @@
 			$.ajax({
 				url: OC.linkToOCS('apps/notifications/api/v1', 2) + 'notifications/' + id + '?format=json',
 				type: 'DELETE',
-				success: function(data) {
+				success: function() {
 					self._removeNotification(id);
 				},
 				error: function() {
@@ -206,12 +206,16 @@
 		 * @param {XMLHttpRequest} xhr
 		 */
 		_onFetchError: function(xhr) {
-			if (xhr.status === 404) {
-				// 404 Not Found - stop polling
-				this._shutDownNotifications();
+			if (xhr.status === 503) {
+				// 503 - Maintenance mode
+				console.debug('Shutting down notifications: instance is in maintenance mode.');
+			} else if (xhr.status === 404) {
+				// 404 - App disabled
+				console.debug('Shutting down notifications: app is disabled.');
 			} else {
-				OC.Notification.showTemporary('Failed to request notifications. Please try to refresh the page manually.');
+				console.error('Shutting down notifications: [' + xhr.status + '] ' + xhr.statusText);
 			}
+			this._shutDownNotifications();
 		},
 
 		/**
