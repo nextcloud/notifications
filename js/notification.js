@@ -13,8 +13,7 @@
 	/**
 	 * Initialise the notification
 	 */
-	var Notif = function(jsonData){
-		// TODO handle defaults
+	var Notif = function(jsonData) {
 		this.app = jsonData.app;
 		this.user = jsonData.user;
 		this.timestamp = moment(jsonData.datetime).format('X');
@@ -23,7 +22,7 @@
 		this.subject = jsonData.subject;
 		this.message = jsonData.message;
 		this.link = jsonData.link;
-		this.actions = jsonData.actions; // TODO some parsing here?
+		this.actions = jsonData.actions;
 		this.notification_id = jsonData.notification_id;
 	};
 
