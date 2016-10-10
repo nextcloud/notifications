@@ -186,6 +186,9 @@ class EndpointController extends OCSController {
 			'link' => $notification->getLink(),
 			'actions' => [],
 		];
+		if (method_exists($notification, 'getIcon')) {
+			$data['icon'] = $notification->getIcon();
+		}
 
 		foreach ($notification->getParsedActions() as $action) {
 			$data['actions'][] = $this->actionToArray($action);
