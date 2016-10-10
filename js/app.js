@@ -220,7 +220,7 @@
 
 		/**
 		 * Handles removing the Notification from the UI when no longer in JSON
-		 * @param {OCA.Notifications.Notification} notification
+		 * @param {OCA.Notifications.Notif} notification
 		 */
 		_onRemoveNotification: function(notification) {
 			$('div.notification[data-id='+escapeHTML(notification.getId())+']').remove();
@@ -229,7 +229,7 @@
 
 		/**
 		 * Handle new notification received
-		 * @param {OCA.Notifications.Notification} notification
+		 * @param {OCA.Notifications.Notif} notification
 		 */
 		_onNewNotification: function(notification) {
 			// Add it to the array
@@ -261,7 +261,7 @@
 		 * Create a browser notification
 		 *
 		 * @see https://developer.mozilla.org/en/docs/Web/API/notification
-		 * @param {OCA.Notifications.Notification} notification
+		 * @param {OCA.Notifications.Notif} notification
 		 */
 		createWebNotification: function (notification) {
 			var n = new Notification(notification.getSubject(), {
@@ -270,6 +270,14 @@
 				body: notification.getMessage(),
 				tag: notification.getId()
 			});
+
+			if (notification.getLink()) {
+				n.onclick = function(event) {
+					event.preventDefault();
+					window.location.href = notification.getLink();
+				}
+			}
+
 			setTimeout(n.close.bind(n), 5000);
 		},
 
@@ -282,7 +290,7 @@
 
 		/**
 		 * Adds the notification to the UI
-		 * @param {OCA.Notifications.Notification} notification
+		 * @param {OCA.Notifications.Notif} notification
 		 */
 		addToUI: function(notification) {
 			$('div.notification-wrapper').prepend(notification.renderElement());
@@ -334,7 +342,6 @@
 				url: OC.linkToOCS('apps/notifications/api/v1', 2) + 'notifications?format=json',
 				type: 'GET'
 			});
-
 
 			request.done(function(data, statusText, xhr) {
 				if (xhr.status === 204 || data.ocs.meta.statuscode === 204) {
