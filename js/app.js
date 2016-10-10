@@ -32,25 +32,26 @@
 
 		interval: null,
 
+		containerTemplate: '' +
+		'<div class="notifications hidden">' +
+		'  <div class="notifications-button menutoggle">' +
+		'    <img class="svg" alt="' + t('notifications', 'Notifications') + '"' +
+		'      src="' + OC.imagePath('notifications', 'notifications') + '">' +
+		'  </div>' +
+		'  <div class="notification-container">' +
+		'    <div class="notification-wrapper"></div>' +
+		'    <div class="emptycontent">' +
+		'      <h2>' + t('notifications', 'No notifications') + '</h2>' +
+		'    </div>' +
+		'  </div>' +
+		'</div>',
+
 		initialise: function() {
-			// Go!
-
 			// Setup elements
-			this.$notifications = $('<div class="notifications hidden"></div>');
-			this.$button = $('<div class="notifications-button menutoggle"><img class="svg" alt="' + t('notifications', 'Notifications') + '" src="' + OC.imagePath('notifications', 'notifications') + '"></div>');
-			this.$container = $('<div class="notification-container"></div>');
-			var $wrapper = $('<div class="notification-wrapper"></div>');
-
-			// Empty content dropdown
-			var $headLine = $('<h2></h2>');
-			$headLine.text(t('notifications', 'No notifications'));
-			var $emptyContent = $('<div class="emptycontent"></div>');
-			$emptyContent.append($headLine);
-			this.$container.append($emptyContent);
-
-			this.$notifications.append(this.$button);
-			this.$notifications.append(this.$container);
-			this.$container.append($wrapper);
+			var compiledTemplate = Handlebars.compile(this.containerTemplate);
+			this.$notifications = $(compiledTemplate());
+			this.$button = this.$notifications.find('.notifications-button');
+			this.$container = this.$notifications.find('.notification-container');
 
 			// Add to the UI
 			$('form.searchbox').before(this.$notifications);
