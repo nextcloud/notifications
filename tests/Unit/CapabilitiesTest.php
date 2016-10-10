@@ -35,6 +35,7 @@ class CapabilitiesTest extends TestCase {
 					'list',
 					'get',
 					'delete',
+					'icon-supported',
 				],
 			],
 		], $capabilities->getCapabilities());

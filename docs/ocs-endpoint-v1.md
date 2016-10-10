@@ -16,7 +16,8 @@ In order to find out if notifications is installed/enabled on the server you can
           "ocs-endpoints": [
             "list",
             "get",
-            "delete"
+            "delete",
+            "icon-supported"
           ]
         }
       }
@@ -49,6 +50,7 @@ The user needs to be identified/logged in by the server. Then you can just run a
         "subject": "You received admin@localhost as a remote share from test",
         "message": "",
         "link": "http://localhost/index.php/apps/files_sharing/pending",
+        "icon": "http://localhost/img/icon.svg",
         "actions": [
           {
             "label": "Accept",
@@ -93,6 +95,7 @@ object_id | string | ID of the object the notification is about, that can be use
 subject | string | Translated short subject that should be presented to the user
 message | string | (Optional) Translated potentially longer message that should be presented to the user
 link | string | (Optional) A link that should be followed when the subject/message is clicked
+icon | string | (Optional) A link to an icon that should be shown next to the notification. Only available when the `icon-supported` capability is set.
 actions | array | (Optional) An array of action elements
 
 
