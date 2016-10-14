@@ -1,79 +1,67 @@
 /**
- * ownCloud - Notifications
+ * @copyright (c) 2016 Joas Schilling <coding@schilljs.com>
+ * @copyright (c) 2015 Tom Needham <tom@owncloud.com>
+ *
+ * @author Tom Needham <tom@owncloud.com>
+ * @author Joas Schilling <coding@schilljs.com>
  *
  * This file is licensed under the Affero General Public License version 3 or
  * later. See the COPYING file.
- *
- * @author Tom Needham <tom@owncloud.com>
- * @copyright Tom Needham 2015
  */
 
 (function() {
 
 	/**
 	 * Initialise the notification
+	 *
+	 * @param {Object} data
+	 * @param {int} data.notification_id
+	 * @param {string} data.app
+	 * @param {string} data.user
+	 * @param {string} data.datetime
+	 * @param {string} data.object_type
+	 * @param {string} data.object_id
+	 * @param {string} data.subject
+	 * @param {string} data.message
+	 * @param {string} data.link
+	 * @param {string} data.icon
+	 * @param {Object[]} data.actions
 	 */
-	var Notif = function(jsonData) {
-		this.app = jsonData.app;
-		this.user = jsonData.user;
-		this.timestamp = moment(jsonData.datetime).format('X');
-		this.object_type = jsonData.object_type;
-		this.object_id = jsonData.object_id;
-		this.subject = jsonData.subject;
-		this.message = jsonData.message;
-		this.link = jsonData.link;
-		this.actions = jsonData.actions;
-		this.notification_id = jsonData.notification_id;
+	OCA.Notifications.Notification = function(data) {
+		this.data = data;
 	};
 
-	Notif.prototype = {
+	OCA.Notifications.Notification.prototype = {
+		getId: function() {
+			return this.data.notification_id;
+		},
 
-		app: null,
+		getApp: function() {
+			return this.data.app;
+		},
 
-		user: null,
-
-		timestamp: null,
-
-		object_type: null,
-
-		object_id: null,
-
-		subject: null,
-
-		message: null,
-
-		link: null,
-
-		actions: [],
-
-		notification_id: null,
-
-		getSubject: function() {
-			return this.subject;
+		getUser: function() {
+			return this.data.user;
 		},
 
 		getTimestamp: function() {
-			return this.timestamp;
+			return moment(this.data.datetime).format('X');
+		},
+
+		getObjectType: function() {
+			return this.data.object_type;
 		},
 
 		getObjectId: function() {
-			return this.object_id;
+			return this.data.object_id;
 		},
 
-		getLink: function() {
-			return this.link;
-		},
-
-		getActions: function() {
-			return this.actions;
-		},
-
-		getId: function() {
-			return this.notification_id;
+		getSubject: function() {
+			return this.data.subject;
 		},
 
 		getMessage: function() {
-			var message = this.message;
+			var message = this.data.message;
 
 			/**
 			 * Trim on word end after 100 chars or hard 120 chars
@@ -88,60 +76,34 @@
 				message += '…';
 			}
 
-			message = escapeHTML(message);
-			message = message.replace(new RegExp("\n", 'g'), ' ');
-
-			return message;
+			return message.replace(new RegExp("\n", 'g'), ' ');
 		},
 
-		getEl: function() {
-			return $('div.notification[data-id='+escapeHTML(this.getId())+']');
+		getLink: function() {
+			return this.data.link;
 		},
 
-		getApp: function() {
-			return this.app;
+		getIcon: function() {
+			return this.data.icon;
+		},
+
+		getActions: function() {
+			return this.data.actions;
+		},
+
+		getElement: function() {
+			return $('div.notification[data-id=' + parseInt(this.getId(), 10) + ']');
 		},
 
 		/**
 		 * Generates the HTML for the notification
+		 * @param {Function} template
 		 */
-		renderElement: function() {
-			// FIXME: use handlebars template
-			var el = $('<div class="notification"></div>');
-			el.attr('data-id', escapeHTML(this.getId()));
-			el.attr('data-timestamp', escapeHTML(this.getTimestamp()));
-
-			if (this.getLink()) {
-				el.append('<a href="'+this.getLink()+'" class="notification-subject"> '+escapeHTML(this.getSubject())+'</a>');
-			} else {
-				el.append('<div class="notification-subject"> '+escapeHTML(this.getSubject())+'</div>');
-			}
-			el.append('<div class="notification-message">'+this.getMessage()+'</div>');
-			// Add actions
-			var actions = $('<div class="notification-actions"></div>');
-			var actionsData = this.getActions();
-			_.each(actionsData, function(actionData) {
-				// FIXME: use handlebars template
-				actions.append(
-					'<button class="action-button pull-right' + (actionData.primary ? ' primary': '') + '" data-type="' + escapeHTML(actionData.type) + '" ' +
-					'data-href="'+escapeHTML(actionData.link)+'">'+escapeHTML(actionData.label)+'</button>'
-				);
-				// TODO create event handler on click for given action type
-			});
-			el.append(actions);
-			el.append('<div style="display: none;" class="notification-delete"><img class="svg" alt="' + t('notifications', 'Dismiss') + '" src="' + OC.imagePath('core', 'actions/close') + '"></div>');
-			return el;
-		},
-
-		/**
-		 * Register notification Binds
-		 */
-		bindNotificationEvents: function() {
-
+		renderElement: function(template) {
+			return template(_.extend(this.data, {
+				message: this.getMessage()
+			}));
 		}
-
 	};
-
-	OCA.Notifications.Notif = Notif;
 
 })();

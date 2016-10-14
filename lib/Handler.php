@@ -205,6 +205,11 @@ class Handler {
 			$sql->andWhere($sql->expr()->eq('link', $sql->createParameter('link')))
 				->setParameter('link', $notification->getLink());
 		}
+
+		if (method_exists($notification, 'getIcon') && $notification->getIcon() !== '') {
+			$sql->andWhere($sql->expr()->eq('icon', $sql->createParameter('icon')))
+				->setParameter('icon', $notification->getIcon());
+		}
 	}
 
 	/**
@@ -244,6 +249,14 @@ class Handler {
 		$sql->setValue('link', $sql->createParameter('link'))
 			->setParameter('link', $notification->getLink());
 
+		if (method_exists($notification, 'getIcon')) {
+			$sql->setValue('icon', $sql->createParameter('icon'))
+				->setParameter('icon', $notification->getIcon());
+		} else {
+			$sql->setValue('icon', $sql->createParameter('icon'))
+				->setParameter('icon', '');
+		}
+
 		$actions = [];
 		foreach ($notification->getActions() as $action) {
 			/** @var IAction $action */
@@ -280,6 +293,9 @@ class Handler {
 		}
 		if ($row['link'] !== '') {
 			$notification->setLink($row['link']);
+		}
+		if (method_exists($notification, 'setIcon') && $row['icon'] !== '') {
+			$notification->setIcon($row['icon']);
 		}
 
 		$actions = (array) json_decode($row['actions'], true);

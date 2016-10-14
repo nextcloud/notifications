@@ -114,6 +114,12 @@
 	padding-bottom: 5px;
 }
 
+.notification img {
+	max-width: 32px;
+	max-height: 32px;
+	margin: 0 5px 5px 0;
+}
+
 .notification-container {
 	box-shadow: 0 1px 10px rgba(50, 50, 50, .7);
 	overflow: auto;
