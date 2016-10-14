@@ -291,10 +291,10 @@ class Handler {
 		if ($row['message'] !== '') {
 			$notification->setMessage($row['message'], (array) json_decode($row['message_parameters'], true));
 		}
-		if ($row['link'] !== '') {
+		if ($row['link'] !== '' && $row['link'] !== null) {
 			$notification->setLink($row['link']);
 		}
-		if (method_exists($notification, 'setIcon') && $row['icon'] !== '') {
+		if ($row['icon'] !== '' && $row['icon'] !== null) {
 			$notification->setIcon($row['icon']);
 		}
 

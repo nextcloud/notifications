@@ -182,13 +182,12 @@ class EndpointController extends OCSController {
 			'object_type' => $notification->getObjectType(),
 			'object_id' => $notification->getObjectId(),
 			'subject' => $notification->getParsedSubject(),
+			'subjectRich' => $notification->getRichSubject(),
+			'subjectRichParameters' => $notification->getRichSubjectParameters(),
 			'message' => $notification->getParsedMessage(),
+			'icon' => $notification->getIcon(),
 			'link' => $notification->getLink(),
 		];
-
-		if (method_exists($notification, 'getIcon')) {
-			$data['icon'] = $notification->getIcon();
-		}
 
 		$data['actions'] = [];
 		foreach ($notification->getParsedActions() as $action) {
