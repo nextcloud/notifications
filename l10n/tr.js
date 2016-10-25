@@ -3,6 +3,6 @@ OC.L10N.register(
     {
     "Notifications" : "Bildirimler",
     "No notifications" : "Bildirimler kapalı",
-    "Dismiss" : "İptal et"
+    "Dismiss" : "Yoksay"
 },
 "nplurals=2; plural=(n > 1);");
