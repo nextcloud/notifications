@@ -185,6 +185,8 @@ class EndpointController extends OCSController {
 			'subjectRich' => $notification->getRichSubject(),
 			'subjectRichParameters' => $notification->getRichSubjectParameters(),
 			'message' => $notification->getParsedMessage(),
+			'messageRich' => $notification->getRichMessage(),
+			'messageRichParameters' => $notification->getRichMessageParameters(),
 			'icon' => $notification->getIcon(),
 			'link' => $notification->getLink(),
 		];
