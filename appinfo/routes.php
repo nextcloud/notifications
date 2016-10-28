@@ -21,8 +21,8 @@
 
 return [
 	'ocs' => [
-		['name' => 'Endpoint#listNotifications', 'url' => '/api/v1/notifications', 'verb' => 'GET'],
-		['name' => 'Endpoint#getNotification', 'url' => '/api/v1/notifications/{id}', 'verb' => 'GET'],
-		['name' => 'Endpoint#deleteNotification', 'url' => '/api/v1/notifications/{id}', 'verb' => 'DELETE'],
+		['name' => 'Endpoint#listNotifications', 'url' => '/api/{apiVersion}/notifications', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v(1|2)']],
+		['name' => 'Endpoint#getNotification', 'url' => '/api/{apiVersion}/notifications/{id}', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v(1|2)', 'id' => '\d+']],
+		['name' => 'Endpoint#deleteNotification', 'url' => '/api/{apiVersion}/notifications/{id}', 'verb' => 'DELETE', 'requirements' => ['apiVersion' => 'v(1|2)', 'id' => '\d+']],
 	],
 ];
