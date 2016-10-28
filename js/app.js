@@ -54,12 +54,12 @@
 		'<div class="notification" data-id="{{id}}" data-timestamp="{{timestamp}}">' +
 		'  {{#if link}}' +
 		'    {{#if icon}}<img src="{{icon}}" style="float: left;">{{/if}}' +
-		'    <a href="{{link}}" class="notification-subject">{{subject}}</a>' +
+		'    <a href="{{link}}" class="notification-subject">{{{subject}}}</a>' +
 		'  {{else}}' +
 		'    {{#if icon}}<img src="{{icon}}" style="float: left;">{{/if}}' +
-		'    <div class="notification-subject">{{subject}}</div>' +
+		'    <div class="notification-subject">{{{subject}}}</div>' +
 		'  {{/if}}' +
-		'  <div class="notification-message">{{message}}</div>' +
+		'  <div class="notification-message">{{{message}}}</div>' +
 		'  <div class="notification-actions">' +
 		'    {{#each actions}}' +
 		'      <button class="action-button pull-right{{#if this.primary}} primary{{/if}}" data-type="{{this.type}}" ' +
@@ -344,9 +344,24 @@
 		 * @param {OCA.Notifications.Notification} notification
 		 */
 		_addToUI: function(notification) {
-			this.$container.find('.notification-wrapper').prepend(
-				notification.renderElement(this.notificationTemplate)
-			);
+			var $element = $(notification.renderElement(this.notificationTemplate));
+
+			$element.find('.avatar').each(function() {
+				console.log('avatar');
+				console.log(arguments);
+				var element = $(this);
+				if (element.data('user-display-name')) {
+					element.avatar(element.data('user'), 28, undefined, false, undefined, element.data('user-display-name'));
+				} else {
+					element.avatar(element.data('user'), 28);
+				}
+			});
+
+			$element.find('.has-tooltip').tooltip({
+				placement: 'bottom'
+			});
+
+			this.$container.find('.notification-wrapper').prepend($element);
 		},
 
 		/**

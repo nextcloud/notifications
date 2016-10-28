@@ -103,21 +103,33 @@
 .notification .notification-subject {
 	display: inline-block;
 	margin-right: 10px;
-	opacity: .57;
-}
-.notification .notification-subject:hover {
-	opacity: 1;
 }
 
 .notification .notification-message {
 	line-height: 20px;
 	padding-bottom: 5px;
+	opacity: .57;
+}
+.notification .notification-message:hover {
+	opacity: 1;
 }
 
 .notification img {
 	max-width: 32px;
 	max-height: 32px;
 	margin: 0 5px 5px 0;
+}
+
+.notification .avatar {
+	vertical-align: middle;
+	display: inline-block;
+	margin-right: 5px;
+}
+
+.notification strong,
+.notification .notification-subject a {
+	font-weight: bold;
+	opacity: 2;
 }
 
 .notification-container {

@@ -22,6 +22,8 @@
 	 * @param {string} data.object_type
 	 * @param {string} data.object_id
 	 * @param {string} data.subject
+	 * @param {string} data.subjectRich
+	 * @param {Object[]} data.subjectRichParameters
 	 * @param {string} data.message
 	 * @param {string} data.link
 	 * @param {string} data.icon
@@ -57,6 +59,13 @@
 		},
 
 		getSubject: function() {
+			if (this.data.subjectRich.length !== 0) {
+				return OCA.Notifications.RichObjectStringParser.parseMessage(
+					this.data.subjectRich,
+					this.data.subjectRichParameters
+				);
+			}
+
 			return this.data.subject;
 		},
 
@@ -80,7 +89,10 @@
 		},
 
 		getLink: function() {
-			return this.data.link;
+			if (this.getSubject().indexOf('<a ') === -1) {
+				return this.data.link;
+			}
+			return '';
 		},
 
 		getIcon: function() {
@@ -101,8 +113,12 @@
 		 */
 		renderElement: function(template) {
 			return template(_.extend(this.data, {
+				subject: this.getSubject(),
+				link: this.getLink(),
 				message: this.getMessage()
 			}));
+
+			return $element;
 		}
 	};
 
