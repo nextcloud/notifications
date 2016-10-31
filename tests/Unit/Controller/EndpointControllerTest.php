@@ -383,8 +383,8 @@ class EndpointControllerTest extends TestCase {
 
 	public function dataNotificationToArray() {
 		return [
-			[42, 'app1', 'user1', 1234, 'type1', 42, 'subject1', '', [], 'message1', 'link1', 'icon1', [], []],
-			[1337, 'app2', 'user2', 1337, 'type2', 21, 'subject2', 'richSubject 2', ['richSubject param'], 'message2', 'link2', 'icon2', [
+			[42, 'app1', 'user1', 1234, 'type1', 42, 'subject1', '', [], 'message1', 'richMessage 1', ['richMessage param'], 'link1', 'icon1', [], []],
+			[1337, 'app2', 'user2', 1337, 'type2', 21, 'subject2', 'richSubject 2', ['richSubject param'], 'message2', '', [], 'link2', 'icon2', [
 				$this->getMockBuilder(IAction::class)
 					->getMock(),
 				$this->getMockBuilder(IAction::class)
@@ -406,12 +406,14 @@ class EndpointControllerTest extends TestCase {
 	 * @param string $subjectRich
 	 * @param array $subjectRichParameters
 	 * @param string $message
+	 * @param string $messageRich
+	 * @param array $messageRichParameters
 	 * @param string $link
 	 * @param string $icon
 	 * @param array $actions
 	 * @param array $actionsExpected
 	 */
-	public function testNotificationToArray($id, $app, $user, $timestamp, $objectType, $objectId, $subject, $subjectRich, $subjectRichParameters, $message, $link, $icon, array $actions, array $actionsExpected) {
+	public function testNotificationToArray($id, $app, $user, $timestamp, $objectType, $objectId, $subject, $subjectRich, $subjectRichParameters, $message, $messageRich, $messageRichParameters, $link, $icon, array $actions, array $actionsExpected) {
 		$notification = $this->getMockBuilder(INotification::class)
 			->getMock();
 
@@ -454,6 +456,14 @@ class EndpointControllerTest extends TestCase {
 			->willReturn($message);
 
 		$notification->expects($this->once())
+			->method('getRichMessage')
+			->willReturn($messageRich);
+
+		$notification->expects($this->once())
+			->method('getRichMessageParameters')
+			->willReturn($messageRichParameters);
+
+		$notification->expects($this->once())
 			->method('getLink')
 			->willReturn($link);
 
@@ -483,6 +493,8 @@ class EndpointControllerTest extends TestCase {
 				'subjectRich' => $subjectRich,
 				'subjectRichParameters' => $subjectRichParameters,
 				'message' => $message,
+				'messageRich' => $messageRich,
+				'messageRichParameters' => $messageRichParameters,
 				'link' => $link,
 				'icon' => $icon,
 				'actions' => $actionsExpected,
