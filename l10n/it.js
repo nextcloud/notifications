@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Notifications" : "Notifiche",
     "No notifications" : "Nessuna notifica",
-    "Dismiss" : "Annulla"
+    "Dismiss" : "Annulla",
+    "in {path}" : "in {path}"
 },
 "nplurals=2; plural=(n != 1);");

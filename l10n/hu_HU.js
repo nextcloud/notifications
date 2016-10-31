@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Notifications" : "Értesítések",
     "No notifications" : "Nincsenek értesítések",
-    "Dismiss" : "Elutasít"
+    "Dismiss" : "Elutasít",
+    "in {path}" : "itt: {path}"
 },
 "nplurals=2; plural=(n != 1);");
