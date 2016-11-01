@@ -12,8 +12,8 @@ Feature: notifications-content
       | message | About Activities and Notifications in ownCloud |
       | object_type | blog |
       | object_id | 9483 |
-    Then user "test1" has 1 notifications
-    And last notification matches
+    Then user "test1" has 1 notifications on v1
+    And last notification on v1 matches
       | app | notificationsintegrationtesting |
       | datetime | 1974-08-05T18:15:17+00:00 |
       | subject | Integration testing |
@@ -31,8 +31,8 @@ Feature: notifications-content
       | message | Reading and deleting notifications as a Client |
       | object_type | repo |
       | object_id | notifications |
-    Then user "test1" has 1 notifications
-    And last notification matches
+    Then user "test1" has 1 notifications on v1
+    And last notification on v1 matches
       | app | notificationsintegrationtesting |
       | datetime | 1974-08-05T18:15:15+00:00 |
       | subject | Testing integration |

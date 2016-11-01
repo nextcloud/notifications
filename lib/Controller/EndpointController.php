@@ -67,9 +67,10 @@ class EndpointController extends OCSController {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 *
+	 * @param string $apiVersion
 	 * @return DataResponse
 	 */
-	public function listNotifications() {
+	public function listNotifications($apiVersion) {
 		// When there are no apps registered that use the notifications
 		// We stop polling for them.
 		if (!$this->manager->hasNotifiers()) {
@@ -94,7 +95,7 @@ class EndpointController extends OCSController {
 			}
 
 			$notificationIds[] = $notificationId;
-			$data[] = $this->notificationToArray($notificationId, $notification);
+			$data[] = $this->notificationToArray($notificationId, $notification, $apiVersion);
 		}
 
 		$etag = $this->generateEtag($notificationIds);
@@ -112,10 +113,11 @@ class EndpointController extends OCSController {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 *
+	 * @param string $apiVersion
 	 * @param int $id
 	 * @return DataResponse
 	 */
-	public function getNotification($id = 0) {
+	public function getNotification($apiVersion, $id) {
 		if (!$this->manager->hasNotifiers()) {
 			return new DataResponse(null, Http::STATUS_NOT_FOUND);
 		}
@@ -139,7 +141,7 @@ class EndpointController extends OCSController {
 			return new DataResponse(null, Http::STATUS_NOT_FOUND);
 		}
 
-		return new DataResponse($this->notificationToArray($id, $notification));
+		return new DataResponse($this->notificationToArray($id, $notification, $apiVersion));
 	}
 
 	/**
@@ -171,9 +173,10 @@ class EndpointController extends OCSController {
 	/**
 	 * @param int $notificationId
 	 * @param INotification $notification
+	 * @param string $apiVersion
 	 * @return array
 	 */
-	protected function notificationToArray($notificationId, INotification $notification) {
+	protected function notificationToArray($notificationId, INotification $notification, $apiVersion) {
 		$data = [
 			'notification_id' => $notificationId,
 			'app' => $notification->getApp(),
@@ -182,14 +185,19 @@ class EndpointController extends OCSController {
 			'object_type' => $notification->getObjectType(),
 			'object_id' => $notification->getObjectId(),
 			'subject' => $notification->getParsedSubject(),
-			'subjectRich' => $notification->getRichSubject(),
-			'subjectRichParameters' => $notification->getRichSubjectParameters(),
 			'message' => $notification->getParsedMessage(),
-			'messageRich' => $notification->getRichMessage(),
-			'messageRichParameters' => $notification->getRichMessageParameters(),
-			'icon' => $notification->getIcon(),
 			'link' => $notification->getLink(),
 		];
+
+		if ($apiVersion !== 'v1') {
+			$data = array_merge($data, [
+				'subjectRich' => $notification->getRichSubject(),
+				'subjectRichParameters' => $notification->getRichSubjectParameters(),
+				'messageRich' => $notification->getRichMessage(),
+				'messageRichParameters' => $notification->getRichMessageParameters(),
+				'icon' => $notification->getIcon(),
+			]);
+		}
 
 		$data['actions'] = [];
 		foreach ($notification->getParsedActions() as $action) {

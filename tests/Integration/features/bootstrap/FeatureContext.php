@@ -86,9 +86,11 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
-	 * @When /^getting notifications(| with different etag| with matching etag)$/
+	 * @When /^getting notifications on (v\d+)(| with different etag| with matching etag)$/
+	 * @param string $api
+	 * @param string $etag
 	 */
-	public function gettingNotifications($etag) {
+	public function gettingNotifications($api, $etag) {
 		$headers = [];
 		if ($etag === ' with different etag') {
 			$headers['ETag'] = md5($this->lastEtag);
@@ -96,7 +98,7 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 			$headers['ETag'] = $this->lastEtag;
 		}
 
-		$this->sendingToWith('GET', '/apps/notifications/api/v1/notifications?format=json', null, $headers);
+		$this->sendingToWith('GET', '/apps/notifications/api/' . $api . '/notifications?format=json', null, $headers);
 		$this->lastEtag = $this->response->getHeader('ETag');
 	}
 
@@ -127,15 +129,16 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
-	 * @Then /^user "([^"]*)" has (\d+) notifications(| missing the last one| missing the first one)$/
+	 * @Then /^user "([^"]*)" has (\d+) notifications on (v\d+)(| missing the last one| missing the first one)$/
 	 *
 	 * @param string $user
 	 * @param int $numNotifications
+	 * @param string $api
 	 * @param string $missingLast
 	 */
-	public function userNumNotifications($user, $numNotifications, $missingLast) {
+	public function userNumNotifications($user, $numNotifications, $api, $missingLast) {
 		if ($user === 'test1') {
-			$this->sendingTo('GET', '/apps/notifications/api/v1/notifications?format=json');
+			$this->sendingTo('GET', '/apps/notifications/api/' . $api . '/notifications?format=json');
 			$this->assertStatusCode($this->response, 200);
 
 			$previousNotificationIds = [];
@@ -161,12 +164,13 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
-	 * @Then /^(first|last) notification matches$/
+	 * @Then /^(first|last) notification on (v\d+) matches$/
 	 *
 	 * @param string $notification
+	 * @param string $api
 	 * @param \Behat\Gherkin\Node\TableNode|null $formData
 	 */
-	public function matchNotification($notification, $formData) {
+	public function matchNotification($notification, $api, $formData) {
 		$lastNotifications = end($this->notificationIds);
 		if ($notification === 'first') {
 			$notificationId = reset($lastNotifications);
@@ -174,7 +178,7 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 			$notificationId = end($lastNotifications);
 		}
 
-		$this->sendingTo('GET', '/apps/notifications/api/v1/notifications/' . $notificationId . '?format=json');
+		$this->sendingTo('GET', '/apps/notifications/api/' . $api . '/notifications/' . $notificationId . '?format=json');
 		$this->assertStatusCode($this->response, 200);
 		$response = $this->response->json();
 
@@ -185,11 +189,12 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
-	 * @Then /^delete (first|last|same|faulty) notification$/
+	 * @Then /^delete (first|last|same|faulty) notification on (v\d+)$/
 	 *
 	 * @param string $toDelete
+	 * @param string $api
 	 */
-	public function deleteNotification($toDelete) {
+	public function deleteNotification($toDelete, $api) {
 		PHPUnit_Framework_Assert::assertNotEmpty($this->notificationIds);
 		$lastNotificationIds = end($this->notificationIds);
 		if ($toDelete === 'first') {
@@ -199,7 +204,7 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 		} else if ($toDelete === 'faulty') {
 			$this->deletedNotification = 'faulty';
 		}
-		$this->sendingTo('DELETE', '/apps/notifications/api/v1/notifications/' . $this->deletedNotification);
+		$this->sendingTo('DELETE', '/apps/notifications/api/' . $api . '/notifications/' . $this->deletedNotification);
 	}
 
 	/**

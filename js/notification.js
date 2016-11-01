@@ -117,8 +117,6 @@
 				link: this.getLink(),
 				message: this.getMessage()
 			}));
-
-			return $element;
 		}
 	};
 

@@ -122,9 +122,11 @@ class EndpointControllerTest extends TestCase {
 	public function dataListNotifications() {
 		return [
 			[
+				'v1',
 				[], md5(json_encode([])), [],
 			],
 			[
+				'v2',
 				[
 					1 => $this->getMockBuilder(INotification::class)
 						->getMock(),
@@ -135,6 +137,7 @@ class EndpointControllerTest extends TestCase {
 				['$notification', '$notification'],
 			],
 			[
+				'v1',
 				[
 					42 => $this->getMockBuilder(INotification::class)
 						->getMock(),
@@ -147,11 +150,12 @@ class EndpointControllerTest extends TestCase {
 
 	/**
 	 * @dataProvider dataListNotifications
+	 * @param string $apiVersion
 	 * @param array $notifications
 	 * @param string $expectedETag
 	 * @param array $expectedData
 	 */
-	public function testListNotifications(array $notifications, $expectedETag, array $expectedData) {
+	public function testListNotifications($apiVersion, array $notifications, $expectedETag, array $expectedData) {
 		$controller = $this->getController([
 			'notificationToArray',
 		]);
@@ -180,7 +184,7 @@ class EndpointControllerTest extends TestCase {
 			->with($filter)
 			->willReturn($notifications);
 
-		$response = $controller->listNotifications();
+		$response = $controller->listNotifications($apiVersion);
 		$this->assertInstanceOf(DataResponse::class, $response);
 		$this->assertSame(Http::STATUS_OK, $response->getStatus());
 
@@ -193,6 +197,7 @@ class EndpointControllerTest extends TestCase {
 	public function dataListNotificationsThrows() {
 		return [
 			[
+				'v1',
 				[
 					1 => $this->getMockBuilder(INotification::class)
 						->getMock(),
@@ -207,11 +212,12 @@ class EndpointControllerTest extends TestCase {
 
 	/**
 	 * @dataProvider dataListNotificationsThrows
+	 * @param string $apiVersion
 	 * @param array $notifications
 	 * @param string $expectedETag
 	 * @param array $expectedData
 	 */
-	public function testListNotificationsThrows(array $notifications, $expectedETag, array $expectedData) {
+	public function testListNotificationsThrows($apiVersion, array $notifications, $expectedETag, array $expectedData) {
 		$controller = $this->getController([
 			'notificationToArray',
 		]);
@@ -243,7 +249,7 @@ class EndpointControllerTest extends TestCase {
 			->with($filter)
 			->willReturn($notifications);
 
-		$response = $controller->listNotifications();
+		$response = $controller->listNotifications($apiVersion);
 		$this->assertInstanceOf(DataResponse::class, $response);
 		$this->assertSame(Http::STATUS_OK, $response->getStatus());
 
@@ -253,30 +259,42 @@ class EndpointControllerTest extends TestCase {
 		$this->assertSame($expectedData, $response->getData());
 	}
 
-	public function testListNotificationsNoNotifiers() {
+	public function dataListNotificationsNoNotifiers() {
+		return [
+			['v1'],
+			['v2'],
+		];
+	}
+
+	/**
+	 * @dataProvider dataListNotificationsNoNotifiers
+	 * @param string $apiVersion
+	 */
+	public function testListNotificationsNoNotifiers($apiVersion) {
 		$controller = $this->getController();
 		$this->manager->expects($this->once())
 			->method('hasNotifiers')
 			->willReturn(false);
 
-		$response = $controller->listNotifications();
+		$response = $controller->listNotifications($apiVersion);
 		$this->assertInstanceOf(DataResponse::class, $response);
 		$this->assertSame(Http::STATUS_NO_CONTENT, $response->getStatus());
 	}
 
 	public function dataGetNotification() {
 		return [
-			[42, 'username1', ['$notification']],
-			[21, 'username2', ['$notification']],
+			['v1', 42, 'username1', ['$notification']],
+			['v2', 21, 'username2', ['$notification']],
 		];
 	}
 
 	/**
 	 * @dataProvider dataGetNotification
+	 * @param string $apiVersion
 	 * @param int $id
 	 * @param string $username
 	 */
-	public function testGetNotification($id, $username) {
+	public function testGetNotification($apiVersion, $id, $username) {
 		$controller = $this->getController([
 			'notificationToArray',
 		], $username);
@@ -302,7 +320,7 @@ class EndpointControllerTest extends TestCase {
 			->with($id, $notification)
 			->willReturn('$notification');
 
-		$response = $controller->getNotification($id);
+		$response = $controller->getNotification($apiVersion, $id);
 		$this->assertInstanceOf(DataResponse::class, $response);
 		$this->assertSame(Http::STATUS_OK, $response->getStatus());
 	}
@@ -312,21 +330,22 @@ class EndpointControllerTest extends TestCase {
 			->getMock();
 
 		return [
-			[false, null, false, null], // No notifiers
-			[true, null, false, null], // No id
-			[true, 42, true, null], // Not found in database
-			[true, 42, true, $notification], // Not handled on prepare
+			['v1', false, 42, false, null], // No notifiers
+			['v1', true, 42, true, null], // Not found in database
+			['v1', true, 42, true, $notification], // Not handled on prepare
+			['v2', true, 42, true, $notification], // Not handled on prepare
 		];
 	}
 
 	/**
 	 * @dataProvider dataGetNotificationNoId
+	 * @param string $apiVersion
 	 * @param bool $hasNotifiers
 	 * @param mixed $id
 	 * @param bool $called
 	 * @param null|INotification $notification
 	 */
-	public function testGetNotificationNoId($hasNotifiers, $id, $called, $notification) {
+	public function testGetNotificationNoId($apiVersion, $hasNotifiers, $id, $called, $notification) {
 		$controller = $this->getController();
 
 		$this->manager->expects($this->once())
@@ -341,7 +360,7 @@ class EndpointControllerTest extends TestCase {
 			->method('prepare')
 			->willThrowException(new \InvalidArgumentException());
 
-		$response = $controller->getNotification($id);
+		$response = $controller->getNotification($apiVersion, $id);
 		$this->assertInstanceOf(DataResponse::class, $response);
 		$this->assertSame(Http::STATUS_NOT_FOUND, $response->getStatus());
 	}
@@ -383,8 +402,15 @@ class EndpointControllerTest extends TestCase {
 
 	public function dataNotificationToArray() {
 		return [
-			[42, 'app1', 'user1', 1234, 'type1', 42, 'subject1', '', [], 'message1', 'richMessage 1', ['richMessage param'], 'link1', 'icon1', [], []],
-			[1337, 'app2', 'user2', 1337, 'type2', 21, 'subject2', 'richSubject 2', ['richSubject param'], 'message2', '', [], 'link2', 'icon2', [
+			['v1', 42, 'app1', 'user1', 1234, 'type1', 42, 'subject1', '', [], 'message1', 'richMessage 1', ['richMessage param'], 'link1', 'icon1', [], []],
+			['v1', 1337, 'app2', 'user2', 1337, 'type2', 21, 'subject2', 'richSubject 2', ['richSubject param'], 'message2', '', [], 'link2', 'icon2', [
+				$this->getMockBuilder(IAction::class)
+					->getMock(),
+				$this->getMockBuilder(IAction::class)
+					->getMock(),
+			], ['action', 'action']],
+			['v2', 42, 'app1', 'user1', 1234, 'type1', 42, 'subject1', '', [], 'message1', 'richMessage 1', ['richMessage param'], 'link1', 'icon1', [], []],
+			['v2', 1337, 'app2', 'user2', 1337, 'type2', 21, 'subject2', 'richSubject 2', ['richSubject param'], 'message2', '', [], 'link2', 'icon2', [
 				$this->getMockBuilder(IAction::class)
 					->getMock(),
 				$this->getMockBuilder(IAction::class)
@@ -396,6 +422,7 @@ class EndpointControllerTest extends TestCase {
 	/**
 	 * @dataProvider dataNotificationToArray
 	 *
+	 * @param string $apiVersion
 	 * @param int $id
 	 * @param string $app
 	 * @param string $user
@@ -413,7 +440,7 @@ class EndpointControllerTest extends TestCase {
 	 * @param array $actions
 	 * @param array $actionsExpected
 	 */
-	public function testNotificationToArray($id, $app, $user, $timestamp, $objectType, $objectId, $subject, $subjectRich, $subjectRichParameters, $message, $messageRich, $messageRichParameters, $link, $icon, array $actions, array $actionsExpected) {
+	public function testNotificationToArray($apiVersion, $id, $app, $user, $timestamp, $objectType, $objectId, $subject, $subjectRich, $subjectRichParameters, $message, $messageRich, $messageRichParameters, $link, $icon, array $actions, array $actionsExpected) {
 		$notification = $this->getMockBuilder(INotification::class)
 			->getMock();
 
@@ -443,11 +470,11 @@ class EndpointControllerTest extends TestCase {
 			->method('getParsedSubject')
 			->willReturn($subject);
 
-		$notification->expects($this->once())
+		$notification->expects($apiVersion === 'v1' ? $this->never() : $this->once())
 			->method('getRichSubject')
 			->willReturn($subjectRich);
 
-		$notification->expects($this->once())
+		$notification->expects($apiVersion === 'v1' ? $this->never() : $this->once())
 			->method('getRichSubjectParameters')
 			->willReturn($subjectRichParameters);
 
@@ -455,11 +482,11 @@ class EndpointControllerTest extends TestCase {
 			->method('getParsedMessage')
 			->willReturn($message);
 
-		$notification->expects($this->once())
+		$notification->expects($apiVersion === 'v1' ? $this->never() : $this->once())
 			->method('getRichMessage')
 			->willReturn($messageRich);
 
-		$notification->expects($this->once())
+		$notification->expects($apiVersion === 'v1' ? $this->never() : $this->once())
 			->method('getRichMessageParameters')
 			->willReturn($messageRichParameters);
 
@@ -467,7 +494,7 @@ class EndpointControllerTest extends TestCase {
 			->method('getLink')
 			->willReturn($link);
 
-		$notification->expects($this->once())
+		$notification->expects($apiVersion === 'v1' ? $this->never() : $this->once())
 			->method('getIcon')
 			->willReturn($icon);
 
@@ -482,24 +509,30 @@ class EndpointControllerTest extends TestCase {
 			->method('actionToArray')
 			->willReturn('action');
 
-		$this->assertEquals([
-				'notification_id' => $id,
-				'app' => $app,
-				'user' => $user,
-				'datetime' => date('c', $timestamp),
-				'object_type' => $objectType,
-				'object_id' => $objectId,
-				'subject' => $subject,
+		$expected = [
+			'notification_id' => $id,
+			'app' => $app,
+			'user' => $user,
+			'datetime' => date('c', $timestamp),
+			'object_type' => $objectType,
+			'object_id' => $objectId,
+			'subject' => $subject,
+			'message' => $message,
+			'link' => $link,
+			'actions' => $actionsExpected,
+		];
+
+		if ($apiVersion !== 'v1') {
+			$expected = array_merge($expected, [
 				'subjectRich' => $subjectRich,
 				'subjectRichParameters' => $subjectRichParameters,
-				'message' => $message,
 				'messageRich' => $messageRich,
 				'messageRichParameters' => $messageRichParameters,
-				'link' => $link,
 				'icon' => $icon,
-				'actions' => $actionsExpected,
-			],
-			$this->invokePrivate($controller, 'notificationToArray', [$id, $notification])
+			]);
+		}
+
+		$this->assertEquals($expected, $this->invokePrivate($controller, 'notificationToArray', [$id, $notification, $apiVersion])
 		);
 	}
 
