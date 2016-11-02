@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Notifications" : "Varsel",
     "No notifications" : "Ingen varsel",
-    "Dismiss" : "Forkast"
+    "Dismiss" : "Forkast",
+    "in {path}" : "i {path}"
 },
 "nplurals=2; plural=(n != 1);");
