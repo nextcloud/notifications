@@ -17,7 +17,7 @@
 
 	OCA.Notifications = {
 		/** @type {number} */
-		pollInterval: 5000, // milliseconds
+		pollInterval: 30000, // milliseconds
 		/** @type {number|null} */
 		interval: null,
 
