@@ -51,7 +51,7 @@
 
 		/** @type {string} */
 		_notificationTemplate: '' +
-		'<div class="notification" data-id="{{id}}" data-timestamp="{{timestamp}}">' +
+		'<div class="notification" data-id="{{notification_id}}" data-timestamp="{{timestamp}}">' +
 		'  {{#if link}}' +
 		'    {{#if icon}}<img src="{{icon}}" style="float: left;">{{/if}}' +
 		'    <a href="{{link}}" class="notification-subject">{{{subject}}}</a>' +
