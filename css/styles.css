@@ -123,7 +123,7 @@
 .notification .avatar {
 	vertical-align: middle;
 	display: inline-block;
-	margin-right: 5px;
+	margin: 0 5px 2px 3px;
 }
 
 .notification strong,
