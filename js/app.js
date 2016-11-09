@@ -312,8 +312,8 @@
 		 * @param {OCA.Notifications.Notification} notification
 		 */
 		_createWebNotification: function (notification) {
-			var n = new Notification(notification.getSubject(), {
-				title: notification.getSubject(),
+			var n = new Notification(notification.getPlainSubject(), {
+				title: notification.getPlainSubject(),
 				lang: OC.getLocale(),
 				body: notification.getMessage(),
 				icon: notification.getIcon(),

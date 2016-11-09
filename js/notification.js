@@ -66,6 +66,10 @@
 				);
 			}
 
+			return this.getPlainSubject();
+		},
+
+		getPlainSubject: function() {
 			return this.data.subject;
 		},
 
@@ -112,7 +116,8 @@
 		 * @param {Function} template
 		 */
 		renderElement: function(template) {
-			return template(_.extend(this.data, {
+			var temp = _.extend({}, this.data);
+			return template(_.extend(temp, {
 				subject: this.getSubject(),
 				link: this.getLink(),
 				message: this.getMessage()
