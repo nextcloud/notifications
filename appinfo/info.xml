@@ -19,6 +19,6 @@
 	<repository type="git">https://github.com/nextcloud/notifications.git</repository>
 
 	<dependencies>
-		<owncloud min-version="9.2" max-version="9.2" />
+		<nextcloud min-version="11" max-version="11" />
 	</dependencies>
 </info>
