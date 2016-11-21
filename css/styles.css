@@ -1,6 +1,6 @@
 .notification {
 	display: block;
-	padding: 7px 15px 50px 15px;
+	padding: 15px 15px 50px 15px;
 	line-height: 1.75em;
 }
 .notification:not(:last-child) {
@@ -117,7 +117,7 @@
 .notification img {
 	max-width: 32px;
 	max-height: 32px;
-	margin: 0 5px 5px 0;
+	margin: 0 0 5px 0;
 }
 
 .notification .avatar {
