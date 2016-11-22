@@ -36,6 +36,7 @@
 .notification {
 	color: black;
 	position: relative;
+	clear: both;
 }
 
 img.notification-icon {
@@ -93,15 +94,16 @@ img.notification-icon {
 	padding: 0 10px;
 	box-shadow: none;
 	margin: 0;
-	float: left;
 }
 
 .notification .notification-actions {
-	float:right;
 	padding: 0;
+	display: inline-block;
+	width: 100%;
+	margin: -6px 0;
 }
 
-.notification .notification-actions .action-button.primary{
+.notification .notification-actions .action-button.primary {
 	color: #fff;
 }
 
@@ -136,7 +138,7 @@ img.notification-icon {
 }
 
 .notification strong,
-.notification .notification-subject a {
+.notification .notification-subject a:not(.full-subject-link) {
 	font-weight: bold;
 	opacity: 2;
 }

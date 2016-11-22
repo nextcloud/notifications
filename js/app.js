@@ -54,7 +54,7 @@
 		'<div class="notification" data-id="{{notification_id}}" data-timestamp="{{timestamp}}">' +
 		'  {{#if link}}' +
 		'    {{#if icon}}<img src="{{icon}}" class="notification-icon">{{/if}}' +
-		'    <a href="{{link}}" class="notification-subject {{#if icon}}has-icon{{/if}}">{{{subject}}}</a>' +
+		'    <div class="notification-subject {{#if icon}}has-icon{{/if}}"><a href="{{link}}" class="full-subject-link">{{{subject}}}</a></div>' +
 		'  {{else}}' +
 		'    {{#if icon}}<img src="{{icon}}" class="notification-icon">{{/if}}' +
 		'    <div class="notification-subject {{#if icon}}has-icon{{/if}}">{{{subject}}}</div>' +
