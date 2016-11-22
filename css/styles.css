@@ -1,6 +1,6 @@
 .notification {
 	display: block;
-	padding: 7px 15px 50px 15px;
+	padding: 12px;
 	line-height: 1.75em;
 }
 .notification:not(:last-child) {
@@ -36,17 +36,27 @@
 .notification {
 	color: black;
 	position: relative;
+	clear: both;
+}
+
+img.notification-icon {
+	width: 32px;
+	float: left;
+}
+
+.notification-subject.has-icon {
+	margin-left: 45px;
 }
 
 .notification .notification-empty {
 	color: #999;
 }
 
-.notification:hover > .notification-delete{
+.notification:hover > .notification-delete {
 	display: block !important;
 	position: absolute;
 	top: 7px;
-	right: 14px;
+	right: 12px;
 	opacity: 0.3;
 }
 
@@ -84,15 +94,16 @@
 	padding: 0 10px;
 	box-shadow: none;
 	margin: 0;
-	float: left;
 }
 
 .notification .notification-actions {
-	float:right;
 	padding: 0;
+	display: inline-block;
+	width: 100%;
+	margin: -6px 0;
 }
 
-.notification .notification-actions .action-button.primary{
+.notification .notification-actions .action-button.primary {
 	color: #fff;
 }
 
@@ -101,8 +112,7 @@
 }
 
 .notification .notification-subject {
-	display: inline-block;
-	margin-right: 10px;
+	margin-right: 20px;
 }
 
 .notification .notification-message {
@@ -114,7 +124,8 @@
 	opacity: 1;
 }
 
-.notification img {
+.notification .notification-message img,
+.notification .notification-subject img {
 	max-width: 32px;
 	max-height: 32px;
 	margin: 0 5px 5px 0;
@@ -127,7 +138,7 @@
 }
 
 .notification strong,
-.notification .notification-subject a {
+.notification .notification-subject a:not(.full-subject-link) {
 	font-weight: bold;
 	opacity: 2;
 }
