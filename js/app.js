@@ -418,11 +418,13 @@
 			});
 
 			request.done(function(data, statusText, xhr) {
-				if (xhr.status === 204 || data.ocs.meta.statuscode === 204) {
+				if (xhr.status === 204) {
 					// 204 No Content - Intercept when no notifiers are there.
 					self._shutDownNotifications();
-				} else {
+				} else if (!_.isUndefined(data) && !_.isUndefined(data.ocs) && !_.isUndefined(data.ocs.data) && _.isArray(data.ocs.data)) {
 					success(data.ocs.data, statusText, xhr);
+				} else {
+					console.debug("data.ocs.data is undefined or not an array");
 				}
 			});
 			request.fail(failure);
