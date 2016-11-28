@@ -114,8 +114,11 @@
 			$notification.fadeOut(OC.menuSpeed);
 
 			$.ajax({
-				url: OC.linkToOCS('apps/notifications/api/v2', 2) + 'notifications/' + id + '?format=json',
+				url: OC.linkToOCS('apps/notifications/api/v2', 2) + 'notifications/' + id,
 				type: 'DELETE',
+				beforeSend: function (request) {
+					request.setRequestHeader('Accept', 'application/json');
+				},
 				success: function() {
 					self._removeNotification(id);
 				},
@@ -407,8 +410,11 @@
 		_fetch: function(success, failure) {
 			var self = this;
 			var request = $.ajax({
-				url: OC.linkToOCS('apps/notifications/api/v2', 2) + 'notifications?format=json',
-				type: 'GET'
+				url: OC.linkToOCS('apps/notifications/api/v2', 2) + 'notifications',
+				type: 'GET',
+				beforeSend: function (request) {
+					request.setRequestHeader('Accept', 'application/json');
+				}
 			});
 
 			request.done(function(data, statusText, xhr) {
