@@ -6,7 +6,7 @@ The API is used by other apps to notify users in the web UI and sync clients abo
 * 📬 [Federated file sharing](https://github.com/nextcloud/server/tree/master/apps/federatedfilesharing): You received a new remote shares
 * 📑 [Comments](https://github.com/nextcloud/server/tree/master/apps/federatedfilesharing): Another user mentioned you in a comment on a file
 * 🚢 [Update notification](https://github.com/nextcloud/server/tree/master/apps/updatenotification): Available update for an app or nextcloud itself
-* 📣 [Announcement Center](https://github.com/nextcloud/announcementcenter): An announcement was posted by an admin
+* 📣 [Announcement center](https://github.com/nextcloud/announcementcenter): An announcement was posted by an admin
 
 ## QA metrics on master branch:
 
