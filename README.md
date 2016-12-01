@@ -16,7 +16,7 @@ The API is used by other apps to notify users in the web UI and sync clients abo
 
 ## Screenshot
 
-![Build Status](https://raw.githubusercontent.com/nextcloud/notifications/master/docs/screenshot.png)
+![Screenshot of the notification icon and dropdown](https://raw.githubusercontent.com/nextcloud/notifications/master/docs/screenshot.png)
 
 **Note:**
 The 🔔 icon is hidden, when the user has no notifications.
