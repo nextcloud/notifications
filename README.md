@@ -1,6 +1,12 @@
 # Notifications
 
-An app that notifies the user about important events of other apps.
+This app provides a backend and frontend for the notification API available in [Nextcloud](https://github.com/nextcloud/server/).
+The API is used by other apps to notify users in the web UI and sync clients about various things. Some examples are:
+
+* 📬 [Federated file sharing](https://github.com/nextcloud/server/tree/master/apps/federatedfilesharing): You received a new remote shares
+* 📑 [Comments](https://github.com/nextcloud/server/tree/master/apps/federatedfilesharing): Another user mentioned you in a comment on a file
+* 🚢 [Update notification](https://github.com/nextcloud/server/tree/master/apps/updatenotification): Available update for an app or nextcloud itself
+* 📣 [Announcement Center](https://github.com/nextcloud/announcementcenter): An announcement was posted by an admin
 
 ## QA metrics on master branch:
 
@@ -8,19 +14,12 @@ An app that notifies the user about important events of other apps.
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/nextcloud/notifications/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/nextcloud/notifications/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/nextcloud/notifications/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/nextcloud/notifications/?branch=master)
 
-## Screenshots
+## Screenshot
 
-### No notifications (Sample)
+![Screenshot of the notification icon and dropdown](https://raw.githubusercontent.com/nextcloud/notifications/master/docs/screenshot.png)
 
 **Note:**
-The app hides itself, when there is no app registered, that creates
-notifications. In this case the bell and the dropdown are not accessible.
-
-![Build Status](img/sample-empty.png)
-
-### New notifications (Sample)
-
-![Build Status](img/sample-new.png)
+The 🔔 icon is hidden, when the user has no notifications.
 
 ## Notification workflow
 
