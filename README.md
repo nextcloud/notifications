@@ -24,7 +24,7 @@ The 🔔 icon is hidden, when the user has no notifications.
 ## Notification workflow
 
 For information how to make your app interact with the notifications app, see
-[Sending and processing/"mark as read" notifications as an Nextcloud App](https://github.com/nextcloud/notifications/blob/master/docs/notification-workflow.md)
+[Sending and processing/"mark as read" notifications as a Nextcloud App](https://github.com/nextcloud/notifications/blob/master/docs/notification-workflow.md)
 in the wiki.
 
 If you want to present notifications as a client, see [Reading and deleting notifications as an Nextcloud Client](https://github.com/nextcloud/notifications/blob/master/docs/ocs-endpoint-v1.md).
