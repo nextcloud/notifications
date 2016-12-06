@@ -1,6 +1,7 @@
 { "translations": {
     "Notifications" : "Bildirimler",
     "No notifications" : "Bildirimler kapalı",
-    "Dismiss" : "Yoksay"
+    "Dismiss" : "Yoksay",
+    "in {path}" : "{path} içinde"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }
