@@ -1,7 +1,7 @@
 .notification {
 	display: block;
-	padding: 12px;
-	line-height: 1.75em;
+	padding: 16px 12px;
+	line-height: 1em;
 }
 .notification:not(:last-child) {
 	border-bottom: 1px solid rgb(238, 238, 238);
@@ -49,6 +49,7 @@ img.notification-icon {
  * Vertical alignment from http://stackoverflow.com/a/39923209
  */
 .notification-subject {
+	padding-top: 12px;
 	position: relative;
 }
 
@@ -88,6 +89,15 @@ img.notification-icon {
 
 .notification-delete img, .notifications-button img {
 	cursor: pointer;
+}
+
+.notification-time {
+	text-align: right;
+	opacity: 0.5;
+	padding-right: 32px;
+	margin-top: -7px;
+	position: absolute;
+	right: 0;
 }
 
 .notifications-button {
@@ -138,7 +148,7 @@ img.notification-icon {
 
 .notification .notification-message {
 	line-height: 20px;
-	padding-bottom: 5px;
+	padding-bottom: 16px;
 	opacity: .57;
 }
 
