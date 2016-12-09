@@ -41,11 +41,32 @@
 
 img.notification-icon {
 	width: 32px;
-	float: left;
+	height: 32px;
+	display: block;
 }
 
-.notification-subject.has-icon {
-	margin-left: 45px;
+/**
+ * Vertical alignment from http://stackoverflow.com/a/39923209
+ */
+.notification-subject {
+	position: relative;
+}
+
+.notification-subject a {
+	display: inline-block;
+}
+
+.notification-subject > span.image,
+.notification-subject > span.text,
+.notification-subject > a > span.image,
+.notification-subject > a > span.text {
+	display:table-cell;
+	vertical-align:middle;
+}
+
+.notification-subject > span.text,
+.notification-subject > a > span.text {
+	padding-left: 10px;
 }
 
 .notification .notification-empty {
@@ -120,12 +141,9 @@ img.notification-icon {
 	padding-bottom: 5px;
 	opacity: .57;
 }
-.notification .notification-message:hover {
-	opacity: 1;
-}
 
 .notification .notification-message img,
-.notification .notification-subject img {
+.notification .notification-subject img:not(.notification-icon) {
 	max-width: 32px;
 	max-height: 32px;
 	margin: 0 5px 5px 0;

@@ -53,11 +53,17 @@
 		_notificationTemplate: '' +
 		'<div class="notification" data-id="{{notification_id}}" data-timestamp="{{timestamp}}">' +
 		'  {{#if link}}' +
-		'    {{#if icon}}<img src="{{icon}}" class="notification-icon">{{/if}}' +
-		'    <div class="notification-subject {{#if icon}}has-icon{{/if}}"><a href="{{link}}" class="full-subject-link">{{{subject}}}</a></div>' +
+		'    <div class="notification-subject">' +
+		'      <a href="{{link}}" class="full-subject-link">' +
+		'        {{#if icon}}<span class="image"><img src="{{icon}}" class="notification-icon"></span>{{/if}}' +
+		'        <span class="text">{{{subject}}}</span>' +
+		'      </a>' +
+		'    </div>' +
 		'  {{else}}' +
-		'    {{#if icon}}<img src="{{icon}}" class="notification-icon">{{/if}}' +
-		'    <div class="notification-subject {{#if icon}}has-icon{{/if}}">{{{subject}}}</div>' +
+		'    <div class="notification-subject">' +
+		'        {{#if icon}}<span class="image"><img src="{{icon}}" class="notification-icon"></span>{{/if}}' +
+		'        <span class="text">{{{subject}}}</span>' +
+		'    </div>' +
 		'  {{/if}}' +
 		'  <div class="notification-message">{{{message}}}</div>' +
 		'  <div class="notification-actions">' +
