@@ -5,7 +5,7 @@ php:
 
 env:
   global:
-    - CORE_BRANCH=master
+    - CORE_BRANCH=postgres-install-failing
     - APP_NAME=notifications
   matrix:
     - DB=sqlite
