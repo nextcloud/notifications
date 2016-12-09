@@ -47,7 +47,11 @@
 		},
 
 		getTimestamp: function() {
-			return moment(this.data.datetime).format('X');
+			if (_.isUndefined(this.data.timestamp)) {
+				this.data.timestamp = moment(this.data.datetime).format('X') * 1000;
+			}
+
+			return this.data.timestamp;
 		},
 
 		getObjectType: function() {
@@ -120,7 +124,10 @@
 			return template(_.extend(temp, {
 				subject: this.getSubject(),
 				link: this.getLink(),
-				message: this.getMessage()
+				message: this.getMessage(),
+				timestamp: this.getTimestamp(),
+				relativeDate: OC.Util.relativeModifiedDate(this.getTimestamp()),
+				absoluteDate: OC.Util.formatDate(this.getTimestamp())
 			}));
 		}
 	};

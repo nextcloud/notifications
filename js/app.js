@@ -52,6 +52,7 @@
 		/** @type {string} */
 		_notificationTemplate: '' +
 		'<div class="notification" data-id="{{notification_id}}" data-timestamp="{{timestamp}}">' +
+		'  <span class="notification-time has-tooltip live-relative-timestamp" data-timestamp="{{timestamp}}" title="{{absoluteDate}}">{{relativeDate}}</span>' +
 		'  {{#if link}}' +
 		'    <div class="notification-subject">' +
 		'      <a href="{{link}}" class="full-subject-link">' +
@@ -356,8 +357,6 @@
 			var $element = $(notification.renderElement(this.notificationTemplate));
 
 			$element.find('.avatar').each(function() {
-				console.log('avatar');
-				console.log(arguments);
 				var element = $(this);
 				if (element.data('user-display-name')) {
 					element.avatar(element.data('user'), 21, undefined, false, undefined, element.data('user-display-name'));
