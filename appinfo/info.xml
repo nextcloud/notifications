@@ -15,7 +15,7 @@
 
 	<licence>AGPL</licence>
 	<author>Joas Schilling</author>
-	<version>1.0.1</version>
+	<version>1.2.0</version>
 
 	<types>
 		<logging/>
@@ -28,6 +28,6 @@
 	<repository type="git">https://github.com/nextcloud/notifications.git</repository>
 
 	<dependencies>
-		<nextcloud min-version="11" max-version="11" />
+		<nextcloud min-version="12" max-version="12" />
 	</dependencies>
 </info>
