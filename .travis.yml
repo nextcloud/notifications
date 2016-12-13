@@ -5,7 +5,7 @@ php:
 
 env:
   global:
-    - CORE_BRANCH=master
+    - CORE_BRANCH=stable11
     - APP_NAME=notifications
   matrix:
     - DB=sqlite
