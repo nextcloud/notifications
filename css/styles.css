@@ -70,6 +70,10 @@ img.notification-icon {
 	padding-left: 10px;
 }
 
+.icon-notifications-off {
+	background-image: url('../img/notifications-off.svg?v=1');
+}
+
 .notification .notification-empty {
 	color: #999;
 }
