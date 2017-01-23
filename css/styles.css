@@ -103,8 +103,8 @@ img.notification-icon {
 .notifications-button {
 	position: relative;
 	float: right;
-	width: 21px;
-	height: 21px;
+	width: 16px;
+	height: 16px;
 	display: block;
 	border-radius: 50%;
 	text-align: center;
