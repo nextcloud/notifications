@@ -116,11 +116,11 @@ class PushController extends OCSController {
 			return new JSONResponse(['message' => 'Invalid device public key'], Http::STATUS_BAD_REQUEST);
 		}
 
-		$encryptedData = $this->crypto->encrypt(json_encode([$user->getCloudId(), $token->getId()]), $user);
+		$encryptedData = $this->crypto->encrypt(sha1(json_encode([$user->getCloudId(), $token->getId()])), $user);
 		return new JSONResponse([
 			'publicKey' => $key->getPublic(),
 			'deviceIdentifier' => $encryptedData['message'],
-			'signature' => $encryptedData['signature'],
+			'signature' => base64_encode($encryptedData['signature']),
 		], $created ? Http::STATUS_CREATED : Http::STATUS_OK);
 	}
 
