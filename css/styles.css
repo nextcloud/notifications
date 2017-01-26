@@ -1,3 +1,7 @@
+#header-right .notifications {
+	position: relative;
+}
+
 .notification {
 	display: block;
 	padding: 16px 12px;
@@ -11,8 +15,8 @@
 	background-color: white;
 	display: none;
 	position: absolute;
-	right: 50px;
-	top: 45px;
+	right: -40px;
+	top: 40px;
 	width: 350px;
 	min-height: 100px;
 	max-height: 260px;
@@ -177,7 +181,7 @@ img.notification-icon {
 
 /* Menu arrow */
 .notification-container:after {
-	right: 53px;
+	right: 47px;
 }
 
 .notification-wrapper {
