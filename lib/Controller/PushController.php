@@ -101,9 +101,9 @@ class PushController extends OCSController {
 			return new JSONResponse(['message' => 'Invalid device public key'], Http::STATUS_BAD_REQUEST);
 		}
 
-		$sessionId = $this->session->getId();
+		$tokenId = $this->session->get('token-id');
 		try {
-			$token = $this->tokenProvider->getToken($sessionId);
+			$token = $this->tokenProvider->getTokenById($tokenId);
 		} catch (InvalidTokenException $e) {
 			return new JSONResponse(['message' => 'Could not identify session token'], Http::STATUS_BAD_REQUEST);
 		}
