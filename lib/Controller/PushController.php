@@ -150,7 +150,12 @@ class PushController extends OCSController {
 			return new JSONResponse(['message' => 'Could not identify session token'], Http::STATUS_BAD_REQUEST);
 		}
 
-		$this->deletePushToken($user, $token, $devicePublicKey);
+		try {
+			$this->deletePushToken($user, $token, $devicePublicKey);
+		} catch (\BadMethodCallException $e) {
+			return new JSONResponse(['message' => 'Invalid device public key'], Http::STATUS_BAD_REQUEST);
+		}
+
 		return new JSONResponse();
 	}
 
@@ -233,6 +238,7 @@ class PushController extends OCSController {
 	 * @param IToken $token
 	 * @param string $devicePublicKey
 	 * @return bool If the entry was deleted
+	 * @throws \BadMethodCallException
 	 */
 	protected function deletePushToken(IUser $user, IToken $token, $devicePublicKey) {
 		$devicePublicKeyHash = hash('sha512', $devicePublicKey);
@@ -242,6 +248,11 @@ class PushController extends OCSController {
 			->where($query->expr()->eq('uid', $query->createNamedParameter($user->getUID())))
 			->andWhere($query->expr()->eq('token', $query->createNamedParameter($token->getId(), IQueryBuilder::PARAM_INT)))
 			->andWhere($query->expr()->eq('devicepublickeyhash', $query->createNamedParameter($devicePublicKeyHash)));
-		return $query->execute() > 0;
+
+		if ($query->execute() !== 0) {
+			throw new \BadMethodCallException();
+		}
+
+		return true;
 	}
 }
