@@ -138,6 +138,11 @@
 			</field>
 			<field>
 				<name>devicepublickey</name>
+				<type>clob</type>
+				<notnull>true</notnull>
+			</field>
+			<field>
+				<name>devicepublickeyhash</name>
 				<type>text</type>
 				<notnull>true</notnull>
 				<length>128</length>
