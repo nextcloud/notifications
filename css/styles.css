@@ -173,8 +173,18 @@ img.notification-icon {
 
 .notification-container {
 	box-shadow: 0 1px 10px rgba(50, 50, 50, .7);
-	overflow: auto;
-	overflow-x: hidden;
+}
+
+/* Menu arrow */
+.notification-container:after {
+	right: 53px;
+}
+
+.notification-wrapper {
+	max-height: 260px;
+	overflow: hidden;
+	overflow-y: auto;
+	margin-right: 3px;
 }
 
 .notifications .emptycontent {
