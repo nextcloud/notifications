@@ -24,7 +24,6 @@ namespace OCA\Notifications\Controller;
 use OC\Authentication\Exceptions\InvalidTokenException;
 use OC\Authentication\Token\IProvider;
 use OC\Authentication\Token\IToken;
-use OC\Security\IdentityProof\Crypto;
 use OC\Security\IdentityProof\Manager;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\JSONResponse;
@@ -53,9 +52,6 @@ class PushController extends OCSController {
 	/** @var Manager */
 	private $identityProof;
 
-	/** @var Crypto */
-	private $crypto;
-
 	/**
 	 * @param string $appName
 	 * @param IRequest $request
@@ -64,9 +60,8 @@ class PushController extends OCSController {
 	 * @param IUserSession $userSession
 	 * @param IProvider $tokenProvider
 	 * @param Manager $identityProof
-	 * @param Crypto $crypto
 	 */
-	public function __construct($appName, IRequest $request, IDBConnection $db, ISession $session, IUserSession $userSession, IProvider $tokenProvider, Manager $identityProof, Crypto $crypto) {
+	public function __construct($appName, IRequest $request, IDBConnection $db, ISession $session, IUserSession $userSession, IProvider $tokenProvider, Manager $identityProof) {
 		parent::__construct($appName, $request);
 
 		$this->db = $db;
@@ -74,7 +69,6 @@ class PushController extends OCSController {
 		$this->userSession = $userSession;
 		$this->tokenProvider = $tokenProvider;
 		$this->identityProof = $identityProof;
-		$this->crypto = $crypto;
 	}
 
 	/**
@@ -92,20 +86,20 @@ class PushController extends OCSController {
 		}
 
 		if (!preg_match('/^([a-f0-9]{128})$/', $pushTokenHash)) {
-			return new JSONResponse(['message' => 'Invalid hashed push token'], Http::STATUS_BAD_REQUEST);
+			return new JSONResponse(['message' => 'INVALID_PUSHTOKEN_HASH'], Http::STATUS_BAD_REQUEST);
 		}
 
 		if (strlen($devicePublicKey) !== 450 ||
 			strpos($devicePublicKey, '-----BEGIN PUBLIC KEY-----') !== 0 ||
 			strpos($devicePublicKey, '-----END PUBLIC KEY-----') !== 426) {
-			return new JSONResponse(['message' => 'Invalid device public key'], Http::STATUS_BAD_REQUEST);
+			return new JSONResponse(['message' => 'INVALID_DEVICE_KEY'], Http::STATUS_BAD_REQUEST);
 		}
 
 		$tokenId = $this->session->get('token-id');
 		try {
 			$token = $this->tokenProvider->getTokenById($tokenId);
 		} catch (InvalidTokenException $e) {
-			return new JSONResponse(['message' => 'Could not identify session token'], Http::STATUS_BAD_REQUEST);
+			return new JSONResponse(['message' => 'INVALID_SESSION_TOKEN'], Http::STATUS_BAD_REQUEST);
 		}
 
 		$key = $this->identityProof->getKey($user);
@@ -113,14 +107,16 @@ class PushController extends OCSController {
 		try {
 			$created = $this->savePushToken($user, $token, $devicePublicKey, $pushTokenHash);
 		} catch (\BadMethodCallException $e) {
-			return new JSONResponse(['message' => 'Invalid device public key'], Http::STATUS_BAD_REQUEST);
+			return new JSONResponse(['message' => 'INVALID_DEVICE_KEY'], Http::STATUS_BAD_REQUEST);
 		}
 
-		$encryptedData = $this->crypto->encrypt(sha1(json_encode([$user->getCloudId(), $token->getId()])), $user);
+		$deviceIdentifier = hash('sha512', json_encode([$user->getCloudId(), $token->getId()]));
+		openssl_sign($deviceIdentifier, $signature, $key->getPrivate(), OPENSSL_ALGO_SHA512);
+
 		return new JSONResponse([
 			'publicKey' => $key->getPublic(),
-			'deviceIdentifier' => $encryptedData['message'],
-			'signature' => base64_encode($encryptedData['signature']),
+			'deviceIdentifier' => $deviceIdentifier,
+			'signature' => base64_encode($signature),
 		], $created ? Http::STATUS_CREATED : Http::STATUS_OK);
 	}
 
@@ -140,23 +136,23 @@ class PushController extends OCSController {
 		if (strlen($devicePublicKey) !== 450 ||
 			strpos($devicePublicKey, '-----BEGIN PUBLIC KEY-----') !== 0 ||
 			strpos($devicePublicKey, '-----END PUBLIC KEY-----') !== 426) {
-			return new JSONResponse(['message' => 'Invalid device public key'], Http::STATUS_BAD_REQUEST);
+			return new JSONResponse(['message' => 'INVALID_DEVICE_KEY'], Http::STATUS_BAD_REQUEST);
 		}
 
 		$sessionId = $this->session->getId();
 		try {
 			$token = $this->tokenProvider->getToken($sessionId);
 		} catch (InvalidTokenException $e) {
-			return new JSONResponse(['message' => 'Could not identify session token'], Http::STATUS_BAD_REQUEST);
+			return new JSONResponse(['message' => 'INVALID_SESSION_TOKEN'], Http::STATUS_BAD_REQUEST);
 		}
 
 		try {
 			$this->deletePushToken($user, $token, $devicePublicKey);
 		} catch (\BadMethodCallException $e) {
-			return new JSONResponse(['message' => 'Invalid device public key'], Http::STATUS_BAD_REQUEST);
+			return new JSONResponse(['message' => 'INVALID_DEVICE_KEY'], Http::STATUS_BAD_REQUEST);
 		}
 
-		return new JSONResponse();
+		return new JSONResponse([], Http::STATUS_ACCEPTED);
 	}
 
 	/**
