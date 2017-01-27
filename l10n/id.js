@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Notifications" : "Pemberitahuan",
     "No notifications" : "Tidak ada pemberitahuan",
-    "Dismiss" : "Abaikan"
+    "Dismiss" : "Abaikan",
+    "in {path}" : "di {path}"
 },
 "nplurals=1; plural=0;");
