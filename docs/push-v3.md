@@ -159,13 +159,14 @@ The server replies with the following status codes:
 
 ## Unsubscribing at the Push Proxy
 
-The device sends the `deviceIdentifier` and the user´s `publicKey`  (from the server´s response) to the Push Proxy:
+The device sends the `deviceIdentifier`, `deviceIdentifierSignature` and the user´s `publicKey`  (from the server´s response) to the Push Proxy:
 
 ```json
 DELETE /devices
 
 {
   "deviceIdentifier": "{{deviceIdentifier}}",
+  "deviceIdentifierSignature": "{{signature}}",
   "userPublicKey": "{{userPublicKey}}"
 }
 ```
