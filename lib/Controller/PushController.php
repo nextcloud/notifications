@@ -34,6 +34,7 @@ use OCP\IRequest;
 use OCP\ISession;
 use OCP\IUser;
 use OCP\IUserSession;
+use phpseclib\Crypt\RSA;
 
 class PushController extends OCSController {
 
@@ -111,7 +112,15 @@ class PushController extends OCSController {
 		}
 
 		$deviceIdentifier = hash('sha512', json_encode([$user->getCloudId(), $token->getId()]));
-		openssl_sign($deviceIdentifier, $signature, $key->getPrivate(), OPENSSL_ALGO_SHA512);
+
+		$privateKey = new RSA();
+		$privateKey->setPrivateKey($key->getPrivate(), RSA::PRIVATE_FORMAT_PKCS1);
+		$privateKey->setSignatureMode(RSA::SIGNATURE_PSS);
+		$privateKey->setHash('sha512');
+		$privateKey->setMGFHash('sha512');
+		// See https://tools.ietf.org/html/rfc3447#page-38
+		$privateKey->setSaltLength(0);
+		$signature = $privateKey->sign($deviceIdentifier);
 
 		return new JSONResponse([
 			'publicKey' => $key->getPublic(),
