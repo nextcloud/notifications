@@ -110,12 +110,12 @@ class PushController extends OCSController {
 			return new JSONResponse(['message' => 'INVALID_DEVICE_KEY'], Http::STATUS_BAD_REQUEST);
 		}
 
-		$deviceIdentifier = hash('sha512', json_encode([$user->getCloudId(), $token->getId()]));
+		$deviceIdentifier = json_encode([$user->getCloudId(), $token->getId()]);
 		openssl_sign($deviceIdentifier, $signature, $key->getPrivate(), OPENSSL_ALGO_SHA512);
 
 		return new JSONResponse([
 			'publicKey' => $key->getPublic(),
-			'deviceIdentifier' => $deviceIdentifier,
+			'deviceIdentifier' => base64_encode(hash('sha512', $deviceIdentifier, true)),
 			'signature' => base64_encode($signature),
 		], $created ? Http::STATUS_CREATED : Http::STATUS_OK);
 	}
