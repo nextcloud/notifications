@@ -4,6 +4,6 @@ OC.L10N.register(
     "Notifications" : "Ειδοποιήσεις",
     "No notifications" : "Καμία ειδοποίηση",
     "Dismiss" : "Απόρριψη",
-    "in {path}" : "στο {μονοπάτι}"
+    "in {path}" : "στην {path}"
 },
 "nplurals=2; plural=(n != 1);");
