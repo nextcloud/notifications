@@ -28,9 +28,12 @@ use OCP\Notification\INotification;
 class App implements IApp {
 	/** @var Handler */
 	protected $handler;
+	/** @var Push */
+	protected $push;
 
-	public function __construct(Handler $handler) {
+	public function __construct(Handler $handler, Push $push) {
 		$this->handler = $handler;
+		$this->push = $push;
 	}
 
 	/**
@@ -39,7 +42,10 @@ class App implements IApp {
 	 * @since 8.2.0
 	 */
 	public function notify(INotification $notification) {
-		$this->handler->add($notification);
+		$notificationId = $this->handler->add($notification);
+
+		$notificationToPush = $this->handler->getById($notificationId, $notification->getUser());
+		$this->push->pushToDevice($notificationToPush);
 	}
 
 	/**
