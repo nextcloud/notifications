@@ -24,10 +24,14 @@ namespace OCA\Notifications;
 
 use OC\Authentication\Exceptions\InvalidTokenException;
 use OC\Authentication\Token\IProvider;
+use OC\Security\IdentityProof\Key;
+use OC\Security\IdentityProof\Manager;
 use OCP\Http\Client\IClientService;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\ILogger;
+use OCP\IUser;
+use OCP\IUserManager;
 use OCP\Notification\IManager;
 use OCP\Notification\INotification;
 
@@ -40,16 +44,22 @@ class Push {
 	protected $config;
 	/** @var IProvider */
 	protected $tokenProvider;
+	/** @var Manager */
+	private $keyManager;
+	/** @var IUserManager */
+	private $userManager;
 	/** @var IClientService */
 	protected $clientService;
 	/** @var ILogger */
 	protected $log;
 
-	public function __construct(IDBConnection $connection, IManager $manager, IConfig $config, IProvider $tokenProvider, IClientService $clientService, ILogger $log) {
+	public function __construct(IDBConnection $connection, IManager $manager, IConfig $config, IProvider $tokenProvider, Manager $keyManager, IUserManager $userManager, IClientService $clientService, ILogger $log) {
 		$this->connection = $connection;
 		$this->manager = $manager;
 		$this->config = $config;
 		$this->tokenProvider = $tokenProvider;
+		$this->keyManager = $keyManager;
+		$this->userManager = $userManager;
 		$this->clientService = $clientService;
 		$this->log = $log;
 	}
@@ -59,8 +69,9 @@ class Push {
 	 */
 	public function pushToDevice(INotification $notification) {
 		$devices = $this->getDevicesForUser($notification->getUser());
+		$user = $this->userManager->get($notification->getUser());
 
-		if (empty($devices)) {
+		if (empty($devices) || !($user instanceof IUser)) {
 			return;
 		}
 
@@ -71,13 +82,16 @@ class Push {
 			return;
 		}
 
-		$subject = $notification->getParsedSubject();
+		$userKey = $this->keyManager->getKey($user);
 
 		$collection = [];
 		foreach ($devices as $device) {
 			try {
-				$collection[] = $this->encryptAndSign($device, $subject);
+				$collection[] = $this->encryptAndSign($userKey, $device, $notification);
 			} catch (InvalidTokenException $e) {
+				// Token does not exist anymore, should drop the push device entry
+				// FIXME delete push token
+			} catch (\InvalidArgumentException $e) {
 				// Token does not exist anymore, should drop the push device entry
 				// FIXME delete push token
 			}
@@ -101,17 +115,29 @@ class Push {
 	}
 
 	/**
+	 * @param Key $userKey
 	 * @param array $device
-	 * @param $subject
+	 * @param INotification $notification
 	 * @return array
 	 * @throws InvalidTokenException
+	 * @throws \InvalidArgumentException
 	 */
-	protected function encryptAndSign(array $device, $subject) {
+	protected function encryptAndSign(Key $userKey, array $device, INotification $notification) {
 		// Check if the token is still valid...
 		$this->tokenProvider->getTokenById($device['token']);
 
-		$encryptedSubject = json_encode($subject); // FIXME use $device['devicepublickey']
-		$signature = hash('sha512', $encryptedSubject); // FIXME use $userPrivateKey
+		$data = [
+			'app' => $notification->getApp(),
+			'subject' => $notification->getParsedSubject(),
+		];
+
+		if (!openssl_private_encrypt(json_encode($data), $encryptedSubject, $device['devicepublickey'], OPENSSL_PKCS1_PADDING)) {
+			$this->log->error(openssl_error_string(), ['app' => 'notifications']);
+			throw new \InvalidArgumentException('Failed to encrypt message for device');
+		}
+
+		openssl_sign(json_encode($encryptedSubject), $signature, $userKey->getPrivate(), OPENSSL_ALGO_SHA512);
+
 		return [
 			'pushTokenHash' => $device['pushtokenhash'],
 			'subject' => $encryptedSubject,
