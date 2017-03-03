@@ -179,9 +179,35 @@ The server replies with the following status codes:
 
 | Status code | Meaning                                  |
 | ----------- | ---------------------------------------- |
-| 200         | Push token was deleted from the databse  |
+| 200         | Push token was deleted from the database |
 | 400         | Public key or device identifier is malformed |
 | 403         | Device identifier and device public key didn't match or could not be found |
 
 
 
+## Pushed notifications
+
+The pushed notifications format depends on the service that is used.
+In case of Apple Push Notification Service, the payload of a push notification looks like the following:
+
+```json
+{
+  "aps" : {
+    "alert" : {
+      "loc-key" : "NEW_NOTIFICATION"
+    }
+  },
+  "subject" : "*Encrypted subject*",
+  "signature" : "*Signature*"
+}
+```
+
+| Attribute   | Meaning                                  |
+| ----------- | ---------------------------------------- |
+| `aps`       | As defined by the [apple documentation](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/CreatingtheNotificationPayload.html#//apple_ref/doc/uid/TP40008194-CH10-SW1). Since this message can not be encrypted, it contains **no sensitive** content. |
+| `subject` | The subject is encrypted with the device´s *public key*. |
+| `signature` | The signature is a sha512 signature over the encrypted subject using the user´s private key. |
+
+### Verification
+So a device should verify the signature using the user´s public key.
+If the signature is okay, the subject can be decrypted using the device´s private key.
