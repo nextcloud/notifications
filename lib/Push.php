@@ -84,10 +84,10 @@ class Push {
 
 		$userKey = $this->keyManager->getKey($user);
 
-		$collection = [];
+		$pushNotifications = [];
 		foreach ($devices as $device) {
 			try {
-				$collection[] = $this->encryptAndSign($userKey, $device, $notification);
+				$pushNotifications[] = $this->encryptAndSign($userKey, $device, $notification);
 			} catch (InvalidTokenException $e) {
 				// Token does not exist anymore, should drop the push device entry
 				// FIXME delete push token
@@ -97,14 +97,14 @@ class Push {
 			}
 		}
 
-		$payload = json_encode($collection);
+		$payload = json_encode($pushNotifications);
 
 		$this->log->alert($payload); // TODO TEMP
 
 		$client = $this->clientService->newClient();
 		try {
 			$response = $client->post('http://127.0.0.1:3306', [
-				'body' => $payload,
+				'body' => $pushNotifications,
 			]);
 		} catch (\Exception $e) {
 			$this->log->logException($e, [
@@ -131,17 +131,19 @@ class Push {
 			'subject' => $notification->getParsedSubject(),
 		];
 
-		if (!openssl_private_encrypt(json_encode($data), $encryptedSubject, $device['devicepublickey'], OPENSSL_PKCS1_PADDING)) {
+		if (!openssl_public_encrypt(json_encode($data), $encryptedSubject, $device['devicepublickey'], OPENSSL_PKCS1_PADDING)) {
 			$this->log->error(openssl_error_string(), ['app' => 'notifications']);
 			throw new \InvalidArgumentException('Failed to encrypt message for device');
 		}
 
 		openssl_sign(json_encode($encryptedSubject), $signature, $userKey->getPrivate(), OPENSSL_ALGO_SHA512);
+		$base64EncryptedSubject = base64_encode($encryptedSubject);
+		$base64Signature = base64_encode($signature);
 
 		return [
 			'pushTokenHash' => $device['pushtokenhash'],
-			'subject' => $encryptedSubject,
-			'signature' => $signature,
+			'subject' => $base64EncryptedSubject,
+			'signature' => $base64Signature,
 		];
 	}
 
@@ -153,7 +155,7 @@ class Push {
 		$query = $this->connection->getQueryBuilder();
 		$query->select('*')
 			->from('notifications_pushtokens')
-			->where($query->expr()->eq('uid', $uid));
+			->where($query->expr()->eq('uid', $query->createNamedParameter($uid)));
 
 		$result = $query->execute();
 		$devices = $result->fetchAll();
