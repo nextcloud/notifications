@@ -26,6 +26,7 @@ use OC\Authentication\Exceptions\InvalidTokenException;
 use OC\Authentication\Token\IProvider;
 use OC\Security\IdentityProof\Key;
 use OC\Security\IdentityProof\Manager;
+use OCP\AppFramework\Http;
 use OCP\Http\Client\IClientService;
 use OCP\IConfig;
 use OCP\IDBConnection;
@@ -97,13 +98,10 @@ class Push {
 			}
 		}
 
-		$payload = json_encode($pushNotifications);
-
-		$this->log->alert($payload); // TODO TEMP
-
 		$client = $this->clientService->newClient();
 		try {
-			$response = $client->post('http://127.0.0.1:3306', [
+			$pushServer = rtrim($this->config->getAppValue('notifications', 'push_server', 'https://push-notifications.nextcloud.com'), '/');
+			$response = $client->post($pushServer . '/notifications', [
 				'body' => $pushNotifications,
 			]);
 		} catch (\Exception $e) {
@@ -111,6 +109,21 @@ class Push {
 				'app' => 'notifications',
 			]);
 			return;
+		}
+
+		$status = $response->getStatusCode();
+		if ($status !== Http::STATUS_OK && $status !== Http::STATUS_SERVICE_UNAVAILABLE) {
+			$body = $response->getBody();
+			$this->log->error('Could not send notification to push server: {error}',[
+				'error' => is_string($body) ? $body : 'no reason given',
+				'app' => 'notifications',
+			]);
+		} else if ($status === Http::STATUS_SERVICE_UNAVAILABLE && $this->config->getSystemValue('debug', false)) {
+			$body = $response->getBody();
+			$this->log->debug('Could not send notification to push server: {error}',[
+				'error' => is_string($body) ? $body : 'no reason given',
+				'app' => 'notifications',
+			]);
 		}
 	}
 
