@@ -104,18 +104,19 @@ class PushController extends OCSController {
 
 		$key = $this->identityProof->getKey($user);
 
+		$deviceIdentifier = json_encode([$user->getCloudId(), $token->getId()]);
+		openssl_sign($deviceIdentifier, $signature, $key->getPrivate(), OPENSSL_ALGO_SHA512);
+		$deviceIdentifier = base64_encode(hash('sha512', $deviceIdentifier, true));
+
 		try {
-			$created = $this->savePushToken($user, $token, $devicePublicKey, $pushTokenHash);
+			$created = $this->savePushToken($user, $token, $deviceIdentifier, $devicePublicKey, $pushTokenHash);
 		} catch (\BadMethodCallException $e) {
 			return new JSONResponse(['message' => 'INVALID_DEVICE_KEY'], Http::STATUS_BAD_REQUEST);
 		}
 
-		$deviceIdentifier = json_encode([$user->getCloudId(), $token->getId()]);
-		openssl_sign($deviceIdentifier, $signature, $key->getPrivate(), OPENSSL_ALGO_SHA512);
-
 		return new JSONResponse([
 			'publicKey' => $key->getPublic(),
-			'deviceIdentifier' => base64_encode(hash('sha512', $deviceIdentifier, true)),
+			'deviceIdentifier' => $deviceIdentifier,
 			'signature' => base64_encode($signature),
 		], $created ? Http::STATUS_CREATED : Http::STATUS_OK);
 	}
@@ -158,12 +159,13 @@ class PushController extends OCSController {
 	/**
 	 * @param IUser $user
 	 * @param IToken $token
+	 * @param string $deviceIdentifier
 	 * @param string $devicePublicKey
 	 * @param string $pushTokenHash
 	 * @return bool If the hash was new to the database
 	 * @throws \BadMethodCallException
 	 */
-	protected function savePushToken(IUser $user, IToken $token, $devicePublicKey, $pushTokenHash) {
+	protected function savePushToken(IUser $user, IToken $token, $deviceIdentifier, $devicePublicKey, $pushTokenHash) {
 		$query = $this->db->getQueryBuilder();
 		$query->select('pushtokenhash')
 			->from('notifications_pushtokens')
@@ -175,7 +177,7 @@ class PushController extends OCSController {
 		$result->closeCursor();
 
 		if (!$row) {
-			return $this->insertPushToken($user, $token, $devicePublicKey, $pushTokenHash);
+			return $this->insertPushToken($user, $token, $deviceIdentifier, $devicePublicKey, $pushTokenHash);
 		} else if ($row['pushtokenhash'] !== $pushTokenHash) {
 			return $this->updatePushToken($user, $token, $devicePublicKey, $pushTokenHash);
 		}
@@ -185,11 +187,12 @@ class PushController extends OCSController {
 	/**
 	 * @param IUser $user
 	 * @param IToken $token
+	 * @param string $deviceIdentifier
 	 * @param string $devicePublicKey
 	 * @param string $pushTokenHash
 	 * @return bool If the entry was created
 	 */
-	protected function insertPushToken(IUser $user, IToken $token, $devicePublicKey, $pushTokenHash) {
+	protected function insertPushToken(IUser $user, IToken $token, $deviceIdentifier, $devicePublicKey, $pushTokenHash) {
 		$devicePublicKeyHash = hash('sha512', $devicePublicKey);
 
 		$query = $this->db->getQueryBuilder();
@@ -197,6 +200,7 @@ class PushController extends OCSController {
 			->values([
 				'uid' => $query->createNamedParameter($user->getUID()),
 				'token' => $query->createNamedParameter($token->getId(), IQueryBuilder::PARAM_INT),
+				'deviceidentifier' => $query->createNamedParameter($deviceIdentifier),
 				'devicepublickey' => $query->createNamedParameter($devicePublicKey),
 				'devicepublickeyhash' => $query->createNamedParameter($devicePublicKeyHash),
 				'pushtokenhash' => $query->createNamedParameter($pushTokenHash),
