@@ -88,7 +88,7 @@ class Push {
 		$pushNotifications = [];
 		foreach ($devices as $device) {
 			try {
-				$pushNotifications[] = $this->encryptAndSign($userKey, $device, $notification);
+				$pushNotifications[] = json_encode($this->encryptAndSign($userKey, $device, $notification));
 			} catch (InvalidTokenException $e) {
 				// Token does not exist anymore, should drop the push device entry
 				// FIXME delete push token
@@ -102,7 +102,9 @@ class Push {
 		try {
 			$pushServer = rtrim($this->config->getAppValue('notifications', 'push_server', 'https://push-notifications.nextcloud.com'), '/');
 			$response = $client->post($pushServer . '/notifications', [
-				'body' => $pushNotifications,
+				'body' => [
+					'notifications' => $pushNotifications,
+				],
 			]);
 		} catch (\Exception $e) {
 			$this->log->logException($e, [
@@ -149,11 +151,12 @@ class Push {
 			throw new \InvalidArgumentException('Failed to encrypt message for device');
 		}
 
-		openssl_sign(json_encode($encryptedSubject), $signature, $userKey->getPrivate(), OPENSSL_ALGO_SHA512);
-		$base64EncryptedSubject = base64_encode($encryptedSubject);
+		openssl_sign($encryptedSubject, $signature, $userKey->getPrivate(), OPENSSL_ALGO_SHA512);
+		$base64EncryptedSubject = base64_encode(hash('sha512', $encryptedSubject, true));
 		$base64Signature = base64_encode($signature);
 
 		return [
+			'deviceIdentifier' => $device['deviceidentifier'],
 			'pushTokenHash' => $device['pushtokenhash'],
 			'subject' => $base64EncryptedSubject,
 			'signature' => $base64Signature,
