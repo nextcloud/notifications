@@ -137,6 +137,12 @@
 				<length>4</length>
 			</field>
 			<field>
+				<name>deviceidentifier</name>
+				<type>text</type>
+				<notnull>true</notnull>
+				<length>128</length>
+			</field>
+			<field>
 				<name>devicepublickey</name>
 				<type>text</type>
 				<notnull>true</notnull>
