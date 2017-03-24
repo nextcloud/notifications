@@ -56,9 +56,7 @@ class Application extends \OCP\AppFramework\App {
 			&& substr($request->getScriptName(), 0 - strlen('/index.php')) === '/index.php'
 			&& substr($request->getPathInfo(), 0, strlen('/s/')) !== '/s/'
 			&& substr($request->getPathInfo(), 0, strlen('/login/')) !== '/login/') {
-			Util::addScript('notifications', 'app');
-			Util::addScript('notifications', 'notification');
-			Util::addScript('notifications', 'richObjectStringParser');
+			Util::addScript('notifications', 'merged');
 			Util::addStyle('notifications', 'styles');
 		}
 
