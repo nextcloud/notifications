@@ -91,7 +91,7 @@
 			this.$container = this.$notifications.find('.notification-container');
 
 			// Add to the UI
-			$('form.searchbox').before(this.$notifications);
+			$('form.searchbox').after(this.$notifications);
 
 			// Initial call to the notification endpoint
 			this.initialFetch();
