@@ -8,12 +8,13 @@
 }
 
 .notification-container {
-	background-color: white;
+	background-color: #fff;
 	display: none;
 	position: absolute;
-	right: 50px;
+	right: 13px;
 	top: 45px;
 	width: 350px;
+	max-width: 90%;
 	min-height: 100px;
 	max-height: 260px;
 	border-radius: 0 0 3px 3px;
@@ -23,14 +24,6 @@
 .notification-container .emptycontent h2 {
 	font-weight: 300;
 	font-size: 16px;
-}
-
-/* Fill width on mobile */
-@media (max-width: 500px) {
-	.notification-container {
-		right: 5%;
-		width: 90%;
-	}
 }
 
 .notification {
@@ -173,8 +166,18 @@ img.notification-icon {
 
 .notification-container {
 	box-shadow: 0 1px 10px rgba(50, 50, 50, .7);
-	overflow: auto;
-	overflow-x: hidden;
+}
+
+/* Menu arrow */
+.notification-container:after {
+	right: 57px;
+}
+
+.notification-wrapper {
+	max-height: 260px;
+	overflow: hidden;
+	overflow-y: auto;
+	margin-right: 3px;
 }
 
 .notifications .emptycontent {
