@@ -388,8 +388,7 @@
 				.animate({opacity: 0.6}, 600)
 				.animate({opacity: 1}, 600)
 				.animate({opacity: 0.6}, 600)
-				.animate({opacity: 1}, 600)
-				.attr('style', '');
+				.animate({opacity: 1}, 600);
 			this.$container.find('.emptycontent').addClass('hidden');
 
 			this.$notifications.removeClass('hidden');
