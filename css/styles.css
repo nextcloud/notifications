@@ -102,15 +102,13 @@ img.notification-icon {
 	border-radius: 50%;
 	text-align: center;
 	padding: 10px;
-	opacity: 0.7;
+	opacity: .6;
 	cursor: pointer;
 }
-.notifications-button.hasNotifications {
+.notifications-button.hasNotifications,
+.notifications-button:hover,
+.notifications-button:focus {
 	opacity: 1 !important;
-}
-
-.notifications-button:hover {
-	opacity: 1;
 }
 
 .notification .button {
@@ -161,7 +159,7 @@ img.notification-icon {
 .notification strong,
 .notification .notification-subject a:not(.full-subject-link) {
 	font-weight: bold;
-	opacity: 2;
+	opacity: 1;
 }
 
 .notification-container {
