@@ -384,7 +384,7 @@
 				icon = 'notifications-new';
 			}
 			this.$button.addClass('hasNotifications');
-			this.$button
+			this.$button.find('img').attr('src', OC.imagePath('notifications', icon))
 				.animate({opacity: 0.6}, 600)
 				.animate({opacity: 1}, 600)
 				.animate({opacity: 0.6}, 600)
