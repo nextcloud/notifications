@@ -96,7 +96,7 @@ class PushController extends OCSController {
 			return new JSONResponse(['message' => 'INVALID_DEVICE_KEY'], Http::STATUS_BAD_REQUEST);
 		}
 
-		if (!filter_input(FILTER_VALIDATE_URL, $proxyServer) || strpos($proxyServer, 'https://') !== 0 || strlen($proxyServer)> 256) {
+		if (!filter_var($proxyServer, FILTER_VALIDATE_URL) || strpos($proxyServer, 'https://') !== 0 || strlen($proxyServer)> 256) {
 			return new JSONResponse(['message' => 'INVALID_PROXY_SERVER'], Http::STATUS_BAD_REQUEST);
 		}
 
