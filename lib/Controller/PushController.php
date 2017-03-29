@@ -77,9 +77,10 @@ class PushController extends OCSController {
 	 *
 	 * @param string $pushTokenHash
 	 * @param string $devicePublicKey
+	 * @param string $proxyServer
 	 * @return JSONResponse
 	 */
-	public function registerDevice($pushTokenHash, $devicePublicKey) {
+	public function registerDevice($pushTokenHash, $devicePublicKey, $proxyServer) {
 		$user = $this->userSession->getUser();
 		if (!$user instanceof IUser) {
 			return new JSONResponse([], Http::STATUS_UNAUTHORIZED);
@@ -95,6 +96,10 @@ class PushController extends OCSController {
 			return new JSONResponse(['message' => 'INVALID_DEVICE_KEY'], Http::STATUS_BAD_REQUEST);
 		}
 
+		if (!filter_input(FILTER_VALIDATE_URL, $proxyServer) || strpos($proxyServer, 'https://') !== 0 || strlen($proxyServer)> 256) {
+			return new JSONResponse(['message' => 'INVALID_PROXY_SERVER'], Http::STATUS_BAD_REQUEST);
+		}
+
 		$tokenId = $this->session->get('token-id');
 		try {
 			$token = $this->tokenProvider->getTokenById($tokenId);
@@ -108,11 +113,7 @@ class PushController extends OCSController {
 		openssl_sign($deviceIdentifier, $signature, $key->getPrivate(), OPENSSL_ALGO_SHA512);
 		$deviceIdentifier = base64_encode(hash('sha512', $deviceIdentifier, true));
 
-		try {
-			$created = $this->savePushToken($user, $token, $deviceIdentifier, $devicePublicKey, $pushTokenHash);
-		} catch (\BadMethodCallException $e) {
-			return new JSONResponse(['message' => 'INVALID_DEVICE_KEY'], Http::STATUS_BAD_REQUEST);
-		}
+		$created = $this->savePushToken($user, $token, $deviceIdentifier, $devicePublicKey, $pushTokenHash, $proxyServer);
 
 		return new JSONResponse([
 			'publicKey' => $key->getPublic(),
@@ -125,19 +126,12 @@ class PushController extends OCSController {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 *
-	 * @param string $devicePublicKey
 	 * @return JSONResponse
 	 */
-	public function removeDevice($devicePublicKey) {
+	public function removeDevice() {
 		$user = $this->userSession->getUser();
 		if (!$user instanceof IUser) {
 			return new JSONResponse([], Http::STATUS_UNAUTHORIZED);
-		}
-
-		if (strlen($devicePublicKey) !== 450 ||
-			strpos($devicePublicKey, '-----BEGIN PUBLIC KEY-----') !== 0 ||
-			strpos($devicePublicKey, '-----END PUBLIC KEY-----') !== 426) {
-			return new JSONResponse(['message' => 'INVALID_DEVICE_KEY'], Http::STATUS_BAD_REQUEST);
 		}
 
 		$sessionId = $this->session->getId();
@@ -147,13 +141,11 @@ class PushController extends OCSController {
 			return new JSONResponse(['message' => 'INVALID_SESSION_TOKEN'], Http::STATUS_BAD_REQUEST);
 		}
 
-		try {
-			$this->deletePushToken($user, $token, $devicePublicKey);
-		} catch (\BadMethodCallException $e) {
-			return new JSONResponse(['message' => 'INVALID_DEVICE_KEY'], Http::STATUS_BAD_REQUEST);
+		if ($this->deletePushToken($user, $token)) {
+			return new JSONResponse([], Http::STATUS_ACCEPTED);
 		}
 
-		return new JSONResponse([], Http::STATUS_ACCEPTED);
+		return new JSONResponse([], Http::STATUS_OK);
 	}
 
 	/**
@@ -162,26 +154,24 @@ class PushController extends OCSController {
 	 * @param string $deviceIdentifier
 	 * @param string $devicePublicKey
 	 * @param string $pushTokenHash
+	 * @param string $proxyServer
 	 * @return bool If the hash was new to the database
-	 * @throws \BadMethodCallException
 	 */
-	protected function savePushToken(IUser $user, IToken $token, $deviceIdentifier, $devicePublicKey, $pushTokenHash) {
+	protected function savePushToken(IUser $user, IToken $token, $deviceIdentifier, $devicePublicKey, $pushTokenHash, $proxyServer) {
 		$query = $this->db->getQueryBuilder();
-		$query->select('pushtokenhash')
+		$query->select('*')
 			->from('notifications_pushtokens')
 			->where($query->expr()->eq('uid', $query->createNamedParameter($user->getUID())))
-			->andWhere($query->expr()->eq('token', $query->createNamedParameter($token->getId())))
-			->andWhere($query->expr()->eq('devicepublickey', $query->createNamedParameter($devicePublicKey)));
+			->andWhere($query->expr()->eq('token', $query->createNamedParameter($token->getId())));
 		$result = $query->execute();
 		$row = $result->fetch();
 		$result->closeCursor();
 
 		if (!$row) {
-			return $this->insertPushToken($user, $token, $deviceIdentifier, $devicePublicKey, $pushTokenHash);
-		} else if ($row['pushtokenhash'] !== $pushTokenHash) {
-			return $this->updatePushToken($user, $token, $devicePublicKey, $pushTokenHash);
+			return $this->insertPushToken($user, $token, $deviceIdentifier, $devicePublicKey, $pushTokenHash, $proxyServer);
 		}
-		return false;
+
+		return $this->updatePushToken($user, $token, $devicePublicKey, $pushTokenHash, $proxyServer);
 	}
 
 	/**
@@ -190,9 +180,10 @@ class PushController extends OCSController {
 	 * @param string $deviceIdentifier
 	 * @param string $devicePublicKey
 	 * @param string $pushTokenHash
+	 * @param string $proxyServer
 	 * @return bool If the entry was created
 	 */
-	protected function insertPushToken(IUser $user, IToken $token, $deviceIdentifier, $devicePublicKey, $pushTokenHash) {
+	protected function insertPushToken(IUser $user, IToken $token, $deviceIdentifier, $devicePublicKey, $pushTokenHash, $proxyServer) {
 		$devicePublicKeyHash = hash('sha512', $devicePublicKey);
 
 		$query = $this->db->getQueryBuilder();
@@ -204,6 +195,7 @@ class PushController extends OCSController {
 				'devicepublickey' => $query->createNamedParameter($devicePublicKey),
 				'devicepublickeyhash' => $query->createNamedParameter($devicePublicKeyHash),
 				'pushtokenhash' => $query->createNamedParameter($pushTokenHash),
+				'proxyserver' => $query->createNamedParameter($proxyServer),
 			]);
 		return $query->execute() > 0;
 	}
@@ -213,46 +205,35 @@ class PushController extends OCSController {
 	 * @param IToken $token
 	 * @param string $devicePublicKey
 	 * @param string $pushTokenHash
+	 * @param string $proxyServer
 	 * @return bool If the entry was updated
-	 * @throws \BadMethodCallException
 	 */
-	protected function updatePushToken(IUser $user, IToken $token, $devicePublicKey, $pushTokenHash) {
+	protected function updatePushToken(IUser $user, IToken $token, $devicePublicKey, $pushTokenHash, $proxyServer) {
 		$devicePublicKeyHash = hash('sha512', $devicePublicKey);
 
 		$query = $this->db->getQueryBuilder();
 		$query->update('notifications_pushtokens')
+			->set('devicepublickey', $query->createNamedParameter($devicePublicKey))
+			->set('devicepublickeyhash', $query->createNamedParameter($devicePublicKeyHash))
 			->set('pushtokenhash', $query->createNamedParameter($pushTokenHash))
+			->set('proxyserver', $query->createNamedParameter($proxyServer))
 			->where($query->expr()->eq('uid', $query->createNamedParameter($user->getUID())))
-			->andWhere($query->expr()->eq('token', $query->createNamedParameter($token->getId(), IQueryBuilder::PARAM_INT)))
-			->andWhere($query->expr()->eq('devicepublickeyhash', $query->createNamedParameter($devicePublicKeyHash)));
+			->andWhere($query->expr()->eq('token', $query->createNamedParameter($token->getId(), IQueryBuilder::PARAM_INT)));
 
-		if ($query->execute() !== 0) {
-			throw new \BadMethodCallException();
-		}
-
-		return true;
+		return $query->execute() !== 0;
 	}
 
 	/**
 	 * @param IUser $user
 	 * @param IToken $token
-	 * @param string $devicePublicKey
 	 * @return bool If the entry was deleted
-	 * @throws \BadMethodCallException
 	 */
-	protected function deletePushToken(IUser $user, IToken $token, $devicePublicKey) {
-		$devicePublicKeyHash = hash('sha512', $devicePublicKey);
-
+	protected function deletePushToken(IUser $user, IToken $token) {
 		$query = $this->db->getQueryBuilder();
 		$query->delete('notifications_pushtokens')
 			->where($query->expr()->eq('uid', $query->createNamedParameter($user->getUID())))
-			->andWhere($query->expr()->eq('token', $query->createNamedParameter($token->getId(), IQueryBuilder::PARAM_INT)))
-			->andWhere($query->expr()->eq('devicepublickeyhash', $query->createNamedParameter($devicePublicKeyHash)));
+			->andWhere($query->expr()->eq('token', $query->createNamedParameter($token->getId(), IQueryBuilder::PARAM_INT)));
 
-		if ($query->execute() !== 0) {
-			throw new \BadMethodCallException();
-		}
-
-		return true;
+		return $query->execute() !== 0;
 	}
 }

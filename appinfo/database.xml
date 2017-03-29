@@ -160,6 +160,12 @@
 				<notnull>true</notnull>
 				<length>128</length>
 			</field>
+			<field>
+				<name>proxyserver</name>
+				<type>text</type>
+				<notnull>true</notnull>
+				<length>256</length>
+			</field>
 
 			<index>
 				<name>oc_notifpushtoken</name>

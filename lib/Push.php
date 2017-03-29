@@ -88,7 +88,10 @@ class Push {
 		$pushNotifications = [];
 		foreach ($devices as $device) {
 			try {
-				$pushNotifications[] = json_encode($this->encryptAndSign($userKey, $device, $notification));
+				if (!isset($pushNotifications[$device['proxyserver']])) {
+					$pushNotifications[$device['proxyserver']] = [];
+				}
+				$pushNotifications[$device['proxyserver']] = json_encode($this->encryptAndSign($userKey, $device, $notification));
 			} catch (InvalidTokenException $e) {
 				// Token does not exist anymore, should drop the push device entry
 				// FIXME delete push token
@@ -99,33 +102,36 @@ class Push {
 		}
 
 		$client = $this->clientService->newClient();
-		try {
-			$pushServer = rtrim($this->config->getAppValue('notifications', 'push_server', 'https://push-notifications.nextcloud.com'), '/');
-			$response = $client->post($pushServer . '/notifications', [
-				'body' => [
-					'notifications' => $pushNotifications,
-				],
-			]);
-		} catch (\Exception $e) {
-			$this->log->logException($e, [
-				'app' => 'notifications',
-			]);
-			return;
-		}
+		foreach ($pushNotifications as $proxyServer => $notifications) {
+			try {
+				$response = $client->post(rtrim($proxyServer, '/') . '/notifications', [
+					'body' => [
+						'notifications' => $notifications,
+					],
+				]);
+			} catch (\Exception $e) {
+				$this->log->logException($e, [
+					'app' => 'notifications',
+				]);
+				return;
+			}
 
-		$status = $response->getStatusCode();
-		if ($status !== Http::STATUS_OK && $status !== Http::STATUS_SERVICE_UNAVAILABLE) {
-			$body = $response->getBody();
-			$this->log->error('Could not send notification to push server: {error}',[
-				'error' => is_string($body) ? $body : 'no reason given',
-				'app' => 'notifications',
-			]);
-		} else if ($status === Http::STATUS_SERVICE_UNAVAILABLE && $this->config->getSystemValue('debug', false)) {
-			$body = $response->getBody();
-			$this->log->debug('Could not send notification to push server: {error}',[
-				'error' => is_string($body) ? $body : 'no reason given',
-				'app' => 'notifications',
-			]);
+			$status = $response->getStatusCode();
+			if ($status !== Http::STATUS_OK && $status !== Http::STATUS_SERVICE_UNAVAILABLE) {
+				$body = $response->getBody();
+				$this->log->error('Could not send notification to push server [{url}]: {error}',[
+					'error' => is_string($body) ? $body : 'no reason given',
+					'url' => $proxyServer,
+					'app' => 'notifications',
+				]);
+			} else if ($status === Http::STATUS_SERVICE_UNAVAILABLE && $this->config->getSystemValue('debug', false)) {
+				$body = $response->getBody();
+				$this->log->debug('Could not send notification to push server [{url}]: {error}',[
+					'error' => is_string($body) ? $body : 'no reason given',
+					'url' => $proxyServer,
+					'app' => 'notifications',
+				]);
+			}
 		}
 	}
 

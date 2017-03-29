@@ -6,7 +6,7 @@
 
 In order to find out if notifications support push on the server you can run a request against the capabilities endpoint: `/ocs/v2.php/cloud/capabilities`
 
-```json
+```
 {
   "ocs": {
     ...
@@ -36,14 +36,15 @@ In order to find out if notifications support push on the server you can run a r
 
 3. The device generates a `sha512` hash of the `PushToken` (`PushTokenHash`)
 
-4. The device then sends the `devicePublicKey` and `PushTokenHash` to the Nextcloud server:
+4. The device then sends the `devicePublicKey`, `PushTokenHash` and `proxyServerUrl` to the Nextcloud server:
 
-   ```json
+   ```
    POST /ocs/v2.php/apps/notifications/api/v3/push
 
    {
      "pushTokenHash": "{{PushTokenHash}}",
-     "devicePublicKey": "{{devicePublicKey}}"
+     "devicePublicKey": "{{devicePublicKey}}",
+     "proxyServer": "{{proxyServerUrl}}"
    }
    ```
 
@@ -83,6 +84,7 @@ In case of `400` the following `message` can appear in the body:
 | `INVALID_PUSHTOKEN_HASH` | The hash of the push token was not a valid `sha512` hash. |
 | `INVALID_SESSION_TOKEN`  | The authentication token of the request could not be identified. Check whether a password was used to login. |
 | `INVALID_DEVICE_KEY`     | The device key does not match the one registered to the provided session token. |
+| `INVALID_PROXY_SERVER`   | The proxy server was not a valid https URL. |
 
 
 
@@ -92,14 +94,10 @@ When an account is removed from a device, the device should unregister on the se
 
 
 
-The device should then send the `devicePublicKey` and `PushTokenHash` to the Nextcloud server: 
+The device should then send a `DELETE` request to the Nextcloud server:
 
-```json
+```
 DELETE /ocs/v2.php/apps/notifications/api/v3/push
-
-{
-  "devicePublicKey": "{{devicePublicKey}}"
-}
 ```
 
 
@@ -110,6 +108,7 @@ The server replies with the following status codes:
 
 | Status code | Meaning                                  |
 | ----------- | ---------------------------------------- |
+| 200         | Push token was not registered on the server |
 | 202         | Push token was deleted and **needs to be deleted from the `Proxy`** |
 | 400         | Invalid public key or device does not use a token to authenticate |
 | 401         | Device is not logged in                  |
@@ -131,7 +130,7 @@ In case of `400` the following `message` can appear in the body:
 
 The device sends the`PushToken` as well as the `deviceIdentifier`, `signature` and the user´s `publicKey`  (from the server´s response) to the Push Proxy:
 
-```json
+```
 POST /devices
 
 {
@@ -161,7 +160,7 @@ The server replies with the following status codes:
 
 The device sends the `deviceIdentifier`, `deviceIdentifierSignature` and the user´s `publicKey`  (from the server´s response) to the Push Proxy:
 
-```json
+```
 DELETE /devices
 
 {
@@ -190,7 +189,9 @@ The server replies with the following status codes:
 The pushed notifications format depends on the service that is used.
 In case of Apple Push Notification Service, the payload of a push notification looks like the following:
 
-```json
+***⚠️ Warning:** Maybe different since we switched to FCM instead of APNS*
+
+```
 {
   "aps" : {
     "alert" : {
