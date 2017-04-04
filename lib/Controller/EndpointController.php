@@ -99,12 +99,9 @@ class EndpointController extends OCSController {
 		}
 
 		$etag = $this->generateEtag($notificationIds);
-		/**
-		 * Not documented yet, check with clients
-		if ($this->request->getHeader('ETag') === $etag) {
-			return new DataResponse($data, Http::STATUS_NOT_MODIFIED);
+		if ($apiVersion !== 'v1' && $this->request->getHeader('If-None-Match') === $etag) {
+			return new DataResponse([], Http::STATUS_NOT_MODIFIED);
 		}
-		 */
 
 		return new DataResponse($data, Http::STATUS_OK, ['ETag' => $etag]);
 	}

@@ -41,5 +41,7 @@ Feature: statuscodes
     Then status code is 200
     And list of notifications has 3 entries
     When getting notifications on v1 with matching etag
-    Then status code is 200
     # Then status code is 304 - Disabled because it's not listed in the API specs
+    Then status code is 200
+    # And response body is empty - Disabled because it's not listed in the API specs
+    And list of notifications has 3 entries

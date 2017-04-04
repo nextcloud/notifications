@@ -93,13 +93,20 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	public function gettingNotifications($api, $etag) {
 		$headers = [];
 		if ($etag === ' with different etag') {
-			$headers['ETag'] = md5($this->lastEtag);
+			$headers['If-None-Match'] = substr($this->lastEtag, 0, 16);
 		} else if ($etag === ' with matching etag') {
-			$headers['ETag'] = $this->lastEtag;
+			$headers['If-None-Match'] = $this->lastEtag;
 		}
 
 		$this->sendingToWith('GET', '/apps/notifications/api/' . $api . '/notifications?format=json', null, $headers);
 		$this->lastEtag = $this->response->getHeader('ETag');
+	}
+
+	/**
+	 * @Then /^response body is empty$/
+	 */
+	public function checkResponseBodyIsEmpty() {
+		PHPUnit_Framework_Assert::assertSame('', $this->response->getBody()->getContents());
 	}
 
 	/**

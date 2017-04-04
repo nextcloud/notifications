@@ -18,7 +18,7 @@ ${ROOT_DIR}/occ app:list | grep notifications
 ${ROOT_DIR}/occ app:list | grep provisioning_api
 
 export TEST_SERVER_URL="http://localhost:8080/"
-${APP_INTEGRATION_DIR}/vendor/bin/behat -f junit -f pretty
+${APP_INTEGRATION_DIR}/vendor/bin/behat -f junit -f pretty $1 $2
 RESULT=$?
 
 kill $PHPPID

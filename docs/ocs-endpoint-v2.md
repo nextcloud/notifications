@@ -4,6 +4,7 @@
 
 * :new: Support for icons was added with capability-entry `icons`
 * :new: Support for [Rich Object Strings](https://github.com/nextcloud/server/issues/1706) was added with capability-entry `rich-strings`
+* :new: ETag/If-None-Match are now evaluated and respond with `304 Not Modified` and empty body when unchanged.
 
 ## Checking the capabilities of the server
 
@@ -93,7 +94,12 @@ The user needs to be identified/logged in by the server. Then you can just run a
 }
 ```
 
-**Note:** If the HTTP status code is `204` (No content), you can slow down the polling to once per hour. This status code means that there is no app that can generate notifications.
+### Response codes
+
+Status | Explanation
+---|---
+`204 No Content` | please slow down the polling to once per hour, since there are no apps that can generate notifications
+`304 Not Modified` | The provided `If-None-Match` matches the ETag, response body is empty
 
 ### Specification
 
