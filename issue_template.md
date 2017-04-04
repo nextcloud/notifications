@@ -17,6 +17,8 @@ Tell us what should happen
 Tell us what happens instead
 
 ### Server configuration
+You can use the Issue Template application to prefill most of the required information: https://apps.nextcloud.com/apps/issuetemplate
+
 **Operating system**:
 
 **Web server:**
@@ -55,7 +57,7 @@ from within your ownCloud installation folder
 or 
 
 Insert your config.php content here
-(Without the database password, passwordsalt and secret)
+Make sure to remove all sensitive content such as passwords. (e.g. database password, passwordsalt, secret, smtp password, …)
 ```
 
 **Are you using an external user-backend, if yes which one:** LDAP/ActiveDirectory/Webdav/...
