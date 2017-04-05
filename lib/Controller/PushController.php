@@ -73,7 +73,6 @@ class PushController extends OCSController {
 
 	/**
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 *
 	 * @param string $pushTokenHash
 	 * @param string $devicePublicKey
@@ -132,7 +131,6 @@ class PushController extends OCSController {
 
 	/**
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 *
 	 * @return JSONResponse
 	 */
