@@ -49,7 +49,7 @@ sudo -u www-data php occ app:list
 from within your ownCloud installation folder
 ```
 
-**The content of config/config.php:**
+**Nextcloud configuration:**
 
 ```
 If you have access to your command line run e.g.:
