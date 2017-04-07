@@ -58,7 +58,7 @@ The server replies with the following status codes:
 | ----------- | ---------------------------------------- |
 | 200         | No further action by the device required |
 | 201         | Push token was created/updated and **needs to be sent to the `Proxy`** |
-| 400         | Invalid public key, device does not use a token to authenticate or the push token hash is invalid formatted |
+| 400         | Invalid device public key; device does not use a token to authenticate; the push token hash is invalid formatted; the proxy server URL is invalid; |
 | 401         | Device is not logged in                  |
 
 
@@ -110,7 +110,7 @@ The server replies with the following status codes:
 | ----------- | ---------------------------------------- |
 | 200         | Push token was not registered on the server |
 | 202         | Push token was deleted and **needs to be deleted from the `Proxy`** |
-| 400         | Invalid public key or device does not use a token to authenticate |
+| 400         | Device does not use a token to authenticate |
 | 401         | Device is not logged in                  |
 
 
@@ -122,7 +122,6 @@ In case of `400` the following `message` can appear in the body:
 | Error                   | Description                              |
 | ----------------------- | ---------------------------------------- |
 | `INVALID_SESSION_TOKEN` | The authentication token of the request could not be identified. |
-| `INVALID_DEVICE_KEY`    | The device key does not match the one registered to the provided session token. |
 
 
 
@@ -186,27 +185,27 @@ The server replies with the following status codes:
 
 ## Pushed notifications
 
-The pushed notifications format depends on the service that is used.
-In case of Apple Push Notification Service, the payload of a push notification looks like the following:
+The pushed notifications is defined by the [Firebase Cloud Messaging HTTP Protocol](https://firebase.google.com/docs/cloud-messaging/http-server-ref#send-downstream). The sample content of a Nextcloud push notification looks like the following:
 
-***⚠️ Warning:** Maybe different since we switched to FCM instead of APNS*
-
-```
+```json
 {
-  "aps" : {
-    "alert" : {
-      "loc-key" : "NEW_NOTIFICATION"
-    }
+  "to" : "APA91bHun4MxP5egoKMwt2KZFBaFUH-1RYqx...",
+  "notification" : {
+    "body" : "NEW_NOTIFICATION",
+    "body_loc_key" : "NEW_NOTIFICATION",
+    "title" : "NEW_NOTIFICATION",
+    "title_loc_key" : "NEW_NOTIFICATION"
   },
-  "subject" : "*Encrypted subject*",
-  "signature" : "*Signature*"
+  "data" : {
+    "subject" : "*Encrypted subject*",
+    "signature" : "*Signature*"
+  }
 }
 ```
 
 | Attribute   | Meaning                                  |
 | ----------- | ---------------------------------------- |
-| `aps`       | As defined by the [apple documentation](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/CreatingtheNotificationPayload.html#//apple_ref/doc/uid/TP40008194-CH10-SW1). Since this message can not be encrypted, it contains **no sensitive** content. |
-| `subject` | The subject is encrypted with the device´s *public key*. |
+| `subject`   | The subject is encrypted with the device´s *public key*. |
 | `signature` | The signature is a sha512 signature over the encrypted subject using the user´s private key. |
 
 ### Verification
