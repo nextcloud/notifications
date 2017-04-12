@@ -2,6 +2,6 @@
     "Notifications" : "Ειδοποιήσεις",
     "No notifications" : "Καμία ειδοποίηση",
     "Dismiss" : "Απόρριψη",
-    "in {path}" : "στην {path}"
+    "in {path}" : "στο {path}"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
