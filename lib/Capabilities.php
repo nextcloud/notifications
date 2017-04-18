@@ -45,6 +45,9 @@ class Capabilities implements ICapability {
 					'icons',
 					'rich-strings',
 				],
+				'push' => [
+					'devices',
+				],
 			],
 		];
 	}

@@ -15,9 +15,9 @@ In order to find out if notifications support push on the server you can run a r
       "capabilities": {
         ...
         "notifications": {
-          "ocs-endpoints": [
+          "push": [
             ...
-            "push"
+            "devices"
           ]
         }
       }
