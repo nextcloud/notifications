@@ -39,7 +39,7 @@ In order to find out if notifications support push on the server you can run a r
 4. The device then sends the `devicePublicKey`, `PushTokenHash` and `proxyServerUrl` to the Nextcloud server:
 
    ```
-   POST /ocs/v2.php/apps/notifications/api/v3/push
+   POST /ocs/v2.php/apps/notifications/api/v2/push
 
    {
      "pushTokenHash": "{{PushTokenHash}}",
@@ -97,7 +97,7 @@ When an account is removed from a device, the device should unregister on the se
 The device should then send a `DELETE` request to the Nextcloud server:
 
 ```
-DELETE /ocs/v2.php/apps/notifications/api/v3/push
+DELETE /ocs/v2.php/apps/notifications/api/v2/push
 ```
 
 
