@@ -27,6 +27,7 @@ use OC\Authentication\Token\IProvider;
 use OC\Security\IdentityProof\Key;
 use OC\Security\IdentityProof\Manager;
 use OCP\AppFramework\Http;
+use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Http\Client\IClientService;
 use OCP\IConfig;
 use OCP\IDBConnection;
@@ -38,7 +39,7 @@ use OCP\Notification\INotification;
 
 class Push {
 	/** @var IDBConnection */
-	protected $connection;
+	protected $db;
 	/** @var IManager */
 	protected $manager;
 	/** @var IConfig */
@@ -55,7 +56,7 @@ class Push {
 	protected $log;
 
 	public function __construct(IDBConnection $connection, IManager $manager, IConfig $config, IProvider $tokenProvider, Manager $keyManager, IUserManager $userManager, IClientService $clientService, ILogger $log) {
-		$this->connection = $connection;
+		$this->db = $connection;
 		$this->manager = $manager;
 		$this->config = $config;
 		$this->tokenProvider = $tokenProvider;
@@ -94,10 +95,10 @@ class Push {
 				$pushNotifications[$device['proxyserver']] = json_encode($this->encryptAndSign($userKey, $device, $notification));
 			} catch (InvalidTokenException $e) {
 				// Token does not exist anymore, should drop the push device entry
-				// FIXME delete push token
+				$this->deletePushToken($device['token']);
 			} catch (\InvalidArgumentException $e) {
-				// Token does not exist anymore, should drop the push device entry
-				// FIXME delete push token
+				// Failed to encrypt message for device: public key is invalid
+				$this->deletePushToken($device['token']);
 			}
 		}
 
@@ -133,6 +134,18 @@ class Push {
 				]);
 			}
 		}
+	}
+
+	/**
+	 * @param int $tokenId
+	 * @return bool
+	 */
+	protected function deletePushToken($tokenId) {
+		$query = $this->db->getQueryBuilder();
+		$query->delete('notifications_pushtokens')
+			->where($query->expr()->eq('token', $query->createNamedParameter($tokenId, IQueryBuilder::PARAM_INT)));
+
+		return $query->execute() !== 0;
 	}
 
 	/**
@@ -174,7 +187,7 @@ class Push {
 	 * @return array[]
 	 */
 	protected function getDevicesForUser($uid) {
-		$query = $this->connection->getQueryBuilder();
+		$query = $this->db->getQueryBuilder();
 		$query->select('*')
 			->from('notifications_pushtokens')
 			->where($query->expr()->eq('uid', $query->createNamedParameter($uid)));
