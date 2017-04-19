@@ -33,7 +33,6 @@ class Application extends \OCP\AppFramework\App {
 		parent::__construct('notifications');
 		$container = $this->getContainer();
 
-		$container->registerAlias('EndpointController', EndpointController::class);
 		$container->registerCapability(Capabilities::class);
 
 		// FIXME this is for automatic DI because it is not in DIContainer
