@@ -26,7 +26,7 @@ use OC\Authentication\Token\IProvider;
 use OC\Authentication\Token\IToken;
 use OC\Security\IdentityProof\Manager;
 use OCP\AppFramework\Http;
-use OCP\AppFramework\Http\JSONResponse;
+use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
@@ -77,23 +77,23 @@ class PushController extends OCSController {
 	 * @param string $pushTokenHash
 	 * @param string $devicePublicKey
 	 * @param string $proxyServer
-	 * @return JSONResponse
+	 * @return DataResponse
 	 */
 	public function registerDevice($pushTokenHash, $devicePublicKey, $proxyServer) {
 		$user = $this->userSession->getUser();
 		if (!$user instanceof IUser) {
-			return new JSONResponse([], Http::STATUS_UNAUTHORIZED);
+			return new DataResponse([], Http::STATUS_UNAUTHORIZED);
 		}
 
 		if (!preg_match('/^([a-f0-9]{128})$/', $pushTokenHash)) {
-			return new JSONResponse(['message' => 'INVALID_PUSHTOKEN_HASH'], Http::STATUS_BAD_REQUEST);
+			return new DataResponse(['message' => 'INVALID_PUSHTOKEN_HASH'], Http::STATUS_BAD_REQUEST);
 		}
 
 		if (
 			((strlen($devicePublicKey) !== 450 || strpos($devicePublicKey, "\n" . '-----END PUBLIC KEY-----') !== 425) &&
 				(strlen($devicePublicKey) !== 451 || strpos($devicePublicKey, "\n" . '-----END PUBLIC KEY-----' . "\n") !== 425)) ||
 			strpos($devicePublicKey, '-----BEGIN PUBLIC KEY-----' . "\n") !== 0) {
-			return new JSONResponse(['message' => 'INVALID_DEVICE_KEY'], Http::STATUS_BAD_REQUEST);
+			return new DataResponse(['message' => 'INVALID_DEVICE_KEY'], Http::STATUS_BAD_REQUEST);
 		}
 
 		if (
@@ -105,14 +105,14 @@ class PushController extends OCSController {
 				strpos($proxyServer, 'http://localhost/') !== 0
 			)
 		) {
-			return new JSONResponse(['message' => 'INVALID_PROXY_SERVER'], Http::STATUS_BAD_REQUEST);
+			return new DataResponse(['message' => 'INVALID_PROXY_SERVER'], Http::STATUS_BAD_REQUEST);
 		}
 
 		$tokenId = $this->session->get('token-id');
 		try {
 			$token = $this->tokenProvider->getTokenById($tokenId);
 		} catch (InvalidTokenException $e) {
-			return new JSONResponse(['message' => 'INVALID_SESSION_TOKEN'], Http::STATUS_BAD_REQUEST);
+			return new DataResponse(['message' => 'INVALID_SESSION_TOKEN'], Http::STATUS_BAD_REQUEST);
 		}
 
 		$key = $this->identityProof->getKey($user);
@@ -123,7 +123,7 @@ class PushController extends OCSController {
 
 		$created = $this->savePushToken($user, $token, $deviceIdentifier, $devicePublicKey, $pushTokenHash, $proxyServer);
 
-		return new JSONResponse([
+		return new DataResponse([
 			'publicKey' => $key->getPublic(),
 			'deviceIdentifier' => $deviceIdentifier,
 			'signature' => base64_encode($signature),
@@ -133,26 +133,26 @@ class PushController extends OCSController {
 	/**
 	 * @NoAdminRequired
 	 *
-	 * @return JSONResponse
+	 * @return DataResponse
 	 */
 	public function removeDevice() {
 		$user = $this->userSession->getUser();
 		if (!$user instanceof IUser) {
-			return new JSONResponse([], Http::STATUS_UNAUTHORIZED);
+			return new DataResponse([], Http::STATUS_UNAUTHORIZED);
 		}
 
 		$sessionId = $this->session->getId();
 		try {
 			$token = $this->tokenProvider->getToken($sessionId);
 		} catch (InvalidTokenException $e) {
-			return new JSONResponse(['message' => 'INVALID_SESSION_TOKEN'], Http::STATUS_BAD_REQUEST);
+			return new DataResponse(['message' => 'INVALID_SESSION_TOKEN'], Http::STATUS_BAD_REQUEST);
 		}
 
 		if ($this->deletePushToken($user, $token)) {
-			return new JSONResponse([], Http::STATUS_ACCEPTED);
+			return new DataResponse([], Http::STATUS_ACCEPTED);
 		}
 
-		return new JSONResponse([], Http::STATUS_OK);
+		return new DataResponse([], Http::STATUS_OK);
 	}
 
 	/**
