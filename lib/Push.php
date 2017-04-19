@@ -92,7 +92,7 @@ class Push {
 				if (!isset($pushNotifications[$device['proxyserver']])) {
 					$pushNotifications[$device['proxyserver']] = [];
 				}
-				$pushNotifications[$device['proxyserver']] = json_encode($this->encryptAndSign($userKey, $device, $notification));
+				$pushNotifications[$device['proxyserver']][] = json_encode($this->encryptAndSign($userKey, $device, $notification));
 			} catch (InvalidTokenException $e) {
 				// Token does not exist anymore, should drop the push device entry
 				$this->deletePushToken($device['token']);
