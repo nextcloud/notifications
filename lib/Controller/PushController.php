@@ -90,8 +90,8 @@ class PushController extends OCSController {
 		}
 
 		if (
-			(strlen($devicePublicKey) !== 450 && strpos($devicePublicKey, "\n" . '-----END PUBLIC KEY-----') !== 425) ||
-			(strlen($devicePublicKey) !== 451 && strpos($devicePublicKey, "\n" . '-----END PUBLIC KEY-----' . "\n") !== 425) ||
+			((strlen($devicePublicKey) !== 450 || strpos($devicePublicKey, "\n" . '-----END PUBLIC KEY-----') !== 425) &&
+				(strlen($devicePublicKey) !== 451 || strpos($devicePublicKey, "\n" . '-----END PUBLIC KEY-----' . "\n") !== 425)) ||
 			strpos($devicePublicKey, '-----BEGIN PUBLIC KEY-----' . "\n") !== 0) {
 			return new JSONResponse(['message' => 'INVALID_DEVICE_KEY'], Http::STATUS_BAD_REQUEST);
 		}
