@@ -22,6 +22,7 @@
 
 namespace OCA\Notifications\Tests\Unit\AppInfo;
 
+use OC\User\Session;
 use OCA\Notifications\App;
 use OCA\Notifications\Tests\Unit\TestCase;
 use OCP\IRequest;
@@ -46,14 +47,9 @@ class AppTest extends TestCase {
 	protected function setUp() {
 		parent::setUp();
 
-		$this->manager = $this->getMockBuilder(IManager::class)
-			->getMock();
-
-		$this->request = $this->getMockBuilder(IRequest::class)
-			->getMock();
-
-		$this->session = $this->getMockBuilder(IUserSession::class)
-			->getMock();
+		$this->manager = $this->createMock(IManager::class);
+		$this->request = $this->createMock(IRequest::class);
+		$this->session = $this->createMock(Session::class);
 
 		$this->overwriteService('NotificationManager', $this->manager);
 		$this->overwriteService('Request', $this->request);
