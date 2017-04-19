@@ -34,14 +34,14 @@ use OCP\IDBConnection;
 use OCP\ILogger;
 use OCP\IUser;
 use OCP\IUserManager;
-use OCP\Notification\IManager;
+use OCP\Notification\IManager as INotificationManager;
 use OCP\Notification\INotification;
 
 class Push {
 	/** @var IDBConnection */
 	protected $db;
-	/** @var IManager */
-	protected $manager;
+	/** @var INotificationManager */
+	protected $notificationManager;
 	/** @var IConfig */
 	protected $config;
 	/** @var IProvider */
@@ -55,9 +55,9 @@ class Push {
 	/** @var ILogger */
 	protected $log;
 
-	public function __construct(IDBConnection $connection, IManager $manager, IConfig $config, IProvider $tokenProvider, Manager $keyManager, IUserManager $userManager, IClientService $clientService, ILogger $log) {
+	public function __construct(IDBConnection $connection, INotificationManager $notificationManager, IConfig $config, IProvider $tokenProvider, Manager $keyManager, IUserManager $userManager, IClientService $clientService, ILogger $log) {
 		$this->db = $connection;
-		$this->manager = $manager;
+		$this->notificationManager = $notificationManager;
 		$this->config = $config;
 		$this->tokenProvider = $tokenProvider;
 		$this->keyManager = $keyManager;
@@ -70,16 +70,19 @@ class Push {
 	 * @param INotification $notification
 	 */
 	public function pushToDevice(INotification $notification) {
-		$devices = $this->getDevicesForUser($notification->getUser());
 		$user = $this->userManager->get($notification->getUser());
+		if (!($user instanceof IUser)) {
+			return;
+		}
 
-		if (empty($devices) || !($user instanceof IUser)) {
+		$devices = $this->getDevicesForUser($notification->getUser());
+		if (empty($devices)) {
 			return;
 		}
 
 		$language = $this->config->getUserValue($notification->getUser(), 'core', 'lang', 'en');
 		try {
-			$notification = $this->manager->prepare($notification, $language);
+			$notification = $this->notificationManager->prepare($notification, $language);
 		} catch (\InvalidArgumentException $e) {
 			return;
 		}
@@ -89,10 +92,13 @@ class Push {
 		$pushNotifications = [];
 		foreach ($devices as $device) {
 			try {
-				if (!isset($pushNotifications[$device['proxyserver']])) {
-					$pushNotifications[$device['proxyserver']] = [];
+				$payload = json_encode($this->encryptAndSign($userKey, $device, $notification));
+
+				$proxyServer = rtrim($device['proxyserver'], '/');
+				if (!isset($pushNotifications[$proxyServer])) {
+					$pushNotifications[$proxyServer] = [];
 				}
-				$pushNotifications[$device['proxyserver']][] = json_encode($this->encryptAndSign($userKey, $device, $notification));
+				$pushNotifications[$proxyServer][] = $payload;
 			} catch (InvalidTokenException $e) {
 				// Token does not exist anymore, should drop the push device entry
 				$this->deletePushToken($device['token']);
@@ -102,10 +108,14 @@ class Push {
 			}
 		}
 
+		if (empty($pushNotifications)) {
+			return;
+		}
+
 		$client = $this->clientService->newClient();
 		foreach ($pushNotifications as $proxyServer => $notifications) {
 			try {
-				$response = $client->post(rtrim($proxyServer, '/') . '/notifications', [
+				$response = $client->post($proxyServer . '/notifications', [
 					'body' => [
 						'notifications' => $notifications,
 					],
@@ -114,7 +124,7 @@ class Push {
 				$this->log->logException($e, [
 					'app' => 'notifications',
 				]);
-				return;
+				continue;
 			}
 
 			$status = $response->getStatusCode();
@@ -134,18 +144,6 @@ class Push {
 				]);
 			}
 		}
-	}
-
-	/**
-	 * @param int $tokenId
-	 * @return bool
-	 */
-	protected function deletePushToken($tokenId) {
-		$query = $this->db->getQueryBuilder();
-		$query->delete('notifications_pushtokens')
-			->where($query->expr()->eq('token', $query->createNamedParameter($tokenId, IQueryBuilder::PARAM_INT)));
-
-		return $query->execute() !== 0;
 	}
 
 	/**
@@ -197,5 +195,17 @@ class Push {
 		$result->closeCursor();
 
 		return $devices;
+	}
+
+	/**
+	 * @param int $tokenId
+	 * @return bool
+	 */
+	protected function deletePushToken($tokenId) {
+		$query = $this->db->getQueryBuilder();
+		$query->delete('notifications_pushtokens')
+			->where($query->expr()->eq('token', $query->createNamedParameter($tokenId, IQueryBuilder::PARAM_INT)));
+
+		return $query->execute() !== 0;
 	}
 }
