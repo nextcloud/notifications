@@ -99,11 +99,7 @@ class PushController extends OCSController {
 		if (
 			!filter_var($proxyServer, FILTER_VALIDATE_URL) ||
 			strlen($proxyServer) > 256 ||
-			(
-				strpos($proxyServer, 'https://') !== 0 &&
-				strpos($proxyServer, 'http://localhost:') !== 0 &&
-				strpos($proxyServer, 'http://localhost/') !== 0
-			)
+			!preg_match('/^(https\:\/\/|http\:\/\/localhost(\:[0-9]{0,5})?\/)/', $proxyServer)
 		) {
 			return new DataResponse(['message' => 'INVALID_PROXY_SERVER'], Http::STATUS_BAD_REQUEST);
 		}
@@ -141,9 +137,9 @@ class PushController extends OCSController {
 			return new DataResponse([], Http::STATUS_UNAUTHORIZED);
 		}
 
-		$sessionId = $this->session->getId();
+		$tokenId = $this->session->get('token-id');
 		try {
-			$token = $this->tokenProvider->getToken($sessionId);
+			$token = $this->tokenProvider->getTokenById($tokenId);
 		} catch (InvalidTokenException $e) {
 			return new DataResponse(['message' => 'INVALID_SESSION_TOKEN'], Http::STATUS_BAD_REQUEST);
 		}
