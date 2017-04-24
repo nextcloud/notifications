@@ -25,12 +25,14 @@ namespace OCA\Notifications\Tests\Unit;
 
 use OCA\Notifications\App;
 use OCA\Notifications\Handler;
+use OCA\Notifications\Push;
 use OCP\Notification\INotification;
 
 class AppTest extends TestCase {
 	/** @var Handler|\PHPUnit_Framework_MockObject_MockObject */
 	protected $handler;
-
+	/** @var Push|\PHPUnit_Framework_MockObject_MockObject */
+	protected $push;
 	/** @var INotification|\PHPUnit_Framework_MockObject_MockObject */
 	protected $notification;
 
@@ -40,34 +42,68 @@ class AppTest extends TestCase {
 	protected function setUp() {
 		parent::setUp();
 
-		$this->handler = $this->getMockBuilder(Handler::class)
-			->disableOriginalConstructor()
-			->getMock();
-
-		$this->notification = $this->getMockBuilder(INotification::class)
-			->disableOriginalConstructor()
-			->getMock();
+		$this->handler = $this->createMock(Handler::class);
+		$this->push = $this->createMock(Push::class);
+		$this->notification = $this->createMock(INotification::class);
 
 		$this->app = new App(
-			$this->handler
+			$this->handler,
+			$this->push
 		);
 	}
 
-	public function testNotify() {
+	public function dataNotify() {
+		return [
+			[23, 'user1'],
+			[42, 'user2'],
+		];
+	}
+
+	/**
+	 * @dataProvider dataNotify
+	 *
+	 * @param int $id
+	 * @param string $user
+	 */
+	public function testNotify($id, $user) {
+		$this->notification->expects($this->once())
+			->method('getUser')
+			->willReturn($user);
+
 		$this->handler->expects($this->once())
 			->method('add')
+			->with($this->notification)
+			->willReturn($id);
+		$this->handler->expects($this->once())
+			->method('getById')
+			->with($id, $user)
+			->willReturn($this->notification);
+		$this->push->expects($this->once())
+			->method('pushToDevice')
 			->with($this->notification);
 
 		$this->app->notify($this->notification);
 	}
 
-	public function testGetCount() {
+	public function dataGetCount() {
+		return [
+			[23],
+			[42],
+		];
+	}
+
+	/**
+	 * @dataProvider dataGetCount
+	 *
+	 * @param int $count
+	 */
+	public function testGetCount($count) {
 		$this->handler->expects($this->once())
 			->method('count')
 			->with($this->notification)
-			->willReturn(42);
+			->willReturn($count);
 
-		$this->assertSame(42, $this->app->getCount($this->notification));
+		$this->assertSame($count, $this->app->getCount($this->notification));
 	}
 
 	public function testMarkProcessed() {

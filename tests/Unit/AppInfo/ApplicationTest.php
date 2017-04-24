@@ -26,7 +26,9 @@ use OCA\Notifications\App;
 use OCA\Notifications\AppInfo\Application;
 use OCA\Notifications\Capabilities;
 use OCA\Notifications\Controller\EndpointController;
+use OCA\Notifications\Controller\PushController;
 use OCA\Notifications\Handler;
+use OCA\Notifications\Push;
 use OCA\Notifications\Tests\Unit\TestCase;
 use OCP\AppFramework\IAppContainer;
 use OCP\AppFramework\OCSController;
@@ -63,12 +65,13 @@ class ApplicationTest extends TestCase {
 			array(App::class, IApp::class),
 			array(Capabilities::class),
 			array(Handler::class),
+			array(Push::class),
 
 			// Controller/
-			array('EndpointController', EndpointController::class),
-			array('EndpointController', OCSController::class),
 			array(EndpointController::class),
 			array(EndpointController::class, OCSController::class),
+			array(PushController::class),
+			array(PushController::class, OCSController::class),
 		);
 	}
 

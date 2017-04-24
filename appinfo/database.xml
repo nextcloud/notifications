@@ -4,6 +4,7 @@
 	<create>true</create>
 	<overwrite>false</overwrite>
 	<charset>utf8</charset>
+
 	<table>
 		<name>*dbprefix*notifications</name>
 		<declaration>
@@ -114,6 +115,66 @@
 				</field>
 				<field>
 					<name>object_id</name>
+				</field>
+			</index>
+		</declaration>
+	</table>
+
+	<table>
+		<name>*dbprefix*notifications_pushtokens</name>
+		<declaration>
+			<field>
+				<name>uid</name>
+				<type>text</type>
+				<notnull>true</notnull>
+				<length>64</length>
+			</field>
+			<field>
+				<name>token</name>
+				<type>integer</type>
+				<default>0</default>
+				<notnull>true</notnull>
+				<length>4</length>
+			</field>
+			<field>
+				<name>deviceidentifier</name>
+				<type>text</type>
+				<notnull>true</notnull>
+				<length>128</length>
+			</field>
+			<field>
+				<name>devicepublickey</name>
+				<type>text</type>
+				<notnull>true</notnull>
+				<length>512</length>
+			</field>
+			<field>
+				<name>devicepublickeyhash</name>
+				<type>text</type>
+				<notnull>true</notnull>
+				<length>128</length>
+			</field>
+			<field>
+				<name>pushtokenhash</name>
+				<type>text</type>
+				<notnull>true</notnull>
+				<length>128</length>
+			</field>
+			<field>
+				<name>proxyserver</name>
+				<type>text</type>
+				<notnull>true</notnull>
+				<length>256</length>
+			</field>
+
+			<index>
+				<name>oc_notifpushtoken</name>
+				<unique>true</unique>
+				<field>
+					<name>uid</name>
+				</field>
+				<field>
+					<name>token</name>
 				</field>
 			</index>
 		</declaration>

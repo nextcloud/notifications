@@ -38,6 +38,9 @@ class CapabilitiesTest extends TestCase {
 					'icons',
 					'rich-strings',
 				],
+				'push' => [
+					'devices',
+				],
 			],
 		], $capabilities->getCapabilities());
 	}
