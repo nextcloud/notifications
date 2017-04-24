@@ -74,8 +74,7 @@
 		'    {{/each}}' +
 		'  </div>' +
 		'  <div style="display: none;" class="notification-delete">' +
-		'    <img class="svg" alt="' + t('notifications', 'Dismiss') + '"' +
-		'      src="' + OC.imagePath('core', 'actions/close') + '">' +
+		'    <div class="icon icon-close svg" title="' + t('notifications', 'Dismiss') + '"></div>' +
 		'  </div>' +
 		'</div>',
 

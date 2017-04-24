@@ -80,7 +80,7 @@ img.notification-icon {
 	cursor: pointer;
 }
 
-.notification-delete img, .notifications-button img {
+.notification-delete div, .notifications-button img {
 	cursor: pointer;
 }
 
