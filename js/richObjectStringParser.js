@@ -14,8 +14,8 @@
 
 		_fileTemplate: '<a class="filename has-tooltip" href="{{link}}" title="{{title}}">{{name}}</a>',
 
-		_userTemplate: '<strong>{{name}}</strong>',
-		_userWithAvatarTemplate: '<div class="avatar" data-user="{{id}}" data-user-display-name="{{name}}"></div>',
+		_userLocalTemplate: '<span class="avatar-name-wrapper" data-user="{{id}}"><div class="avatar" data-user="{{id}}" data-user-display-name="{{name}}"></div><strong>{{name}}</strong></span>',
+		_userRemoteTemplate: '<strong>{{name}}</strong>',
 
 		_unknownTemplate: '<strong>{{name}}</strong>',
 		_unknownLinkTemplate: '<a href="{{link}}">{{name}}</a>',
@@ -53,15 +53,18 @@
 					return this.parseFileParameter(parameter);
 
 				case 'user':
-					if (!this.userTemplate) {
-						var template = this._userTemplate;
-						if (this.avatarsEnabled && _.isUndefined(parameter.server)) {
-							template = this._userWithAvatarTemplate + template;
+					if (_.isUndefined(parameter.server)) {
+						if (!this.userLocalTemplate) {
+							this.userLocalTemplate = Handlebars.compile(this._userLocalTemplate);
 						}
-						this.userTemplate = Handlebars.compile(template);
+						return this.userLocalTemplate(parameter);
 					}
 
-					return this.userTemplate(parameter);
+					if (!this.userRemoteTemplate) {
+						this.userRemoteTemplate = Handlebars.compile(this._userRemoteTemplate);
+					}
+
+					return this.userRemoteTemplate(parameter);
 
 				default:
 					if (!_.isUndefined(parameter.link)) {
