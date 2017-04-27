@@ -365,6 +365,14 @@
 				}
 			});
 
+			$element.find('.avatar-name-wrapper').each(function() {
+				var element = $(this);
+				var avatar = element.find('.avatar');
+				var label = element.find('strong');
+
+				$.merge(avatar, label).contactsMenu(element.data('user'), 0, element);
+			});
+
 			$element.find('.has-tooltip').tooltip({
 				placement: 'bottom'
 			});
