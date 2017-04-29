@@ -162,10 +162,6 @@ img.notification-icon {
 	opacity: 1;
 }
 
-.notification-container {
-	box-shadow: 0 1px 10px rgba(50, 50, 50, .7);
-}
-
 /* Menu arrow */
 .notification-container:after {
 	right: 101px;
