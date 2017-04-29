@@ -38,7 +38,7 @@
 		_containerTemplate: '' +
 		'<div class="notifications hidden">' +
 		'  <div class="notifications-button menutoggle">' +
-		'    <img class="svg" alt="' + t('notifications', 'Notifications') + '"' +
+		'    <img class="svg" alt="" title="' + t('notifications', 'Notifications') + '"' +
 		'      src="' + OC.imagePath('notifications', 'notifications') + '">' +
 		'  </div>' +
 		'  <div class="notification-container">' +
