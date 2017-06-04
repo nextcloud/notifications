@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Notifications" : "Tilkynningar",
     "No notifications" : "Engar tilkynningar",
-    "Dismiss" : "Hafna"
+    "Dismiss" : "Hafna",
+    "in {path}" : "í {path}"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");

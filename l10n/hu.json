@@ -1,0 +1,7 @@
+{ "translations": {
+    "Notifications" : "Értesítések",
+    "No notifications" : "Nincsenek értesítések",
+    "Dismiss" : "Elutasít",
+    "in {path}" : "itt: {path}"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}

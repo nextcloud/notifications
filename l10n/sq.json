@@ -1,0 +1,7 @@
+{ "translations": {
+    "Notifications" : "Njoftimet",
+    "No notifications" : "Asnjë njoftim",
+    "Dismiss" : "Hiq",
+    "in {path}" : "në {path}"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}
