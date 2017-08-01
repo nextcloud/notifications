@@ -81,14 +81,14 @@
 			var message = this.data.message;
 
 			/**
-			 * Trim on word end after 100 chars or hard 120 chars
+			 * Trim on word end after 180 chars or hard 200 chars
 			 */
-			if (message.length > 120) {
-				var spacePosition = message.indexOf(' ', 100);
-				if (spacePosition !== -1 && spacePosition <= 120) {
+			if (message.length > 200) {
+				var spacePosition = message.indexOf(' ', 180);
+				if (spacePosition !== -1 && spacePosition <= 200) {
 					message = message.substring(0, spacePosition);
 				} else {
-					message = message.substring(0, 120);
+					message = message.substring(0, 200);
 				}
 				message += '…';
 			}
@@ -125,6 +125,7 @@
 				subject: this.getSubject(),
 				link: this.getLink(),
 				message: this.getMessage(),
+				full_message: this.data.message,
 				timestamp: this.getTimestamp(),
 				relativeDate: OC.Util.relativeModifiedDate(this.getTimestamp()),
 				absoluteDate: OC.Util.formatDate(this.getTimestamp())
