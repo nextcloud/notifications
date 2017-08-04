@@ -67,6 +67,7 @@
 		'    </div>' +
 		'  {{/if}}' +
 		'  <div class="notification-message">{{{message}}}</div>' +
+		'  <div class="notification-full-message hidden">{{{full_message}}}</div>' +
 		'  <div class="notification-actions">' +
 		'    {{#each actions}}' +
 		'      <button class="action-button pull-right{{#if this.primary}} primary{{/if}}" data-type="{{this.type}}" ' +
@@ -374,6 +375,13 @@
 
 			$element.find('.has-tooltip').tooltip({
 				placement: 'bottom'
+			});
+
+			$element.find('.notification-message').on('click', function() {
+				var $fullMessage = $(this).parent().find('.notification-full-message');
+				$(this).addClass('hidden');
+				$fullMessage.removeClass('hidden');
+
 			});
 
 			this.$container.find('.notification-wrapper').prepend($element);

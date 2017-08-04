@@ -137,13 +137,15 @@ img.notification-icon {
 	margin-right: 20px;
 }
 
-.notification .notification-message {
+.notification .notification-message,
+.notification .notification-full-message {
 	line-height: 20px;
 	padding-bottom: 16px;
 	opacity: .57;
 }
 
 .notification .notification-message img,
+.notification .notification-full-message img,
 .notification .notification-subject img:not(.notification-icon) {
 	max-width: 32px;
 	max-height: 32px;
