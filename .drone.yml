@@ -1,7 +1,9 @@
-pipeline:
-  clone:
+clone:
+  git:
     image: plugins/git
     depth: 1
+
+pipeline:
   signed-off-check:
     image: nextcloudci/php7.0:php7.0-2
     environment:
