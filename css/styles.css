@@ -17,7 +17,6 @@
 	min-height: 100px;
 	max-height: 260px;
 	border-radius: 0 0 3px 3px;
-	border: 1px solid rgb(238, 238, 238);
 }
 
 .notification-container .emptycontent h2 {
@@ -172,7 +171,6 @@ img.notification-icon {
 	max-height: 260px;
 	overflow: hidden;
 	overflow-y: auto;
-	margin-right: 3px;
 }
 
 .notifications .emptycontent {
