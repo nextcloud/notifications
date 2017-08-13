@@ -66,14 +66,14 @@
 		'        <span class="text">{{{subject}}}</span>' +
 		'    </div>' +
 		'  {{/if}}' +
-		'  <div class="notification-message">{{{message}}}</div>' +
+		'  {{#if message}}<div class="notification-message">{{{message}}}</div>{{/if}}' +
 		'  <div class="notification-full-message hidden">{{{full_message}}}</div>' +
-		'  <div class="notification-actions">' +
+		'  {{#if actions}}<div class="notification-actions">' +
 		'    {{#each actions}}' +
 		'      <button class="action-button pull-right{{#if this.primary}} primary{{/if}}" data-type="{{this.type}}" ' +
 		'data-href="{{this.link}}">{{this.label}}</button>' +
 		'    {{/each}}' +
-		'  </div>' +
+		'  </div>{{/if}}' +
 		'  <div style="display: none;" class="notification-delete">' +
 		'    <div class="icon icon-close svg" title="' + t('notifications', 'Dismiss') + '"></div>' +
 		'  </div>' +
