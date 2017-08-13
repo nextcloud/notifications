@@ -1,7 +1,6 @@
 .notification {
 	display: block;
 	padding: 16px 12px;
-	line-height: 1em;
 }
 .notification:not(:last-child) {
 	border-bottom: 1px solid rgb(238, 238, 238);
