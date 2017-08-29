@@ -204,7 +204,7 @@
 					_.each(data, function(notification) {
 						var n = new self.Notification(notification);
 						self.notifications[n.getId()] = n;
-						self._addToUI(n);
+						self._addToUI(n, true);
 					});
 
 					// Check if we have any, and notify the UI
@@ -353,7 +353,7 @@
 		 * Adds the notification to the UI
 		 * @param {OCA.Notifications.Notification} notification
 		 */
-		_addToUI: function(notification) {
+		_addToUI: function(notification, append) {
 			var $element = $(notification.renderElement(this.notificationTemplate));
 
 			$element.find('.avatar').each(function() {
@@ -384,7 +384,11 @@
 
 			});
 
-			this.$container.find('.notification-wrapper').prepend($element);
+			if (append) {
+				this.$container.find('.notification-wrapper').append($element);
+			} else {
+				this.$container.find('.notification-wrapper').prepend($element);
+			}
 		},
 
 		/**
