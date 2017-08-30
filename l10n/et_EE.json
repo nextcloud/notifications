@@ -1,4 +1,5 @@
 { "translations": {
-    "Notifications" : "Märguanded"
+    "Notifications" : "Märguanded",
+    "No notifications" : "Märguandeid pole"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
