@@ -227,7 +227,8 @@
 			this._fetch(
 				function(data) {
 					var inJson = [],
-						oldNum = self.numNotifications();
+						oldNum = self.numNotifications(),
+						resort = false;
 
 					_.each(data, function(notification) {
 						var n = new self.Notification(notification);
@@ -235,8 +236,17 @@
 						if (!self.getNotification(n.getId())) {
 							// New notification!
 							self._onNewNotification(n);
+							resort = true;
 						}
 					});
+
+					if (resort) {
+						self.$container.find('.notification').sort(function (prev, next) {
+							return parseInt(next.dataset.timestamp) - parseInt(prev.dataset.timestamp);
+						}).each(function() {
+							$(self.$container.find('.notification-wrapper')).append(this);
+						});
+					}
 
 					_.each(self.getNotifications(), function(n) {
 						if (inJson.indexOf(n.getId()) === -1) {
@@ -381,10 +391,9 @@
 				var $fullMessage = $(this).parent().find('.notification-full-message');
 				$(this).addClass('hidden');
 				$fullMessage.removeClass('hidden');
-
 			});
 
-			this.$container.find('.notification-wrapper').prepend($element);
+			this.$container.find('.notification-wrapper').append($element);
 		},
 
 		/**
