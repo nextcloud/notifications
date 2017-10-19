@@ -62,6 +62,13 @@ class Application extends \OCP\AppFramework\App {
 			&& substr($request->getScriptName(), 0 - strlen('/index.php')) === '/index.php'
 			&& substr($request->getPathInfo(), 0, strlen('/s/')) !== '/s/'
 			&& substr($request->getPathInfo(), 0, strlen('/login/')) !== '/login/') {
+
+			if (\OC::$server->getConfig()->getSystemValue('debug', false)) {
+				Util::addScript('notifications', 'vue');
+			} else {
+				Util::addScript('notifications', 'vue.min');
+			}
+
 			Util::addScript('notifications', 'merged');
 			Util::addStyle('notifications', 'styles');
 		}

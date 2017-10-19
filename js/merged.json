@@ -1,5 +1,7 @@
 [
+  "components/action.js",
+  "components/notification.js",
+  "components/root.js",
   "app.js",
-  "notification.js",
   "richObjectStringParser.js"
 ]
