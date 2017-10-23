@@ -169,7 +169,7 @@ class Push {
 		}
 
 		openssl_sign($encryptedSubject, $signature, $userKey->getPrivate(), OPENSSL_ALGO_SHA512);
-		$base64EncryptedSubject = base64_encode(hash('sha512', $encryptedSubject, true));
+		$base64EncryptedSubject = base64_encode($encryptedSubject);
 		$base64Signature = base64_encode($signature);
 
 		return [
