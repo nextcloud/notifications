@@ -75,7 +75,7 @@
 		'    {{/each}}' +
 		'  </div>' +
 		'  <div style="display: none;" class="notification-delete">' +
-		'    <div class="icon icon-close svg" title="' + t('notifications', 'Dismiss') + '"></div>' +
+		'    <div class="icon icon-close svg"  role="button" aria-label="' + t('notifications', 'Dismiss') + '" title="' + t('notifications', 'Dismiss') + '"></div>' +
 		'  </div>' +
 		'</div>',
 
