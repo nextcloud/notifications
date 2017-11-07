@@ -1,0 +1,7 @@
+{ "translations": {
+    "Notifications" : "შეტყობინებები",
+    "No notifications" : "შეტყობინებები არაა",
+    "Dismiss" : "უარყოფა",
+    "in {path}" : "{path}-ში"
+},"pluralForm" :"nplurals=1; plural=0;"
+}
