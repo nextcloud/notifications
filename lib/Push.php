@@ -114,7 +114,7 @@ class Push {
 			}
 
 			try {
-				$payload = json_encode($this->encryptAndSign($userKey, $device, $notification));
+				$payload = json_encode($this->encryptAndSign($userKey, $device, $notification, $isTalkNotification));
 
 				$proxyServer = rtrim($device['proxyserver'], '/');
 				if (!isset($pushNotifications[$proxyServer])) {
@@ -172,11 +172,12 @@ class Push {
 	 * @param Key $userKey
 	 * @param array $device
 	 * @param INotification $notification
+	 * @param bool $isTalkNotification
 	 * @return array
 	 * @throws InvalidTokenException
 	 * @throws \InvalidArgumentException
 	 */
-	protected function encryptAndSign(Key $userKey, array $device, INotification $notification) {
+	protected function encryptAndSign(Key $userKey, array $device, INotification $notification, $isTalkNotification) {
 		// Check if the token is still valid...
 		$this->tokenProvider->getTokenById($device['token']);
 
@@ -184,6 +185,11 @@ class Push {
 			'app' => $notification->getApp(),
 			'subject' => $notification->getParsedSubject(),
 		];
+
+		if ($isTalkNotification) {
+			$data['type'] = $notification->getObjectType();
+			$data['id'] = $notification->getObjectId();
+		}
 
 		if (!openssl_public_encrypt(json_encode($data), $encryptedSubject, $device['devicepublickey'], OPENSSL_PKCS1_PADDING)) {
 			$this->log->error(openssl_error_string(), ['app' => 'notifications']);

@@ -574,7 +574,6 @@ class PushTest extends TestCase {
 			->willReturn($key);
 
 		if ($pushedDevice === null) {
-
 			$push->expects($this->never())
 				->method('encryptAndSign');
 
@@ -583,7 +582,7 @@ class PushTest extends TestCase {
 		} else {
 			$push->expects($this->exactly(1))
 				->method('encryptAndSign')
-				->with($this->anything(), $devices[$pushedDevice], $this->anything())
+				->with($this->anything(), $devices[$pushedDevice], $this->anything(), $isTalkNotification)
 				->willReturn(['Payload']);
 
 			/** @var IClient|\PHPUnit_Framework_MockObject_MockObject $client */
