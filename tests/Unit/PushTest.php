@@ -224,6 +224,7 @@ class PushTest extends TestCase {
 			->willReturn([[
 				'proxyserver' => 'proxyserver1',
 				'token' => 23,
+				'apptype' => 'other',
 			]]);
 
 		$this->config->expects($this->once())
@@ -280,6 +281,7 @@ class PushTest extends TestCase {
 			->willReturn([[
 				'proxyserver' => 'proxyserver1',
 				'token' => 23,
+				'apptype' => 'other',
 			]]);
 
 		$this->config->expects($this->once())
@@ -346,22 +348,27 @@ class PushTest extends TestCase {
 				[
 					'proxyserver' => 'proxyserver1',
 					'token' => 16,
+					'apptype' => 'other',
 				],
 				[
 					'proxyserver' => 'proxyserver1/',
 					'token' => 23,
+					'apptype' => 'other',
 				],
 				[
 					'proxyserver' => 'badrequest',
 					'token' => 42,
+					'apptype' => 'other',
 				],
 				[
 					'proxyserver' => 'unavailable',
 					'token' => 48,
+					'apptype' => 'other',
 				],
 				[
 					'proxyserver' => 'ok',
 					'token' => 64,
+					'apptype' => 'other',
 				],
 			]);
 
@@ -484,4 +491,128 @@ class PushTest extends TestCase {
 
 		$push->pushToDevice($notification);
 	}
+
+	public function dataPushToDeviceTalkNotification() {
+		return [
+			[['nextcloud'], false, 0],
+			[['nextcloud'], true, 0],
+			[['nextcloud', 'talk'], false, 0],
+			[['nextcloud', 'talk'], true, 1],
+			[['talk', 'nextcloud'], false, 1],
+			[['talk', 'nextcloud'], true, 0],
+			[['talk'], false, null],
+			[['talk'], true, 0],
+		];
+	}
+
+	/**
+	 * @dataProvider dataPushToDeviceTalkNotification
+	 * @param string[] $deviceTypes
+	 * @param bool $isTalkNotification
+	 * @param int $pushedDevice
+	 */
+	public function testPushToDeviceTalkNotification(array $deviceTypes, $isTalkNotification, $pushedDevice) {
+		$push = $this->getPush(['getDevicesForUser', 'encryptAndSign', 'deletePushToken']);
+
+		/** @var INotification|\PHPUnit_Framework_MockObject_MockObject $notification */
+		$notification = $this->createMock(INotification::class);
+		$notification->expects($this->exactly(3))
+			->method('getUser')
+			->willReturn('valid');
+
+		if ($isTalkNotification) {
+			$notification->expects($this->once())
+				->method('getApp')
+				->willReturn('spreed');
+			$notification->expects($this->once())
+				->method('getSubject')
+				->willReturn('call');
+		} else {
+			$notification->expects($this->once())
+				->method('getApp')
+				->willReturn('notifications');
+			$notification->expects($this->never())
+				->method('getSubject');
+		}
+
+		/** @var IUser|\PHPUnit_Framework_MockObject_MockObject $user */
+		$user = $this->createMock(IUser::class);
+
+		$this->userManager->expects($this->once())
+			->method('get')
+			->with('valid')
+			->willReturn($user);
+
+		$devices = [];
+		foreach ($deviceTypes as $deviceType) {
+			$devices[] = [
+				'proxyserver' => 'proxyserver',
+				'token' => strlen($deviceType),
+				'apptype' => $deviceType,
+			];
+		}
+		$push->expects($this->once())
+			->method('getDevicesForUser')
+			->willReturn($devices);
+
+		$this->config->expects($this->once())
+			->method('getUserValue')
+			->with('valid', 'core', 'lang', 'en')
+			->willReturn('ru');
+
+		$this->notificationManager->expects($this->once())
+			->method('prepare')
+			->with($notification, 'ru')
+			->willReturnArgument(0);
+
+		/** @var Key|\PHPUnit_Framework_MockObject_MockObject $key */
+		$key = $this->createMock(Key::class);
+
+		$this->keyManager->expects($this->once())
+			->method('getKey')
+			->with($user)
+			->willReturn($key);
+
+		if ($pushedDevice === null) {
+
+			$push->expects($this->never())
+				->method('encryptAndSign');
+
+			$this->clientService->expects($this->never())
+				->method('newClient');
+		} else {
+			$push->expects($this->exactly(1))
+				->method('encryptAndSign')
+				->with($this->anything(), $devices[$pushedDevice], $this->anything())
+				->willReturn(['Payload']);
+
+			/** @var IClient|\PHPUnit_Framework_MockObject_MockObject $client */
+			$client = $this->createMock(IClient::class);
+
+			$this->clientService->expects($this->once())
+				->method('newClient')
+				->willReturn($client);
+
+			/** @var IResponse|\PHPUnit_Framework_MockObject_MockObject $response1 */
+			$response = $this->createMock(IResponse::class);
+			$response->expects($this->once())
+				->method('getStatusCode')
+				->willReturn(Http::STATUS_BAD_REQUEST);
+			$response->expects($this->once())
+				->method('getBody')
+				->willReturn(null);
+			$client->expects($this->once())
+				->method('post')
+				->with('proxyserver/notifications', [
+					'body' => [
+						'notifications' => ['["Payload"]'],
+					],
+				])
+				->willReturn($response);
+		}
+
+		$push->pushToDevice($notification);
+	}
+
+
 }
