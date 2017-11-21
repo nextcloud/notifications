@@ -117,7 +117,20 @@ class PushController extends OCSController {
 		openssl_sign($deviceIdentifier, $signature, $key->getPrivate(), OPENSSL_ALGO_SHA512);
 		$deviceIdentifier = base64_encode(hash('sha512', $deviceIdentifier, true));
 
-		$created = $this->savePushToken($user, $token, $deviceIdentifier, $devicePublicKey, $pushTokenHash, $proxyServer);
+		$appType = 'unknown';
+		if ($this->request->isUserAgent([
+				IRequest::USER_AGENT_TALK_ANDROID,
+				IRequest::USER_AGENT_TALK_IOS,
+			])) {
+			$appType = 'talk';
+		} else if ($this->request->isUserAgent([
+				IRequest::USER_AGENT_CLIENT_ANDROID,
+				IRequest::USER_AGENT_CLIENT_IOS,
+			])) {
+			$appType = 'nextcloud';
+		}
+
+		$created = $this->savePushToken($user, $token, $deviceIdentifier, $devicePublicKey, $pushTokenHash, $proxyServer, $appType);
 
 		return new DataResponse([
 			'publicKey' => $key->getPublic(),
@@ -158,9 +171,10 @@ class PushController extends OCSController {
 	 * @param string $devicePublicKey
 	 * @param string $pushTokenHash
 	 * @param string $proxyServer
+	 * @param string $appType
 	 * @return bool If the hash was new to the database
 	 */
-	protected function savePushToken(IUser $user, IToken $token, $deviceIdentifier, $devicePublicKey, $pushTokenHash, $proxyServer) {
+	protected function savePushToken(IUser $user, IToken $token, $deviceIdentifier, $devicePublicKey, $pushTokenHash, $proxyServer, $appType) {
 		$query = $this->db->getQueryBuilder();
 		$query->select('*')
 			->from('notifications_pushtokens')
@@ -171,10 +185,10 @@ class PushController extends OCSController {
 		$result->closeCursor();
 
 		if (!$row) {
-			return $this->insertPushToken($user, $token, $deviceIdentifier, $devicePublicKey, $pushTokenHash, $proxyServer);
+			return $this->insertPushToken($user, $token, $deviceIdentifier, $devicePublicKey, $pushTokenHash, $proxyServer, $appType);
 		}
 
-		return $this->updatePushToken($user, $token, $devicePublicKey, $pushTokenHash, $proxyServer);
+		return $this->updatePushToken($user, $token, $devicePublicKey, $pushTokenHash, $proxyServer, $appType);
 	}
 
 	/**
@@ -184,9 +198,10 @@ class PushController extends OCSController {
 	 * @param string $devicePublicKey
 	 * @param string $pushTokenHash
 	 * @param string $proxyServer
+	 * @param string $appType
 	 * @return bool If the entry was created
 	 */
-	protected function insertPushToken(IUser $user, IToken $token, $deviceIdentifier, $devicePublicKey, $pushTokenHash, $proxyServer) {
+	protected function insertPushToken(IUser $user, IToken $token, $deviceIdentifier, $devicePublicKey, $pushTokenHash, $proxyServer, $appType) {
 		$devicePublicKeyHash = hash('sha512', $devicePublicKey);
 
 		$query = $this->db->getQueryBuilder();
@@ -199,6 +214,7 @@ class PushController extends OCSController {
 				'devicepublickeyhash' => $query->createNamedParameter($devicePublicKeyHash),
 				'pushtokenhash' => $query->createNamedParameter($pushTokenHash),
 				'proxyserver' => $query->createNamedParameter($proxyServer),
+				'apptype' => $query->createNamedParameter($appType),
 			]);
 		return $query->execute() > 0;
 	}
@@ -209,9 +225,10 @@ class PushController extends OCSController {
 	 * @param string $devicePublicKey
 	 * @param string $pushTokenHash
 	 * @param string $proxyServer
+	 * @param string $appType
 	 * @return bool If the entry was updated
 	 */
-	protected function updatePushToken(IUser $user, IToken $token, $devicePublicKey, $pushTokenHash, $proxyServer) {
+	protected function updatePushToken(IUser $user, IToken $token, $devicePublicKey, $pushTokenHash, $proxyServer, $appType) {
 		$devicePublicKeyHash = hash('sha512', $devicePublicKey);
 
 		$query = $this->db->getQueryBuilder();
@@ -220,6 +237,7 @@ class PushController extends OCSController {
 			->set('devicepublickeyhash', $query->createNamedParameter($devicePublicKeyHash))
 			->set('pushtokenhash', $query->createNamedParameter($pushTokenHash))
 			->set('proxyserver', $query->createNamedParameter($proxyServer))
+			->set('apptype', $query->createNamedParameter($appType))
 			->where($query->expr()->eq('uid', $query->createNamedParameter($user->getUID())))
 			->andWhere($query->expr()->eq('token', $query->createNamedParameter($token->getId(), IQueryBuilder::PARAM_INT)));
 
