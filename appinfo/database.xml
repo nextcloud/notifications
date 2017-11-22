@@ -166,6 +166,12 @@
 				<notnull>true</notnull>
 				<length>256</length>
 			</field>
+			<field>
+				<name>apptype</name>
+				<type>text</type>
+				<notnull>true</notnull>
+				<length>32</length>
+			</field>
 
 			<index>
 				<name>oc_notifpushtoken</name>

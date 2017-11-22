@@ -89,10 +89,32 @@ class Push {
 
 		$userKey = $this->keyManager->getKey($user);
 
+		$isTalkNotification = in_array($notification->getApp(), ['spreed', 'talk'], true)
+			&& in_array($notification->getSubject(), ['invitation', 'call', 'mention'], true);
+		$talkApps = array_filter($devices, function($device) {
+			return $device['apptype'] === 'talk';
+		});
+		$hasTalkApps = !empty($talkApps);
+
 		$pushNotifications = [];
 		foreach ($devices as $device) {
+			if (!$isTalkNotification && $device['apptype'] === 'talk') {
+				// The iOS app can not kill notifications,
+				// therefor we should only send relevant notifications to the Talk
+				// app, so it does not pollute the notifications bar with useless
+				// notifications, especially when the Sync client app is also installed.
+				continue;
+			}
+			if ($isTalkNotification && $hasTalkApps && $device['apptype'] !== 'talk') {
+				// Similar to the previous case, we also don't send Talk notifications
+				// to the Sync client app, when there is a Talk app installed. We only
+				// do this, when you don't have a Talk app on your device, so you still
+				// get the push notification.
+				continue;
+			}
+
 			try {
-				$payload = json_encode($this->encryptAndSign($userKey, $device, $notification));
+				$payload = json_encode($this->encryptAndSign($userKey, $device, $notification, $isTalkNotification));
 
 				$proxyServer = rtrim($device['proxyserver'], '/');
 				if (!isset($pushNotifications[$proxyServer])) {
@@ -150,11 +172,12 @@ class Push {
 	 * @param Key $userKey
 	 * @param array $device
 	 * @param INotification $notification
+	 * @param bool $isTalkNotification
 	 * @return array
 	 * @throws InvalidTokenException
 	 * @throws \InvalidArgumentException
 	 */
-	protected function encryptAndSign(Key $userKey, array $device, INotification $notification) {
+	protected function encryptAndSign(Key $userKey, array $device, INotification $notification, $isTalkNotification) {
 		// Check if the token is still valid...
 		$this->tokenProvider->getTokenById($device['token']);
 
@@ -162,6 +185,11 @@ class Push {
 			'app' => $notification->getApp(),
 			'subject' => $notification->getParsedSubject(),
 		];
+
+		if ($isTalkNotification) {
+			$data['type'] = $notification->getObjectType();
+			$data['id'] = $notification->getObjectId();
+		}
 
 		if (!openssl_public_encrypt(json_encode($data), $encryptedSubject, $device['devicepublickey'], OPENSSL_PKCS1_PADDING)) {
 			$this->log->error(openssl_error_string(), ['app' => 'notifications']);
