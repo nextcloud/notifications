@@ -171,6 +171,7 @@
 				<type>text</type>
 				<notnull>true</notnull>
 				<length>32</length>
+				<default>unknown</default>
 			</field>
 
 			<index>
