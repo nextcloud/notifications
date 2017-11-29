@@ -384,6 +384,7 @@
 			});
 
 			$element.find('.has-tooltip').tooltip({
+				container: this.$container.find('.notification-wrapper'),
 				placement: 'bottom'
 			});
 
