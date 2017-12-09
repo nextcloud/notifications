@@ -1,5 +1,6 @@
 { "translations": {
     "Notifications" : "Märguanded",
-    "No notifications" : "Märguandeid pole"
+    "No notifications" : "Märguandeid pole",
+    "Dismiss" : "Jäta vahele"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
