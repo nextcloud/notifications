@@ -57,6 +57,7 @@ img.notification-icon {
 }
 
 .notification-delete:hover,
+.notification-delete .icon-close,
 .notifications-button img {
 	opacity: 1;
 	cursor: pointer;
