@@ -25,19 +25,14 @@
 	border-bottom: 1px solid rgb(238, 238, 238);
 }
 
-.notification-heading {
+.notification-heading,
+.notification-subject {
     display: flex;
-    flex-flow: wrap;
 }
 
 img.notification-icon {
 	width: 32px;
 	height: 32px;
-	display: flex;
-}
-
-.notification-subject {
-	padding: 0 12px;
 	display: flex;
 }
 
@@ -93,6 +88,9 @@ img.notification-icon {
 	margin: 0;
 }
 
+.notification-subject,
+.notification .notification-message,
+.notification .notification-full-message,
 .notification .notification-actions {
 	margin: 0 12px 12px;
 }
@@ -109,7 +107,6 @@ img.notification-icon {
 .notification .notification-full-message {
 	line-height: 20px;
 	opacity: .57;
-	padding: 12px;
 }
 
 .notification .notification-message img,
