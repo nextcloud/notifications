@@ -9,6 +9,8 @@
 	min-height: 100px;
 	max-height: 260px;
 	border-radius: 0 0 3px 3px;
+	overflow: hidden;
+	overflow-y: auto;
 }
 
 .notification-container .emptycontent h2 {
@@ -16,12 +18,7 @@
 	font-size: 16px;
 }
 
-.notification {
-	display: flex;
-	flex-direction: column;
-}
-
-.notification:not(:last-child) {
+.notification:not(:first-child) {
 	border-bottom: 1px solid rgb(238, 238, 238);
 }
 
@@ -134,9 +131,8 @@ img.notification-icon {
 }
 
 .notification-wrapper {
-	max-height: 260px;
-	overflow: hidden;
-	overflow-y: auto;
+	display: flex;
+	flex-direction: column-reverse;
 }
 
 .notifications .emptycontent {
