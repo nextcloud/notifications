@@ -18,7 +18,7 @@
 	font-size: 16px;
 }
 
-.notification:not(:first-child) {
+.notification:not(:last-child) {
 	border-bottom: 1px solid rgb(238, 238, 238);
 }
 
