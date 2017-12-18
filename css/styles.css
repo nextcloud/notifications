@@ -132,7 +132,7 @@ img.notification-icon {
 
 .notification-wrapper {
 	display: flex;
-	flex-direction: column-reverse;
+	flex-direction: column;
 }
 
 .notifications .emptycontent {
