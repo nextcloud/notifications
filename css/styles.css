@@ -28,7 +28,7 @@
 
 .notification-heading,
 .notification-subject {
-    display: flex;
+	display: flex;
 }
 
 img.notification-icon {
