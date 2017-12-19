@@ -52,31 +52,31 @@
 		/** @type {string} */
 		_notificationTemplate: '' +
 		'<div class="notification" data-id="{{notification_id}}" data-timestamp="{{timestamp}}">' +
-		'  <span class="notification-time has-tooltip live-relative-timestamp" data-timestamp="{{timestamp}}" title="{{absoluteDate}}">{{relativeDate}}</span>' +
-		'  {{#if link}}' +
-		'    <div class="notification-subject">' +
-		'      <a href="{{link}}" class="full-subject-link">' +
-		'        {{#if icon}}<span class="image"><img src="{{icon}}" class="notification-icon"></span>{{/if}}' +
-		'        <span class="text">{{{subject}}}</span>' +
-		'      </a>' +
+		'  <div class="notification-heading">' +
+		'    <span class="notification-time has-tooltip live-relative-timestamp" data-timestamp="{{timestamp}}" title="{{absoluteDate}}">{{relativeDate}}</span>' +
+		'    <div class="notification-delete">' +
+		'      <span class="icon icon-close svg" title="' + t('notifications', 'Dismiss') + '"></span>' +
 		'    </div>' +
+		'  </div>' +
+		'  {{#if link}}' +
+		'    <a href="{{link}}" class="notification-subject full-subject-link">' +
+		'      {{#if icon}}<span class="image"><img src="{{icon}}" class="notification-icon"></span>{{/if}}' +
+		'      <span class="text">{{{subject}}}</span>' +
+		'    </a>' +
 		'  {{else}}' +
 		'    <div class="notification-subject">' +
 		'        {{#if icon}}<span class="image"><img src="{{icon}}" class="notification-icon"></span>{{/if}}' +
 		'        <span class="text">{{{subject}}}</span>' +
 		'    </div>' +
 		'  {{/if}}' +
-		'  <div class="notification-message">{{{message}}}</div>' +
+		'  {{#if message}}<div class="notification-message">{{{message}}}</div>{{/if}}' +
 		'  <div class="notification-full-message hidden">{{{full_message}}}</div>' +
-		'  <div class="notification-actions">' +
+		'  {{#if actions}}<div class="notification-actions">' +
 		'    {{#each actions}}' +
 		'      <button class="action-button pull-right{{#if this.primary}} primary{{/if}}" data-type="{{this.type}}" ' +
 		'data-href="{{this.link}}">{{this.label}}</button>' +
 		'    {{/each}}' +
-		'  </div>' +
-		'  <div style="display: none;" class="notification-delete">' +
-		'    <div class="icon icon-close svg" title="' + t('notifications', 'Dismiss') + '"></div>' +
-		'  </div>' +
+		'  </div>{{/if}}' +
 		'</div>',
 
 		/**

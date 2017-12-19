@@ -1,12 +1,3 @@
-.notification {
-	display: block;
-	padding: 16px 12px;
-	line-height: 1em;
-}
-.notification:not(:last-child) {
-	border-bottom: 1px solid rgb(238, 238, 238);
-}
-
 .notification-container {
 	background-color: #fff;
 	display: none;
@@ -18,7 +9,8 @@
 	min-height: 100px;
 	max-height: 260px;
 	border-radius: 0 0 3px 3px;
-	border: 1px solid rgb(238, 238, 238);
+	overflow: hidden;
+	overflow-y: auto;
 }
 
 .notification-container .emptycontent h2 {
@@ -27,35 +19,22 @@
 }
 
 .notification {
-	color: black;
-	position: relative;
-	clear: both;
+	padding-bottom: 12px;
+}
+
+.notification:not(:last-child) {
+	border-bottom: 1px solid rgb(238, 238, 238);
+}
+
+.notification-heading,
+.notification-subject {
+	display: flex;
 }
 
 img.notification-icon {
 	width: 32px;
 	height: 32px;
-	display: block;
-}
-
-/**
- * Vertical alignment from http://stackoverflow.com/a/39923209
- */
-.notification-subject {
-	padding-top: 12px;
-	position: relative;
-}
-
-.notification-subject a {
-	display: inline-block;
-}
-
-.notification-subject > span.image,
-.notification-subject > span.text,
-.notification-subject > a > span.image,
-.notification-subject > a > span.text {
-	display:table-cell;
-	vertical-align:middle;
+	display: flex;
 }
 
 .notification-subject > span.text,
@@ -67,30 +46,22 @@ img.notification-icon {
 	color: #999;
 }
 
-.notification:hover > .notification-delete {
-	display: block !important;
-	position: absolute;
-	top: 7px;
-	right: 12px;
-	opacity: 0.3;
+.notification-delete {
+	display: flex;
+	opacity: 0.5;
+	padding: 14px;
 }
 
-.notification-delete:hover {
-	opacity: 0.8 !important;
-	cursor: pointer;
-}
-
-.notification-delete div, .notifications-button img {
+.notification-delete:hover,
+.notification-delete .icon-close,
+.notifications-button img {
+	opacity: 1;
 	cursor: pointer;
 }
 
 .notification-time {
-	text-align: right;
 	opacity: 0.5;
-	padding-right: 32px;
-	margin-top: -7px;
-	position: absolute;
-	right: 0;
+	margin: 13px 0 13px auto;
 }
 
 .notifications-button {
@@ -118,11 +89,11 @@ img.notification-icon {
 	margin: 0;
 }
 
+.notification-subject,
+.notification .notification-message,
+.notification .notification-full-message,
 .notification .notification-actions {
-	padding: 0;
-	display: inline-block;
-	width: 100%;
-	margin: -6px 0;
+	margin: 0 12px 12px;
 }
 
 .notification .notification-actions .action-button.primary {
@@ -133,14 +104,9 @@ img.notification-icon {
 	margin-left: auto;
 }
 
-.notification .notification-subject {
-	margin-right: 20px;
-}
-
 .notification .notification-message,
 .notification .notification-full-message {
 	line-height: 20px;
-	padding-bottom: 16px;
 	opacity: .57;
 }
 
@@ -158,8 +124,7 @@ img.notification-icon {
 	margin: 0 5px 2px 3px;
 }
 
-.notification strong,
-.notification .notification-subject a:not(.full-subject-link) {
+.notification strong {
 	font-weight: bold;
 	opacity: 1;
 }
@@ -170,10 +135,8 @@ img.notification-icon {
 }
 
 .notification-wrapper {
-	max-height: 260px;
-	overflow: hidden;
-	overflow-y: auto;
-	margin-right: 3px;
+	display: flex;
+	flex-direction: column;
 }
 
 .notifications .emptycontent {
