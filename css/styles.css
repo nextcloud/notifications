@@ -7,10 +7,7 @@
 	width: 350px;
 	max-width: 90%;
 	min-height: 100px;
-	max-height: 260px;
 	border-radius: 0 0 3px 3px;
-	overflow: hidden;
-	overflow-y: auto;
 }
 
 .notification-container .emptycontent h2 {
@@ -137,6 +134,8 @@ img.notification-icon {
 .notification-wrapper {
 	display: flex;
 	flex-direction: column;
+	overflow-y: auto;
+	max-height: 260px;
 }
 
 .notifications .emptycontent {
