@@ -36,7 +36,7 @@
 
 		/** @type {string} */
 		_containerTemplate: '' +
-		'<div class="notifications hidden">' +
+		'<div class="notifications">' +
 		'  <div class="notifications-button menutoggle">' +
 		'    <img class="svg" alt="" title="' + t('notifications', 'Notifications') + '"' +
 		'      src="' + OC.imagePath('notifications', 'notifications') + '">' +
@@ -415,8 +415,6 @@
 				.animate({opacity: 0.6}, 600)
 				.animate({opacity: 1}, 600);
 			this.$container.find('.emptycontent').addClass('hidden');
-
-			this.$notifications.removeClass('hidden');
 		},
 
 		/**
@@ -427,8 +425,6 @@
 			this.$button.removeClass('hasNotifications');
 			this.$container.find('.emptycontent').removeClass('hidden');
 			this.$button.find('img').attr('src', OC.imagePath('notifications', 'notifications'));
-
-			this.$notifications.addClass('hidden');
 		},
 
 		/**
