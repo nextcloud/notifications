@@ -9,10 +9,12 @@
  * later. See the COPYING file.
  */
 
-(function(OC, OCA, $, _) {
-	OCA.Notifications = OCA.Notifications || {};
+/* global OC, OCA, $, _, t, define, console */
 
-	OCA.Notifications.App = {
+define(function (require) {
+	"use strict";
+
+	return {
 
 		/** @type {number} */
 		pollInterval: 30000, // milliseconds
@@ -32,7 +34,8 @@
 			$('form.searchbox').after($('<div>').attr('id', 'notifications'));
 
 			// Setup Vue
-			this.vm = new Vue(OCA.Notifications.Components.Root);
+			var Vue = require('vue');
+			this.vm = new Vue(require('./components/root'));
 
 			// Initial call to the notification endpoint
 			this._fetch();
@@ -92,8 +95,4 @@
 			this.vm.shutdown = true;
 		}
 	};
-})(OC, OCA, $, _);
-
-$(document).ready(function () {
-	OCA.Notifications.App.initialise();
 });

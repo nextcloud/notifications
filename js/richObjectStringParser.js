@@ -7,9 +7,12 @@
  * later. See the COPYING file.
  */
 
-(function() {
+/* global OC, _, Handlebars, t, define */
 
-	OCA.Notifications.RichObjectStringParser = {
+define(function () {
+	"use strict";
+
+	return {
 		avatarsEnabled: true,
 
 		_fileTemplate: '<a class="filename has-tooltip" href="{{link}}" title="{{title}}">{{name}}</a>',
@@ -102,5 +105,4 @@
 			}));
 		}
 	};
-
-})();
+});

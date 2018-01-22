@@ -7,11 +7,14 @@
  * later. See the COPYING file.
  */
 
-(function(OC, OCA, $) {
-	OCA.Notifications = OCA.Notifications || {};
-	OCA.Notifications.Components = OCA.Notifications.Components || {};
+/* global OC, $, t, moment, define */
 
-	OCA.Notifications.Components.Notification = {
+define(function (require) {
+	"use strict";
+
+	var parser = require('../richObjectStringParser');
+
+	return {
 		template: '' +
 		'<div class="notification" :data-id="notification_id" :data-timestamp="timestamp">' +
 		'  <div class="notification-heading">' +
@@ -70,7 +73,7 @@
 			},
 			renderedSubject: function() {
 				if (this.subjectRich.length !== 0) {
-					return OCA.Notifications.RichObjectStringParser.parseMessage(
+					return parser.parseMessage(
 						this.subjectRich,
 						this.subjectRichParameters
 					);
@@ -192,7 +195,7 @@
 		},
 
 		components: {
-			'action': OCA.Notifications.Components.Action
+			'action': require('./action')
 		}
 	};
-})(OC, OCA, $);
+});

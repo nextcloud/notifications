@@ -7,11 +7,12 @@
  * later. See the COPYING file.
  */
 
-(function(OC, OCA, $) {
-	OCA.Notifications = OCA.Notifications || {};
-	OCA.Notifications.Components = OCA.Notifications.Components || {};
+/* global OC, OCA, $, t, define */
 
-	OCA.Notifications.Components.Root = {
+define(function (require) {
+	"use strict";
+
+	return {
 		template: '' +
 		'<div v-if="!shutdown" class="notifications">' +
 		'  <div class="notifications-button menutoggle" :class="{ hasNotifications: notifications.length }">' +
@@ -66,7 +67,7 @@
 		},
 
 		components: {
-			'notification': OCA.Notifications.Components.Notification
+			'notification': require('./notification')
 		},
 
 		mounted: function () {
@@ -93,4 +94,4 @@
 			this.hadNotifications = this.notifications.length > 0;
 		}
 	};
-})(OC, OCA, $);
+});

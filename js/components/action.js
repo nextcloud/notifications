@@ -7,11 +7,12 @@
  * later. See the COPYING file.
  */
 
-(function(OC, OCA, $) {
-	OCA.Notifications = OCA.Notifications || {};
-	OCA.Notifications.Components = OCA.Notifications.Components || {};
+/* global OC, $, define */
 
-	OCA.Notifications.Components.Action = {
+define(function () {
+	"use strict";
+
+	return {
 		/** @type {string} */
 		template: '' +
 		'<button' +
@@ -50,4 +51,4 @@
 			}
 		}
 	};
-})(OC, OCA, $);
+});

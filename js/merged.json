@@ -1,7 +1,0 @@
-[
-  "components/action.js",
-  "components/notification.js",
-  "components/root.js",
-  "app.js",
-  "richObjectStringParser.js"
-]
