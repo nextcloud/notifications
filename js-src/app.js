@@ -35,7 +35,7 @@ define(function (require) {
 
 			// Setup Vue
 			var Vue = require('vue');
-			this.vm = new Vue(require('./components/root'));
+			this.vm = new Vue(require('./components/root.vue'));
 
 			// Initial call to the notification endpoint
 			this._fetch();

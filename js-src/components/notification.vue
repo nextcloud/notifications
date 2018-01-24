@@ -1,42 +1,32 @@
-/**
- * @copyright (c) 2017 Joas Schilling <coding@schilljs.com>
- *
- * @author Joas Schilling <coding@schilljs.com>
- *
- * This file is licensed under the Affero General Public License version 3 or
- * later. See the COPYING file.
- */
+<template>
+	<div class="notification" :data-id="notification_id" :data-timestamp="timestamp">
+		<div class="notification-heading">
+			<span class="notification-time has-tooltip live-relative-timestamp" :data-timestamp="timestamp" :title="absoluteDate">{{relativeDate}}</span>
+			<div class="notification-delete" @click="onDismissNotification">
+				<span class="icon icon-close svg" :title="t_dismiss"></span>
+			</div>
+		</div>
+		<a v-if="useLink" :href="link" class="notification-subject full-subject-link">
+			<span v-if="icon" class="image"><img :src="icon" class="notification-icon"></span>
+			<span class="text" v-html="renderedSubject"></span>
+		</a>
+		<div v-else class="notification-subject">
+			<span v-if="icon" class="image"><img :src="icon" class="notification-icon"></span>
+			<span class="text" v-html="renderedSubject"></span>
+		</div>
+		<div class="notification-message" v-if="message" v-html="renderedMessage" @click="onClickFullMessage"></div>
+		<div class="notification-full-message hidden" v-html="message"></div>
+		<div class="notification-actions" v-if="actions.length">
+			<action v-for="(a, index) in actions" v-bind="a" :key="index"></action>
+		</div>
+	</div>
+</template>
 
-/* global OC, $, t, moment, define */
-
-define(function (require) {
-	"use strict";
-
+<script>
 	var parser = require('../richObjectStringParser');
 
-	return {
-		template: '' +
-		'<div class="notification" :data-id="notification_id" :data-timestamp="timestamp">' +
-		'  <div class="notification-heading">' +
-		'    <span class="notification-time has-tooltip live-relative-timestamp" :data-timestamp="timestamp" :title="absoluteDate">{{relativeDate}}</span>' +
-		'    <div class="notification-delete" @click="onDismissNotification">' +
-		'      <span class="icon icon-close svg" title="' + t('notifications', 'Dismiss') + '"></span>' +
-		'    </div>' +
-		'  </div>' +
-		'    <a v-if="useLink" :href="link" class="notification-subject full-subject-link">' +
-		'      <span v-if="icon" class="image"><img :src="icon" class="notification-icon"></span>' +
-		'      <span class="text" v-html="renderedSubject"></span>' +
-		'    </a>' +
-		'    <div v-else class="notification-subject">' +
-		'        <span v-if="icon" class="image"><img :src="icon" class="notification-icon"></span>' +
-		'        <span class="text" v-html="renderedSubject"></span>' +
-		'    </div>' +
-		'  <div class="notification-message" v-if="message" v-html="renderedMessage" @click="onClickFullMessage"></div>' +
-		'  <div class="notification-full-message hidden" v-html="message"></div>' +
-		'  <div class="notification-actions" v-if="actions.length">' +
-		'    <action v-for="(a, index) in actions" v-bind="a" :key="index"></action>' +
-		'  </div>' +
-		'</div>',
+	export default {
+		name: "notification",
 
 		props: [
 			'notification_id',
@@ -59,6 +49,9 @@ define(function (require) {
 		_$el: null,
 
 		computed: {
+			t_dismiss: function() {
+				return t('notifications', 'Dismiss');
+			},
 			timestamp: function() {
 				return moment(this.datetime).format('X') * 1000;
 			},
@@ -112,7 +105,7 @@ define(function (require) {
 						this.$emit('remove');
 					}.bind(this),
 					error: function () {
-						OC.Notification.showTemporary('Failed to perform action'); // FIXME translation
+						OC.Notification.showTemporary(t('notifications', 'Failed to dismiss notification'));
 					}
 				});
 			},
@@ -195,7 +188,7 @@ define(function (require) {
 		},
 
 		components: {
-			'action': require('./action')
+			'action': require('./action.vue')
 		}
-	};
-});
+	}
+</script>

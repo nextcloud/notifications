@@ -1,39 +1,32 @@
-/**
- * @copyright (c) 2017 Joas Schilling <coding@schilljs.com>
- *
- * @author Joas Schilling <coding@schilljs.com>
- *
- * This file is licensed under the Affero General Public License version 3 or
- * later. See the COPYING file.
- */
+<template>
+	<div v-if="!shutdown" class="notifications">
+		<div class="notifications-button menutoggle" :class="{ hasNotifications: notifications.length }">
+			<img class="svg" alt="" :title="t_notifications" :src="iconPath">
+		</div>
+		<div class="notification-container">
+			<div class="notification-wrapper" v-if="notifications.length">
+				<notification v-for="(n, index) in notifications" v-bind="n" :key="n.notification_id" @remove="onRemove" ></notification>
+			</div>
+			<div class="emptycontent" v-else>
+				<h2>{{t_empty}}</h2>
+			</div>
+		</div>
+	</div>
+</template>
 
-/* global OC, OCA, $, t, define */
-
-define(function (require) {
-	"use strict";
-
-	return {
-		template: '' +
-		'<div v-if="!shutdown" class="notifications">' +
-		'  <div class="notifications-button menutoggle" :class="{ hasNotifications: notifications.length }">' +
-		'    <img class="svg" alt="" title="' + t('notifications', 'Notifications') + '" :src="iconPath">' +
-		'  </div>' +
-		'  <div class="notification-container">' +
-		'    <div class="notification-wrapper" v-if="notifications.length">' +
-		'      <notification v-for="(n, index) in notifications" v-bind="n" :key="n.notification_id" @remove="onRemove"></notification>' +
-		'    </div>' +
-		'    <div class="emptycontent" v-else>' +
-		'      <h2>' + t('notifications', 'No notifications') + '</h2>' +
-		'    </div>' +
-		'  </div>' +
-		'</div>',
+<script>
+	export default {
+		name: "root",
 
 		el: '#notifications',
-		data: {
-			hadNotifications: false,
-			backgroundFetching: false,
-			shutdown: false,
-			notifications: []
+
+		data: function () {
+			return {
+				hadNotifications: false,
+				backgroundFetching: false,
+				shutdown: false,
+				notifications: []
+			};
 		},
 
 		_$el: null,
@@ -42,6 +35,12 @@ define(function (require) {
 		_$container: null,
 
 		computed: {
+			t_empty: function() {
+				return t('notifications', 'No notifications');
+			},
+			t_notifications: function() {
+				return t('notifications', 'Notifications');
+			},
 			iconPath: function() {
 				var iconPath = 'notifications';
 
@@ -67,7 +66,7 @@ define(function (require) {
 		},
 
 		components: {
-			'notification': require('./notification')
+			'notification': require('./notification.vue')
 		},
 
 		mounted: function () {
@@ -93,5 +92,5 @@ define(function (require) {
 
 			this.hadNotifications = this.notifications.length > 0;
 		}
-	};
-});
+	}
+</script>
