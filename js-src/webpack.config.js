@@ -2,9 +2,9 @@ var path = require('path');
 var webpack = require('webpack');
 
 module.exports = {
-	entry: './js/init.js',
+	entry: './js-src/init.js',
 	output: {
-		path: path.resolve(__dirname, '.'),
+		path: path.resolve(__dirname, '../js'),
 		publicPath: '/',
 		filename: 'merged.js'
 	},

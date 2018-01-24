@@ -52,7 +52,7 @@ nbproject
 
 # WebPack
 /node_modules
-/js/merged.js*
+/js
 
 # Tests - auto-generated files
 /tests/Unit/coverage*
@@ -62,3 +62,7 @@ nbproject
 /tests/Integration/composer.lock
 /tests/Integration/output
 /tests/Integration/vendor
+
+# Build related files
+/npm-debug.log
+/build
