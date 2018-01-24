@@ -14,12 +14,15 @@ npm-update:
 	npm update
 
 build-js:
+	npm run dev
+
+build-js-production:
 	npm run build
 
 clean:
 	rm -rf $(build_dir)
 
-package: clean build-js
+package: clean build-js-production
 	mkdir -p $(source_dir)
 	rsync -a \
 	--exclude=/build \
