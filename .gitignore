@@ -50,6 +50,10 @@ nbproject
 .well-known
 /.buildpath
 
+# WebPack
+/node_modules
+/js
+
 # Tests - auto-generated files
 /tests/Unit/coverage*
 /tests/Unit/clover.xml
@@ -58,3 +62,7 @@ nbproject
 /tests/Integration/composer.lock
 /tests/Integration/output
 /tests/Integration/vendor
+
+# Build related files
+/npm-debug.log
+/build

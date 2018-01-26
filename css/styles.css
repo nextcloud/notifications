@@ -49,6 +49,19 @@ img.notification-icon {
 	padding: 14px;
 }
 
+.notification:hover > .notification-delete {
+	display: block !important;
+	position: absolute;
+	top: 7px;
+	right: 12px;
+	opacity: 0.3;
+}
+
+.notification-delete:hover {
+	opacity: 0.8 !important;
+	cursor: pointer;
+}
+
 .notification-delete:hover,
 .notification-delete .icon-close,
 .notifications-button img {
