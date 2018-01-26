@@ -42,5 +42,6 @@ package: clean build-js-production
 	--exclude=/node_modules \
 	--exclude=/npm-debug.log \
 	--exclude=/package.json \
+	--exclude=/package-lock.json \
 	--exclude=/Makefile \
 	$(project_dir)/ $(source_dir)
