@@ -1,7 +1,7 @@
 { "translations": {
+    "in {path}" : "í {path}",
     "Notifications" : "Tilkynningar",
     "No notifications" : "Engar tilkynningar",
-    "Dismiss" : "Hafna",
-    "in {path}" : "í {path}"
+    "Dismiss" : "Hafna"
 },"pluralForm" :"nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);"
 }
