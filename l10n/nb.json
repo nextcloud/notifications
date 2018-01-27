@@ -1,7 +1,7 @@
 { "translations": {
+    "in {path}" : "i {path}",
     "Notifications" : "Varsel",
     "No notifications" : "Ingen varsel",
-    "Dismiss" : "Forkast",
-    "in {path}" : "i {path}"
+    "Dismiss" : "Forkast"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

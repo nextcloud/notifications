@@ -1,7 +1,7 @@
 { "translations": {
+    "in {path}" : "polussa {path}",
     "Notifications" : "Ilmoitukset",
     "No notifications" : "Ei ilmoituksia",
-    "Dismiss" : "Hylkää",
-    "in {path}" : "polussa {path}"
+    "Dismiss" : "Hylkää"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

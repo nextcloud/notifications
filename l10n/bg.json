@@ -1,6 +1,6 @@
 { "translations": {
+    "in {path}" : "в {path}",
     "Notifications" : "Известия",
-    "No notifications" : "Няма известия",
-    "in {path}" : "в {path}"
+    "No notifications" : "Няма известия"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
