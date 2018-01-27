@@ -1,7 +1,7 @@
 { "translations": {
+    "in {path}" : "di {path}",
     "Notifications" : "Pemberitahuan",
     "No notifications" : "Tidak ada pemberitahuan",
-    "Dismiss" : "Abaikan",
-    "in {path}" : "di {path}"
+    "Dismiss" : "Abaikan"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

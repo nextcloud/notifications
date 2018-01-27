@@ -1,7 +1,7 @@
 { "translations": {
+    "in {path}" : "在 {path}",
     "Notifications" : "通知",
     "No notifications" : "無通知",
-    "Dismiss" : "離開",
-    "in {path}" : "在 {path}"
+    "Dismiss" : "離開"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

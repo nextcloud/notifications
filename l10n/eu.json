@@ -1,7 +1,7 @@
 { "translations": {
+    "in {path}" : "{path} -en",
     "Notifications" : "Jakinarazpenak",
     "No notifications" : "Ez dago jakinarazpenik",
-    "Dismiss" : "Baztertu",
-    "in {path}" : "{path} -en"
+    "Dismiss" : "Baztertu"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
