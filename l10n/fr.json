@@ -1,7 +1,7 @@
 { "translations": {
+    "in {path}" : "dans {path}",
     "Notifications" : "Notifications",
     "No notifications" : "Aucune notification",
-    "Dismiss" : "Ignorer",
-    "in {path}" : "dans {path}"
+    "Dismiss" : "Ignorer"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }
