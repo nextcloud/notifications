@@ -1,0 +1,144 @@
+.notifications-button {
+	position: relative;
+	float: right;
+	width: 16px;
+	height: 16px;
+	display: block;
+	border-radius: 50%;
+	text-align: center;
+	padding: 10px;
+	opacity: .6;
+
+	&,
+	img {
+		cursor: pointer;
+	}
+
+	&.hasNotifications,
+	&:hover,
+	&:focus {
+		opacity: 1 !important;
+	}
+}
+
+.notification-container {
+	display: none;
+	right: 13px;
+	width: 350px;
+	max-width: 90%;
+	min-height: 100px;
+
+	.notification-wrapper {
+		display: flex;
+		flex-direction: column;
+		overflow-y: auto;
+		max-height: 260px;
+	}
+
+	.emptycontent {
+		margin: 50px 0;
+
+		h2 {
+			font-weight: 300;
+			font-size: 16px;
+		}
+	}
+
+	/* Menu arrow */
+	&:after {
+		right: 101px;
+	}
+}
+
+
+.notification {
+	padding-bottom: 12px;
+
+	&:not(:last-child) {
+		border-bottom: 1px solid rgb(238, 238, 238);
+	}
+
+	.notification-heading {
+		display: flex;
+
+		.notification-time {
+			opacity: 0.5;
+			margin: 13px 0 13px auto;
+		}
+
+		.notification-delete {
+			display: flex;
+			opacity: 0.5;
+			padding: 14px;
+
+			&:hover,
+			.icon-close {
+				opacity: 1;
+				cursor: pointer;
+			}
+		}
+	}
+
+
+	.notification-subject,
+	.notification-message,
+	.notification-full-message,
+	.notification-actions {
+		margin: 0 12px 12px;
+	}
+
+	.notification-subject {
+		display: flex;
+
+		& > span.text,
+		& > a > span.text {
+			padding-left: 10px;
+		}
+	}
+
+	.notification-message,
+	.notification-full-message {
+		line-height: 20px;
+		opacity: .57;
+	}
+
+	img.notification-icon {
+		width: 32px;
+		height: 32px;
+		display: flex;
+	}
+
+	.notification-message img,
+	.notification-full-message img,
+	.notification-subject img:not(.notification-icon) {
+		max-width: 32px;
+		max-height: 32px;
+		margin: 0 5px 5px 0;
+	}
+
+	strong {
+		font-weight: bold;
+		opacity: 1;
+	}
+
+	.avatar-name-wrapper {
+		position: relative;
+		cursor: pointer;
+
+		.avatar {
+			vertical-align: middle;
+			display: inline-block;
+			margin: 0 5px 2px 3px;
+		}
+	}
+
+	.notification-actions {
+		.action-button.primary {
+			color: $color-primary-text;
+		}
+
+		&:first-child {
+			margin-left: auto;
+		}
+	}
+}
