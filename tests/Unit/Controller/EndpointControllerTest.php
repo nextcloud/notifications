@@ -400,6 +400,23 @@ class EndpointControllerTest extends TestCase {
 		$this->assertSame(Http::STATUS_NOT_FOUND, $response->getStatus());
 	}
 
+	/**
+	 * @dataProvider dataDeleteNotification
+	 * @param int $_
+	 * @param string $username
+	 */
+	public function testDeleteAllNotifications($_, $username) {
+		$controller = $this->getController([], $username);
+
+		$this->handler->expects($this->once())
+			->method('deleteByUser')
+			->with($username);
+
+		$response = $controller->deleteAllNotifications();
+		$this->assertInstanceOf(DataResponse::class, $response);
+		$this->assertSame(Http::STATUS_OK, $response->getStatus());
+	}
+
 	public function dataNotificationToArray() {
 		return [
 			['v1', 42, 'app1', 'user1', 1234, 'type1', 42, 'subject1', '', [], 'message1', 'richMessage 1', ['richMessage param'], 'link1', 'icon1', [], []],
