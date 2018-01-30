@@ -44,6 +44,24 @@
 		}
 	}
 
+	.dismiss-all {
+		display: flex;
+		opacity: 0.5;
+		padding: 10px;
+		margin-left: auto;
+		margin-right: auto;
+
+		&:hover,
+		.icon-close {
+			opacity: 1;
+			cursor: pointer;
+		}
+
+		.icon-close {
+			margin-right: 5px;
+		}
+	}
+
 	/* Menu arrow */
 	&:after {
 		right: 101px;
