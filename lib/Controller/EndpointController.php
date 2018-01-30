@@ -70,7 +70,7 @@ class EndpointController extends OCSController {
 	 * @param string $apiVersion
 	 * @return DataResponse
 	 */
-	public function listNotifications($apiVersion) {
+	public function listNotifications(string $apiVersion): DataResponse {
 		// When there are no apps registered that use the notifications
 		// We stop polling for them.
 		if (!$this->manager->hasNotifiers()) {
@@ -114,7 +114,7 @@ class EndpointController extends OCSController {
 	 * @param int $id
 	 * @return DataResponse
 	 */
-	public function getNotification($apiVersion, $id) {
+	public function getNotification(string $apiVersion, int $id): DataResponse {
 		if (!$this->manager->hasNotifiers()) {
 			return new DataResponse(null, Http::STATUS_NOT_FOUND);
 		}
@@ -147,11 +147,10 @@ class EndpointController extends OCSController {
 	 * @param int $id
 	 * @return DataResponse
 	 */
-	public function deleteNotification($id = 0) {
-		if (!is_int($id) || $id === 0) {
+	public function deleteNotification(int $id): DataResponse {
+		if ($id === 0) {
 			return new DataResponse(null, Http::STATUS_NOT_FOUND);
 		}
-		$id = (int) $id;
 
 		$this->handler->deleteById($id, $this->getCurrentUser());
 		return new DataResponse();
@@ -173,7 +172,7 @@ class EndpointController extends OCSController {
 	 * @param array $notifications
 	 * @return string
 	 */
-	protected function generateEtag(array $notifications) {
+	protected function generateEtag(array $notifications): string {
 		return md5(json_encode($notifications));
 	}
 
@@ -183,7 +182,7 @@ class EndpointController extends OCSController {
 	 * @param string $apiVersion
 	 * @return array
 	 */
-	protected function notificationToArray($notificationId, INotification $notification, $apiVersion) {
+	protected function notificationToArray(int $notificationId, INotification $notification, string $apiVersion): array {
 		$data = [
 			'notification_id' => $notificationId,
 			'app' => $notification->getApp(),
@@ -218,7 +217,7 @@ class EndpointController extends OCSController {
 	 * @param IAction $action
 	 * @return array
 	 */
-	protected function actionToArray(IAction $action) {
+	protected function actionToArray(IAction $action): array {
 		return [
 			'label' => $action->getParsedLabel(),
 			'link' => $action->getLink(),
@@ -230,7 +229,7 @@ class EndpointController extends OCSController {
 	/**
 	 * @return string
 	 */
-	protected function getCurrentUser() {
+	protected function getCurrentUser(): string {
 		$user = $this->session->getUser();
 		if ($user instanceof IUser) {
 			$user = $user->getUID();

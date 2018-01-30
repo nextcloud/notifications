@@ -71,9 +71,9 @@ class Application extends \OCP\AppFramework\App {
 		$request = $server->getRequest();
 
 		if ($server->getUserSession()->getUser() !== null
-			&& substr($request->getScriptName(), 0 - strlen('/index.php')) === '/index.php'
-			&& substr($request->getPathInfo(), 0, strlen('/s/')) !== '/s/'
-			&& substr($request->getPathInfo(), 0, strlen('/login/')) !== '/login/') {
+			&& substr($request->getScriptName(), 0 - \strlen('/index.php')) === '/index.php'
+			&& substr($request->getPathInfo(), 0, \strlen('/s/')) !== '/s/'
+			&& substr($request->getPathInfo(), 0, \strlen('/login/')) !== '/login/') {
 
 			Util::addScript('notifications', 'merged');
 			Util::addStyle('notifications', 'styles');

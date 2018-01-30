@@ -53,7 +53,7 @@ class App implements IApp {
 	 * @return int
 	 * @since 8.2.0
 	 */
-	public function getCount(INotification $notification) {
+	public function getCount(INotification $notification): int {
 		return $this->handler->count($notification);
 	}
 

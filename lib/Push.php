@@ -89,8 +89,8 @@ class Push {
 
 		$userKey = $this->keyManager->getKey($user);
 
-		$isTalkNotification = in_array($notification->getApp(), ['spreed', 'talk'], true)
-			&& in_array($notification->getSubject(), ['invitation', 'call', 'mention'], true);
+		$isTalkNotification = \in_array($notification->getApp(), ['spreed', 'talk'], true)
+			&& \in_array($notification->getSubject(), ['invitation', 'call', 'mention'], true);
 		$talkApps = array_filter($devices, function($device) {
 			return $device['apptype'] === 'talk';
 		});
@@ -153,14 +153,14 @@ class Push {
 			if ($status !== Http::STATUS_OK && $status !== Http::STATUS_SERVICE_UNAVAILABLE) {
 				$body = $response->getBody();
 				$this->log->error('Could not send notification to push server [{url}]: {error}',[
-					'error' => is_string($body) ? $body : 'no reason given',
+					'error' => \is_string($body) ? $body : 'no reason given',
 					'url' => $proxyServer,
 					'app' => 'notifications',
 				]);
 			} else if ($status === Http::STATUS_SERVICE_UNAVAILABLE && $this->config->getSystemValue('debug', false)) {
 				$body = $response->getBody();
 				$this->log->debug('Could not send notification to push server [{url}]: {error}',[
-					'error' => is_string($body) ? $body : 'no reason given',
+					'error' => \is_string($body) ? $body : 'no reason given',
 					'url' => $proxyServer,
 					'app' => 'notifications',
 				]);
@@ -177,7 +177,7 @@ class Push {
 	 * @throws InvalidTokenException
 	 * @throws \InvalidArgumentException
 	 */
-	protected function encryptAndSign(Key $userKey, array $device, INotification $notification, $isTalkNotification) {
+	protected function encryptAndSign(Key $userKey, array $device, INotification $notification, bool $isTalkNotification): array {
 		// Check if the token is still valid...
 		$this->tokenProvider->getTokenById($device['token']);
 
@@ -212,7 +212,7 @@ class Push {
 	 * @param string $uid
 	 * @return array[]
 	 */
-	protected function getDevicesForUser($uid) {
+	protected function getDevicesForUser(string $uid): array {
 		$query = $this->db->getQueryBuilder();
 		$query->select('*')
 			->from('notifications_pushtokens')
@@ -229,7 +229,7 @@ class Push {
 	 * @param int $tokenId
 	 * @return bool
 	 */
-	protected function deletePushToken($tokenId) {
+	protected function deletePushToken(int $tokenId): bool {
 		$query = $this->db->getQueryBuilder();
 		$query->delete('notifications_pushtokens')
 			->where($query->expr()->eq('token', $query->createNamedParameter($tokenId, IQueryBuilder::PARAM_INT)));
