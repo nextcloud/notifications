@@ -22,6 +22,7 @@
 namespace OCA\Notifications;
 
 
+use OCA\Notifications\Exceptions\NotificationNotFoundException;
 use OCP\Notification\IApp;
 use OCP\Notification\INotification;
 
@@ -44,8 +45,12 @@ class App implements IApp {
 	public function notify(INotification $notification) {
 		$notificationId = $this->handler->add($notification);
 
-		$notificationToPush = $this->handler->getById($notificationId, $notification->getUser());
-		$this->push->pushToDevice($notificationToPush);
+		try {
+			$notificationToPush = $this->handler->getById($notificationId, $notification->getUser());
+			$this->push->pushToDevice($notificationToPush);
+		} catch (NotificationNotFoundException $e) {
+			throw new \InvalidArgumentException('Error while preparing push notification');
+		}
 	}
 
 	/**

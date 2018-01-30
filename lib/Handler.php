@@ -22,6 +22,7 @@
 namespace OCA\Notifications;
 
 
+use OCA\Notifications\Exceptions\NotificationNotFoundException;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\Notification\IAction;
@@ -50,7 +51,7 @@ class Handler {
 	 * @param INotification $notification
 	 * @return int
 	 */
-	public function add(INotification $notification) {
+	public function add(INotification $notification): int {
 		$sql = $this->connection->getQueryBuilder();
 		$sql->insert('notifications');
 		$this->sqlInsert($sql, $notification);
@@ -65,7 +66,7 @@ class Handler {
 	 * @param INotification $notification
 	 * @return int
 	 */
-	public function count(INotification $notification) {
+	public function count(INotification $notification): int {
 		$sql = $this->connection->getQueryBuilder();
 		$sql->select($sql->createFunction('COUNT(*)'))
 			->from('notifications');
@@ -112,7 +113,7 @@ class Handler {
 	 * @param int $id
 	 * @param string $user
 	 */
-	public function deleteById($id, $user) {
+	public function deleteById(int $id, string $user) {
 		$sql = $this->connection->getQueryBuilder();
 		$sql->delete('notifications')
 			->where($sql->expr()->eq('notification_id', $sql->createParameter('id')))
@@ -127,9 +128,10 @@ class Handler {
 	 *
 	 * @param int $id
 	 * @param string $user
-	 * @return null|INotification
+	 * @return INotification
+	 * @throws NotificationNotFoundException
 	 */
-	public function getById($id, $user) {
+	public function getById(int $id, string $user): INotification {
 		$sql = $this->connection->getQueryBuilder();
 		$sql->select('*')
 			->from('notifications')
@@ -138,14 +140,18 @@ class Handler {
 			->andWhere($sql->expr()->eq('user', $sql->createParameter('user')))
 			->setParameter('user', $user);
 		$statement = $sql->execute();
-
-		$notification = null;
-		if ($row = $statement->fetch()) {
-			$notification = $this->notificationFromRow($row);
-		}
+		$row = $statement->fetch();
 		$statement->closeCursor();
 
-		return $notification;
+		if ($row === false) {
+			throw new NotificationNotFoundException('No entry returned from database');
+		}
+
+		try {
+			return $this->notificationFromRow($row);
+		} catch (\InvalidArgumentException $e) {
+			throw new NotificationNotFoundException('Could not create notification from database row');
+		}
 	}
 
 	/**
@@ -155,7 +161,7 @@ class Handler {
 	 * @param int $limit
 	 * @return array [notification_id => INotification]
 	 */
-	public function get(INotification $notification, $limit = 25) {
+	public function get(INotification $notification, $limit = 25): array {
 		$sql = $this->connection->getQueryBuilder();
 		$sql->select('*')
 			->from('notifications')
@@ -167,7 +173,11 @@ class Handler {
 
 		$notifications = [];
 		while ($row = $statement->fetch()) {
-			$notifications[(int) $row['notification_id']] = $this->notificationFromRow($row);
+			try {
+				$notifications[(int)$row['notification_id']] = $this->notificationFromRow($row);
+			} catch (\InvalidArgumentException $e) {
+				continue;
+			}
 		}
 		$statement->closeCursor();
 
@@ -291,8 +301,9 @@ class Handler {
 	 *
 	 * @param array $row
 	 * @return INotification
+	 * @throws \InvalidArgumentException
 	 */
-	protected function notificationFromRow(array $row) {
+	protected function notificationFromRow(array $row): INotification {
 		$dateTime = new \DateTime();
 		$dateTime->setTimestamp((int) $row['timestamp']);
 

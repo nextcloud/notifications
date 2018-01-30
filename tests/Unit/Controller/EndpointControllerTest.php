@@ -23,6 +23,7 @@
 namespace OCA\Notifications\Tests\Unit\Controller;
 
 use OCA\Notifications\Controller\EndpointController;
+use OCA\Notifications\Exceptions\NotificationNotFoundException;
 use OCA\Notifications\Handler;
 use OCA\Notifications\Tests\Unit\TestCase;
 use OCP\AppFramework\Http;
@@ -34,56 +35,51 @@ use OCP\IUserSession;
 use OCP\Notification\IAction;
 use OCP\Notification\IManager;
 use OCP\Notification\INotification;
+use PHPUnit\Framework\MockObject\MockObject;
+use function Sabre\Event\Loop\instance;
 
 class EndpointControllerTest extends TestCase {
-	/** @var IRequest|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var IRequest|MockObject */
 	protected $request;
 
-	/** @var Handler|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var Handler|MockObject */
 	protected $handler;
 
-	/** @var IManager|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var IManager|MockObject */
 	protected $manager;
 
-	/** @var IConfig|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var IConfig|MockObject */
 	protected $config;
 
-	/** @var IUserSession|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var IUserSession|MockObject */
 	protected $session;
 
 	/** @var EndpointController */
 	protected $controller;
 
-	/** @var IUser|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var IUser|MockObject */
 	protected $user;
 
 	protected function setUp() {
 		parent::setUp();
 
-		/** @var IRequest|\PHPUnit_Framework_MockObject_MockObject */
-		$this->request = $this->getMockBuilder(IRequest::class)
-			->getMock();
+		/** @var IRequest|MockObject */
+		$this->request = $this->createMock(IRequest::class);
 
-		/** @var Handler|\PHPUnit_Framework_MockObject_MockObject */
-		$this->handler = $this->getMockBuilder(Handler::class)
-			->disableOriginalConstructor()
-			->getMock();
+		/** @var Handler|MockObject */
+		$this->handler = $this->createMock(Handler::class);
 
-		/** @var IManager|\PHPUnit_Framework_MockObject_MockObject */
-		$this->manager = $this->getMockBuilder(IManager::class)
-			->getMock();
+		/** @var IManager|MockObject */
+		$this->manager = $this->createMock(IManager::class);
 
-		/** @var IConfig|\PHPUnit_Framework_MockObject_MockObject */
-		$this->config = $this->getMockBuilder(IConfig::class)
-			->getMock();
+		/** @var IConfig|MockObject */
+		$this->config = $this->createMock(IConfig::class);
 
-		/** @var IUserSession|\PHPUnit_Framework_MockObject_MockObject */
-		$this->session = $this->getMockBuilder(IUserSession::class)
-			->getMock();
+		/** @var IUserSession|MockObject */
+		$this->session = $this->createMock(IUserSession::class);
 
-		/** @var IUser|\PHPUnit_Framework_MockObject_MockObject */
-		$this->user = $this->getMockBuilder(IUser::class)
-			->getMock();
+		/** @var IUser|MockObject */
+		$this->user = $this->createMock(IUser::class);
 
 		$this->session->expects($this->any())
 			->method('getUser')
@@ -104,19 +100,19 @@ class EndpointControllerTest extends TestCase {
 				$this->config,
 				$this->session
 			);
-		} else {
-			return $this->getMockBuilder(EndpointController::class)
-				->setConstructorArgs([
-					'notifications',
-					$this->request,
-					$this->handler,
-					$this->manager,
-					$this->config,
-					$this->session
-				])
-				->setMethods($methods)
-				->getMock();
 		}
+
+		return $this->getMockBuilder(EndpointController::class)
+			->setConstructorArgs([
+				'notifications',
+				$this->request,
+				$this->handler,
+				$this->manager,
+				$this->config,
+				$this->session
+			])
+			->setMethods($methods)
+			->getMock();
 	}
 
 	public function dataListNotifications() {
@@ -134,7 +130,7 @@ class EndpointControllerTest extends TestCase {
 						->getMock(),
 				],
 				md5(json_encode([1, 3])),
-				['$notification', '$notification'],
+				[['$notification'], ['$notification']],
 			],
 			[
 				'v1',
@@ -143,7 +139,7 @@ class EndpointControllerTest extends TestCase {
 						->getMock(),
 				],
 				md5(json_encode([42])),
-				['$notification'],
+				[['$notification']],
 			],
 		];
 	}
@@ -159,9 +155,9 @@ class EndpointControllerTest extends TestCase {
 		$controller = $this->getController([
 			'notificationToArray',
 		]);
-		$controller->expects($this->exactly(sizeof($notifications)))
+		$controller->expects($this->exactly(\count($notifications)))
 			->method('notificationToArray')
-			->willReturn('$notification');
+			->willReturn(['$notification']);
 
 		$filter = $this->getMockBuilder(INotification::class)
 			->getMock();
@@ -175,7 +171,7 @@ class EndpointControllerTest extends TestCase {
 		$this->manager->expects($this->once())
 			->method('createNotification')
 			->willReturn($filter);
-		$this->manager->expects($this->exactly(sizeof($notifications)))
+		$this->manager->expects($this->exactly(\count($notifications)))
 			->method('prepare')
 			->willReturnArgument(0);
 
@@ -205,7 +201,7 @@ class EndpointControllerTest extends TestCase {
 						->getMock(),
 				],
 				md5(json_encode([3])),
-				['$notification'],
+				[['$notification']],
 			],
 		];
 	}
@@ -223,7 +219,7 @@ class EndpointControllerTest extends TestCase {
 		]);
 		$controller->expects($this->exactly(1))
 			->method('notificationToArray')
-			->willReturn('$notification');
+			->willReturn(['$notification']);
 
 		$filter = $this->getMockBuilder(INotification::class)
 			->getMock();
@@ -283,8 +279,8 @@ class EndpointControllerTest extends TestCase {
 
 	public function dataGetNotification() {
 		return [
-			['v1', 42, 'username1', ['$notification']],
-			['v2', 21, 'username2', ['$notification']],
+			['v1', 42, 'username1', [['$notification']]],
+			['v2', 21, 'username2', [['$notification']]],
 		];
 	}
 
@@ -318,7 +314,7 @@ class EndpointControllerTest extends TestCase {
 		$controller->expects($this->exactly(1))
 			->method('notificationToArray')
 			->with($id, $notification)
-			->willReturn('$notification');
+			->willReturn(['$notification']);
 
 		$response = $controller->getNotification($apiVersion, $id);
 		$this->assertInstanceOf(DataResponse::class, $response);
@@ -330,8 +326,8 @@ class EndpointControllerTest extends TestCase {
 			->getMock();
 
 		return [
-			['v1', false, 42, false, null], // No notifiers
-			['v1', true, 42, true, null], // Not found in database
+			['v1', false, 42, false, new NotificationNotFoundException()], // No notifiers
+			['v1', true, 42, true, new NotificationNotFoundException()], // Not found in database
 			['v1', true, 42, true, $notification], // Not handled on prepare
 			['v2', true, 42, true, $notification], // Not handled on prepare
 		];
@@ -343,7 +339,7 @@ class EndpointControllerTest extends TestCase {
 	 * @param bool $hasNotifiers
 	 * @param mixed $id
 	 * @param bool $called
-	 * @param null|INotification $notification
+	 * @param NotificationNotFoundException|INotification $notification
 	 */
 	public function testGetNotificationNoId($apiVersion, $hasNotifiers, $id, $called, $notification) {
 		$controller = $this->getController();
@@ -352,13 +348,23 @@ class EndpointControllerTest extends TestCase {
 			->method('hasNotifiers')
 			->willReturn($hasNotifiers);
 
-		$this->handler->expects($called ? $this->once() : $this->never())
-			->method('getById')
-			->willReturn($notification);
+		if ($notification instanceof NotificationNotFoundException) {
+			$this->handler->expects($called ? $this->once() : $this->never())
+				->method('getById')
+				->willThrowException($notification);
 
-		$this->manager->expects($called && $notification ? $this->once() : $this->never())
-			->method('prepare')
-			->willThrowException(new \InvalidArgumentException());
+			$this->manager->expects($called && !$notification instanceof NotificationNotFoundException ? $this->once() : $this->never())
+				->method('prepare')
+				->willThrowException(new \InvalidArgumentException());
+		} else {
+			$this->handler->expects($this->once())
+				->method('getById')
+				->willReturn($notification);
+
+			$this->manager->expects($this->once())
+				->method('prepare')
+				->willThrowException(new \InvalidArgumentException());
+		}
 
 		$response = $controller->getNotification($apiVersion, $id);
 		$this->assertInstanceOf(DataResponse::class, $response);
@@ -395,7 +401,7 @@ class EndpointControllerTest extends TestCase {
 		$this->handler->expects($this->never())
 			->method('deleteById');
 
-		$response = $controller->deleteNotification([]);
+		$response = $controller->deleteNotification(0);
 		$this->assertInstanceOf(DataResponse::class, $response);
 		$this->assertSame(Http::STATUS_NOT_FOUND, $response->getStatus());
 	}
@@ -425,14 +431,14 @@ class EndpointControllerTest extends TestCase {
 					->getMock(),
 				$this->getMockBuilder(IAction::class)
 					->getMock(),
-			], ['action', 'action']],
+			], [['action'], ['action']]],
 			['v2', 42, 'app1', 'user1', 1234, 'type1', 42, 'subject1', '', [], 'message1', 'richMessage 1', ['richMessage param'], 'link1', 'icon1', [], []],
 			['v2', 1337, 'app2', 'user2', 1337, 'type2', 21, 'subject2', 'richSubject 2', ['richSubject param'], 'message2', '', [], 'link2', 'icon2', [
 				$this->getMockBuilder(IAction::class)
 					->getMock(),
 				$this->getMockBuilder(IAction::class)
 					->getMock(),
-			], ['action', 'action']],
+			], [['action'], ['action']]],
 		];
 	}
 
@@ -522,9 +528,9 @@ class EndpointControllerTest extends TestCase {
 		$controller = $this->getController([
 			'actionToArray'
 		]);
-		$controller->expects($this->exactly(sizeof($actions)))
+		$controller->expects($this->exactly(\count($actions)))
 			->method('actionToArray')
-			->willReturn('action');
+			->willReturn(['action']);
 
 		$expected = [
 			'notification_id' => $id,

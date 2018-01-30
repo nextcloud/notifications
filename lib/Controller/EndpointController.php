@@ -21,6 +21,7 @@
 
 namespace OCA\Notifications\Controller;
 
+use OCA\Notifications\Exceptions\NotificationNotFoundException;
 use OCA\Notifications\Handler;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
@@ -98,12 +99,12 @@ class EndpointController extends OCSController {
 			$data[] = $this->notificationToArray($notificationId, $notification, $apiVersion);
 		}
 
-		$etag = $this->generateEtag($notificationIds);
-		if ($apiVersion !== 'v1' && $this->request->getHeader('If-None-Match') === $etag) {
+		$eTag = $this->generateETag($notificationIds);
+		if ($apiVersion !== 'v1' && $this->request->getHeader('If-None-Match') === $eTag) {
 			return new DataResponse([], Http::STATUS_NOT_MODIFIED);
 		}
 
-		return new DataResponse($data, Http::STATUS_OK, ['ETag' => $etag]);
+		return new DataResponse($data, Http::STATUS_OK, ['ETag' => $eTag]);
 	}
 
 	/**
@@ -119,13 +120,13 @@ class EndpointController extends OCSController {
 			return new DataResponse(null, Http::STATUS_NOT_FOUND);
 		}
 
-		if (!is_int($id) || $id === 0) {
+		if ($id === 0) {
 			return new DataResponse(null, Http::STATUS_NOT_FOUND);
 		}
 
-		$notification = $this->handler->getById($id, $this->getCurrentUser());
-
-		if (!($notification instanceof INotification)) {
+		try {
+			$notification = $this->handler->getById($id, $this->getCurrentUser());
+		} catch (NotificationNotFoundException $e) {
 			return new DataResponse(null, Http::STATUS_NOT_FOUND);
 		}
 
@@ -167,12 +168,12 @@ class EndpointController extends OCSController {
 	}
 
 	/**
-	 * Get an Etag for the notification ids
+	 * Get an ETag for the notification ids
 	 *
 	 * @param array $notifications
 	 * @return string
 	 */
-	protected function generateEtag(array $notifications): string {
+	protected function generateETag(array $notifications): string {
 		return md5(json_encode($notifications));
 	}
 

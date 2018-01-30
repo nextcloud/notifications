@@ -23,6 +23,7 @@
 namespace OCA\Notifications\Tests\Unit;
 
 
+use OCA\Notifications\Exceptions\NotificationNotFoundException;
 use OCA\Notifications\Handler;
 use OCP\Notification\IAction;
 use OCP\Notification\INotification;
@@ -149,8 +150,12 @@ class HandlerTest extends TestCase {
 		$notificationId = key($notifications);
 
 		// Get with wrong user
-		$getNotification = $this->handler->getById($notificationId, 'test_user2');
-		$this->assertSame(null, $getNotification);
+		try {
+			$this->handler->getById($notificationId, 'test_user2');
+			$this->fail('Exception of type NotificationNotFoundException expected');
+		} catch (\Exception $e) {
+			$this->assertInstanceOf(NotificationNotFoundException::class, $e);
+		}
 
 		// Delete with wrong user
 		$this->handler->deleteById($notificationId, 'test_user2');
