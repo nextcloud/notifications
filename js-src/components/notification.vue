@@ -3,7 +3,7 @@
 		<div class="notification-heading">
 			<span class="notification-time has-tooltip live-relative-timestamp" :data-timestamp="timestamp" :title="absoluteDate">{{relativeDate}}</span>
 			<div class="notification-delete" @click="onDismissNotification">
-				<span class="icon icon-close svg" :title="t_dismiss"></span>
+				<span class="icon icon-close svg" :title="t('notifications', 'Dismiss')"></span>
 			</div>
 		</div>
 		<a v-if="useLink" :href="link" class="notification-subject full-subject-link">
@@ -49,9 +49,6 @@
 		_$el: null,
 
 		computed: {
-			t_dismiss: function() {
-				return t('notifications', 'Dismiss');
-			},
 			timestamp: function() {
 				return moment(this.datetime).format('X') * 1000;
 			},

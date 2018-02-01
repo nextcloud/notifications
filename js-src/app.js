@@ -35,6 +35,17 @@ define(function (require) {
 
 			// Setup Vue
 			var Vue = require('vue');
+			Vue.mixin({
+				methods: {
+					t(app, text, vars, count, options) {
+						return OC.L10N.translate(app, text, vars, count, options);
+					},
+					n(app, textSingular, textPlural, count, vars, options) {
+						return OC.L10N.translatePlural(app, textSingular, textPlural, count, vars, options);
+					}
+				}
+			});
+
 			this.vm = new Vue(require('./components/root.vue'));
 
 			// Initial call to the notification endpoint
