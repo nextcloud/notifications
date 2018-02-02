@@ -1,14 +1,14 @@
 <template>
 	<div v-if="!shutdown" class="notifications">
 		<div class="notifications-button menutoggle" :class="{ hasNotifications: notifications.length }">
-			<img class="svg" alt="" :title="t_notifications" :src="iconPath">
+			<img class="svg" alt="" :title="t('notifications', 'Notifications')" :src="iconPath">
 		</div>
 		<div class="notification-container">
 			<div class="notification-wrapper" v-if="notifications.length">
 				<notification v-for="(n, index) in notifications" v-bind="n" :key="n.notification_id" @remove="onRemove" ></notification>
 			</div>
 			<div class="emptycontent" v-else>
-				<h2>{{t_empty}}</h2>
+				<h2>{{ t('notifications', 'No notifications') }}</h2>
 			</div>
 		</div>
 	</div>
@@ -35,12 +35,6 @@
 		_$container: null,
 
 		computed: {
-			t_empty: function() {
-				return t('notifications', 'No notifications');
-			},
-			t_notifications: function() {
-				return t('notifications', 'Notifications');
-			},
 			iconPath: function() {
 				var iconPath = 'notifications';
 
