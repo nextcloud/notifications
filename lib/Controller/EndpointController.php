@@ -158,6 +158,16 @@ class EndpointController extends OCSController {
 	}
 
 	/**
+	 * @NoAdminRequired
+	 *
+	 * @return DataResponse
+	 */
+	public function deleteAllNotifications(): DataResponse {
+		$this->handler->deleteByUser($this->getCurrentUser());
+		return new DataResponse();
+	}
+
+	/**
 	 * Get an Etag for the notification ids
 	 *
 	 * @param array $notifications

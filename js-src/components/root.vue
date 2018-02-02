@@ -5,7 +5,10 @@
 		</div>
 		<div class="notification-container">
 			<div class="notification-wrapper" v-if="notifications.length">
-				<notification v-for="(n, index) in notifications" v-bind="n" :key="n.notification_id" @remove="onRemove" ></notification>
+				<notification v-for="n in notifications" v-bind="n" :key="n.notification_id" @remove="onRemove" ></notification>
+				<div class="dismiss-all" v-if="notifications.length > 2" @click="onDismissAll">
+					<span class="icon icon-close svg" :title="t('notifications', 'Dismiss all notifications')"></span> {{ t('notifications', 'Dismiss all notifications') }}
+				</div>
 			</div>
 			<div class="emptycontent" v-else>
 				<h2>{{ t('notifications', 'No notifications') }}</h2>
@@ -54,6 +57,18 @@
 		},
 
 		methods: {
+			onDismissAll: function() {
+				$.ajax({
+					url: OC.linkToOCS('apps/notifications/api/v2', 2) + 'notifications',
+					type: 'DELETE',
+					success: function () {
+						this.notifications = [];
+					}.bind(this),
+					error: function () {
+						OC.Notification.showTemporary(t('notifications', 'Failed to dismiss all notifications'));
+					}
+				});
+			},
 			onRemove: function(index) {
 				this.notifications.splice(index, 1);
 			}

@@ -23,6 +23,7 @@ In order to find out if notifications is installed/enabled on the server you can
             "list",
             "get",
             "delete",
+            "delete-all",
             "icons",
             "rich-strings"
           ]
@@ -150,3 +151,10 @@ In order to get a single notification, you can send a GET request against `/ocs/
 
 In order to delete a notification, you can send a DELETE request against `/ocs/v2.php/apps/notifications/api/v2/notifications/{id}`
 
+
+
+## Deleting all notifications for a user
+
+In order to delete all notifications, you can send a DELETE request against `/ocs/v2.php/apps/notifications/api/v2/notifications`
+
+**Note:** This endpoint was added for Nextcloud 14, so check for the `delete-all` capability first.

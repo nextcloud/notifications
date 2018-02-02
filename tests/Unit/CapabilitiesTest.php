@@ -35,6 +35,7 @@ class CapabilitiesTest extends TestCase {
 					'list',
 					'get',
 					'delete',
+					'delete-all',
 					'icons',
 					'rich-strings',
 				],

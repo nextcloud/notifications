@@ -92,6 +92,21 @@ class Handler {
 	}
 
 	/**
+	 * Delete the notification of a given user
+	 *
+	 * @param string $user
+	 */
+	public function deleteByUser(string $user) {
+		$notification = $this->manager->createNotification();
+		try {
+			$notification->setUser($user);
+		} catch (\InvalidArgumentException $e) {
+			return;
+		}
+		$this->delete($notification);
+	}
+
+	/**
 	 * Delete the notification matching the given id
 	 *
 	 * @param int $id

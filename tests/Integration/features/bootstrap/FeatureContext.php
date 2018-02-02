@@ -215,6 +215,16 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
+	 * @Then /^delete all notifications on (v\d+)$/
+	 *
+	 * @param string $api
+	 */
+	public function deleteAllNotification($api) {
+		PHPUnit_Framework_Assert::assertNotEmpty($this->notificationIds);
+		$this->sendingTo('DELETE', '/apps/notifications/api/' . $api . '/notifications');
+	}
+
+	/**
 	 * @Then /^status code is ([0-9]*)$/
 	 *
 	 * @param int $statusCode
