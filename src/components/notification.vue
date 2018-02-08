@@ -152,6 +152,10 @@
 					}.bind(this);
 				}
 
+				if (this.app === 'spreed') {
+					this.$parent.playSound();
+				}
+
 				setTimeout(n.close.bind(n), 5000);
 			}
 		},

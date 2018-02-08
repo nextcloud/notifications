@@ -29,6 +29,7 @@
 				hadNotifications: false,
 				backgroundFetching: false,
 				shutdown: false,
+				playedSound: false,
 				notifications: [],
 
 				/** @type {number} */
@@ -40,6 +41,7 @@
 		},
 
 		_$icon: null,
+		_$audio: null,
 
 		computed: {
 			iconPath: function() {
@@ -108,6 +110,7 @@
 
 			_backgroundFetch: function() {
 				this.backgroundFetching = true;
+				this.playedSound = false;
 				this._fetch();
 			},
 
@@ -118,6 +121,16 @@
 			_shutDownNotifications: function() {
 				window.clearInterval(this.interval);
 				this.shutdown = true;
+			},
+
+			playSound: function() {
+				if (this.playedSound) {
+					// Already played in this background fetch
+					return;
+				}
+
+				this._$audio.play();
+				this.playedSound = true;
 			}
 		},
 
@@ -127,6 +140,11 @@
 
 		mounted: function () {
 			this._$icon = $(this.$refs.icon);
+
+			const $audio = $('<audio>');
+			$('<source>').attr('src', OC.linkTo('notifications', 'resources/talk.mp3')).appendTo($audio);
+			$('<source>').attr('src', OC.linkTo('notifications', 'resources/talk.ogg')).appendTo($audio);
+			this._$audio = $audio[0];
 
 			// Bind the button click event
 			OC.registerMenu($(this.$refs.button), $(this.$refs.container), undefined, true);
