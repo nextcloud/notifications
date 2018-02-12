@@ -28,7 +28,7 @@ package: clean build-js-production
 	--exclude=/build \
 	--exclude=/docs \
 	--exclude=/js-src \
-	--exclude=/l10n/.tx \
+	--exclude=/.tx \
 	--exclude=/tests \
 	--exclude=/.git \
 	--exclude=/.github \
