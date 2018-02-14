@@ -1,6 +1,9 @@
 OC.L10N.register(
     "notifications",
     {
+    "Failed to perform action" : "Esecuzione operazione non riuscita",
+    "Failed to dismiss notification" : "Cancellazione notifiche non riuscita",
+    "Failed to dismiss all notifications" : "Cancellazione di tutte le notifiche non riuscita",
     "in {path}" : "in {path}",
     "Notifications" : "Notifiche",
     "No notifications" : "Nessuna notifica",
