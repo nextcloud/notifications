@@ -1,6 +1,9 @@
 OC.L10N.register(
     "notifications",
     {
+    "Failed to perform action" : "Не удалось выполнить задание",
+    "Failed to dismiss notification" : "Не удалось отменить напоминание",
+    "Failed to dismiss all notifications" : "Не удалось отменить все напоминания",
     "in {path}" : "в {path}",
     "Notifications" : "Уведомления",
     "No notifications" : "Уведомлений нет",
