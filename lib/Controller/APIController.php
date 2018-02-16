@@ -64,10 +64,7 @@ class APIController extends OCSController {
 	 * @param string $longMessage
 	 * @return DataResponse
 	 */
-	public function generateNotification($userId, $shortMessage, $longMessage) {
-		$shortMessage = (string) $shortMessage;
-		$longMessage = (string) $longMessage;
-
+	public function generateNotification(string $userId, string $shortMessage, string $longMessage = ''): DataResponse {
 		$user = $this->userManager->get($userId);
 
 		if (!$user instanceof IUser) {

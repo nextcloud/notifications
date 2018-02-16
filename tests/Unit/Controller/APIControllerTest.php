@@ -71,7 +71,6 @@ class APIControllerTest extends \Test\TestCase {
 		return [
 			['user', '', '', false, null, false, null, 123, null, Http::STATUS_NOT_FOUND],
 			['user', '', '', false, null, false, 'user', 123, null, Http::STATUS_BAD_REQUEST],
-			['user', null, '', false, null, false, 'user', 123, null, Http::STATUS_BAD_REQUEST],
 			['user', str_repeat('a', 256), '', false, null, false, 'user', 123, null, Http::STATUS_BAD_REQUEST],
 			['user', 'short', '', true, false, false, 'user', 123, '7b', Http::STATUS_OK],
 			['user', 'short', str_repeat('a', 4001), false, null, false, 'user', 123, null, Http::STATUS_BAD_REQUEST],

@@ -51,7 +51,7 @@ class AdminNotifications implements INotifier {
 	 * @return INotification
 	 * @throws \InvalidArgumentException When the notification was not prepared by a notifier
 	 */
-	public function prepare(INotification $notification, $languageCode) {
+	public function prepare(INotification $notification, $languageCode): INotification {
 		if ($notification->getApp() !== 'admin_notifications') {
 			throw new \InvalidArgumentException('Unknown app');
 		}
