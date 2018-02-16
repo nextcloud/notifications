@@ -1,9 +1,9 @@
 <template>
 	<div v-if="!shutdown" class="notifications">
-		<div class="notifications-button menutoggle" :class="{ hasNotifications: notifications.length }">
-			<img class="svg" alt="" :title="t('notifications', 'Notifications')" :src="iconPath">
+		<div class="notifications-button menutoggle" ref="button" :class="{ hasNotifications: notifications.length }">
+			<img class="svg" alt="" ref="icon" :title="t('notifications', 'Notifications')" :src="iconPath">
 		</div>
-		<div class="notification-container">
+		<div class="notification-container"  ref="container">
 			<div class="notification-wrapper" v-if="notifications.length">
 				<notification v-for="n in notifications" v-bind="n" :key="n.notification_id" @remove="onRemove" ></notification>
 				<div class="dismiss-all" v-if="notifications.length > 2" @click="onDismissAll">
@@ -32,10 +32,7 @@
 			};
 		},
 
-		_$el: null,
-		_$button: null,
 		_$icon: null,
-		_$container: null,
 
 		computed: {
 			iconPath: function() {
@@ -79,17 +76,14 @@
 		},
 
 		mounted: function () {
-			this._$el = $(this.$el);
-			this._$button = this._$el.find('.notifications-button');
-			this._$icon = this._$button.find('img');
-			this._$container = this._$el.find('.notification-container');
+			this._$icon = $(this.$refs.icon);
 
 			// Bind the button click event
-			OC.registerMenu(this._$button, this._$container);
+			OC.registerMenu($(this.$refs.button), $(this.$refs.container));
 		},
 
 		updated: function() {
-			this._$button.find('img').attr('src', this.iconPath);
+			this._$icon.attr('src', this.iconPath);
 
 			if (!this.hadNotifications && this.notifications.length) {
 				this._$icon
