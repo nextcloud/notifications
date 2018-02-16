@@ -37,10 +37,10 @@ define(function (require) {
 			var Vue = require('vue');
 			Vue.mixin({
 				methods: {
-					t(app, text, vars, count, options) {
+					t: function(app, text, vars, count, options) {
 						return OC.L10N.translate(app, text, vars, count, options);
 					},
-					n(app, textSingular, textPlural, count, vars, options) {
+					n: function(app, textSingular, textPlural, count, vars, options) {
 						return OC.L10N.translatePlural(app, textSingular, textPlural, count, vars, options);
 					}
 				}
