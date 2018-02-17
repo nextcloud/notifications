@@ -1,6 +1,9 @@
 OC.L10N.register(
     "notifications",
     {
+    "Failed to perform action" : "Failed to perform action",
+    "Failed to dismiss notification" : "Failed to dismiss notification",
+    "Failed to dismiss all notifications" : "Failed to dismiss all notifications",
     "in {path}" : "in {path}",
     "Notifications" : "Notifications",
     "No notifications" : "No notifications",
