@@ -22,6 +22,7 @@
 namespace OCA\Notifications;
 
 
+use OCA\Notifications\Exceptions\NotificationNotFoundException;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\Notification\IAction;
@@ -50,7 +51,7 @@ class Handler {
 	 * @param INotification $notification
 	 * @return int
 	 */
-	public function add(INotification $notification) {
+	public function add(INotification $notification): int {
 		$sql = $this->connection->getQueryBuilder();
 		$sql->insert('notifications');
 		$this->sqlInsert($sql, $notification);
@@ -65,7 +66,7 @@ class Handler {
 	 * @param INotification $notification
 	 * @return int
 	 */
-	public function count(INotification $notification) {
+	public function count(INotification $notification): int {
 		$sql = $this->connection->getQueryBuilder();
 		$sql->select($sql->createFunction('COUNT(*)'))
 			->from('notifications');
@@ -112,13 +113,11 @@ class Handler {
 	 * @param int $id
 	 * @param string $user
 	 */
-	public function deleteById($id, $user) {
+	public function deleteById(int $id, string $user) {
 		$sql = $this->connection->getQueryBuilder();
 		$sql->delete('notifications')
-			->where($sql->expr()->eq('notification_id', $sql->createParameter('id')))
-			->setParameter('id', $id)
-			->andWhere($sql->expr()->eq('user', $sql->createParameter('user')))
-			->setParameter('user', $user);
+			->where($sql->expr()->eq('notification_id', $sql->createNamedParameter($id)))
+			->andWhere($sql->expr()->eq('user', $sql->createNamedParameter($user)));
 		$sql->execute();
 	}
 
@@ -127,25 +126,28 @@ class Handler {
 	 *
 	 * @param int $id
 	 * @param string $user
-	 * @return null|INotification
+	 * @return INotification
+	 * @throws NotificationNotFoundException
 	 */
-	public function getById($id, $user) {
+	public function getById(int $id, string $user): INotification {
 		$sql = $this->connection->getQueryBuilder();
 		$sql->select('*')
 			->from('notifications')
-			->where($sql->expr()->eq('notification_id', $sql->createParameter('id')))
-			->setParameter('id', $id)
-			->andWhere($sql->expr()->eq('user', $sql->createParameter('user')))
-			->setParameter('user', $user);
+			->where($sql->expr()->eq('notification_id', $sql->createNamedParameter($id)))
+			->andWhere($sql->expr()->eq('user', $sql->createNamedParameter($user)));
 		$statement = $sql->execute();
-
-		$notification = null;
-		if ($row = $statement->fetch()) {
-			$notification = $this->notificationFromRow($row);
-		}
+		$row = $statement->fetch();
 		$statement->closeCursor();
 
-		return $notification;
+		if ($row === false) {
+			throw new NotificationNotFoundException('No entry returned from database');
+		}
+
+		try {
+			return $this->notificationFromRow($row);
+		} catch (\InvalidArgumentException $e) {
+			throw new NotificationNotFoundException('Could not create notification from database row');
+		}
 	}
 
 	/**
@@ -155,7 +157,7 @@ class Handler {
 	 * @param int $limit
 	 * @return array [notification_id => INotification]
 	 */
-	public function get(INotification $notification, $limit = 25) {
+	public function get(INotification $notification, $limit = 25): array {
 		$sql = $this->connection->getQueryBuilder();
 		$sql->select('*')
 			->from('notifications')
@@ -167,7 +169,11 @@ class Handler {
 
 		$notifications = [];
 		while ($row = $statement->fetch()) {
-			$notifications[(int) $row['notification_id']] = $this->notificationFromRow($row);
+			try {
+				$notifications[(int)$row['notification_id']] = $this->notificationFromRow($row);
+			} catch (\InvalidArgumentException $e) {
+				continue;
+			}
 		}
 		$statement->closeCursor();
 
@@ -182,48 +188,40 @@ class Handler {
 	 */
 	protected function sqlWhere(IQueryBuilder $sql, INotification $notification) {
 		if ($notification->getApp() !== '') {
-			$sql->andWhere($sql->expr()->eq('app', $sql->createParameter('app')));
-			$sql->setParameter('app', $notification->getApp());
+			$sql->andWhere($sql->expr()->eq('app', $sql->createNamedParameter($notification->getApp())));
 		}
 
 		if ($notification->getUser() !== '') {
-			$sql->andWhere($sql->expr()->eq('user', $sql->createParameter('user')))
-				->setParameter('user', $notification->getUser());
+			$sql->andWhere($sql->expr()->eq('user', $sql->createNamedParameter($notification->getUser())));
 		}
 
-		if ($notification->getDateTime()->getTimestamp() !== 0) {
-			$sql->andWhere($sql->expr()->eq('timestamp', $sql->createParameter('timestamp')))
-				->setParameter('timestamp', $notification->getDateTime()->getTimestamp());
+		$timestamp = $notification->getDateTime()->getTimestamp();
+		if ($timestamp !== 0) {
+			$sql->andWhere($sql->expr()->eq('timestamp', $sql->createNamedParameter($timestamp)));
 		}
 
 		if ($notification->getObjectType() !== '') {
-			$sql->andWhere($sql->expr()->eq('object_type', $sql->createParameter('objectType')))
-				->setParameter('objectType', $notification->getObjectType());
+			$sql->andWhere($sql->expr()->eq('object_type', $sql->createNamedParameter($notification->getObjectType())));
 		}
 
 		if ($notification->getObjectId() !== '') {
-			$sql->andWhere($sql->expr()->eq('object_id', $sql->createParameter('objectId')))
-				->setParameter('objectId', $notification->getObjectId());
+			$sql->andWhere($sql->expr()->eq('object_id', $sql->createNamedParameter($notification->getObjectId())));
 		}
 
 		if ($notification->getSubject() !== '') {
-			$sql->andWhere($sql->expr()->eq('subject', $sql->createParameter('subject')))
-				->setParameter('subject', $notification->getSubject());
+			$sql->andWhere($sql->expr()->eq('subject', $sql->createNamedParameter($notification->getSubject())));
 		}
 
 		if ($notification->getMessage() !== '') {
-			$sql->andWhere($sql->expr()->eq('message', $sql->createParameter('message')))
-				->setParameter('message', $notification->getMessage());
+			$sql->andWhere($sql->expr()->eq('message', $sql->createNamedParameter($notification->getMessage())));
 		}
 
 		if ($notification->getLink() !== '') {
-			$sql->andWhere($sql->expr()->eq('link', $sql->createParameter('link')))
-				->setParameter('link', $notification->getLink());
+			$sql->andWhere($sql->expr()->eq('link', $sql->createNamedParameter($notification->getLink())));
 		}
 
-		if (method_exists($notification, 'getIcon') && $notification->getIcon() !== '') {
-			$sql->andWhere($sql->expr()->eq('icon', $sql->createParameter('icon')))
-				->setParameter('icon', $notification->getIcon());
+		if ($notification->getIcon() !== '') {
+			$sql->andWhere($sql->expr()->eq('icon', $sql->createNamedParameter($notification->getIcon())));
 		}
 	}
 
@@ -234,44 +232,6 @@ class Handler {
 	 * @param INotification $notification
 	 */
 	protected function sqlInsert(IQueryBuilder $sql, INotification $notification) {
-		$sql->setValue('app', $sql->createParameter('app'))
-			->setParameter('app', $notification->getApp());
-
-		$sql->setValue('user', $sql->createParameter('user'))
-			->setParameter('user', $notification->getUser());
-
-		$sql->setValue('timestamp', $sql->createParameter('timestamp'))
-			->setParameter('timestamp', $notification->getDateTime()->getTimestamp());
-
-		$sql->setValue('object_type', $sql->createParameter('objectType'))
-			->setParameter('objectType', $notification->getObjectType());
-
-		$sql->setValue('object_id', $sql->createParameter('objectId'))
-			->setParameter('objectId', $notification->getObjectId());
-
-		$sql->setValue('subject', $sql->createParameter('subject'))
-			->setParameter('subject', $notification->getSubject());
-
-		$sql->setValue('subject_parameters', $sql->createParameter('subject_parameters'))
-			->setParameter('subject_parameters', json_encode($notification->getSubjectParameters()));
-
-		$sql->setValue('message', $sql->createParameter('message'))
-			->setParameter('message', $notification->getMessage());
-
-		$sql->setValue('message_parameters', $sql->createParameter('message_parameters'))
-			->setParameter('message_parameters', json_encode($notification->getMessageParameters()));
-
-		$sql->setValue('link', $sql->createParameter('link'))
-			->setParameter('link', $notification->getLink());
-
-		if (method_exists($notification, 'getIcon')) {
-			$sql->setValue('icon', $sql->createParameter('icon'))
-				->setParameter('icon', $notification->getIcon());
-		} else {
-			$sql->setValue('icon', $sql->createParameter('icon'))
-				->setParameter('icon', '');
-		}
-
 		$actions = [];
 		foreach ($notification->getActions() as $action) {
 			/** @var IAction $action */
@@ -282,8 +242,19 @@ class Handler {
 				'primary' => $action->isPrimary(),
 			];
 		}
-		$sql->setValue('actions', $sql->createParameter('actions'))
-			->setParameter('actions', json_encode($actions));
+
+		$sql->setValue('app', $sql->createNamedParameter($notification->getApp()))
+			->setValue('user', $sql->createNamedParameter($notification->getUser()))
+			->setValue('timestamp', $sql->createNamedParameter($notification->getDateTime()->getTimestamp()))
+			->setValue('object_type', $sql->createNamedParameter($notification->getObjectType()))
+			->setValue('object_id', $sql->createNamedParameter($notification->getObjectId()))
+			->setValue('subject', $sql->createNamedParameter($notification->getSubject()))
+			->setValue('subject_parameters', $sql->createNamedParameter(json_encode($notification->getSubjectParameters())))
+			->setValue('message', $sql->createNamedParameter($notification->getMessage()))
+			->setValue('message_parameters', $sql->createNamedParameter(json_encode($notification->getMessageParameters())))
+			->setValue('link', $sql->createNamedParameter($notification->getLink()))
+			->setValue('icon', $sql->createNamedParameter($notification->getIcon()))
+			->setValue('actions', $sql->createNamedParameter(json_encode($actions)));
 	}
 
 	/**
@@ -291,8 +262,9 @@ class Handler {
 	 *
 	 * @param array $row
 	 * @return INotification
+	 * @throws \InvalidArgumentException
 	 */
-	protected function notificationFromRow(array $row) {
+	protected function notificationFromRow(array $row): INotification {
 		$dateTime = new \DateTime();
 		$dateTime->setTimestamp((int) $row['timestamp']);
 

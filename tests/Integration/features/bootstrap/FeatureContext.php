@@ -23,8 +23,12 @@ require __DIR__ . '/../../vendor/autoload.php';
 
 use Behat\Behat\Context\Context;
 use Behat\Behat\Context\SnippetAcceptingContext;
+use Behat\Gherkin\Node\TableNode;
 use GuzzleHttp\Client;
+use GuzzleHttp\Cookie\CookieJar;
+use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Message\ResponseInterface;
+use PHPUnit\Framework\Assert;
 
 /**
  * Defines application features from the specific context.
@@ -43,7 +47,7 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	/** @var ResponseInterface */
 	private $response = null;
 
-	/** @var \GuzzleHttp\Cookie\CookieJar */
+	/** @var CookieJar */
 	private $cookieJar;
 
 	/** @var string */
@@ -56,7 +60,7 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	 * FeatureContext constructor.
 	 */
 	public function __construct() {
-		$this->cookieJar = new \GuzzleHttp\Cookie\CookieJar();
+		$this->cookieJar = new CookieJar();
 		$this->baseUrl = getenv('TEST_SERVER_URL');
 	}
 
@@ -65,7 +69,7 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	 *
 	 * @param string $user
 	 */
-	public function hasNotifications($user) {
+	public function hasNotifications(string $user) {
 		if ($user === 'test1') {
 			$response = $this->setTestingValue('POST', 'apps/notificationsintegrationtesting/notifications', null);
 			$this->assertStatusCode($response, 200);
@@ -76,9 +80,9 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	 * @Given /^user "([^"]*)" receives notification with$/
 	 *
 	 * @param string $user
-	 * @param \Behat\Gherkin\Node\TableNode|null $formData
+	 * @param TableNode|null $formData
 	 */
-	public function receiveNotification($user, \Behat\Gherkin\Node\TableNode $formData) {
+	public function receiveNotification(string $user, TableNode $formData) {
 		if ($user === 'test1') {
 			$response = $this->setTestingValue('POST', 'apps/notificationsintegrationtesting/notifications', $formData);
 			$this->assertStatusCode($response, 200);
@@ -88,13 +92,13 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	/**
 	 * @When /^getting notifications on (v\d+)(| with different etag| with matching etag)$/
 	 * @param string $api
-	 * @param string $etag
+	 * @param string $eTag
 	 */
-	public function gettingNotifications($api, $etag) {
+	public function gettingNotifications(string $api, string $eTag) {
 		$headers = [];
-		if ($etag === ' with different etag') {
+		if ($eTag === ' with different etag') {
 			$headers['If-None-Match'] = substr($this->lastEtag, 0, 16);
-		} else if ($etag === ' with matching etag') {
+		} else if ($eTag === ' with matching etag') {
 			$headers['If-None-Match'] = $this->lastEtag;
 		}
 
@@ -106,7 +110,7 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	 * @Then /^response body is empty$/
 	 */
 	public function checkResponseBodyIsEmpty() {
-		PHPUnit_Framework_Assert::assertSame('', $this->response->getBody()->getContents());
+		Assert::assertSame('', $this->response->getBody()->getContents());
 	}
 
 	/**
@@ -114,9 +118,9 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	 *
 	 * @param int $numNotifications
 	 */
-	public function checkNumNotifications($numNotifications) {
+	public function checkNumNotifications(int $numNotifications) {
 		$notifications = $this->getArrayOfNotificationsResponded($this->response);
-		PHPUnit_Framework_Assert::assertCount((int) $numNotifications, $notifications);
+		Assert::assertCount((int) $numNotifications, $notifications);
 
 		$notificationIds = [];
 		foreach ($notifications as $notification) {
@@ -131,7 +135,7 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	 * @param ResponseInterface $response
 	 * @return array
 	 */
-	protected function getArrayOfNotificationsResponded(ResponseInterface $response) {
+	protected function getArrayOfNotificationsResponded(ResponseInterface $response): array {
 		return $response->json()['ocs']['data'];
 	}
 
@@ -143,14 +147,14 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	 * @param string $api
 	 * @param string $missingLast
 	 */
-	public function userNumNotifications($user, $numNotifications, $api, $missingLast) {
+	public function userNumNotifications(string $user, int $numNotifications, string $api, string $missingLast) {
 		if ($user === 'test1') {
 			$this->sendingTo('GET', '/apps/notifications/api/' . $api . '/notifications?format=json');
 			$this->assertStatusCode($this->response, 200);
 
 			$previousNotificationIds = [];
 			if ($missingLast) {
-				PHPUnit_Framework_Assert::assertNotEmpty($this->notificationIds);
+				Assert::assertNotEmpty($this->notificationIds);
 				$previousNotificationIds = end($this->notificationIds);
 			}
 
@@ -164,7 +168,7 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 					$now[] = $this->deletedNotification;
 				}
 
-				PHPUnit_Framework_Assert::assertEquals($previousNotificationIds, $now);
+				Assert::assertEquals($previousNotificationIds, $now);
 			}
 
 		}
@@ -175,9 +179,9 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	 *
 	 * @param string $notification
 	 * @param string $api
-	 * @param \Behat\Gherkin\Node\TableNode|null $formData
+	 * @param TableNode|null $formData
 	 */
-	public function matchNotification($notification, $api, $formData) {
+	public function matchNotification(string $notification, string $api, TableNode $formData = null) {
 		$lastNotifications = end($this->notificationIds);
 		if ($notification === 'first') {
 			$notificationId = reset($lastNotifications);
@@ -190,8 +194,8 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 		$response = $this->response->json();
 
 		foreach ($formData->getRowsHash() as $key => $value) {
-			PHPUnit_Framework_Assert::assertArrayHasKey($key, $response['ocs']['data']);
-			PHPUnit_Framework_Assert::assertEquals($value, $response['ocs']['data'][$key]);
+			Assert::assertArrayHasKey($key, $response['ocs']['data']);
+			Assert::assertEquals($value, $response['ocs']['data'][$key]);
 		}
 	}
 
@@ -201,8 +205,8 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	 * @param string $toDelete
 	 * @param string $api
 	 */
-	public function deleteNotification($toDelete, $api) {
-		PHPUnit_Framework_Assert::assertNotEmpty($this->notificationIds);
+	public function deleteNotification(string $toDelete, string $api) {
+		Assert::assertNotEmpty($this->notificationIds);
 		$lastNotificationIds = end($this->notificationIds);
 		if ($toDelete === 'first') {
 			$this->deletedNotification = end($lastNotificationIds);
@@ -220,7 +224,7 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	 * @param string $api
 	 */
 	public function deleteAllNotification($api) {
-		PHPUnit_Framework_Assert::assertNotEmpty($this->notificationIds);
+		Assert::assertNotEmpty($this->notificationIds);
 		$this->sendingTo('DELETE', '/apps/notifications/api/' . $api . '/notifications');
 	}
 
@@ -229,7 +233,7 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	 *
 	 * @param int $statusCode
 	 */
-	public function isStatusCode($statusCode) {
+	public function isStatusCode(int $statusCode) {
 		$this->assertStatusCode($this->response, $statusCode);
 	}
 
@@ -243,25 +247,25 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
-	 * @param $verb
-	 * @param $url
-	 * @param $body
+	 * @param string $verb
+	 * @param string $url
+	 * @param TableNode $body
 	 * @return \GuzzleHttp\Message\FutureResponse|ResponseInterface|null
 	 */
-	protected function setTestingValue($verb, $url, $body) {
+	protected function setTestingValue(string $verb, string $url, TableNode $body = null) {
 		$fullUrl = $this->baseUrl . 'ocs/v2.php/' . $url;
 		$client = new Client();
 		$options = [
 			'auth' => ['admin', 'admin'],
 		];
-		if ($body instanceof \Behat\Gherkin\Node\TableNode) {
+		if ($body instanceof TableNode) {
 			$fd = $body->getRowsHash();
 			$options['body'] = $fd;
 		}
 
 		try {
 			return $client->send($client->createRequest($verb, $fullUrl, $options));
-		} catch (\GuzzleHttp\Exception\ClientException $ex) {
+		} catch (ClientException $ex) {
 			return $ex->getResponse();
 		}
 	}
@@ -274,7 +278,7 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	 * @Given /^as user "([^"]*)"$/
 	 * @param string $user
 	 */
-	public function setCurrentUser($user) {
+	public function setCurrentUser(string $user) {
 		$this->currentUser = $user;
 	}
 
@@ -282,17 +286,17 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	 * @Given /^user "([^"]*)" exists$/
 	 * @param string $user
 	 */
-	public function assureUserExists($user) {
+	public function assureUserExists(string $user) {
 		try {
 			$this->userExists($user);
-		} catch (\GuzzleHttp\Exception\ClientException $ex) {
+		} catch (ClientException $ex) {
 			$this->createUser($user);
 		}
 		$response = $this->userExists($user);
 		$this->assertStatusCode($response, 200);
 	}
 
-	private function userExists($user) {
+	private function userExists(string $user): ResponseInterface {
 		$client = new Client();
 		$options = [
 			'auth' => ['admin', 'admin'],
@@ -303,9 +307,9 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 		return $client->get($this->baseUrl . 'ocs/v2.php/cloud/users/' . $user, $options);
 	}
 
-	private function createUser($user) {
+	private function createUser(string $user) {
 		$previous_user = $this->currentUser;
-		$this->currentUser = "admin";
+		$this->currentUser = 'admin';
 
 		$userProvisioningUrl = $this->baseUrl . 'ocs/v2.php/cloud/users';
 		$client = new Client();
@@ -342,7 +346,7 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	 * @param string $verb
 	 * @param string $url
 	 */
-	public function sendingTo($verb, $url) {
+	public function sendingTo(string $verb, string $url) {
 		$this->sendingToWith($verb, $url, null);
 	}
 
@@ -350,10 +354,10 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	 * @When /^sending "([^"]*)" to "([^"]*)" with$/
 	 * @param string $verb
 	 * @param string $url
-	 * @param \Behat\Gherkin\Node\TableNode $body
+	 * @param TableNode $body
 	 * @param array $headers
 	 */
-	public function sendingToWith($verb, $url, $body, array $headers = []) {
+	public function sendingToWith(string $verb, string $url, TableNode $body = null, array $headers = []) {
 		$fullUrl = $this->baseUrl . 'ocs/v2.php' . $url;
 		$client = new Client();
 		$options = [];
@@ -362,7 +366,7 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 		} else {
 			$options['auth'] = [$this->currentUser, '123456'];
 		}
-		if ($body instanceof \Behat\Gherkin\Node\TableNode) {
+		if ($body instanceof TableNode) {
 			$fd = $body->getRowsHash();
 			$options['body'] = $fd;
 		}
@@ -373,7 +377,7 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 
 		try {
 			$this->response = $client->send($client->createRequest($verb, $fullUrl, $options));
-		} catch (\GuzzleHttp\Exception\ClientException $ex) {
+		} catch (ClientException $ex) {
 			$this->response = $ex->getResponse();
 		}
 	}
@@ -382,7 +386,7 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	 * @param ResponseInterface $response
 	 * @param int $statusCode
 	 */
-	protected function assertStatusCode(ResponseInterface $response, $statusCode) {
-		PHPUnit_Framework_Assert::assertEquals($statusCode, $response->getStatusCode());
+	protected function assertStatusCode(ResponseInterface $response, int $statusCode) {
+		Assert::assertEquals($statusCode, $response->getStatusCode());
 	}
 }

@@ -35,7 +35,7 @@ class Capabilities implements ICapability {
 	 *
 	 * @return array
 	 */
-	public function getCapabilities() {
+	public function getCapabilities(): array {
 		return [
 			'notifications' => [
 				'ocs-endpoints' => [

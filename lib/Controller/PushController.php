@@ -79,7 +79,7 @@ class PushController extends OCSController {
 	 * @param string $proxyServer
 	 * @return DataResponse
 	 */
-	public function registerDevice($pushTokenHash, $devicePublicKey, $proxyServer) {
+	public function registerDevice(string $pushTokenHash, string $devicePublicKey, string $proxyServer): DataResponse {
 		$user = $this->userSession->getUser();
 		if (!$user instanceof IUser) {
 			return new DataResponse([], Http::STATUS_UNAUTHORIZED);
@@ -90,16 +90,17 @@ class PushController extends OCSController {
 		}
 
 		if (
-			((strlen($devicePublicKey) !== 450 || strpos($devicePublicKey, "\n" . '-----END PUBLIC KEY-----') !== 425) &&
-				(strlen($devicePublicKey) !== 451 || strpos($devicePublicKey, "\n" . '-----END PUBLIC KEY-----' . "\n") !== 425)) ||
-			strpos($devicePublicKey, '-----BEGIN PUBLIC KEY-----' . "\n") !== 0) {
+			strpos($devicePublicKey, '-----BEGIN PUBLIC KEY-----' . "\n") !== 0 ||
+			((\strlen($devicePublicKey) !== 450 || strpos($devicePublicKey, "\n" . '-----END PUBLIC KEY-----') !== 425) &&
+				(\strlen($devicePublicKey) !== 451 || strpos($devicePublicKey, "\n" . '-----END PUBLIC KEY-----' . "\n") !== 425))
+			) {
 			return new DataResponse(['message' => 'INVALID_DEVICE_KEY'], Http::STATUS_BAD_REQUEST);
 		}
 
 		if (
 			!filter_var($proxyServer, FILTER_VALIDATE_URL) ||
-			strlen($proxyServer) > 256 ||
-			!preg_match('/^(https\:\/\/|http\:\/\/localhost(\:[0-9]{0,5})?\/)/', $proxyServer)
+			\strlen($proxyServer) > 256 ||
+			!preg_match('/^(https\:\/\/|http\:\/\/localhost(\:\d{0,5})?\/)/', $proxyServer)
 		) {
 			return new DataResponse(['message' => 'INVALID_PROXY_SERVER'], Http::STATUS_BAD_REQUEST);
 		}
@@ -144,7 +145,7 @@ class PushController extends OCSController {
 	 *
 	 * @return DataResponse
 	 */
-	public function removeDevice() {
+	public function removeDevice(): DataResponse {
 		$user = $this->userSession->getUser();
 		if (!$user instanceof IUser) {
 			return new DataResponse([], Http::STATUS_UNAUTHORIZED);
@@ -174,7 +175,7 @@ class PushController extends OCSController {
 	 * @param string $appType
 	 * @return bool If the hash was new to the database
 	 */
-	protected function savePushToken(IUser $user, IToken $token, $deviceIdentifier, $devicePublicKey, $pushTokenHash, $proxyServer, $appType) {
+	protected function savePushToken(IUser $user, IToken $token, string $deviceIdentifier, string $devicePublicKey, string $pushTokenHash, string $proxyServer, string $appType): bool {
 		$query = $this->db->getQueryBuilder();
 		$query->select('*')
 			->from('notifications_pushtokens')
@@ -201,7 +202,7 @@ class PushController extends OCSController {
 	 * @param string $appType
 	 * @return bool If the entry was created
 	 */
-	protected function insertPushToken(IUser $user, IToken $token, $deviceIdentifier, $devicePublicKey, $pushTokenHash, $proxyServer, $appType) {
+	protected function insertPushToken(IUser $user, IToken $token, string $deviceIdentifier, string $devicePublicKey, string $pushTokenHash, string $proxyServer, string $appType): bool {
 		$devicePublicKeyHash = hash('sha512', $devicePublicKey);
 
 		$query = $this->db->getQueryBuilder();
@@ -228,7 +229,7 @@ class PushController extends OCSController {
 	 * @param string $appType
 	 * @return bool If the entry was updated
 	 */
-	protected function updatePushToken(IUser $user, IToken $token, $devicePublicKey, $pushTokenHash, $proxyServer, $appType) {
+	protected function updatePushToken(IUser $user, IToken $token, string $devicePublicKey, string $pushTokenHash, string $proxyServer, string $appType): bool {
 		$devicePublicKeyHash = hash('sha512', $devicePublicKey);
 
 		$query = $this->db->getQueryBuilder();
@@ -249,7 +250,7 @@ class PushController extends OCSController {
 	 * @param IToken $token
 	 * @return bool If the entry was deleted
 	 */
-	protected function deletePushToken(IUser $user, IToken $token) {
+	protected function deletePushToken(IUser $user, IToken $token): bool {
 		$query = $this->db->getQueryBuilder();
 		$query->delete('notifications_pushtokens')
 			->where($query->expr()->eq('uid', $query->createNamedParameter($user->getUID())))

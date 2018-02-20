@@ -59,7 +59,6 @@ nbproject
 /tests/Unit/clover.xml
 /tests/Unit/js/node_modules
 
-/tests/Integration/composer.lock
 /tests/Integration/output
 /tests/Integration/vendor
 
