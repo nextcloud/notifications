@@ -1,7 +1,9 @@
 <?xml version="1.0"?>
-<info>
+<info xmlns:xsi= "http://www.w3.org/2001/XMLSchema-instance"
+	  xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
 	<id>notifications</id>
 	<name>Notifications</name>
+	<summary><![CDATA[This app provides a backend and frontend for the notification API available in Nextcloud.]]></summary>
 	<description><![CDATA[This app provides a backend and frontend for the notification API available in Nextcloud.
 		The API is used by other apps to notify users in the web UI and sync clients about various things. Some examples are:
 
@@ -13,19 +15,21 @@
 
 📣 Announcement center: An announcement was posted by an admin]]></description>
 
-	<licence>AGPL</licence>
-	<author>Joas Schilling</author>
 	<version>2.2.1</version>
+	<licence>agpl</licence>
+	<author>Joas Schilling</author>
+
+	<default_enable/>
 
 	<types>
 		<logging/>
 	</types>
 
-	<default_enable/>
+	<category>tools</category>
 
 	<website>https://github.com/nextcloud/notifications</website>
 	<bugs>https://github.com/nextcloud/notifications/issues</bugs>
-	<repository type="git">https://github.com/nextcloud/notifications.git</repository>
+	<repository>https://github.com/nextcloud/notifications.git</repository>
 
 	<dependencies>
 		<nextcloud min-version="14" max-version="14" />
