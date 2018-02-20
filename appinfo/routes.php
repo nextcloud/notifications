@@ -27,5 +27,6 @@ return [
 		['name' => 'Endpoint#deleteAllNotifications', 'url' => '/api/{apiVersion}/notifications', 'verb' => 'DELETE', 'requirements' => ['apiVersion' => 'v(1|2)']],
 		['name' => 'Push#registerDevice', 'url' => '/api/{apiVersion}/push', 'verb' => 'POST', 'requirements' => ['apiVersion' => 'v2']],
 		['name' => 'Push#removeDevice', 'url' => '/api/{apiVersion}/push', 'verb' => 'DELETE', 'requirements' => ['apiVersion' => 'v2']],
+		['name' => 'API#generateNotification', 'url' => '/api/{apiVersion}/notifications/{userId}', 'verb' => 'POST', 'requirements' => ['apiVersion' => 'v(1|2)'], 'root' => '/apps/admin_notifications'],
 	],
 ];

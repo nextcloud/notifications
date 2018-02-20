@@ -15,7 +15,7 @@
 
 	<licence>AGPL</licence>
 	<author>Joas Schilling</author>
-	<version>2.2.0</version>
+	<version>2.2.1</version>
 
 	<types>
 		<logging/>
@@ -30,4 +30,8 @@
 	<dependencies>
 		<nextcloud min-version="14" max-version="14" />
 	</dependencies>
+
+	<commands>
+		<command>OCA\Notifications\Command\Generate</command>
+	</commands>
 </info>

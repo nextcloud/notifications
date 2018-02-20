@@ -42,6 +42,10 @@ class CapabilitiesTest extends TestCase {
 				'push' => [
 					'devices',
 				],
+				'admin-notifications' => [
+					'ocs',
+					'cli',
+				],
 			],
 		], $capabilities->getCapabilities());
 	}

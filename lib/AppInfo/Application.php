@@ -24,7 +24,7 @@ namespace OCA\Notifications\AppInfo;
 use OC\Authentication\Token\IProvider;
 use OCA\Notifications\App;
 use OCA\Notifications\Capabilities;
-use OCA\Notifications\Controller\EndpointController;
+use OCA\Notifications\Notifier\AdminNotifications;
 use OCP\AppFramework\IAppContainer;
 use OCP\Util;
 
@@ -43,6 +43,7 @@ class Application extends \OCP\AppFramework\App {
 
 	public function register() {
 		$this->registerNotificationApp();
+		$this->registerAdminNotifications();
 		$this->registerUserInterface();
 	}
 
@@ -50,6 +51,17 @@ class Application extends \OCP\AppFramework\App {
 		$container = $this->getContainer();
 		$container->getServer()->getNotificationManager()->registerApp(function() use($container) {
 			return $container->query(App::class);
+		});
+	}
+	protected function registerAdminNotifications() {
+		$this->getContainer()->getServer()->getNotificationManager()->registerNotifier(function() {
+			return $this->getContainer()->query(AdminNotifications::class);
+		}, function() {
+			$l = $this->getContainer()->getServer()->getL10NFactory()->get('notifications');
+			return [
+				'id' => 'admin_notifications',
+				'name' => $l->t('Admin notifications'),
+			];
 		});
 	}
 
@@ -66,6 +78,5 @@ class Application extends \OCP\AppFramework\App {
 			Util::addScript('notifications', 'merged');
 			Util::addStyle('notifications', 'styles');
 		}
-
 	}
 }
