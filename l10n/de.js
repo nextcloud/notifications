@@ -5,6 +5,7 @@ OC.L10N.register(
     "Failed to dismiss notification" : "Benachrichtigung konnte nicht verworfen werden",
     "Failed to dismiss all notifications" : "Alle Benachrichtigungen konnten nicht verworfen werden",
     "in {path}" : "in {path}",
+    "Admin notifications" : "Administrator-Benachrichtigung",
     "Notifications" : "Benachrichtigungen",
     "No notifications" : "Keine Benachrichtigungen",
     "Dismiss" : "Verwerfen"
