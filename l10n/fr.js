@@ -5,6 +5,7 @@ OC.L10N.register(
     "Failed to dismiss notification" : "Impossible d'ignorer la notification",
     "Failed to dismiss all notifications" : "Impossible d'ignorer toutes les notifications",
     "in {path}" : "dans {path}",
+    "Admin notifications" : "Notifications d'administration",
     "Notifications" : "Notifications",
     "No notifications" : "Aucune notification",
     "Dismiss" : "Ignorer"
