@@ -1,7 +1,11 @@
 OC.L10N.register(
     "notifications",
     {
+    "Failed to perform action" : "Грешка при извршавању операције",
+    "Failed to dismiss notification" : "Грешка при уклањању обавештења",
+    "Failed to dismiss all notifications" : "Грешка при уклањању свих обавештења",
     "in {path}" : "у {path}",
+    "Admin notifications" : "Администраторска обавештења",
     "Notifications" : "Обавештења",
     "No notifications" : "Нема обавештења",
     "Dismiss" : "Одбаци"
