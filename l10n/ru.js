@@ -5,6 +5,7 @@ OC.L10N.register(
     "Failed to dismiss notification" : "Не удалось отменить напоминание",
     "Failed to dismiss all notifications" : "Не удалось отменить все напоминания",
     "in {path}" : "в {path}",
+    "Admin notifications" : "Уведомления администратора",
     "Notifications" : "Уведомления",
     "No notifications" : "Уведомлений нет",
     "Dismiss" : "Закрыть"
