@@ -5,6 +5,7 @@ OC.L10N.register(
     "Failed to dismiss notification" : "Bildirim yok sayılamadı",
     "Failed to dismiss all notifications" : "Tüm bildirimler yok sayılamadı",
     "in {path}" : "{path} içinde",
+    "Admin notifications" : "Yönetici bildirimleri",
     "Notifications" : "Bildirimler",
     "No notifications" : "Bildirimler kapalı",
     "Dismiss" : "Yoksay"
