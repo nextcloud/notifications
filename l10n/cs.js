@@ -1,7 +1,11 @@
 OC.L10N.register(
     "notifications",
     {
+    "Failed to perform action" : "Nepodařilo se provést akci",
+    "Failed to dismiss notification" : "Nepodařilo se zrušit oznámení",
+    "Failed to dismiss all notifications" : "Nepodařilo se zrušit všechna oznámení",
     "in {path}" : "v {path}",
+    "Admin notifications" : "Oznámení administrátora",
     "Notifications" : "Upozornění",
     "No notifications" : "Žádná upozornění",
     "Dismiss" : "Zavřít"
