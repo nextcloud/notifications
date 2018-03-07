@@ -79,7 +79,7 @@
 			this._$icon = $(this.$refs.icon);
 
 			// Bind the button click event
-			OC.registerMenu($(this.$refs.button), $(this.$refs.container));
+			OC.registerMenu($(this.$refs.button), $(this.$refs.container), undefined, true);
 		},
 
 		updated: function() {
