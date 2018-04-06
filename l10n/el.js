@@ -1,6 +1,7 @@
 OC.L10N.register(
     "notifications",
     {
+    "Failed to perform action" : "Αποτυχία εκτέλεσης ενέργειας",
     "in {path}" : "στο {path}",
     "Admin notifications" : "Ειδοποιήσεις διαχειριστή",
     "Notifications" : "Ειδοποιήσεις",
