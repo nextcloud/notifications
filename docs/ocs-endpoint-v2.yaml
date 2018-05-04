@@ -1,0 +1,236 @@
+openapi: "3.0.0"
+info:
+  version: 2.0.0
+  title: Nextcloud notifications app
+  license:
+    name: AGPLv3
+    url: http://www.gnu.org/licenses/agpl-3.0.html
+servers:
+  - url: http://{host}/ocs/v2.php/apps/notifications/api/v2
+paths:
+  /notifications:
+    get:
+      summary: Get the notifications of a user
+      description: Grab a list of notifications. The user needs to be identified/logged in by the server.
+      tags:
+        - notifications
+      responses:
+        200:
+          description: An array of notifications
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Notifications"
+        204:
+          description: No content, you can slow down the polling to once per hour. This status code means that there is no app that can generate notifications.
+        304:
+          description: The provided `If-None-Match` matches the ETag, response body is empty
+    delete:
+      summary: Delete all notifications for a user
+      description: |
+        **Note**: This endpoint was added for Nextcloud 14, so check for the `delete-all` capability first.
+      tags:
+        - notifications
+      responses:
+        200:
+          description: Success
+  /notifications/{id}:
+    get:
+      summary: Get a single notification for a user
+      tags:
+        - notifications
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The id of the notification to retrieve
+          schema:
+            type: integer
+      responses:
+        200:
+          description: A single notification
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Notification"
+    delete:
+      summary: Delete a notification for a user
+      tags:
+        - notifications
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The id of the notification to delete
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success
+
+components:
+  schemas:
+    Action:
+      type: object
+      required:
+        - label
+        - link
+        - type
+        - primary
+      properties:
+        label:
+          description: Translated short label of the action/button that should be presented to the user
+          type: string
+        link:
+          description: A link that should be followed when the action is performed/clicked
+          type: string
+        type:
+          description: HTTP method that should be used for the request against the link
+          type: string
+          enum: [GET, PUT, POST, DELETE]
+        primary:
+          description: If the action is the primary action for the notification or not
+          type: boolean
+    Notification:
+      type: object
+      required:
+        - notification_id
+        - app
+        - user
+        - datetime
+        - object_type
+        - object_id
+        - subject
+      properties:
+        notification_id:
+          description: Unique identifier of the notification, can be used to dismiss a notification
+          type: integer
+          format: int64
+        app:
+          description: Name of the app that triggered the notification
+          type: string
+        user:
+          description: User id of the user that receives the notification
+          type: string
+        datetime:
+          description: ISO 8601 date and time when the notification was published
+          type: string
+          format: date-time
+        object_type:
+          description: Type of the object the notification is about, that can be used in php to mark a notification as resolved
+          type: string
+        object_id:
+          description: ID of the object the notification is about, that can be used in php to mark a notification as resolved
+          type: string
+        subject:
+          description: Translated short subject that should be presented to the user
+          type: string
+        subjectRich:
+          description: (Optional) Translated subject string with placeholders (see [Rich Object String](https://github.com/nextcloud/server/issues/1706))
+          type: string
+        subjectRichParameters:
+          description: (Optional) Subject parameters for `subjectRich` (see [Rich Object String](https://github.com/nextcloud/server/issues/1706))
+          type: array
+          items:
+            $ref: "#/components/schemas/RichStringParameter"
+        message:
+          description: (Optional) Translated potentially longer message that should be presented to the user
+          type: string
+        messageRich:
+          description: (Optional) Translated message string with placeholders (see [Rich Object String](https://github.com/nextcloud/server/issues/1706))
+          type: string
+        messageRichParameters:
+          description: (Optional) Message parameters for `messageRich` (see [Rich Object String](https://github.com/nextcloud/server/issues/1706))
+          type: array
+          items:
+            $ref: "#/components/schemas/RichStringParameter"
+        link:
+          description: (Optional) A link that should be followed when the subject/message is clicked
+          type: string
+          format: url
+        icon:
+          description: (Optional) A link to an icon that should be shown next to the notification.
+          type: string
+          format: url
+        actions:
+          description: (Optional) An array of action elements
+          type: array
+          items:
+            $ref: "#/components/schemas/Action"
+    Notifications:
+      type: object
+      required:
+        - ocs
+      properties:
+        ocs:
+          type: object
+          properties:
+            meta:
+              $ref: "#/components/schemas/Meta"
+            data:
+              type: array
+              items:
+                $ref: "#/components/schemas/Notification"
+    Meta:
+      type: object
+      required:
+        - status
+        - statuscode
+        - message
+      properties:
+        status:
+          type: string
+        statuscode:
+          type: integer
+        message:
+          type: string
+    RichStringParameter:
+      type: object
+      required:
+        - type
+        - id
+        - name
+      properties:
+        type:
+          description: A unique identifier for the object type
+          type: string
+          enum: [addressbook, addressbook-contact, announcement, app, calendar, calendar-event, call, circle, email, file, highlight, open-graph, pending-federated-share, systemtag, user-group]
+        id:
+          description: A short identifier of the object on the server (int or string)
+          oneOf:
+            - type: integer
+            - type: string
+        name:
+          description: A name which should be used in the visual representation
+          type: string
+        description:
+          description: The open graph description from the website
+          type: string
+        thumb:
+          description: The full URL of the open graph thumbnail
+          type: string
+          format: uri
+        website:
+          description: The name of the described website
+          type: string
+        path:
+          description: The full path of the file for the user, should not start with a slash
+          type: string
+        link:
+          description: The full URL to the file
+          type: string
+          format: url
+        call-type:
+          description: "The type of the call: one2one, group or public"
+          type: string
+          enum: [one2one, group, public]
+        visibility:
+          description: If the user can see the systemtag
+          type: boolean
+        assignable:
+          description: If the user can assign the systemtag
+          type: boolean
+        server:
+          description: The URL of the instance the user lives on
+          type: string
+          format: url

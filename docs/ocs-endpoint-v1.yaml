@@ -1,0 +1,154 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Nextcloud notifications app
+  license:
+    name: AGPLv3
+    url: http://www.gnu.org/licenses/agpl-3.0.html
+servers:
+  - url: http://{host}/ocs/v2.php/apps/notifications/api/v1
+paths:
+  /notifications:
+    get:
+      summary: Getting the notifications of a user
+      description: Grab a list of notifications. The user needs to be identified/logged in by the server.
+      tags:
+        - notifications
+      responses:
+        200:
+          description: An array of notifications
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Notifications"
+        204:
+          description: No content, you can slow down the polling to once per hour. This status code means that there is no app that can generate notifications.
+  /notifications/{id}:
+    get:
+      summary: Get a single notification for a user
+      tags:
+        - notifications
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The id of the notification to retrieve
+          schema:
+            type: integer
+      responses:
+        200:
+          description: A single notification
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Notification"
+    delete:
+      summary: Deleting a notification for a user
+      tags:
+        - notifications
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The id of the notification to delete
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success
+
+components:
+  schemas:
+    Notification:
+      type: object
+      required:
+        - notification_id
+        - app
+        - user
+        - datetime
+        - object_type
+        - object_id
+        - subject
+      properties:
+        notification_id:
+          description: Unique identifier of the notification, can be used to dismiss a notification
+          type: integer
+          format: int64
+        app:
+          description: Name of the app that triggered the notification
+          type: string
+        user:
+          description: User id of the user that receives the notification
+          type: string
+        datetime:
+          description: ISO 8601 date and time when the notification was published
+          type: string
+          format: date-time
+        object_type:
+          description: Type of the object the notification is about, that can be used in php to mark a notification as resolved
+          type: string
+        object_id:
+          description: ID of the object the notification is about, that can be used in php to mark a notification as resolved
+          type: string
+        subject:
+          description: Translated short subject that should be presented to the user
+          type: string
+        message:
+          description: (Optional) Translated potentially longer message that should be presented to the user
+          type: string
+        link:
+          description: (Optional) A link that should be followed when the subject/message is clicked
+          type: string
+        actions:
+          description: (Optional) An array of action elements
+          type: array
+          items:
+            $ref: "#/components/schemas/Action"
+    Action:
+      type: object
+      required:
+        - label
+        - link
+        - type
+        - primary
+      properties:
+        label:
+          description: Translated short label of the action/button that should be presented to the user
+          type: string
+        link:
+          description: A link that should be followed when the action is performed/clicked
+          type: string
+        type:
+          description: HTTP method that should be used for the request against the link
+          type: string
+          enum: [GET, PUT, POST, DELETE]
+        primary:
+          description: If the action is the primary action for the notification or not
+          type: boolean
+    Notifications:
+      required:
+        - ocs
+      type: object
+      properties:
+        ocs:
+          type: object
+          properties:
+            meta:
+              $ref: "#/components/schemas/Meta"
+            data:
+              type: array
+              items:
+                $ref: "#/components/schemas/Notification"
+    Meta:
+      type: object
+      required:
+        - status
+        - statuscode
+        - message
+      properties:
+        status:
+          type: string
+        statuscode:
+          type: integer
+        message:
+          type: string
