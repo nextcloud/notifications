@@ -9,7 +9,7 @@
  * later. See the COPYING file.
  */
 
-/* global OC, OCA, $, _, t, define, console */
+/* global OC, OCA, $, _, t, oc_config, define, console */
 
 define(function (require) {
 	"use strict";
@@ -52,7 +52,9 @@ define(function (require) {
 			this._fetch();
 
 			// Setup the background checker
-			this.interval = setInterval(this._backgroundFetch.bind(this), this.pollInterval);
+			if (oc_config.session_keepalive) {
+				this.interval = setInterval(this._backgroundFetch.bind(this), this.pollInterval);
+			}
 		},
 
 		/**
