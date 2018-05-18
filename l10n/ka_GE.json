@@ -7,5 +7,5 @@
     "Notifications" : "შეტყობინებები",
     "No notifications" : "შეტყობინებები არაა",
     "Dismiss" : "უარყოფა"
-},"pluralForm" :"nplurals=2; plural=(n==1);"
+},"pluralForm" :"nplurals=2; plural=(n!=1);"
 }
