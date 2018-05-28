@@ -188,8 +188,12 @@ class PushTest extends TestCase {
 			]]);
 
 		$this->config->expects($this->once())
+			->method('getSystemValue')
+			->with('force_language', false)
+			->willReturn(false);
+		$this->config->expects($this->once())
 			->method('getUserValue')
-			->with('valid', 'core', 'lang', 'en')
+			->with('valid', 'core', 'lang', null)
 			->willReturn('de');
 
 		$this->notificationManager->expects($this->once())
@@ -228,8 +232,12 @@ class PushTest extends TestCase {
 			]]);
 
 		$this->config->expects($this->once())
+			->method('getSystemValue')
+			->with('force_language', false)
+			->willReturn(false);
+		$this->config->expects($this->once())
 			->method('getUserValue')
-			->with('valid', 'core', 'lang', 'en')
+			->with('valid', 'core', 'lang', null)
 			->willReturn('ru');
 
 		$this->notificationManager->expects($this->once())
@@ -264,7 +272,7 @@ class PushTest extends TestCase {
 
 		/** @var INotification|\PHPUnit_Framework_MockObject_MockObject $notification */
 		$notification = $this->createMock(INotification::class);
-		$notification->expects($this->exactly(3))
+		$notification->expects($this->exactly(2))
 			->method('getUser')
 			->willReturn('valid');
 
@@ -285,9 +293,11 @@ class PushTest extends TestCase {
 			]]);
 
 		$this->config->expects($this->once())
-			->method('getUserValue')
-			->with('valid', 'core', 'lang', 'en')
+			->method('getSystemValue')
+			->with('force_language', false)
 			->willReturn('ru');
+		$this->config->expects($this->never())
+			->method('getUserValue');
 
 		$this->notificationManager->expects($this->once())
 			->method('prepare')
@@ -372,9 +382,16 @@ class PushTest extends TestCase {
 				],
 			]);
 
+		$this->config->expects($this->exactly(2))
+			->method('getSystemValue')
+			->willReturnMap([
+				['debug', false, $isDebug],
+				['force_language', false, false],
+			]);
+
 		$this->config->expects($this->once())
 			->method('getUserValue')
-			->with('valid', 'core', 'lang', 'en')
+			->with('valid', 'core', 'lang', null)
 			->willReturn('ru');
 
 		$this->notificationManager->expects($this->once())
@@ -461,11 +478,6 @@ class PushTest extends TestCase {
 					],
 				])
 			->willReturn($response2);
-
-		$this->config->expects($this->once())
-			->method('getSystemValue')
-			->with('debug', false)
-			->willReturn($isDebug);
 
 		$this->logger->expects($isDebug ? $this->at(2) : $this->never())
 			->method('debug')
@@ -556,8 +568,12 @@ class PushTest extends TestCase {
 			->willReturn($devices);
 
 		$this->config->expects($this->once())
+			->method('getSystemValue')
+			->with('force_language', false)
+			->willReturn(false);
+		$this->config->expects($this->once())
 			->method('getUserValue')
-			->with('valid', 'core', 'lang', 'en')
+			->with('valid', 'core', 'lang', null)
 			->willReturn('ru');
 
 		$this->notificationManager->expects($this->once())

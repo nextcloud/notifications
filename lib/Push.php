@@ -80,7 +80,9 @@ class Push {
 			return;
 		}
 
-		$language = $this->config->getUserValue($notification->getUser(), 'core', 'lang', 'en');
+		$language = $this->config->getSystemValue('force_language', false);
+		$language = \is_string($language) ? $language : $this->config->getUserValue($notification->getUser(), 'core', 'lang', null);
+		$language = $language ?? $this->config->getSystemValue('default_language', 'en');
 		try {
 			$notification = $this->notificationManager->prepare($notification, $language);
 		} catch (\InvalidArgumentException $e) {
