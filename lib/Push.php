@@ -205,7 +205,12 @@ class Push {
 							break;
 					}
 				} else {
-					$data['callType'] = 1;
+					if (array_key_exists('user', $richParameters)) {
+						$data['callType'] = 1;
+					} else {
+						// treat the call as group if user parameter is not set
+						$data['callType'] = 2;
+					}
 				}
 			}
 		}
