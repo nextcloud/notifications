@@ -189,6 +189,25 @@ class Push {
 		if ($isTalkNotification) {
 			$data['type'] = $notification->getObjectType();
 			$data['id'] = $notification->getObjectId();
+			if ($data['type'] === 'call') {
+				$richParameters = $notification->getRichSubjectParameters();
+				if (array_key_exists('call', $richParameters)) {
+					$call = $richParameters['call'];
+					switch ($call['call-type']) {
+						case "one2one":
+							$data['callType'] = 1;
+							break;
+						case "group":
+							$data['callType'] = 2;
+							break;
+						case "public":
+							$data['callType'] = 3;
+							break;
+					}
+				} else {
+					$data['callType'] = 1;
+				}
+			}
 		}
 
 		if (!openssl_public_encrypt(json_encode($data), $encryptedSubject, $device['devicepublickey'], OPENSSL_PKCS1_PADDING)) {
