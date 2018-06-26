@@ -7,6 +7,7 @@ OC.L10N.register(
     "in {path}" : "תחת {path}",
     "Admin notifications" : "התרעות למנהלים",
     "Notifications" : "התרעות",
+    "This app provides a backend and frontend for the notification API available in Nextcloud." : "יישומון זה מספק מנגנון ומנשק משתמש ל־API של ההתראות שזמין ב־Nextcloud.",
     "No notifications" : "אין התרעות",
     "Dismiss" : "התעלמות"
 },
