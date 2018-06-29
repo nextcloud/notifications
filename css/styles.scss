@@ -19,6 +19,29 @@
 	&:focus {
 		opacity: 1 !important;
 	}
+
+	@function luma($c) {
+		$-local-red: red(rgba($c, 1.0));
+		$-local-green: green(rgba($c, 1.0));
+		$-local-blue: blue(rgba($c, 1.0));
+
+		@return (0.2126 * $-local-red  + 0.7152 * $-local-green + 0.0722 * $-local-blue) / 255;
+	}
+
+	@if (hue($color-primary) < 15deg or hue($color-primary) > 330deg)
+	and (saturation($color-primary) > 70%)
+	and (lightness($color-primary) > 25% and lightness($color-primary) < 80%)
+	and (luma($color-primary) > 0.1 and luma($color-primary) < 0.6) {
+		.notifications-button.hasNotifications {
+			background-repeat: no-repeat;
+			background-position: center center;
+			background-image: url('../img/notifications-new-fallback.svg?v=1');
+			img {
+				display: none;
+			}
+		}
+	}
+
 }
 
 .notification-container {
