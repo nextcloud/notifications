@@ -75,7 +75,7 @@ class Application extends \OCP\AppFramework\App {
 			&& strpos($request->getPathInfo(), '/login/') !== 0
 			&& substr($request->getScriptName(), 0 - \strlen('/index.php')) === '/index.php') {
 
-			Util::addScript('notifications', 'merged');
+			Util::addScript('notifications', 'notifications');
 			Util::addStyle('notifications', 'styles');
 		}
 	}

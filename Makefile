@@ -5,12 +5,14 @@ build_dir=$(CURDIR)/build
 source_dir=$(build_dir)/$(app_name)
 sign_dir=$(build_dir)/sign
 
-all: package
+all: dev-setup build-js-production
 
-dev-setup: clean npm-update build-js
+dev-setup: clean clean-dev npm-init
+
+npm-init:
+	npm install
 
 npm-update:
-	rm -rf node_modules
 	npm update
 
 build-js:
@@ -19,10 +21,18 @@ build-js:
 build-js-production:
 	npm run build
 
+watch-js:
+	npm run watch
+
 clean:
+	rm -f js/notifications.js
+	rm -f js/notifications.js.map
 	rm -rf $(build_dir)
 
-package: clean build-js-production
+clean-dev:
+	rm -rf node_modules
+
+package: dev-setup build-js-production
 	mkdir -p $(source_dir)
 	rsync -a \
 	--exclude=/build \
