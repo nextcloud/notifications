@@ -184,12 +184,9 @@ class Push {
 		$data = [
 			'app' => $notification->getApp(),
 			'subject' => $notification->getParsedSubject(),
+			'type' => $notification->getObjectType(),
+			'id' => $notification->getObjectId(),
 		];
-
-		if ($isTalkNotification) {
-			$data['type'] = $notification->getObjectType();
-			$data['id'] = $notification->getObjectId();
-		}
 
 		if (!openssl_public_encrypt(json_encode($data), $encryptedSubject, $device['devicepublickey'], OPENSSL_PKCS1_PADDING)) {
 			$this->log->error(openssl_error_string(), ['app' => 'notifications']);
