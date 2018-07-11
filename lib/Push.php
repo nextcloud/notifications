@@ -191,9 +191,9 @@ class Push {
 		];
 
 		if ($isTalkNotification) {
-			$priority = "high";
+			$priority = 'high';
 		} else {
-			$priority = "normal";
+			$priority = 'normal';
 		}
 
 		if (!openssl_public_encrypt(json_encode($data), $encryptedSubject, $device['devicepublickey'], OPENSSL_PKCS1_PADDING)) {
