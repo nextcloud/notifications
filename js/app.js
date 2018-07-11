@@ -104,7 +104,9 @@
 			this.$container.on('click', '.notification-delete', _.bind(this._onClickDismissNotification, this));
 
 			// Setup the background checker
-			this.interval = setInterval(_.bind(this.backgroundFetch, this), this.pollInterval);
+			if (oc_config.session_keepalive) {
+				this.interval = setInterval(_.bind(this.backgroundFetch, this), this.pollInterval);
+			}
 		},
 
 		/**
