@@ -188,6 +188,12 @@ class Push {
 			'id' => $notification->getObjectId(),
 		];
 
+		if ($isTalkNotification) {
+			$priority = 'high';
+		} else {
+			$priority = 'normal';
+		}
+
 		if (!openssl_public_encrypt(json_encode($data), $encryptedSubject, $device['devicepublickey'], OPENSSL_PKCS1_PADDING)) {
 			$this->log->error(openssl_error_string(), ['app' => 'notifications']);
 			throw new \InvalidArgumentException('Failed to encrypt message for device');
@@ -202,6 +208,7 @@ class Push {
 			'pushTokenHash' => $device['pushtokenhash'],
 			'subject' => $base64EncryptedSubject,
 			'signature' => $base64Signature,
+			'priority' => $priority,
 		];
 	}
 
