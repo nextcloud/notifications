@@ -35,6 +35,7 @@ branches:
 before_install:
   - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
   - . ./before_install.sh $APP_NAME $CORE_BRANCH $DB
+  - sh -c "if [ -f ../server/data/nextcloud.log ]; then cat ../server/data/nextcloud.log; fi"
 
   # Add some output debugging information
   - cd ../server
