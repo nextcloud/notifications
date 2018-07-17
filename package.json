@@ -11,6 +11,7 @@
     "build": "webpack --progress --hide-modules --config src/webpack.prod.js"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "vue": "^2.5.16"
   },
   "browserslist": [

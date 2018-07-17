@@ -4,6 +4,7 @@
 </template>
 
 <script>
+	import axios from 'axios';
 	export default {
 		name: 'action',
 
@@ -16,23 +17,24 @@
 
 		methods: {
 			onClickActionButton: function () {
-				$.ajax({
+				axios({
+					method: this.type || 'GET',
 					url: this.link,
-					type: this.type || 'GET',
-					success: function () {
-						this.$parent._$el.fadeOut(OC.menuSpeed);
-						this.$parent.$emit('remove');
-						$('body').trigger(new $.Event('OCA.Notification.Action', {
-							notification: this.$parent,
-							action: {
-								url: this.link,
-								type: this.type || 'GET'
-							}
-						}));
-					}.bind(this),
-					error: function () {
-						OC.Notification.showTemporary(t('notifications', 'Failed to perform action'));
-					}
+					headers: { requesttoken: OC.requestToken }
+				})
+				.then(response => {
+					this.$parent._$el.fadeOut(OC.menuSpeed);
+					this.$parent.$emit('remove');
+					$('body').trigger(new $.Event('OCA.Notification.Action', {
+						notification: this.$parent,
+						action: {
+							url: this.link,
+							type: this.type || 'GET'
+						}
+					}));
+				})
+				.catch(err => {
+					OC.Notification.showTemporary(t('notifications', 'Failed to perform action'));
 				});
 			}
 		}

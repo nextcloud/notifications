@@ -23,6 +23,7 @@
 </template>
 
 <script>
+	import axios from 'axios';
 	import action from './action';
 	import parser from '../richObjectStringParser';
 
@@ -95,17 +96,17 @@
 			},
 
 			onDismissNotification: function() {
-				$.ajax({
-					url: OC.linkToOCS('apps/notifications/api/v2', 2) + 'notifications/' + this.notification_id,
-					type: 'DELETE',
-					success: function () {
+				axios
+					.delete(OC.linkToOCS('apps/notifications/api/v2', 2) + 'notifications/' + this.notification_id,
+						{ headers: { requesttoken: OC.requestToken } }
+					)
+					.then(response => {
 						this._$el.fadeOut(OC.menuSpeed);
 						this.$emit('remove');
-					}.bind(this),
-					error: function () {
+					})
+					.catch(err => {
 						OC.Notification.showTemporary(t('notifications', 'Failed to dismiss notification'));
-					}
-				});
+					});
 			},
 
 			/**

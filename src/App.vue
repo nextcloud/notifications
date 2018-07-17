@@ -19,7 +19,7 @@
 
 <script>
 	import notification from './components/notification';
-	// import axios from 'axios';
+	import axios from 'axios';
 
 	export default {
 		name: 'app',
@@ -62,16 +62,14 @@
 
 		methods: {
 			onDismissAll: function() {
-				$.ajax({
-					url: OC.linkToOCS('apps/notifications/api/v2', 2) + 'notifications',
-					type: 'DELETE',
-					success: function () {
+				axios
+					.delete(OC.linkToOCS('apps/notifications/api/v2', 2) + 'notifications', { headers: { requesttoken: OC.requestToken } })
+					.then(response => {
 						this.notifications = [];
-					}.bind(this),
-					error: function () {
+					})
+					.catch(err => {
 						OC.Notification.showTemporary(t('notifications', 'Failed to dismiss all notifications'));
-					}
-				});
+					});
 			},
 			onRemove: function(index) {
 				this.notifications.splice(index, 1);
@@ -81,37 +79,31 @@
 			 * Performs the AJAX request to retrieve the notifications
 			 */
 			_fetch: function() {
-				var request = $.ajax({
-					url: OC.linkToOCS('apps/notifications/api/v2', 2) + 'notifications',
-					type: 'GET',
-					beforeSend: function (request) {
-						request.setRequestHeader('Accept', 'application/json');
-					}
-				});
+				axios
+					.get(OC.linkToOCS('apps/notifications/api/v2', 2) + 'notifications', { headers: { requesttoken: OC.requestToken } })
+					.then(response => {
+						if (response.status === 204) {
+							// 204 No Content - Intercept when no notifiers are there.
+							this._shutDownNotifications();
+						} else if (!_.isUndefined(response.data) && !_.isUndefined(response.data.ocs) && !_.isUndefined(response.data.ocs.data) && _.isArray(response.data.ocs.data)) {
+							this.notifications = response.data.ocs.data;
+						} else {
+							console.debug("data.ocs.data is undefined or not an array");
+						}
+					})
+					.catch(err => {
+						if (err.response.status === 503) {
+							// 503 - Maintenance mode
+							console.debug('Shutting down notifications: instance is in maintenance mode.');
+						} else if (err.response.status === 404) {
+							// 404 - App disabled
+							console.debug('Shutting down notifications: app is disabled.');
+						} else {
+							console.error('Shutting down notifications: [' + err.response.status + '] ' + err.response.statusText);
+						}
 
-				request.done(function(data, statusText, xhr) {
-					if (xhr.status === 204) {
-						// 204 No Content - Intercept when no notifiers are there.
 						this._shutDownNotifications();
-					} else if (!_.isUndefined(data) && !_.isUndefined(data.ocs) && !_.isUndefined(data.ocs.data) && _.isArray(data.ocs.data)) {
-						this.notifications = data.ocs.data;
-					} else {
-						console.debug("data.ocs.data is undefined or not an array");
-					}
-				}.bind(this));
-				request.fail(function(xhr) {
-					if (xhr.status === 503) {
-						// 503 - Maintenance mode
-						console.debug('Shutting down notifications: instance is in maintenance mode.');
-					} else if (xhr.status === 404) {
-						// 404 - App disabled
-						console.debug('Shutting down notifications: app is disabled.');
-					} else {
-						console.error('Shutting down notifications: [' + xhr.status + '] ' + xhr.statusText);
-					}
-
-					this._shutDownNotifications();
-				}.bind(this));
+					});
 			},
 
 			_backgroundFetch: function() {
