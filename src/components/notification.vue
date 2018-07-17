@@ -23,10 +23,11 @@
 </template>
 
 <script>
-	var parser = require('../richObjectStringParser');
+	import action from './action';
+	import parser from '../richObjectStringParser';
 
 	export default {
-		name: "notification",
+		name: 'notification',
 
 		props: [
 			'notification_id',
@@ -185,7 +186,7 @@
 		},
 
 		components: {
-			'action': require('./action.vue')
+			action
 		}
 	}
 </script>

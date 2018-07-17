@@ -18,17 +18,24 @@
 </template>
 
 <script>
-	export default {
-		name: "root",
+	import notification from './components/notification';
+	// import axios from 'axios';
 
-		el: '#notifications',
+	export default {
+		name: 'app',
 
 		data: function () {
 			return {
 				hadNotifications: false,
 				backgroundFetching: false,
 				shutdown: false,
-				notifications: []
+				notifications: [],
+
+				/** @type {number} */
+				pollInterval: 30000, // milliseconds
+
+				/** @type {number|null} */
+				interval: null,
 			};
 		},
 
@@ -68,11 +75,62 @@
 			},
 			onRemove: function(index) {
 				this.notifications.splice(index, 1);
+			},
+
+			/**
+			 * Performs the AJAX request to retrieve the notifications
+			 */
+			_fetch: function() {
+				var request = $.ajax({
+					url: OC.linkToOCS('apps/notifications/api/v2', 2) + 'notifications',
+					type: 'GET',
+					beforeSend: function (request) {
+						request.setRequestHeader('Accept', 'application/json');
+					}
+				});
+
+				request.done(function(data, statusText, xhr) {
+					if (xhr.status === 204) {
+						// 204 No Content - Intercept when no notifiers are there.
+						this._shutDownNotifications();
+					} else if (!_.isUndefined(data) && !_.isUndefined(data.ocs) && !_.isUndefined(data.ocs.data) && _.isArray(data.ocs.data)) {
+						this.notifications = data.ocs.data;
+					} else {
+						console.debug("data.ocs.data is undefined or not an array");
+					}
+				}.bind(this));
+				request.fail(function(xhr) {
+					if (xhr.status === 503) {
+						// 503 - Maintenance mode
+						console.debug('Shutting down notifications: instance is in maintenance mode.');
+					} else if (xhr.status === 404) {
+						// 404 - App disabled
+						console.debug('Shutting down notifications: app is disabled.');
+					} else {
+						console.error('Shutting down notifications: [' + xhr.status + '] ' + xhr.statusText);
+					}
+
+					this._shutDownNotifications();
+				}.bind(this));
+			},
+
+			_backgroundFetch: function() {
+				this.backgroundFetching = true;
+				this._fetch();
+			},
+
+			/**
+			 * The app was disabled or has no notifiers, so we can stop polling
+			 * And hide the UI as well
+			 */
+			_shutDownNotifications: function() {
+				window.clearInterval(this.interval);
+				this.shutdown = true;
 			}
 		},
 
 		components: {
-			'notification': require('./notification.vue')
+			notification
 		},
 
 		mounted: function () {
@@ -80,6 +138,14 @@
 
 			// Bind the button click event
 			OC.registerMenu($(this.$refs.button), $(this.$refs.container), undefined, true);
+
+			// Initial call to the notification endpoint
+			this._fetch();
+
+			// Setup the background checker
+			if (oc_config.session_keepalive) {
+				this.interval = setInterval(this._backgroundFetch.bind(this), this.pollInterval);
+			}
 		},
 
 		updated: function() {

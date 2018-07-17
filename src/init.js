@@ -18,14 +18,17 @@
  *
  */
 
-/* global define, $ */
+import Vue from 'vue';
+import App from './App';
 
-define(function(require) {
-	'use strict';
+Vue.prototype.t = t;
+Vue.prototype.n = n;
+Vue.prototype.OC = OC;
+Vue.prototype.OCA = OCA;
 
-	var App = require('./app');
+$('form.searchbox').after($('<div>').attr('id', 'notifications'));
 
-	$(function() {
-		App.initialise();
-	});
+new Vue({
+	el: '#notifications',
+	render: h => h(App)
 });

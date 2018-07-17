@@ -5,7 +5,7 @@
 
 <script>
 	export default {
-		name: "action",
+		name: 'action',
 
 		props: [
 			'label',
