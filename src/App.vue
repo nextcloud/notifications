@@ -29,17 +29,21 @@
 				hadNotifications: false,
 				backgroundFetching: false,
 				shutdown: false,
+				playedSoundVideoCall: false,
+				playedSoundOther: false,
 				notifications: [],
 
 				/** @type {number} */
 				pollInterval: 30000, // milliseconds
 
 				/** @type {number|null} */
-				interval: null,
+				interval: null
 			};
 		},
 
 		_$icon: null,
+		_$audioVideoCall: null,
+		_$audioOther: null,
 
 		computed: {
 			iconPath: function() {
@@ -108,6 +112,8 @@
 
 			_backgroundFetch: function() {
 				this.backgroundFetching = true;
+				this.playedSoundVideoCall = false;
+				this.playedSoundOther = false;
 				this._fetch();
 			},
 
@@ -118,6 +124,26 @@
 			_shutDownNotifications: function() {
 				window.clearInterval(this.interval);
 				this.shutdown = true;
+			},
+
+			playSoundVideoCall: function() {
+				if (this.playedSoundVideoCall) {
+					// Already played in this background fetch
+					return;
+				}
+
+				this._$audioVideoCall.play();
+				this.playedSoundVideoCall = true;
+			},
+
+			playSoundOther: function() {
+				if (this.playedSoundVideoCall || this.playedSoundOther) {
+					// Already played in this background fetch
+					return;
+				}
+
+				this._$audioOther.play();
+				this.playedSoundOther = true;
 			}
 		},
 
@@ -127,6 +153,16 @@
 
 		mounted: function () {
 			this._$icon = $(this.$refs.icon);
+
+			var $audio = $('<audio>');
+			$('<source>').attr('src', OC.linkTo('notifications', 'resources/videocall.mp3')).appendTo($audio);
+			$('<source>').attr('src', OC.linkTo('notifications', 'resources/videocall.ogg')).appendTo($audio);
+			this._$audioVideoCall = $audio[0];
+
+			$audio = $('<audio>');
+			$('<source>').attr('src', OC.linkTo('notifications', 'resources/notification.mp3')).appendTo($audio);
+			$('<source>').attr('src', OC.linkTo('notifications', 'resources/notification.ogg')).appendTo($audio);
+			this._$audioOther = $audio[0];
 
 			// Bind the button click event
 			OC.registerMenu($(this.$refs.button), $(this.$refs.container), undefined, true);

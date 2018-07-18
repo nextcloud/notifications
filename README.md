@@ -8,9 +8,14 @@ The API is used by other apps to notify users in the web UI and sync clients abo
 * 🚢 [Update notification](https://github.com/nextcloud/server/tree/master/apps/updatenotification): Available update for an app or nextcloud itself
 * 📣 [Announcement center](https://github.com/nextcloud/announcementcenter): An announcement was posted by an admin
 
+
 ## Screenshot
 
 ![Screenshot of the notification icon and dropdown](https://raw.githubusercontent.com/nextcloud/notifications/master/docs/screenshot.png)
+
+
+## Notification sounds
+The sound files are licensed CC0 and were created by [feandesign](https://soundcloud.com/feandesign/sets/librem-5-sounds) for the Librem5 sound contest.
 
 
 ## Developers

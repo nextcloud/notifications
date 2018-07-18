@@ -152,6 +152,12 @@
 					}.bind(this);
 				}
 
+				if (this.app === 'spreed' && this.object_type === 'call') {
+					this.$parent.playSoundVideoCall();
+				} else {
+					this.$parent.playSoundOther();
+				}
+
 				setTimeout(n.close.bind(n), 5000);
 			}
 		},
