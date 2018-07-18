@@ -23,10 +23,12 @@
 </template>
 
 <script>
-	var parser = require('../richObjectStringParser');
+	import axios from 'axios';
+	import action from './action';
+	import parser from '../richObjectStringParser';
 
 	export default {
-		name: "notification",
+		name: 'notification',
 
 		props: [
 			'notification_id',
@@ -94,17 +96,17 @@
 			},
 
 			onDismissNotification: function() {
-				$.ajax({
-					url: OC.linkToOCS('apps/notifications/api/v2', 2) + 'notifications/' + this.notification_id,
-					type: 'DELETE',
-					success: function () {
+				axios
+					.delete(OC.linkToOCS('apps/notifications/api/v2', 2) + 'notifications/' + this.notification_id,
+						{ headers: { requesttoken: OC.requestToken } }
+					)
+					.then(response => {
 						this._$el.fadeOut(OC.menuSpeed);
 						this.$emit('remove');
-					}.bind(this),
-					error: function () {
+					})
+					.catch(err => {
 						OC.Notification.showTemporary(t('notifications', 'Failed to dismiss notification'));
-					}
-				});
+					});
 			},
 
 			/**
@@ -185,7 +187,7 @@
 		},
 
 		components: {
-			'action': require('./action.vue')
+			action
 		}
 	}
 </script>
