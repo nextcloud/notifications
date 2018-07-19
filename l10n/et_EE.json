@@ -1,6 +1,6 @@
 { "translations": {
-    "in {path}" : "rajal {path}",
     "Notifications" : "Märguanded",
+    "in {path}" : "rajal {path}",
     "No notifications" : "Märguandeid pole",
     "Dismiss" : "Jäta vahele"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

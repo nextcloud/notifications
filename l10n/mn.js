@@ -1,8 +1,8 @@
 OC.L10N.register(
     "notifications",
     {
-    "in {path}" : "{path}-д",
     "Notifications" : "Мэдэгдэл",
+    "in {path}" : "{path}-д",
     "No notifications" : "Мэдэгдэл байхгүй",
     "Dismiss" : "Арилгах"
 },

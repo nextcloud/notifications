@@ -1,8 +1,8 @@
 OC.L10N.register(
     "notifications",
     {
-    "in {path}" : "в {path}",
     "Notifications" : "Повідомлення",
+    "in {path}" : "в {path}",
     "No notifications" : "Немає повідомлень",
     "Dismiss" : "Припинити"
 },

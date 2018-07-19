@@ -1,8 +1,8 @@
 OC.L10N.register(
     "notifications",
     {
-    "in {path}" : "rajal {path}",
     "Notifications" : "Märguanded",
+    "in {path}" : "rajal {path}",
     "No notifications" : "Märguandeid pole",
     "Dismiss" : "Jäta vahele"
 },

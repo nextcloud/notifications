@@ -1,10 +1,10 @@
 OC.L10N.register(
     "notifications",
     {
-    "Failed to perform action" : "Toimenpiteen suorittaminen epäonnistui",
-    "in {path}" : "polussa {path}",
     "Admin notifications" : "Ylläpitoilmoitukset",
     "Notifications" : "Ilmoitukset",
+    "Failed to perform action" : "Toimenpiteen suorittaminen epäonnistui",
+    "in {path}" : "polussa {path}",
     "No notifications" : "Ei ilmoituksia",
     "Dismiss" : "Hylkää"
 },

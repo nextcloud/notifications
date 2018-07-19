@@ -1,6 +1,6 @@
 { "translations": {
-    "in {path}" : "{path}-д",
     "Notifications" : "Мэдэгдэл",
+    "in {path}" : "{path}-д",
     "No notifications" : "Мэдэгдэл байхгүй",
     "Dismiss" : "Арилгах"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
