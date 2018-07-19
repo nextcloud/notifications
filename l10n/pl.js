@@ -1,12 +1,12 @@
 OC.L10N.register(
     "notifications",
     {
-    "Failed to perform action" : "Nie udało się wykonać czynności",
-    "Failed to dismiss notification" : "Nie udało się odrzucić powiadomienia",
-    "Failed to dismiss all notifications" : "Nie udało się zamknąć wszystkich powiadomień",
-    "in {path}" : "w {path}",
     "Admin notifications" : "Powiadomienia administratora",
     "Notifications" : "Powiadomienia",
+    "Failed to dismiss all notifications" : "Nie udało się zamknąć wszystkich powiadomień",
+    "Failed to perform action" : "Nie udało się wykonać czynności",
+    "Failed to dismiss notification" : "Nie udało się odrzucić powiadomienia",
+    "in {path}" : "w {path}",
     "No notifications" : "Brak powiadomień",
     "Dismiss" : "Anuluj"
 },

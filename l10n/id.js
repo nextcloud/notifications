@@ -1,8 +1,8 @@
 OC.L10N.register(
     "notifications",
     {
-    "in {path}" : "di {path}",
     "Notifications" : "Pemberitahuan",
+    "in {path}" : "di {path}",
     "No notifications" : "Tidak ada pemberitahuan",
     "Dismiss" : "Abaikan"
 },

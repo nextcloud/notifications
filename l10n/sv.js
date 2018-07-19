@@ -1,11 +1,11 @@
 OC.L10N.register(
     "notifications",
     {
-    "Failed to dismiss notification" : "Misslyckades att avfärda notifikation",
-    "Failed to dismiss all notifications" : "Misslyckades att avfärda alla notifikationer",
-    "in {path}" : "i {path}",
     "Admin notifications" : "Administratörnotifikationer",
     "Notifications" : "Notifikation",
+    "Failed to dismiss all notifications" : "Misslyckades att avfärda alla notifikationer",
+    "Failed to dismiss notification" : "Misslyckades att avfärda notifikation",
+    "in {path}" : "i {path}",
     "No notifications" : "Inga notifikationer",
     "Dismiss" : "Avfärda"
 },
