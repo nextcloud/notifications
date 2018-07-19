@@ -1,6 +1,6 @@
 { "translations": {
-    "in {path}" : "in {path}",
     "Notifications" : "Notificationes",
+    "in {path}" : "in {path}",
     "No notifications" : "Nulle notificationes",
     "Dismiss" : "Dimitter"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

@@ -1,12 +1,12 @@
 OC.L10N.register(
     "notifications",
     {
-    "Failed to perform action" : "Mistókst að framkvæma aðgerð",
-    "Failed to dismiss notification" : "Mistókst að afgreiða tilkynningu",
-    "Failed to dismiss all notifications" : "Mistókst að afgreiða allar tilkynningar",
-    "in {path}" : "í {path}",
     "Admin notifications" : "Tilkynningar kerfisstjóra",
     "Notifications" : "Tilkynningar",
+    "Failed to dismiss all notifications" : "Mistókst að afgreiða allar tilkynningar",
+    "Failed to perform action" : "Mistókst að framkvæma aðgerð",
+    "Failed to dismiss notification" : "Mistókst að afgreiða tilkynningu",
+    "in {path}" : "í {path}",
     "No notifications" : "Engar tilkynningar",
     "Dismiss" : "Hafna"
 },

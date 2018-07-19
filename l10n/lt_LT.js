@@ -1,12 +1,12 @@
 OC.L10N.register(
     "notifications",
     {
-    "Failed to perform action" : "Nepavyko įvykdyti veiksmą",
-    "Failed to dismiss notification" : "Nepavyko atmesti pranešimą",
-    "Failed to dismiss all notifications" : "Nepavyko atmesti visus pranešimus",
-    "in {path}" : "nuorodoje {path}",
     "Admin notifications" : "Administratoriaus pranešimai",
     "Notifications" : "Pranešimai",
+    "Failed to dismiss all notifications" : "Nepavyko atmesti visus pranešimus",
+    "Failed to perform action" : "Nepavyko įvykdyti veiksmą",
+    "Failed to dismiss notification" : "Nepavyko atmesti pranešimą",
+    "in {path}" : "nuorodoje {path}",
     "No notifications" : "Pranešimų nėra",
     "Dismiss" : "Atmesti"
 },

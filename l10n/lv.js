@@ -1,10 +1,10 @@
 OC.L10N.register(
     "notifications",
     {
-    "Failed to dismiss notification" : "Neizdevās atmest paziņojumu",
-    "in {path}" : "{path}",
     "Admin notifications" : "Adminu paziņojumi",
     "Notifications" : "Paziņojumi",
+    "Failed to dismiss notification" : "Neizdevās atmest paziņojumu",
+    "in {path}" : "{path}",
     "No notifications" : "Nav paziņojumu",
     "Dismiss" : "Atmest"
 },

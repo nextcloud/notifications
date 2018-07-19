@@ -1,10 +1,10 @@
 OC.L10N.register(
     "notifications",
     {
-    "Failed to dismiss notification" : "Fallu al escartar l'avisu",
-    "Failed to dismiss all notifications" : "Fall al escartar tolos avisos",
-    "in {path}" : "en {path}",
     "Notifications" : "Avisos",
+    "Failed to dismiss all notifications" : "Fall al escartar tolos avisos",
+    "Failed to dismiss notification" : "Fallu al escartar l'avisu",
+    "in {path}" : "en {path}",
     "No notifications" : "Nun hai avisos",
     "Dismiss" : "Escartar"
 },
