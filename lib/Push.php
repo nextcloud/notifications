@@ -84,9 +84,12 @@ class Push {
 		$language = \is_string($language) ? $language : $this->config->getUserValue($notification->getUser(), 'core', 'lang', null);
 		$language = $language ?? $this->config->getSystemValue('default_language', 'en');
 		try {
+			$this->notificationManager->setPreparingPushNotification(true);
 			$notification = $this->notificationManager->prepare($notification, $language);
 		} catch (\InvalidArgumentException $e) {
 			return;
+		} finally {
+			$this->notificationManager->setPreparingPushNotification(false);
 		}
 
 		$userKey = $this->keyManager->getKey($user);
