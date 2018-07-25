@@ -9,15 +9,23 @@
 	padding: 10px;
 	opacity: .6;
 
+	&:hover,
+	&:focus {
+		opacity: 1;
+	}
+
+	&.hasNotifications {
+		opacity: 1 !important;
+
+		&:hover,
+		&:focus {
+			opacity: .6 !important;
+		}
+	}
+
 	&,
 	img {
 		cursor: pointer;
-	}
-
-	&.hasNotifications,
-	&:hover,
-	&:focus {
-		opacity: 1 !important;
 	}
 }
 

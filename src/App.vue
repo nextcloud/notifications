@@ -1,6 +1,9 @@
 <template>
 	<div v-if="!shutdown" class="notifications">
-		<div class="notifications-button menutoggle" ref="button" :class="{ hasNotifications: notifications.length }">
+		<div class="notifications-button menutoggle" ref="button" :class="{ hasNotifications: notifications.length }"
+			tabindex="0" role="button"
+			aria-label="t('notifications', 'Notifications')"
+			aria-haspopup="true" aria-controls="notification-container" aria-expanded="false">
 			<img class="svg" alt="" ref="icon" :title="t('notifications', 'Notifications')" :src="iconPath">
 		</div>
 		<div class="notification-container"  ref="container">
