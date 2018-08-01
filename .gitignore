@@ -52,7 +52,6 @@ nbproject
 
 # WebPack
 /node_modules
-/js
 
 # Tests - auto-generated files
 /tests/Unit/coverage*
