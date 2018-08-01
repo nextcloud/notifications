@@ -94,8 +94,7 @@ class Push {
 
 		$userKey = $this->keyManager->getKey($user);
 
-		$isTalkNotification = \in_array($notification->getApp(), ['spreed', 'talk'], true)
-			&& \in_array($notification->getSubject(), ['invitation', 'call', 'mention'], true);
+		$isTalkNotification = \in_array($notification->getApp(), ['spreed', 'talk'], true);
 		$talkApps = array_filter($devices, function($device) {
 			return $device['apptype'] === 'talk';
 		});
