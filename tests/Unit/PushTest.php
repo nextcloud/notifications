@@ -536,15 +536,10 @@ class PushTest extends TestCase {
 			$notification->expects($this->once())
 				->method('getApp')
 				->willReturn('spreed');
-			$notification->expects($this->once())
-				->method('getSubject')
-				->willReturn('call');
 		} else {
 			$notification->expects($this->once())
 				->method('getApp')
 				->willReturn('notifications');
-			$notification->expects($this->never())
-				->method('getSubject');
 		}
 
 		/** @var IUser|\PHPUnit_Framework_MockObject_MockObject $user */
