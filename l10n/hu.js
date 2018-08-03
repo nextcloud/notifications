@@ -1,13 +1,13 @@
 OC.L10N.register(
     "notifications",
     {
-    "Admin notifications" : "Adminisztrátor értesítések",
+    "in {path}" : "itt: {path}",
     "Notifications" : "Értesítések",
-    "Failed to dismiss all notifications" : "Sikertelen volt az összes értesítés elengedése",
+    "No notifications" : "Nincsenek értesítések",
+    "Dismiss" : "Elutasít",
     "Failed to perform action" : "Sikertelen művelet",
     "Failed to dismiss notification" : "Sikertelen értesítés elengedés",
-    "in {path}" : "itt: {path}",
-    "No notifications" : "Nincsenek értesítések",
-    "Dismiss" : "Elutasít"
+    "Failed to dismiss all notifications" : "Sikertelen volt az összes értesítés elengedése",
+    "Admin notifications" : "Adminisztrátor értesítések"
 },
 "nplurals=2; plural=(n != 1);");

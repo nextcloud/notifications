@@ -1,13 +1,13 @@
 OC.L10N.register(
     "notifications",
     {
-    "Admin notifications" : "Ειδοποιήσεις διαχειριστή",
+    "in {path}" : "στο {path}",
     "Notifications" : "Ειδοποιήσεις",
-    "Failed to dismiss all notifications" : "Αποτυχία αποδέσμευσης όλων των ειδοποιήσεων",
+    "No notifications" : "Καμία ειδοποίηση",
+    "Dismiss" : "Αποδέσμευση",
     "Failed to perform action" : "Αποτυχία εκτέλεσης ενέργειας",
     "Failed to dismiss notification" : "Αποτυχία αποδέσμευσης της ειδοποίησης",
-    "in {path}" : "στο {path}",
-    "No notifications" : "Καμία ειδοποίηση",
-    "Dismiss" : "Αποδέσμευση"
+    "Failed to dismiss all notifications" : "Αποτυχία αποδέσμευσης όλων των ειδοποιήσεων",
+    "Admin notifications" : "Ειδοποιήσεις διαχειριστή"
 },
 "nplurals=2; plural=(n != 1);");

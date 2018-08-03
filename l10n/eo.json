@@ -1,11 +1,11 @@
 { "translations": {
-    "Admin notifications" : "Administraj sciigoj",
+    "in {path}" : "en {path}",
     "Notifications" : "Sciigoj",
-    "Failed to dismiss all notifications" : "Malsukcesis forsendi ĉiujn sciigojn",
+    "No notifications" : "Neniu sciigoj",
+    "Dismiss" : "Forsendi",
     "Failed to perform action" : "Malsukcesis fari agon",
     "Failed to dismiss notification" : "Malsukcesis forsendi sciigo",
-    "in {path}" : "en {path}",
-    "No notifications" : "Neniu sciigoj",
-    "Dismiss" : "Forsendi"
+    "Failed to dismiss all notifications" : "Malsukcesis forsendi ĉiujn sciigojn",
+    "Admin notifications" : "Administraj sciigoj"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
