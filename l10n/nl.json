@@ -1,11 +1,11 @@
 { "translations": {
-    "Admin notifications" : "Beheermeldingen",
+    "in {path}" : "in {path}",
     "Notifications" : "Meldingen",
-    "Failed to dismiss all notifications" : "Niet gelukt om alle meldingen af te handelen",
+    "No notifications" : "Geen meldingen",
+    "Dismiss" : "Weigeren",
     "Failed to perform action" : "Niet gelukt om actie uit te voeren",
     "Failed to dismiss notification" : "Niet gelukt om melding af te handelen",
-    "in {path}" : "in {path}",
-    "No notifications" : "Geen meldingen",
-    "Dismiss" : "Weigeren"
+    "Failed to dismiss all notifications" : "Niet gelukt om alle meldingen af te handelen",
+    "Admin notifications" : "Beheermeldingen"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

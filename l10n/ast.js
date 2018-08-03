@@ -1,11 +1,11 @@
 OC.L10N.register(
     "notifications",
     {
-    "Notifications" : "Avisos",
-    "Failed to dismiss all notifications" : "Fall al escartar tolos avisos",
-    "Failed to dismiss notification" : "Fallu al escartar l'avisu",
     "in {path}" : "en {path}",
+    "Notifications" : "Avisos",
     "No notifications" : "Nun hai avisos",
-    "Dismiss" : "Escartar"
+    "Dismiss" : "Escartar",
+    "Failed to dismiss notification" : "Fallu al escartar l'avisu",
+    "Failed to dismiss all notifications" : "Fall al escartar tolos avisos"
 },
 "nplurals=2; plural=(n != 1);");
