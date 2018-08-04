@@ -1,8 +1,11 @@
 OC.L10N.register(
     "notifications",
     {
+    "_" : "_",
     "in {path}" : "in {path}",
     "Notifications" : "Benachrichtigungen",
+    "_icon_::_svg_" : ["Symbol","svg"],
+    "Dismiss all notifications" : "Alle Benachrichtigungen verwerfen",
     "No notifications" : "Keine Benachrichtigungen",
     "Dismiss" : "Verwerfen",
     "Failed to perform action" : "Aktion konnte nicht ausgeführt werden",
