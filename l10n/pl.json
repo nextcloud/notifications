@@ -1,4 +1,5 @@
 { "translations": {
+    "_" : "_",
     "in {path}" : "w {path}",
     "Notifications" : "Powiadomienia",
     "No notifications" : "Brak powiadomień",
