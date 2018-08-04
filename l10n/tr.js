@@ -1,10 +1,17 @@
 OC.L10N.register(
     "notifications",
     {
+    "_" : "_",
     "in {path}" : "{path} içinde",
     "Notifications" : "Bildirimler",
+    "_icon_::_svg_" : ["simge","svg"],
+    "_button_::_notifications-button menutoggle_" : ["düğme","notifications-button menutoggle"],
+    "Dismiss all notifications" : "Tüm bildirimleri yok say",
     "No notifications" : "Bildirimler kapalı",
+    "_container_::_notification-container_" : ["kapsayıcı","notification-container"],
+    "_notification-time has-tooltip live-relative-timestamp_::_data-timestamp_" : ["notification-time has-tooltip live-relative-timestamp","data-timestamp"],
     "Dismiss" : "Yoksay",
+    "_notification_::_data-id_" : ["bildirim","data-id"],
     "Failed to perform action" : "İşlem yürütülemedi",
     "Failed to dismiss notification" : "Bildirim yok sayılamadı",
     "Failed to dismiss all notifications" : "Tüm bildirimler yok sayılamadı",
