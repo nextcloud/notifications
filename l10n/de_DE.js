@@ -8,6 +8,7 @@ OC.L10N.register(
     "Dismiss all notifications" : "Alle Benachrichtigungen verwerfen",
     "No notifications" : "Keine Benachrichtigungen",
     "Dismiss" : "Verwerfen",
+    "_notification_::_data-id_" : ["Benachrichtigung","data-id"],
     "Failed to perform action" : "Aktion konnte nicht ausgeführt werden",
     "Failed to dismiss notification" : "Benachrichtigung konnte nicht verworfen werden",
     "Failed to dismiss all notifications" : "Alle Benachrichtigungen konnten nicht verworfen werden",
