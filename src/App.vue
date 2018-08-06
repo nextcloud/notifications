@@ -95,7 +95,10 @@
 						}
 					})
 					.catch(err => {
-						if (err.response.status === 503) {
+						if (!err.response) {
+							console.debug('No response received, retrying');
+							return;
+						} else if (err.response.status === 503) {
 							// 503 - Maintenance mode
 							console.debug('Shutting down notifications: instance is in maintenance mode.');
 						} else if (err.response.status === 404) {
