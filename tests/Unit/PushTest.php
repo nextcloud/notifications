@@ -128,7 +128,7 @@ class PushTest extends TestCase {
 			->with('invalid')
 			->willReturn(null);
 
-		$push->pushToDevice($notification);
+		$push->pushToDevice(23, $notification);
 	}
 
 	public function testPushToDeviceNoDevices() {
@@ -156,7 +156,7 @@ class PushTest extends TestCase {
 			->method('getDevicesForUser')
 			->willReturn([]);
 
-		$push->pushToDevice($notification);
+		$push->pushToDevice(42, $notification);
 	}
 
 	public function testPushToDeviceNotPrepared() {
@@ -201,7 +201,7 @@ class PushTest extends TestCase {
 			->with($notification, 'de')
 			->willThrowException(new \InvalidArgumentException());
 
-		$push->pushToDevice($notification);
+		$push->pushToDevice(1337, $notification);
 	}
 
 	public function testPushToDeviceInvalidToken() {
@@ -262,7 +262,7 @@ class PushTest extends TestCase {
 			->method('deletePushToken')
 			->with(23);
 
-		$push->pushToDevice($notification);
+		$push->pushToDevice(2018, $notification);
 	}
 
 	public function testPushToDeviceEncryptionError() {
@@ -321,7 +321,7 @@ class PushTest extends TestCase {
 			->method('deletePushToken')
 			->with(23);
 
-		$push->pushToDevice($notification);
+		$push->pushToDevice(1970, $notification);
 	}
 
 	public function dataPushToDeviceSending() {
@@ -501,7 +501,7 @@ class PushTest extends TestCase {
 				])
 			->willReturn($response3);
 
-		$push->pushToDevice($notification);
+		$push->pushToDevice(207787, $notification);
 	}
 
 	public function dataPushToDeviceTalkNotification() {
@@ -593,7 +593,7 @@ class PushTest extends TestCase {
 		} else {
 			$push->expects($this->exactly(1))
 				->method('encryptAndSign')
-				->with($this->anything(), $devices[$pushedDevice], $this->anything(), $isTalkNotification)
+				->with($this->anything(), $devices[$pushedDevice], $this->anything(), $this->anything(), $isTalkNotification)
 				->willReturn(['Payload']);
 
 			/** @var IClient|\PHPUnit_Framework_MockObject_MockObject $client */
@@ -621,7 +621,7 @@ class PushTest extends TestCase {
 				->willReturn($response);
 		}
 
-		$push->pushToDevice($notification);
+		$push->pushToDevice(200718, $notification);
 	}
 
 

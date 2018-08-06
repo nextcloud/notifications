@@ -66,10 +66,7 @@ class Push {
 		$this->log = $log;
 	}
 
-	/**
-	 * @param INotification $notification
-	 */
-	public function pushToDevice(INotification $notification) {
+	public function pushToDevice(int $id, INotification $notification) {
 		$user = $this->userManager->get($notification->getUser());
 		if (!($user instanceof IUser)) {
 			return;
@@ -118,7 +115,7 @@ class Push {
 			}
 
 			try {
-				$payload = json_encode($this->encryptAndSign($userKey, $device, $notification, $isTalkNotification));
+				$payload = json_encode($this->encryptAndSign($userKey, $device, $id, $notification, $isTalkNotification));
 
 				$proxyServer = rtrim($device['proxyserver'], '/');
 				if (!isset($pushNotifications[$proxyServer])) {
@@ -175,17 +172,19 @@ class Push {
 	/**
 	 * @param Key $userKey
 	 * @param array $device
+	 * @param int $id
 	 * @param INotification $notification
 	 * @param bool $isTalkNotification
 	 * @return array
 	 * @throws InvalidTokenException
 	 * @throws \InvalidArgumentException
 	 */
-	protected function encryptAndSign(Key $userKey, array $device, INotification $notification, bool $isTalkNotification): array {
+	protected function encryptAndSign(Key $userKey, array $device, int $id, INotification $notification, bool $isTalkNotification): array {
 		// Check if the token is still valid...
 		$this->tokenProvider->getTokenById($device['token']);
 
 		$data = [
+			'nid' => $id,
 			'app' => $notification->getApp(),
 			'subject' => $notification->getParsedSubject(),
 			'type' => $notification->getObjectType(),

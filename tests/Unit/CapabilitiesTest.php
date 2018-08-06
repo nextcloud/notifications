@@ -41,6 +41,7 @@ class CapabilitiesTest extends TestCase {
 				],
 				'push' => [
 					'devices',
+					'object-data',
 				],
 				'admin-notifications' => [
 					'ocs',
