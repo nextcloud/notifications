@@ -1,4 +1,5 @@
 { "translations": {
+    "_" : "_",
     "in {path}" : "στο {path}",
     "Notifications" : "Ειδοποιήσεις",
     "No notifications" : "Καμία ειδοποίηση",

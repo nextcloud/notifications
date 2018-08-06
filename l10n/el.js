@@ -1,6 +1,7 @@
 OC.L10N.register(
     "notifications",
     {
+    "_" : "_",
     "in {path}" : "στο {path}",
     "Notifications" : "Ειδοποιήσεις",
     "No notifications" : "Καμία ειδοποίηση",
