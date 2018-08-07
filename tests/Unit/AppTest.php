@@ -80,7 +80,7 @@ class AppTest extends TestCase {
 			->willReturn($this->notification);
 		$this->push->expects($this->once())
 			->method('pushToDevice')
-			->with($this->notification);
+			->with($id, $this->notification);
 
 		$this->app->notify($this->notification);
 	}

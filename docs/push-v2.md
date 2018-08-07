@@ -17,7 +17,8 @@ In order to find out if notifications support push on the server you can run a r
         "notifications": {
           "push": [
             ...
-            "devices"
+            "devices",
+            "object-data"
           ]
         }
       }
@@ -207,6 +208,30 @@ The pushed notifications is defined by the [Firebase Cloud Messaging HTTP Protoc
 | ----------- | ---------------------------------------- |
 | `subject`   | The subject is encrypted with the device´s *public key*. |
 | `signature` | The signature is a sha512 signature over the encrypted subject using the user´s private key. |
+
+### Encrypted subject data
+
+If you are missing any information necessary to parse the notification in a more usable way, use the `nid` to get the full notification information via [OCS API](ocs-endpoint-v2.md)
+
+```json
+{
+  "app" : "spreed",
+  "subject" : "Test mentioned you in a private conversation",
+  "type" : "chat",
+  "id" : "t0k3n",
+  "nid" : 1337
+  }
+}
+```
+
+| Attribute   | Meaning                                  | Capability |
+| ----------- | ---------------------------------------- |------------|
+| `app`   | The nextcloud app sending the notification | -|
+| `subject`   | The subject of the actual notification | -|
+| `type`   | Type of the object this notification is about | `object-data` |
+| `id`   | Identifier of the object this notification is about | `object-data` |
+| `nid`   | Numeric identifier of the notification in order to get more information via the [OCS API](ocs-endpoint-v2.md) | `object-data` |
+
 
 ### Verification
 So a device should verify the signature using the user´s public key.

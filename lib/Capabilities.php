@@ -48,6 +48,7 @@ class Capabilities implements ICapability {
 				],
 				'push' => [
 					'devices',
+					'object-data',
 				],
 				'admin-notifications' => [
 					'ocs',

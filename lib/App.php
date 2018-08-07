@@ -47,7 +47,7 @@ class App implements IApp {
 
 		try {
 			$notificationToPush = $this->handler->getById($notificationId, $notification->getUser());
-			$this->push->pushToDevice($notificationToPush);
+			$this->push->pushToDevice($notificationId, $notificationToPush);
 		} catch (NotificationNotFoundException $e) {
 			throw new \InvalidArgumentException('Error while preparing push notification');
 		}
