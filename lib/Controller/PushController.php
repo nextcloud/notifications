@@ -106,6 +106,9 @@ class PushController extends OCSController {
 		}
 
 		$tokenId = $this->session->get('token-id');
+		if (!\is_int($tokenId)) {
+			return new DataResponse(['message' => 'INVALID_SESSION_TOKEN'], Http::STATUS_BAD_REQUEST);
+		}
 		try {
 			$token = $this->tokenProvider->getTokenById($tokenId);
 		} catch (InvalidTokenException $e) {
