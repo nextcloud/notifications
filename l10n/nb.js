@@ -1,6 +1,7 @@
 OC.L10N.register(
     "notifications",
     {
+    "_" : "_",
     "in {path}" : "i {path}",
     "Notifications" : "Varsel",
     "No notifications" : "Ingen varsel",
