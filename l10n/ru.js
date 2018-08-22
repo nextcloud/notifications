@@ -1,8 +1,10 @@
 OC.L10N.register(
     "notifications",
     {
+    "_" : "_",
     "in {path}" : "в {path}",
     "Notifications" : "Уведомления",
+    "Dismiss all notifications" : "Отклонить все уведомления",
     "No notifications" : "Уведомлений нет",
     "Dismiss" : "Закрыть",
     "Failed to perform action" : "Не удалось выполнить задание",
