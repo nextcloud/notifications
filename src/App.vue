@@ -47,8 +47,14 @@
 		computed: {
 			iconPath: function() {
 				var iconPath = 'notifications';
+				if (this.isRedThemed()) {
+					iconPath += '-red-new';
+				}
 
-				if (/*this.backgroundFetching &&*/ this.notifications.length) {
+				if (this.notifications.length) {
+					if (this.isRedThemed()) {
+						iconPath += '-red';
+					}
 					iconPath += '-new';
 				}
 
@@ -77,6 +83,38 @@
 
 			invertedTheme: function() {
 				return OCA.Theming && OCA.Theming.inverted;
+			},
+
+			isRedThemed: function() {
+				if (OCA.Theming && OCA.Theming.color) {
+					var hsl = this.rgbToHsl(OCA.Theming.color.substring(1, 3),
+							OCA.Theming.color.substring(3, 5),
+							OCA.Theming.color.substring(5, 7)),
+						h = hsl[0] * 360;
+					return (h >= 330 || h <= 15) && hsl[1] > 0.7 && (hsl[2] > 0.1 || hsl[2] < 0.6);
+				}
+				return false;
+			},
+
+			rgbToHsl: function (r, g, b) {
+				r = parseInt(r, 16) / 255; g = parseInt(g, 16) / 255; b = parseInt(b, 16) / 255;
+				var max = Math.max(r, g, b), min = Math.min(r, g, b);
+				var h, s, l = (max + min) / 2;
+
+				if (max === min) {
+					h = s = 0;
+				} else {
+					var d = max - min;
+					s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+					switch (max) {
+						case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+						case g: h = (b - r) / d + 2; break;
+						case b: h = (r - g) / d + 4; break;
+					}
+					h /= 6;
+				}
+
+				return [h, s, l];
 			},
 
 			/**
