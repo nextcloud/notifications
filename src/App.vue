@@ -47,9 +47,6 @@
 		computed: {
 			iconPath: function() {
 				var iconPath = 'notifications';
-				if (this.isRedThemed()) {
-					iconPath += '-red-new';
-				}
 
 				if (this.notifications.length) {
 					if (this.isRedThemed()) {
