@@ -52,14 +52,11 @@
 					iconPath += '-new';
 				}
 
-				if (this.invertedTheme) {
+				if (this.invertedTheme()) {
 					iconPath += '-dark';
 				}
 
 				return OC.imagePath('notifications', iconPath);
-			},
-			invertedTheme: function() {
-				return OCA.Theming && OCA.Theming.inverted;
 			}
 		},
 
@@ -76,6 +73,10 @@
 			},
 			onRemove: function(index) {
 				this.notifications.splice(index, 1);
+			},
+
+			invertedTheme: function() {
+				return OCA.Theming && OCA.Theming.inverted;
 			},
 
 			/**
