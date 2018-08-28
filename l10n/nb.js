@@ -4,6 +4,7 @@ OC.L10N.register(
     "_" : "_",
     "in {path}" : "i {path}",
     "Notifications" : "Varsel",
+    "_icon_::_svg_" : ["ikon","svg"],
     "No notifications" : "Ingen varsel",
     "Dismiss" : "Forkast",
     "Failed to perform action" : "Klarte ikke å utføre handling",
