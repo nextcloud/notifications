@@ -19,6 +19,14 @@ pipeline:
     when:
       matrix:
         TESTS: signed-off-check
+  vue-build-check:
+    image: node
+    commands:
+     - ./tests/vue-build.sh ./js/notifications.js
+    when:
+      matrix:
+        TESTS: vue-build-check
 matrix:
   include:
     - TESTS: signed-off-check
+    - TESTS: vue-build-check
