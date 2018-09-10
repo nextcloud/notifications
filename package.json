@@ -22,7 +22,7 @@
     "@babel/core": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "babel-loader": "^8.0.2",
-    "css-loader": "^0.28.11",
+    "css-loader": "^1.0.0",
     "file-loader": "^1.1.11",
     "vue-loader": "^15.4.1",
     "vue-template-compiler": "^2.5.17",
