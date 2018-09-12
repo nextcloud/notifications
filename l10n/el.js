@@ -4,6 +4,7 @@ OC.L10N.register(
     "_" : "_",
     "in {path}" : "στο {path}",
     "Notifications" : "Ειδοποιήσεις",
+    "_icon_::_svg_" : ["icon","svg"],
     "No notifications" : "Καμία ειδοποίηση",
     "Dismiss" : "Αποδέσμευση",
     "Failed to perform action" : "Αποτυχία εκτέλεσης ενέργειας",
