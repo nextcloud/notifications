@@ -15,6 +15,7 @@ OC.L10N.register(
     "Failed to perform action" : "Niet gelukt om actie uit te voeren",
     "Failed to dismiss notification" : "Niet gelukt om melding af te handelen",
     "Failed to dismiss all notifications" : "Niet gelukt om alle meldingen af te handelen",
-    "Admin notifications" : "Beheermeldingen"
+    "Admin notifications" : "Beheermeldingen",
+    "This app provides a backend and frontend for the notification API available in Nextcloud." : "Deze app levert de back-end en front-end voor de medlingen API in Nextcloud."
 },
 "nplurals=2; plural=(n != 1);");
