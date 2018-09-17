@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "in {path}" : "polussa {path}",
     "Notifications" : "Ilmoitukset",
+    "Dismiss all notifications" : "Hylkää kaikki ilmoitukset",
     "No notifications" : "Ei ilmoituksia",
     "Dismiss" : "Hylkää",
     "Failed to perform action" : "Toimenpiteen suorittaminen epäonnistui",
