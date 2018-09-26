@@ -4,7 +4,7 @@
     "Notifications" : "Oznámení",
     "_icon_::_svg_" : ["ikona","ikony","ikon","ikony"],
     "Dismiss all notifications" : "Zahodit všechna oznámení",
-    "No notifications" : "Žádná upozornění",
+    "No notifications" : "Žádná oznámení",
     "_container_::_notification-container_" : ["kontejner","oznámení-kontejnery","oznámení-kontejnerů","oznámení-kontejnery"],
     "_notification-time has-tooltip live-relative-timestamp_::_data-timestamp_" : ["časové razítko","časová razítka","časových razítek","časová razítka"],
     "Dismiss" : "Zavřít",
