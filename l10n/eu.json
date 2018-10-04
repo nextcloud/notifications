@@ -1,0 +1,7 @@
+{ "translations": {
+    "Notifications" : "Jakinarazpenak",
+    "in {path}" : "{path} -en",
+    "No notifications" : "Ez dago jakinarazpenik",
+    "Dismiss" : "Baztertu"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}

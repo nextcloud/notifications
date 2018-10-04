@@ -1,10 +1,8 @@
 OC.L10N.register(
     "notifications",
     {
-    "_" : "_",
-    "in {path}" : "v {path}",
     "Notifications" : "Upozornenia",
-    "Dismiss all notifications" : "Odmietnuť všetky upozornenia",
+    "in {path}" : "v {path}",
     "No notifications" : "Žiadne upozornenia",
     "Dismiss" : "Odmietnuť"
 },
