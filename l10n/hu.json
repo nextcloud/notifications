@@ -1,11 +1,11 @@
 { "translations": {
-    "in {path}" : "itt: {path}",
+    "Admin notifications" : "Adminisztrátor értesítések",
     "Notifications" : "Értesítések",
-    "No notifications" : "Nincsenek értesítések",
-    "Dismiss" : "Elutasít",
+    "Failed to dismiss all notifications" : "Sikertelen volt az összes értesítés elengedése",
     "Failed to perform action" : "Sikertelen művelet",
     "Failed to dismiss notification" : "Sikertelen értesítés elengedés",
-    "Failed to dismiss all notifications" : "Sikertelen volt az összes értesítés elengedése",
-    "Admin notifications" : "Adminisztrátor értesítések"
+    "in {path}" : "itt: {path}",
+    "No notifications" : "Nincsenek értesítések",
+    "Dismiss" : "Elutasít"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
