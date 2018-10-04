@@ -1,11 +1,11 @@
 OC.L10N.register(
     "notifications",
     {
-    "in {path}" : "polussa {path}",
+    "Admin notifications" : "Ylläpitoilmoitukset",
     "Notifications" : "Ilmoitukset",
-    "No notifications" : "Ei ilmoituksia",
-    "Dismiss" : "Hylkää",
     "Failed to perform action" : "Toimenpiteen suorittaminen epäonnistui",
-    "Admin notifications" : "Ylläpitoilmoitukset"
+    "in {path}" : "polussa {path}",
+    "No notifications" : "Ei ilmoituksia",
+    "Dismiss" : "Hylkää"
 },
 "nplurals=2; plural=(n != 1);");
