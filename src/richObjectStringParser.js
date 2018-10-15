@@ -7,7 +7,7 @@
  * later. See the COPYING file.
  */
 
-/* global OC, _, Handlebars, t, define */
+/* global OC, _, t, define */
 
 define(function () {
 	"use strict";
@@ -15,13 +15,13 @@ define(function () {
 	return {
 		avatarsEnabled: true,
 
-		_fileTemplate: '<a class="filename has-tooltip" href="{{link}}" title="{{title}}">{{name}}</a>',
+		fileTemplate: require('./templates/file.handlebars'),
 
-		_userLocalTemplate: '<span class="avatar-name-wrapper" data-user="{{id}}"><div class="avatar" data-user="{{id}}" data-user-display-name="{{name}}"></div><strong>{{name}}</strong></span>',
-		_userRemoteTemplate: '<strong>{{name}}</strong>',
+		userLocalTemplate: require('./templates/userLocal.handlebars'),
+		userRemoteTemplate: require('./templates/userRemote.handlebars'),
 
-		_unknownTemplate: '<strong>{{name}}</strong>',
-		_unknownLinkTemplate: '<a href="{{link}}">{{name}}</a>',
+		unknownTemplate: require('./templates/unkown.handlebars'),
+		unknownLinkTemplate: require('./templates/unkownLink.handlebars'),
 
 		/**
 		 * @param {string} subject
@@ -57,29 +57,18 @@ define(function () {
 
 				case 'user':
 					if (_.isUndefined(parameter.server)) {
-						if (!this.userLocalTemplate) {
-							this.userLocalTemplate = Handlebars.compile(this._userLocalTemplate);
-						}
 						return this.userLocalTemplate(parameter);
 					}
 
-					if (!this.userRemoteTemplate) {
-						this.userRemoteTemplate = Handlebars.compile(this._userRemoteTemplate);
-					}
+					this.userRemoteTemplate = this._userRemoteTemplate;
 
 					return this.userRemoteTemplate(parameter);
 
 				default:
 					if (!_.isUndefined(parameter.link)) {
-						if (!this.unknownLinkTemplate) {
-							this.unknownLinkTemplate = Handlebars.compile(this._unknownLinkTemplate);
-						}
 						return this.unknownLinkTemplate(parameter);
 					}
 
-					if (!this.unknownTemplate) {
-						this.unknownTemplate = Handlebars.compile(this._unknownTemplate);
-					}
 					return this.unknownTemplate(parameter);
 			}
 		},
@@ -93,11 +82,8 @@ define(function () {
 		 * @param {string} parameter.link
 		 */
 		parseFileParameter: function(parameter) {
-			if (!this.fileTemplate) {
-				this.fileTemplate = Handlebars.compile(this._fileTemplate);
-			}
-			var lastSlashPosition = parameter.path.lastIndexOf('/'),
-				firstSlashPosition = parameter.path.indexOf('/');
+			var lastSlashPosition = parameter.path.lastIndexOf('/');
+			var firstSlashPosition = parameter.path.indexOf('/');
 			parameter.path = parameter.path.substring(firstSlashPosition === 0 ? 1 : 0, lastSlashPosition);
 
 			return this.fileTemplate(_.extend(parameter, {

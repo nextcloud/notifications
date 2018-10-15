@@ -29,13 +29,21 @@ module.exports = {
 				options: {
 					name: '[name].[ext]?[hash]'
 				}
+			},
+			{
+				test: /\.handlebars/,
+				loader: "handlebars-loader",
+				query: {
+					extensions: '.handlebars'
+				}
 			}
 		]
 	},
 	plugins: [new VueLoaderPlugin()],
 	resolve: {
 		alias: {
-			vue$: 'vue/dist/vue.esm.js'
+			vue$: 'vue/dist/vue.esm.js',
+			'handlebars': 'handlebars/runtime.js'
 		},
 		extensions: ['*', '.js', '.vue', '.json']
 	}
