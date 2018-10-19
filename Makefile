@@ -49,6 +49,7 @@ package: dev-setup build-js-production
 	--exclude=/.scrutinizer.yml \
 	--exclude=/.travis.yml \
 	--exclude=/.drone.yml \
+	--exclude=.l10nignore \
 	--exclude=/node_modules \
 	--exclude=/npm-debug.log \
 	--exclude=/package.json \
