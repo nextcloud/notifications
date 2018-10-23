@@ -29,6 +29,13 @@ module.exports = {
 				options: {
 					name: '[name].[ext]?[hash]'
 				}
+			},
+			{
+				test: /\.handlebars/,
+				loader: "handlebars-loader",
+				query: {
+					extensions: '.handlebars'
+				}
 			}
 		]
 	},

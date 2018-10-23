@@ -24,6 +24,8 @@
     "babel-loader": "^8.0.4",
     "css-loader": "^1.0.0",
     "file-loader": "^2.0.0",
+    "handlebars": "^4.0.12",
+    "handlebars-loader": "^1.7.0",
     "vue-loader": "^15.4.2",
     "vue-template-compiler": "^2.5.17",
     "webpack": "^4.22.0",
