@@ -14,8 +14,10 @@
 			<span v-if="icon" class="image"><img :src="icon" class="notification-icon"></span>
 			<span class="text" v-html="renderedSubject"></span>
 		</div>
-		<div class="notification-message" v-if="message" v-html="renderedMessage" @click="onClickFullMessage"></div>
-		<div class="notification-full-message hidden" v-html="message"></div>
+		<div class="notification-message" v-if="message" @click="onClickMessage">
+			<div class="message-container" :class="{ collapsed: isCollapsedMessage }" v-html="renderedMessage"></div>
+			<div v-if="isCollapsedMessage" class="notification-overflow"></div>
+		</div>
 		<div class="notification-actions" v-if="actions.length">
 			<action v-for="(a, index) in actions" v-bind="a" :key="index"></action>
 		</div>
@@ -45,8 +47,14 @@
 			'subjectRichParameters',
 			'object_type',
 			'object_id',
-			'actions'
+			'actions',
 		],
+
+		data: function() {
+			return {
+				showFullMessage: false,
+			}
+		},
 
 		_$el: null,
 
@@ -73,26 +81,26 @@
 
 				return this.subject;
 			},
+			isCollapsedMessage: function() {
+				return this.message.length > 200 && !this.showFullMessage;
+			},
 			renderedMessage: function() {
-				var message = this.message;
-				if (message.length > 200) {
-					var spacePosition = message.indexOf(' ', 180);
-					if (spacePosition !== -1 && spacePosition <= 200) {
-						message = message.substring(0, spacePosition);
-					} else {
-						message = message.substring(0, 200);
-					}
-					message += '…';
+				if (this.messageRich.length !== 0) {
+					return parser.parseMessage(
+						this.messageRich,
+						this.messageRichParameters
+					);
 				}
 
-				return message.replace(new RegExp("\n", 'g'), ' ');
+				return this.message.replace(new RegExp("\n", 'g'), ' ');
 			}
 		},
 
 		methods: {
-			onClickFullMessage: function() {
-				this._$el.find('.notification-message').addClass('hidden');
-				this._$el.find('.notification-full-message').removeClass('hidden');
+			onClickMessage: function(e) {
+				if (e.target.classList.contains('message-container')) {
+					this.showFullMessage = !this.showFullMessage;
+				}
 			},
 
 			onDismissNotification: function() {
