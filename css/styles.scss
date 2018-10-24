@@ -131,6 +131,16 @@
 	.notification-full-message {
 		line-height: 20px;
 		opacity: .57;
+
+		& > .collapsed {
+			overflow: hidden;
+			max-height: 70px
+		}
+
+		& > .notification-overflow {
+			box-shadow: 0 0 20px 20px var(--color-main-background);
+			position: relative;
+		}
 	}
 
 	img.notification-icon {

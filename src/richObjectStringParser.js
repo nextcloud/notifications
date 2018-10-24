@@ -30,7 +30,7 @@ define(function () {
 		 */
 		parseMessage: function(subject, parameters) {
 			var self = this,
-				regex = /\{([a-z0-9]+)\}/gi,
+				regex = /\{([a-z\-_0-9]+)\}/gi,
 				matches = subject.match(regex);
 
 			_.each(matches, function(parameter) {
