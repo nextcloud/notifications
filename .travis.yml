@@ -3,8 +3,6 @@ sudo: required
 language: php
 php:
   - 7.0
-  - 7.1
-  - 7.2
 
 services:
   - docker
@@ -22,7 +20,7 @@ cache:
 
 env:
   global:
-    - CORE_BRANCH=master
+    - CORE_BRANCH=bugfix/12446/fix-oracle-install-again
     - APP_NAME=notifications
   matrix:
     - DB=sqlite
@@ -78,17 +76,5 @@ script:
 matrix:
   include:
     - php: 7.0
-      env: DB=mysql
-    - php: 7.0
-      env: DB=pgsql
-    - php: 7.0
       env: DB=oracle
-    - php: 7.0
-      env: DB=mysql;CODECHECK=1
-    - php: 7.0
-      env: DB=mysql;CODECHECK=2
-    - php: 7.0
-      env: DB=mysql;INTEGRATION=1
-  allow_failures:
-    - env: DB=mysql;CODECHECK=2
   fast_finish: true
