@@ -2,10 +2,10 @@ OC.L10N.register(
     "notifications",
     {
     "Notifications" : "Notifikationer",
-    "Failed to perform action" : "Mislykkedes at udføre handling",
-    "Failed to dismiss notification" : "Kunne ikke fjerne notifikation",
-    "in {path}" : "i {path}",
     "No notifications" : "Ingen notifikationer",
-    "Dismiss" : "Afvis"
+    "Failed to perform action" : "Mislykkedes at udføre handling",
+    "Dismiss" : "Afvis",
+    "Failed to dismiss notification" : "Kunne ikke fjerne notifikation",
+    "in {path}" : "i {path}"
 },
 "nplurals=2; plural=(n != 1);");
