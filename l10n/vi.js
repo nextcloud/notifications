@@ -3,9 +3,9 @@ OC.L10N.register(
     {
     "Admin notifications" : "Thông báo quản trị",
     "Notifications" : "Thông báo",
-    "Failed to dismiss notification" : "Lỗi bỏ qua thông báo",
-    "in {path}" : "trong {path}",
     "No notifications" : "Không thông báo ",
-    "Dismiss" : "Bỏ qua"
+    "Dismiss" : "Bỏ qua",
+    "Failed to dismiss notification" : "Lỗi bỏ qua thông báo",
+    "in {path}" : "trong {path}"
 },
 "nplurals=1; plural=0;");

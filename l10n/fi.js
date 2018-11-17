@@ -3,9 +3,9 @@ OC.L10N.register(
     {
     "Admin notifications" : "Ylläpitoilmoitukset",
     "Notifications" : "Ilmoitukset",
-    "Failed to perform action" : "Toimenpiteen suorittaminen epäonnistui",
-    "in {path}" : "polussa {path}",
     "No notifications" : "Ei ilmoituksia",
-    "Dismiss" : "Hylkää"
+    "Failed to perform action" : "Toimenpiteen suorittaminen epäonnistui",
+    "Dismiss" : "Hylkää",
+    "in {path}" : "polussa {path}"
 },
 "nplurals=2; plural=(n != 1);");

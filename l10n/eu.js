@@ -2,8 +2,8 @@ OC.L10N.register(
     "notifications",
     {
     "Notifications" : "Jakinarazpenak",
-    "in {path}" : "{path} -en",
     "No notifications" : "Ez dago jakinarazpenik",
-    "Dismiss" : "Baztertu"
+    "Dismiss" : "Baztertu",
+    "in {path}" : "{path} -en"
 },
 "nplurals=2; plural=(n != 1);");

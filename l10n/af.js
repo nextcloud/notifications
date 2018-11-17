@@ -3,11 +3,11 @@ OC.L10N.register(
     {
     "Admin notifications" : "Admin kennisgewings",
     "Notifications" : "Kennisgewings",
+    "No notifications" : "Geen kennisgewings",
     "Failed to dismiss all notifications" : "Kon nie alle kennisgewings afwys nie ",
     "Failed to perform action" : "Kon nie aksie voltooi nie",
+    "Dismiss" : "Wys Af",
     "Failed to dismiss notification" : "Kon nie kennisgewing afwys nie",
-    "in {path}" : "in {path}",
-    "No notifications" : "Geen kennisgewings",
-    "Dismiss" : "Wys Af"
+    "in {path}" : "in {path}"
 },
 "nplurals=2; plural=(n != 1);");

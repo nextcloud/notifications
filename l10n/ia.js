@@ -2,8 +2,8 @@ OC.L10N.register(
     "notifications",
     {
     "Notifications" : "Notificationes",
-    "in {path}" : "in {path}",
     "No notifications" : "Nulle notificationes",
-    "Dismiss" : "Dimitter"
+    "Dismiss" : "Dimitter",
+    "in {path}" : "in {path}"
 },
 "nplurals=2; plural=(n != 1);");

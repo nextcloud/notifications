@@ -3,11 +3,11 @@ OC.L10N.register(
     {
     "Admin notifications" : "Administrator- notifikasjoner",
     "Notifications" : "Varsel",
+    "No notifications" : "Ingen varsel",
     "Failed to dismiss all notifications" : "Klarte ikke å fjerne alle varslene",
     "Failed to perform action" : "Klarte ikke å utføre handling",
+    "Dismiss" : "Forkast",
     "Failed to dismiss notification" : "Klarte ikke fjerne varsel",
-    "in {path}" : "i {path}",
-    "No notifications" : "Ingen varsel",
-    "Dismiss" : "Forkast"
+    "in {path}" : "i {path}"
 },
 "nplurals=2; plural=(n != 1);");

@@ -2,8 +2,8 @@ OC.L10N.register(
     "notifications",
     {
     "Notifications" : "Njoftimet",
-    "in {path}" : "në {path}",
     "No notifications" : "Asnjë njoftim",
-    "Dismiss" : "Hiq"
+    "Dismiss" : "Hiq",
+    "in {path}" : "në {path}"
 },
 "nplurals=2; plural=(n != 1);");
