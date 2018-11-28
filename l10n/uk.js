@@ -1,8 +1,13 @@
 OC.L10N.register(
     "notifications",
     {
-    "Notifications" : "Повідомлення",
-    "No notifications" : "Немає повідомлень",
+    "Admin notifications" : "Сповіщення адміністратора",
+    "Notifications" : "Сповіщення",
+    "This app provides a backend and frontend for the notification API available in Nextcloud." : "Це додаток сповіщень забезпечує бекенд та фронтенд інтерфейс для API, доступних в Nextcloud.",
+    "Dismiss all notifications" : "Відхилити всі сповіщення",
+    "No notifications" : "Немає сповіщень",
+    "Failed to dismiss all notifications" : "Не вдалося відхилити всі сповіщення",
+    "Failed to perform action" : "Не вдалося виконати дію",
     "Dismiss" : "Припинити",
     "in {path}" : "в {path}"
 },
