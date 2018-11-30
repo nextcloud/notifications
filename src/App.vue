@@ -15,7 +15,7 @@
 			</div>
 			<div class="emptycontent" v-else>
 				<div class="icon icon-notifications-dark"></div>
-				<h2>{{ t('notifications', 'No notifications') }}</h2>
+				<h3>{{ t('notifications', 'No notifications') }}</h3>
 			</div>
 		</div>
 	</div>
