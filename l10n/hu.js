@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Admin notifications" : "Rendszergazdai értesítések",
     "Notifications" : "Értesítések",
+    "Dismiss all notifications" : "Összes értesítés mellőzése",
     "No notifications" : "Nincsenek értesítések",
     "Failed to dismiss all notifications" : "Sikertelen volt az összes értesítés elengedése",
     "Failed to perform action" : "Sikertelen művelet",
