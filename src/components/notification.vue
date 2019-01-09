@@ -25,7 +25,7 @@
 </template>
 
 <script>
-	import axios from 'axios';
+	import axios from 'nextcloud-axios';
 	import action from './action';
 	import parser from '../richObjectStringParser';
 
@@ -105,9 +105,7 @@
 
 			onDismissNotification: function() {
 				axios
-					.delete(OC.linkToOCS('apps/notifications/api/v2', 2) + 'notifications/' + this.notification_id,
-						{ headers: { requesttoken: OC.requestToken } }
-					)
+					.delete(OC.linkToOCS('apps/notifications/api/v2', 2) + 'notifications/' + this.notification_id)
 					.then(response => {
 						this._$el.fadeOut(OC.menuSpeed);
 						this.$emit('remove');
