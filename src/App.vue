@@ -23,7 +23,7 @@
 
 <script>
 	import notification from './components/notification';
-	import axios from 'axios';
+	import axios from 'nextcloud-axios';
 
 	export default {
 		name: 'app',
@@ -67,7 +67,7 @@
 		methods: {
 			onDismissAll: function() {
 				axios
-					.delete(OC.linkToOCS('apps/notifications/api/v2', 2) + 'notifications', { headers: { requesttoken: OC.requestToken } })
+					.delete(OC.linkToOCS('apps/notifications/api/v2', 2) + 'notifications')
 					.then(response => {
 						this.notifications = [];
 					})
@@ -120,7 +120,7 @@
 			 */
 			_fetch: function() {
 				axios
-					.get(OC.linkToOCS('apps/notifications/api/v2', 2) + 'notifications', { headers: { requesttoken: OC.requestToken } })
+					.get(OC.linkToOCS('apps/notifications/api/v2', 2) + 'notifications')
 					.then(response => {
 						if (response.status === 204) {
 							// 204 No Content - Intercept when no notifiers are there.

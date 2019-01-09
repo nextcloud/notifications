@@ -4,7 +4,7 @@
 </template>
 
 <script>
-	import axios from 'axios';
+	import axios from 'nextcloud-axios';
 	export default {
 		name: 'action',
 
@@ -19,8 +19,7 @@
 			onClickActionButton: function () {
 				axios({
 					method: this.type || 'GET',
-					url: this.link,
-					headers: { requesttoken: OC.requestToken }
+					url: this.link
 				})
 				.then(response => {
 					this.$parent._$el.fadeOut(OC.menuSpeed);
