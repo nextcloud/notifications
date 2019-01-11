@@ -28,7 +28,7 @@
     "handlebars-loader": "^1.7.1",
     "vue-loader": "^15.5.1",
     "vue-template-compiler": "^2.5.21",
-    "webpack": "^4.28.3",
+    "webpack": "^4.28.4",
     "webpack-cli": "^3.2.1",
     "webpack-merge": "^4.2.1"
   }
