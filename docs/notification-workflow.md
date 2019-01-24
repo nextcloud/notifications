@@ -25,7 +25,7 @@ $declineAction = $notification->createAction();
 $declineAction->setLabel('decline')
     ->setLink('/apps/files_sharing/api/v1/remote_shares/1337', 'DELETE');
 
-$notification->setApp('files_sharing')
+$notification->setApp('myapp')
     ->setUser('recipient1')
     ->setDateTime(new DateTime())
     ->setObject('remote', '1337') // $type and $id
@@ -47,13 +47,19 @@ $manager->notify($notification);
 ### Preparing a notification for display
 
   1. In `app.php` register your Notifier (`\OCP\Notification\INotifier`) interface to the manager,
-  using a `\Closure`:
+  using a `\Closure` returning the Notifier and a `\Closure` returning an array of the id and name:
 ```php
 $manager = \OC::$server->getNotificationManager();
 $manager->registerNotifier(function() {
     return new \OCA\Files_Sharing\Notifier(
         \OC::$server->getL10NFactory()
     );
+}, function() {
+		$l = \OC::$server->getL10N('myapp');
+		return [
+			'id' => 'myapp',
+			'name' => $l->t('My apps name'),
+		];
 });
 ```
 
@@ -61,56 +67,59 @@ $manager->registerNotifier(function() {
   If the notification is not known by your app, just throw an `\InvalidArgumentException`,
   but if it is actually from your app, you must set the parsed subject, message and action labels:
 ```php
-protected $factory;
+class Notifier implements OCP\Notification\INotifier {
 
-public function __construct(\OCP\L10N\IFactory $factory) {
-    $this->factory = $factory;
-}
+    protected $factory;
 
-/**
- * @param INotification $notification
- * @param string $languageCode The code of the language that should be used to prepare the notification
- */
-public function prepare(INotification $notification, $languageCode) {
-    if ($notification->getApp() !== 'files_sharing') {
-        // Not my app => throw
-        throw new \InvalidArgumentException();
+    public function __construct(\OCP\L10N\IFactory $factory) {
+        $this->factory = $factory;
     }
 
-    // Read the language from the notification
-    $l = $this->factory->get('myapp', $languageCode);
-
-    switch ($notification->getSubject()) {
-        // Deal with known subjects
-        case 'remote_share':
-            $notification->setParsedSubject(
-                (string) $l->t('You received the remote share "%s"', $notification->getSubjectParameters())
-            );
-
-            // Deal with the actions for a known subject
-            foreach ($notification->getActions() as $action) {
-                switch ($action->getLabel()) {
-                    case 'accept':
-                        $action->setParsedLabel(
-                            (string) $l->t('Accept')
-                        );
-                    break;
-
-                    case 'decline':
-                        $action->setParsedLabel(
-                            (string) $l->t('Decline')
-                        );
-                    break;
-                }
-
-                $notification->addParsedAction($action);
-            }
-            return $notification;
-        break;
-
-        default:
-            // Unknown subject => Unknown notification => throw
+    /**
+     * @param INotification $notification
+     * @param string $languageCode The code of the language that should be used to prepare the notification
+     */
+    public function prepare(INotification $notification, $languageCode) {
+        if ($notification->getApp() !== 'myapp') {
+            // Not my app => throw
             throw new \InvalidArgumentException();
+        }
+
+        // Read the language from the notification
+        $l = $this->factory->get('myapp', $languageCode);
+
+        switch ($notification->getSubject()) {
+            // Deal with known subjects
+            case 'remote_share':
+                $notification->setParsedSubject(
+                    (string) $l->t('You received the remote share "%s"', $notification->getSubjectParameters())
+                );
+
+                // Deal with the actions for a known subject
+                foreach ($notification->getActions() as $action) {
+                    switch ($action->getLabel()) {
+                        case 'accept':
+                            $action->setParsedLabel(
+                                (string) $l->t('Accept')
+                            );
+                        break;
+
+                        case 'decline':
+                            $action->setParsedLabel(
+                                (string) $l->t('Decline')
+                            );
+                        break;
+                    }
+
+                    $notification->addParsedAction($action);
+                }
+                return $notification;
+            break;
+
+            default:
+                // Unknown subject => Unknown notification => throw
+                throw new \InvalidArgumentException();
+        }
     }
 }
 ```
@@ -126,7 +135,7 @@ notification object:
 
 ```php
 $manager = \OC::$server->getNotificationManager();
-$notification->setApp('files_sharing')
+$notification->setApp('myapp')
     ->setObject('remote', 1337)
     ->setUser('recipient1');
 $manager->markProcessed($notification);
@@ -138,7 +147,7 @@ remove all notifications for the app files_sharing on the object "remote #1337":
 
 ```php
 $manager = \OC::$server->getNotificationManager();
-$notification->setApp('files_sharing')
+$notification->setApp('myapp')
     ->setObject('remote', 1337);
 $manager->markProcessed($notification);
 ```
