@@ -54,22 +54,22 @@ define(function () {
 		parseParameter: function(parameter) {
 			switch (parameter.type) {
 				case 'file':
-					return this.parseFileParameter(parameter);
+					return this.parseFileParameter(parameter).trim("\n");
 
 				case 'user':
 					if (_.isUndefined(parameter.server)) {
-						return this.userLocalTemplate(parameter);
+						return this.userLocalTemplate(parameter).trim("\n");
 					}
 
 
-					return this.userRemoteTemplate(parameter);
+					return this.userRemoteTemplate(parameter).trim("\n");
 
 				default:
 					if (!_.isUndefined(parameter.link)) {
-						return this.unknownLinkTemplate(parameter);
+						return this.unknownLinkTemplate(parameter).trim("\n");
 					}
 
-					return this.unknownTemplate(parameter);
+					return this.unknownTemplate(parameter).trim("\n");
 			}
 		},
 
