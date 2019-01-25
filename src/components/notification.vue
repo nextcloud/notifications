@@ -74,12 +74,12 @@
 			renderedSubject: function() {
 				if (this.subjectRich.length !== 0) {
 					return parser.parseMessage(
-						this.subjectRich,
+						this.subjectRich.replace(new RegExp("\n", 'g'), ' '),
 						this.subjectRichParameters
 					);
 				}
 
-				return this.subject;
+				return escapeHTML(this.subject).replace(new RegExp("\n", 'g'), ' ');
 			},
 			isCollapsedMessage: function() {
 				return this.message.length > 200 && !this.showFullMessage;
@@ -92,7 +92,7 @@
 					);
 				}
 
-				return this.message.replace(new RegExp("\n", 'g'), ' ');
+				return escapeHTML(this.message).replace(new RegExp("\n", 'g'), '<br>');
 			}
 		},
 

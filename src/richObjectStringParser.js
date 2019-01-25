@@ -24,23 +24,24 @@ define(function () {
 		unknownLinkTemplate: require('./templates/unkownLink.handlebars'),
 
 		/**
-		 * @param {string} subject
+		 * @param {string} message
 		 * @param {Object} parameters
 		 * @returns {string}
 		 */
-		parseMessage: function(subject, parameters) {
+		parseMessage: function(message, parameters) {
+			message = escapeHTML(message);
 			var self = this,
 				regex = /\{([a-z\-_0-9]+)\}/gi,
-				matches = subject.match(regex);
+				matches = message.match(regex);
 
 			_.each(matches, function(parameter) {
 				parameter = parameter.substring(1, parameter.length - 1);
 				var parsed = self.parseParameter(parameters[parameter]);
 
-				subject = subject.replace('{' + parameter + '}', parsed);
+				message = message.replace('{' + parameter + '}', parsed);
 			});
 
-			return subject;
+			return message.replace(new RegExp("\n", 'g'), '<br>');
 		},
 
 		/**
