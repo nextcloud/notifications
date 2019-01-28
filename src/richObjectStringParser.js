@@ -24,23 +24,29 @@ define(function () {
 		unknownLinkTemplate: require('./templates/unkownLink.handlebars'),
 
 		/**
-		 * @param {string} subject
+		 * @param {string} message
 		 * @param {Object} parameters
 		 * @returns {string}
 		 */
-		parseMessage: function(subject, parameters) {
+		parseMessage: function(message, parameters) {
+			message = escapeHTML(message);
 			var self = this,
 				regex = /\{([a-z\-_0-9]+)\}/gi,
-				matches = subject.match(regex);
+				matches = message.match(regex);
 
 			_.each(matches, function(parameter) {
 				parameter = parameter.substring(1, parameter.length - 1);
-				var parsed = self.parseParameter(parameters[parameter]);
+				if (!parameters.hasOwnProperty(parameter) || !parameters[parameter]) {
+					// Malformed translation?
+					console.error('Potential malformed ROS string: parameter {' + parameter + '} was found in the string but is missing from the parameter list');
+					return;
+				}
 
-				subject = subject.replace('{' + parameter + '}', parsed);
+				var parsed = self.parseParameter(parameters[parameter]);
+				message = message.replace('{' + parameter + '}', parsed);
 			});
 
-			return subject;
+			return message.replace(new RegExp("\n", 'g'), '<br>');
 		},
 
 		/**
@@ -53,22 +59,22 @@ define(function () {
 		parseParameter: function(parameter) {
 			switch (parameter.type) {
 				case 'file':
-					return this.parseFileParameter(parameter);
+					return this.parseFileParameter(parameter).trim("\n");
 
 				case 'user':
 					if (_.isUndefined(parameter.server)) {
-						return this.userLocalTemplate(parameter);
+						return this.userLocalTemplate(parameter).trim("\n");
 					}
 
 
-					return this.userRemoteTemplate(parameter);
+					return this.userRemoteTemplate(parameter).trim("\n");
 
 				default:
 					if (!_.isUndefined(parameter.link)) {
-						return this.unknownLinkTemplate(parameter);
+						return this.unknownLinkTemplate(parameter).trim("\n");
 					}
 
-					return this.unknownTemplate(parameter);
+					return this.unknownTemplate(parameter).trim("\n");
 			}
 		},
 

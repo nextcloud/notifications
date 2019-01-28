@@ -19,17 +19,17 @@ $notification = $manager->createNotification();
 ```php
 $acceptAction = $notification->createAction();
 $acceptAction->setLabel('accept')
-    ->setLink('/apps/files_sharing/api/v1/remote_shares/1337', 'POST');
+    ->setLink('remote_shares', 'POST');
 
 $declineAction = $notification->createAction();
 $declineAction->setLabel('decline')
-    ->setLink('/apps/files_sharing/api/v1/remote_shares/1337', 'DELETE');
+    ->setLink('remote_shares', 'DELETE');
 
-$notification->setApp('myapp')
+$notification->setApp('files_sharing')
     ->setUser('recipient1')
     ->setDateTime(new DateTime())
     ->setObject('remote', '1337') // $type and $id
-    ->setSubject('remote_share', ['/fancyFolder']) // $subject and $parameters
+    ->setSubject('remote_share', ['name' => '/fancyFolder']) // $subject and $parameters
     ->addAction($acceptAction)
     ->addAction($declineAction)
 ;
@@ -38,6 +38,11 @@ $notification->setApp('myapp')
   translated subject, message or action label. Use something like a "language key", to avoid
   length problems with translations in the storage of a notification app. Translation is done
   via invocation of your notifier by the manager when the notification is prepared for display.
+
+  You should also try to avoid setting links and image paths here already, use keys again instead.
+  This allows you to change the image/url of your application and also the admin can move the instance
+  to another domain later, without breaking pending notifications. Also make sure, all your URLs are
+  absolute URLs, so the notification icon and link also work from the desktop and mobile clients.
 
   3. Send the notification back to the manager:
 ```php
@@ -55,10 +60,10 @@ $manager->registerNotifier(function() {
         \OC::$server->getL10NFactory()
     );
 }, function() {
-		$l = \OC::$server->getL10N('myapp');
+		$l = \OC::$server->getL10N('files_sharing');
 		return [
 			'id' => 'myapp',
-			'name' => $l->t('My apps name'),
+			'name' => $l->t('My app name'),
 		];
 });
 ```
@@ -67,64 +72,92 @@ $manager->registerNotifier(function() {
   If the notification is not known by your app, just throw an `\InvalidArgumentException`,
   but if it is actually from your app, you must set the parsed subject, message and action labels:
 ```php
-class Notifier implements OCP\Notification\INotifier {
 
-    protected $factory;
+class Notifier implements \OCP\Notification\INotifier {
+	protected $factory;
+	protected $url;
 
-    public function __construct(\OCP\L10N\IFactory $factory) {
-        $this->factory = $factory;
-    }
+	public function __construct(\OCP\L10N\IFactory $factory,
+								\OCP\IURLGenerator $urlGenerator) {
+		$this->factory = $factory;
+		$this->url = $urlGenerator;
+	}
 
-    /**
-     * @param INotification $notification
-     * @param string $languageCode The code of the language that should be used to prepare the notification
-     */
-    public function prepare(INotification $notification, $languageCode) {
-        if ($notification->getApp() !== 'myapp') {
-            // Not my app => throw
-            throw new \InvalidArgumentException();
-        }
+	/**
+	 * @param INotification $notification
+	 * @param string $languageCode The code of the language that should be used to prepare the notification
+	 */
+	public function prepare(INotification $notification, $languageCode) {
+		if ($notification->getApp() !== 'files_sharing') {
+			// Not my app => throw
+			throw new \InvalidArgumentException();
+		}
 
-        // Read the language from the notification
-        $l = $this->factory->get('myapp', $languageCode);
+		// Read the language from the notification
+		$l = $this->factory->get('files_sharing', $languageCode);
 
-        switch ($notification->getSubject()) {
-            // Deal with known subjects
-            case 'remote_share':
-                $notification->setParsedSubject(
-                    (string) $l->t('You received the remote share "%s"', $notification->getSubjectParameters())
-                );
+		switch ($notification->getSubject()) {
+			// Deal with known subjects
+			case 'remote_share':
+				$notification->setIcon($this->url->getAbsoluteURL($this->url->imagePath('core', 'actions/share.svg')))
+					->setLink($this->url->linkToRouteAbsolute('files_sharing.RemoteShare.overview', ['id' => $notification->getObjectId()]));
 
-                // Deal with the actions for a known subject
-                foreach ($notification->getActions() as $action) {
-                    switch ($action->getLabel()) {
-                        case 'accept':
-                            $action->setParsedLabel(
-                                (string) $l->t('Accept')
-                            );
-                        break;
+				// Set rich subject, see https://github.com/nextcloud/server/issues/1706 for more information
+				// and https://github.com/nextcloud/server/blob/master/lib/public/RichObjectStrings/Definitions.php
+				// for a list of defined objects and their parameters.
+				$parameters = $notification->getSubjectParameters();
+				$notification->setRichSubject($l->t('You received the remote share "{share}"'), [
+					'share' => [
+						'type' => 'pending-federated-share',
+						'id' => $notification->getObjectId(),
+						'name' => $parameters['name'],
+					]
+				]);
 
-                        case 'decline':
-                            $action->setParsedLabel(
-                                (string) $l->t('Decline')
-                            );
-                        break;
-                    }
+				// Deal with the actions for a known subject
+				foreach ($notification->getActions() as $action) {
+					switch ($action->getLabel()) {
+						case 'accept':
+							$action->setParsedLabel($l->t('Accept'))
+								->setLink($this->url->linkToRouteAbsolute('files_sharing.RemoteShare.accept', ['id' => $notification->getObjectId()]), 'POST');
+							break;
 
-                    $notification->addParsedAction($action);
-                }
-                return $notification;
-            break;
+						case 'decline':
+							$action->setParsedLabel($l->t('Decline'))
+								->setLink($this->url->linkToRouteAbsolute('files_sharing.RemoteShare.decline', ['id' => $notification->getObjectId()]), 'DELETE');
+							break;
+					}
 
-            default:
-                // Unknown subject => Unknown notification => throw
-                throw new \InvalidArgumentException();
-        }
-    }
+					$notification->addParsedAction($action);
+				}
+
+				// Set the plain text subject automatically
+				$this->setParsedSubjectFromRichSubject($notification);
+				return $notification;
+
+			default:
+				// Unknown subject => Unknown notification => throw
+				throw new \InvalidArgumentException();
+		}
+	}
+
+	// This is a little helper function which automatically sets the simple parsed subject
+	// based on the rich subject you set.
+	protected function setParsedSubjectFromRichSubject(INotification $notification) {
+		$placeholders = $replacements = [];
+		foreach ($notification->getRichSubjectParameters() as $placeholder => $parameter) {
+			$placeholders[] = '{' . $placeholder . '}';
+			if ($parameter['type'] === 'file') {
+				$replacements[] = $parameter['path'];
+			} else {
+				$replacements[] = $parameter['name'];
+			}
+		}
+
+		$notification->setParsedSubject(str_replace($placeholders, $replacements, $notification->getRichSubject()));
+	}
 }
 ```
-
-**Note:** currently no markup is allowed.
 
 ### Marking a notification as read/deleted/processed/obsoleted
 
@@ -135,7 +168,7 @@ notification object:
 
 ```php
 $manager = \OC::$server->getNotificationManager();
-$notification->setApp('myapp')
+$notification->setApp('files_sharing')
     ->setObject('remote', 1337)
     ->setUser('recipient1');
 $manager->markProcessed($notification);
@@ -147,7 +180,7 @@ remove all notifications for the app files_sharing on the object "remote #1337":
 
 ```php
 $manager = \OC::$server->getNotificationManager();
-$notification->setApp('myapp')
+$notification->setApp('files_sharing')
     ->setObject('remote', 1337);
 $manager->markProcessed($notification);
 ```
