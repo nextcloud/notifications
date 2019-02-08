@@ -15,6 +15,8 @@ npm-init:
 npm-update:
 	npm update
 
+dependabot: dev-setup npm-update build-js-production
+
 build-js:
 	npm run dev
 
