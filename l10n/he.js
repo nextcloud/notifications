@@ -4,6 +4,7 @@ OC.L10N.register(
     "Admin notifications" : "התרעות למנהלים",
     "Notifications" : "התרעות",
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "יישומון זה מספק מנגנון ומנשק משתמש ל־API של ההתראות שזמין ב־Nextcloud.",
+    "Dismiss all notifications" : "התעלמות מכל ההתראות",
     "No notifications" : "אין התרעות",
     "Failed to dismiss all notifications" : "התעלמות מכל ההתרעות נכשלה",
     "Failed to perform action" : "הפעולה נכשלה",
