@@ -435,6 +435,7 @@ class PushTest extends TestCase {
 			->method('logException')
 			->with($e, [
 				'app' => 'notifications',
+				'level' => ILogger::WARN,
 			]);
 
 		/** @var IResponse|\PHPUnit_Framework_MockObject_MockObject $response1 */
