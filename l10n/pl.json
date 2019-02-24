@@ -1,12 +1,12 @@
 { "translations": {
     "Admin notifications" : "Powiadomienia administratora",
     "Notifications" : "Powiadomienia",
-    "This app provides a backend and frontend for the notification API available in Nextcloud." : "Ta aplikacja udostępnia backend i frontend dla API powiadomień w Nextcloud.",
-    "This app provides a backend and frontend for the notification API available in Nextcloud.\n\t\tThe API is used by other apps to notify users in the web UI and sync clients about various things. Some examples are:\n\n📬 Federated file sharing: You received a new remote share\n\n📑 Comments: Another user mentioned you in a comment on a file\n\n🚢 Update notification: Available update for an app or nextcloud itself\n\n📣 Announcement center: An announcement was posted by an admin" : "Ta aplikacja udostępnia backend i frontend dla interfejsu API powiadomień dostępnego w usłudze NextCloud.\nInterfejs API jest używany przez inne aplikacje do powiadamiania użytkowników w interfejsie internetowym i synchronizowania klientów z różnymi rzeczami. Oto kilka przykładów:\n\n📬 Udostępnianie plików stowarzyszonych: Otrzymano nowy udział zdalny\n\n📑 Komentarze: inny użytkownik wspomniał o Tobie w komentarzu do pliku\n\n🚢 Powiadomienie o aktualizacji: dostępna aktualizacja dla samej aplikacji lub kolejnej\n\n📣 Centrum ogłoszeń: ogłoszenie zostało ogłoszone przez administratora",
+    "This app provides a backend and frontend for the notification API available in Nextcloud." : "Ta aplikacja udostępnia backend i frontend dla interfejsu API powiadomień dostępnego w usłudze Nextcloud.",
+    "This app provides a backend and frontend for the notification API available in Nextcloud.\n\t\tThe API is used by other apps to notify users in the web UI and sync clients about various things. Some examples are:\n\n📬 Federated file sharing: You received a new remote share\n\n📑 Comments: Another user mentioned you in a comment on a file\n\n🚢 Update notification: Available update for an app or nextcloud itself\n\n📣 Announcement center: An announcement was posted by an admin" : "Ta aplikacja udostępnia backend i frontend dla interfejsu API powiadomień dostępnego w usłudze Nextcloud.\nInterfejs API jest używany przez inne aplikacje do powiadamiania użytkowników w interfejsie internetowym i synchronizowania klientów z różnymi rzeczami. Oto kilka przykładów:\n\n📬 Udostępnianie plików we Federacji: Otrzymano nowe udostępnianie zdalne\n\n📑 Komentarze: inny użytkownik wspomniał o Tobie w komentarzu do pliku\n\n🚢 Powiadomienie o aktualizacji: dostępna aktualizacja dla samej aplikacji lub następnej\n\n📣 Centrum ogłoszeń: ogłoszenie zostało wysłane przez administratora",
     "Dismiss all notifications" : "Zamknij wszystkie powiadomienia",
     "No notifications" : "Brak powiadomień",
     "Failed to dismiss all notifications" : "Nie udało się zamknąć wszystkich powiadomień",
-    "Failed to perform action" : "Nie udało się wykonać czynności",
+    "Failed to perform action" : "Nie udało się wykonać działania",
     "Dismiss" : "Anuluj",
     "Failed to dismiss notification" : "Nie udało się odrzucić powiadomienia",
     "in {path}" : "w {path}"
