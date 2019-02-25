@@ -1,7 +1,9 @@
 OC.L10N.register(
     "notifications",
     {
+    "Admin notifications" : "管理员通知",
     "Notifications" : "通知",
+    "Dismiss all notifications" : "忽略所有通知",
     "No notifications" : "没有通知",
     "Failed to dismiss all notifications" : "无法清除所有通知",
     "Failed to perform action" : "操作失败",
