@@ -146,6 +146,7 @@ class Push {
 			} catch (\Exception $e) {
 				$this->log->logException($e, [
 					'app' => 'notifications',
+					'level' => $e->getCode() === Http::STATUS_BAD_REQUEST ? ILogger::INFO : ILogger::WARN,
 				]);
 				continue;
 			}
