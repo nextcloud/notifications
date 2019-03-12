@@ -1,8 +1,8 @@
-const path = require('path');
-const { VueLoaderPlugin } = require('vue-loader');
+const path = require('path')
+const { VueLoaderPlugin } = require('vue-loader')
 
 module.exports = {
-	entry:  path.join(__dirname, 'init.js'),
+	entry: path.join(__dirname, 'init.js'),
 	output: {
 		path: path.resolve(__dirname, '../js'),
 		publicPath: '/js/',
@@ -24,6 +24,12 @@ module.exports = {
 				exclude: /node_modules/
 			},
 			{
+				enforce: 'pre',
+				test: /\.(js|vue)$/,
+				loader: 'eslint-loader',
+				exclude: /node_modules/
+			},
+			{
 				test: /\.(png|jpg|gif|svg)$/,
 				loader: 'file-loader',
 				options: {
@@ -32,7 +38,7 @@ module.exports = {
 			},
 			{
 				test: /\.handlebars/,
-				loader: "handlebars-loader",
+				loader: 'handlebars-loader',
 				query: {
 					extensions: '.handlebars'
 				}
@@ -46,4 +52,4 @@ module.exports = {
 		},
 		extensions: ['*', '.js', '.vue', '.json']
 	}
-};
+}
