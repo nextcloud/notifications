@@ -19,7 +19,7 @@
 			<div v-if="isCollapsedMessage" class="notification-overflow" />
 		</div>
 		<div v-if="actions.length" class="notification-actions">
-			<action v-for="(a, index) in actions" :key="index" v-bind="a" />
+			<action v-for="(a, i) in actions" :key="i" v-bind="a" />
 		</div>
 	</div>
 </template>

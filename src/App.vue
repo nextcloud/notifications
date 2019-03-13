@@ -8,24 +8,28 @@
 				:title="t('notifications', 'Notifications')" :src="iconPath">
 		</div>
 		<div ref="container" class="notification-container">
-			<div v-if="notifications.length" class="notification-wrapper">
-				<notification
-					v-for="(n, index) in notifications"
-					:key="n.notification_id"
-					v-bind="n"
-					:index="index"
-					:notification-id="n.notification_id"
-					:object-id="n.object_id"
-					:object-type="n.object_type"
-					@remove="onRemove" />
-				<div v-if="notifications.length > 2" class="dismiss-all" @click="onDismissAll">
-					<span class="icon icon-close svg" :title="t('notifications', 'Dismiss all notifications')" /> {{ t('notifications', 'Dismiss all notifications') }}
+			<transition name="fade">
+				<ul v-if="notifications.length > 0" class="notification-wrapper">
+					<transition-group name="fade-collapse" tag="li">
+						<notification
+							v-for="(n, index) in notifications"
+							:key="n.notification_id"
+							v-bind="n"
+							:index="index"
+							:notification-id="n.notification_id"
+							:object-id="n.object_id"
+							:object-type="n.object_type"
+							@remove="onRemove" />
+						<div v-if="notifications.length > 2" class="dismiss-all" @click="onDismissAll">
+							<span class="icon icon-close svg" :title="t('notifications', 'Dismiss all notifications')" /> {{ t('notifications', 'Dismiss all notifications') }}
+						</div>
+					</transition-group>
+				</ul>
+				<div v-else class="emptycontent">
+					<div class="icon icon-notifications-dark" />
+					<h2>{{ t('notifications', 'No notifications') }}</h2>
 				</div>
-			</div>
-			<div v-else class="emptycontent">
-				<div class="icon icon-notifications-dark" />
-				<h2>{{ t('notifications', 'No notifications') }}</h2>
-			</div>
+			</transition>
 		</div>
 	</div>
 </template>
@@ -208,3 +212,21 @@ export default {
 	}
 }
 </script>
+
+<style scoped>
+	.fade-enter-active,
+	.fade-leave-active,
+	.fade-collapse-enter-active,
+	.fade-collapse-leave-active {
+		transition: opacity 200ms, max-height 200ms;
+	}
+	.fade-collapse-enter,
+	.fade-collapse-leave-to {
+		opacity: 0;
+		max-height: 0;
+	}
+	.fade-enter,
+	.fade-leave-to {
+		opacity: 0;
+	}
+</style>
