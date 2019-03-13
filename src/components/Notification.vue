@@ -1,5 +1,5 @@
 <template>
-	<div class="notification" :data-id="notification_id" :data-timestamp="timestamp">
+	<div class="notification" :data-id="notificationId" :data-timestamp="timestamp">
 		<div class="notification-heading">
 			<span class="notification-time has-tooltip live-relative-timestamp" :data-timestamp="timestamp" :title="absoluteDate">{{ relativeDate }}</span>
 			<div class="notification-delete" @click="onDismissNotification">
@@ -43,8 +43,8 @@ export default {
 			required: true
 		},
 		datetime: {
-			type: Number,
-			default: -1,
+			type: String,
+			default: '',
 			required: true
 		},
 		app: {
@@ -116,6 +116,12 @@ export default {
 			default() {
 				return []
 			},
+			required: true
+		},
+
+		index: {
+			type: Number,
+			default: -1,
 			required: true
 		}
 	},
@@ -210,8 +216,8 @@ export default {
 			axios
 				.delete(OC.linkToOCS('apps/notifications/api/v2', 2) + 'notifications/' + this.notificationId)
 				.then(() => {
-					// this._$el.fadeOut(OC.menuSpeed);
-					this.$emit('remove')
+					// this._$el.fadeOut(OC.menuSpeed)
+					this.$emit('remove', this.index)
 				})
 				.catch(() => {
 					OC.Notification.showTemporary(t('notifications', 'Failed to dismiss notification'))

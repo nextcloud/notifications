@@ -10,10 +10,13 @@
 		<div ref="container" class="notification-container">
 			<div v-if="notifications.length" class="notification-wrapper">
 				<notification
-					v-for="n in notifications"
+					v-for="(n, index) in notifications"
 					:key="n.notification_id"
 					v-bind="n"
+					:index="index"
 					:notification-id="n.notification_id"
+					:object-id="n.object_id"
+					:object-type="n.object_type"
 					@remove="onRemove" />
 				<div v-if="notifications.length > 2" class="dismiss-all" @click="onDismissAll">
 					<span class="icon icon-close svg" :title="t('notifications', 'Dismiss all notifications')" /> {{ t('notifications', 'Dismiss all notifications') }}
