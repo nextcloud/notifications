@@ -40,5 +40,6 @@ Array.prototype.map.call(searchBox, (el) => {
 
 export default new Vue({
 	el: '#notifications',
+	name: 'NotificationsRoot',
 	render: h => h(App)
 })

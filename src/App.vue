@@ -40,7 +40,7 @@ import axios from 'nextcloud-axios'
 import _ from 'lodash'
 
 export default {
-	name: 'App',
+	name: 'NotificationsList',
 
 	components: {
 		Notification
