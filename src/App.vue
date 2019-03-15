@@ -218,7 +218,7 @@ export default {
 	.fade-leave-active,
 	.fade-collapse-enter-active,
 	.fade-collapse-leave-active {
-		transition: opacity 200ms, max-height 200ms;
+		transition: opacity var(--animation-quick), max-height var(--animation-quick);
 	}
 	.fade-collapse-enter,
 	.fade-collapse-leave-to {
