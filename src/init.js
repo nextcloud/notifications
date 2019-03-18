@@ -18,17 +18,28 @@
  *
  */
 
-import Vue from 'vue';
-import App from './App';
+import Vue from 'vue'
+import App from './App'
 
-Vue.prototype.t = t;
-Vue.prototype.n = n;
-Vue.prototype.OC = OC;
-Vue.prototype.OCA = OCA;
+Vue.prototype.t = t
+Vue.prototype.n = n
+Vue.prototype.OC = OC
+Vue.prototype.OCA = OCA
 
-$('form.searchbox').after($('<div>').attr('id', 'notifications'));
+const searchBox = document.getElementsByClassName('searchbox')
+let notificationsBell = document.createElement('div')
+notificationsBell.setAttribute('id', 'notifications')
 
-new Vue({
+Array.prototype.map.call(searchBox, (el) => {
+	if (el.nodeName !== 'FORM') {
+		return
+	}
+
+	el.insertAdjacentHTML('afterend', notificationsBell.outerHTML)
+})
+
+export default new Vue({
 	el: '#notifications',
+	name: 'NotificationsRoot',
 	render: h => h(App)
-});
+})
