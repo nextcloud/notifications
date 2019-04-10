@@ -25,7 +25,8 @@ In order to find out if notifications is installed/enabled on the server you can
             "delete",
             "delete-all",
             "icons",
-            "rich-strings"
+            "rich-strings",
+            "action-web"
           ]
         }
       }
@@ -138,7 +139,7 @@ Field name | Type | Value description
 ---------- | ---- | -----------------
 label | string | Translated short label of the action/button that should be presented to the user
 link | string | A link that should be followed when the action is performed/clicked
-type | string | HTTP method that should be used for the request against the link: GET, POST, DELETE
+type | string | HTTP method that should be used for the request against the link: GET, POST, DELETE, PUT or WEB. In case of WEB a redirect should happen instead.
 primary | bool | If the action is the primary action for the notification or not
 
 

@@ -45,6 +45,7 @@ class Capabilities implements ICapability {
 					'delete-all',
 					'icons',
 					'rich-strings',
+					'action-web',
 				],
 				'push' => [
 					'devices',
