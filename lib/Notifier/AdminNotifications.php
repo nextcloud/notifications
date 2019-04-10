@@ -25,6 +25,7 @@ namespace OCA\Notifications\Notifier;
 
 use OCP\IURLGenerator;
 use OCP\L10N\IFactory;
+use OCP\Notification\AlreadyProcessedException;
 use OCP\Notification\INotification;
 use OCP\Notification\INotifier;
 
@@ -46,12 +47,33 @@ class AdminNotifications implements INotifier {
 	}
 
 	/**
+	 * Identifier of the notifier, only use [a-z0-9_]
+	 *
+	 * @return string
+	 * @since 17.0.0
+	 */
+	public function getID(): string {
+		return 'admin_notifications';
+	}
+
+	/**
+	 * Human readable name describing the notifier
+	 *
+	 * @return string
+	 * @since 17.0.0
+	 */
+	public function getName(): string {
+		return $this->l10nFactory->get('notifications')->t('Admin notifications');
+	}
+
+	/**
 	 * @param INotification $notification
 	 * @param string $languageCode The code of the language that should be used to prepare the notification
 	 * @return INotification
 	 * @throws \InvalidArgumentException When the notification was not prepared by a notifier
+	 * @throws AlreadyProcessedException When the notification is not needed anymore and should be deleted
 	 */
-	public function prepare(INotification $notification, $languageCode): INotification {
+	public function prepare(INotification $notification, string $languageCode): INotification {
 		if ($notification->getApp() !== 'admin_notifications') {
 			throw new \InvalidArgumentException('Unknown app');
 		}

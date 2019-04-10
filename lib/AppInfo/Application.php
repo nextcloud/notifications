@@ -41,31 +41,26 @@ class Application extends \OCP\AppFramework\App {
 		});
 	}
 
-	public function register() {
+	public function register(): void {
 		$this->registerNotificationApp();
 		$this->registerAdminNotifications();
 		$this->registerUserInterface();
 	}
 
-	protected function registerNotificationApp() {
-		$container = $this->getContainer();
-		$container->getServer()->getNotificationManager()->registerApp(function() use($container) {
-			return $container->query(App::class);
-		});
+	protected function registerNotificationApp(): void {
+		$this->getContainer()
+			->getServer()
+			->getNotificationManager()
+			->registerApp(App::class);
 	}
-	protected function registerAdminNotifications() {
-		$this->getContainer()->getServer()->getNotificationManager()->registerNotifier(function() {
-			return $this->getContainer()->query(AdminNotifications::class);
-		}, function() {
-			$l = $this->getContainer()->getServer()->getL10NFactory()->get('notifications');
-			return [
-				'id' => 'admin_notifications',
-				'name' => $l->t('Admin notifications'),
-			];
-		});
+	protected function registerAdminNotifications(): void {
+		$this->getContainer()
+			->getServer()
+			->getNotificationManager()
+			->registerNotifier(AdminNotifications::class);
 	}
 
-	protected function registerUserInterface() {
+	protected function registerUserInterface(): void {
 		// Only display the app on index.php except for public shares
 		$server = $this->getContainer()->getServer();
 		$request = $server->getRequest();

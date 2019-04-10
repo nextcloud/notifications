@@ -23,6 +23,7 @@ namespace OCA\Notifications\Controller;
 
 use OCA\Notifications\Exceptions\NotificationNotFoundException;
 use OCA\Notifications\Handler;
+use OCA\Notifications\Push;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
@@ -37,15 +38,15 @@ use OCP\Notification\INotification;
 class EndpointController extends OCSController {
 	/** @var Handler */
 	private $handler;
-
 	/** @var IManager */
 	private $manager;
-
-	/** @var IUserSession */
-	private $session;
-
 	/** @var IConfig */
 	private $config;
+	/** @var IUserSession */
+	private $session;
+	/** @var Push */
+	private $push;
+
 
 	/**
 	 * @param string $appName
@@ -54,14 +55,22 @@ class EndpointController extends OCSController {
 	 * @param IManager $manager
 	 * @param IConfig $config
 	 * @param IUserSession $session
+	 * @param Push $push
 	 */
-	public function __construct($appName, IRequest $request, Handler $handler, IManager $manager, IConfig $config, IUserSession $session) {
+	public function __construct(string $appName,
+								IRequest $request,
+								Handler $handler,
+								IManager $manager,
+								IConfig $config,
+								IUserSession $session,
+								Push $push) {
 		parent::__construct($appName, $request);
 
 		$this->handler = $handler;
 		$this->manager = $manager;
 		$this->config = $config;
 		$this->session = $session;
+		$this->push = $push;
 	}
 
 	/**
@@ -154,6 +163,7 @@ class EndpointController extends OCSController {
 		}
 
 		$this->handler->deleteById($id, $this->getCurrentUser());
+		$this->push->pushDeleteToDevice($this->getCurrentUser(), $id);
 		return new DataResponse();
 	}
 
@@ -164,6 +174,7 @@ class EndpointController extends OCSController {
 	 */
 	public function deleteAllNotifications(): DataResponse {
 		$this->handler->deleteByUser($this->getCurrentUser());
+		$this->push->pushDeleteToDevice($this->getCurrentUser(), 0);
 		return new DataResponse();
 	}
 
