@@ -22,7 +22,7 @@ cache:
 
 env:
   global:
-    - CORE_BRANCH=master
+    - CORE_BRANCH=stable16
     - APP_NAME=notifications
   matrix:
     - DB=sqlite
