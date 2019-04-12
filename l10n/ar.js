@@ -1,6 +1,7 @@
 OC.L10N.register(
     "notifications",
     {
+    "Admin notifications" : "إشعارات المدير",
     "Notifications" : "الإخطارات",
     "No notifications" : "لا توجد هناك إخطارات",
     "Dismiss" : "رفض",
