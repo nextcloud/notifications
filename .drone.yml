@@ -1,16 +1,16 @@
-clone:
-  git:
-    image: plugins/git
-    depth: 1
+kind: pipeline
+name: vue-build
 
-pipeline:
-  vue-build-check:
+steps:
+  - name: vue-build-check
     image: node
     commands:
-     - ./tests/vue-build.sh ./js/notifications.js
-    when:
-      matrix:
-        TESTS: vue-build-check
-matrix:
-  include:
-    - TESTS: vue-build-check
+      - ./tests/vue-build.sh ./js/notifications.js
+
+trigger:
+  branch:
+    - master
+    - stable*
+  event:
+    - pull_request
+    - push
