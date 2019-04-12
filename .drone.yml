@@ -1,32 +1,16 @@
-clone:
-  git:
-    image: plugins/git
-    depth: 1
+kind: pipeline
+name: vue-build
 
-pipeline:
-  signed-off-check:
-    image: nextcloudci/php7.0:php7.0-2
-    environment:
-      - APP_NAME=notifications
-      - CORE_BRANCH=stable15
-      - DB=sqlite
-    commands:
-      - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
-      - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
-      - cd ../server
-      - php ./build/signed-off-checker.php
-    secrets: [ github_token ]
-    when:
-      matrix:
-        TESTS: signed-off-check
-  vue-build-check:
+steps:
+  - name: vue-build-check
     image: node
     commands:
-     - ./tests/vue-build.sh ./js/notifications.js
-    when:
-      matrix:
-        TESTS: vue-build-check
-matrix:
-  include:
-    - TESTS: signed-off-check
-    - TESTS: vue-build-check
+      - ./tests/vue-build.sh ./js/notifications.js
+
+trigger:
+  branch:
+    - master
+    - stable*
+  event:
+    - pull_request
+    - push
