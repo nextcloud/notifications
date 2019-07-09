@@ -3,7 +3,7 @@ name: vue-build
 
 steps:
   - name: vue-build-check
-    image: node
+    image: node:lts
     commands:
       - ./tests/vue-build.sh ./js/notifications.js
 
