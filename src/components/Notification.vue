@@ -200,7 +200,8 @@ export default {
 			placement: 'bottom'
 		})
 
-		if (this.$parent.backgroundFetching) {
+		// Parents: TransitionGroup > NotificationsList
+		if (this.$parent.$parent.backgroundFetching) {
 			this._triggerWebNotification()
 		}
 	},
