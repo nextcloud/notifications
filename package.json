@@ -13,7 +13,7 @@
     "lint:fix": "eslint --ext .js,.vue src --fix"
   },
   "dependencies": {
-    "lodash": "^4.17.13",
+    "lodash": "^4.17.14",
     "nextcloud-axios": "^0.2.0",
     "vue": "^2.6.10"
   },
@@ -22,8 +22,8 @@
     "ie >= 11"
   ],
   "devDependencies": {
-    "@babel/core": "^7.5.0",
-    "@babel/preset-env": "^7.5.2",
+    "@babel/core": "^7.5.4",
+    "@babel/preset-env": "^7.5.4",
     "babel-eslint": "^10.0.2",
     "babel-loader": "^8.0.6",
     "css-loader": "^3.0.0",
