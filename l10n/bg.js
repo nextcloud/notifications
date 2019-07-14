@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Admin notifications" : "Административни известия",
     "Notifications" : "Известия",
+    "Dismiss all notifications" : "Откажи всички съобщения",
     "No notifications" : "Няма известия",
     "Failed to dismiss all notifications" : "Неуспешно отхвърляне на всичко известия",
     "Failed to perform action" : "Грешка при изпълнение на действие",
