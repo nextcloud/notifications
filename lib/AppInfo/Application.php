@@ -57,7 +57,7 @@ class Application extends \OCP\AppFramework\App {
 		$this->getContainer()
 			->getServer()
 			->getNotificationManager()
-			->registerNotifier(AdminNotifications::class);
+			->registerNotifierService(AdminNotifications::class);
 	}
 
 	protected function registerUserInterface(): void {
