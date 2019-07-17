@@ -180,6 +180,8 @@
 	}
 
 	.notification-actions {
+		overflow: hidden;
+		
 		.action-button.primary {
 			color: var(--color-primary-text);
 		}
