@@ -125,6 +125,8 @@
 		& > span.text,
 		& > a > span.text {
 			padding-left: 10px;
+			display: inline-flex;
+			align-items: center;
 		}
 	}
 
