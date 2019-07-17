@@ -35,8 +35,14 @@ export default {
 
 	methods: {
 		onClickActionButton: function() {
+			const type = this.type || 'GET'
+			if (type === 'WEB') {
+				OC.redirect(this.link)
+				return
+			}
+
 			axios({
-				method: this.type || 'GET',
+				method: type,
 				url: this.link
 			})
 				.then(() => {
@@ -46,7 +52,7 @@ export default {
 						notification: this.$parent,
 						action: {
 							url: this.link,
-							type: this.type || 'GET'
+							type: type
 						}
 					}))
 				})
