@@ -133,7 +133,8 @@
 	.notification-message,
 	.notification-full-message {
 		line-height: 20px;
-		opacity: .57;
+		padding-left: 42px; // 32px icon + 10px title padding
+		color: var(--color-text-maxcontrast);
 
 		& > .collapsed {
 			overflow: hidden;
