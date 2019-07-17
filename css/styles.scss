@@ -121,6 +121,11 @@
 
 	.notification-subject {
 		display: flex;
+		align-items: center;
+
+		& > .image {
+			align-self: flex-start;
+		}
 
 		& > span.text,
 		& > a > span.text {
