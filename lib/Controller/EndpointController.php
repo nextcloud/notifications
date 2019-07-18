@@ -90,6 +90,7 @@ class EndpointController extends OCSController {
 		$filter = $this->manager->createNotification();
 		$filter->setUser($this->getCurrentUser());
 		$language = $this->config->getUserValue($this->getCurrentUser(), 'core', 'lang', null);
+		$language = $language ?? $this->config->getSystemValue('default_language', 'en');
 
 		$notifications = $this->handler->get($filter);
 
@@ -140,6 +141,7 @@ class EndpointController extends OCSController {
 		}
 
 		$language = $this->config->getUserValue($this->getCurrentUser(), 'core', 'lang', null);
+		$language = $language ?? $this->config->getSystemValue('default_language', 'en');
 
 		try {
 			$notification = $this->manager->prepare($notification, $language);
