@@ -5,7 +5,8 @@ steps:
   - name: vue-build-check
     image: node:lts
     commands:
-      - ./tests/vue-build.sh ./js/notifications.js
+      - make npm-init
+      - ./tests/vue-build.sh
 
 trigger:
   branch:
