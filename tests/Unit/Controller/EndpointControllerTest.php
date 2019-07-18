@@ -25,6 +25,7 @@ namespace OCA\Notifications\Tests\Unit\Controller;
 use OCA\Notifications\Controller\EndpointController;
 use OCA\Notifications\Exceptions\NotificationNotFoundException;
 use OCA\Notifications\Handler;
+use OCA\Notifications\Push;
 use OCA\Notifications\Tests\Unit\TestCase;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
@@ -59,27 +60,19 @@ class EndpointControllerTest extends TestCase {
 
 	/** @var IUser|MockObject */
 	protected $user;
+	/** @var Push|MockObject */
+	protected $push;
 
 	protected function setUp() {
 		parent::setUp();
 
-		/** @var IRequest|MockObject */
 		$this->request = $this->createMock(IRequest::class);
-
-		/** @var Handler|MockObject */
 		$this->handler = $this->createMock(Handler::class);
-
-		/** @var IManager|MockObject */
 		$this->manager = $this->createMock(IManager::class);
-
-		/** @var IConfig|MockObject */
 		$this->config = $this->createMock(IConfig::class);
-
-		/** @var IUserSession|MockObject */
 		$this->session = $this->createMock(IUserSession::class);
-
-		/** @var IUser|MockObject */
 		$this->user = $this->createMock(IUser::class);
+		$this->push = $this->createMock(Push::class);
 
 		$this->session->expects($this->any())
 			->method('getUser')
@@ -98,7 +91,8 @@ class EndpointControllerTest extends TestCase {
 				$this->handler,
 				$this->manager,
 				$this->config,
-				$this->session
+				$this->session,
+				$this->push
 			);
 		}
 
@@ -109,7 +103,8 @@ class EndpointControllerTest extends TestCase {
 				$this->handler,
 				$this->manager,
 				$this->config,
-				$this->session
+				$this->session,
+				$this->push,
 			])
 			->setMethods($methods)
 			->getMock();
@@ -163,7 +158,7 @@ class EndpointControllerTest extends TestCase {
 			->getMock();
 		$filter->expects($this->once())
 			->method('setUser')
-			->willReturn('username');
+			->willReturn($filter);
 
 		$this->manager->expects($this->once())
 			->method('hasNotifiers')
@@ -174,6 +169,11 @@ class EndpointControllerTest extends TestCase {
 		$this->manager->expects($this->exactly(\count($notifications)))
 			->method('prepare')
 			->willReturnArgument(0);
+
+		$this->config->expects($this->once())
+			->method('getUserValue')
+			->with('username', 'core', 'lang', null)
+			->willReturn('en');
 
 		$this->handler->expects($this->once())
 			->method('get')
@@ -225,7 +225,7 @@ class EndpointControllerTest extends TestCase {
 			->getMock();
 		$filter->expects($this->once())
 			->method('setUser')
-			->willReturn('username');
+			->willReturn($filter);
 
 		$this->manager->expects($this->once())
 			->method('hasNotifiers')
@@ -239,6 +239,11 @@ class EndpointControllerTest extends TestCase {
 		$this->manager->expects($this->at(3))
 			->method('prepare')
 			->willReturnArgument(0);
+
+		$this->config->expects($this->once())
+			->method('getUserValue')
+			->with('username', 'core', 'lang', null)
+			->willReturn('en');
 
 		$this->handler->expects($this->once())
 			->method('get')
@@ -316,6 +321,11 @@ class EndpointControllerTest extends TestCase {
 			->with($id, $notification)
 			->willReturn(['$notification']);
 
+		$this->config->expects($this->once())
+			->method('getUserValue')
+			->with($username, 'core', 'lang', null)
+			->willReturn('en');
+
 		$response = $controller->getNotification($apiVersion, $id);
 		$this->assertInstanceOf(DataResponse::class, $response);
 		$this->assertSame(Http::STATUS_OK, $response->getStatus());
@@ -360,6 +370,11 @@ class EndpointControllerTest extends TestCase {
 			$this->handler->expects($this->once())
 				->method('getById')
 				->willReturn($notification);
+
+			$this->config->expects($this->once())
+				->method('getUserValue')
+				->with('username', 'core', 'lang', null)
+				->willReturn('en');
 
 			$this->manager->expects($this->once())
 				->method('prepare')
