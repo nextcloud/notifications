@@ -42,7 +42,7 @@ class App implements IApp {
 	 * @throws \InvalidArgumentException When the notification is not valid
 	 * @since 8.2.0
 	 */
-	public function notify(INotification $notification) {
+	public function notify(INotification $notification): void {
 		$notificationId = $this->handler->add($notification);
 
 		try {
@@ -66,7 +66,13 @@ class App implements IApp {
 	 * @param INotification $notification
 	 * @since 8.2.0
 	 */
-	public function markProcessed(INotification $notification) {
-		$this->handler->delete($notification);
+	public function markProcessed(INotification $notification): void {
+		$deleted = $this->handler->delete($notification);
+
+		foreach ($deleted as $user => $notifications) {
+			foreach ($notifications as $notificationId) {
+				$this->push->pushDeleteToDevice($user, $notificationId);
+			}
+		}
 	}
 }

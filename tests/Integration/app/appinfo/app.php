@@ -19,11 +19,4 @@
  *
  */
 
-\OC::$server->getNotificationManager()->registerNotifier(function() {
-	return new \OCA\NotificationsIntegrationTesting\Notifier();
-}, function() {
-	return [
-		'id' => 'testing',
-		'name' => 'testing',
-	];
-});
+\OC::$server->getNotificationManager()->registerNotifierService(\OCA\NotificationsIntegrationTesting\Notifier::class);

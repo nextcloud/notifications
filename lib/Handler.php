@@ -84,12 +84,33 @@ class Handler {
 	 * Delete the notifications matching the given Notification
 	 *
 	 * @param INotification $notification
+	 * @return array A Map with all deleted notifications [user => [notifications]]
 	 */
-	public function delete(INotification $notification) {
+	public function delete(INotification $notification): array {
 		$sql = $this->connection->getQueryBuilder();
-		$sql->delete('notifications');
+		$sql->select('notification_id', 'user')
+			->from('notifications');
+
 		$this->sqlWhere($sql, $notification);
-		$sql->execute();
+		$statement = $sql->execute();
+
+		$deleted = [];
+		while ($row = $statement->fetch()) {
+			if (!isset($deleted[$row['user']])) {
+				$deleted[$row['user']] = [];
+			}
+
+			$deleted[$row['user']][] = (int) $row['notification_id'];
+		}
+		$statement->closeCursor();
+
+		foreach ($deleted as $user => $notifications) {
+			foreach ($notifications as $notificationId) {
+				$this->deleteById($notificationId, $user);
+			}
+		}
+
+		return $deleted;
 	}
 
 	/**

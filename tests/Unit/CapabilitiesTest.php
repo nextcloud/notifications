@@ -38,10 +38,12 @@ class CapabilitiesTest extends TestCase {
 					'delete-all',
 					'icons',
 					'rich-strings',
+					'action-web',
 				],
 				'push' => [
 					'devices',
 					'object-data',
+					'delete',
 				],
 				'admin-notifications' => [
 					'ocs',

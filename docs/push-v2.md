@@ -18,7 +18,8 @@ In order to find out if notifications support push on the server you can run a r
           "push": [
             ...
             "devices",
-            "object-data"
+            "object-data",
+            "delete"
           ]
         }
       }
@@ -211,6 +212,8 @@ The pushed notifications is defined by the [Firebase Cloud Messaging HTTP Protoc
 
 ### Encrypted subject data
 
+#### Normal content notification
+
 If you are missing any information necessary to parse the notification in a more usable way, use the `nid` to get the full notification information via [OCS API](ocs-endpoint-v2.md)
 
 ```json
@@ -220,7 +223,6 @@ If you are missing any information necessary to parse the notification in a more
   "type" : "chat",
   "id" : "t0k3n",
   "nid" : 1337
-  }
 }
 ```
 
@@ -231,6 +233,38 @@ If you are missing any information necessary to parse the notification in a more
 | `type`   | Type of the object this notification is about | `object-data` |
 | `id`   | Identifier of the object this notification is about | `object-data` |
 | `nid`   | Numeric identifier of the notification in order to get more information via the [OCS API](ocs-endpoint-v2.md) | `object-data` |
+
+
+#### Silent delete notification (single)
+
+These notifications should not be shown to the user. Instead you should delete pending system notifications for the respective id
+
+```json
+{
+  "delete" : true,
+  "nid" : 1337
+}
+```
+
+| Attribute   | Meaning                                  | Capability |
+| ----------- | ---------------------------------------- |------------|
+| `nid`   | Numeric identifier of the notification in order to get more information via the [OCS API](ocs-endpoint-v2.md) | `object-data` |
+| `delete`   | Delete all notifications related to `nid` | `delete` |
+
+
+#### Silent delete notification (all)
+
+These notifications should not be shown to the user. Instead you should delete all pending system notifications for this account
+
+```json
+{
+  "delete-all" : true
+}
+```
+
+| Attribute   | Meaning                                  | Capability |
+| ----------- | ---------------------------------------- |------------|
+| `delete-all`   | Delete all notifications related to this account | `delete` |
 
 
 ### Verification

@@ -67,10 +67,8 @@ class AppTest extends TestCase {
 	public function testRegisterApp() {
 		$this->manager->expects($this->once())
 			->method('registerApp')
-			->willReturnCallback(function($closure) {
-				$this->assertInstanceOf(\Closure::class, $closure);
-				$navigation = $closure();
-				$this->assertInstanceOf(App::class, $navigation);
+			->willReturnCallback(function($service) {
+				$this->assertSame(App::class, $service);
 			});
 
 		include(__DIR__ . '/../../../appinfo/app.php');
