@@ -20,10 +20,12 @@
 							:object-id="n.object_id"
 							:object-type="n.object_type"
 							@remove="onRemove" />
-						<div v-if="notifications.length > 2" class="dismiss-all" @click="onDismissAll">
+					</transition-group>
+					<li v-if="notifications.length > 2">
+						<div class="dismiss-all" @click="onDismissAll">
 							<span class="icon icon-close svg" :title="t('notifications', 'Dismiss all notifications')" /> {{ t('notifications', 'Dismiss all notifications') }}
 						</div>
-					</transition-group>
+					</li>
 				</ul>
 				<div v-else class="emptycontent">
 					<div class="icon icon-notifications-dark" />

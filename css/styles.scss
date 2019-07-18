@@ -54,10 +54,9 @@
 
 	.dismiss-all {
 		display: flex;
+		justify-content: center;
 		color: var(--color-text-maxcontrast);
 		padding: 10px;
-		margin-left: auto;
-		margin-right: auto;
 
 		&:hover,
 		.icon-close {
