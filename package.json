@@ -13,7 +13,7 @@
     "lint:fix": "eslint --ext .js,.vue src --fix"
   },
   "dependencies": {
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.14",
     "nextcloud-axios": "^0.2.0",
     "vue": "^2.6.10"
   },
@@ -22,8 +22,8 @@
     "ie >= 11"
   ],
   "devDependencies": {
-    "@babel/core": "^7.5.0",
-    "@babel/preset-env": "^7.5.2",
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
     "babel-eslint": "^10.0.2",
     "babel-loader": "^8.0.6",
     "css-loader": "^3.0.0",
@@ -41,10 +41,10 @@
     "handlebars-loader": "^1.7.1",
     "node-sass": "^4.12.0",
     "sass-loader": "^7.1.0",
-    "vue-loader": "^15.7.0",
+    "vue-loader": "^15.7.1",
     "vue-template-compiler": "^2.6.10",
-    "webpack": "^4.35.3",
-    "webpack-cli": "^3.3.5",
+    "webpack": "^4.36.1",
+    "webpack-cli": "^3.3.6",
     "webpack-merge": "^4.2.1"
   }
 }
