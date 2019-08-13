@@ -154,7 +154,7 @@ class PushController extends OCSController {
 			return new DataResponse([], Http::STATUS_UNAUTHORIZED);
 		}
 
-		$tokenId = $this->session->get('token-id');
+		$tokenId = (int)$this->session->get('token-id');
 		try {
 			$token = $this->tokenProvider->getTokenById($tokenId);
 		} catch (InvalidTokenException $e) {
