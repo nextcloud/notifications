@@ -197,6 +197,8 @@ class Push {
 		$dataLength = 245 - strlen(json_encode($data));
 		if (strlen($subject) > $dataLength) {
 			$data['subject'] = substr($subject, 0, $dataLength) . '…';
+		} else {
+			$data['subject'] = $subject;
 		}
 
 		if ($isTalkNotification) {
