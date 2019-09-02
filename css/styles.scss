@@ -129,8 +129,6 @@
 		& > span.text,
 		& > a > span.text {
 			padding-left: 10px;
-			display: inline-flex;
-			align-items: center;
 		}
 	}
 
@@ -183,7 +181,7 @@
 
 	.notification-actions {
 		overflow: hidden;
-		
+
 		.action-button.primary {
 			color: var(--color-primary-text);
 		}
