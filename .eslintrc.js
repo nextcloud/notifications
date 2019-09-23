@@ -44,8 +44,7 @@ module.exports = {
 	},
 	plugins: ['vue', 'node'],
 	rules: {
-		"no-control-regex": 0,
-
+		'no-control-regex': 0,
 		// space before function ()
 		'space-before-function-paren': ['error', 'never'],
 		// curly braces always space
@@ -68,11 +67,11 @@ module.exports = {
 		'multiline-ternary': ['error', 'always-multiline'],
 		// force proper JSDocs
 		'valid-jsdoc': [2, {
-			'prefer': {
-				'return': 'returns'
+			prefer: {
+				return: 'returns'
 			},
-			'requireReturn': false,
-			'requireReturnDescription': false
+			requireReturn: false,
+			requireReturnDescription: false
 		}],
 		// es6 import/export and require
 		'node/no-unpublished-require': ['off'],
@@ -84,16 +83,16 @@ module.exports = {
 		// no ending html tag on a new line
 		'vue/html-closing-bracket-newline': ['error', { multiline: 'never' }],
 		// code spacing with attributes
-		'vue/max-attributes-per-line': [
-			'error',
-			{
-				singleline: 3,
-				multiline: {
-					max: 3,
-					allowFirstLine: true
-				}
+		'vue/max-attributes-per-line': ['error', {
+			singleline: 3,
+			multiline: {
+				max: 3,
+				allowFirstLine: true
 			}
-		],
+		}],
+		'node/no-missing-import': ['error', {
+			tryExtensions: ['.js', '.vue']
+		}],
 		'vue/no-v-html': ['off']
 	}
 }
