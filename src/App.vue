@@ -39,7 +39,6 @@
 <script>
 import Notification from './Components/Notification'
 import axios from 'nextcloud-axios'
-import _ from 'lodash'
 
 export default {
 	name: 'NotificationsList',
@@ -174,7 +173,7 @@ export default {
 					if (response.status === 204) {
 						// 204 No Content - Intercept when no notifiers are there.
 						this._shutDownNotifications()
-					} else if (!_.isUndefined(response.data) && !_.isUndefined(response.data.ocs) && !_.isUndefined(response.data.ocs.data) && _.isArray(response.data.ocs.data)) {
+					} else if (response.data !== undefined && response.data.ocs !== undefined && response.data.ocs.data !== undefined && Array.isArray(response.data.ocs.data)) {
 						this.notifications = response.data.ocs.data
 					} else {
 						console.info('data.ocs.data is undefined or not an array')

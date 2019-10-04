@@ -9,12 +9,9 @@
 
 /* global t */
 
-import _ from 'lodash'
 import escapeHTML from 'escape-html'
 
 export default {
-	avatarsEnabled: true,
-
 	fileTemplate: require('./templates/file.handlebars'),
 
 	userLocalTemplate: require('./templates/userLocal.handlebars'),
@@ -30,11 +27,10 @@ export default {
 	 */
 	parseMessage: function(message, parameters) {
 		message = escapeHTML(message)
-		var self = this
-		var regex = /\{([a-z\-_0-9]+)\}/gi
+		const regex = /\{([a-z\-_0-9]+)\}/gi
 		var matches = message.match(regex)
 
-		_.each(matches, function(parameter) {
+		matches.forEach(parameter => {
 			parameter = parameter.substring(1, parameter.length - 1)
 			if (!parameters.hasOwnProperty(parameter) || !parameters[parameter]) {
 				// Malformed translation?
@@ -42,7 +38,7 @@ export default {
 				return
 			}
 
-			var parsed = self.parseParameter(parameters[parameter])
+			var parsed = this.parseParameter(parameters[parameter])
 			message = message.replace('{' + parameter + '}', parsed)
 		})
 
@@ -65,14 +61,14 @@ export default {
 			return this.parseFileParameter(parameter).trim('\n')
 
 		case 'user':
-			if (_.isUndefined(parameter.server)) {
+			if (parameter.server === undefined) {
 				return this.userLocalTemplate(parameter).trim('\n')
 			}
 
 			return this.userRemoteTemplate(parameter).trim('\n')
 
 		default:
-			if (!_.isUndefined(parameter.link)) {
+			if (parameter.link !== undefined) {
 				return this.unknownLinkTemplate(parameter).trim('\n')
 			}
 
@@ -89,11 +85,11 @@ export default {
 	 * @returns {string} The HTML to render this parameter
 	 */
 	parseFileParameter: function(parameter) {
-		var lastSlashPosition = parameter.path.lastIndexOf('/')
-		var firstSlashPosition = parameter.path.indexOf('/')
+		const lastSlashPosition = parameter.path.lastIndexOf('/')
+		const firstSlashPosition = parameter.path.indexOf('/')
 		parameter.path = parameter.path.substring(firstSlashPosition === 0 ? 1 : 0, lastSlashPosition)
 
-		return this.fileTemplate(_.extend(parameter, {
+		return this.fileTemplate(Object.assign({}, parameter, {
 			title: parameter.path.length === 0 ? '' : t('notifications', 'in {path}', parameter)
 		}))
 	}
