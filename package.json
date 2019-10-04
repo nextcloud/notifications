@@ -13,6 +13,7 @@
     "lint:fix": "eslint --ext .js,.vue src --fix"
   },
   "dependencies": {
+    "escape-html": "^1.0.3",
     "lodash": "^4.17.15",
     "nextcloud-axios": "^0.2.1",
     "vue": "^2.6.10"

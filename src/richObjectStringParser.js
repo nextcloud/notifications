@@ -7,9 +7,10 @@
  * later. See the COPYING file.
  */
 
-/* global t, escapeHTML */
+/* global t */
 
 import _ from 'lodash'
+import escapeHTML from 'escape-html'
 
 export default {
 	avatarsEnabled: true,
