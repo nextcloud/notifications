@@ -93,7 +93,7 @@ export default {
 		this._fetch()
 
 		// Setup the background checker
-		if (oc_config.session_keepalive) {
+		if (OC.config.session_keepalive) {
 			this.interval = setInterval(this._backgroundFetch.bind(this), this.pollInterval)
 		}
 	},
