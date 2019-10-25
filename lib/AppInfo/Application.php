@@ -24,6 +24,7 @@ namespace OCA\Notifications\AppInfo;
 use OC\Authentication\Token\IProvider;
 use OCA\Notifications\App;
 use OCA\Notifications\Capabilities;
+use OCA\Notifications\Handler;
 use OCA\Notifications\Notifier\AdminNotifications;
 use OCP\AppFramework\IAppContainer;
 use OCP\Util;
@@ -45,6 +46,7 @@ class Application extends \OCP\AppFramework\App {
 		$this->registerNotificationApp();
 		$this->registerAdminNotifications();
 		$this->registerUserInterface();
+		$this->registerUserDeleteHook();
 	}
 
 	protected function registerNotificationApp(): void {
@@ -73,5 +75,15 @@ class Application extends \OCP\AppFramework\App {
 			Util::addScript('notifications', 'notifications');
 			Util::addStyle('notifications', 'styles');
 		}
+	}
+
+	protected function registerUserDeleteHook(): void {
+		Util::connectHook('OC_User', 'post_deleteUser', $this, 'deleteUser');
+	}
+
+	public function deleteUser(array $params): void {
+		/** @var Handler $handler */
+		$handler = $this->getContainer()->query(Handler::class);
+		$handler->deleteByUser($params['uid']);
 	}
 }
