@@ -30,6 +30,10 @@ export default {
 		const regex = /\{([a-z\-_0-9]+)\}/gi
 		var matches = message.match(regex)
 
+		if (!matches) {
+			return message
+		}
+
 		matches.forEach(parameter => {
 			parameter = parameter.substring(1, parameter.length - 1)
 			if (!parameters.hasOwnProperty(parameter) || !parameters[parameter]) {
