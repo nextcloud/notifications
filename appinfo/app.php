@@ -19,5 +19,7 @@
  *
  */
 
-$application = new \OCA\Notifications\AppInfo\Application();
+use OCA\Notifications\AppInfo\Application;
+
+$application = \OC::$server->query(Application::class);
 $application->register();
