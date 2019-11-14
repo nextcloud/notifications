@@ -38,7 +38,7 @@
 
 <script>
 import Notification from './components/Notification'
-import axios from 'nextcloud-axios'
+import axios from '@nextcloud/axios'
 import _ from 'lodash'
 
 export default {
