@@ -7,8 +7,6 @@
  * later. See the COPYING file.
  */
 
-/* global t */
-
 import escapeHTML from 'escape-html'
 
 export default {
@@ -36,7 +34,7 @@ export default {
 
 		matches.forEach(parameter => {
 			parameter = parameter.substring(1, parameter.length - 1)
-			if (!parameters.hasOwnProperty(parameter) || !parameters[parameter]) {
+			if (!Object.prototype.hasOwnProperty.call(parameters, parameter) || !parameters[parameter]) {
 				// Malformed translation?
 				console.error('Potential malformed ROS string: parameter {' + parameter + '} was found in the string but is missing from the parameter list')
 				return
