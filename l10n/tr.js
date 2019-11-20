@@ -9,7 +9,7 @@ OC.L10N.register(
     "No notifications" : "Bildirimler kapalı",
     "Failed to dismiss all notifications" : "Tüm bildirimler yok sayılamadı",
     "Failed to perform action" : "İşlem yürütülemedi",
-    "Dismiss" : "Yoksay",
+    "Dismiss" : "Yok say",
     "Failed to dismiss notification" : "Bildirim yok sayılamadı",
     "in {path}" : "{path} içinde"
 },
