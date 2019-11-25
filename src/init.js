@@ -27,7 +27,7 @@ Vue.prototype.OC = OC
 Vue.prototype.OCA = OCA
 
 const searchBox = document.getElementsByClassName('searchbox')
-let notificationsBell = document.createElement('div')
+const notificationsBell = document.createElement('div')
 notificationsBell.setAttribute('id', 'notifications')
 
 Array.prototype.map.call(searchBox, (el) => {
