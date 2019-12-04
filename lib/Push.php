@@ -194,9 +194,10 @@ class Push {
 
 		// Max length of encryption is 255, so we need to shorten the subject to be shorter
 		$subject = $notification->getParsedSubject();
-		$dataLength = 245 - strlen(json_encode($data));
+		// Half the length for multibyte characters like Russian, Chinese, Japanese, Emojis, …
+		$dataLength = floor((245 - strlen(json_encode($data))) / 2) - 1;
 		if (strlen($subject) > $dataLength) {
-			$data['subject'] = substr($subject, 0, $dataLength) . '…';
+			$data['subject'] = mb_substr($subject, 0, $dataLength) . '…';
 		} else {
 			$data['subject'] = $subject;
 		}
