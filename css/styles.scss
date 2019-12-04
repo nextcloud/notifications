@@ -11,7 +11,7 @@
 
 	&:hover,
 	&:focus {
-		opacity: 1;
+		opacity: 1 !important;
 	}
 
 	&.hasNotifications {
@@ -181,7 +181,7 @@
 
 	.notification-actions {
 		overflow: hidden;
-		
+
 		.action-button.primary {
 			color: var(--color-primary-text);
 		}
