@@ -37,20 +37,24 @@ export default {
 	},
 
 	methods: {
-		onClickActionButton: function() {
+		async onClickActionButton() {
 			const type = this.type || 'GET'
 			if (type === 'WEB') {
 				OC.redirect(this.link)
 				return
 			}
 
-			axios({
-				method: type,
-				url: this.link,
-			})
-				.then(() => {
-					this.$parent._$el.fadeOut(OC.menuSpeed)
-					this.$parent.$emit('remove')
+			try {
+				// execute action
+				await axios({
+					method: type,
+					url: this.link,
+				})
+
+				// emit event to current app
+				this.$parent._$el.fadeOut(OC.menuSpeed)
+				this.$parent.$emit('remove')
+				try {
 					$('body').trigger(new $.Event('OCA.Notification.Action', {
 						notification: this.$parent,
 						action: {
@@ -58,10 +62,15 @@ export default {
 							type: type,
 						},
 					}))
-				})
-				.catch(() => {
-					OC.Notification.showTemporary(t('notifications', 'Failed to perform action'))
-				})
+				// do not do anything but log, the action went fine
+				// only the event bus listener failed, this is not our problem
+				} catch (error) {
+					console.error(error)
+				}
+			} catch (error) {
+				console.error('Failed to perform action', error)
+				OC.Notification.showTemporary(t('notifications', 'Failed to perform action'))
+			}
 		},
 	},
 }
