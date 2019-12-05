@@ -23,7 +23,7 @@ cache:
 
 env:
   global:
-    - CORE_BRANCH=master
+    - CORE_BRANCH=bugfix/noid/broken-oracle-install
     - APP_NAME=notifications
   matrix:
     - DB=sqlite
