@@ -44,7 +44,7 @@ class AppTest extends TestCase {
 	/** @var IUserSession|\PHPUnit_Framework_MockObject_MockObject */
 	protected $session;
 
-	protected function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$this->manager = $this->createMock(IManager::class);
@@ -56,7 +56,7 @@ class AppTest extends TestCase {
 		$this->overwriteService('UserSession', $this->session);
 	}
 
-	protected function tearDown() {
+	protected function tearDown(): void {
 		$this->restoreService('NotificationManager');
 		$this->restoreService('Request');
 		$this->restoreService('UserSession');

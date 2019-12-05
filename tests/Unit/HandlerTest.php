@@ -38,7 +38,7 @@ class HandlerTest extends TestCase {
 	/** @var Handler */
 	protected $handler;
 
-	protected function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$this->handler = new Handler(
