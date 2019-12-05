@@ -82,7 +82,7 @@ matrix:
       env: DB=mysql;CODECHECK=1
     - php: 7.3
       env: DB=mysql;CODECHECK=2
-    - php: 7.3
+    - php: 7.2
       env: DB=mysql;INTEGRATION=1
   allow_failures:
     - env: DB=mysql;CODECHECK=2
