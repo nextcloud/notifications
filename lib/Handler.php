@@ -137,6 +137,9 @@ class Handler {
 	 * @return bool
 	 */
 	public function deleteById(int $id, string $user): bool {
+		$notifcation = $this->getById($id, $user);
+		$this->manager->dismissNotification($notifcation);
+
 		$sql = $this->connection->getQueryBuilder();
 		$sql->delete('notifications')
 			->where($sql->expr()->eq('notification_id', $sql->createNamedParameter($id)))
