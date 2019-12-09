@@ -164,8 +164,10 @@ class EndpointController extends OCSController {
 			return new DataResponse(null, Http::STATUS_NOT_FOUND);
 		}
 
-		$this->handler->deleteById($id, $this->getCurrentUser());
-		$this->push->pushDeleteToDevice($this->getCurrentUser(), $id);
+		$deleted = $this->handler->deleteById($id, $this->getCurrentUser());
+		if ($deleted) {
+			$this->push->pushDeleteToDevice($this->getCurrentUser(), $id);
+		}
 		return new DataResponse();
 	}
 
@@ -175,8 +177,10 @@ class EndpointController extends OCSController {
 	 * @return DataResponse
 	 */
 	public function deleteAllNotifications(): DataResponse {
-		$this->handler->deleteByUser($this->getCurrentUser());
-		$this->push->pushDeleteToDevice($this->getCurrentUser(), 0);
+		$deletedSomething = $this->handler->deleteByUser($this->getCurrentUser());
+		if ($deletedSomething) {
+			$this->push->pushDeleteToDevice($this->getCurrentUser(), 0);
+		}
 		return new DataResponse();
 	}
 
