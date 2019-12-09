@@ -49,7 +49,7 @@ class APIControllerTest extends \Test\TestCase {
 	/** @var APIController */
 	protected $controller;
 
-	protected function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 
 		/** @var IRequest|\PHPUnit_Framework_MockObject_MockObject $request */

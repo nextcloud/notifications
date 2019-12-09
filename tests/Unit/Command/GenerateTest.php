@@ -48,7 +48,7 @@ class GenerateTest extends \Test\TestCase {
 	/** @var Generate */
 	protected $command;
 
-	protected function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$this->timeFactory = $this->createMock(ITimeFactory::class);

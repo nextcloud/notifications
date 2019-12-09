@@ -39,7 +39,7 @@ class AppTest extends TestCase {
 	/** @var App */
 	protected $app;
 
-	protected function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$this->handler = $this->createMock(Handler::class);

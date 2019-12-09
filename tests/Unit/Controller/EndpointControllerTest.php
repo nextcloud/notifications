@@ -63,7 +63,7 @@ class EndpointControllerTest extends TestCase {
 	/** @var Push|MockObject */
 	protected $push;
 
-	protected function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$this->request = $this->createMock(IRequest::class);

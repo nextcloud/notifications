@@ -2,9 +2,9 @@ dist: trusty
 sudo: required
 language: php
 php:
-  - 7.1
   - 7.2
   - 7.3
+  - 7.4snapshot
 services:
   - mysql
   - postgresql
@@ -23,7 +23,7 @@ cache:
 
 env:
   global:
-    - CORE_BRANCH=master
+    - CORE_BRANCH=bugfix/noid/broken-oracle-install
     - APP_NAME=notifications
   matrix:
     - DB=sqlite
@@ -34,7 +34,7 @@ branches:
     - /^stable\d+(\.\d+)?$/
 
 before_install:
-  - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
+  - wget https://raw.githubusercontent.com/nextcloud/travis_ci/oracle-support/before_install.sh
   - . ./before_install.sh $APP_NAME $CORE_BRANCH $DB
   - sh -c "if [ -f ../server/data/nextcloud.log ]; then cat ../server/data/nextcloud.log; fi"
 
@@ -72,17 +72,17 @@ script:
 
 matrix:
   include:
-    - php: 7.1
+    - php: 7.3
       env: DB=mysql
-    - php: 7.1
+    - php: 7.3
       env: DB=pgsql
-    - php: 7.1
+    - php: 7.3
       env: DB=oracle
-    - php: 7.1
+    - php: 7.3
       env: DB=mysql;CODECHECK=1
-    - php: 7.1
+    - php: 7.3
       env: DB=mysql;CODECHECK=2
-    - php: 7.1
+    - php: 7.2
       env: DB=mysql;INTEGRATION=1
   allow_failures:
     - env: DB=mysql;CODECHECK=2

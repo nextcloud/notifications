@@ -1,20 +1,27 @@
 <?xml version="1.0"?>
-<info>
+<info xmlns:xsi= "http://www.w3.org/2001/XMLSchema-instance"
+	  xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
 	<id>notificationsintegrationtesting</id>
 	<name>Notifications Integration Testing</name>
-	<namespace>NotificationsIntegrationTesting</namespace>
-	<description/>
+	<summary><![CDATA[1]]></summary>
+	<description><![CDATA[2]]></description>
 
-	<licence>AGPL</licence>
-	<author>Joas Schilling</author>
 	<version>0.2.3</version>
+	<licence>agpl</licence>
+	<author>Joas Schilling</author>
+	<namespace>NotificationsIntegrationTesting</namespace>
 
 	<types>
 		<logging/>
 	</types>
 
+	<category>tools</category>
+
+	<website>https://github.com/nextcloud/notifications</website>
+	<bugs>https://github.com/nextcloud/notifications/issues</bugs>
+	<repository>https://github.com/nextcloud/notifications.git</repository>
+
 	<dependencies>
-		<owncloud min-version="9.0" />
-		<owncloud max-version="9.2" />
+		<nextcloud min-version="18" max-version="18" />
 	</dependencies>
 </info>
