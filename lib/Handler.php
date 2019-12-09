@@ -117,15 +117,16 @@ class Handler {
 	 * Delete the notification of a given user
 	 *
 	 * @param string $user
+	 * @return bool
 	 */
-	public function deleteByUser(string $user) {
+	public function deleteByUser(string $user): bool {
 		$notification = $this->manager->createNotification();
 		try {
 			$notification->setUser($user);
 		} catch (\InvalidArgumentException $e) {
-			return;
+			return false;
 		}
-		$this->delete($notification);
+		return !empty($this->delete($notification));
 	}
 
 	/**
@@ -133,13 +134,14 @@ class Handler {
 	 *
 	 * @param int $id
 	 * @param string $user
+	 * @return bool
 	 */
-	public function deleteById(int $id, string $user) {
+	public function deleteById(int $id, string $user): bool {
 		$sql = $this->connection->getQueryBuilder();
 		$sql->delete('notifications')
 			->where($sql->expr()->eq('notification_id', $sql->createNamedParameter($id)))
 			->andWhere($sql->expr()->eq('user', $sql->createNamedParameter($user)));
-		$sql->execute();
+		return (bool) $sql->execute();
 	}
 
 	/**
