@@ -138,6 +138,7 @@ class Handler {
 	 * @param string $user
 	 * @param INotification|null $notification
 	 * @return bool
+	 * @throws NotificationNotFoundException
 	 */
 	public function deleteById(int $id, string $user, ?INotification $notification = null): bool {
 		if (!$notification instanceof INotification) {
