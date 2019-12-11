@@ -88,25 +88,27 @@ class Handler {
 	 */
 	public function delete(INotification $notification): array {
 		$sql = $this->connection->getQueryBuilder();
-		$sql->select('notification_id', 'user')
+		$sql->select('*')
 			->from('notifications');
 
 		$this->sqlWhere($sql, $notification);
 		$statement = $sql->execute();
 
 		$deleted = [];
+		$notifications = [];
 		while ($row = $statement->fetch()) {
 			if (!isset($deleted[$row['user']])) {
 				$deleted[$row['user']] = [];
 			}
 
 			$deleted[$row['user']][] = (int) $row['notification_id'];
+			$notifications[(int) $row['notification_id']] = $this->notificationFromRow($row);
 		}
 		$statement->closeCursor();
 
-		foreach ($deleted as $user => $notifications) {
-			foreach ($notifications as $notificationId) {
-				$this->deleteById($notificationId, $user);
+		foreach ($deleted as $user => $notificationIds) {
+			foreach ($notificationIds as $notificationId) {
+				$this->deleteById($notificationId, $user, $notifications[$notificationId]);
 			}
 		}
 
@@ -134,9 +136,17 @@ class Handler {
 	 *
 	 * @param int $id
 	 * @param string $user
+	 * @param INotification|null $notification
 	 * @return bool
+	 * @throws NotificationNotFoundException
 	 */
-	public function deleteById(int $id, string $user): bool {
+	public function deleteById(int $id, string $user, ?INotification $notification = null): bool {
+		if (!$notification instanceof INotification) {
+			$notification = $this->getById($id, $user);
+		}
+
+		$this->manager->dismissNotification($notification);
+
 		$sql = $this->connection->getQueryBuilder();
 		$sql->delete('notifications')
 			->where($sql->expr()->eq('notification_id', $sql->createNamedParameter($id)))
