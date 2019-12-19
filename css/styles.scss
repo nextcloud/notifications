@@ -34,12 +34,12 @@
 	right: 13px;
 	width: 350px;
 	max-width: 90%;
-	min-height: 200px;
+	min-height: 210px;
+	height: 210px;
 
 	.notification-wrapper {
 		display: flex;
 		flex-direction: column;
-		overflow-y: auto;
 		max-height: 260px;
 	}
 
