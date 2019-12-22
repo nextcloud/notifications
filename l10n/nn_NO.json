@@ -1,0 +1,6 @@
+{ "translations": {
+    "Notifications" : "Meldingar",
+    "Dismiss" : "Forkast",
+    "in {path}" : "i {spor}"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}
