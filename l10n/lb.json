@@ -1,0 +1,6 @@
+{ "translations": {
+    "Notifications" : "Notifikatiounen",
+    "Dismiss" : "Ofbriechen",
+    "in {path}" : "am [Pad]"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}

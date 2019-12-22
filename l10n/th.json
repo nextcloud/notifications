@@ -1,0 +1,6 @@
+{ "translations": {
+    "Notifications" : "การแจ้งเตือน",
+    "Dismiss" : "ยกเลิก",
+    "in {path}" : "ใน {เส้นทาง}"
+},"pluralForm" :"nplurals=1; plural=0;"
+}
