@@ -1,0 +1,6 @@
+{ "translations": {
+    "Notifications" : "آگاهی‌ها",
+    "Dismiss" : "پنهان کن",
+    "in {path}" : "در { مسیر }"
+},"pluralForm" :"nplurals=2; plural=(n > 1);"
+}
