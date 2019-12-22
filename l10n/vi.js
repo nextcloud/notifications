@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Admin notifications" : "Thông báo quản trị",
     "Notifications" : "Thông báo",
+    "Dismiss all notifications" : "Bỏ qua tất cả thông báo",
     "No notifications" : "Không thông báo ",
     "Dismiss" : "Bỏ qua",
     "Failed to dismiss notification" : "Lỗi bỏ qua thông báo",
