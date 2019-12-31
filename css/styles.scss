@@ -34,20 +34,15 @@
 	right: 13px;
 	width: 350px;
 	max-width: 90%;
-	min-height: 210px;
-	height: 210px;
 
 	.notification-wrapper {
 		display: flex;
 		flex-direction: column;
-		max-height: 260px;
 	}
 
 	.emptycontent {
 		padding: 50px 0;
 		margin: 0;
-		position: absolute;
-		top: 0;
 
 		@include icon-black-white('notifications-dark', 'notifications', 1);
 	}
