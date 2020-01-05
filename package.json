@@ -35,7 +35,7 @@
     "eslint-plugin-node": "^10.0.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
-    "eslint-plugin-vue": "^6.0.1",
+    "eslint-plugin-vue": "^6.1.2",
     "file-loader": "^5.0.2",
     "handlebars": "^4.5.3",
     "handlebars-loader": "^1.7.1",
