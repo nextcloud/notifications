@@ -51,6 +51,7 @@
 		display: flex;
 		justify-content: center;
 		color: var(--color-text-maxcontrast);
+		border-top: 1px solid var(--color-border);
 		padding: 10px;
 
 		&:hover,
