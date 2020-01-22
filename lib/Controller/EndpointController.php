@@ -164,6 +164,10 @@ class EndpointController extends OCSController {
 			return new DataResponse(null, Http::STATUS_NOT_FOUND);
 		}
 
+		if ($this->session->getImpersonatingUserID() !== null) {
+			return new DataResponse(null, Http::STATUS_FORBIDDEN);
+		}
+
 		try {
 			$deleted = $this->handler->deleteById($id, $this->getCurrentUser());
 
@@ -182,6 +186,10 @@ class EndpointController extends OCSController {
 	 * @return DataResponse
 	 */
 	public function deleteAllNotifications(): DataResponse {
+		if ($this->session->getImpersonatingUserID() !== null) {
+			return new DataResponse(null, Http::STATUS_FORBIDDEN);
+		}
+
 		$deletedSomething = $this->handler->deleteByUser($this->getCurrentUser());
 		if ($deletedSomething) {
 			$this->push->pushDeleteToDevice($this->getCurrentUser(), 0);
