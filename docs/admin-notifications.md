@@ -64,5 +64,4 @@ Status | Description
 
 Both the occ command and the HTTP request generate the same notification
 
-
-![Admin notification triggered from console](docs/Screenshot.png)
+![Admin notification triggered from console](https://raw.githubusercontent.com/nextcloud/notifications/master/docs/screenshot.png)
