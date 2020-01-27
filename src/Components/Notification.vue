@@ -29,6 +29,7 @@ import axios from '@nextcloud/axios'
 import Action from './Action'
 import parser from '../richObjectStringParser'
 import escapeHTML from 'escape-html'
+import moment from '@nextcloud/moment'
 
 export default {
 	name: 'Notification',
