@@ -1,0 +1,14 @@
+{
+  "name": "nextcloud/notifications",
+  "description": "notifications",
+  "license": "AGPL",
+  "config": {
+    "optimize-autoloader": true,
+    "classmap-authoritative": true
+  },
+  "require": {
+  },
+  "scripts": {
+    "lint": "find . -name \\*.php -not -path './vendor/*' -exec php -l \"{}\" \\;"
+  }
+}
