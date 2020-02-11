@@ -199,8 +199,9 @@ export default {
 		})
 
 		// Parents: TransitionGroup > NotificationsList
-		if (this.$parent.$parent.backgroundFetching) {
-			this._triggerWebNotification()
+		if (this.$parent.$parent.backgroundFetching
+			&& this.$parent.$parent.webNotificationsGranted) {
+			this._createWebNotification()
 		}
 	},
 
@@ -224,31 +225,9 @@ export default {
 		},
 
 		/**
-			 * Check if we do web notifications
-			 */
-		_triggerWebNotification: function() {
-			// Trigger browsers web notification
-			if ('Notification' in window) {
-				if (Notification.permission === 'granted') {
-					// If it's okay let's create a notification
-					this._createWebNotification()
-
-				// Otherwise, we need to ask the user for permission
-				} else if (Notification.permission !== 'denied') {
-					Notification.requestPermission(function(permission) {
-						// If the user accepts, let's create a notification
-						if (permission === 'granted') {
-							this._createWebNotification()
-						}
-					}.bind(this))
-				}
-			}
-		},
-
-		/**
-			 * Create a browser notification
-			 * @see https://developer.mozilla.org/en/docs/Web/API/notification
-			 */
+		 * Create a browser notification
+		 * @see https://developer.mozilla.org/en/docs/Web/API/notification
+		 */
 		_createWebNotification: function() {
 			const n = new Notification(this.subject, {
 				title: this.subject,
