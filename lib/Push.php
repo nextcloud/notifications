@@ -274,8 +274,10 @@ class Push {
 
 		if ($isTalkNotification) {
 			$priority = 'high';
+			$type = $data['type'] === 'call' ? 'voip' : 'alert';
 		} else {
 			$priority = 'normal';
+			$type = 'alert';
 		}
 
 		if (!openssl_public_encrypt(json_encode($data), $encryptedSubject, $device['devicepublickey'], OPENSSL_PKCS1_PADDING)) {
@@ -293,6 +295,7 @@ class Push {
 			'subject' => $base64EncryptedSubject,
 			'signature' => $base64Signature,
 			'priority' => $priority,
+			'type' => $type,
 		];
 	}
 
@@ -334,6 +337,7 @@ class Push {
 			'subject' => $base64EncryptedSubject,
 			'signature' => $base64Signature,
 			'priority' => 'normal',
+			'type' => 'background',
 		];
 	}
 
