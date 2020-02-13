@@ -92,7 +92,7 @@ class Push {
 		$userKey = $this->keyManager->getKey($user);
 
 		$isTalkNotification = \in_array($notification->getApp(), ['spreed', 'talk'], true);
-		$talkApps = array_filter($devices, function($device) {
+		$talkApps = array_filter($devices, function ($device) {
 			return $device['apptype'] === 'talk';
 		});
 		$hasTalkApps = !empty($talkApps);
@@ -131,43 +131,7 @@ class Push {
 			}
 		}
 
-		if (empty($pushNotifications)) {
-			return;
-		}
-
-		$client = $this->clientService->newClient();
-		foreach ($pushNotifications as $proxyServer => $notifications) {
-			try {
-				$response = $client->post($proxyServer . '/notifications', [
-					'body' => [
-						'notifications' => $notifications,
-					],
-				]);
-			} catch (\Exception $e) {
-				$this->log->logException($e, [
-					'app' => 'notifications',
-					'level' => $e->getCode() === Http::STATUS_BAD_REQUEST ? ILogger::INFO : ILogger::WARN,
-				]);
-				continue;
-			}
-
-			$status = $response->getStatusCode();
-			if ($status !== Http::STATUS_OK && $status !== Http::STATUS_SERVICE_UNAVAILABLE) {
-				$body = $response->getBody();
-				$this->log->error('Could not send notification to push server [{url}]: {error}',[
-					'error' => \is_string($body) ? $body : 'no reason given',
-					'url' => $proxyServer,
-					'app' => 'notifications',
-				]);
-			} else if ($status === Http::STATUS_SERVICE_UNAVAILABLE && $this->config->getSystemValue('debug', false)) {
-				$body = $response->getBody();
-				$this->log->debug('Could not send notification to push server [{url}]: {error}',[
-					'error' => \is_string($body) ? $body : 'no reason given',
-					'url' => $proxyServer,
-					'app' => 'notifications',
-				]);
-			}
-		}
+		$this->sendNotificationsToProxies($pushNotifications);
 	}
 
 	public function pushDeleteToDevice(string $userId, int $notificationId): void {
@@ -201,6 +165,10 @@ class Push {
 			}
 		}
 
+		$this->sendNotificationsToProxies($pushNotifications);
+	}
+
+	protected function sendNotificationsToProxies(array $pushNotifications): void {
 		if (empty($pushNotifications)) {
 			return;
 		}
