@@ -190,20 +190,30 @@ class Push {
 			}
 
 			$status = $response->getStatusCode();
-			if ($status !== Http::STATUS_OK && $status !== Http::STATUS_SERVICE_UNAVAILABLE) {
-				$body = $response->getBody();
-				$this->log->error('Could not send notification to push server [{url}]: {error}',[
-					'error' => \is_string($body) ? $body : 'no reason given',
-					'url' => $proxyServer,
-					'app' => 'notifications',
-				]);
-			} else if ($status === Http::STATUS_SERVICE_UNAVAILABLE && $this->config->getSystemValue('debug', false)) {
+			if ($status === Http::STATUS_SERVICE_UNAVAILABLE && $this->config->getSystemValue('debug', false)) {
 				$body = $response->getBody();
 				$this->log->debug('Could not send notification to push server [{url}]: {error}',[
 					'error' => \is_string($body) ? $body : 'no reason given',
 					'url' => $proxyServer,
 					'app' => 'notifications',
 				]);
+				continue;
+			}
+
+			$body = $response->getBody();
+			$bodyData = json_decode($body, true);
+			if ($status !== Http::STATUS_OK) {
+				$this->log->error('Could not send notification to push server [{url}]: {error}',[
+					'error' => \is_string($body) && $bodyData === null ? $body : 'no reason given',
+					'url' => $proxyServer,
+					'app' => 'notifications',
+				]);
+			}
+
+			if (is_array($bodyData) && !empty($bodyData['unknown']) && is_array($bodyData['unknown'])) {
+				foreach ($bodyData['unknown'] as $unknownDevice) {
+					$this->deletePushTokenByDeviceIdentifier($unknownDevice);
+				}
 			}
 		}
 	}
@@ -353,6 +363,18 @@ class Push {
 		$query = $this->db->getQueryBuilder();
 		$query->delete('notifications_pushtokens')
 			->where($query->expr()->eq('token', $query->createNamedParameter($tokenId, IQueryBuilder::PARAM_INT)));
+
+		return $query->execute() !== 0;
+	}
+
+	/**
+	 * @param string $deviceIdentifier
+	 * @return bool
+	 */
+	protected function deletePushTokenByDeviceIdentifier(string $deviceIdentifier): bool {
+		$query = $this->db->getQueryBuilder();
+		$query->delete('notifications_pushtokens')
+			->where($query->expr()->eq('deviceidentifier', $query->createNamedParameter($deviceIdentifier)));
 
 		return $query->execute() !== 0;
 	}
