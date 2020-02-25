@@ -192,14 +192,12 @@ class Push {
 			'id' => $notification->getObjectId(),
 		];
 
-		// Max length of encryption is 255, so we need to shorten the subject to be shorter
-		$subject = $notification->getParsedSubject();
-		// Half the length for multibyte characters like Russian, Chinese, Japanese, Emojis, …
-		$dataLength = floor((245 - strlen(json_encode($data))) / 2) - 1;
-		if (strlen($subject) > $dataLength) {
-			$data['subject'] = mb_substr($subject, 0, $dataLength) . '…';
-		} else {
-			$data['subject'] = $subject;
+		// Max length of encryption is 255, so we need to make sure the subject is shorter.
+		// We also substract a buffer of 10 bytes.
+		$maxDataLength = 255 - strlen(json_encode($data)) - 10;
+		$data['subject'] = $this->shortenJsonEncodedMultibyte($notification->getParsedSubject(), $maxDataLength);
+		if ($notification->getParsedSubject() !== $data['subject']) {
+			$data['subject'] .= '…';
 		}
 
 		if ($isTalkNotification) {
@@ -224,6 +222,27 @@ class Push {
 			'signature' => $base64Signature,
 			'priority' => $priority,
 		];
+	}
+
+	/**
+	 * json_encode is messing with multibyte characters a lot,
+	 * replacing them with something along "\u1234".
+	 * The data length in our encryption is a hard limit, but we don't want to
+	 * make non-utf8 subjects unnecessary short. So this function tries to cut
+	 * it off first.
+	 * If that is not enough it always cuts off 5 characters in multibyte-safe
+	 * fashion until the json_encode-d string is shorter then the given limit.
+	 *
+	 * @param string $subject
+	 * @param int $dataLength
+	 * @return string
+	 */
+	protected function shortenJsonEncodedMultibyte(string $subject, int $dataLength): string {
+		$temp = mb_substr($subject, 0, $dataLength);
+		while (strlen(json_encode($temp)) > $dataLength) {
+			$temp = mb_substr($temp, 0, -5);
+		}
+		return $temp;
 	}
 
 	/**
