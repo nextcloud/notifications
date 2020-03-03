@@ -130,10 +130,7 @@ export default {
 
 	data() {
 		return {
-			showFullMessage: {
-				type: Boolean,
-				default: false
-			}
+			showFullMessage: false,
 		}
 	},
 
