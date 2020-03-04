@@ -19,7 +19,7 @@
 			<div v-if="isCollapsedMessage" class="notification-overflow" />
 		</div>
 		<div v-if="actions.length" class="notification-actions">
-			<action v-for="(a, i) in actions" :key="i" v-bind="a" />
+			<Action v-for="(a, i) in actions" :key="i" v-bind="a" />
 		</div>
 	</div>
 </template>
@@ -35,105 +35,102 @@ export default {
 	name: 'Notification',
 
 	components: {
-		Action
+		Action,
 	},
 
 	props: {
 		notificationId: {
 			type: Number,
 			default: -1,
-			required: true
+			required: true,
 		},
 		datetime: {
 			type: String,
 			default: '',
-			required: true
+			required: true,
 		},
 		app: {
 			type: String,
 			default: '',
-			required: true
+			required: true,
 		},
 		icon: {
 			type: String,
 			default: '',
-			required: true
+			required: true,
 		},
 		link: {
 			type: String,
 			default: '',
-			required: true
+			required: true,
 		},
 		user: {
 			type: String,
 			default: '',
-			required: true
+			required: true,
 		},
 		message: {
 			type: String,
 			default: '',
-			required: true
+			required: true,
 		},
 		messageRich: {
 			type: String,
 			default: '',
-			required: true
+			required: true,
 		},
 		messageRichParameters: {
 			type: [Object, Array],
 			default() {
 				return {}
 			},
-			required: true
+			required: true,
 		},
 		subject: {
 			type: String,
 			default: '',
-			required: true
+			required: true,
 		},
 		subjectRich: {
 			type: String,
 			default: '',
-			required: true
+			required: true,
 		},
 		subjectRichParameters: {
 			type: [Object, Array],
 			default() {
 				return {}
 			},
-			required: true
+			required: true,
 		},
 		objectType: {
 			type: String,
 			default: '',
-			required: true
+			required: true,
 		},
 		objectId: {
 			type: String,
 			default: '',
-			required: true
+			required: true,
 		},
 		actions: {
 			type: Array,
 			default() {
 				return []
 			},
-			required: true
+			required: true,
 		},
 
 		index: {
 			type: Number,
 			default: -1,
-			required: true
-		}
+			required: true,
+		},
 	},
 
 	data() {
 		return {
-			showFullMessage: {
-				type: Boolean,
-				default: false
-			}
+			showFullMessage: false,
 		}
 	},
 
@@ -174,14 +171,14 @@ export default {
 			}
 
 			return escapeHTML(this.message).replace(new RegExp('\n', 'g'), '<br>')
-		}
+		},
 	},
 
 	mounted: function() {
 		this._$el = $(this.$el)
 
 		this._$el.find('.avatar').each(function() {
-			var element = $(this)
+			const element = $(this)
 			if (element.data('user-display-name')) {
 				element.avatar(element.data('user'), 21, undefined, false, undefined, element.data('user-display-name'))
 			} else {
@@ -190,16 +187,16 @@ export default {
 		})
 
 		this._$el.find('.avatar-name-wrapper').each(function() {
-			var element = $(this)
-			var avatar = element.find('.avatar')
-			var label = element.find('strong')
+			const element = $(this)
+			const avatar = element.find('.avatar')
+			const label = element.find('strong')
 
 			$.merge(avatar, label).contactsMenu(element.data('user'), 0, element)
 		})
 
 		this._$el.find('.has-tooltip').tooltip({
 			// container: this.$container.find('.notification-wrapper'),
-			placement: 'bottom'
+			placement: 'bottom',
 		})
 
 		// Parents: TransitionGroup > NotificationsList
@@ -233,12 +230,12 @@ export default {
 		 * @see https://developer.mozilla.org/en/docs/Web/API/notification
 		 */
 		_createWebNotification: function() {
-			var n = new Notification(this.subject, {
+			const n = new Notification(this.subject, {
 				title: this.subject,
 				lang: OC.getLocale(),
 				body: this.message,
 				icon: this.icon,
-				tag: this.notificationId
+				tag: this.notificationId,
 			})
 
 			if (this.link) {
@@ -249,7 +246,7 @@ export default {
 			}
 
 			setTimeout(n.close.bind(n), 5000)
-		}
-	}
+		},
+	},
 }
 </script>
