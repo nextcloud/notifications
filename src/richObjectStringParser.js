@@ -26,7 +26,7 @@ export default {
 	parseMessage: function(message, parameters) {
 		message = escapeHTML(message)
 		const regex = /\{([a-z\-_0-9]+)\}/gi
-		var matches = message.match(regex)
+		const matches = message.match(regex)
 
 		if (!matches) {
 			return message
@@ -40,7 +40,7 @@ export default {
 				return
 			}
 
-			var parsed = this.parseParameter(parameters[parameter])
+			const parsed = this.parseParameter(parameters[parameter])
 			message = message.replace('{' + parameter + '}', parsed)
 		})
 
@@ -92,7 +92,7 @@ export default {
 		parameter.path = parameter.path.substring(firstSlashPosition === 0 ? 1 : 0, lastSlashPosition)
 
 		return this.fileTemplate(Object.assign({}, parameter, {
-			title: parameter.path.length === 0 ? '' : t('notifications', 'in {path}', parameter)
+			title: parameter.path.length === 0 ? '' : t('notifications', 'in {path}', parameter),
 		}))
-	}
+	},
 }

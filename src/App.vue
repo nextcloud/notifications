@@ -10,14 +10,17 @@
 			aria-controls="notification-container"
 			aria-expanded="false"
 			@click="requestWebNotificationPermissions">
-			<img ref="icon" class="svg" alt=""
-				:title="t('notifications', 'Notifications')" :src="iconPath">
+			<img ref="icon"
+				class="svg"
+				alt=""
+				:title="t('notifications', 'Notifications')"
+				:src="iconPath">
 		</div>
 		<div ref="container" class="notification-container">
 			<transition name="fade">
 				<ul v-if="notifications.length > 0" class="notification-wrapper">
 					<transition-group name="fade-collapse" tag="li">
-						<notification
+						<Notification
 							v-for="(n, index) in notifications"
 							:key="n.notification_id"
 							v-bind="n"
@@ -52,10 +55,10 @@ import Notification from './Components/Notification'
 import axios from '@nextcloud/axios'
 
 export default {
-	name: 'NotificationsList',
+	name: 'App',
 
 	components: {
-		Notification
+		Notification,
 	},
 
 	data: function() {
@@ -70,7 +73,7 @@ export default {
 			pollInterval: 30000, // milliseconds
 
 			/** @type {number|null} */
-			interval: null
+			interval: null,
 		}
 	},
 
@@ -78,7 +81,7 @@ export default {
 
 	computed: {
 		iconPath: function() {
-			var iconPath = 'notifications'
+			let iconPath = 'notifications'
 
 			if (this.webNotificationsGranted === null || this.notifications.length) {
 				if (this.isRedThemed()) {
@@ -92,7 +95,7 @@ export default {
 			}
 
 			return OC.imagePath('notifications', iconPath)
-		}
+		},
 	},
 
 	mounted: function() {
@@ -147,10 +150,10 @@ export default {
 
 		isRedThemed: function() {
 			if (OCA.Theming && OCA.Theming.color) {
-				var hsl = this.rgbToHsl(OCA.Theming.color.substring(1, 3),
+				const hsl = this.rgbToHsl(OCA.Theming.color.substring(1, 3),
 					OCA.Theming.color.substring(3, 5),
 					OCA.Theming.color.substring(5, 7))
-				var h = hsl[0] * 360
+				const h = hsl[0] * 360
 				return (h >= 330 || h <= 15) && hsl[1] > 0.7 && (hsl[2] > 0.1 || hsl[2] < 0.6)
 			}
 			return false
@@ -158,13 +161,13 @@ export default {
 
 		rgbToHsl: function(r, g, b) {
 			r = parseInt(r, 16) / 255; g = parseInt(g, 16) / 255; b = parseInt(b, 16) / 255
-			var max = Math.max(r, g, b); var min = Math.min(r, g, b)
-			var h; var s; var l = (max + min) / 2
+			const max = Math.max(r, g, b); const min = Math.min(r, g, b)
+			let h; let s; const l = (max + min) / 2
 
 			if (max === min) {
 				h = s = 0
 			} else {
-				var d = max - min
+				const d = max - min
 				s = l > 0.5 ? d / (2 - max - min) : d / (max + min)
 				switch (max) {
 				case r: h = (g - b) / d + (g < b ? 6 : 0); break
@@ -263,8 +266,8 @@ export default {
 				.then((permissions) => {
 					this.webNotificationsGranted = permissions === 'granted'
 				})
-		}
-	}
+		},
+	},
 }
 </script>
 
