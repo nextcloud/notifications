@@ -3,6 +3,7 @@ module.exports = {
 		'nextcloud'
 	],
 	globals: {
+		'moment': true,
 		'$': true
 	},
 	rules: {
