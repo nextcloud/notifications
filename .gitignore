@@ -57,6 +57,7 @@ nbproject
 /tests/Unit/coverage*
 /tests/Unit/clover.xml
 /tests/Unit/js/node_modules
+/tests/Unit/.phpunit.result.cache
 
 /tests/Integration/output
 /tests/Integration/vendor

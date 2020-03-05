@@ -468,7 +468,7 @@ class PushTest extends TestCase {
 		$response2->expects($this->once())
 			->method('getStatusCode')
 			->willReturn(Http::STATUS_SERVICE_UNAVAILABLE);
-		$response2->expects($isDebug ? $this->once() : $this->never())
+		$response2->expects($this->once())
 			->method('getBody')
 			->willReturn('Maintenance');
 		$client->expects($this->at(2))
