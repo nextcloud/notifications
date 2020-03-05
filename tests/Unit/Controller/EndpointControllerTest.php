@@ -440,15 +440,15 @@ class EndpointControllerTest extends TestCase {
 
 	public function dataNotificationToArray() {
 		return [
-			['v1', 42, 'app1', 'user1', 1234, 'type1', 42, 'subject1', '', [], 'message1', 'richMessage 1', ['richMessage param'], 'link1', 'icon1', [], []],
-			['v1', 1337, 'app2', 'user2', 1337, 'type2', 21, 'subject2', 'richSubject 2', ['richSubject param'], 'message2', '', [], 'link2', 'icon2', [
+			['v1', 42, 'app1', 'user1', 1234, 'type1', '42', 'subject1', '', [], 'message1', 'richMessage 1', ['richMessage param'], 'link1', 'icon1', [], []],
+			['v1', 1337, 'app2', 'user2', 1337, 'type2', '21', 'subject2', 'richSubject 2', ['richSubject param'], 'message2', '', [], 'link2', 'icon2', [
 				$this->getMockBuilder(IAction::class)
 					->getMock(),
 				$this->getMockBuilder(IAction::class)
 					->getMock(),
 			], [['action'], ['action']]],
-			['v2', 42, 'app1', 'user1', 1234, 'type1', 42, 'subject1', '', [], 'message1', 'richMessage 1', ['richMessage param'], 'link1', 'icon1', [], []],
-			['v2', 1337, 'app2', 'user2', 1337, 'type2', 21, 'subject2', 'richSubject 2', ['richSubject param'], 'message2', '', [], 'link2', 'icon2', [
+			['v2', 42, 'app1', 'user1', 1234, 'type1', '42', 'subject1', '', [], 'message1', 'richMessage 1', ['richMessage param'], 'link1', 'icon1', [], []],
+			['v2', 1337, 'app2', 'user2', 1337, 'type2', '21', 'subject2', 'richSubject 2', ['richSubject param'], 'message2', '', [], 'link2', 'icon2', [
 				$this->getMockBuilder(IAction::class)
 					->getMock(),
 				$this->getMockBuilder(IAction::class)
