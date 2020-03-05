@@ -2,57 +2,57 @@ const path = require('path')
 const { VueLoaderPlugin } = require('vue-loader')
 
 module.exports = {
-	entry: path.join(__dirname, 'init.js'),
+	entry: path.join(__dirname, 'Init.js'),
 	output: {
 		path: path.resolve(__dirname, '../js'),
 		publicPath: '/js/',
-		filename: 'notifications.js'
+		filename: 'notifications.js',
 	},
 	module: {
 		rules: [
 			{
 				test: /\.css$/,
-				use: ['vue-style-loader', 'css-loader']
+				use: ['vue-style-loader', 'css-loader'],
 			},
 			{
 				test: /\.vue$/,
 				loader: 'vue-loader',
 				options: {
-					hotReload: false // disables Hot Reload
-				}
+					hotReload: false, // disables Hot Reload
+				},
 			},
 			{
 				test: /\.js$/,
 				loader: 'babel-loader',
-				exclude: /node_modules/
+				exclude: /node_modules/,
 			},
 			{
 				enforce: 'pre',
 				test: /\.(js|vue)$/,
 				loader: 'eslint-loader',
-				exclude: /node_modules/
+				exclude: /node_modules/,
 			},
 			{
 				test: /\.(png|jpg|gif|svg)$/,
 				loader: 'file-loader',
 				options: {
-					name: '[name].[ext]?[hash]'
-				}
+					name: '[name].[ext]?[hash]',
+				},
 			},
 			{
 				test: /\.handlebars/,
 				loader: 'handlebars-loader',
 				query: {
-					extensions: '.handlebars'
-				}
-			}
-		]
+					extensions: '.handlebars',
+				},
+			},
+		],
 	},
 	plugins: [new VueLoaderPlugin()],
 	resolve: {
 		alias: {
-			vue$: 'vue/dist/vue.esm.js'
+			vue$: 'vue/dist/vue.esm.js',
 		},
-		extensions: ['*', '.js', '.vue', '.json']
-	}
+		extensions: ['*', '.js', '.vue', '.json'],
+	},
 }

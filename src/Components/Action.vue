@@ -1,6 +1,9 @@
 <template>
-	<button class="action-button pull-right" :class="{ primary: primary }"
-		:data-type="type" :data-href="link" @click="onClickActionButton">
+	<button class="action-button pull-right"
+		:class="{ primary: primary }"
+		:data-type="type"
+		:data-href="link"
+		@click="onClickActionButton">
 		{{ label }}
 	</button>
 </template>
@@ -14,23 +17,23 @@ export default {
 		label: {
 			type: String,
 			default: '',
-			required: true
+			required: true,
 		},
 		link: {
 			type: String,
 			default: '',
-			required: true
+			required: true,
 		},
 		type: {
 			type: String,
 			default: '',
-			required: true
+			required: true,
 		},
 		primary: {
 			type: Boolean,
 			default: false,
-			required: true
-		}
+			required: true,
+		},
 	},
 
 	methods: {
@@ -43,7 +46,7 @@ export default {
 
 			axios({
 				method: type,
-				url: this.link
+				url: this.link,
 			})
 				.then(() => {
 					this.$parent._$el.fadeOut(OC.menuSpeed)
@@ -52,14 +55,14 @@ export default {
 						notification: this.$parent,
 						action: {
 							url: this.link,
-							type: type
-						}
+							type: type,
+						},
 					}))
 				})
 				.catch(() => {
 					OC.Notification.showTemporary(t('notifications', 'Failed to perform action'))
 				})
-		}
-	}
+		},
+	},
 }
 </script>

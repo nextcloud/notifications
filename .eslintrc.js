@@ -1,98 +1,12 @@
 module.exports = {
-	root: true,
-	env: {
-		browser: true,
-		es6: true,
-		node: true
-	},
-	globals: {
-		oc_config: true,
-		oca_contacts: true,
-		moment: true,
-		escapeHTML: true,
-		n: true,
-		t: true,
-		OC: true,
-		OCA: true,
-		OCP: true,
-		Vue: true,
-		$: true // FIXME should remove jQuery dependency
-	},
-	parserOptions: {
-		parser: 'babel-eslint',
-		ecmaVersion: 6
-	},
 	extends: [
-		'eslint:recommended',
-		'plugin:import/errors',
-		'plugin:import/warnings',
-		'plugin:node/recommended',
-		'plugin:vue/essential',
-		'plugin:vue/recommended',
-		'standard'
+		'nextcloud'
 	],
-	settings: {
-		'import/resolver': {
-			webpack: {
-				config: 'src/webpack.common.js'
-			},
-			node: {
-				paths: ['src'],
-				extensions: ['.js', '.vue']
-			}
-		}
+	globals: {
+		'moment': true,
+		'$': true
 	},
-	plugins: ['vue', 'node'],
 	rules: {
-		'no-control-regex': 0,
-		// space before function ()
-		'space-before-function-paren': ['error', 'never'],
-		// curly braces always space
-		'object-curly-spacing': ['error', 'always'],
-		// stay consistent with array brackets
-		'array-bracket-newline': ['error', 'consistent'],
-		// 1tbs brace style
-		'brace-style': 'error',
-		// tabs only
-		indent: ['error', 'tab'],
-		'no-tabs': 0,
-		'vue/html-indent': ['error', 'tab'],
-		// only debug console
-		'no-console': ['error', { allow: ['error', 'warn', 'info', 'debug'] }],
-		// classes blocks
-		'padded-blocks': ['error', { classes: 'always' }],
-		// always have the operator in front
-		'operator-linebreak': ['error', 'before'],
-		// ternary on multiline
-		'multiline-ternary': ['error', 'always-multiline'],
-		// force proper JSDocs
-		'valid-jsdoc': [2, {
-			prefer: {
-				return: 'returns'
-			},
-			requireReturn: false,
-			requireReturnDescription: false
-		}],
-		// es6 import/export and require
-		'node/no-unpublished-require': ['off'],
-		'node/no-unsupported-features/es-syntax': ['off'],
-		// kebab case components for vuejs
-		'vue/component-name-in-template-casing': ['error', 'kebab-case'],
-		// space before self-closing elements
-		'vue/html-closing-bracket-spacing': 'error',
-		// no ending html tag on a new line
-		'vue/html-closing-bracket-newline': ['error', { multiline: 'never' }],
-		// code spacing with attributes
-		'vue/max-attributes-per-line': ['error', {
-			singleline: 3,
-			multiline: {
-				max: 3,
-				allowFirstLine: true
-			}
-		}],
-		'node/no-missing-import': ['error', {
-			tryExtensions: ['.js', '.vue']
-		}],
-		'vue/no-v-html': ['off']
+		'no-control-regex': 1
 	}
 }
