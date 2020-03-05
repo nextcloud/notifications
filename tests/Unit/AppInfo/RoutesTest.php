@@ -33,10 +33,10 @@ use OCA\Notifications\Tests\Unit\TestCase;
 class RoutesTest extends TestCase {
 	public function testRoutes() {
 		$routes = include __DIR__ . '/../../../appinfo/routes.php';
-		$this->assertInternalType('array', $routes);
+		$this->assertIsArray($routes);
 		$this->assertCount(1, $routes);
 		$this->assertArrayHasKey('ocs', $routes);
-		$this->assertInternalType('array', $routes['ocs']);
+		$this->assertIsArray($routes['ocs']);
 		$this->assertCount(7, $routes['ocs']);
 	}
 }
