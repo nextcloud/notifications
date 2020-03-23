@@ -29,6 +29,7 @@ use OCP\IRequest;
 use OCP\IUser;
 use OCP\IUserSession;
 use OCP\Notification\IManager;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Class AppTest
@@ -37,11 +38,11 @@ use OCP\Notification\IManager;
  * @package OCA\Notifications\Tests\AppInfo
  */
 class AppTest extends TestCase {
-	/** @var IManager|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var IManager|MockObject */
 	protected $manager;
-	/** @var IRequest|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var IRequest|MockObject */
 	protected $request;
-	/** @var IUserSession|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var IUserSession|MockObject */
 	protected $session;
 
 	protected function setUp(): void {
@@ -51,15 +52,15 @@ class AppTest extends TestCase {
 		$this->request = $this->createMock(IRequest::class);
 		$this->session = $this->createMock(Session::class);
 
-		$this->overwriteService('NotificationManager', $this->manager);
-		$this->overwriteService('Request', $this->request);
-		$this->overwriteService('UserSession', $this->session);
+		$this->overwriteService(IManager::class, $this->manager);
+		$this->overwriteService(IRequest::class, $this->request);
+		$this->overwriteService(Session::class, $this->session);
 	}
 
 	protected function tearDown(): void {
-		$this->restoreService('NotificationManager');
-		$this->restoreService('Request');
-		$this->restoreService('UserSession');
+		$this->restoreService(IManager::class);
+		$this->restoreService(IRequest::class);
+		$this->restoreService(Session::class);
 
 		parent::tearDown();
 	}
