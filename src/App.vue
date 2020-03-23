@@ -5,7 +5,7 @@
 			:class="{ hasNotifications: notifications.length }"
 			tabindex="0"
 			role="button"
-			aria-label="t('notifications', 'Notifications')"
+			:aria-label="t('notifications', 'Notifications')"
 			aria-haspopup="true"
 			aria-controls="notification-container"
 			aria-expanded="false"
