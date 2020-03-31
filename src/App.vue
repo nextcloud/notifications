@@ -5,10 +5,11 @@
 			:class="{ hasNotifications: notifications.length }"
 			tabindex="0"
 			role="button"
-			aria-label="t('notifications', 'Notifications')"
+			:aria-label="t('notifications', 'Notifications')"
 			aria-haspopup="true"
 			aria-controls="notification-container"
-			aria-expanded="false">
+			aria-expanded="false"
+			@click="requestWebNotificationPermissions">
 			<img ref="icon"
 				class="svg"
 				alt=""
@@ -37,7 +38,12 @@
 				</ul>
 				<div v-else class="emptycontent">
 					<div class="icon icon-notifications-dark" />
-					<h2>{{ t('notifications', 'No notifications') }}</h2>
+					<h2 v-if="webNotificationsGranted === null">
+						{{ t('notifications', 'Requesting browser permissions to show notifications') }}
+					</h2>
+					<h2 v-else>
+						{{ t('notifications', 'No notifications') }}
+					</h2>
 				</div>
 			</transition>
 		</div>
@@ -57,6 +63,7 @@ export default {
 
 	data: function() {
 		return {
+			webNotificationsGranted: null,
 			hadNotifications: false,
 			backgroundFetching: false,
 			shutdown: false,
@@ -76,7 +83,7 @@ export default {
 		iconPath: function() {
 			let iconPath = 'notifications'
 
-			if (this.notifications.length) {
+			if (this.webNotificationsGranted === null || this.notifications.length) {
 				if (this.isRedThemed()) {
 					iconPath += '-red'
 				}
@@ -96,6 +103,8 @@ export default {
 
 		// Bind the button click event
 		OC.registerMenu($(this.$refs.button), $(this.$refs.container), undefined, true)
+
+		this.checkWebNotificationPermissions()
 
 		// Initial call to the notification endpoint
 		this._fetch()
@@ -218,7 +227,47 @@ export default {
 			window.clearInterval(this.interval)
 			this.shutdown = true
 		},
-	},
+
+		/**
+		 * Check if we can do web notifications
+		 */
+		checkWebNotificationPermissions: function() {
+			if (!('Notification' in window)) {
+				console.info('Browser does not support notifications')
+				this.webNotificationsGranted = false
+
+			}
+
+			if (window.Notification.permission === 'granted') {
+				console.debug('Notifications permissions granted')
+				this.webNotificationsGranted = true
+				return
+			}
+
+			if (window.Notification.permission === 'denied') {
+				console.debug('Notifications permissions denied')
+				this.webNotificationsGranted = false
+				return
+			}
+
+			console.info('Notifications permissions not yet requested')
+		},
+
+		/**
+		 * Check if we can do web notifications
+		 */
+		requestWebNotificationPermissions: async function() {
+			if (this.webNotificationsGranted !== null) {
+				return
+			}
+
+			console.info('Requesting notifications permissions')
+			window.Notification.requestPermission()
+				.then((permissions) => {
+					this.webNotificationsGranted = permissions === 'granted'
+				})
+		}
+	}
 }
 </script>
 
