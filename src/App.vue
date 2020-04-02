@@ -235,7 +235,7 @@ export default {
 			if (!('Notification' in window)) {
 				console.info('Browser does not support notifications')
 				this.webNotificationsGranted = false
-
+				return
 			}
 
 			if (window.Notification.permission === 'granted') {
