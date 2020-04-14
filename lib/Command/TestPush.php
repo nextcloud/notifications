@@ -23,6 +23,7 @@
 
 namespace OCA\Notifications\Command;
 
+use OCA\Notifications\App;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\IUser;
 use OCP\IUserManager;
@@ -33,50 +34,44 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Generate extends Command {
+class TestPush extends Command {
 
 	/** @var ITimeFactory */
 	protected $timeFactory;
-
 	/** @var IUserManager */
 	protected $userManager;
-
 	/** @var IManager */
 	protected $notificationManager;
+	/** @var App */
+	protected $app;
 
-	/**
-	 * @param ITimeFactory $timeFactory
-	 * @param IUserManager $userManager
-	 * @param IManager $notificationManager
-	 */
-	public function __construct(ITimeFactory $timeFactory, IUserManager $userManager, IManager $notificationManager) {
+	public function __construct(
+		ITimeFactory $timeFactory,
+		IUserManager $userManager,
+		IManager $notificationManager,
+		App $app) {
 		parent::__construct();
 
 		$this->timeFactory = $timeFactory;
 		$this->userManager = $userManager;
 		$this->notificationManager = $notificationManager;
+		$this->app = $app;
 	}
 
 	protected function configure() {
 		$this
-			->setName('notification:generate')
+			->setName('notification:test-push')
 			->setDescription('Generate a notification for the given user')
 			->addArgument(
 				'user-id',
 				InputArgument::REQUIRED,
 				'User ID of the user to notify'
 			)
-			->addArgument(
-				'short-message',
-				InputArgument::REQUIRED,
-				'Short message to be sent to the user (max. 255 characters)'
-			)
 			->addOption(
-				'long-message',
-				'l',
-				InputOption::VALUE_REQUIRED,
-				'Long mesage to be sent to the user (max. 4000 characters)',
-				''
+				'talk',
+				null,
+				InputOption::VALUE_NONE,
+				'Test talk devices'
 			)
 		;
 	}
@@ -89,8 +84,7 @@ class Generate extends Command {
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 
 		$userId = $input->getArgument('user-id');
-		$subject = $input->getArgument('short-message');
-		$message = $input->getOption('long-message');
+		$subject = 'Testing push notifications';
 
 		$user = $this->userManager->get($userId);
 		if (!$user instanceof IUser) {
@@ -98,30 +92,18 @@ class Generate extends Command {
 			return 1;
 		}
 
-		if ($subject === '' || strlen($subject) > 255) {
-			$output->writeln('Too long or empty short-message');
-			return 1;
-		}
-
-		if ($message !== '' && strlen($message) > 4000) {
-			$output->writeln('Too long long-message');
-			return 1;
-		}
-
 		$notification = $this->notificationManager->createNotification();
 		$datetime = $this->timeFactory->getDateTime();
+		$app = $input->getOption('talk') ? 'admin_notification_talk' : 'admin_notifications';
 
 		try {
-			$notification->setApp('admin_notifications')
+			$notification->setApp($app)
 				->setUser($user->getUID())
 				->setDateTime($datetime)
 				->setObject('admin_notifications', dechex($datetime->getTimestamp()))
 				->setSubject('cli', [$subject]);
 
-			if ($message !== '') {
-				$notification->setMessage('cli', [$message]);
-			}
-
+			$this->app->setOutput($output);
 			$this->notificationManager->notify($notification);
 		} catch (\InvalidArgumentException $e) {
 			$output->writeln('Error while sending the notification');

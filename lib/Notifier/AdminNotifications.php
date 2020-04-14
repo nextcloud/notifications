@@ -74,7 +74,7 @@ class AdminNotifications implements INotifier {
 	 * @throws AlreadyProcessedException When the notification is not needed anymore and should be deleted
 	 */
 	public function prepare(INotification $notification, string $languageCode): INotification {
-		if ($notification->getApp() !== 'admin_notifications') {
+		if ($notification->getApp() !== 'admin_notifications' && $notification->getApp() !== 'admin_notification_talk') {
 			throw new \InvalidArgumentException('Unknown app');
 		}
 
