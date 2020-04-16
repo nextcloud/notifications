@@ -8,7 +8,7 @@ OC.L10N.register(
     "Dismiss all notifications" : "Atmesti visus pranešimus",
     "Requesting browser permissions to show notifications" : "Užklausiama naršyklės leidimo rodyti pranešimus",
     "No notifications" : "Pranešimų nėra",
-    "Failed to dismiss all notifications" : "Nepavyko atmesti visus pranešimus",
+    "Failed to dismiss all notifications" : "Nepavyko atmesti visų pranešimų",
     "Failed to perform action" : "Nepavyko įvykdyti veiksmą",
     "Dismiss" : "Atmesti",
     "Failed to dismiss notification" : "Nepavyko atmesti pranešimą",
