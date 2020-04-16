@@ -111,9 +111,7 @@ export default {
 		this._fetch()
 
 		// Setup the background checker
-		if (OC.config.session_keepalive) {
-			this.interval = setInterval(this._backgroundFetch.bind(this), this.pollInterval)
-		}
+		this.setupBackgroundFetcher()
 	},
 
 	updated: function() {
@@ -131,6 +129,12 @@ export default {
 	},
 
 	methods: {
+		setupBackgroundFetcher() {
+			if (OC.config.session_keepalive) {
+				this.interval = setInterval(this._backgroundFetch.bind(this), this.pollInterval)
+			}
+		},
+
 		onDismissAll: function() {
 			axios
 				.delete(OC.linkToOCS('apps/notifications/api/v2', 2) + 'notifications')
@@ -199,13 +203,16 @@ export default {
 				.then(response => {
 					if (response.status === 204) {
 						// 204 No Content - Intercept when no notifiers are there.
-						this._shutDownNotifications()
+						this._setPollingInterval(300000)
+						return
 					} else if (response.data !== undefined && response.data.ocs !== undefined && response.data.ocs.data !== undefined && Array.isArray(response.data.ocs.data)) {
 						this.lastETag = response.headers.etag
 						this.notifications = response.data.ocs.data
 					} else {
 						console.info('data.ocs.data is undefined or not an array')
 					}
+
+					this._setPollingInterval(30000)
 				})
 				.catch(err => {
 					if (!err.response) {
@@ -216,15 +223,17 @@ export default {
 						return
 					} else if (err.response.status === 503) {
 						// 503 - Maintenance mode
-						console.info('Shutting down notifications: instance is in maintenance mode.')
+						console.info('Slowing down notifications: instance is in maintenance mode.')
 					} else if (err.response.status === 404) {
 						// 404 - App disabled
 						console.info('Shutting down notifications: app is disabled.')
+						this._shutDownNotifications()
+						return
 					} else {
-						console.info('Shutting down notifications: [' + err.response.status + '] ' + err.response.statusText)
+						console.info('Slowing down notifications: [' + err.response.status + '] ' + err.response.statusText)
 					}
 
-					this._shutDownNotifications()
+					this._setPollingInterval(300000)
 				})
 		},
 
@@ -233,12 +242,29 @@ export default {
 			this._fetch()
 		},
 
+		_setPollingInterval(pollInterval) {
+			if (pollInterval === this.pollInterval) {
+				return
+			}
+
+			if (this.interval) {
+				window.clearInterval(this.interval)
+				this.interval = null
+			}
+
+			this.pollInterval = pollInterval
+			this.setupBackgroundFetcher()
+		},
+
 		/**
 			 * The app was disabled or has no notifiers, so we can stop polling
 			 * And hide the UI as well
 			 */
 		_shutDownNotifications: function() {
-			window.clearInterval(this.interval)
+			if (this.interval) {
+				window.clearInterval(this.interval)
+				this.interval = null
+			}
 			this.shutdown = true
 		},
 
