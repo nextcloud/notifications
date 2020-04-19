@@ -121,8 +121,7 @@
 			align-self: flex-start;
 		}
 
-		& > span.text,
-		& > a > span.text {
+		& > .text {
 			padding-left: 10px;
 			hyphens: auto;
 		}
