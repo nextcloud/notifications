@@ -53,6 +53,7 @@
 <script>
 import Notification from './Components/Notification'
 import axios from '@nextcloud/axios'
+import { subscribe } from '@nextcloud/event-bus'
 
 export default {
 	name: 'App',
@@ -112,6 +113,14 @@ export default {
 
 		// Setup the background checker
 		this.setupBackgroundFetcher()
+
+		subscribe('networkOffline', () => {
+			this._shutDownNotifications(true)
+		})
+		subscribe('networkOnline', () => {
+			this._fetch()
+			this.setupBackgroundFetcher()
+		})
 	},
 
 	updated: function() {
@@ -227,7 +236,7 @@ export default {
 					} else if (err.response.status === 404) {
 						// 404 - App disabled
 						console.info('Shutting down notifications: app is disabled.')
-						this._shutDownNotifications()
+						this._shutDownNotifications(false)
 						return
 					} else {
 						console.info('Slowing down notifications: [' + err.response.status + '] ' + err.response.statusText)
@@ -257,15 +266,16 @@ export default {
 		},
 
 		/**
-			 * The app was disabled or has no notifiers, so we can stop polling
-			 * And hide the UI as well
-			 */
-		_shutDownNotifications: function() {
+		 * The app was disabled or has no notifiers, so we can stop polling
+		 * And hide the UI as well
+		 * @param {Boolean} temporary If false, the notification bell will be hidden
+		 */
+		_shutDownNotifications: function(temporary) {
 			if (this.interval) {
 				window.clearInterval(this.interval)
 				this.interval = null
 			}
-			this.shutdown = true
+			this.shutdown = !temporary
 		},
 
 		/**
