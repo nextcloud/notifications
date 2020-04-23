@@ -4,6 +4,7 @@ OC.L10N.register(
     "Admin notifications" : "Ylläpitoilmoitukset",
     "Notifications" : "Ilmoitukset",
     "Dismiss all notifications" : "Hylkää kaikki ilmoitukset",
+    "Requesting browser permissions to show notifications" : "Pyydetään selaimen oikeuksia ilmoitusten näyttämiseksi",
     "No notifications" : "Ei ilmoituksia",
     "Failed to dismiss all notifications" : "Kaikki ilmoitusten hylkääminen epäonnistui",
     "Failed to perform action" : "Toimenpiteen suorittaminen epäonnistui",

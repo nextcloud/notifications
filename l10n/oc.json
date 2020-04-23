@@ -1,5 +1,8 @@
 { "translations": {
+    "Admin notifications" : "Notificacions admin",
     "Notifications" : "Notificacions",
+    "Dismiss all notifications" : "Tancar totas las notificacions",
+    "No notifications" : "Cap de notificacion",
     "Dismiss" : "Ignorar"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }
