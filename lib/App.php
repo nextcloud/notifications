@@ -25,6 +25,7 @@ namespace OCA\Notifications;
 use OCA\Notifications\Exceptions\NotificationNotFoundException;
 use OCP\Notification\IApp;
 use OCP\Notification\INotification;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class App implements IApp {
 	/** @var Handler */
@@ -35,6 +36,10 @@ class App implements IApp {
 	public function __construct(Handler $handler, Push $push) {
 		$this->handler = $handler;
 		$this->push = $push;
+	}
+
+	public function setOutput(OutputInterface $output): void {
+		$this->push->setOutput($output);
 	}
 
 	/**

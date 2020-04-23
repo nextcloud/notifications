@@ -36,6 +36,7 @@ use OCP\IUser;
 use OCP\IUserManager;
 use OCP\Notification\IManager as INotificationManager;
 use OCP\Notification\INotification;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class Push {
 	/** @var IDBConnection */
@@ -54,6 +55,8 @@ class Push {
 	protected $clientService;
 	/** @var ILogger */
 	protected $log;
+	/** @var OutputInterface */
+	protected $output;
 
 	public function __construct(IDBConnection $connection, INotificationManager $notificationManager, IConfig $config, IProvider $tokenProvider, Manager $keyManager, IUserManager $userManager, IClientService $clientService, ILogger $log) {
 		$this->db = $connection;
@@ -66,7 +69,17 @@ class Push {
 		$this->log = $log;
 	}
 
-	public function pushToDevice(int $id, INotification $notification): void {
+	public function setOutput(OutputInterface $output): void {
+		$this->output = $output;
+	}
+
+	protected function printInfo(string $message): void {
+		if ($this->output) {
+			$this->output->writeln($message);
+		}
+	}
+
+	public function pushToDevice(int $id, INotification $notification, ?OutputInterface $output = null): void {
 		$user = $this->userManager->get($notification->getUser());
 		if (!($user instanceof IUser)) {
 			return;
@@ -74,12 +87,19 @@ class Push {
 
 		$devices = $this->getDevicesForUser($notification->getUser());
 		if (empty($devices)) {
+			$this->printInfo('No devices found for user');
 			return;
 		}
+
+		$this->printInfo('Trying to push to ' . count($devices) . ' devices');
+		$this->printInfo('');
 
 		$language = $this->config->getSystemValue('force_language', false);
 		$language = \is_string($language) ? $language : $this->config->getUserValue($notification->getUser(), 'core', 'lang', null);
 		$language = $language ?? $this->config->getSystemValue('default_language', 'en');
+
+		$this->printInfo('Language is set to ' . $language);
+
 		try {
 			$this->notificationManager->setPreparingPushNotification(true);
 			$notification = $this->notificationManager->prepare($notification, $language);
@@ -91,7 +111,10 @@ class Push {
 
 		$userKey = $this->keyManager->getKey($user);
 
-		$isTalkNotification = \in_array($notification->getApp(), ['spreed', 'talk'], true);
+		$this->printInfo('Private user key size: ' . strlen($userKey->getPrivate()));
+		$this->printInfo('Public user key size: ' . strlen($userKey->getPublic()));
+
+		$isTalkNotification = \in_array($notification->getApp(), ['spreed', 'talk', 'admin_notification_talk'], true);
 		$talkApps = array_filter($devices, function ($device) {
 			return $device['apptype'] === 'talk';
 		});
@@ -99,11 +122,15 @@ class Push {
 
 		$pushNotifications = [];
 		foreach ($devices as $device) {
+			$this->printInfo('');
+			$this->printInfo('Device token:' . $device['token']);
+
 			if (!$isTalkNotification && $device['apptype'] === 'talk') {
 				// The iOS app can not kill notifications,
 				// therefor we should only send relevant notifications to the Talk
 				// app, so it does not pollute the notifications bar with useless
 				// notifications, especially when the Sync client app is also installed.
+				$this->printInfo('Skipping talk device for non-talk notification');
 				continue;
 			}
 			if ($isTalkNotification && $hasTalkApps && $device['apptype'] !== 'talk') {
@@ -111,6 +138,7 @@ class Push {
 				// to the Sync client app, when there is a Talk app installed. We only
 				// do this, when you don't have a Talk app on your device, so you still
 				// get the push notification.
+				$this->printInfo('Skipping other device for talk notification because a talk app is available');
 				continue;
 			}
 
@@ -124,6 +152,7 @@ class Push {
 				$pushNotifications[$proxyServer][] = $payload;
 			} catch (InvalidTokenException $e) {
 				// Token does not exist anymore, should drop the push device entry
+				$this->printInfo('InvalidTokenException is thrown');
 				$this->deletePushToken($device['token']);
 			} catch (\InvalidArgumentException $e) {
 				// Failed to encrypt message for device: public key is invalid
@@ -203,15 +232,20 @@ class Push {
 			$body = $response->getBody();
 			$bodyData = json_decode($body, true);
 			if ($status !== Http::STATUS_OK) {
-				$this->log->error('Could not send notification to push server [{url}]: {error}',[
-					'error' => \is_string($body) && $bodyData === null ? $body : 'no reason given',
+				$error = \is_string($body) && $bodyData === null ? $body : 'no reason given';
+				$this->printInfo('Could not send notification to push server [' . $proxyServer . ']: ' . $error);
+				$this->log->error('Could not send notification to push server [{url}]: {error}', [
+					'error' => $error,
 					'url' => $proxyServer,
 					'app' => 'notifications',
 				]);
+			} else {
+				$this->printInfo('Push notification sent');
 			}
 
 			if (is_array($bodyData) && !empty($bodyData['unknown']) && is_array($bodyData['unknown'])) {
 				foreach ($bodyData['unknown'] as $unknownDevice) {
+					$this->printInfo('Deleting device because it is unknown by the push server: ' . $unknownDevice);
 					$this->deletePushTokenByDeviceIdentifier($unknownDevice);
 				}
 			}
@@ -256,12 +290,21 @@ class Push {
 			$type = 'alert';
 		}
 
+		$this->printInfo('Device public key size: ' . strlen($device['devicepublickey']));
+		$this->printInfo('Data to encrypt is: ' . json_encode($data));
+
 		if (!openssl_public_encrypt(json_encode($data), $encryptedSubject, $device['devicepublickey'], OPENSSL_PKCS1_PADDING)) {
-			$this->log->error(openssl_error_string(), ['app' => 'notifications']);
+			$error = openssl_error_string();
+			$this->log->error($error, ['app' => 'notifications']);
+			$this->printInfo('Error while encrypting data: "' . $error . '"');
 			throw new \InvalidArgumentException('Failed to encrypt message for device');
 		}
 
-		openssl_sign($encryptedSubject, $signature, $userKey->getPrivate(), OPENSSL_ALGO_SHA512);
+		if (openssl_sign($encryptedSubject, $signature, $userKey->getPrivate(), OPENSSL_ALGO_SHA512)) {
+			$this->printInfo('Signed encrypted push subject');
+		} else {
+			$this->printInfo('Failed to signed encrypted push subject');
+		}
 		$base64EncryptedSubject = base64_encode($encryptedSubject);
 		$base64Signature = base64_encode($signature);
 
