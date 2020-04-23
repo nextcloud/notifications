@@ -65,7 +65,7 @@ class NotifierTest extends \Test\TestCase {
 		/** @var INotification|\PHPUnit_Framework_MockObject_MockObject $notification */
 		$notification = $this->createMock(INotification::class);
 
-		$notification->expects($this->once())
+		$notification->expects($this->exactly(2))
 			->method('getApp')
 			->willReturn('notifications');
 		$notification->expects($this->never())

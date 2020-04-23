@@ -64,13 +64,13 @@ class GenerateTest extends \Test\TestCase {
 
 	public function dataExecute() {
 		return [
-			['user', '', '', false, null, false, null, 123, null, 1],
-			['user', '', '', false, null, false, 'user', 123, null, 1],
-			['user', str_repeat('a', 256), '', false, null, false, 'user', 123, null, 1],
-			['user', 'short', '', true, false, false, 'user', 123, '7b', 0],
-			['user', 'short', str_repeat('a', 4001), false, null, false, 'user', 123, null, 1],
-			['user', 'short', str_repeat('a', 4000), true, false, true, 'user', 123, '7b', 0],
-			['user', 'short', 'long', true, true, true, 'user', 123, '7b', 1],
+			['user', '', '', false, null, false, null, false, 1],
+			['user', '', '', false, null, false, 'user', false, 1],
+			['user', str_repeat('a', 256), '', false, null, false, 'user', false, 1],
+			['user', 'short', '', true, false, false, 'user', true, 0],
+			['user', 'short', str_repeat('a', 4001), false, null, false, 'user', false, 1],
+			['user', 'short', str_repeat('a', 4000), true, false, true, 'user',  true, 0],
+			['user', 'short', 'long', true, true, true, 'user', true, 1],
 		];
 	}
 
@@ -83,11 +83,10 @@ class GenerateTest extends \Test\TestCase {
 	 * @param bool $notifyThrows
 	 * @param bool $validLong
 	 * @param string|null $user
-	 * @param int $time
-	 * @param string|null $hexTime
+	 * @param bool $isCreated
 	 * @param int $exitCode
 	 */
-	public function testExecute($userId, $short, $long, $createNotification, $notifyThrows, $validLong, $user, $time, $hexTime, $exitCode) {
+	public function testExecute($userId, $short, $long, $createNotification, $notifyThrows, $validLong, $user, $isCreated, $exitCode) {
 		if ($user !== null) {
 			$u = $this->createMock(IUser::class);
 			$u->expects($createNotification ? $this->once() : $this->never())
@@ -101,9 +100,10 @@ class GenerateTest extends \Test\TestCase {
 			->with($userId)
 			->willReturn($u);
 
-		$this->timeFactory->expects($hexTime === null ? $this->never() : $this->once())
-			->method('getTime')
-			->willReturn($time);
+		$dateTime = new \DateTime();
+		$this->timeFactory->expects(!$isCreated ? $this->never() : $this->once())
+			->method('getDateTime')
+			->willReturn($dateTime);
 
 		if ($createNotification) {
 			$n = $this->createMock(INotification::class);
@@ -117,10 +117,11 @@ class GenerateTest extends \Test\TestCase {
 				->willReturnSelf();
 			$n->expects($this->once())
 				->method('setDateTime')
+				->with($dateTime)
 				->willReturnSelf();
 			$n->expects($this->once())
 				->method('setObject')
-				->with('admin_notifications', $hexTime)
+				->with('admin_notifications', dechex($dateTime->getTimestamp()))
 				->willReturnSelf();
 			$n->expects($this->once())
 				->method('setSubject')
