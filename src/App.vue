@@ -68,6 +68,7 @@ export default {
 			backgroundFetching: false,
 			shutdown: false,
 			notifications: [],
+			lastETag: null,
 
 			/** @type {number} */
 			pollInterval: 30000, // milliseconds
@@ -184,13 +185,23 @@ export default {
 			 * Performs the AJAX request to retrieve the notifications
 			 */
 		_fetch: function() {
+			let requestConfig = {}
+			if (this.lastETag) {
+				requestConfig = {
+					headers: {
+						'If-None-Match': this.lastETag,
+					},
+				}
+			}
+
 			axios
-				.get(OC.linkToOCS('apps/notifications/api/v2', 2) + 'notifications')
+				.get(OC.linkToOCS('apps/notifications/api/v2', 2) + 'notifications', requestConfig)
 				.then(response => {
 					if (response.status === 204) {
 						// 204 No Content - Intercept when no notifiers are there.
 						this._shutDownNotifications()
 					} else if (response.data !== undefined && response.data.ocs !== undefined && response.data.ocs.data !== undefined && Array.isArray(response.data.ocs.data)) {
+						this.lastETag = response.headers.etag
 						this.notifications = response.data.ocs.data
 					} else {
 						console.info('data.ocs.data is undefined or not an array')
@@ -199,6 +210,9 @@ export default {
 				.catch(err => {
 					if (!err.response) {
 						console.info('No response received, retrying')
+						return
+					} else if (err.response.status === 304) {
+						// 304 - Not modified
 						return
 					} else if (err.response.status === 503) {
 						// 503 - Maintenance mode
