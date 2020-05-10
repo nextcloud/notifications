@@ -54,6 +54,7 @@
 import Notification from './Components/Notification'
 import axios from '@nextcloud/axios'
 import { subscribe } from '@nextcloud/event-bus'
+import { imagePath, generateOcsUrl } from '@nextcloud/router'
 
 export default {
 	name: 'App',
@@ -96,7 +97,7 @@ export default {
 				iconPath += '-dark'
 			}
 
-			return OC.imagePath('notifications', iconPath)
+			return imagePath('notifications', iconPath)
 		},
 	},
 
@@ -146,7 +147,7 @@ export default {
 
 		onDismissAll: function() {
 			axios
-				.delete(OC.linkToOCS('apps/notifications/api/v2', 2) + 'notifications')
+				.delete(generateOcsUrl('apps/notifications/api/v2', 2) + 'notifications')
 				.then(() => {
 					this.notifications = []
 				})
@@ -208,7 +209,7 @@ export default {
 			}
 
 			axios
-				.get(OC.linkToOCS('apps/notifications/api/v2', 2) + 'notifications', requestConfig)
+				.get(generateOcsUrl('apps/notifications/api/v2', 2) + 'notifications', requestConfig)
 				.then(response => {
 					if (response.status === 204) {
 						// 204 No Content - Intercept when no notifiers are there.
