@@ -29,7 +29,6 @@ import axios from '@nextcloud/axios'
 import Action from './Action'
 import parser from '../richObjectStringParser'
 import escapeHTML from 'escape-html'
-import moment from '@nextcloud/moment'
 import { generateOcsUrl } from '@nextcloud/router'
 
 export default {
@@ -139,7 +138,7 @@ export default {
 
 	computed: {
 		timestamp: function() {
-			return moment(this.datetime).format('X') * 1000
+			return (new Date(this.datetime)).valueOf()
 		},
 		absoluteDate: function() {
 			return OC.Util.formatDate(this.timestamp)
