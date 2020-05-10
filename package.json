@@ -42,7 +42,7 @@
 		"file-loader": "^6.0.0",
 		"handlebars": "^4.7.6",
 		"handlebars-loader": "^1.7.1",
-		"node-sass": "^4.14.0",
+		"node-sass": "^4.14.1",
 		"sass-loader": "^8.0.2",
 		"vue-loader": "^15.9.2",
 		"vue-template-compiler": "^2.6.11",
