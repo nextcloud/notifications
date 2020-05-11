@@ -30,6 +30,7 @@ import Action from './Action'
 import parser from '../richObjectStringParser'
 import escapeHTML from 'escape-html'
 import moment from '@nextcloud/moment'
+import { generateOcsUrl } from '@nextcloud/router'
 
 export default {
 	name: 'Notification',
@@ -215,7 +216,7 @@ export default {
 
 		onDismissNotification: function() {
 			axios
-				.delete(OC.linkToOCS('apps/notifications/api/v2', 2) + 'notifications/' + this.notificationId)
+				.delete(generateOcsUrl('apps/notifications/api/v2', 2) + 'notifications/' + this.notificationId)
 				.then(() => {
 					// this._$el.fadeOut(OC.menuSpeed)
 					this.$emit('remove', this.index)
