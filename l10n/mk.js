@@ -4,6 +4,7 @@ OC.L10N.register(
     "Admin notifications" : "Известувања за администраторот",
     "Notifications" : "Известувања",
     "Dismiss all notifications" : "Отфрли ги сите известувања",
+    "Requesting browser permissions to show notifications" : "Барање на дозвола од прелистувачот за прикажување на известувања.",
     "No notifications" : "Нема известувања",
     "Failed to dismiss all notifications" : "Неуспешно отфрлање на сите известувања",
     "Failed to perform action" : "Неуспешно извршување на акцијата",
