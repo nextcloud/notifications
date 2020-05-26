@@ -39,7 +39,7 @@
     "eslint-plugin-standard": "^4.0.1",
     "eslint-plugin-vue": "^6.1.2",
     "file-loader": "^5.0.2",
-    "handlebars": "^4.5.3",
+    "handlebars": "^4.6.0",
     "handlebars-loader": "^1.7.1",
     "node-sass": "^4.13.0",
     "sass-loader": "^7.3.1",
