@@ -90,4 +90,12 @@ class App implements IApp {
 			$this->push->flushPayloads();
 		}
 	}
+
+	public function defer(): void {
+		$this->push->deferPayloads();
+	}
+
+	public function flush(): void {
+		$this->push->flushPayloads();
+	}
 }

@@ -26,7 +26,10 @@ use OCA\Notifications\App;
 use OCA\Notifications\Capabilities;
 use OCA\Notifications\Handler;
 use OCA\Notifications\Notifier\AdminNotifications;
+use OCA\Notifications\Push;
 use OCP\AppFramework\IAppContainer;
+use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Notification\IApp;
 use OCP\Util;
 
 class Application extends \OCP\AppFramework\App {
@@ -44,6 +47,7 @@ class Application extends \OCP\AppFramework\App {
 
 	public function register(): void {
 		$this->registerNotificationApp();
+		$this->registerTalkDeferPushing();
 		$this->registerAdminNotifications();
 		$this->registerUserInterface();
 		$this->registerUserDeleteHook();
@@ -75,6 +79,22 @@ class Application extends \OCP\AppFramework\App {
 			Util::addScript('notifications', 'notifications');
 			Util::addStyle('notifications', 'styles');
 		}
+	}
+
+	protected function registerTalkDeferPushing(): void {
+		/** @var IEventDispatcher $dispatcher */
+		$dispatcher = $this->getContainer()->getServer()->query(IEventDispatcher::class);
+
+		$dispatcher->addListener(IApp::class . '::defer', function() {
+			/** @var App $app */
+			$app = $this->getContainer()->query(App::class);
+			$app->defer();
+		});
+		$dispatcher->addListener(IApp::class . '::flush', function() {
+			/** @var App $app */
+			$app = $this->getContainer()->query(App::class);
+			$app->flush();
+		});
 	}
 
 	protected function registerUserDeleteHook(): void {
