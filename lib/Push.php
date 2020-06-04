@@ -96,8 +96,10 @@ class Push {
 		}
 	}
 
-	public function deferPayloads(): void {
+	public function deferPayloads(): bool {
+		$shouldFlush = !$this->deferPayloads;
 		$this->deferPayloads = true;
+		return $shouldFlush;
 	}
 
 	public function flushPayloads(): void {

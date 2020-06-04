@@ -50,14 +50,17 @@ class App implements IApp {
 	public function notify(INotification $notification): void {
 		$notificationId = $this->handler->add($notification);
 
-		$this->push->deferPayloads();
+		$shouldFlush = $this->push->deferPayloads();
 		try {
 			$notificationToPush = $this->handler->getById($notificationId, $notification->getUser());
 			$this->push->pushToDevice($notificationId, $notificationToPush);
 		} catch (NotificationNotFoundException $e) {
 			throw new \InvalidArgumentException('Error while preparing push notification');
 		}
-		$this->push->flushPayloads();
+
+		if ($shouldFlush) {
+			$this->push->flushPayloads();
+		}
 	}
 
 	/**
@@ -76,12 +79,15 @@ class App implements IApp {
 	public function markProcessed(INotification $notification): void {
 		$deleted = $this->handler->delete($notification);
 
-		$this->push->deferPayloads();
+		$shouldFlush = $this->push->deferPayloads();
 		foreach ($deleted as $user => $notifications) {
 			foreach ($notifications as $notificationId) {
 				$this->push->pushDeleteToDevice($user, $notificationId);
 			}
 		}
-		$this->push->flushPayloads();
+
+		if ($shouldFlush) {
+			$this->push->flushPayloads();
+		}
 	}
 }
