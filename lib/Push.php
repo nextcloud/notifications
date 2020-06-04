@@ -97,7 +97,6 @@ class Push {
 		});
 		$hasTalkApps = !empty($talkApps);
 
-		$pushNotifications = [];
 		foreach ($devices as $device) {
 			if (!$isTalkNotification && $device['apptype'] === 'talk') {
 				// The iOS app can not kill notifications,
@@ -118,8 +117,8 @@ class Push {
 				$payload = json_encode($this->encryptAndSign($userKey, $device, $id, $notification, $isTalkNotification));
 
 				$proxyServer = rtrim($device['proxyserver'], '/');
-				if (!isset($pushNotifications[$proxyServer])) {
-					$pushNotifications[$proxyServer] = [];
+				if (!isset($this->payloadsToSend[$proxyServer])) {
+					$this->payloadsToSend[$proxyServer] = [];
 				}
 				$pushNotifications[$proxyServer][] = $payload;
 			} catch (InvalidTokenException $e) {
@@ -131,7 +130,9 @@ class Push {
 			}
 		}
 
-		$this->sendNotificationsToProxies($pushNotifications);
+		if (!$this->deferPayloads) {
+			$this->sendNotificationsToProxies();
+		}
 	}
 
 	public function pushDeleteToDevice(string $userId, int $notificationId): void {
@@ -146,14 +147,13 @@ class Push {
 		}
 
 		$userKey = $this->keyManager->getKey($user);
-		$pushNotifications = [];
 		foreach ($devices as $device) {
 			try {
 				$payload = json_encode($this->encryptAndSignDelete($userKey, $device, $notificationId));
 
 				$proxyServer = rtrim($device['proxyserver'], '/');
-				if (!isset($pushNotifications[$proxyServer])) {
-					$pushNotifications[$proxyServer] = [];
+				if (!isset($this->payloadsToSend[$proxyServer])) {
+					$this->payloadsToSend[$proxyServer] = [];
 				}
 				$pushNotifications[$proxyServer][] = $payload;
 			} catch (InvalidTokenException $e) {
@@ -165,10 +165,14 @@ class Push {
 			}
 		}
 
-		$this->sendNotificationsToProxies($pushNotifications);
+		if (!$this->deferPayloads) {
+			$this->sendNotificationsToProxies();
+		}
 	}
 
-	protected function sendNotificationsToProxies(array $pushNotifications): void {
+	protected function sendNotificationsToProxies(): void {
+		$pushNotifications = $this->payloadsToSend;
+		$this->payloadsToSend = [];
 		if (empty($pushNotifications)) {
 			return;
 		}
