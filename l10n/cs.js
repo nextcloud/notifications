@@ -9,7 +9,7 @@ OC.L10N.register(
     "Requesting browser permissions to show notifications" : "Žádá se o oprávnění v prohlížeči pro zobrazování upozornění",
     "No notifications" : "Žádná upozornění",
     "Failed to dismiss all notifications" : "Zahození všech upozornění se nezdařilo",
-    "Failed to perform action" : "Nepodařilo se provést akci",
+    "Failed to perform action" : "Akci se nepodařilo provést",
     "Dismiss" : "Zavřít",
     "Failed to dismiss notification" : "Upozornění se nepodařilo zahodit",
     "in {path}" : "v {path}"
