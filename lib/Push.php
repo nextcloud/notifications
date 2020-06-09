@@ -141,12 +141,15 @@ class Push {
 			}
 		}
 
+		// We don't push to devices that are older than 60 days
+		$maxAge = time() - 60 * 24 * 60 * 60;
+
 		$pushNotifications = [];
 		foreach ($devices as $device) {
 			$this->printInfo('');
 			$this->printInfo('Device token:' . $device['token']);
 
-			if (!$this->validateToken($device['token'])) {
+			if (!$this->validateToken($device['token'], $maxAge)) {
 				// Token does not exist anymore
 				continue;
 			}
@@ -179,10 +182,13 @@ class Push {
 			return;
 		}
 
+		// We don't push to devices that are older than 60 days
+		$maxAge = time() - 60 * 24 * 60 * 60;
+
 		$userKey = $this->keyManager->getKey($user);
 		$pushNotifications = [];
 		foreach ($devices as $device) {
-			if (!$this->validateToken($device['token'])) {
+			if (!$this->validateToken($device['token'], $maxAge)) {
 				// Token does not exist anymore
 				continue;
 			}
@@ -259,11 +265,11 @@ class Push {
 		}
 	}
 
-	protected function validateToken(int $tokenId): bool {
+	protected function validateToken(int $tokenId, int $maxAge): bool {
 		try {
 			// Check if the token is still valid...
-			$this->tokenProvider->getTokenById($tokenId);
-			return true;
+			$token = $this->tokenProvider->getTokenById($tokenId);
+			return $token->getLastCheck() > $maxAge;
 		} catch (InvalidTokenException $e) {
 			// Token does not exist anymore, should drop the push device entry
 			$this->printInfo('InvalidTokenException is thrown');
