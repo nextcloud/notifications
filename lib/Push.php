@@ -29,6 +29,8 @@ use OC\Security\IdentityProof\Manager;
 use OCP\AppFramework\Http;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Http\Client\IClientService;
+use OCP\ICache;
+use OCP\ICacheFactory;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\ILogger;
@@ -53,12 +55,22 @@ class Push {
 	private $userManager;
 	/** @var IClientService */
 	protected $clientService;
+	/** @var ICache */
+	protected $cache;
 	/** @var ILogger */
 	protected $log;
 	/** @var OutputInterface */
 	protected $output;
 
-	public function __construct(IDBConnection $connection, INotificationManager $notificationManager, IConfig $config, IProvider $tokenProvider, Manager $keyManager, IUserManager $userManager, IClientService $clientService, ILogger $log) {
+	public function __construct(IDBConnection $connection,
+								INotificationManager $notificationManager,
+								IConfig $config,
+								IProvider $tokenProvider,
+								Manager $keyManager,
+								IUserManager $userManager,
+								IClientService $clientService,
+								ICacheFactory $cacheFactory,
+								ILogger $log) {
 		$this->db = $connection;
 		$this->notificationManager = $notificationManager;
 		$this->config = $config;
@@ -66,6 +78,7 @@ class Push {
 		$this->keyManager = $keyManager;
 		$this->userManager = $userManager;
 		$this->clientService = $clientService;
+		$this->cache = $cacheFactory->createDistributed('pushtokens');
 		$this->log = $log;
 	}
 
@@ -266,9 +279,15 @@ class Push {
 	}
 
 	protected function validateToken(int $tokenId, int $maxAge): bool {
+		$age = $this->cache->get('t' . $tokenId);
+		if ($age !== null) {
+			return $age > $maxAge;
+		}
+
 		try {
 			// Check if the token is still valid...
 			$token = $this->tokenProvider->getTokenById($tokenId);
+			$this->cache->set('t' . $tokenId, $token->getLastCheck(), 600);
 			return $token->getLastCheck() > $maxAge;
 		} catch (InvalidTokenException $e) {
 			// Token does not exist anymore, should drop the push device entry
