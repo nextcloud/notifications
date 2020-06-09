@@ -146,6 +146,11 @@ class Push {
 			$this->printInfo('');
 			$this->printInfo('Device token:' . $device['token']);
 
+			if (!$this->validateToken($device['token'])) {
+				// Token does not exist anymore
+				continue;
+			}
+
 			try {
 				$payload = json_encode($this->encryptAndSign($userKey, $device, $id, $notification, $isTalkNotification));
 
@@ -154,10 +159,6 @@ class Push {
 					$pushNotifications[$proxyServer] = [];
 				}
 				$pushNotifications[$proxyServer][] = $payload;
-			} catch (InvalidTokenException $e) {
-				// Token does not exist anymore, should drop the push device entry
-				$this->printInfo('InvalidTokenException is thrown');
-				$this->deletePushToken($device['token']);
 			} catch (\InvalidArgumentException $e) {
 				// Failed to encrypt message for device: public key is invalid
 				$this->deletePushToken($device['token']);
@@ -181,6 +182,11 @@ class Push {
 		$userKey = $this->keyManager->getKey($user);
 		$pushNotifications = [];
 		foreach ($devices as $device) {
+			if (!$this->validateToken($device['token'])) {
+				// Token does not exist anymore
+				continue;
+			}
+
 			try {
 				$payload = json_encode($this->encryptAndSignDelete($userKey, $device, $notificationId));
 
@@ -189,9 +195,6 @@ class Push {
 					$pushNotifications[$proxyServer] = [];
 				}
 				$pushNotifications[$proxyServer][] = $payload;
-			} catch (InvalidTokenException $e) {
-				// Token does not exist anymore, should drop the push device entry
-				$this->deletePushToken($device['token']);
 			} catch (\InvalidArgumentException $e) {
 				// Failed to encrypt message for device: public key is invalid
 				$this->deletePushToken($device['token']);
@@ -256,6 +259,19 @@ class Push {
 		}
 	}
 
+	protected function validateToken(int $tokenId): bool {
+		try {
+			// Check if the token is still valid...
+			$this->tokenProvider->getTokenById($tokenId);
+			return true;
+		} catch (InvalidTokenException $e) {
+			// Token does not exist anymore, should drop the push device entry
+			$this->printInfo('InvalidTokenException is thrown');
+			$this->deletePushToken($tokenId);
+			return false;
+		}
+	}
+
 	/**
 	 * @param Key $userKey
 	 * @param array $device
@@ -267,9 +283,6 @@ class Push {
 	 * @throws \InvalidArgumentException
 	 */
 	protected function encryptAndSign(Key $userKey, array $device, int $id, INotification $notification, bool $isTalkNotification): array {
-		// Check if the token is still valid...
-		$this->tokenProvider->getTokenById($device['token']);
-
 		$data = [
 			'nid' => $id,
 			'app' => $notification->getApp(),
@@ -352,9 +365,6 @@ class Push {
 	 * @throws \InvalidArgumentException
 	 */
 	protected function encryptAndSignDelete(Key $userKey, array $device, int $id): array {
-		// Check if the token is still valid...
-		$this->tokenProvider->getTokenById($device['token']);
-
 		if ($id === 0) {
 			$data = [
 				'delete-all' => true,
