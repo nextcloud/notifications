@@ -235,9 +235,7 @@ export default {
 						console.info('Slowing down notifications: instance is in maintenance mode.')
 					} else if (err.response.status === 404) {
 						// 404 - App disabled
-						console.info('Shutting down notifications: app is disabled.')
-						this._shutDownNotifications(false)
-						return
+						console.info('Slowing down notifications: app is disabled.')
 					} else {
 						console.info('Slowing down notifications: [' + err.response.status + '] ' + err.response.statusText)
 					}
