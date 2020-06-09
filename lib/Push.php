@@ -293,6 +293,7 @@ class Push {
 			// Token does not exist anymore, should drop the push device entry
 			$this->printInfo('InvalidTokenException is thrown');
 			$this->deletePushToken($tokenId);
+			$this->cache->set('t' . $tokenId, 0, 600);
 			return false;
 		}
 	}
