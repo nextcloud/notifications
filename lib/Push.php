@@ -115,32 +115,36 @@ class Push {
 		$this->printInfo('Public user key size: ' . strlen($userKey->getPublic()));
 
 		$isTalkNotification = \in_array($notification->getApp(), ['spreed', 'talk', 'admin_notification_talk'], true);
-		$talkApps = array_filter($devices, function ($device) {
+		$talkDevices = array_filter($devices, function ($device) {
 			return $device['apptype'] === 'talk';
 		});
-		$hasTalkApps = !empty($talkApps);
+		$otherDevices = array_filter($devices, function ($device) {
+			return $device['apptype'] !== 'talk';
+		});
+
+		$this->printInfo('Identified ' . count($talkDevices) . ' Talk devices and ' . count($otherDevices) . ' others.');
+
+		if (!$isTalkNotification) {
+			if (empty($otherDevices)) {
+				// We only send file notifications to the files app.
+				// If you don't have such a device, bye!
+				return;
+			}
+			$devices = $otherDevices;
+		} else {
+			if (empty($talkDevices)) {
+				// If you don't have a talk device,
+				// we fall back to the files app.
+				$devices = $otherDevices;
+			} else {
+				$devices = $talkDevices;
+			}
+		}
 
 		$pushNotifications = [];
 		foreach ($devices as $device) {
 			$this->printInfo('');
 			$this->printInfo('Device token:' . $device['token']);
-
-			if (!$isTalkNotification && $device['apptype'] === 'talk') {
-				// The iOS app can not kill notifications,
-				// therefor we should only send relevant notifications to the Talk
-				// app, so it does not pollute the notifications bar with useless
-				// notifications, especially when the Sync client app is also installed.
-				$this->printInfo('Skipping talk device for non-talk notification');
-				continue;
-			}
-			if ($isTalkNotification && $hasTalkApps && $device['apptype'] !== 'talk') {
-				// Similar to the previous case, we also don't send Talk notifications
-				// to the Sync client app, when there is a Talk app installed. We only
-				// do this, when you don't have a Talk app on your device, so you still
-				// get the push notification.
-				$this->printInfo('Skipping other device for talk notification because a talk app is available');
-				continue;
-			}
 
 			try {
 				$payload = json_encode($this->encryptAndSign($userKey, $device, $id, $notification, $isTalkNotification));
