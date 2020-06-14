@@ -29,7 +29,7 @@
 		"@nextcloud/eslint-plugin": "^1.4.0",
 		"babel-eslint": "^10.1.0",
 		"babel-loader": "^8.1.0",
-		"css-loader": "^3.5.3",
+		"css-loader": "^3.6.0",
 		"eslint": "^6.8.0",
 		"eslint-config-standard": "^14.1.1",
 		"eslint-import-resolver-webpack": "^0.12.1",
