@@ -24,12 +24,13 @@ namespace OCA\Notifications\AppInfo;
 use OC\Authentication\Token\IProvider;
 use OCA\Notifications\App;
 use OCA\Notifications\Capabilities;
-use OCA\Notifications\Handler;
+use OCA\Notifications\Listener\UserDeletedListener;
 use OCA\Notifications\Notifier\AdminNotifications;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\AppFramework\IAppContainer;
+use OCP\User\Events\UserDeletedEvent;
 use OCP\Util;
 
 class Application extends \OCP\AppFramework\App implements IBootstrap {
@@ -46,6 +47,8 @@ class Application extends \OCP\AppFramework\App implements IBootstrap {
 		$context->registerService(IProvider::class, function(IAppContainer $c) {
 			return $c->getServer()->query(IProvider::class);
 		});
+
+		$context->registerEventListener(UserDeletedEvent::class, UserDeletedListener::class);
 	}
 
 	public function boot(IBootContext $context): void {
@@ -71,14 +74,5 @@ class Application extends \OCP\AppFramework\App implements IBootstrap {
 			Util::addScript('notifications', 'notifications');
 			Util::addStyle('notifications', 'styles');
 		}
-
-		// User delete hook
-		Util::connectHook('OC_User', 'post_deleteUser', $this, 'deleteUser');
-	}
-
-	public function deleteUser(array $params): void {
-		/** @var Handler $handler */
-		$handler = $this->getContainer()->query(Handler::class);
-		$handler->deleteByUser($params['uid']);
 	}
 }
