@@ -26,48 +26,44 @@ use OCA\Notifications\App;
 use OCA\Notifications\Capabilities;
 use OCA\Notifications\Handler;
 use OCA\Notifications\Notifier\AdminNotifications;
+use OCP\AppFramework\Bootstrap\IBootContext;
+use OCP\AppFramework\Bootstrap\IBootstrap;
+use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\AppFramework\IAppContainer;
 use OCP\Util;
 
-class Application extends \OCP\AppFramework\App {
+class Application extends \OCP\AppFramework\App implements IBootstrap {
+
+	public const APP_ID = 'notifications';
+
 	public function __construct() {
-		parent::__construct('notifications');
-		$container = $this->getContainer();
+		parent::__construct(self::APP_ID);
+	}
 
-		$container->registerCapability(Capabilities::class);
+	public function register(IRegistrationContext $context): void {
+		$context->registerCapability(Capabilities::class);
 
-		// FIXME this is for automatic DI because it is not in DIContainer
-		$container->registerService(IProvider::class, function(IAppContainer $c) {
+		$context->registerService(IProvider::class, function(IAppContainer $c) {
 			return $c->getServer()->query(IProvider::class);
 		});
 	}
 
-	public function register(): void {
-		$this->registerNotificationApp();
-		$this->registerAdminNotifications();
-		$this->registerUserInterface();
-		$this->registerUserDeleteHook();
-	}
-
-	protected function registerNotificationApp(): void {
-		$this->getContainer()
-			->getServer()
+	public function boot(IBootContext $context): void {
+		// notification app
+		$context->getServerContainer()
 			->getNotificationManager()
 			->registerApp(App::class);
-	}
-	protected function registerAdminNotifications(): void {
+
+		// admin notifications
 		$this->getContainer()
 			->getServer()
 			->getNotificationManager()
 			->registerNotifierService(AdminNotifications::class);
-	}
 
-	protected function registerUserInterface(): void {
-		// Only display the app on index.php except for public shares
-		$server = $this->getContainer()->getServer();
-		$request = $server->getRequest();
+		// User interface
+		$request = $context->getServerContainer()->getRequest();
 
-		if ($server->getUserSession()->getUser() !== null
+		if ($context->getServerContainer()->getUserSession()->getUser() !== null
 			&& strpos($request->getPathInfo(), '/s/') !== 0
 			&& strpos($request->getPathInfo(), '/login/') !== 0
 			&& substr($request->getScriptName(), 0 - \strlen('/index.php')) === '/index.php') {
@@ -75,9 +71,8 @@ class Application extends \OCP\AppFramework\App {
 			Util::addScript('notifications', 'notifications');
 			Util::addStyle('notifications', 'styles');
 		}
-	}
 
-	protected function registerUserDeleteHook(): void {
+		// User delete hook
 		Util::connectHook('OC_User', 'post_deleteUser', $this, 'deleteUser');
 	}
 
