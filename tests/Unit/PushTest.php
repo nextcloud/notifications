@@ -31,6 +31,8 @@ use OCA\Notifications\Push;
 use OCP\AppFramework\Http;
 use OCP\Http\Client\IClient;
 use OCP\Http\Client\IResponse;
+use OCP\ICache;
+use OCP\ICacheFactory;
 use OCP\IConfig;
 use OCP\Http\Client\IClientService;
 use OCP\IDBConnection;
@@ -39,6 +41,7 @@ use OCP\IUser;
 use OCP\IUserManager;
 use OCP\Notification\IManager as INotificationManager;
 use OCP\Notification\INotification;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Class PushTest
@@ -49,19 +52,23 @@ use OCP\Notification\INotification;
 class PushTest extends TestCase {
 	/** @var IDBConnection */
 	protected $db;
-	/** @var INotificationManager|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var INotificationManager|MockObject */
 	protected $notificationManager;
-	/** @var IConfig|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var IConfig|MockObject */
 	protected $config;
-	/** @var IProvider|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var IProvider|MockObject */
 	protected $tokenProvider;
-	/** @var Manager|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var Manager|MockObject */
 	protected $keyManager;
-	/** @var IUserManager|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var IUserManager|MockObject */
 	protected $userManager;
-	/** @var IClientService|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var IClientService|MockObject */
 	protected $clientService;
-	/** @var ILogger|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var ICacheFactory|MockObject */
+	protected $cacheFactory;
+	/** @var ICache|MockObject */
+	protected $cache;
+	/** @var ILogger|MockObject */
 	protected $logger;
 
 	protected function setUp(): void {
@@ -74,12 +81,18 @@ class PushTest extends TestCase {
 		$this->keyManager = $this->createMock(Manager::class);
 		$this->userManager = $this->createMock(IUserManager::class);
 		$this->clientService = $this->createMock(IClientService::class);
+		$this->cacheFactory = $this->createMock(ICacheFactory::class);
+		$this->cache = $this->createMock(ICache::class);
 		$this->logger = $this->createMock(ILogger::class);
+
+		$this->cacheFactory->method('createDistributed')
+			->with('pushtokens')
+			->willReturn($this->cache);
 	}
 
 	/**
 	 * @param string[] $methods
-	 * @return Push|\PHPUnit_Framework_MockObject_MockObject
+	 * @return Push|MockObject
 	 */
 	protected function getPush(array $methods = []) {
 		if (!empty($methods)) {
@@ -92,6 +105,7 @@ class PushTest extends TestCase {
 					$this->keyManager,
 					$this->userManager,
 					$this->clientService,
+					$this->cacheFactory,
 					$this->logger,
 				])
 				->setMethods($methods)
@@ -106,6 +120,7 @@ class PushTest extends TestCase {
 			$this->keyManager,
 			$this->userManager,
 			$this->clientService,
+			$this->cacheFactory,
 			$this->logger
 		);
 	}
@@ -117,7 +132,7 @@ class PushTest extends TestCase {
 		$this->clientService->expects($this->never())
 			->method('newClient');
 
-		/** @var INotification|\PHPUnit_Framework_MockObject_MockObject $notification */
+		/** @var INotification|MockObject$notification */
 		$notification = $this->createMock(INotification::class);
 		$notification->expects($this->once())
 			->method('getUser')
@@ -138,13 +153,13 @@ class PushTest extends TestCase {
 		$this->clientService->expects($this->never())
 			->method('newClient');
 
-		/** @var INotification|\PHPUnit_Framework_MockObject_MockObject $notification */
+		/** @var INotification|MockObject $notification */
 		$notification = $this->createMock(INotification::class);
 		$notification->expects($this->exactly(2))
 			->method('getUser')
 			->willReturn('valid');
 
-		/** @var IUser|\PHPUnit_Framework_MockObject_MockObject $user */
+		/** @var IUser|MockObject $user */
 		$user = $this->createMock(IUser::class);
 
 		$this->userManager->expects($this->once())
@@ -166,13 +181,13 @@ class PushTest extends TestCase {
 		$this->clientService->expects($this->never())
 			->method('newClient');
 
-		/** @var INotification|\PHPUnit_Framework_MockObject_MockObject $notification */
+		/** @var INotification|MockObject $notification */
 		$notification = $this->createMock(INotification::class);
 		$notification->expects($this->exactly(3))
 			->method('getUser')
 			->willReturn('valid');
 
-		/** @var IUser|\PHPUnit_Framework_MockObject_MockObject $user */
+		/** @var IUser|MockObject $user */
 		$user = $this->createMock(IUser::class);
 
 		$this->userManager->expects($this->once())
@@ -209,13 +224,13 @@ class PushTest extends TestCase {
 		$this->clientService->expects($this->never())
 			->method('newClient');
 
-		/** @var INotification|\PHPUnit_Framework_MockObject_MockObject $notification */
+		/** @var INotification|MockObject $notification */
 		$notification = $this->createMock(INotification::class);
 		$notification->expects($this->exactly(3))
 			->method('getUser')
 			->willReturn('valid');
 
-		/** @var IUser|\PHPUnit_Framework_MockObject_MockObject $user */
+		/** @var IUser|MockObject $user */
 		$user = $this->createMock(IUser::class);
 
 		$this->userManager->expects($this->once())
@@ -246,7 +261,7 @@ class PushTest extends TestCase {
 			->willReturnArgument(0);
 
 
-		/** @var Key|\PHPUnit_Framework_MockObject_MockObject $key */
+		/** @var Key|MockObject $key */
 		$key = $this->createMock(Key::class);
 
 		$this->keyManager->expects($this->once())
@@ -254,9 +269,12 @@ class PushTest extends TestCase {
 			->with($user)
 			->willReturn($key);
 
-		$push->expects($this->once())
-			->method('encryptAndSign')
+		$this->tokenProvider->expects($this->once())
+			->method('getTokenById')
 			->willThrowException(new InvalidTokenException());
+
+		$push->expects($this->never())
+			->method('encryptAndSign');
 
 		$push->expects($this->once())
 			->method('deletePushToken')
@@ -266,17 +284,17 @@ class PushTest extends TestCase {
 	}
 
 	public function testPushToDeviceEncryptionError() {
-		$push = $this->getPush(['getDevicesForUser', 'encryptAndSign', 'deletePushToken']);
+		$push = $this->getPush(['getDevicesForUser', 'encryptAndSign', 'deletePushToken', 'validateToken']);
 		$this->clientService->expects($this->never())
 			->method('newClient');
 
-		/** @var INotification|\PHPUnit_Framework_MockObject_MockObject $notification */
+		/** @var INotification|MockObject $notification */
 		$notification = $this->createMock(INotification::class);
 		$notification->expects($this->exactly(2))
 			->method('getUser')
 			->willReturn('valid');
 
-		/** @var IUser|\PHPUnit_Framework_MockObject_MockObject $user */
+		/** @var IUser|MockObject $user */
 		$user = $this->createMock(IUser::class);
 
 		$this->userManager->expects($this->once())
@@ -305,13 +323,17 @@ class PushTest extends TestCase {
 			->willReturnArgument(0);
 
 
-		/** @var Key|\PHPUnit_Framework_MockObject_MockObject $key */
+		/** @var Key|MockObject $key */
 		$key = $this->createMock(Key::class);
 
 		$this->keyManager->expects($this->once())
 			->method('getKey')
 			->with($user)
 			->willReturn($key);
+
+		$push->expects($this->once())
+			->method('validateToken')
+			->willReturn(true);
 
 		$push->expects($this->once())
 			->method('encryptAndSign')
@@ -336,15 +358,15 @@ class PushTest extends TestCase {
 	 * @param bool $isDebug
 	 */
 	public function testPushToDeviceSending($isDebug) {
-		$push = $this->getPush(['getDevicesForUser', 'encryptAndSign', 'deletePushToken']);
+		$push = $this->getPush(['getDevicesForUser', 'encryptAndSign', 'deletePushToken', 'validateToken']);
 
-		/** @var INotification|\PHPUnit_Framework_MockObject_MockObject $notification */
+		/** @var INotification|MockObject $notification */
 		$notification = $this->createMock(INotification::class);
 		$notification->expects($this->exactly(3))
 			->method('getUser')
 			->willReturn('valid');
 
-		/** @var IUser|\PHPUnit_Framework_MockObject_MockObject $user */
+		/** @var IUser|MockObject $user */
 		$user = $this->createMock(IUser::class);
 
 		$this->userManager->expects($this->once())
@@ -399,7 +421,7 @@ class PushTest extends TestCase {
 			->with($notification, 'ru')
 			->willReturnArgument(0);
 
-		/** @var Key|\PHPUnit_Framework_MockObject_MockObject $key */
+		/** @var Key|MockObject $key */
 		$key = $this->createMock(Key::class);
 
 		$this->keyManager->expects($this->once())
@@ -408,13 +430,17 @@ class PushTest extends TestCase {
 			->willReturn($key);
 
 		$push->expects($this->exactly(5))
+			->method('validateToken')
+			->willReturn(true);
+
+		$push->expects($this->exactly(5))
 			->method('encryptAndSign')
 			->willReturn(['Payload']);
 
 		$push->expects($this->never())
 			->method('deletePushToken');
 
-		/** @var IClient|\PHPUnit_Framework_MockObject_MockObject $client */
+		/** @var IClient|MockObject $client */
 		$client = $this->createMock(IClient::class);
 
 		$this->clientService->expects($this->once())
@@ -438,7 +464,7 @@ class PushTest extends TestCase {
 				'level' => ILogger::WARN,
 			]);
 
-		/** @var IResponse|\PHPUnit_Framework_MockObject_MockObject $response1 */
+		/** @var IResponse|MockObject $response1 */
 		$response1 = $this->createMock(IResponse::class);
 		$response1->expects($this->once())
 			->method('getStatusCode')
@@ -463,7 +489,7 @@ class PushTest extends TestCase {
 				'app' => 'notifications',
 			]);
 
-		/** @var IResponse|\PHPUnit_Framework_MockObject_MockObject $response1 */
+		/** @var IResponse|MockObject $response1 */
 		$response2 = $this->createMock(IResponse::class);
 		$response2->expects($this->once())
 			->method('getStatusCode')
@@ -488,7 +514,7 @@ class PushTest extends TestCase {
 				'app' => 'notifications',
 			]);
 
-		/** @var IResponse|\PHPUnit_Framework_MockObject_MockObject $response1 */
+		/** @var IResponse|MockObject $response1 */
 		$response3 = $this->createMock(IResponse::class);
 		$response3->expects($this->once())
 			->method('getStatusCode')
@@ -525,9 +551,9 @@ class PushTest extends TestCase {
 	 * @param int $pushedDevice
 	 */
 	public function testPushToDeviceTalkNotification(array $deviceTypes, $isTalkNotification, $pushedDevice) {
-		$push = $this->getPush(['getDevicesForUser', 'encryptAndSign', 'deletePushToken']);
+		$push = $this->getPush(['getDevicesForUser', 'encryptAndSign', 'deletePushToken', 'validateToken']);
 
-		/** @var INotification|\PHPUnit_Framework_MockObject_MockObject $notification */
+		/** @var INotification|MockObject $notification */
 		$notification = $this->createMock(INotification::class);
 		$notification->expects($this->exactly(3))
 			->method('getUser')
@@ -543,7 +569,7 @@ class PushTest extends TestCase {
 				->willReturn('notifications');
 		}
 
-		/** @var IUser|\PHPUnit_Framework_MockObject_MockObject $user */
+		/** @var IUser|MockObject $user */
 		$user = $this->createMock(IUser::class);
 
 		$this->userManager->expects($this->once())
@@ -577,7 +603,7 @@ class PushTest extends TestCase {
 			->with($notification, 'ru')
 			->willReturnArgument(0);
 
-		/** @var Key|\PHPUnit_Framework_MockObject_MockObject $key */
+		/** @var Key|MockObject $key */
 		$key = $this->createMock(Key::class);
 
 		$this->keyManager->expects($this->once())
@@ -587,24 +613,32 @@ class PushTest extends TestCase {
 
 		if ($pushedDevice === null) {
 			$push->expects($this->never())
+				->method('validateToken');
+
+			$push->expects($this->never())
 				->method('encryptAndSign');
 
 			$this->clientService->expects($this->never())
 				->method('newClient');
 		} else {
+
+			$push->expects($this->exactly(1))
+				->method('validateToken')
+				->willReturn(true);
+
 			$push->expects($this->exactly(1))
 				->method('encryptAndSign')
 				->with($this->anything(), $devices[$pushedDevice], $this->anything(), $this->anything(), $isTalkNotification)
 				->willReturn(['Payload']);
 
-			/** @var IClient|\PHPUnit_Framework_MockObject_MockObject $client */
+			/** @var IClient|MockObject $client */
 			$client = $this->createMock(IClient::class);
 
 			$this->clientService->expects($this->once())
 				->method('newClient')
 				->willReturn($client);
 
-			/** @var IResponse|\PHPUnit_Framework_MockObject_MockObject $response1 */
+			/** @var IResponse|MockObject $response1 */
 			$response = $this->createMock(IResponse::class);
 			$response->expects($this->once())
 				->method('getStatusCode')
