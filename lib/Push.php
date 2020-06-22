@@ -29,6 +29,8 @@ use OC\Security\IdentityProof\Manager;
 use OCP\AppFramework\Http;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Http\Client\IClientService;
+use OCP\ICache;
+use OCP\ICacheFactory;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\ILogger;
@@ -53,12 +55,22 @@ class Push {
 	private $userManager;
 	/** @var IClientService */
 	protected $clientService;
+	/** @var ICache */
+	protected $cache;
 	/** @var ILogger */
 	protected $log;
 	/** @var OutputInterface */
 	protected $output;
 
-	public function __construct(IDBConnection $connection, INotificationManager $notificationManager, IConfig $config, IProvider $tokenProvider, Manager $keyManager, IUserManager $userManager, IClientService $clientService, ILogger $log) {
+	public function __construct(IDBConnection $connection,
+								INotificationManager $notificationManager,
+								IConfig $config,
+								IProvider $tokenProvider,
+								Manager $keyManager,
+								IUserManager $userManager,
+								IClientService $clientService,
+								ICacheFactory $cacheFactory,
+								ILogger $log) {
 		$this->db = $connection;
 		$this->notificationManager = $notificationManager;
 		$this->config = $config;
@@ -66,6 +78,7 @@ class Push {
 		$this->keyManager = $keyManager;
 		$this->userManager = $userManager;
 		$this->clientService = $clientService;
+		$this->cache = $cacheFactory->createDistributed('pushtokens');
 		$this->log = $log;
 	}
 
@@ -115,30 +128,42 @@ class Push {
 		$this->printInfo('Public user key size: ' . strlen($userKey->getPublic()));
 
 		$isTalkNotification = \in_array($notification->getApp(), ['spreed', 'talk', 'admin_notification_talk'], true);
-		$talkApps = array_filter($devices, function ($device) {
+		$talkDevices = array_filter($devices, function ($device) {
 			return $device['apptype'] === 'talk';
 		});
-		$hasTalkApps = !empty($talkApps);
+		$otherDevices = array_filter($devices, function ($device) {
+			return $device['apptype'] !== 'talk';
+		});
+
+		$this->printInfo('Identified ' . count($talkDevices) . ' Talk devices and ' . count($otherDevices) . ' others.');
+
+		if (!$isTalkNotification) {
+			if (empty($otherDevices)) {
+				// We only send file notifications to the files app.
+				// If you don't have such a device, bye!
+				return;
+			}
+			$devices = $otherDevices;
+		} else {
+			if (empty($talkDevices)) {
+				// If you don't have a talk device,
+				// we fall back to the files app.
+				$devices = $otherDevices;
+			} else {
+				$devices = $talkDevices;
+			}
+		}
+
+		// We don't push to devices that are older than 60 days
+		$maxAge = time() - 60 * 24 * 60 * 60;
 
 		$pushNotifications = [];
 		foreach ($devices as $device) {
 			$this->printInfo('');
 			$this->printInfo('Device token:' . $device['token']);
 
-			if (!$isTalkNotification && $device['apptype'] === 'talk') {
-				// The iOS app can not kill notifications,
-				// therefor we should only send relevant notifications to the Talk
-				// app, so it does not pollute the notifications bar with useless
-				// notifications, especially when the Sync client app is also installed.
-				$this->printInfo('Skipping talk device for non-talk notification');
-				continue;
-			}
-			if ($isTalkNotification && $hasTalkApps && $device['apptype'] !== 'talk') {
-				// Similar to the previous case, we also don't send Talk notifications
-				// to the Sync client app, when there is a Talk app installed. We only
-				// do this, when you don't have a Talk app on your device, so you still
-				// get the push notification.
-				$this->printInfo('Skipping other device for talk notification because a talk app is available');
+			if (!$this->validateToken($device['token'], $maxAge)) {
+				// Token does not exist anymore
 				continue;
 			}
 
@@ -150,10 +175,6 @@ class Push {
 					$pushNotifications[$proxyServer] = [];
 				}
 				$pushNotifications[$proxyServer][] = $payload;
-			} catch (InvalidTokenException $e) {
-				// Token does not exist anymore, should drop the push device entry
-				$this->printInfo('InvalidTokenException is thrown');
-				$this->deletePushToken($device['token']);
 			} catch (\InvalidArgumentException $e) {
 				// Failed to encrypt message for device: public key is invalid
 				$this->deletePushToken($device['token']);
@@ -174,9 +195,17 @@ class Push {
 			return;
 		}
 
+		// We don't push to devices that are older than 60 days
+		$maxAge = time() - 60 * 24 * 60 * 60;
+
 		$userKey = $this->keyManager->getKey($user);
 		$pushNotifications = [];
 		foreach ($devices as $device) {
+			if (!$this->validateToken($device['token'], $maxAge)) {
+				// Token does not exist anymore
+				continue;
+			}
+
 			try {
 				$payload = json_encode($this->encryptAndSignDelete($userKey, $device, $notificationId));
 
@@ -185,9 +214,6 @@ class Push {
 					$pushNotifications[$proxyServer] = [];
 				}
 				$pushNotifications[$proxyServer][] = $payload;
-			} catch (InvalidTokenException $e) {
-				// Token does not exist anymore, should drop the push device entry
-				$this->deletePushToken($device['token']);
 			} catch (\InvalidArgumentException $e) {
 				// Failed to encrypt message for device: public key is invalid
 				$this->deletePushToken($device['token']);
@@ -252,6 +278,26 @@ class Push {
 		}
 	}
 
+	protected function validateToken(int $tokenId, int $maxAge): bool {
+		$age = $this->cache->get('t' . $tokenId);
+		if ($age !== null) {
+			return $age > $maxAge;
+		}
+
+		try {
+			// Check if the token is still valid...
+			$token = $this->tokenProvider->getTokenById($tokenId);
+			$this->cache->set('t' . $tokenId, $token->getLastCheck(), 600);
+			return $token->getLastCheck() > $maxAge;
+		} catch (InvalidTokenException $e) {
+			// Token does not exist anymore, should drop the push device entry
+			$this->printInfo('InvalidTokenException is thrown');
+			$this->deletePushToken($tokenId);
+			$this->cache->set('t' . $tokenId, 0, 600);
+			return false;
+		}
+	}
+
 	/**
 	 * @param Key $userKey
 	 * @param array $device
@@ -263,9 +309,6 @@ class Push {
 	 * @throws \InvalidArgumentException
 	 */
 	protected function encryptAndSign(Key $userKey, array $device, int $id, INotification $notification, bool $isTalkNotification): array {
-		// Check if the token is still valid...
-		$this->tokenProvider->getTokenById($device['token']);
-
 		$data = [
 			'nid' => $id,
 			'app' => $notification->getApp(),
@@ -348,9 +391,6 @@ class Push {
 	 * @throws \InvalidArgumentException
 	 */
 	protected function encryptAndSignDelete(Key $userKey, array $device, int $id): array {
-		// Check if the token is still valid...
-		$this->tokenProvider->getTokenById($device['token']);
-
 		if ($id === 0) {
 			$data = [
 				'delete-all' => true,
