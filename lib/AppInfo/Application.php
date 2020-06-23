@@ -24,14 +24,18 @@ namespace OCA\Notifications\AppInfo;
 use OC\Authentication\Token\IProvider;
 use OCA\Notifications\App;
 use OCA\Notifications\Capabilities;
+use OCA\Notifications\Flow\Operation;
 use OCA\Notifications\Listener\UserDeletedListener;
 use OCA\Notifications\Notifier\AdminNotifications;
+use OCA\Notifications\Notifier\FlowNotifications;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\AppFramework\IAppContainer;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\User\Events\UserDeletedEvent;
 use OCP\Util;
+use OCP\WorkflowEngine\Events\RegisterOperationsEvent;
 
 class Application extends \OCP\AppFramework\App implements IBootstrap {
 
@@ -57,11 +61,9 @@ class Application extends \OCP\AppFramework\App implements IBootstrap {
 			->getNotificationManager()
 			->registerApp(App::class);
 
-		// admin notifications
-		$this->getContainer()
-			->getServer()
-			->getNotificationManager()
-			->registerNotifierService(AdminNotifications::class);
+		$notificationManager = $this->getContainer()->getServer()->getNotificationManager();
+		$notificationManager->registerNotifierService(AdminNotifications::class);
+		$notificationManager->registerNotifierService(FlowNotifications::class);
 
 		// User interface
 		$request = $context->getServerContainer()->getRequest();
@@ -74,5 +76,11 @@ class Application extends \OCP\AppFramework\App implements IBootstrap {
 			Util::addScript('notifications', 'notifications');
 			Util::addStyle('notifications', 'styles');
 		}
+
+		$dispatcher = $context->getServerContainer()->query(IEventDispatcher::class);
+		$dispatcher->addListener(RegisterOperationsEvent::class, function (RegisterOperationsEvent $event) {
+			$operation = \OC::$server->query(Operation::class);
+			$event->registerOperation($operation);
+		});
 	}
 }
