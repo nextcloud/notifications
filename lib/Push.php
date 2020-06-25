@@ -240,9 +240,8 @@ class Push {
 			'id' => $notification->getObjectId(),
 		];
 
-		// Max length of encryption is 255, so we need to make sure the subject is shorter.
-		// We also substract a buffer of 10 bytes.
-		$maxDataLength = 255 - strlen(json_encode($data)) - 10;
+		// Max length of encryption is ~240, so we need to make sure the subject is shorter.
+		$maxDataLength = 200 - strlen(json_encode($data));
 		$data['subject'] = $this->shortenJsonEncodedMultibyte($notification->getParsedSubject(), $maxDataLength);
 		if ($notification->getParsedSubject() !== $data['subject']) {
 			$data['subject'] .= '…';
