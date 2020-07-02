@@ -189,6 +189,9 @@ class PushController extends OCSController {
 		$result->closeCursor();
 
 		if (!$row) {
+			// In case the auth token is new, delete potentially old entries for the same device (push token) by this user
+			$this->deletePushTokenByHash($user, $pushTokenHash);
+
 			return $this->insertPushToken($user, $token, $deviceIdentifier, $devicePublicKey, $pushTokenHash, $proxyServer, $appType);
 		}
 
@@ -258,6 +261,20 @@ class PushController extends OCSController {
 		$query->delete('notifications_pushtokens')
 			->where($query->expr()->eq('uid', $query->createNamedParameter($user->getUID())))
 			->andWhere($query->expr()->eq('token', $query->createNamedParameter($token->getId(), IQueryBuilder::PARAM_INT)));
+
+		return $query->execute() !== 0;
+	}
+
+	/**
+	 * @param IUser $user
+	 * @param string $pushTokenHash
+	 * @return bool If the entry was deleted
+	 */
+	protected function deletePushTokenByHash(IUser $user, string $pushTokenHash): bool {
+		$query = $this->db->getQueryBuilder();
+		$query->delete('notifications_pushtokens')
+			->where($query->expr()->eq('uid', $query->createNamedParameter($user->getUID())))
+			->andWhere($query->expr()->eq('pushtokenhash', $query->createNamedParameter($pushTokenHash)));
 
 		return $query->execute() !== 0;
 	}
