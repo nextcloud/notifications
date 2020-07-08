@@ -96,6 +96,10 @@ class Push {
 		}
 	}
 
+	public function isDeferring(): bool {
+		return $this->deferPayloads;
+	}
+
 	public function deferPayloads(): void {
 		$this->deferPayloads = true;
 	}

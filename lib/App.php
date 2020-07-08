@@ -74,10 +74,17 @@ class App implements IDeferrableApp {
 	public function markProcessed(INotification $notification): void {
 		$deleted = $this->handler->delete($notification);
 
+		$isAlreadyDeferring = $this->push->isDeferring();
+		if (!$isAlreadyDeferring) {
+			$this->push->deferPayloads();
+		}
 		foreach ($deleted as $user => $notifications) {
 			foreach ($notifications as $notificationId) {
 				$this->push->pushDeleteToDevice($user, $notificationId);
 			}
+		}
+		if (!$isAlreadyDeferring) {
+			$this->push->flushPayloads();
 		}
 	}
 
