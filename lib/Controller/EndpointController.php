@@ -27,10 +27,10 @@ use OCA\Notifications\Push;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
-use OCP\IConfig;
 use OCP\IRequest;
 use OCP\IUser;
 use OCP\IUserSession;
+use OCP\L10N\IFactory;
 use OCP\Notification\IAction;
 use OCP\Notification\IManager;
 use OCP\Notification\INotification;
@@ -40,35 +40,25 @@ class EndpointController extends OCSController {
 	private $handler;
 	/** @var IManager */
 	private $manager;
-	/** @var IConfig */
-	private $config;
+	/** @var IFactory */
+	private $l10nFactory;
 	/** @var IUserSession */
 	private $session;
 	/** @var Push */
 	private $push;
 
-
-	/**
-	 * @param string $appName
-	 * @param IRequest $request
-	 * @param Handler $handler
-	 * @param IManager $manager
-	 * @param IConfig $config
-	 * @param IUserSession $session
-	 * @param Push $push
-	 */
 	public function __construct(string $appName,
 								IRequest $request,
 								Handler $handler,
 								IManager $manager,
-								IConfig $config,
+								IFactory $l10nFactory,
 								IUserSession $session,
 								Push $push) {
 		parent::__construct($appName, $request);
 
 		$this->handler = $handler;
 		$this->manager = $manager;
-		$this->config = $config;
+		$this->l10nFactory = $l10nFactory;
 		$this->session = $session;
 		$this->push = $push;
 	}
@@ -89,9 +79,7 @@ class EndpointController extends OCSController {
 
 		$filter = $this->manager->createNotification();
 		$filter->setUser($this->getCurrentUser());
-		$language = $this->config->getUserValue($this->getCurrentUser(), 'core', 'lang', null);
-		$language = $language ?? $this->config->getSystemValue('default_language', 'en');
-
+		$language = $this->l10nFactory->getUserLanguage($this->session->getUser());
 		$notifications = $this->handler->get($filter);
 
 		$data = [];
@@ -140,8 +128,7 @@ class EndpointController extends OCSController {
 			return new DataResponse(null, Http::STATUS_NOT_FOUND);
 		}
 
-		$language = $this->config->getUserValue($this->getCurrentUser(), 'core', 'lang', null);
-		$language = $language ?? $this->config->getSystemValue('default_language', 'en');
+		$language = $this->l10nFactory->getUserLanguage($this->session->getUser());
 
 		try {
 			$notification = $this->manager->prepare($notification, $language);

@@ -39,6 +39,7 @@ use OCP\IDBConnection;
 use OCP\ILogger;
 use OCP\IUser;
 use OCP\IUserManager;
+use OCP\L10N\IFactory;
 use OCP\Notification\IManager as INotificationManager;
 use OCP\Notification\INotification;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -68,6 +69,8 @@ class PushTest extends TestCase {
 	protected $cacheFactory;
 	/** @var ICache|MockObject */
 	protected $cache;
+	/** @var IFactory|MockObject */
+	protected $l10nFactory;
 	/** @var ILogger|MockObject */
 	protected $logger;
 
@@ -83,6 +86,7 @@ class PushTest extends TestCase {
 		$this->clientService = $this->createMock(IClientService::class);
 		$this->cacheFactory = $this->createMock(ICacheFactory::class);
 		$this->cache = $this->createMock(ICache::class);
+		$this->l10nFactory = $this->createMock(IFactory::class);
 		$this->logger = $this->createMock(ILogger::class);
 
 		$this->cacheFactory->method('createDistributed')
@@ -106,6 +110,7 @@ class PushTest extends TestCase {
 					$this->userManager,
 					$this->clientService,
 					$this->cacheFactory,
+					$this->l10nFactory,
 					$this->logger,
 				])
 				->setMethods($methods)
@@ -121,6 +126,7 @@ class PushTest extends TestCase {
 			$this->userManager,
 			$this->clientService,
 			$this->cacheFactory,
+			$this->l10nFactory,
 			$this->logger
 		);
 	}
@@ -134,7 +140,7 @@ class PushTest extends TestCase {
 
 		/** @var INotification|MockObject$notification */
 		$notification = $this->createMock(INotification::class);
-		$notification->expects($this->once())
+		$notification
 			->method('getUser')
 			->willReturn('invalid');
 
@@ -155,7 +161,7 @@ class PushTest extends TestCase {
 
 		/** @var INotification|MockObject $notification */
 		$notification = $this->createMock(INotification::class);
-		$notification->expects($this->exactly(2))
+		$notification
 			->method('getUser')
 			->willReturn('valid');
 
@@ -183,7 +189,7 @@ class PushTest extends TestCase {
 
 		/** @var INotification|MockObject $notification */
 		$notification = $this->createMock(INotification::class);
-		$notification->expects($this->exactly(3))
+		$notification
 			->method('getUser')
 			->willReturn('valid');
 
@@ -202,13 +208,9 @@ class PushTest extends TestCase {
 				'token' => 'token1',
 			]]);
 
-		$this->config->expects($this->once())
-			->method('getSystemValue')
-			->with('force_language', false)
-			->willReturn(false);
-		$this->config->expects($this->once())
-			->method('getUserValue')
-			->with('valid', 'core', 'lang', null)
+		$this->l10nFactory
+			->method('getUserLanguage')
+			->with($user)
 			->willReturn('de');
 
 		$this->notificationManager->expects($this->once())
@@ -226,7 +228,7 @@ class PushTest extends TestCase {
 
 		/** @var INotification|MockObject $notification */
 		$notification = $this->createMock(INotification::class);
-		$notification->expects($this->exactly(3))
+		$notification
 			->method('getUser')
 			->willReturn('valid');
 
@@ -246,13 +248,9 @@ class PushTest extends TestCase {
 				'apptype' => 'other',
 			]]);
 
-		$this->config->expects($this->once())
-			->method('getSystemValue')
-			->with('force_language', false)
-			->willReturn(false);
-		$this->config->expects($this->once())
-			->method('getUserValue')
-			->with('valid', 'core', 'lang', null)
+		$this->l10nFactory
+			->method('getUserLanguage')
+			->with($user)
 			->willReturn('ru');
 
 		$this->notificationManager->expects($this->once())
@@ -290,7 +288,7 @@ class PushTest extends TestCase {
 
 		/** @var INotification|MockObject $notification */
 		$notification = $this->createMock(INotification::class);
-		$notification->expects($this->exactly(2))
+		$notification
 			->method('getUser')
 			->willReturn('valid');
 
@@ -310,18 +308,15 @@ class PushTest extends TestCase {
 				'apptype' => 'other',
 			]]);
 
-		$this->config->expects($this->once())
-			->method('getSystemValue')
-			->with('force_language', false)
+		$this->l10nFactory
+			->method('getUserLanguage')
+			->with($user)
 			->willReturn('ru');
-		$this->config->expects($this->never())
-			->method('getUserValue');
 
 		$this->notificationManager->expects($this->once())
 			->method('prepare')
 			->with($notification, 'ru')
 			->willReturnArgument(0);
-
 
 		/** @var Key|MockObject $key */
 		$key = $this->createMock(Key::class);
@@ -362,7 +357,7 @@ class PushTest extends TestCase {
 
 		/** @var INotification|MockObject $notification */
 		$notification = $this->createMock(INotification::class);
-		$notification->expects($this->exactly(3))
+		$notification
 			->method('getUser')
 			->willReturn('valid');
 
@@ -404,16 +399,14 @@ class PushTest extends TestCase {
 				],
 			]);
 
-		$this->config->expects($this->exactly(2))
+		$this->config
 			->method('getSystemValue')
-			->willReturnMap([
-				['debug', false, $isDebug],
-				['force_language', false, false],
-			]);
+			->with('debug', false)
+			->willReturn($isDebug);
 
-		$this->config->expects($this->once())
-			->method('getUserValue')
-			->with('valid', 'core', 'lang', null)
+		$this->l10nFactory
+			->method('getUserLanguage')
+			->with($user)
 			->willReturn('ru');
 
 		$this->notificationManager->expects($this->once())
@@ -555,7 +548,7 @@ class PushTest extends TestCase {
 
 		/** @var INotification|MockObject $notification */
 		$notification = $this->createMock(INotification::class);
-		$notification->expects($this->exactly(3))
+		$notification
 			->method('getUser')
 			->willReturn('valid');
 
@@ -589,13 +582,9 @@ class PushTest extends TestCase {
 			->method('getDevicesForUser')
 			->willReturn($devices);
 
-		$this->config->expects($this->once())
-			->method('getSystemValue')
-			->with('force_language', false)
-			->willReturn(false);
-		$this->config->expects($this->once())
-			->method('getUserValue')
-			->with('valid', 'core', 'lang', null)
+		$this->l10nFactory
+			->method('getUserLanguage')
+			->with($user)
 			->willReturn('ru');
 
 		$this->notificationManager->expects($this->once())
