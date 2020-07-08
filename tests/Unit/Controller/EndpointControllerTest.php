@@ -33,6 +33,7 @@ use OCP\IConfig;
 use OCP\IRequest;
 use OCP\IUser;
 use OCP\IUserSession;
+use OCP\L10N\IFactory;
 use OCP\Notification\IAction;
 use OCP\Notification\IManager;
 use OCP\Notification\INotification;
@@ -49,8 +50,8 @@ class EndpointControllerTest extends TestCase {
 	/** @var IManager|MockObject */
 	protected $manager;
 
-	/** @var IConfig|MockObject */
-	protected $config;
+	/** @var IFactory|MockObject */
+	protected $l10nFactory;
 
 	/** @var IUserSession|MockObject */
 	protected $session;
@@ -69,7 +70,7 @@ class EndpointControllerTest extends TestCase {
 		$this->request = $this->createMock(IRequest::class);
 		$this->handler = $this->createMock(Handler::class);
 		$this->manager = $this->createMock(IManager::class);
-		$this->config = $this->createMock(IConfig::class);
+		$this->l10nFactory = $this->createMock(IFactory::class);
 		$this->session = $this->createMock(IUserSession::class);
 		$this->user = $this->createMock(IUser::class);
 		$this->push = $this->createMock(Push::class);
@@ -90,7 +91,7 @@ class EndpointControllerTest extends TestCase {
 				$this->request,
 				$this->handler,
 				$this->manager,
-				$this->config,
+				$this->l10nFactory,
 				$this->session,
 				$this->push
 			);
@@ -102,7 +103,7 @@ class EndpointControllerTest extends TestCase {
 				$this->request,
 				$this->handler,
 				$this->manager,
-				$this->config,
+				$this->l10nFactory,
 				$this->session,
 				$this->push,
 			])
@@ -170,9 +171,9 @@ class EndpointControllerTest extends TestCase {
 			->method('prepare')
 			->willReturnArgument(0);
 
-		$this->config->expects($this->once())
-			->method('getUserValue')
-			->with('username', 'core', 'lang', null)
+		$this->l10nFactory
+			->method('getUserLanguage')
+			->with($this->user)
 			->willReturn('en');
 
 		$this->handler->expects($this->once())
@@ -240,9 +241,9 @@ class EndpointControllerTest extends TestCase {
 			->method('prepare')
 			->willReturnArgument(0);
 
-		$this->config->expects($this->once())
-			->method('getUserValue')
-			->with('username', 'core', 'lang', null)
+		$this->l10nFactory
+			->method('getUserLanguage')
+			->with($this->user)
 			->willReturn('en');
 
 		$this->handler->expects($this->once())
@@ -321,9 +322,9 @@ class EndpointControllerTest extends TestCase {
 			->with($id, $notification)
 			->willReturn(['$notification']);
 
-		$this->config->expects($this->once())
-			->method('getUserValue')
-			->with($username, 'core', 'lang', null)
+		$this->l10nFactory
+			->method('getUserLanguage')
+			->with($this->user)
 			->willReturn('en');
 
 		$response = $controller->getNotification($apiVersion, $id);
@@ -371,9 +372,9 @@ class EndpointControllerTest extends TestCase {
 				->method('getById')
 				->willReturn($notification);
 
-			$this->config->expects($this->once())
-				->method('getUserValue')
-				->with('username', 'core', 'lang', null)
+			$this->l10nFactory
+				->method('getUserLanguage')
+				->with($this->user)
 				->willReturn('en');
 
 			$this->manager->expects($this->once())

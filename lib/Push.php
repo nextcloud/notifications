@@ -36,6 +36,7 @@ use OCP\IDBConnection;
 use OCP\ILogger;
 use OCP\IUser;
 use OCP\IUserManager;
+use OCP\L10N\IFactory;
 use OCP\Notification\IManager as INotificationManager;
 use OCP\Notification\INotification;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -57,6 +58,8 @@ class Push {
 	protected $clientService;
 	/** @var ICache */
 	protected $cache;
+	/** @var IFactory */
+	protected $l10nFactory;
 	/** @var ILogger */
 	protected $log;
 	/** @var OutputInterface */
@@ -70,6 +73,7 @@ class Push {
 								IUserManager $userManager,
 								IClientService $clientService,
 								ICacheFactory $cacheFactory,
+								IFactory $l10nFactory,
 								ILogger $log) {
 		$this->db = $connection;
 		$this->notificationManager = $notificationManager;
@@ -79,6 +83,7 @@ class Push {
 		$this->userManager = $userManager;
 		$this->clientService = $clientService;
 		$this->cache = $cacheFactory->createDistributed('pushtokens');
+		$this->l10nFactory = $l10nFactory;
 		$this->log = $log;
 	}
 
@@ -107,10 +112,7 @@ class Push {
 		$this->printInfo('Trying to push to ' . count($devices) . ' devices');
 		$this->printInfo('');
 
-		$language = $this->config->getSystemValue('force_language', false);
-		$language = \is_string($language) ? $language : $this->config->getUserValue($notification->getUser(), 'core', 'lang', null);
-		$language = $language ?? $this->config->getSystemValue('default_language', 'en');
-
+		$language = $this->l10nFactory->getUserLanguage($user);
 		$this->printInfo('Language is set to ' . $language);
 
 		try {
