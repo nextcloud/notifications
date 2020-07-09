@@ -67,6 +67,10 @@ class Push {
 	}
 
 	public function pushToDevice(int $id, INotification $notification): void {
+		if (!$this->config->getSystemValueBool('has_internet_connection', true)) {
+			return;
+		}
+
 		$user = $this->userManager->get($notification->getUser());
 		if (!($user instanceof IUser)) {
 			return;
