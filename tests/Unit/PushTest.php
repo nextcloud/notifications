@@ -131,12 +131,37 @@ class PushTest extends TestCase {
 		);
 	}
 
+	public function testPushToDeviceNoInternet() {
+		$push = $this->getPush();
+
+		$this->config->expects($this->once())
+			->method('getSystemValueBool')
+			->with('has_internet_connection', true)
+			->willReturn(false);
+		$this->keyManager->expects($this->never())
+			->method('getKey');
+		$this->clientService->expects($this->never())
+			->method('newClient');
+		$this->userManager->expects($this->never())
+			->method('get');
+
+		/** @var INotification|MockObject$notification */
+		$notification = $this->createMock(INotification::class);
+
+		$push->pushToDevice(23, $notification);
+	}
+
 	public function testPushToDeviceInvalidUser() {
 		$push = $this->getPush();
 		$this->keyManager->expects($this->never())
 			->method('getKey');
 		$this->clientService->expects($this->never())
 			->method('newClient');
+
+		$this->config->expects($this->once())
+			->method('getSystemValueBool')
+			->with('has_internet_connection', true)
+			->willReturn(true);
 
 		/** @var INotification|MockObject$notification */
 		$notification = $this->createMock(INotification::class);
@@ -158,6 +183,11 @@ class PushTest extends TestCase {
 			->method('getKey');
 		$this->clientService->expects($this->never())
 			->method('newClient');
+
+		$this->config->expects($this->once())
+			->method('getSystemValueBool')
+			->with('has_internet_connection', true)
+			->willReturn(true);
 
 		/** @var INotification|MockObject $notification */
 		$notification = $this->createMock(INotification::class);
@@ -186,6 +216,11 @@ class PushTest extends TestCase {
 			->method('getKey');
 		$this->clientService->expects($this->never())
 			->method('newClient');
+
+		$this->config->expects($this->once())
+			->method('getSystemValueBool')
+			->with('has_internet_connection', true)
+			->willReturn(true);
 
 		/** @var INotification|MockObject $notification */
 		$notification = $this->createMock(INotification::class);
@@ -225,6 +260,11 @@ class PushTest extends TestCase {
 		$push = $this->getPush(['getDevicesForUser', 'encryptAndSign', 'deletePushToken']);
 		$this->clientService->expects($this->never())
 			->method('newClient');
+
+		$this->config->expects($this->once())
+			->method('getSystemValueBool')
+			->with('has_internet_connection', true)
+			->willReturn(true);
 
 		/** @var INotification|MockObject $notification */
 		$notification = $this->createMock(INotification::class);
@@ -285,6 +325,11 @@ class PushTest extends TestCase {
 		$push = $this->getPush(['getDevicesForUser', 'encryptAndSign', 'deletePushToken', 'validateToken']);
 		$this->clientService->expects($this->never())
 			->method('newClient');
+
+		$this->config->expects($this->once())
+			->method('getSystemValueBool')
+			->with('has_internet_connection', true)
+			->willReturn(true);
 
 		/** @var INotification|MockObject $notification */
 		$notification = $this->createMock(INotification::class);
@@ -439,6 +484,11 @@ class PushTest extends TestCase {
 		$this->clientService->expects($this->once())
 			->method('newClient')
 			->willReturn($client);
+
+		$this->config->expects($this->once())
+			->method('getSystemValueBool')
+			->with('has_internet_connection', true)
+			->willReturn(true);
 
 		$e = new \Exception();
 		$client->expects($this->at(0))
@@ -644,6 +694,11 @@ class PushTest extends TestCase {
 				])
 				->willReturn($response);
 		}
+
+		$this->config->expects($this->once())
+			->method('getSystemValueBool')
+			->with('has_internet_connection', true)
+			->willReturn(true);
 
 		$push->pushToDevice(200718, $notification);
 	}
