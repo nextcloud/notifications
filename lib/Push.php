@@ -61,6 +61,10 @@ class Push {
 	protected $log;
 	/** @var OutputInterface */
 	protected $output;
+	/** @var array */
+	protected $payloadsToSend = [];
+	/** @var bool */
+	protected $deferPayloads = false;
 
 	public function __construct(IDBConnection $connection,
 								INotificationManager $notificationManager,
@@ -90,6 +94,17 @@ class Push {
 		if ($this->output) {
 			$this->output->writeln($message);
 		}
+	}
+
+	public function deferPayloads(): bool {
+		$shouldFlush = !$this->deferPayloads;
+		$this->deferPayloads = true;
+		return $shouldFlush;
+	}
+
+	public function flushPayloads(): void {
+		$this->deferPayloads = false;
+		$this->sendNotificationsToProxies();
 	}
 
 	public function pushToDevice(int $id, INotification $notification, ?OutputInterface $output = null): void {
@@ -157,7 +172,6 @@ class Push {
 		// We don't push to devices that are older than 60 days
 		$maxAge = time() - 60 * 24 * 60 * 60;
 
-		$pushNotifications = [];
 		foreach ($devices as $device) {
 			$this->printInfo('');
 			$this->printInfo('Device token:' . $device['token']);
@@ -171,17 +185,19 @@ class Push {
 				$payload = json_encode($this->encryptAndSign($userKey, $device, $id, $notification, $isTalkNotification));
 
 				$proxyServer = rtrim($device['proxyserver'], '/');
-				if (!isset($pushNotifications[$proxyServer])) {
-					$pushNotifications[$proxyServer] = [];
+				if (!isset($this->payloadsToSend[$proxyServer])) {
+					$this->payloadsToSend[$proxyServer] = [];
 				}
-				$pushNotifications[$proxyServer][] = $payload;
+				$this->payloadsToSend[$proxyServer][] = $payload;
 			} catch (\InvalidArgumentException $e) {
 				// Failed to encrypt message for device: public key is invalid
 				$this->deletePushToken($device['token']);
 			}
 		}
 
-		$this->sendNotificationsToProxies($pushNotifications);
+		if (!$this->deferPayloads) {
+			$this->sendNotificationsToProxies();
+		}
 	}
 
 	public function pushDeleteToDevice(string $userId, int $notificationId): void {
@@ -199,7 +215,6 @@ class Push {
 		$maxAge = time() - 60 * 24 * 60 * 60;
 
 		$userKey = $this->keyManager->getKey($user);
-		$pushNotifications = [];
 		foreach ($devices as $device) {
 			if (!$this->validateToken($device['token'], $maxAge)) {
 				// Token does not exist anymore
@@ -210,20 +225,24 @@ class Push {
 				$payload = json_encode($this->encryptAndSignDelete($userKey, $device, $notificationId));
 
 				$proxyServer = rtrim($device['proxyserver'], '/');
-				if (!isset($pushNotifications[$proxyServer])) {
-					$pushNotifications[$proxyServer] = [];
+				if (!isset($this->payloadsToSend[$proxyServer])) {
+					$this->payloadsToSend[$proxyServer] = [];
 				}
-				$pushNotifications[$proxyServer][] = $payload;
+				$this->payloadsToSend[$proxyServer][] = $payload;
 			} catch (\InvalidArgumentException $e) {
 				// Failed to encrypt message for device: public key is invalid
 				$this->deletePushToken($device['token']);
 			}
 		}
 
-		$this->sendNotificationsToProxies($pushNotifications);
+		if (!$this->deferPayloads) {
+			$this->sendNotificationsToProxies();
+		}
 	}
 
-	protected function sendNotificationsToProxies(array $pushNotifications): void {
+	protected function sendNotificationsToProxies(): void {
+		$pushNotifications = $this->payloadsToSend;
+		$this->payloadsToSend = [];
 		if (empty($pushNotifications)) {
 			return;
 		}
