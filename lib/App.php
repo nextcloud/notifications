@@ -23,11 +23,11 @@ namespace OCA\Notifications;
 
 
 use OCA\Notifications\Exceptions\NotificationNotFoundException;
-use OCP\Notification\IApp;
+use OCP\Notification\IDeferrableApp;
 use OCP\Notification\INotification;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class App implements IApp {
+class App implements IDeferrableApp {
 	/** @var Handler */
 	protected $handler;
 	/** @var Push */
@@ -74,10 +74,25 @@ class App implements IApp {
 	public function markProcessed(INotification $notification): void {
 		$deleted = $this->handler->delete($notification);
 
+		$isAlreadyDeferring = $this->push->isDeferring();
+		if (!$isAlreadyDeferring) {
+			$this->push->deferPayloads();
+		}
 		foreach ($deleted as $user => $notifications) {
 			foreach ($notifications as $notificationId) {
 				$this->push->pushDeleteToDevice($user, $notificationId);
 			}
 		}
+		if (!$isAlreadyDeferring) {
+			$this->push->flushPayloads();
+		}
+	}
+
+	public function defer(): void {
+		$this->push->deferPayloads();
+	}
+
+	public function flush(): void {
+		$this->push->flushPayloads();
 	}
 }
