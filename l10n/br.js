@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Admin notifications" : "Kemenadennoù an administratour",
     "Notifications" : "Kemenadenoù",
+    "No notifications" : "Kemenaden ebet",
     "Dismiss" : "Arrest",
     "in {path}" : "e {treug}"
 },
