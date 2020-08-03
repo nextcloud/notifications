@@ -1,5 +1,6 @@
 const path = require('path')
 const { VueLoaderPlugin } = require('vue-loader')
+const babelLoaderExcludeNodeModulesExcept = require('babel-loader-exclude-node-modules-except')
 
 module.exports = {
 	entry: path.join(__dirname, 'Init.js'),
@@ -24,7 +25,10 @@ module.exports = {
 			{
 				test: /\.js$/,
 				loader: 'babel-loader',
-				exclude: /node_modules/,
+				exclude: babelLoaderExcludeNodeModulesExcept([
+					'semver',
+					'@nextcloud/event-bus',
+				]),
 			},
 			{
 				enforce: 'pre',
