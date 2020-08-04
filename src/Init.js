@@ -26,17 +26,10 @@ Vue.prototype.n = n
 Vue.prototype.OC = OC
 Vue.prototype.OCA = OCA
 
-const searchBox = document.getElementsByClassName('searchbox')
+const unifiedSearch = document.getElementById('unified-search')
 const notificationsBell = document.createElement('div')
 notificationsBell.setAttribute('id', 'notifications')
-
-Array.prototype.map.call(searchBox, (el) => {
-	if (el.nodeName !== 'FORM') {
-		return
-	}
-
-	el.insertAdjacentHTML('afterend', notificationsBell.outerHTML)
-})
+unifiedSearch.insertAdjacentHTML('afterend', notificationsBell.outerHTML)
 
 export default new Vue({
 	el: '#notifications',
