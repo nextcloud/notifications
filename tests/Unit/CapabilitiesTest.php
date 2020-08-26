@@ -39,6 +39,7 @@ class CapabilitiesTest extends TestCase {
 					'icons',
 					'rich-strings',
 					'action-web',
+					'user-status',
 				],
 				'push' => [
 					'devices',
