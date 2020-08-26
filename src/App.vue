@@ -71,6 +71,7 @@ export default {
 			shutdown: false,
 			notifications: [],
 			lastETag: null,
+			userStatus: null,
 
 			/** @type {number} */
 			pollInterval: 30000, // milliseconds
@@ -98,6 +99,12 @@ export default {
 			}
 
 			return imagePath('notifications', iconPath)
+		},
+
+		showBrowserNotifications() {
+			return this.backgroundFetching
+				&& this.webNotificationsGranted
+				&& this.userStatus !== 'dnd'
 		},
 	},
 
@@ -216,6 +223,7 @@ export default {
 						this._setPollingInterval(300000)
 						return
 					} else if (response.data !== undefined && response.data.ocs !== undefined && response.data.ocs.data !== undefined && Array.isArray(response.data.ocs.data)) {
+						this.userStatus = response.headers['x-nextcloud-user-status']
 						this.lastETag = response.headers.etag
 						this.notifications = response.data.ocs.data
 					} else {
