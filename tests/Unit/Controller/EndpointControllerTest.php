@@ -37,6 +37,7 @@ use OCP\L10N\IFactory;
 use OCP\Notification\IAction;
 use OCP\Notification\IManager;
 use OCP\Notification\INotification;
+use OCP\UserStatus\IManager as IUserStatusManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use function Sabre\Event\Loop\instance;
 
@@ -55,7 +56,8 @@ class EndpointControllerTest extends TestCase {
 
 	/** @var IUserSession|MockObject */
 	protected $session;
-
+	/** @var IUserStatusManager|MockObject */
+	protected $userStatusManager;
 	/** @var EndpointController */
 	protected $controller;
 
@@ -72,6 +74,7 @@ class EndpointControllerTest extends TestCase {
 		$this->manager = $this->createMock(IManager::class);
 		$this->l10nFactory = $this->createMock(IFactory::class);
 		$this->session = $this->createMock(IUserSession::class);
+		$this->userStatusManager = $this->createMock(IUserStatusManager::class);
 		$this->user = $this->createMock(IUser::class);
 		$this->push = $this->createMock(Push::class);
 
@@ -93,6 +96,7 @@ class EndpointControllerTest extends TestCase {
 				$this->manager,
 				$this->l10nFactory,
 				$this->session,
+				$this->userStatusManager,
 				$this->push
 			);
 		}
@@ -105,6 +109,7 @@ class EndpointControllerTest extends TestCase {
 				$this->manager,
 				$this->l10nFactory,
 				$this->session,
+				$this->userStatusManager,
 				$this->push,
 			])
 			->setMethods($methods)

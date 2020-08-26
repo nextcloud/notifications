@@ -34,6 +34,8 @@ use OCP\L10N\IFactory;
 use OCP\Notification\IAction;
 use OCP\Notification\IManager;
 use OCP\Notification\INotification;
+use OCP\UserStatus\IManager as IUserStatusManager;
+use OCP\UserStatus\IUserStatus;
 
 class EndpointController extends OCSController {
 	/** @var Handler */
@@ -44,6 +46,8 @@ class EndpointController extends OCSController {
 	private $l10nFactory;
 	/** @var IUserSession */
 	private $session;
+	/** @var IUserStatusManager */
+	private $userStatusManager;
 	/** @var Push */
 	private $push;
 
@@ -53,6 +57,7 @@ class EndpointController extends OCSController {
 								IManager $manager,
 								IFactory $l10nFactory,
 								IUserSession $session,
+								IUserStatusManager $userStatusManager,
 								Push $push) {
 		parent::__construct($appName, $request);
 
@@ -60,6 +65,7 @@ class EndpointController extends OCSController {
 		$this->manager = $manager;
 		$this->l10nFactory = $l10nFactory;
 		$this->session = $session;
+		$this->userStatusManager = $userStatusManager;
 		$this->push = $push;
 	}
 
@@ -71,10 +77,20 @@ class EndpointController extends OCSController {
 	 * @return DataResponse
 	 */
 	public function listNotifications(string $apiVersion): DataResponse {
+		$userStatus = $this->userStatusManager->getUserStatuses([
+			$this->getCurrentUser(),
+		]);
+
+		$headers = ['X-Nextcloud-User-Status' => IUserStatus::ONLINE];
+		if (isset($userStatus[$this->getCurrentUser()])) {
+			$userStatus = $userStatus[$this->getCurrentUser()];
+			$headers['X-Nextcloud-User-Status'] = $userStatus->getStatus();
+		}
+
 		// When there are no apps registered that use the notifications
 		// We stop polling for them.
 		if (!$this->manager->hasNotifiers()) {
-			return new DataResponse(null, Http::STATUS_NO_CONTENT);
+			return new DataResponse(null, Http::STATUS_NO_CONTENT, $headers);
 		}
 
 		$filter = $this->manager->createNotification();
@@ -98,11 +114,13 @@ class EndpointController extends OCSController {
 		}
 
 		$eTag = $this->generateETag($notificationIds);
+
+		$headers['ETag'] = $eTag;
 		if ($apiVersion !== 'v1' && $this->request->getHeader('If-None-Match') === $eTag) {
-			return new DataResponse([], Http::STATUS_NOT_MODIFIED);
+			return new DataResponse([], Http::STATUS_NOT_MODIFIED, $headers);
 		}
 
-		return new DataResponse($data, Http::STATUS_OK, ['ETag' => $eTag]);
+		return new DataResponse($data, Http::STATUS_OK, $headers);
 	}
 
 	/**

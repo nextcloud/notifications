@@ -200,8 +200,7 @@ export default {
 		})
 
 		// Parents: TransitionGroup > NotificationsList
-		if (this.$parent.$parent.backgroundFetching
-			&& this.$parent.$parent.webNotificationsGranted) {
+		if (this.$parent.$parent.showBrowserNotifications) {
 			this._createWebNotification()
 		}
 	},
