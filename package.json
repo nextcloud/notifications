@@ -19,7 +19,7 @@
 		"core-js": "^3.6.5",
 		"escape-html": "^1.0.3",
 		"regenerator-runtime": "^0.13.7",
-		"vue": "^2.6.11"
+		"vue": "^2.6.12"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.11.4",
@@ -46,7 +46,7 @@
 		"node-sass": "^4.14.1",
 		"sass-loader": "^9.0.3",
 		"vue-loader": "^15.9.3",
-		"vue-template-compiler": "^2.6.11",
+		"vue-template-compiler": "^2.6.12",
 		"webpack": "^4.44.1",
 		"webpack-cli": "^3.3.12",
 		"webpack-merge": "^5.1.2"
