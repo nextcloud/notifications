@@ -39,6 +39,8 @@ use OCP\IUserManager;
 use OCP\L10N\IFactory;
 use OCP\Notification\IManager as INotificationManager;
 use OCP\Notification\INotification;
+use OCP\UserStatus\IManager as IUserStatusManager;
+use OCP\UserStatus\IUserStatus;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Push {
@@ -58,6 +60,8 @@ class Push {
 	protected $clientService;
 	/** @var ICache */
 	protected $cache;
+	/** @var IUserStatusManager */
+	protected $userStatusManager;
 	/** @var IFactory */
 	protected $l10nFactory;
 	/** @var ILogger */
@@ -77,6 +81,7 @@ class Push {
 								IUserManager $userManager,
 								IClientService $clientService,
 								ICacheFactory $cacheFactory,
+								IUserStatusManager $userStatusManager,
 								IFactory $l10nFactory,
 								ILogger $log) {
 		$this->db = $connection;
@@ -87,6 +92,7 @@ class Push {
 		$this->userManager = $userManager;
 		$this->clientService = $clientService;
 		$this->cache = $cacheFactory->createDistributed('pushtokens');
+		$this->userStatusManager = $userStatusManager;
 		$this->l10nFactory = $l10nFactory;
 		$this->log = $log;
 	}
@@ -122,6 +128,18 @@ class Push {
 		$user = $this->userManager->get($notification->getUser());
 		if (!($user instanceof IUser)) {
 			return;
+		}
+
+		$userStatus = $this->userStatusManager->getUserStatuses([
+			$notification->getUser(),
+		]);
+
+		if (isset($userStatus[$notification->getUser()])) {
+			$userStatus = $userStatus[$notification->getUser()];
+			if ($userStatus->getStatus() === IUserStatus::DND) {
+				$this->printInfo('User status is set to DND');
+				return;
+			}
 		}
 
 		$devices = $this->getDevicesForUser($notification->getUser());

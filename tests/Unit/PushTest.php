@@ -42,6 +42,7 @@ use OCP\IUserManager;
 use OCP\L10N\IFactory;
 use OCP\Notification\IManager as INotificationManager;
 use OCP\Notification\INotification;
+use OCP\UserStatus\IManager as IUserStatusManager;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
@@ -69,6 +70,8 @@ class PushTest extends TestCase {
 	protected $cacheFactory;
 	/** @var ICache|MockObject */
 	protected $cache;
+	/** @var IUserStatusManager|MockObject */
+	protected $userStatusManager;
 	/** @var IFactory|MockObject */
 	protected $l10nFactory;
 	/** @var ILogger|MockObject */
@@ -86,6 +89,7 @@ class PushTest extends TestCase {
 		$this->clientService = $this->createMock(IClientService::class);
 		$this->cacheFactory = $this->createMock(ICacheFactory::class);
 		$this->cache = $this->createMock(ICache::class);
+		$this->userStatusManager = $this->createMock(IUserStatusManager::class);
 		$this->l10nFactory = $this->createMock(IFactory::class);
 		$this->logger = $this->createMock(ILogger::class);
 
@@ -110,6 +114,7 @@ class PushTest extends TestCase {
 					$this->userManager,
 					$this->clientService,
 					$this->cacheFactory,
+					$this->userStatusManager,
 					$this->l10nFactory,
 					$this->logger,
 				])
@@ -126,6 +131,7 @@ class PushTest extends TestCase {
 			$this->userManager,
 			$this->clientService,
 			$this->cacheFactory,
+			$this->userStatusManager,
 			$this->l10nFactory,
 			$this->logger
 		);
