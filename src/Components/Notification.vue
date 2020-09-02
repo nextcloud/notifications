@@ -8,14 +8,22 @@
 		</div>
 		<a v-if="useLink" :href="link" class="notification-subject full-subject-link">
 			<span v-if="icon" class="image"><img :src="icon" class="notification-icon"></span>
-			<span class="text" v-html="renderedSubject" />
+			<RichText
+				:text="subjectRich"
+				:arguments="preparedSubjectParameters" />
 		</a>
 		<div v-else class="notification-subject">
 			<span v-if="icon" class="image"><img :src="icon" class="notification-icon"></span>
-			<span class="text" v-html="renderedSubject" />
+			<RichText
+				:text="subjectRich"
+				:arguments="preparedSubjectParameters" />
 		</div>
 		<div v-if="message" class="notification-message" @click="onClickMessage">
-			<div class="message-container" :class="{ collapsed: isCollapsedMessage }" v-html="renderedMessage" />
+			<div class="message-container" :class="{ collapsed: isCollapsedMessage }">
+				<RichText
+					:text="messageRich"
+					:arguments="preparedMessageParameters" />
+			</div>
 			<div v-if="isCollapsedMessage" class="notification-overflow" />
 		</div>
 		<div v-if="actions.length" class="notification-actions">
@@ -30,12 +38,17 @@ import Action from './Action'
 import parser from '../richObjectStringParser'
 import escapeHTML from 'escape-html'
 import { generateOcsUrl } from '@nextcloud/router'
+import RichText from '@juliushaertl/vue-richtext'
+import DefaultParameter from './Parameters/DefaultParameter'
+import File from './Parameters/File'
+import User from './Parameters/User'
 
 export default {
 	name: 'Notification',
 
 	components: {
 		Action,
+		RichText,
 	},
 
 	props: {
@@ -147,8 +160,17 @@ export default {
 			return OC.Util.relativeModifiedDate(this.timestamp)
 		},
 		useLink: function() {
-			return this.link && this.renderedSubject.indexOf('<a ') === -1
+			return this.link && this.renderedSubject.indexOf('<a ') === -1 // FIXME
 		},
+
+		preparedSubjectParameters() {
+			return this.prepareParameters(this.subjectRichParameters)
+		},
+
+		preparedMessageParameters() {
+			return this.prepareParameters(this.messageRichParameters)
+		},
+
 		renderedSubject: function() {
 			if (this.subjectRich.length !== 0) {
 				return parser.parseMessage(
@@ -206,6 +228,30 @@ export default {
 	},
 
 	methods: {
+		prepareParameters(parameters) {
+			const richParameters = {}
+			Object.keys(parameters).forEach(p => {
+				const type = parameters[p].type
+				if (type === 'user') {
+					richParameters[p] = {
+						component: User,
+						props: parameters[p],
+					}
+				} else if (type === 'file') {
+					richParameters[p] = {
+						component: File,
+						props: parameters[p],
+					}
+				} else {
+					richParameters[p] = {
+						component: DefaultParameter,
+						props: parameters[p],
+					}
+				}
+			})
+			return richParameters
+		},
+
 		onClickMessage: function(e) {
 			if (e.target.classList.contains('message-container')) {
 				this.showFullMessage = !this.showFullMessage
@@ -249,3 +295,10 @@ export default {
 	},
 }
 </script>
+
+<style lang="scss" scoped>
+::v-deep .rich-text--wrapper {
+	white-space: pre-wrap;
+	word-break: break-word;
+}
+</style>

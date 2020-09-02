@@ -121,8 +121,8 @@
 			align-self: flex-start;
 		}
 
-		& > span.text,
-		& > a > span.text {
+		& > .rich-text--wrapper,
+		& > a > .rich-text--wrapper {
 			padding-left: 10px;
 			word-wrap: anywhere;
 		}
@@ -130,7 +130,6 @@
 
 	.notification-message,
 	.notification-full-message {
-		line-height: 20px;
 		padding-left: 42px; // 32px icon + 10px title padding
 		color: var(--color-text-maxcontrast);
 
@@ -149,30 +148,15 @@
 		width: 32px;
 		height: 32px;
 		display: flex;
-	}
 
-	.notification-message img,
-	.notification-full-message img,
-	.notification-subject img:not(.notification-icon) {
-		max-width: 32px;
-		max-height: 32px;
-		margin: 0 5px 5px 0;
+		body.theme--dark & {
+			filter: invert(1);
+		}
 	}
 
 	strong {
 		font-weight: bold;
 		opacity: 1;
-	}
-
-	.avatar-name-wrapper {
-		position: relative;
-		cursor: pointer;
-
-		.avatar {
-			vertical-align: middle;
-			display: inline-block;
-			margin: 0 5px 3px;
-		}
 	}
 
 	.notification-actions {
