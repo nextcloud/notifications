@@ -25,7 +25,8 @@
 			<div class="message-container" :class="{ collapsed: isCollapsedMessage }">
 				<RichText
 					:text="messageRich"
-					:arguments="preparedMessageParameters" />
+					:arguments="preparedMessageParameters"
+					:autolink="true" />
 			</div>
 			<div v-if="isCollapsedMessage" class="notification-overflow" />
 		</div>
