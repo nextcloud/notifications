@@ -128,6 +128,7 @@ export default {
 		})
 		subscribe('networkOnline', () => {
 			this._fetch()
+			this._setPollingInterval(30000)
 			this.setupBackgroundFetcher()
 		})
 	},
@@ -260,7 +261,7 @@ export default {
 		},
 
 		_setPollingInterval(pollInterval) {
-			if (pollInterval === this.pollInterval) {
+			if (this.interval && pollInterval === this.pollInterval) {
 				return
 			}
 
