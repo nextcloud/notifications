@@ -44,17 +44,7 @@ module.exports = {
 			},
 			{
 				test: /\.(png|jpg|gif|svg)$/,
-				loader: 'file-loader',
-				options: {
-					name: '[name].[ext]?[hash]',
-				},
-			},
-			{
-				test: /\.handlebars/,
-				loader: 'handlebars-loader',
-				options: {
-					extensions: '.handlebars',
-				},
+				loader: 'url-loader',
 			},
 		],
 	},

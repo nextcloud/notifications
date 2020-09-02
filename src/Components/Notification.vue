@@ -38,6 +38,7 @@
 <script>
 import axios from '@nextcloud/axios'
 import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip'
+import { showError } from '@nextcloud/dialogs'
 import Action from './Action'
 import { generateOcsUrl } from '@nextcloud/router'
 import RichText from '@juliushaertl/vue-richtext'
@@ -153,6 +154,8 @@ export default {
 		}
 	},
 
+	_$el: null,
+
 	computed: {
 		timestamp: function() {
 			return (new Date(this.datetime)).valueOf()
@@ -191,6 +194,8 @@ export default {
 	},
 
 	mounted: function() {
+		this._$el = $(this.$el)
+
 		// Parents: TransitionGroup > NotificationsList
 		if (this.$parent.$parent.showBrowserNotifications) {
 			this._createWebNotification()
@@ -235,7 +240,7 @@ export default {
 					this.$emit('remove', this.index)
 				})
 				.catch(() => {
-					OC.Notification.showTemporary(t('notifications', 'Failed to dismiss notification'))
+					showError(t('notifications', 'Failed to dismiss notification'))
 				})
 		},
 

@@ -21,6 +21,9 @@
 import Vue from 'vue'
 import App from './App'
 
+// Styles
+import '@nextcloud/dialogs/styles/toast.scss'
+
 Vue.prototype.t = t
 Vue.prototype.n = n
 Vue.prototype.OC = OC

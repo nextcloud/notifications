@@ -10,6 +10,8 @@
 
 <script>
 import axios from '@nextcloud/axios'
+import { showError } from '@nextcloud/dialogs'
+
 export default {
 	name: 'Action',
 
@@ -40,7 +42,7 @@ export default {
 		async onClickActionButton() {
 			const type = this.type || 'GET'
 			if (type === 'WEB') {
-				OC.redirect(this.link)
+				window.location = this.link
 				return
 			}
 
@@ -69,7 +71,7 @@ export default {
 				}
 			} catch (error) {
 				console.error('Failed to perform action', error)
-				OC.Notification.showTemporary(t('notifications', 'Failed to perform action'))
+				showError(t('notifications', 'Failed to perform action'))
 			}
 		},
 	},
