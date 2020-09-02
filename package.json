@@ -19,7 +19,6 @@
 		"@nextcloud/router": "^1.1.0",
 		"@nextcloud/vue": "^2.6.3",
 		"core-js": "^3.6.5",
-		"escape-html": "^1.0.3",
 		"regenerator-runtime": "^0.13.7",
 		"vue": "^2.6.12",
 		"vue-tooltip": "^0.1.0"
@@ -44,8 +43,6 @@
 		"eslint-plugin-standard": "^4.0.1",
 		"eslint-plugin-vue": "^6.2.2",
 		"file-loader": "^6.0.0",
-		"handlebars": "^4.7.6",
-		"handlebars-loader": "^1.7.1",
 		"node-sass": "^4.14.1",
 		"sass-loader": "^10.0.1",
 		"vue-loader": "^15.9.3",
