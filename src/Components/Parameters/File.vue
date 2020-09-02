@@ -20,21 +20,29 @@
 -->
 
 <template>
-	<a class="filename" :href="link" :title="title">
-		{{ name }}
-	</a>
+	<a
+		v-tooltip.bottom="title"
+		class="filename"
+		:href="link">{{ name }}</a>
 </template>
 
 <script>
+import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip'
+
 export default {
 	name: 'File',
+
+	directives: {
+		tooltip: Tooltip,
+	},
+
 	props: {
 		type: {
 			type: String,
 			required: true,
 		},
 		id: {
-			type: String,
+			type: [Number, String],
 			required: true,
 		},
 		name: {
@@ -70,8 +78,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.filename {
-	display: contents;
-	white-space: nowrap;
-}
 </style>

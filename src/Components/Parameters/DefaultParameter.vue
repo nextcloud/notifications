@@ -39,7 +39,7 @@ export default {
 			required: true,
 		},
 		id: {
-			type: String,
+			type: [Number, String],
 			required: true,
 		},
 		name: {
