@@ -41,7 +41,7 @@
     "file-loader": "^5.0.2",
     "handlebars": "^4.6.0",
     "handlebars-loader": "^1.7.1",
-    "node-sass": "^4.13.0",
+    "node-sass": "^4.13.1",
     "sass-loader": "^7.3.1",
     "vue-loader": "^15.8.3",
     "vue-template-compiler": "^2.6.11",
