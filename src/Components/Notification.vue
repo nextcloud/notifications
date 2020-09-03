@@ -1,21 +1,33 @@
 <template>
 	<div class="notification" :data-id="notificationId" :data-timestamp="timestamp">
 		<div class="notification-heading">
-			<span class="notification-time has-tooltip live-relative-timestamp" :data-timestamp="timestamp" :title="absoluteDate">{{ relativeDate }}</span>
+			<span
+				v-tooltip.bottom="absoluteDate"
+				class="notification-time live-relative-timestamp"
+				:data-timestamp="timestamp">{{ relativeDate }}</span>
 			<div class="notification-delete" @click="onDismissNotification">
 				<span class="icon icon-close svg" :title="t('notifications', 'Dismiss')" />
 			</div>
 		</div>
 		<a v-if="useLink" :href="link" class="notification-subject full-subject-link">
 			<span v-if="icon" class="image"><img :src="icon" class="notification-icon"></span>
-			<span class="text" v-html="renderedSubject" />
+			<RichText
+				:text="subjectRich"
+				:arguments="preparedSubjectParameters" />
 		</a>
 		<div v-else class="notification-subject">
 			<span v-if="icon" class="image"><img :src="icon" class="notification-icon"></span>
-			<span class="text" v-html="renderedSubject" />
+			<RichText
+				:text="subjectRich"
+				:arguments="preparedSubjectParameters" />
 		</div>
 		<div v-if="message" class="notification-message" @click="onClickMessage">
-			<div class="message-container" :class="{ collapsed: isCollapsedMessage }" v-html="renderedMessage" />
+			<div class="message-container" :class="{ collapsed: isCollapsedMessage }">
+				<RichText
+					:text="messageRich"
+					:arguments="preparedMessageParameters"
+					:autolink="true" />
+			</div>
 			<div v-if="isCollapsedMessage" class="notification-overflow" />
 		</div>
 		<div v-if="actions.length" class="notification-actions">
@@ -26,16 +38,25 @@
 
 <script>
 import axios from '@nextcloud/axios'
+import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip'
+import { showError } from '@nextcloud/dialogs'
 import Action from './Action'
-import parser from '../richObjectStringParser'
-import escapeHTML from 'escape-html'
 import { generateOcsUrl } from '@nextcloud/router'
+import RichText from '@juliushaertl/vue-richtext'
+import DefaultParameter from './Parameters/DefaultParameter'
+import File from './Parameters/File'
+import User from './Parameters/User'
 
 export default {
 	name: 'Notification',
 
 	components: {
 		Action,
+		RichText,
+	},
+
+	directives: {
+		tooltip: Tooltip,
 	},
 
 	props: {
@@ -141,63 +162,40 @@ export default {
 			return (new Date(this.datetime)).valueOf()
 		},
 		absoluteDate: function() {
-			return OC.Util.formatDate(this.timestamp)
+			return OC.Util.formatDate(this.timestamp, 'LLL')
 		},
 		relativeDate: function() {
 			return OC.Util.relativeModifiedDate(this.timestamp)
 		},
 		useLink: function() {
-			return this.link && this.renderedSubject.indexOf('<a ') === -1
-		},
-		renderedSubject: function() {
-			if (this.subjectRich.length !== 0) {
-				return parser.parseMessage(
-					this.subjectRich.replace(new RegExp('\n', 'g'), ' '),
-					this.subjectRichParameters
-				)
+			if (!this.link) {
+				return false
 			}
 
-			return escapeHTML(this.subject).replace(new RegExp('\n', 'g'), ' ')
+			let parametersHaveLink = false
+			Object.keys(this.subjectRichParameters).forEach(p => {
+				if (p.link) {
+					parametersHaveLink = true
+				}
+			})
+			return parametersHaveLink
 		},
+
+		preparedSubjectParameters() {
+			return this.prepareParameters(this.subjectRichParameters)
+		},
+
+		preparedMessageParameters() {
+			return this.prepareParameters(this.messageRichParameters)
+		},
+
 		isCollapsedMessage: function() {
 			return this.message.length > 200 && !this.showFullMessage
-		},
-		renderedMessage: function() {
-			if (this.messageRich.length !== 0) {
-				return parser.parseMessage(
-					this.messageRich,
-					this.messageRichParameters
-				)
-			}
-
-			return escapeHTML(this.message).replace(new RegExp('\n', 'g'), '<br>')
 		},
 	},
 
 	mounted: function() {
 		this._$el = $(this.$el)
-
-		this._$el.find('.avatar').each(function() {
-			const element = $(this)
-			if (element.data('user-display-name')) {
-				element.avatar(element.data('user'), 21, undefined, false, undefined, element.data('user-display-name'))
-			} else {
-				element.avatar(element.data('user'), 21)
-			}
-		})
-
-		this._$el.find('.avatar-name-wrapper').each(function() {
-			const element = $(this)
-			const avatar = element.find('.avatar')
-			const label = element.find('strong')
-
-			$.merge(avatar, label).contactsMenu(element.data('user'), 0, element)
-		})
-
-		this._$el.find('.has-tooltip').tooltip({
-			// container: this.$container.find('.notification-wrapper'),
-			placement: 'bottom',
-		})
 
 		// Parents: TransitionGroup > NotificationsList
 		if (this.$parent.$parent.showBrowserNotifications) {
@@ -206,8 +204,32 @@ export default {
 	},
 
 	methods: {
+		prepareParameters(parameters) {
+			const richParameters = {}
+			Object.keys(parameters).forEach(p => {
+				const type = parameters[p].type
+				if (type === 'user') {
+					richParameters[p] = {
+						component: User,
+						props: parameters[p],
+					}
+				} else if (type === 'file') {
+					richParameters[p] = {
+						component: File,
+						props: parameters[p],
+					}
+				} else {
+					richParameters[p] = {
+						component: DefaultParameter,
+						props: parameters[p],
+					}
+				}
+			})
+			return richParameters
+		},
+
 		onClickMessage: function(e) {
-			if (e.target.classList.contains('message-container')) {
+			if (e.target.classList.contains('rich-text--wrapper')) {
 				this.showFullMessage = !this.showFullMessage
 			}
 		},
@@ -216,11 +238,10 @@ export default {
 			axios
 				.delete(generateOcsUrl('apps/notifications/api/v2', 2) + 'notifications/' + this.notificationId)
 				.then(() => {
-					// this._$el.fadeOut(OC.menuSpeed)
 					this.$emit('remove', this.index)
 				})
 				.catch(() => {
-					OC.Notification.showTemporary(t('notifications', 'Failed to dismiss notification'))
+					showError(t('notifications', 'Failed to dismiss notification'))
 				})
 		},
 
@@ -249,3 +270,10 @@ export default {
 	},
 }
 </script>
+
+<style lang="scss" scoped>
+::v-deep .rich-text--wrapper {
+	white-space: pre-wrap;
+	word-break: break-word;
+}
+</style>

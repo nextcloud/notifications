@@ -16,18 +16,24 @@ module.exports = {
 				use: ['vue-style-loader', 'css-loader'],
 			},
 			{
+				test: /\.scss$/,
+				use: ['vue-style-loader', 'css-loader', 'sass-loader'],
+			},
+			{
 				test: /\.vue$/,
 				loader: 'vue-loader',
-				options: {
-					hotReload: false, // disables Hot Reload
-				},
+				exclude: babelLoaderExcludeNodeModulesExcept([
+					'@juliushaertl/vue-richtext',
+					'vue-material-design-icons',
+				]),
 			},
 			{
 				test: /\.js$/,
 				loader: 'babel-loader',
 				exclude: babelLoaderExcludeNodeModulesExcept([
-					'semver',
+					'@juliushaertl/vue-richtext',
 					'@nextcloud/event-bus',
+					'semver',
 				]),
 			},
 			{
@@ -38,25 +44,15 @@ module.exports = {
 			},
 			{
 				test: /\.(png|jpg|gif|svg)$/,
-				loader: 'file-loader',
-				options: {
-					name: '[name].[ext]?[hash]',
-				},
-			},
-			{
-				test: /\.handlebars/,
-				loader: 'handlebars-loader',
-				options: {
-					extensions: '.handlebars',
-				},
+				loader: 'url-loader',
 			},
 		],
 	},
-	plugins: [new VueLoaderPlugin()],
+	plugins: [
+		new VueLoaderPlugin(),
+	],
 	resolve: {
-		alias: {
-			vue$: 'vue/dist/vue.esm.js',
-		},
-		extensions: ['*', '.js', '.vue', '.json'],
+		extensions: ['*', '.js', '.vue'],
+		symlinks: false,
 	},
 }

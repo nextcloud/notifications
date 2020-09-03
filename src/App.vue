@@ -54,6 +54,7 @@
 import Notification from './Components/Notification'
 import axios from '@nextcloud/axios'
 import { subscribe } from '@nextcloud/event-bus'
+import { showError } from '@nextcloud/dialogs'
 import { imagePath, generateOcsUrl } from '@nextcloud/router'
 
 export default {
@@ -127,6 +128,7 @@ export default {
 		})
 		subscribe('networkOnline', () => {
 			this._fetch()
+			this._setPollingInterval(30000)
 			this.setupBackgroundFetcher()
 		})
 	},
@@ -159,7 +161,7 @@ export default {
 					this.notifications = []
 				})
 				.catch(() => {
-					OC.Notification.showTemporary(t('notifications', 'Failed to dismiss all notifications'))
+					showError(t('notifications', 'Failed to dismiss all notifications'))
 				})
 		},
 		onRemove: function(index) {
@@ -259,7 +261,7 @@ export default {
 		},
 
 		_setPollingInterval(pollInterval) {
-			if (pollInterval === this.pollInterval) {
+			if (this.interval && pollInterval === this.pollInterval) {
 				return
 			}
 
