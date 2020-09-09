@@ -53,9 +53,10 @@ before_install:
   - cd ../../
 
 script:
+  - composer install
   # Run phpunit tests
   - cd tests/Unit
-  - sh -c "if [ '$INTEGRATION' != '1' -a '$JSTESTS' != '1' -a '$CODECHECK' != '1' -a '$CODECHECK' != '2' ]; then phpunit --configuration phpunit.xml; fi"
+  - sh -c "if [ '$INTEGRATION' != '1' -a '$JSTESTS' != '1' -a '$CODECHECK' != '1' -a '$CODECHECK' != '2' ]; then ../../vendor/bin/phpunit --configuration phpunit.xml; fi"
   - cd ../..
 
   # Integration tests
