@@ -36,6 +36,5 @@ unifiedSearch.insertAdjacentHTML('afterend', notificationsBell.outerHTML)
 
 export default new Vue({
 	el: '#notifications',
-	name: 'Init',
 	render: h => h(App),
 })

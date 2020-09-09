@@ -71,7 +71,7 @@ class Application extends \OCP\AppFramework\App implements IBootstrap {
 			&& strpos($request->getPathInfo(), '/login/') !== 0
 			&& substr($request->getScriptName(), 0 - \strlen('/index.php')) === '/index.php') {
 
-			Util::addScript('notifications', 'notifications');
+			Util::addScript('notifications', 'notifications-main');
 			Util::addStyle('notifications', 'styles');
 		}
 	}
