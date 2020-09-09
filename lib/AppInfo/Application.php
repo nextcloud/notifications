@@ -30,6 +30,9 @@ use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\AppFramework\IAppContainer;
+use OCP\IRequest;
+use OCP\IUserSession;
+use OCP\Notification\IManager;
 use OCP\User\Events\UserDeletedEvent;
 use OCP\Util;
 
@@ -45,28 +48,25 @@ class Application extends \OCP\AppFramework\App implements IBootstrap {
 		$context->registerCapability(Capabilities::class);
 
 		$context->registerService(IProvider::class, function(IAppContainer $c) {
-			return $c->getServer()->query(IProvider::class);
+			return $c->getServer()->get(IProvider::class);
 		});
 
 		$context->registerEventListener(UserDeletedEvent::class, UserDeletedListener::class);
 	}
 
 	public function boot(IBootContext $context): void {
+		$context->injectFn(\Closure::fromCallable([$this, 'registerAppAndNotifier']));
+	}
+
+	public function registerAppAndNotifier(IManager $notificationManager, IRequest $request, IUserSession $userSession): void {
 		// notification app
-		$context->getServerContainer()
-			->getNotificationManager()
-			->registerApp(App::class);
+		$notificationManager->registerApp(App::class);
 
 		// admin notifications
-		$this->getContainer()
-			->getServer()
-			->getNotificationManager()
-			->registerNotifierService(AdminNotifications::class);
+		$notificationManager->registerNotifierService(AdminNotifications::class);
 
 		// User interface
-		$request = $context->getServerContainer()->getRequest();
-
-		if ($context->getServerContainer()->getUserSession()->getUser() !== null
+		if ($userSession->getUser() !== null
 			&& strpos($request->getPathInfo(), '/s/') !== 0
 			&& strpos($request->getPathInfo(), '/login/') !== 0
 			&& substr($request->getScriptName(), 0 - \strlen('/index.php')) === '/index.php') {
