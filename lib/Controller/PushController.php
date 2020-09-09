@@ -123,14 +123,14 @@ class PushController extends OCSController {
 
 		$appType = 'unknown';
 		if ($this->request->isUserAgent([
-				IRequest::USER_AGENT_TALK_ANDROID,
-				IRequest::USER_AGENT_TALK_IOS,
-			])) {
+			IRequest::USER_AGENT_TALK_ANDROID,
+			IRequest::USER_AGENT_TALK_IOS,
+		])) {
 			$appType = 'talk';
-		} else if ($this->request->isUserAgent([
-				IRequest::USER_AGENT_CLIENT_ANDROID,
-				IRequest::USER_AGENT_CLIENT_IOS,
-			])) {
+		} elseif ($this->request->isUserAgent([
+			IRequest::USER_AGENT_CLIENT_ANDROID,
+			IRequest::USER_AGENT_CLIENT_IOS,
+		])) {
 			$appType = 'nextcloud';
 		}
 

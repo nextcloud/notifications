@@ -21,7 +21,6 @@
 
 namespace OCA\NotificationsIntegrationTesting;
 
-
 use OCP\Notification\INotification;
 use OCP\Notification\INotifier;
 

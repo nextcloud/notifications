@@ -82,7 +82,6 @@ class TestPush extends Command {
 	 * @return int
 	 */
 	protected function execute(InputInterface $input, OutputInterface $output): int {
-
 		$userId = $input->getArgument('user-id');
 		$subject = 'Testing push notifications';
 

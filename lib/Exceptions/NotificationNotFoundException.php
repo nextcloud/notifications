@@ -25,5 +25,4 @@
 namespace OCA\Notifications\Exceptions;
 
 class NotificationNotFoundException extends \OutOfBoundsException {
-
 }

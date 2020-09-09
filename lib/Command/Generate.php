@@ -87,7 +87,6 @@ class Generate extends Command {
 	 * @return int
 	 */
 	protected function execute(InputInterface $input, OutputInterface $output): int {
-
 		$userId = $input->getArgument('user-id');
 		$subject = $input->getArgument('short-message');
 		$message = $input->getOption('long-message');

@@ -21,7 +21,6 @@
 
 namespace OCA\Notifications;
 
-
 use OCA\Notifications\Exceptions\NotificationNotFoundException;
 use OCP\Notification\IDeferrableApp;
 use OCP\Notification\INotification;

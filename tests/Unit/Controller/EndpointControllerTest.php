@@ -29,7 +29,6 @@ use OCA\Notifications\Push;
 use OCA\Notifications\Tests\Unit\TestCase;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
-use OCP\IConfig;
 use OCP\IRequest;
 use OCP\IUser;
 use OCP\IUserSession;
@@ -39,7 +38,6 @@ use OCP\Notification\IManager;
 use OCP\Notification\INotification;
 use OCP\UserStatus\IManager as IUserStatusManager;
 use PHPUnit\Framework\MockObject\MockObject;
-use function Sabre\Event\Loop\instance;
 
 class EndpointControllerTest extends TestCase {
 	/** @var IRequest|MockObject */
@@ -312,7 +310,7 @@ class EndpointControllerTest extends TestCase {
 		$this->manager->expects($this->once())
 			->method('hasNotifiers')
 			->willReturn(true);
-		$this->manager->expects($this->once() )
+		$this->manager->expects($this->once())
 			->method('prepare')
 			->with($notification)
 			->willReturn($notification);
@@ -616,11 +614,11 @@ class EndpointControllerTest extends TestCase {
 			->willReturn($isPrimary);
 
 		$this->assertEquals([
-				'label' => $label,
-				'link' => $link,
-				'type' => $requestType,
-				'primary' => $isPrimary,
-			],
+			'label' => $label,
+			'link' => $link,
+			'type' => $requestType,
+			'primary' => $isPrimary,
+		],
 			$this->invokePrivate($this->getController(), 'actionToArray', [$action])
 		);
 	}

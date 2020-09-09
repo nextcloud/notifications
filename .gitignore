@@ -58,6 +58,7 @@ nbproject
 /tests/Unit/clover.xml
 /tests/Unit/js/node_modules
 /tests/Unit/.phpunit.result.cache
+/.php_cs.cache
 
 /tests/Integration/output
 /tests/Integration/vendor
