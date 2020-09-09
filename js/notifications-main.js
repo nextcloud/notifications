@@ -302,4 +302,4 @@ t.exports=function(t){return null!=t&&(n(t)||function(t){return"function"==typeo
  *
  */
 i.default.prototype.t=t,i.default.prototype.n=n,i.default.prototype.OC=OC,i.default.prototype.OCA=OCA;var O=document.getElementById("unified-search"),N=document.createElement("div");N.setAttribute("id","notifications"),O.insertAdjacentHTML("afterend",N.outerHTML);r.default=new i.default({el:"#notifications",render:function(t){return t(S)}})}]);
-//# sourceMappingURL=notifications-main.js.map?v=3031a1466fa120c05087
+//# sourceMappingURL=notifications-main.js.map?v=978e68925e882464e515
