@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import { emit } from '@nextcloud/event-bus'
 import axios from '@nextcloud/axios'
 import { showError } from '@nextcloud/dialogs'
 
@@ -57,16 +58,13 @@ export default {
 				this.$parent._$el.fadeOut(OC.menuSpeed)
 				this.$parent.$emit('remove')
 				try {
-					$('body').trigger(new $.Event('OCA.Notification.Action', {
-						notification: this.$parent,
-						action: {
-							url: this.link,
-							type: type,
-						},
-					}))
-				// do not do anything but log, the action went fine
-				// only the event bus listener failed, this is not our problem
+					emit('notifications:action', {
+						notification: this.$parent._props,
+						action: this._props,
+					})
 				} catch (error) {
+					// do not do anything but log, the action went fine
+					// only the event bus listener failed, this is not our problem
 					console.error(error)
 				}
 			} catch (error) {
