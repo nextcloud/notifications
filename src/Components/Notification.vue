@@ -12,21 +12,27 @@
 		<a v-if="useLink" :href="link" class="notification-subject full-subject-link">
 			<span v-if="icon" class="image"><img :src="icon" class="notification-icon"></span>
 			<RichText
+				v-if="subjectRich"
 				:text="subjectRich"
 				:arguments="preparedSubjectParameters" />
+			<span v-else class="subject">{{ subject }}</span>
 		</a>
 		<div v-else class="notification-subject">
 			<span v-if="icon" class="image"><img :src="icon" class="notification-icon"></span>
 			<RichText
+				v-if="subjectRich"
 				:text="subjectRich"
 				:arguments="preparedSubjectParameters" />
+			<span v-else class="subject">{{ subject }}</span>
 		</div>
 		<div v-if="message" class="notification-message" @click="onClickMessage">
 			<div class="message-container" :class="{ collapsed: isCollapsedMessage }">
 				<RichText
+					v-if="messageRich"
 					:text="messageRich"
 					:arguments="preparedMessageParameters"
 					:autolink="true" />
+				<span v-else>{{ message }}</span>
 			</div>
 			<div v-if="isCollapsedMessage" class="notification-overflow" />
 		</div>

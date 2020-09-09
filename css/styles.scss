@@ -121,6 +121,8 @@
 			align-self: flex-start;
 		}
 
+		& > span.subject,
+		& > a > span.subject,
 		& > .rich-text--wrapper,
 		& > a > .rich-text--wrapper {
 			padding-left: 10px;
