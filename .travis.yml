@@ -53,12 +53,6 @@ before_install:
   - cd ../../
 
 script:
-  # Test the app
-  - cd ../../
-  - sh -c "if [ '$CODECHECK' = '1' ]; then ./occ app:check-code $APP_NAME -c private -c strong-comparison; fi"
-  - sh -c "if [ '$CODECHECK' = '2' ]; then ./occ app:check-code $APP_NAME -c deprecation; fi"
-  - cd apps/$APP_NAME/
-
   # Run phpunit tests
   - cd tests/Unit
   - sh -c "if [ '$INTEGRATION' != '1' -a '$JSTESTS' != '1' -a '$CODECHECK' != '1' -a '$CODECHECK' != '2' ]; then phpunit --configuration phpunit.xml; fi"
@@ -77,10 +71,6 @@ matrix:
       env: DB=pgsql
     - php: 7.3
       env: DB=oracle
-    - php: 7.3
-      env: DB=mysql;CODECHECK=1
-    - php: 7.3
-      env: DB=mysql;CODECHECK=2
     - php: 7.2
       env: DB=mysql;INTEGRATION=1
   allow_failures:
