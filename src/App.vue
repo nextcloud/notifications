@@ -64,7 +64,7 @@ export default {
 		Notification,
 	},
 
-	data: function() {
+	data() {
 		return {
 			webNotificationsGranted: null,
 			hadNotifications: false,
@@ -85,7 +85,7 @@ export default {
 	_$icon: null,
 
 	computed: {
-		iconPath: function() {
+		iconPath() {
 			let iconPath = 'notifications'
 
 			if (this.webNotificationsGranted === null || this.notifications.length) {
@@ -109,7 +109,7 @@ export default {
 		},
 	},
 
-	mounted: function() {
+	mounted() {
 		this._$icon = $(this.$refs.icon)
 
 		// Bind the button click event
@@ -133,7 +133,7 @@ export default {
 		})
 	},
 
-	updated: function() {
+	updated() {
 		this._$icon.attr('src', this.iconPath)
 
 		if (!this.hadNotifications && this.notifications.length) {
@@ -154,7 +154,7 @@ export default {
 			}
 		},
 
-		onDismissAll: function() {
+		onDismissAll() {
 			axios
 				.delete(generateOcsUrl('apps/notifications/api/v2', 2) + 'notifications')
 				.then(() => {
@@ -164,15 +164,15 @@ export default {
 					showError(t('notifications', 'Failed to dismiss all notifications'))
 				})
 		},
-		onRemove: function(index) {
+		onRemove(index) {
 			this.notifications.splice(index, 1)
 		},
 
-		invertedTheme: function() {
+		invertedTheme() {
 			return OCA.Theming && OCA.Theming.inverted
 		},
 
-		isRedThemed: function() {
+		isRedThemed() {
 			if (OCA.Theming && OCA.Theming.color) {
 				const hsl = this.rgbToHsl(OCA.Theming.color.substring(1, 3),
 					OCA.Theming.color.substring(3, 5),
@@ -183,7 +183,7 @@ export default {
 			return false
 		},
 
-		rgbToHsl: function(r, g, b) {
+		rgbToHsl(r, g, b) {
 			r = parseInt(r, 16) / 255; g = parseInt(g, 16) / 255; b = parseInt(b, 16) / 255
 			const max = Math.max(r, g, b); const min = Math.min(r, g, b)
 			let h; let s; const l = (max + min) / 2
@@ -207,7 +207,7 @@ export default {
 		/**
 			 * Performs the AJAX request to retrieve the notifications
 			 */
-		_fetch: function() {
+		_fetch() {
 			let requestConfig = {}
 			if (this.lastETag) {
 				requestConfig = {
@@ -255,7 +255,7 @@ export default {
 				})
 		},
 
-		_backgroundFetch: function() {
+		_backgroundFetch() {
 			this.backgroundFetching = true
 			this._fetch()
 		},
@@ -279,7 +279,7 @@ export default {
 		 * And hide the UI as well
 		 * @param {Boolean} temporary If false, the notification bell will be hidden
 		 */
-		_shutDownNotifications: function(temporary) {
+		_shutDownNotifications(temporary) {
 			if (this.interval) {
 				window.clearInterval(this.interval)
 				this.interval = null
@@ -290,7 +290,7 @@ export default {
 		/**
 		 * Check if we can do web notifications
 		 */
-		checkWebNotificationPermissions: function() {
+		checkWebNotificationPermissions() {
 			if (!('Notification' in window)) {
 				console.info('Browser does not support notifications')
 				this.webNotificationsGranted = false
@@ -315,7 +315,7 @@ export default {
 		/**
 		 * Check if we can do web notifications
 		 */
-		requestWebNotificationPermissions: async function() {
+		async requestWebNotificationPermissions() {
 			if (this.webNotificationsGranted !== null) {
 				return
 			}

@@ -164,16 +164,16 @@ export default {
 	_$el: null,
 
 	computed: {
-		timestamp: function() {
+		timestamp() {
 			return (new Date(this.datetime)).valueOf()
 		},
-		absoluteDate: function() {
+		absoluteDate() {
 			return OC.Util.formatDate(this.timestamp, 'LLL')
 		},
-		relativeDate: function() {
+		relativeDate() {
 			return OC.Util.relativeModifiedDate(this.timestamp)
 		},
-		useLink: function() {
+		useLink() {
 			if (!this.link) {
 				return false
 			}
@@ -195,12 +195,12 @@ export default {
 			return this.prepareParameters(this.messageRichParameters)
 		},
 
-		isCollapsedMessage: function() {
+		isCollapsedMessage() {
 			return this.message.length > 200 && !this.showFullMessage
 		},
 	},
 
-	mounted: function() {
+	mounted() {
 		this._$el = $(this.$el)
 
 		// Parents: TransitionGroup > NotificationsList
@@ -234,13 +234,13 @@ export default {
 			return richParameters
 		},
 
-		onClickMessage: function(e) {
+		onClickMessage(e) {
 			if (e.target.classList.contains('rich-text--wrapper')) {
 				this.showFullMessage = !this.showFullMessage
 			}
 		},
 
-		onDismissNotification: function() {
+		onDismissNotification() {
 			axios
 				.delete(generateOcsUrl('apps/notifications/api/v2', 2) + 'notifications/' + this.notificationId)
 				.then(() => {
@@ -255,7 +255,7 @@ export default {
 		 * Create a browser notification
 		 * @see https://developer.mozilla.org/en/docs/Web/API/notification
 		 */
-		_createWebNotification: function() {
+		_createWebNotification() {
 			const n = new Notification(this.subject, {
 				title: this.subject,
 				lang: OC.getLocale(),
