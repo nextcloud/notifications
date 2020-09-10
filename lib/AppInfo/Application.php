@@ -37,7 +37,6 @@ use OCP\User\Events\UserDeletedEvent;
 use OCP\Util;
 
 class Application extends \OCP\AppFramework\App implements IBootstrap {
-
 	public const APP_ID = 'notifications';
 
 	public function __construct() {
@@ -47,7 +46,7 @@ class Application extends \OCP\AppFramework\App implements IBootstrap {
 	public function register(IRegistrationContext $context): void {
 		$context->registerCapability(Capabilities::class);
 
-		$context->registerService(IProvider::class, function(IAppContainer $c) {
+		$context->registerService(IProvider::class, function (IAppContainer $c) {
 			return $c->getServer()->get(IProvider::class);
 		});
 
@@ -70,8 +69,7 @@ class Application extends \OCP\AppFramework\App implements IBootstrap {
 			&& strpos($request->getPathInfo(), '/s/') !== 0
 			&& strpos($request->getPathInfo(), '/login/') !== 0
 			&& substr($request->getScriptName(), 0 - \strlen('/index.php')) === '/index.php') {
-
-			Util::addScript('notifications', 'notifications');
+			Util::addScript('notifications', 'notifications-main');
 			Util::addStyle('notifications', 'styles');
 		}
 	}

@@ -148,11 +148,11 @@ class APIControllerTest extends \Test\TestCase {
 			if ($notifyThrows === null) {
 				$this->notificationManager->expects($this->never())
 					->method('notify');
-			} else if ($notifyThrows === false) {
+			} elseif ($notifyThrows === false) {
 				$this->notificationManager->expects($this->once())
 					->method('notify')
 					->with($n);
-			} else if ($notifyThrows === true) {
+			} elseif ($notifyThrows === true) {
 				$this->notificationManager->expects($this->once())
 					->method('notify')
 					->willThrowException(new \InvalidArgumentException());

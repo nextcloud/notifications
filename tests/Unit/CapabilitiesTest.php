@@ -25,7 +25,6 @@ namespace OCA\Notifications\Tests\Unit;
 use OCA\Notifications\Capabilities;
 
 class CapabilitiesTest extends TestCase {
-
 	public function testGetCapabilities() {
 		$capabilities = new Capabilities();
 

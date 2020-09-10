@@ -21,7 +21,6 @@
 
 namespace OCA\Notifications;
 
-
 use OC\Authentication\Exceptions\InvalidTokenException;
 use OC\Authentication\Token\IProvider;
 use OC\Security\IdentityProof\Key;

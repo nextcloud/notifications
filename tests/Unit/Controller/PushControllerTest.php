@@ -504,5 +504,4 @@ FwIDAQAB
 		$this->assertSame($status, $response->getStatus());
 		$this->assertSame($payload, $response->getData());
 	}
-
 }

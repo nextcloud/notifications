@@ -22,7 +22,6 @@
 
 namespace OCA\Notifications\Tests\Unit;
 
-
 use OCA\Notifications\Exceptions\NotificationNotFoundException;
 use OCA\Notifications\Handler;
 use OCP\Notification\IAction;

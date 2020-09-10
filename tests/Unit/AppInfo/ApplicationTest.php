@@ -59,20 +59,20 @@ class ApplicationTest extends TestCase {
 	}
 
 	public function dataContainerQuery() {
-		return array(
+		return [
 			// lib/
-			array(App::class),
-			array(App::class, IApp::class),
-			array(Capabilities::class),
-			array(Handler::class),
-			array(Push::class),
+			[App::class],
+			[App::class, IApp::class],
+			[Capabilities::class],
+			[Handler::class],
+			[Push::class],
 
 			// Controller/
-			array(EndpointController::class),
-			array(EndpointController::class, OCSController::class),
-			array(PushController::class),
-			array(PushController::class, OCSController::class),
-		);
+			[EndpointController::class],
+			[EndpointController::class, OCSController::class],
+			[PushController::class],
+			[PushController::class, OCSController::class],
+		];
 	}
 
 	/**

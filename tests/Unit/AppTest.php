@@ -22,7 +22,6 @@
 
 namespace OCA\Notifications\Tests\Unit;
 
-
 use OCA\Notifications\App;
 use OCA\Notifications\Handler;
 use OCA\Notifications\Push;

@@ -98,7 +98,7 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 		$headers = [];
 		if ($eTag === ' with different etag') {
 			$headers['If-None-Match'] = substr($this->lastEtag, 0, 16);
-		} else if ($eTag === ' with matching etag') {
+		} elseif ($eTag === ' with matching etag') {
 			$headers['If-None-Match'] = $this->lastEtag;
 		}
 
@@ -170,7 +170,6 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 
 				Assert::assertEquals($previousNotificationIds, $now);
 			}
-
 		}
 	}
 
@@ -185,7 +184,7 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 		$lastNotifications = end($this->notificationIds);
 		if ($notification === 'first') {
 			$notificationId = reset($lastNotifications);
-		} else/* if ($notification === 'last')*/ {
+		} else /* if ($notification === 'last')*/ {
 			$notificationId = end($lastNotifications);
 		}
 
@@ -210,9 +209,9 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 		$lastNotificationIds = end($this->notificationIds);
 		if ($toDelete === 'first') {
 			$this->deletedNotification = end($lastNotificationIds);
-		} else if ($toDelete === 'last') {
+		} elseif ($toDelete === 'last') {
 			$this->deletedNotification = reset($lastNotificationIds);
-		} else if ($toDelete === 'faulty') {
+		} elseif ($toDelete === 'faulty') {
 			$this->deletedNotification = 'faulty';
 		}
 		$this->sendingTo('DELETE', '/apps/notifications/api/' . $api . '/notifications/' . $this->deletedNotification);

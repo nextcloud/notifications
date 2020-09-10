@@ -22,7 +22,6 @@
 
 namespace OCA\Notifications\Tests\Unit;
 
-
 use OC\Authentication\Exceptions\InvalidTokenException;
 use OC\Authentication\Token\IProvider;
 use OC\Security\IdentityProof\Key;
@@ -500,10 +499,10 @@ class PushTest extends TestCase {
 		$client->expects($this->at(0))
 			->method('post')
 			->with('proxyserver1/notifications', [
-					'body' => [
-						'notifications' => ['["Payload"]', '["Payload"]'],
-					],
-				])
+				'body' => [
+					'notifications' => ['["Payload"]', '["Payload"]'],
+				],
+			])
 			->willThrowException($e);
 
 		$this->logger->expects($this->at(0))
@@ -524,10 +523,10 @@ class PushTest extends TestCase {
 		$client->expects($this->at(1))
 			->method('post')
 			->with('badrequest/notifications', [
-					'body' => [
-						'notifications' => ['["Payload"]'],
-					],
-				])
+				'body' => [
+					'notifications' => ['["Payload"]'],
+				],
+			])
 			->willReturn($response1);
 
 		$this->logger->expects($this->at(1))
@@ -549,10 +548,10 @@ class PushTest extends TestCase {
 		$client->expects($this->at(2))
 			->method('post')
 			->with('unavailable/notifications', [
-					'body' => [
-						'notifications' => ['["Payload"]'],
-					],
-				])
+				'body' => [
+					'notifications' => ['["Payload"]'],
+				],
+			])
 			->willReturn($response2);
 
 		$this->logger->expects($isDebug ? $this->at(2) : $this->never())
@@ -571,10 +570,10 @@ class PushTest extends TestCase {
 		$client->expects($this->at(3))
 			->method('post')
 			->with('ok/notifications', [
-					'body' => [
-						'notifications' => ['["Payload"]'],
-					],
-				])
+				'body' => [
+					'notifications' => ['["Payload"]'],
+				],
+			])
 			->willReturn($response3);
 
 		$push->pushToDevice(207787, $notification);
@@ -666,7 +665,6 @@ class PushTest extends TestCase {
 			$this->clientService->expects($this->never())
 				->method('newClient');
 		} else {
-
 			$push->expects($this->exactly(1))
 				->method('validateToken')
 				->willReturn(true);
@@ -708,6 +706,4 @@ class PushTest extends TestCase {
 
 		$push->pushToDevice(200718, $notification);
 	}
-
-
 }

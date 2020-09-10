@@ -337,11 +337,13 @@ export default {
 	.fade-collapse-leave-active {
 		transition: opacity var(--animation-quick), max-height var(--animation-quick);
 	}
+
 	.fade-collapse-enter,
 	.fade-collapse-leave-to {
 		opacity: 0;
 		max-height: 0;
 	}
+
 	.fade-enter,
 	.fade-leave-to {
 		opacity: 0;

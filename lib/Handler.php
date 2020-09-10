@@ -21,7 +21,6 @@
 
 namespace OCA\Notifications;
 
-
 use OCA\Notifications\Exceptions\NotificationNotFoundException;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
