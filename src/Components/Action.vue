@@ -61,7 +61,7 @@ export default {
 						notification: this.$parent,
 						action: {
 							url: this.link,
-							type: type,
+							type,
 						},
 					}))
 				// do not do anything but log, the action went fine
