@@ -222,7 +222,7 @@ export default {
 			 * Performs the AJAX request to retrieve the notifications
 			 */
 		async _fetch() {
-			const response = await getNotificationsData(this.tabId, this.lastETag)
+			const response = await getNotificationsData(this.tabId, this.lastETag, !this.backgroundFetching)
 
 			if (response.status === 204) {
 				// 204 No Content - Intercept when no notifiers are there.
