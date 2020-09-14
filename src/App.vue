@@ -53,7 +53,7 @@
 <script>
 import Notification from './Components/Notification'
 import axios from '@nextcloud/axios'
-import { subscribe } from '@nextcloud/event-bus'
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { showError } from '@nextcloud/dialogs'
 import { imagePath, generateOcsUrl } from '@nextcloud/router'
 
@@ -123,14 +123,13 @@ export default {
 		// Setup the background checker
 		this.setupBackgroundFetcher()
 
-		subscribe('networkOffline', () => {
-			this._shutDownNotifications(true)
-		})
-		subscribe('networkOnline', () => {
-			this._fetch()
-			this._setPollingInterval(30000)
-			this.setupBackgroundFetcher()
-		})
+		subscribe('networkOffline', this.handleNetworkOffline)
+		subscribe('networkOnline', this.handleNetworkOnline)
+	},
+
+	beforeDestroy() {
+		unsubscribe('networkOffline', this.handleNetworkOffline)
+		unsubscribe('networkOnline', this.handleNetworkOnline)
 	},
 
 	updated() {
@@ -148,6 +147,16 @@ export default {
 	},
 
 	methods: {
+		handleNetworkOffline() {
+			this._setPollingInterval(300000)
+		},
+
+		handleNetworkOnline() {
+			this._fetch()
+			this._setPollingInterval(30000)
+			this.setupBackgroundFetcher()
+		},
+
 		setupBackgroundFetcher() {
 			if (OC.config.session_keepalive) {
 				this.interval = setInterval(this._backgroundFetch.bind(this), this.pollInterval)
