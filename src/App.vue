@@ -164,7 +164,7 @@ export default {
 
 		setupBackgroundFetcher() {
 			if (OC.config.session_keepalive) {
-				this.interval = setInterval(this._backgroundFetch.bind(this), this.pollInterval)
+				this.interval = window.setInterval(this._backgroundFetch.bind(this), this.pollInterval)
 			}
 		},
 
