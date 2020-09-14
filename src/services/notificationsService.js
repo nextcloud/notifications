@@ -35,10 +35,10 @@ const getNotificationsData = async(tabId, lastETag, forceRefresh) => {
 		|| lastUpdated + 35 < now) {
 		BrowserStorage.setItem('tabId', tabId)
 		BrowserStorage.setItem('lastUpdated', now)
-		console.debug('Refetching data in ' + tabId + ' (prev: ' + lastTab + ' age: ' + (now - lastUpdated) + ')')
+		// console.debug('Refetching data in ' + tabId + ' (prev: ' + lastTab + ' age: ' + (now - lastUpdated) + ')')
 		await refreshData(lastETag)
-	} else {
-		console.debug('Reusing data in ' + tabId + ' (prev: ' + lastTab + ' age: ' + (now - lastUpdated) + ')')
+	// } else {
+	// console.debug('Reusing data in ' + tabId + ' (prev: ' + lastTab + ' age: ' + (now - lastUpdated) + ')')
 	}
 
 	return {
