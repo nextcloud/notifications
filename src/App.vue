@@ -53,9 +53,10 @@
 <script>
 import Notification from './Components/Notification'
 import axios from '@nextcloud/axios'
-import { subscribe } from '@nextcloud/event-bus'
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { showError } from '@nextcloud/dialogs'
 import { imagePath, generateOcsUrl } from '@nextcloud/router'
+import { getNotificationsData } from './services/notificationsService'
 
 export default {
 	name: 'App',
@@ -72,7 +73,9 @@ export default {
 			shutdown: false,
 			notifications: [],
 			lastETag: null,
+			lastTabId: null,
 			userStatus: null,
+			tabId: null,
 
 			/** @type {number} */
 			pollInterval: 30000, // milliseconds
@@ -106,10 +109,12 @@ export default {
 			return this.backgroundFetching
 				&& this.webNotificationsGranted
 				&& this.userStatus !== 'dnd'
+				&& this.tabId !== this.lastTabId
 		},
 	},
 
 	mounted() {
+		this.tabId = OC.requestToken || ('' + Math.random())
 		this._$icon = $(this.$refs.icon)
 
 		// Bind the button click event
@@ -123,14 +128,13 @@ export default {
 		// Setup the background checker
 		this.setupBackgroundFetcher()
 
-		subscribe('networkOffline', () => {
-			this._shutDownNotifications(true)
-		})
-		subscribe('networkOnline', () => {
-			this._fetch()
-			this._setPollingInterval(30000)
-			this.setupBackgroundFetcher()
-		})
+		subscribe('networkOffline', this.handleNetworkOffline)
+		subscribe('networkOnline', this.handleNetworkOnline)
+	},
+
+	beforeDestroy() {
+		unsubscribe('networkOffline', this.handleNetworkOffline)
+		unsubscribe('networkOnline', this.handleNetworkOnline)
 	},
 
 	updated() {
@@ -148,9 +152,19 @@ export default {
 	},
 
 	methods: {
+		handleNetworkOffline() {
+			this._setPollingInterval(300000)
+		},
+
+		handleNetworkOnline() {
+			this._fetch()
+			this._setPollingInterval(30000)
+			this.setupBackgroundFetcher()
+		},
+
 		setupBackgroundFetcher() {
 			if (OC.config.session_keepalive) {
-				this.interval = setInterval(this._backgroundFetch.bind(this), this.pollInterval)
+				this.interval = window.setInterval(this._backgroundFetch.bind(this), this.pollInterval)
 			}
 		},
 
@@ -207,52 +221,33 @@ export default {
 		/**
 			 * Performs the AJAX request to retrieve the notifications
 			 */
-		_fetch() {
-			let requestConfig = {}
-			if (this.lastETag) {
-				requestConfig = {
-					headers: {
-						'If-None-Match': this.lastETag,
-					},
-				}
+		async _fetch() {
+			const response = await getNotificationsData(this.tabId, this.lastETag, !this.backgroundFetching)
+
+			if (response.status === 204) {
+				// 204 No Content - Intercept when no notifiers are there.
+				this._setPollingInterval(300000)
+			} else if (response.status === 200) {
+				this.userStatus = response.headers['x-nextcloud-user-status']
+				this.lastETag = response.headers.etag
+				this.lastTabId = response.lastTabId
+				this.notifications = response.data
+				this._setPollingInterval(30000)
+			} else if (response.status === 304) {
+				// 304 - Not modified
+				this._setPollingInterval(30000)
+			} else if (response.status === 503) {
+				// 503 - Maintenance mode
+				console.info('Slowing down notifications: instance is in maintenance mode.')
+				this._setPollingInterval(300000)
+			} else if (response.status === 404) {
+				// 404 - App disabled
+				console.info('Slowing down notifications: app is disabled.')
+				this._setPollingInterval(300000)
+			} else {
+				console.info('Slowing down notifications: Status ' + response.status)
+				this._setPollingInterval(300000)
 			}
-
-			axios
-				.get(generateOcsUrl('apps/notifications/api/v2', 2) + 'notifications', requestConfig)
-				.then(response => {
-					if (response.status === 204) {
-						// 204 No Content - Intercept when no notifiers are there.
-						this._setPollingInterval(300000)
-						return
-					} else if (response.data !== undefined && response.data.ocs !== undefined && response.data.ocs.data !== undefined && Array.isArray(response.data.ocs.data)) {
-						this.userStatus = response.headers['x-nextcloud-user-status']
-						this.lastETag = response.headers.etag
-						this.notifications = response.data.ocs.data
-					} else {
-						console.info('data.ocs.data is undefined or not an array')
-					}
-
-					this._setPollingInterval(30000)
-				})
-				.catch(err => {
-					if (!err.response) {
-						console.info('No response received, retrying')
-						return
-					} else if (err.response.status === 304) {
-						// 304 - Not modified
-						return
-					} else if (err.response.status === 503) {
-						// 503 - Maintenance mode
-						console.info('Slowing down notifications: instance is in maintenance mode.')
-					} else if (err.response.status === 404) {
-						// 404 - App disabled
-						console.info('Slowing down notifications: app is disabled.')
-					} else {
-						console.info('Slowing down notifications: [' + err.response.status + '] ' + err.response.statusText)
-					}
-
-					this._setPollingInterval(300000)
-				})
 		},
 
 		_backgroundFetch() {

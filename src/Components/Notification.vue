@@ -48,6 +48,7 @@ import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip'
 import { showError } from '@nextcloud/dialogs'
 import Action from './Action'
 import { generateOcsUrl } from '@nextcloud/router'
+import moment from '@nextcloud/moment'
 import RichText from '@juliushaertl/vue-richtext'
 import DefaultParameter from './Parameters/DefaultParameter'
 import File from './Parameters/File'
@@ -168,10 +169,14 @@ export default {
 			return (new Date(this.datetime)).valueOf()
 		},
 		absoluteDate() {
-			return OC.Util.formatDate(this.timestamp, 'LLL')
+			return moment(this.timestamp).format('LLL')
 		},
 		relativeDate() {
-			return OC.Util.relativeModifiedDate(this.timestamp)
+			const diff = moment().diff(moment(this.timestamp))
+			if (diff >= 0 && diff < 45000) {
+				return t('core', 'seconds ago')
+			}
+			return moment(this.timestamp).fromNow()
 		},
 		useLink() {
 			if (!this.link) {
