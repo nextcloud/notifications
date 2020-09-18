@@ -2,9 +2,9 @@ dist: trusty
 sudo: required
 language: php
 php:
-  - 7.2
   - 7.3
-  - 7.4snapshot
+  - 7.4
+  - 8.0snapshot
 services:
   - mysql
   - postgresql
@@ -23,7 +23,7 @@ cache:
 
 env:
   global:
-    - CORE_BRANCH=master
+    - CORE_BRANCH=php/noid/bump-min-php-version
     - APP_NAME=notifications
   matrix:
     - DB=sqlite
