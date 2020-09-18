@@ -11,6 +11,7 @@ OC.L10N.register(
     "Failed to dismiss all notifications" : "Alle Benachrichtigungen konnten nicht verworfen werden",
     "Failed to perform action" : "Aktion konnte nicht ausgeführt werden",
     "Dismiss" : "Verwerfen",
+    "seconds ago" : "Gerade eben",
     "Failed to dismiss notification" : "Benachrichtigung konnte nicht verworfen werden",
     "in {path}" : "in {path}"
 },

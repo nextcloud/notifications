@@ -11,6 +11,7 @@ OC.L10N.register(
     "Failed to dismiss all notifications" : "Misslyckades att avfärda alla aviseringar",
     "Failed to perform action" : "Misslyckades utföra åtgärd",
     "Dismiss" : "Avfärda",
+    "seconds ago" : "sekunder sedan",
     "Failed to dismiss notification" : "Misslyckades att avfärda notifiering",
     "in {path}" : "i {path}"
 },

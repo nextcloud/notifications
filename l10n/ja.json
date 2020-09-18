@@ -9,6 +9,7 @@
     "Failed to dismiss all notifications" : "すべての通知を破棄できませんでした",
     "Failed to perform action" : "アクションの実行に失敗",
     "Dismiss" : "閉じる",
+    "seconds ago" : "数秒前",
     "Failed to dismiss notification" : "通知の却下に失敗しました",
     "in {path}" : "{path}に"
 },"pluralForm" :"nplurals=1; plural=0;"

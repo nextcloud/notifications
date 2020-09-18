@@ -11,6 +11,7 @@ OC.L10N.register(
     "Failed to dismiss all notifications" : "Не могу да уклоним сва обавештења",
     "Failed to perform action" : "Не могу да извршим радњу",
     "Dismiss" : "Уклони",
+    "seconds ago" : "пре неколико секунди",
     "Failed to dismiss notification" : "Не могу да уклоним обавештење",
     "in {path}" : "у {path}"
 },

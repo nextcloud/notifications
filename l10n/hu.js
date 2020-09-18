@@ -11,6 +11,7 @@ OC.L10N.register(
     "Failed to dismiss all notifications" : "Az összes értesítés mellőzése sikertelen",
     "Failed to perform action" : "A művelet végrehajtása sikertelen",
     "Dismiss" : "Mellőzés",
+    "seconds ago" : "másodperce",
     "Failed to dismiss notification" : "Az értesítés mellőzése sikertelen",
     "in {path}" : "itt: {path}"
 },

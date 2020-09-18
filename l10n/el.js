@@ -11,6 +11,7 @@ OC.L10N.register(
     "Failed to dismiss all notifications" : "Αποτυχία αποδέσμευσης όλων των ειδοποιήσεων",
     "Failed to perform action" : "Αποτυχία εκτέλεσης ενέργειας",
     "Dismiss" : "Αποδέσμευση",
+    "seconds ago" : " δευτερόλεπτα πριν ",
     "Failed to dismiss notification" : "Αποτυχία αποδέσμευσης της ειδοποίησης",
     "in {path}" : "στο {path}"
 },
