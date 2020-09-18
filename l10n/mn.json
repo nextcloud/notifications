@@ -2,6 +2,7 @@
     "Notifications" : "Мэдэгдэл",
     "No notifications" : "Мэдэгдэл байхгүй",
     "Dismiss" : "Арилгах",
+    "seconds ago" : "хоёрдахь өмнө",
     "in {path}" : "{path}-д"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

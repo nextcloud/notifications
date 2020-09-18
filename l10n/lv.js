@@ -5,6 +5,7 @@ OC.L10N.register(
     "Notifications" : "Paziņojumi",
     "No notifications" : "Nav paziņojumu",
     "Dismiss" : "Atmest",
+    "seconds ago" : "pirms mirkļa",
     "Failed to dismiss notification" : "Neizdevās atmest paziņojumu",
     "in {path}" : "{path}"
 },

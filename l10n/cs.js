@@ -11,6 +11,7 @@ OC.L10N.register(
     "Failed to dismiss all notifications" : "Zahození všech upozornění se nezdařilo",
     "Failed to perform action" : "Akci se nepodařilo provést",
     "Dismiss" : "Zavřít",
+    "seconds ago" : "před několika sekundami",
     "Failed to dismiss notification" : "Upozornění se nepodařilo zahodit",
     "in {path}" : "v {path}"
 },

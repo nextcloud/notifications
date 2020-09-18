@@ -8,6 +8,7 @@
     "Failed to dismiss all notifications" : "התעלמות מכל ההתרעות נכשלה",
     "Failed to perform action" : "הפעולה נכשלה",
     "Dismiss" : "התעלמות",
+    "seconds ago" : "לפני מספר שניות",
     "Failed to dismiss notification" : "ההתעלמות מההתרעה נכשלה",
     "in {path}" : "תחת {path}"
 },"pluralForm" :"nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;"

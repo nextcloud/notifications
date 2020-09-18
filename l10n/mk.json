@@ -7,6 +7,7 @@
     "Failed to dismiss all notifications" : "Неуспешно отфрлање на сите известувања",
     "Failed to perform action" : "Неуспешно извршување на акцијата",
     "Dismiss" : "Отфрли",
+    "seconds ago" : "пред неколку секунди",
     "Failed to dismiss notification" : "Неуспешно отфрлање на известувањето",
     "in {path}" : "во {path}"
 },"pluralForm" :"nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;"

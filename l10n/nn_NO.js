@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Notifications" : "Meldingar",
     "Dismiss" : "Forkast",
+    "seconds ago" : "sekund sidan",
     "in {path}" : "i {spor}"
 },
 "nplurals=2; plural=(n != 1);");

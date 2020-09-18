@@ -11,6 +11,7 @@ OC.L10N.register(
     "Failed to dismiss all notifications" : "Не вдалося відхилити всі сповіщення",
     "Failed to perform action" : "Не вдалося виконати дію",
     "Dismiss" : "Припинити",
+    "seconds ago" : "секунд тому",
     "Failed to dismiss notification" : "Не вдалося відпустити сповіщення",
     "in {path}" : "в {path}"
 },

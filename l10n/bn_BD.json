@@ -1,4 +1,5 @@
 { "translations": {
-    "Notifications" : "বার্তাসমূহ"
+    "Notifications" : "বার্তাসমূহ",
+    "seconds ago" : "সেকেন্ড পূর্বে"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

@@ -11,6 +11,7 @@ OC.L10N.register(
     "Failed to dismiss all notifications" : "C'hwitet da deurel tout ar gemenadennoù",
     "Failed to perform action" : "C'hwitet an ober",
     "Dismiss" : "Arrest",
+    "seconds ago" : "eilenn zo",
     "Failed to dismiss notification" : "C'hwitet da deurel ar gemenadenn",
     "in {path}" : "e {treug}"
 },

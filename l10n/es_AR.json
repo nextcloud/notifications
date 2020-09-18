@@ -2,6 +2,7 @@
     "Notifications" : "Notificaciones",
     "No notifications" : "No hay notificaciones",
     "Dismiss" : "Descartar",
+    "seconds ago" : "segundos",
     "in {path}" : "en {path}"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

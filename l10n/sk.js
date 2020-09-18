@@ -11,6 +11,7 @@ OC.L10N.register(
     "Failed to dismiss all notifications" : "Nepodarilo sa odstrániť všetky notifikácie",
     "Failed to perform action" : "Nepodarilo sa vykonať akciu",
     "Dismiss" : "Odmietnuť",
+    "seconds ago" : "pred niekoľkými sekundami",
     "Failed to dismiss notification" : "Nepoadrilo sa odstrániť notifikáciu",
     "in {path}" : "v {path}"
 },

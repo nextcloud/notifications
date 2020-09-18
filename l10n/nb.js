@@ -7,6 +7,7 @@ OC.L10N.register(
     "Failed to dismiss all notifications" : "Klarte ikke å fjerne alle varslene",
     "Failed to perform action" : "Klarte ikke å utføre handling",
     "Dismiss" : "Forkast",
+    "seconds ago" : "sekunder siden",
     "Failed to dismiss notification" : "Klarte ikke fjerne varsel",
     "in {path}" : "i {path}"
 },

@@ -8,6 +8,7 @@ OC.L10N.register(
     "Failed to dismiss all notifications" : "Falhou a dispensar todas as notificações",
     "Failed to perform action" : "Falhou a executar acção",
     "Dismiss" : "Dispensar",
+    "seconds ago" : "segundos atrás",
     "Failed to dismiss notification" : "Falhou a dispensar notificação",
     "in {path}" : "em {path}"
 },
