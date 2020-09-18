@@ -10,6 +10,7 @@ OC.L10N.register(
     "Failed to dismiss all notifications" : "모든 알림을 해제할 수 없음",
     "Failed to perform action" : "동작을 수행할 수 없음",
     "Dismiss" : "해제",
+    "seconds ago" : "초 전",
     "Failed to dismiss notification" : "알림을 해제할 수 없음",
     "in {path}" : "{path}에 있음"
 },

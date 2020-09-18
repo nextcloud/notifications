@@ -11,6 +11,7 @@ OC.L10N.register(
     "Failed to dismiss all notifications" : "Huts egin du jakinarazpen guztiak baztertzean",
     "Failed to perform action" : "Huts egin du ekintza burutzean",
     "Dismiss" : "Baztertu",
+    "seconds ago" : "segundo lehenago",
     "Failed to dismiss notification" : "Huts egin du jakinarazpena baztertzean",
     "in {path}" : "{path} -en"
 },

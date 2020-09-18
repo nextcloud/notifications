@@ -1,5 +1,6 @@
 { "translations": {
     "Notifications" : "通知",
+    "seconds ago" : "秒前",
     "in {path}" : "在 {path}"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

@@ -9,6 +9,7 @@ OC.L10N.register(
     "Failed to dismiss all notifications" : "Se presentó una falla al descartar todas las notificaciones",
     "Failed to perform action" : "Se presentó una falla al ejeuctar la acción",
     "Dismiss" : "Descartar",
+    "seconds ago" : "hace segundos",
     "Failed to dismiss notification" : "Se presentó una falla al descartar la notificación",
     "in {path}" : "en {path}"
 },

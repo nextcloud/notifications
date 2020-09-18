@@ -1,4 +1,5 @@
 { "translations": {
-    "Notifications" : "ការ​ជូន​ដំណឹង"
+    "Notifications" : "ការ​ជូន​ដំណឹង",
+    "seconds ago" : "វិនាទី​មុន"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

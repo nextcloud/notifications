@@ -11,6 +11,7 @@ OC.L10N.register(
     "Failed to dismiss all notifications" : "无法清除所有通知",
     "Failed to perform action" : "操作失败",
     "Dismiss" : "忽略",
+    "seconds ago" : "几秒前",
     "Failed to dismiss notification" : "无法清除通知",
     "in {path}" : "在 {path}"
 },

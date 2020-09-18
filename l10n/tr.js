@@ -11,6 +11,7 @@ OC.L10N.register(
     "Failed to dismiss all notifications" : "Tüm bildirimler yok sayılamadı",
     "Failed to perform action" : "İşlem yürütülemedi",
     "Dismiss" : "Yok say",
+    "seconds ago" : "saniye önce",
     "Failed to dismiss notification" : "Bildirim yok sayılamadı",
     "in {path}" : "{path} içinde"
 },

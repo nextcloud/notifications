@@ -1,6 +1,7 @@
 { "translations": {
     "Notifications" : "Meldingar",
     "Dismiss" : "Forkast",
+    "seconds ago" : "sekund sidan",
     "in {path}" : "i {spor}"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

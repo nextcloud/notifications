@@ -11,6 +11,7 @@ OC.L10N.register(
     "Failed to dismiss all notifications" : "Impossible d'ignorer toutes les notifications",
     "Failed to perform action" : "Échec lors de la réalisation de l'action",
     "Dismiss" : "Ignorer",
+    "seconds ago" : "à l'instant",
     "Failed to dismiss notification" : "Impossible d'ignorer la notification",
     "in {path}" : "dans {path}"
 },

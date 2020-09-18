@@ -11,6 +11,7 @@ OC.L10N.register(
     "Failed to dismiss all notifications" : "Nepavyko atmesti visų pranešimų",
     "Failed to perform action" : "Nepavyko įvykdyti veiksmą",
     "Dismiss" : "Atmesti",
+    "seconds ago" : "prieš keletą sekundžių",
     "Failed to dismiss notification" : "Nepavyko atmesti pranešimą",
     "in {path}" : "ties {path}"
 },

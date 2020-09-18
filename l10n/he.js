@@ -10,6 +10,7 @@ OC.L10N.register(
     "Failed to dismiss all notifications" : "התעלמות מכל ההתרעות נכשלה",
     "Failed to perform action" : "הפעולה נכשלה",
     "Dismiss" : "התעלמות",
+    "seconds ago" : "לפני מספר שניות",
     "Failed to dismiss notification" : "ההתעלמות מההתרעה נכשלה",
     "in {path}" : "תחת {path}"
 },

@@ -11,6 +11,7 @@ OC.L10N.register(
     "Failed to dismiss all notifications" : "Niet gelukt om alle meldingen af te handelen",
     "Failed to perform action" : "Niet gelukt om actie uit te voeren",
     "Dismiss" : "Weigeren",
+    "seconds ago" : "seconden geleden",
     "Failed to dismiss notification" : "Niet gelukt om melding af te handelen",
     "in {path}" : "in {path}"
 },

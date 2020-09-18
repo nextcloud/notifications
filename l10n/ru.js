@@ -11,6 +11,7 @@ OC.L10N.register(
     "Failed to dismiss all notifications" : "Не удалось скрыть все уведомления",
     "Failed to perform action" : "Не удалось выполнить задание",
     "Dismiss" : "Закрыть",
+    "seconds ago" : "несколько секунд назад",
     "Failed to dismiss notification" : "Не удалось скрыть уведомление",
     "in {path}" : "в {path}"
 },
