@@ -1,5 +1,3 @@
-dist: focal
-sudo: required
 language: php
 php:
   - 7.3
