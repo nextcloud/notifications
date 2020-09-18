@@ -8,6 +8,7 @@ OC.L10N.register(
     "Failed to dismiss all notifications" : "Неуспешно отхвърляне на всичко известия",
     "Failed to perform action" : "Грешка при изпълнение на действие",
     "Dismiss" : "Отхвърляне",
+    "seconds ago" : "преди секунди",
     "Failed to dismiss notification" : "Неуспешен опит за отхвърляне на известие",
     "in {path}" : "в {path}"
 },

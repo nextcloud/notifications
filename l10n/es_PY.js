@@ -7,6 +7,7 @@ OC.L10N.register(
     "Requesting browser permissions to show notifications" : "Solicitando permisos del navegador para mostrar notificaciones",
     "No notifications" : "No hay notificaciones",
     "Dismiss" : "Descartar",
+    "seconds ago" : "hace segundos",
     "in {path}" : "en {path}"
 },
 "nplurals=2; plural=(n != 1);");

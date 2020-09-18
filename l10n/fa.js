@@ -10,6 +10,7 @@ OC.L10N.register(
     "Failed to dismiss all notifications" : "رد همه اعلان ها انجام نشد",
     "Failed to perform action" : "انجام عملی انجام نشد",
     "Dismiss" : "پنهان کن",
+    "seconds ago" : "ثانیه‌هایی پیش",
     "Failed to dismiss notification" : "رد اخطار انجام نشد",
     "in {path}" : "در { مسیر }"
 },

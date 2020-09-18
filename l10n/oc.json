@@ -3,6 +3,7 @@
     "Notifications" : "Notificacions",
     "Dismiss all notifications" : "Tancar totas las notificacions",
     "No notifications" : "Cap de notificacion",
-    "Dismiss" : "Ignorar"
+    "Dismiss" : "Ignorar",
+    "seconds ago" : "i a qualques segondas"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }

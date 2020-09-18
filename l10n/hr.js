@@ -11,6 +11,7 @@ OC.L10N.register(
     "Failed to dismiss all notifications" : "Zanemarivanje svih obavijesti nije uspjelo",
     "Failed to perform action" : "Izvršavanje radnje nije uspjelo",
     "Dismiss" : "Zanemari",
+    "seconds ago" : "prije nekoliko sekundi",
     "Failed to dismiss notification" : "Zanemarivanje obavijesti nije uspjelo",
     "in {path}" : "u {path}"
 },
