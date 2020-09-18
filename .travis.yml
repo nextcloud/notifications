@@ -3,7 +3,7 @@ sudo: required
 language: php
 php:
   - 7.3
-  - 7.4snapshot
+  - 7.4
 services:
   - mysql
   - postgresql
@@ -65,13 +65,13 @@ script:
 
 matrix:
   include:
-    - php: 7.3
+    - php: 7.4
       env: DB=mysql
-    - php: 7.3
+    - php: 7.4
       env: DB=pgsql
-    - php: 7.3
+    - php: 7.4
       env: DB=oracle
-    - php: 7.2
+    - php: 7.3
       env: DB=mysql;INTEGRATION=1
   allow_failures:
     - env: DB=mysql;CODECHECK=2
