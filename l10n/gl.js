@@ -11,7 +11,7 @@ OC.L10N.register(
     "Failed to dismiss all notifications" : "Produciuse un fallo ao rexeitar todas as notificacións",
     "Failed to perform action" : "Produciuse un fallo ao realizar a acción",
     "Dismiss" : "Rexeitar",
-    "seconds ago" : "segundos atrás",
+    "seconds ago" : "hai uns segundos",
     "Failed to dismiss notification" : "Produciuse un erro ao rexeitar  a notificación",
     "in {path}" : "en {path}"
 },
