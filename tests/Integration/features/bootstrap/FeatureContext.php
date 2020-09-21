@@ -27,8 +27,8 @@ use Behat\Gherkin\Node\TableNode;
 use GuzzleHttp\Client;
 use GuzzleHttp\Cookie\CookieJar;
 use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Message\ResponseInterface;
 use PHPUnit\Framework\Assert;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Defines application features from the specific context.
@@ -103,7 +103,8 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 		}
 
 		$this->sendingToWith('GET', '/apps/notifications/api/' . $api . '/notifications?format=json', null, $headers);
-		$this->lastEtag = $this->response->getHeader('ETag');
+		$etagHeaders = $this->response->getHeader('ETag');
+		$this->lastEtag = array_pop($etagHeaders);
 	}
 
 	/**
@@ -136,7 +137,8 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	 * @return array
 	 */
 	protected function getArrayOfNotificationsResponded(ResponseInterface $response): array {
-		return $response->json()['ocs']['data'];
+		$jsonBody = json_decode($response->getBody()->getContents(), true);
+		return $jsonBody['ocs']['data'];
 	}
 
 	/**
@@ -190,11 +192,11 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 
 		$this->sendingTo('GET', '/apps/notifications/api/' . $api . '/notifications/' . $notificationId . '?format=json');
 		$this->assertStatusCode($this->response, 200);
-		$response = $this->response->json();
+		$response = $this->getArrayOfNotificationsResponded($this->response);
 
 		foreach ($formData->getRowsHash() as $key => $value) {
-			Assert::assertArrayHasKey($key, $response['ocs']['data']);
-			Assert::assertEquals($value, $response['ocs']['data'][$key]);
+			Assert::assertArrayHasKey($key, $response);
+			Assert::assertEquals($value, $response[$key]);
 		}
 	}
 
@@ -259,11 +261,13 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 		];
 		if ($body instanceof TableNode) {
 			$fd = $body->getRowsHash();
-			$options['body'] = $fd;
+			$options['form_params'] = $fd;
+		} else if (is_array($body)) {
+			$options['form_params'] = $body;
 		}
 
 		try {
-			return $client->send($client->createRequest($verb, $fullUrl, $options));
+			return $client->{$verb}($fullUrl, $options);
 		} catch (ClientException $ex) {
 			return $ex->getResponse();
 		}
@@ -314,7 +318,7 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 		$client = new Client();
 		$options = [
 			'auth' => ['admin', 'admin'],
-			'body' => [
+			'form_params' => [
 				'userid' => $user,
 				'password' => '123456'
 			],
@@ -322,7 +326,7 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 				'OCS-APIREQUEST' => 'true',
 			],
 		];
-		$client->send($client->createRequest('POST', $userProvisioningUrl, $options));
+		$client->post($userProvisioningUrl, $options);
 
 		//Quick hack to login once with the current user
 		$options2 = [
@@ -331,7 +335,7 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 				'OCS-APIREQUEST' => 'true',
 			],
 		];
-		$client->send($client->createRequest('GET', $userProvisioningUrl . '/' . $user, $options2));
+		$client->get($userProvisioningUrl . '/' . $user, $options2);
 
 		$this->currentUser = $previous_user;
 	}
@@ -367,7 +371,9 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 		}
 		if ($body instanceof TableNode) {
 			$fd = $body->getRowsHash();
-			$options['body'] = $fd;
+			$options['form_params'] = $fd;
+		} else if (is_array($body)) {
+			$options['form_params'] = $body;
 		}
 
 		$options['headers'] = array_merge($headers, [
@@ -375,7 +381,7 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 		]);
 
 		try {
-			$this->response = $client->send($client->createRequest($verb, $fullUrl, $options));
+			$this->response = $client->request($verb, $fullUrl, $options);
 		} catch (ClientException $ex) {
 			$this->response = $ex->getResponse();
 		}
