@@ -22,6 +22,6 @@
 	<repository>https://github.com/nextcloud/notifications.git</repository>
 
 	<dependencies>
-		<nextcloud min-version="20" max-version="20" />
+		<nextcloud min-version="21" max-version="21" />
 	</dependencies>
 </info>

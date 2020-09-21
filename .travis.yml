@@ -2,7 +2,6 @@ dist: trusty
 sudo: required
 language: php
 php:
-  - 7.2
   - 7.3
   - 7.4snapshot
 services:
@@ -72,7 +71,7 @@ matrix:
       env: DB=pgsql
     - php: 7.3
       env: DB=oracle
-    - php: 7.2
+    - php: 7.3
       env: DB=mysql;INTEGRATION=1
   allow_failures:
     - env: DB=mysql;CODECHECK=2
