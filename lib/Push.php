@@ -21,6 +21,8 @@
 
 namespace OCA\Notifications;
 
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
 use OC\Authentication\Exceptions\InvalidTokenException;
 use OC\Authentication\Token\IProvider;
 use OC\Security\IdentityProof\Key;
@@ -284,44 +286,65 @@ class Push {
 						'notifications' => $notifications,
 					],
 				]);
+			} catch (ClientException $e) {
+				// Server responded with 4xx (400 Bad Request mostlikely)
+				$response = $e->getResponse();
+			} catch (ServerException $e) {
+				// Server responded with 5xx
+				$response = $e->getResponse();
+				$body = $response->getBody();
+				$error = \is_string($body) ? $body : ('no reason given (' . $response->getStatusCode() . ')');
+
+				$this->log->debug('Could not send notification to push server [{url}]: {error}',[
+					'error' => $error,
+					'url' => $proxyServer,
+					'app' => 'notifications',
+				]);
+
+				$this->printInfo('Could not send notification to push server [' . $proxyServer . ']: ' . $error);
+				continue;
 			} catch (\Exception $e) {
 				$this->log->logException($e, [
 					'app' => 'notifications',
-					'level' => $e->getCode() === Http::STATUS_BAD_REQUEST ? ILogger::INFO : ILogger::WARN,
+					'level' => ILogger::ERROR,
 				]);
+
+				$error = $e->getMessage() ?: 'no reason given';
+				$this->printInfo('Could not send notification to push server [' . get_class($e) . ']: ' . $error);
 				continue;
 			}
 
 			$status = $response->getStatusCode();
-			if ($status === Http::STATUS_SERVICE_UNAVAILABLE && $this->config->getSystemValue('debug', false)) {
-				$body = $response->getBody();
-				$this->log->debug('Could not send notification to push server [{url}]: {error}',[
-					'error' => \is_string($body) ? $body : 'no reason given',
-					'url' => $proxyServer,
-					'app' => 'notifications',
-				]);
-				continue;
-			}
-
 			$body = $response->getBody();
 			$bodyData = json_decode($body, true);
-			if ($status !== Http::STATUS_OK) {
+
+			if (is_array($bodyData) && isset($bodyData['unknown'], $bodyData['failed']) && is_array($bodyData['unknown'])) {
+				foreach ($bodyData['unknown'] as $unknownDevice) {
+					$this->printInfo('Deleting device because it is unknown by the push server: ' . $unknownDevice);
+					$this->deletePushTokenByDeviceIdentifier($unknownDevice);
+				}
+
+				if ($bodyData['failed'] !== 0) {
+					$this->printInfo('Push notification sent, but ' . $bodyData['failed'] . ' failed');
+				} else {
+					$this->printInfo('Push notification sent successfully');
+				}
+			} elseif ($status !== Http::STATUS_OK) {
 				$error = \is_string($body) && $bodyData === null ? $body : 'no reason given';
 				$this->printInfo('Could not send notification to push server [' . $proxyServer . ']: ' . $error);
-				$this->log->error('Could not send notification to push server [{url}]: {error}', [
+				$this->log->warning('Could not send notification to push server [{url}]: {error}', [
 					'error' => $error,
 					'url' => $proxyServer,
 					'app' => 'notifications',
 				]);
 			} else {
-				$this->printInfo('Push notification sent');
-			}
-
-			if (is_array($bodyData) && !empty($bodyData['unknown']) && is_array($bodyData['unknown'])) {
-				foreach ($bodyData['unknown'] as $unknownDevice) {
-					$this->printInfo('Deleting device because it is unknown by the push server: ' . $unknownDevice);
-					$this->deletePushTokenByDeviceIdentifier($unknownDevice);
-				}
+				$error = \is_string($body) && $bodyData === null ? $body : 'no reason given';
+				$this->printInfo('Push notification sent but response was not parsable, using an outdated push proxy? [' . $proxyServer . ']: ' . $error);
+				$this->log->info('Push notification sent but response was not parsable, using an outdated push proxy? [{url}]: {error}', [
+					'error' => $error,
+					'url' => $proxyServer,
+					'app' => 'notifications',
+				]);
 			}
 		}
 	}
