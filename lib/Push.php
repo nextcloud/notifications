@@ -22,6 +22,8 @@
 namespace OCA\Notifications;
 
 
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
 use OC\Authentication\Exceptions\InvalidTokenException;
 use OC\Authentication\Token\IProvider;
 use OC\Security\IdentityProof\Key;
@@ -297,6 +299,7 @@ class Push {
 
 			if (is_array($bodyData) && isset($bodyData['unknown'], $bodyData['failed'])) {
 				if (is_array($bodyData['unknown'])) {
+					// Proxy returns null when the array is empty
 					foreach ($bodyData['unknown'] as $unknownDevice) {
 						$this->printInfo('Deleting device because it is unknown by the push server: ' . $unknownDevice);
 						$this->deletePushTokenByDeviceIdentifier($unknownDevice);

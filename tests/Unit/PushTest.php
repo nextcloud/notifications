@@ -23,6 +23,8 @@
 namespace OCA\Notifications\Tests\Unit;
 
 
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
 use OC\Authentication\Exceptions\InvalidTokenException;
 use OC\Authentication\Token\IProvider;
 use OC\Security\IdentityProof\Key;
@@ -407,7 +409,7 @@ class PushTest extends TestCase {
 
 		/** @var INotification|MockObject $notification */
 		$notification = $this->createMock(INotification::class);
-		$notification->expects($this->exactly(3))
+		$notification
 			->method('getUser')
 			->willReturn('valid');
 
@@ -454,10 +456,9 @@ class PushTest extends TestCase {
 				],
 			]);
 
-		$this->config->expects($this->exactly(2))
+		$this->config->expects($this->exactly(1))
 			->method('getSystemValue')
 			->willReturnMap([
-				['debug', false, $isDebug],
 				['force_language', false, false],
 			]);
 
@@ -506,10 +507,10 @@ class PushTest extends TestCase {
 		$client->expects($this->at(0))
 			->method('post')
 			->with('proxyserver1/notifications', [
-					'body' => [
-						'notifications' => ['["Payload"]', '["Payload"]'],
-					],
-				])
+				'body' => [
+					'notifications' => ['["Payload"]', '["Payload"]'],
+				],
+			])
 			->willThrowException($e);
 
 		$this->logger->expects($this->at(0))
@@ -533,11 +534,11 @@ class PushTest extends TestCase {
 		$client->expects($this->at(1))
 			->method('post')
 			->with('badrequest/notifications', [
-					'body' => [
-						'notifications' => ['["Payload"]'],
-					],
-				])
-			->willReturn($response1);
+				'body' => [
+					'notifications' => ['["Payload"]'],
+				],
+			])
+			->willThrowException($e);
 
 		$this->logger->expects($this->at(1))
 			->method('warning')
@@ -558,11 +559,11 @@ class PushTest extends TestCase {
 		$client->expects($this->at(2))
 			->method('post')
 			->with('unavailable/notifications', [
-					'body' => [
-						'notifications' => ['["Payload"]'],
-					],
-				])
-			->willReturn($response2);
+				'body' => [
+					'notifications' => ['["Payload"]'],
+				],
+			])
+			->willThrowException($e);
 
 		$this->logger->expects($this->at(2))
 			->method('debug')
@@ -580,10 +581,10 @@ class PushTest extends TestCase {
 		$client->expects($this->at(3))
 			->method('post')
 			->with('ok/notifications', [
-					'body' => [
-						'notifications' => ['["Payload"]'],
-					],
-				])
+				'body' => [
+					'notifications' => ['["Payload"]'],
+				],
+			])
 			->willReturn($response3);
 
 		/** @var IResponse|MockObject $response1 */
