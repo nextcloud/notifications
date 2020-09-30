@@ -405,7 +405,7 @@ class PushTest extends TestCase {
 	 * @param bool $isDebug
 	 */
 	public function testPushToDeviceSending($isDebug) {
-		$push = $this->getPush(['getDevicesForUser', 'encryptAndSign', 'deletePushToken', 'validateToken']);
+		$push = $this->getPush(['getDevicesForUser', 'encryptAndSign', 'deletePushToken', 'validateToken', 'deletePushTokenByDeviceIdentifier']);
 
 		/** @var INotification|MockObject $notification */
 		$notification = $this->createMock(INotification::class);
@@ -449,6 +449,11 @@ class PushTest extends TestCase {
 					'token' => 64,
 					'apptype' => 'other',
 				],
+				[
+					'proxyserver' => 'badrequest-with-devices',
+					'token' => 128,
+					'apptype' => 'other',
+				],
 			]);
 
 		$this->config
@@ -474,11 +479,11 @@ class PushTest extends TestCase {
 			->with($user)
 			->willReturn($key);
 
-		$push->expects($this->exactly(5))
+		$push->expects($this->exactly(6))
 			->method('validateToken')
 			->willReturn(true);
 
-		$push->expects($this->exactly(5))
+		$push->expects($this->exactly(6))
 			->method('encryptAndSign')
 			->willReturn(['Payload']);
 
@@ -580,6 +585,34 @@ class PushTest extends TestCase {
 				],
 			])
 			->willReturn($response3);
+
+		/** @var IResponse|MockObject $response1 */
+		$response4 = $this->createMock(IResponse::class);
+		$response4->expects($this->once())
+			->method('getStatusCode')
+			->willReturn(Http::STATUS_BAD_REQUEST);
+		$response4->expects($this->once())
+			->method('getBody')
+			->willReturn(json_encode([
+				'failed' => 1,
+				'unknown' => [
+					'123456'
+				]
+			]));
+		$e = $this->createMock(ClientException::class);
+		$e->method('getResponse')
+			->willReturn($response4);
+		$client->expects($this->at(4))
+			->method('post')
+			->with('badrequest-with-devices/notifications', [
+				'body' => [
+					'notifications' => ['["Payload"]'],
+				],
+			])
+			->willThrowException($e);
+
+		$push->method('deletePushTokenByDeviceIdentifier')
+			->with('123456');
 
 		$push->pushToDevice(207787, $notification);
 	}
