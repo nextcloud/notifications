@@ -511,7 +511,7 @@ class PushTest extends TestCase {
 			->method('logException')
 			->with($e, [
 				'app' => 'notifications',
-				'level' => ILogger::WARN,
+				'level' => ILogger::ERROR,
 			]);
 
 		/** @var IResponse|MockObject $response1 */
@@ -522,6 +522,9 @@ class PushTest extends TestCase {
 		$response1->expects($this->once())
 			->method('getBody')
 			->willReturn(null);
+		$e = $this->createMock(ClientException::class);
+		$e->method('getResponse')
+			->willReturn($response1);
 		$client->expects($this->at(1))
 			->method('post')
 			->with('badrequest/notifications', [
@@ -532,7 +535,7 @@ class PushTest extends TestCase {
 			->willReturn($response1);
 
 		$this->logger->expects($this->at(1))
-			->method('error')
+			->method('warning')
 			->with('Could not send notification to push server [{url}]: {error}', [
 				'error' => 'no reason given',
 				'url' => 'badrequest',
@@ -542,11 +545,11 @@ class PushTest extends TestCase {
 		/** @var IResponse|MockObject $response1 */
 		$response2 = $this->createMock(IResponse::class);
 		$response2->expects($this->once())
-			->method('getStatusCode')
-			->willReturn(Http::STATUS_SERVICE_UNAVAILABLE);
-		$response2->expects($this->once())
 			->method('getBody')
 			->willReturn('Maintenance');
+		$e = $this->createMock(ServerException::class);
+		$e->method('getResponse')
+			->willReturn($response2);
 		$client->expects($this->at(2))
 			->method('post')
 			->with('unavailable/notifications', [
@@ -556,7 +559,7 @@ class PushTest extends TestCase {
 				])
 			->willReturn($response2);
 
-		$this->logger->expects($isDebug ? $this->at(2) : $this->never())
+		$this->logger->expects($this->at(2))
 			->method('debug')
 			->with('Could not send notification to push server [{url}]: {error}', [
 				'error' => 'Maintenance',
