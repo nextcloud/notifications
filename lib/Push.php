@@ -320,6 +320,7 @@ class Push {
 
 			if (is_array($bodyData) && isset($bodyData['unknown'], $bodyData['failed'])) {
 				if (is_array($bodyData['unknown'])) {
+					// Proxy returns null when the array is empty
 					foreach ($bodyData['unknown'] as $unknownDevice) {
 						$this->printInfo('Deleting device because it is unknown by the push server: ' . $unknownDevice);
 						$this->deletePushTokenByDeviceIdentifier($unknownDevice);
