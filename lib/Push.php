@@ -272,7 +272,7 @@ class Push {
 				$body = $response->getBody();
 				$error = \is_string($body) ? $body : ('no reason given (' . $response->getStatusCode() . ')');
 
-				$this->log->debug('Could not send notification to push server [{url}]: {error}',[
+				$this->log->debug('Could not send notification to push server [{url}]: {error}', [
 					'error' => $error,
 					'url' => $proxyServer,
 					'app' => 'notifications',
@@ -295,10 +295,12 @@ class Push {
 			$body = $response->getBody();
 			$bodyData = json_decode($body, true);
 
-			if (is_array($bodyData) && isset($bodyData['unknown'], $bodyData['failed']) && is_array($bodyData['unknown'])) {
-				foreach ($bodyData['unknown'] as $unknownDevice) {
-					$this->printInfo('Deleting device because it is unknown by the push server: ' . $unknownDevice);
-					$this->deletePushTokenByDeviceIdentifier($unknownDevice);
+			if (is_array($bodyData) && isset($bodyData['unknown'], $bodyData['failed'])) {
+				if (is_array($bodyData['unknown'])) {
+					foreach ($bodyData['unknown'] as $unknownDevice) {
+						$this->printInfo('Deleting device because it is unknown by the push server: ' . $unknownDevice);
+						$this->deletePushTokenByDeviceIdentifier($unknownDevice);
+					}
 				}
 
 				if ($bodyData['failed'] !== 0) {
