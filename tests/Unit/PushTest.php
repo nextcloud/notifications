@@ -427,10 +427,9 @@ class PushTest extends TestCase {
 				],
 			]);
 
-		$this->config->expects($this->exactly(2))
+		$this->config->expects($this->exactly(1))
 			->method('getSystemValue')
 			->willReturnMap([
-				['debug', false, $isDebug],
 				['force_language', false, false],
 			]);
 
@@ -490,7 +489,7 @@ class PushTest extends TestCase {
 			->method('logException')
 			->with($e, [
 				'app' => 'notifications',
-				'level' => ILogger::WARN,
+				'level' => ILogger::ERROR,
 			]);
 
 		/** @var IResponse|\PHPUnit_Framework_MockObject_MockObject $response1 */
@@ -511,7 +510,7 @@ class PushTest extends TestCase {
 			->willReturn($response1);
 
 		$this->logger->expects($this->at(1))
-			->method('error')
+			->method('warning')
 			->with('Could not send notification to push server [{url}]: {error}', [
 				'error' => 'no reason given',
 				'url' => 'badrequest',
@@ -535,8 +534,8 @@ class PushTest extends TestCase {
 				])
 			->willReturn($response2);
 
-		$this->logger->expects($isDebug ? $this->at(2) : $this->never())
-			->method('debug')
+		$this->logger->expects($this->at(2))
+			->method('warning')
 			->with('Could not send notification to push server [{url}]: {error}', [
 				'error' => 'Maintenance',
 				'url' => 'unavailable',

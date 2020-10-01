@@ -22,6 +22,8 @@
 namespace OCA\Notifications;
 
 
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
 use OC\Authentication\Exceptions\InvalidTokenException;
 use OC\Authentication\Token\IProvider;
 use OC\Security\IdentityProof\Key;
@@ -189,39 +191,55 @@ class Push {
 						'notifications' => $notifications,
 					],
 				]);
+			} catch (ClientException $e) {
+				// Server responded with 4xx (400 Bad Request mostlikely)
+				$response = $e->getResponse();
+			} catch (ServerException $e) {
+				// Server responded with 5xx
+				$response = $e->getResponse();
+				$body = $response->getBody();
+				$error = \is_string($body) ? $body : ('no reason given (' . $response->getStatusCode() . ')');
+
+				$this->log->debug('Could not send notification to push server [{url}]: {error}', [
+					'error' => $error,
+					'url' => $proxyServer,
+					'app' => 'notifications',
+				]);
+
+				continue;
 			} catch (\Exception $e) {
 				$this->log->logException($e, [
 					'app' => 'notifications',
-					'level' => $e->getCode() === Http::STATUS_BAD_REQUEST ? ILogger::INFO : ILogger::WARN,
+					'level' => ILogger::ERROR,
 				]);
 				continue;
 			}
 
 			$status = $response->getStatusCode();
-			if ($status === Http::STATUS_SERVICE_UNAVAILABLE && $this->config->getSystemValue('debug', false)) {
-				$body = $response->getBody();
-				$this->log->debug('Could not send notification to push server [{url}]: {error}',[
-					'error' => \is_string($body) ? $body : 'no reason given',
-					'url' => $proxyServer,
-					'app' => 'notifications',
-				]);
-				continue;
-			}
-
 			$body = $response->getBody();
 			$bodyData = json_decode($body, true);
-			if ($status !== Http::STATUS_OK) {
-				$this->log->error('Could not send notification to push server [{url}]: {error}',[
-					'error' => \is_string($body) && $bodyData === null ? $body : 'no reason given',
+
+			if (is_array($bodyData) && isset($bodyData['unknown'], $bodyData['failed'])) {
+				if (is_array($bodyData['unknown'])) {
+					// Proxy returns null when the array is empty
+					foreach ($bodyData['unknown'] as $unknownDevice) {
+						$this->deletePushTokenByDeviceIdentifier($unknownDevice);
+					}
+				}
+			} elseif ($status !== Http::STATUS_OK) {
+				$error = \is_string($body) && $bodyData === null ? $body : 'no reason given';
+				$this->log->warning('Could not send notification to push server [{url}]: {error}', [
+					'error' => $error,
 					'url' => $proxyServer,
 					'app' => 'notifications',
 				]);
-			}
-
-			if (is_array($bodyData) && !empty($bodyData['unknown']) && is_array($bodyData['unknown'])) {
-				foreach ($bodyData['unknown'] as $unknownDevice) {
-					$this->deletePushTokenByDeviceIdentifier($unknownDevice);
-				}
+			} else {
+				$error = \is_string($body) && $bodyData === null ? $body : 'no reason given';
+				$this->log->info('Push notification sent but response was not parsable, using an outdated push proxy? [{url}]: {error}', [
+					'error' => $error,
+					'url' => $proxyServer,
+					'app' => 'notifications',
+				]);
 			}
 		}
 	}
