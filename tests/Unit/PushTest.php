@@ -23,6 +23,8 @@
 namespace OCA\Notifications\Tests\Unit;
 
 
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
 use OC\Authentication\Exceptions\InvalidTokenException;
 use OC\Authentication\Token\IProvider;
 use OC\Security\IdentityProof\Key;
@@ -403,11 +405,11 @@ class PushTest extends TestCase {
 	 * @param bool $isDebug
 	 */
 	public function testPushToDeviceSending($isDebug) {
-		$push = $this->getPush(['getDevicesForUser', 'encryptAndSign', 'deletePushToken', 'validateToken']);
+		$push = $this->getPush(['getDevicesForUser', 'encryptAndSign', 'deletePushToken', 'validateToken', 'deletePushTokenByDeviceIdentifier']);
 
 		/** @var INotification|MockObject $notification */
 		$notification = $this->createMock(INotification::class);
-		$notification->expects($this->exactly(3))
+		$notification
 			->method('getUser')
 			->willReturn('valid');
 
@@ -447,12 +449,16 @@ class PushTest extends TestCase {
 					'token' => 64,
 					'apptype' => 'other',
 				],
+				[
+					'proxyserver' => 'badrequest-with-devices',
+					'token' => 128,
+					'apptype' => 'other',
+				],
 			]);
 
-		$this->config->expects($this->exactly(2))
+		$this->config->expects($this->exactly(1))
 			->method('getSystemValue')
 			->willReturnMap([
-				['debug', false, $isDebug],
 				['force_language', false, false],
 			]);
 
@@ -474,11 +480,11 @@ class PushTest extends TestCase {
 			->with($user)
 			->willReturn($key);
 
-		$push->expects($this->exactly(5))
+		$push->expects($this->exactly(6))
 			->method('validateToken')
 			->willReturn(true);
 
-		$push->expects($this->exactly(5))
+		$push->expects($this->exactly(6))
 			->method('encryptAndSign')
 			->willReturn(['Payload']);
 
@@ -501,17 +507,17 @@ class PushTest extends TestCase {
 		$client->expects($this->at(0))
 			->method('post')
 			->with('proxyserver1/notifications', [
-					'body' => [
-						'notifications' => ['["Payload"]', '["Payload"]'],
-					],
-				])
+				'body' => [
+					'notifications' => ['["Payload"]', '["Payload"]'],
+				],
+			])
 			->willThrowException($e);
 
 		$this->logger->expects($this->at(0))
 			->method('logException')
 			->with($e, [
 				'app' => 'notifications',
-				'level' => ILogger::WARN,
+				'level' => ILogger::ERROR,
 			]);
 
 		/** @var IResponse|MockObject $response1 */
@@ -522,17 +528,20 @@ class PushTest extends TestCase {
 		$response1->expects($this->once())
 			->method('getBody')
 			->willReturn(null);
+		$e = $this->createMock(ClientException::class);
+		$e->method('getResponse')
+			->willReturn($response1);
 		$client->expects($this->at(1))
 			->method('post')
 			->with('badrequest/notifications', [
-					'body' => [
-						'notifications' => ['["Payload"]'],
-					],
-				])
-			->willReturn($response1);
+				'body' => [
+					'notifications' => ['["Payload"]'],
+				],
+			])
+			->willThrowException($e);
 
 		$this->logger->expects($this->at(1))
-			->method('error')
+			->method('warning')
 			->with('Could not send notification to push server [{url}]: {error}', [
 				'error' => 'no reason given',
 				'url' => 'badrequest',
@@ -542,21 +551,21 @@ class PushTest extends TestCase {
 		/** @var IResponse|MockObject $response1 */
 		$response2 = $this->createMock(IResponse::class);
 		$response2->expects($this->once())
-			->method('getStatusCode')
-			->willReturn(Http::STATUS_SERVICE_UNAVAILABLE);
-		$response2->expects($this->once())
 			->method('getBody')
 			->willReturn('Maintenance');
+		$e = $this->createMock(ServerException::class);
+		$e->method('getResponse')
+			->willReturn($response2);
 		$client->expects($this->at(2))
 			->method('post')
 			->with('unavailable/notifications', [
-					'body' => [
-						'notifications' => ['["Payload"]'],
-					],
-				])
-			->willReturn($response2);
+				'body' => [
+					'notifications' => ['["Payload"]'],
+				],
+			])
+			->willThrowException($e);
 
-		$this->logger->expects($isDebug ? $this->at(2) : $this->never())
+		$this->logger->expects($this->at(2))
 			->method('debug')
 			->with('Could not send notification to push server [{url}]: {error}', [
 				'error' => 'Maintenance',
@@ -572,11 +581,39 @@ class PushTest extends TestCase {
 		$client->expects($this->at(3))
 			->method('post')
 			->with('ok/notifications', [
-					'body' => [
-						'notifications' => ['["Payload"]'],
-					],
-				])
+				'body' => [
+					'notifications' => ['["Payload"]'],
+				],
+			])
 			->willReturn($response3);
+
+		/** @var IResponse|MockObject $response1 */
+		$response4 = $this->createMock(IResponse::class);
+		$response4->expects($this->once())
+			->method('getStatusCode')
+			->willReturn(Http::STATUS_BAD_REQUEST);
+		$response4->expects($this->once())
+			->method('getBody')
+			->willReturn(json_encode([
+				'failed' => 1,
+				'unknown' => [
+					'123456'
+				]
+			]));
+		$e = $this->createMock(ClientException::class);
+		$e->method('getResponse')
+			->willReturn($response4);
+		$client->expects($this->at(4))
+			->method('post')
+			->with('badrequest-with-devices/notifications', [
+				'body' => [
+					'notifications' => ['["Payload"]'],
+				],
+			])
+			->willThrowException($e);
+
+		$push->method('deletePushTokenByDeviceIdentifier')
+			->with('123456');
 
 		$push->pushToDevice(207787, $notification);
 	}
