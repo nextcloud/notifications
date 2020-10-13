@@ -4,6 +4,7 @@ language: php
 php:
   - 7.3
   - 7.4snapshot
+  - 8.0snapshot
 services:
   - mysql
   - postgresql
