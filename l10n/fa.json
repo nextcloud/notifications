@@ -8,6 +8,7 @@
     "Failed to dismiss all notifications" : "رد همه اعلان ها انجام نشد",
     "Failed to perform action" : "انجام عملی انجام نشد",
     "Dismiss" : "پنهان کن",
+    "seconds ago" : "ثانیه‌هایی پیش",
     "Failed to dismiss notification" : "رد اخطار انجام نشد",
     "in {path}" : "در { مسیر }"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"

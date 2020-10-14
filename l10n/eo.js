@@ -10,6 +10,7 @@ OC.L10N.register(
     "Failed to dismiss all notifications" : "Malsukcesis forsendi ĉiujn sciigojn",
     "Failed to perform action" : "Malsukcesis fari agon",
     "Dismiss" : "Forsendi",
+    "seconds ago" : "antaŭ kelkaj sekundoj",
     "Failed to dismiss notification" : "Malsukcesis forsendi sciigo",
     "in {path}" : "en {path}"
 },

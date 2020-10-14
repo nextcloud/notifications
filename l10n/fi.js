@@ -9,6 +9,7 @@ OC.L10N.register(
     "Failed to dismiss all notifications" : "Kaikki ilmoitusten hylkääminen epäonnistui",
     "Failed to perform action" : "Toimenpiteen suorittaminen epäonnistui",
     "Dismiss" : "Hylkää",
+    "seconds ago" : "sekuntia sitten",
     "Failed to dismiss notification" : "Ilmoituksen hylkääminen epäonnistui",
     "in {path}" : "polussa {path}"
 },

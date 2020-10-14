@@ -11,6 +11,7 @@ OC.L10N.register(
     "Failed to dismiss all notifications" : "Opuščanje obvestil je spodletelo!",
     "Failed to perform action" : "Izvajanje dejanja je spodletelo",
     "Dismiss" : "Opusti",
+    "seconds ago" : "pred nekaj sekundami",
     "Failed to dismiss notification" : "Opuščanje obvestila je spodletelo!",
     "in {path}" : "v {path}"
 },
