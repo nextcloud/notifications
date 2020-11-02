@@ -8,7 +8,7 @@ OC.L10N.register(
     "Dismiss all notifications" : "Alle Benachrichtigungen verwerfen",
     "Requesting browser permissions to show notifications" : "Anfordern der Browserberechtigungen zum Anzeigen von Benachrichtigungen",
     "No notifications" : "Keine Benachrichtigungen",
-    "Failed to dismiss all notifications" : "Alle Benachrichtigungen konnten nicht verworfen werden",
+    "Failed to dismiss all notifications" : "Es konnten nicht alle Benachrichtigungen verworfen werden",
     "Failed to perform action" : "Aktion konnte nicht ausgeführt werden",
     "Dismiss" : "Verwerfen",
     "seconds ago" : "Gerade eben",
