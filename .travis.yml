@@ -70,8 +70,6 @@ matrix:
       env: DB=mysql
     - php: 7.3
       env: DB=pgsql
-    - php: 7.3
-      env: DB=oracle
     - php: 7.2
       env: DB=mysql;INTEGRATION=1
   allow_failures:
