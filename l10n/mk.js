@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Admin notifications" : "Известувања за администраторот",
     "Notifications" : "Известувања",
+    "This app provides a backend and frontend for the notification API available in Nextcloud." : "Оваа апликација обезбедува backend и frontend за известувачкиот API достапен во Nextcloud.",
     "Dismiss all notifications" : "Отфрли ги сите известувања",
     "Requesting browser permissions to show notifications" : "Барање на дозвола од прелистувачот за прикажување на известувања.",
     "No notifications" : "Нема известувања",
