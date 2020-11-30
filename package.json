@@ -22,7 +22,7 @@
 		"@nextcloud/event-bus": "^1.2.0",
 		"@nextcloud/moment": "^1.1.1",
 		"@nextcloud/router": "^1.2.0",
-		"@nextcloud/vue": "^3.2.0",
+		"@nextcloud/vue": "^3.3.0",
 		"core-js": "^3.8.0",
 		"regenerator-runtime": "^0.13.7",
 		"vue": "^2.6.12",
