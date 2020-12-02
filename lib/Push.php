@@ -318,7 +318,7 @@ class Push {
 			$body = $response->getBody();
 			$bodyData = json_decode($body, true);
 
-			if (is_array($bodyData) && isset($bodyData['unknown'], $bodyData['failed'])) {
+			if (is_array($bodyData) && array_key_exists('unknown', $bodyData) && array_key_exists('failed', $bodyData)) {
 				if (is_array($bodyData['unknown'])) {
 					// Proxy returns null when the array is empty
 					foreach ($bodyData['unknown'] as $unknownDevice) {
