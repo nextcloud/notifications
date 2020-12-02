@@ -10,7 +10,7 @@ OC.L10N.register(
     "No notifications" : "Brak powiadomień",
     "Failed to dismiss all notifications" : "Nie udało się usunąć wszystkich powiadomień",
     "Failed to perform action" : "Nie udało się wykonać działania",
-    "Dismiss" : "Anuluj",
+    "Dismiss" : "Odrzuć",
     "seconds ago" : "przed chwilą",
     "Failed to dismiss notification" : "Nie udało się usunąć powiadomienia ",
     "in {path}" : "w {path}"
