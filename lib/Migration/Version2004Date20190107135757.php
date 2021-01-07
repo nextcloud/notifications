@@ -24,7 +24,7 @@ declare(strict_types=1);
 namespace OCA\Notifications\Migration;
 
 use Closure;
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use OCP\DB\ISchemaWrapper;
 use OCP\Migration\SimpleMigrationStep;
 use OCP\Migration\IOutput;
@@ -43,55 +43,55 @@ class Version2004Date20190107135757 extends SimpleMigrationStep {
 
 		if (!$schema->hasTable('notifications')) {
 			$table = $schema->createTable('notifications');
-			$table->addColumn('notification_id', Type::INTEGER, [
+			$table->addColumn('notification_id', Types::INTEGER, [
 				'autoincrement' => true,
 				'notnull' => true,
 				'length' => 4,
 			]);
-			$table->addColumn('app', Type::STRING, [
+			$table->addColumn('app', Types::STRING, [
 				'notnull' => true,
 				'length' => 32,
 			]);
-			$table->addColumn('user', Type::STRING, [
+			$table->addColumn('user', Types::STRING, [
 				'notnull' => true,
 				'length' => 64,
 			]);
-			$table->addColumn('timestamp', Type::INTEGER, [
+			$table->addColumn('timestamp', Types::INTEGER, [
 				'notnull' => true,
 				'length' => 4,
 				'default' => 0,
 			]);
-			$table->addColumn('object_type', Type::STRING, [
+			$table->addColumn('object_type', Types::STRING, [
 				'notnull' => true,
 				'length' => 64,
 			]);
-			$table->addColumn('object_id', Type::STRING, [
+			$table->addColumn('object_id', Types::STRING, [
 				'notnull' => true,
 				'length' => 64,
 			]);
-			$table->addColumn('subject', Type::STRING, [
+			$table->addColumn('subject', Types::STRING, [
 				'notnull' => true,
 				'length' => 64,
 			]);
-			$table->addColumn('subject_parameters', Type::TEXT, [
+			$table->addColumn('subject_parameters', Types::TEXT, [
 				'notnull' => false,
 			]);
-			$table->addColumn('message', Type::STRING, [
+			$table->addColumn('message', Types::STRING, [
 				'notnull' => false,
 				'length' => 64,
 			]);
-			$table->addColumn('message_parameters', Type::TEXT, [
+			$table->addColumn('message_parameters', Types::TEXT, [
 				'notnull' => false,
 			]);
-			$table->addColumn('link', Type::STRING, [
+			$table->addColumn('link', Types::STRING, [
 				'notnull' => false,
 				'length' => 4000,
 			]);
-			$table->addColumn('icon', Type::STRING, [
+			$table->addColumn('icon', Types::STRING, [
 				'notnull' => false,
 				'length' => 4000,
 			]);
-			$table->addColumn('actions', Type::TEXT, [
+			$table->addColumn('actions', Types::TEXT, [
 				'notnull' => false,
 			]);
 			$table->setPrimaryKey(['notification_id']);
@@ -103,36 +103,36 @@ class Version2004Date20190107135757 extends SimpleMigrationStep {
 
 		if (!$schema->hasTable('notifications_pushtokens')) {
 			$table = $schema->createTable('notifications_pushtokens');
-			$table->addColumn('uid', Type::STRING, [
+			$table->addColumn('uid', Types::STRING, [
 				'notnull' => true,
 				'length' => 64,
 			]);
-			$table->addColumn('token', Type::INTEGER, [
+			$table->addColumn('token', Types::INTEGER, [
 				'notnull' => true,
 				'length' => 4,
 				'default' => 0,
 			]);
-			$table->addColumn('deviceidentifier', Type::STRING, [
+			$table->addColumn('deviceidentifier', Types::STRING, [
 				'notnull' => true,
 				'length' => 128,
 			]);
-			$table->addColumn('devicepublickey', Type::STRING, [
+			$table->addColumn('devicepublickey', Types::STRING, [
 				'notnull' => true,
 				'length' => 512,
 			]);
-			$table->addColumn('devicepublickeyhash', Type::STRING, [
+			$table->addColumn('devicepublickeyhash', Types::STRING, [
 				'notnull' => true,
 				'length' => 128,
 			]);
-			$table->addColumn('pushtokenhash', Type::STRING, [
+			$table->addColumn('pushtokenhash', Types::STRING, [
 				'notnull' => true,
 				'length' => 128,
 			]);
-			$table->addColumn('proxyserver', Type::STRING, [
+			$table->addColumn('proxyserver', Types::STRING, [
 				'notnull' => true,
 				'length' => 256,
 			]);
-			$table->addColumn('apptype', Type::STRING, [
+			$table->addColumn('apptype', Types::STRING, [
 				'notnull' => true,
 				'length' => 32,
 				'default' => 'unknown',

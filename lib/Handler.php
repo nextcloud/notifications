@@ -73,7 +73,7 @@ class Handler {
 		$this->sqlWhere($sql, $notification);
 
 		$statement = $sql->execute();
-		$count = (int) $statement->fetchColumn();
+		$count = (int) $statement->fetchOne();
 		$statement->closeCursor();
 
 		return $count;
