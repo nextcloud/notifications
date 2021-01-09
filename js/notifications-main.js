@@ -355,4 +355,4 @@ t.exports=function(t){return null!=t&&(n(t)||function(t){return"function"==typeo
  *
  */
 o.default.prototype.t=t,o.default.prototype.n=n,o.default.prototype.OC=OC,o.default.prototype.OCA=OCA;var ft=document.getElementById("unified-search"),mt=document.createElement("div");mt.setAttribute("id","notifications"),ft.insertAdjacentHTML("afterend",mt.outerHTML);r.default=new o.default({el:"#notifications",render:function(t){return t(pt)}})}]);
-//# sourceMappingURL=notifications-main.js.map?v=d092213ee896b45e7fd2
+//# sourceMappingURL=notifications-main.js.map?v=9a6f0250c9d38670c04a
