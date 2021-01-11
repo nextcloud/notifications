@@ -445,6 +445,10 @@
                 }
             ],
             "description": "A tool to automatically fix PHP code style",
+            "support": {
+                "issues": "https://github.com/FriendsOfPHP/PHP-CS-Fixer/issues",
+                "source": "https://github.com/FriendsOfPHP/PHP-CS-Fixer/tree/v2.17.3"
+            },
             "funding": [
                 {
                     "url": "https://github.com/keradus",
@@ -3614,7 +3618,7 @@
     "platform": [],
     "platform-dev": [],
     "platform-overrides": {
-        "php": "7.2"
+        "php": "7.3"
     },
-    "plugin-api-version": "1.1.0"
+    "plugin-api-version": "2.0.0"
 }
