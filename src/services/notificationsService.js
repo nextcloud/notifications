@@ -73,6 +73,17 @@ const refreshData = async(lastETag) => {
 	}
 }
 
+const setupPush = async(endpoints) => {
+	const response = await axios.post(endpoints.pre_auth)
+	const ws = new WebSocket(endpoints.websocket)
+	ws.onopen = () => {
+		ws.send('dummy')
+		ws.send(response.data)
+	}
+	return ws
+}
+
 export {
 	getNotificationsData,
+	setupPush,
 }

@@ -56,7 +56,8 @@ import axios from '@nextcloud/axios'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { showError } from '@nextcloud/dialogs'
 import { imagePath, generateOcsUrl } from '@nextcloud/router'
-import { getNotificationsData } from './services/notificationsService'
+import { getNotificationsData, setupPush } from './services/notificationsService'
+import { getCapabilities } from '@nextcloud/capabilities'
 
 export default {
 	name: 'App',
@@ -78,10 +79,13 @@ export default {
 			tabId: null,
 
 			/** @type {number} */
-			pollInterval: 30000, // milliseconds
+			pollIntervalBase: 30000, // milliseconds
+			/** @type {number} */
+			pollIntervalCurrent: 30000, // milliseconds
 
 			/** @type {number|null} */
 			interval: null,
+			pushEndpoints: null
 		}
 	},
 
@@ -125,8 +129,18 @@ export default {
 		// Initial call to the notification endpoint
 		this._fetch()
 
+		const capabilities = getCapabilities()
+		if (capabilities.notify_push) {
+			this.pushEndpoints = capabilities.notify_push.endpoints
+
+			// Because we have push, we only background poll very infrequent
+			this.pollIntervalBase = 15 * 60 * 1000
+
+			this._setupPush()
+		}
+
 		// Setup the background checker
-		this.setupBackgroundFetcher()
+		this._setPollingInterval(this.pollIntervalBase)
 
 		subscribe('networkOffline', this.handleNetworkOffline)
 		subscribe('networkOnline', this.handleNetworkOnline)
@@ -153,18 +167,17 @@ export default {
 
 	methods: {
 		handleNetworkOffline() {
-			this._setPollingInterval(300000)
+			this._setPollingInterval(this.pollIntervalBase * 10)
 		},
 
 		handleNetworkOnline() {
 			this._fetch()
-			this._setPollingInterval(30000)
-			this.setupBackgroundFetcher()
+			this._setPollingInterval(this.pollIntervalBase)
 		},
 
 		setupBackgroundFetcher() {
 			if (OC.config.session_keepalive) {
-				this.interval = window.setInterval(this._backgroundFetch.bind(this), this.pollInterval)
+				this.interval = window.setInterval(this._backgroundFetch.bind(this), this.pollIntervalCurrent)
 			}
 		},
 
@@ -226,27 +239,43 @@ export default {
 
 			if (response.status === 204) {
 				// 204 No Content - Intercept when no notifiers are there.
-				this._setPollingInterval(300000)
+				this._setPollingInterval(this.pollIntervalBase * 10)
 			} else if (response.status === 200) {
 				this.userStatus = response.headers['x-nextcloud-user-status']
 				this.lastETag = response.headers.etag
 				this.lastTabId = response.lastTabId
 				this.notifications = response.data
-				this._setPollingInterval(30000)
+				this._setPollingInterval(this.pollIntervalBase)
 			} else if (response.status === 304) {
 				// 304 - Not modified
-				this._setPollingInterval(30000)
+				this._setPollingInterval(this.pollIntervalBase)
 			} else if (response.status === 503) {
 				// 503 - Maintenance mode
 				console.info('Slowing down notifications: instance is in maintenance mode.')
-				this._setPollingInterval(300000)
+				this._setPollingInterval(this.pollIntervalBase * 10)
 			} else if (response.status === 404) {
 				// 404 - App disabled
 				console.info('Slowing down notifications: app is disabled.')
-				this._setPollingInterval(300000)
+				this._setPollingInterval(this.pollIntervalBase * 10)
 			} else {
 				console.info('Slowing down notifications: Status ' + response.status)
-				this._setPollingInterval(300000)
+				this._setPollingInterval(this.pollIntervalBase * 10)
+			}
+		},
+
+		async _setupPush() {
+			if (!this.pushEndpoints) {
+				return
+			}
+
+			const ws = await setupPush(this.pushEndpoints)
+			ws.onmessage = message => {
+				if (message.data === 'notify_notification') {
+					this._fetch()
+				}
+			}
+			ws.onclose = () => {
+				this._setupPush()
 			}
 		},
 
@@ -256,7 +285,7 @@ export default {
 		},
 
 		_setPollingInterval(pollInterval) {
-			if (this.interval && pollInterval === this.pollInterval) {
+			if (this.interval && pollInterval === this.pollIntervalCurrent) {
 				return
 			}
 
@@ -265,7 +294,7 @@ export default {
 				this.interval = null
 			}
 
-			this.pollInterval = pollInterval
+			this.pollIntervalCurrent = pollInterval
 			this.setupBackgroundFetcher()
 		},
 
