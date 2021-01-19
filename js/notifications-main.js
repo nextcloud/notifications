@@ -354,5 +354,5 @@ t.exports=function(t){return null!=t&&(n(t)||function(t){return"function"==typeo
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-o.default.prototype.t=t,o.default.prototype.n=n,o.default.prototype.OC=OC,o.default.prototype.OCA=OCA;var ht=document.getElementById("unified-search"),_t=document.createElement("div");_t.setAttribute("id","notifications"),ht.insertAdjacentHTML("afterend",_t.outerHTML);r.default=new o.default({el:"#notifications",render:function(t){return t(mt)}})}]);
-//# sourceMappingURL=notifications-main.js.map?v=7de70a0ec32ddd05e8c4
+o.default.prototype.t=t,o.default.prototype.n=n,o.default.prototype.OC=OC,o.default.prototype.OCA=OCA;r.default=new o.default({el:"#notifications",render:function(t){return t(mt)}})}]);
+//# sourceMappingURL=notifications-main.js.map?v=9ec210a813712ed94b09

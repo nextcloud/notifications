@@ -29,11 +29,6 @@ Vue.prototype.n = n
 Vue.prototype.OC = OC
 Vue.prototype.OCA = OCA
 
-const unifiedSearch = document.getElementById('unified-search')
-const notificationsBell = document.createElement('div')
-notificationsBell.setAttribute('id', 'notifications')
-unifiedSearch.insertAdjacentHTML('afterend', notificationsBell.outerHTML)
-
 export default new Vue({
 	el: '#notifications',
 	render: h => h(App),
