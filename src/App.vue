@@ -56,8 +56,8 @@ import axios from '@nextcloud/axios'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { showError } from '@nextcloud/dialogs'
 import { imagePath, generateOcsUrl } from '@nextcloud/router'
-import { getNotificationsData, setupPush } from './services/notificationsService'
-import { getCapabilities } from '@nextcloud/capabilities'
+import { getNotificationsData } from './services/notificationsService'
+import { listen } from '@nextcloud/notify_push'
 
 export default {
 	name: 'App',
@@ -129,14 +129,11 @@ export default {
 		// Initial call to the notification endpoint
 		this._fetch()
 
-		const capabilities = getCapabilities()
-		if (capabilities.notify_push) {
-			this.pushEndpoints = capabilities.notify_push.endpoints
-
-			// Because we have push, we only background poll very infrequent
+		const hasPush = listen('notify_notification', () => {
+			this._fetch()
+		})
+		if (hasPush) {
 			this.pollIntervalBase = 15 * 60 * 1000
-
-			this._setupPush()
 		}
 
 		// Setup the background checker
@@ -260,22 +257,6 @@ export default {
 			} else {
 				console.info('Slowing down notifications: Status ' + response.status)
 				this._setPollingInterval(this.pollIntervalBase * 10)
-			}
-		},
-
-		async _setupPush() {
-			if (!this.pushEndpoints) {
-				return
-			}
-
-			const ws = await setupPush(this.pushEndpoints)
-			ws.onmessage = message => {
-				if (message.data === 'notify_notification') {
-					this._fetch()
-				}
-			}
-			ws.onclose = () => {
-				this._setupPush()
 			}
 		},
 
