@@ -241,6 +241,10 @@ export default {
 
 		onClickMessage(e) {
 			if (e.target.classList.contains('rich-text--wrapper')) {
+				// Vue RichText
+				this.showFullMessage = !this.showFullMessage
+			} else if (!this.messageRich && !!this.message) {
+				// Plain text
 				this.showFullMessage = !this.showFullMessage
 			}
 		},
