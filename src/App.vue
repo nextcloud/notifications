@@ -85,7 +85,7 @@ export default {
 
 			/** @type {number|null} */
 			interval: null,
-			pushEndpoints: null
+			pushEndpoints: null,
 		}
 	},
 
