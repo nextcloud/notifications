@@ -355,4 +355,4 @@ t.exports=function(t){return null!=t&&(n(t)||function(t){return"function"==typeo
  *
  */
 o.default.prototype.t=t,o.default.prototype.n=n,o.default.prototype.OC=OC,o.default.prototype.OCA=OCA;r.default=new o.default({el:"#notifications",render:function(t){return t(ft)}})}]);
-//# sourceMappingURL=notifications-main.js.map?v=caf6613b3661c2d19e11
+//# sourceMappingURL=notifications-main.js.map?v=58c4270ad8b87d70783a
