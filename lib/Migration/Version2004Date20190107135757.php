@@ -101,44 +101,9 @@ class Version2004Date20190107135757 extends SimpleMigrationStep {
 			$table->addIndex(['object_type', 'object_id'], 'oc_notifications_object');
 		}
 
-		if (!$schema->hasTable('notifications_pushtokens')) {
-			$table = $schema->createTable('notifications_pushtokens');
-			$table->addColumn('uid', Types::STRING, [
-				'notnull' => true,
-				'length' => 64,
-			]);
-			$table->addColumn('token', Types::INTEGER, [
-				'notnull' => true,
-				'length' => 4,
-				'default' => 0,
-			]);
-			$table->addColumn('deviceidentifier', Types::STRING, [
-				'notnull' => true,
-				'length' => 128,
-			]);
-			$table->addColumn('devicepublickey', Types::STRING, [
-				'notnull' => true,
-				'length' => 512,
-			]);
-			$table->addColumn('devicepublickeyhash', Types::STRING, [
-				'notnull' => true,
-				'length' => 128,
-			]);
-			$table->addColumn('pushtokenhash', Types::STRING, [
-				'notnull' => true,
-				'length' => 128,
-			]);
-			$table->addColumn('proxyserver', Types::STRING, [
-				'notnull' => true,
-				'length' => 256,
-			]);
-			$table->addColumn('apptype', Types::STRING, [
-				'notnull' => true,
-				'length' => 32,
-				'default' => 'unknown',
-			]);
-			$table->addUniqueIndex(['uid', 'token'], 'oc_notifpushtoken');
-		}
+		// $schema->createTable('notifications_pushtokens') was
+		// replaced with notifications_pushhash in Version2010Date20210218082811
+		// and deleted in Version2010Date20210218082855
 		return $schema;
 	}
 }

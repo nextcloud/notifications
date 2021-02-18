@@ -501,7 +501,7 @@ class Push {
 	protected function getDevicesForUser(string $uid): array {
 		$query = $this->db->getQueryBuilder();
 		$query->select('*')
-			->from('notifications_pushtokens')
+			->from('notifications_pushhash')
 			->where($query->expr()->eq('uid', $query->createNamedParameter($uid)));
 
 		$result = $query->execute();
@@ -517,7 +517,7 @@ class Push {
 	 */
 	protected function deletePushToken(int $tokenId): bool {
 		$query = $this->db->getQueryBuilder();
-		$query->delete('notifications_pushtokens')
+		$query->delete('notifications_pushhash')
 			->where($query->expr()->eq('token', $query->createNamedParameter($tokenId, IQueryBuilder::PARAM_INT)));
 
 		return $query->execute() !== 0;
@@ -529,7 +529,7 @@ class Push {
 	 */
 	protected function deletePushTokenByDeviceIdentifier(string $deviceIdentifier): bool {
 		$query = $this->db->getQueryBuilder();
-		$query->delete('notifications_pushtokens')
+		$query->delete('notifications_pushhash')
 			->where($query->expr()->eq('deviceidentifier', $query->createNamedParameter($deviceIdentifier)));
 
 		return $query->execute() !== 0;

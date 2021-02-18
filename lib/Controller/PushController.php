@@ -181,7 +181,7 @@ class PushController extends OCSController {
 	protected function savePushToken(IUser $user, IToken $token, string $deviceIdentifier, string $devicePublicKey, string $pushTokenHash, string $proxyServer, string $appType): bool {
 		$query = $this->db->getQueryBuilder();
 		$query->select('*')
-			->from('notifications_pushtokens')
+			->from('notifications_pushhash')
 			->where($query->expr()->eq('uid', $query->createNamedParameter($user->getUID())))
 			->andWhere($query->expr()->eq('token', $query->createNamedParameter($token->getId())));
 		$result = $query->execute();
@@ -212,7 +212,7 @@ class PushController extends OCSController {
 		$devicePublicKeyHash = hash('sha512', $devicePublicKey);
 
 		$query = $this->db->getQueryBuilder();
-		$query->insert('notifications_pushtokens')
+		$query->insert('notifications_pushhash')
 			->values([
 				'uid' => $query->createNamedParameter($user->getUID()),
 				'token' => $query->createNamedParameter($token->getId(), IQueryBuilder::PARAM_INT),
@@ -239,7 +239,7 @@ class PushController extends OCSController {
 		$devicePublicKeyHash = hash('sha512', $devicePublicKey);
 
 		$query = $this->db->getQueryBuilder();
-		$query->update('notifications_pushtokens')
+		$query->update('notifications_pushhash')
 			->set('devicepublickey', $query->createNamedParameter($devicePublicKey))
 			->set('devicepublickeyhash', $query->createNamedParameter($devicePublicKeyHash))
 			->set('pushtokenhash', $query->createNamedParameter($pushTokenHash))
@@ -258,7 +258,7 @@ class PushController extends OCSController {
 	 */
 	protected function deletePushToken(IUser $user, IToken $token): bool {
 		$query = $this->db->getQueryBuilder();
-		$query->delete('notifications_pushtokens')
+		$query->delete('notifications_pushhash')
 			->where($query->expr()->eq('uid', $query->createNamedParameter($user->getUID())))
 			->andWhere($query->expr()->eq('token', $query->createNamedParameter($token->getId(), IQueryBuilder::PARAM_INT)));
 
@@ -272,7 +272,7 @@ class PushController extends OCSController {
 	 */
 	protected function deletePushTokenByHash(IUser $user, string $pushTokenHash): bool {
 		$query = $this->db->getQueryBuilder();
-		$query->delete('notifications_pushtokens')
+		$query->delete('notifications_pushhash')
 			->where($query->expr()->eq('uid', $query->createNamedParameter($user->getUID())))
 			->andWhere($query->expr()->eq('pushtokenhash', $query->createNamedParameter($pushTokenHash)));
 
