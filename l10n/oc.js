@@ -6,6 +6,6 @@ OC.L10N.register(
     "Dismiss all notifications" : "Tancar totas las notificacions",
     "No notifications" : "Cap de notificacion",
     "Dismiss" : "Ignorar",
-    "seconds ago" : "i a qualques segondas"
+    "seconds ago" : "fa qualques segondas"
 },
 "nplurals=2; plural=(n > 1);");
