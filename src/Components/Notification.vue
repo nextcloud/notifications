@@ -189,7 +189,7 @@ export default {
 					parametersHaveLink = true
 				}
 			})
-			return parametersHaveLink
+			return !parametersHaveLink
 		},
 
 		preparedSubjectParameters() {
