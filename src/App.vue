@@ -120,6 +120,7 @@ export default {
 	mounted() {
 		this.tabId = OC.requestToken || ('' + Math.random())
 		this._$icon = $(this.$refs.icon)
+		this._oldcount = 0
 
 		// Bind the button click event
 		OC.registerMenu($(this.$refs.button), $(this.$refs.container), undefined, true)
@@ -139,6 +140,8 @@ export default {
 		// Setup the background checker
 		this._setPollingInterval(this.pollIntervalBase)
 
+
+		this._watchTabVisibility()
 		subscribe('networkOffline', this.handleNetworkOffline)
 		subscribe('networkOnline', this.handleNetworkOnline)
 	},
@@ -229,6 +232,24 @@ export default {
 		},
 
 		/**
+			 * Update the title to show * if there are new notifications
+			 * @param {Object} notifications The list of notifications
+			 */
+		async _updateDocTitleOnNewNotifications(notifications) {
+			if (notifications.length !== this._oldcount) {
+				this._oldcount = notifications.length
+				if (document.hidden) {
+					// If we didn't already highlight, store the title so we can restore on tab-view
+					if (self._setTitle !== document.title) {
+						self._storedTitle = document.title
+						self._setTitle = '* ' + document.title
+						document.title = self._setTitle
+					}
+				}
+			}
+		},
+
+		/**
 			 * Performs the AJAX request to retrieve the notifications
 			 */
 		async _fetch() {
@@ -243,6 +264,7 @@ export default {
 				this.lastTabId = response.lastTabId
 				this.notifications = response.data
 				this._setPollingInterval(this.pollIntervalBase)
+			  this._updateDocTitleOnNewNotifications(this.notifications)
 			} else if (response.status === 304) {
 				// 304 - Not modified
 				this._setPollingInterval(this.pollIntervalBase)
@@ -263,6 +285,20 @@ export default {
 		_backgroundFetch() {
 			this.backgroundFetching = true
 			this._fetch()
+		},
+
+		_watchTabVisibility(pollInterval) {
+			document.addEventListener('visibilitychange', this._visibilityChange, false)
+		},
+
+		_visibilityChange(evt) {
+			if (!document.hidden) {
+				// Only restore title if it's still what we set it to, talk might have altered it
+				if (self._setTitle === document.title) {
+					document.title = self._storedTitle
+				   self._setTitle = null
+				}
+			}
 		},
 
 		_setPollingInterval(pollInterval) {
