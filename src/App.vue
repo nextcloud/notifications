@@ -140,7 +140,6 @@ export default {
 		// Setup the background checker
 		this._setPollingInterval(this.pollIntervalBase)
 
-
 		this._watchTabVisibility()
 		subscribe('networkOffline', this.handleNetworkOffline)
 		subscribe('networkOnline', this.handleNetworkOnline)
