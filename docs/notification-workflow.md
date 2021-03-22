@@ -11,7 +11,7 @@ with it, we want to remove the notification again.
   1. Grab a new notification object (`\OCP\Notification\INotification`) from the manager
   (`\OCP\Notification\IManager`):
 ```php
-$manager = \OC::$server->getNotificationManager();
+$manager = \OC::$server->get(\OCP\Notification\IManager::class);
 $notification = $manager->createNotification();
 ```
 
@@ -54,18 +54,8 @@ $manager->notify($notification);
   1. In `app.php` register your Notifier (`\OCP\Notification\INotifier`) interface to the manager,
   using a `\Closure` returning the Notifier and a `\Closure` returning an array of the id and name:
 ```php
-$manager = \OC::$server->getNotificationManager();
-$manager->registerNotifier(function() {
-    return new \OCA\Files_Sharing\Notifier(
-        \OC::$server->getL10NFactory()
-    );
-}, function() {
-		$l = \OC::$server->getL10N('files_sharing');
-		return [
-			'id' => 'myapp',
-			'name' => $l->t('My app name'),
-		];
-});
+$manager = \OC::$server->get(\OCP\Notification\IManager::class);
+$manager->registerNotifierService(\OCA\Files_Sharing\Notification\Notifier::class);
 ```
 
   2. The manager will execute the closure and then call the `prepare()` method on your notifier.
@@ -84,10 +74,26 @@ class Notifier implements \OCP\Notification\INotifier {
 	}
 
 	/**
+	 * Identifier of the notifier, only use [a-z0-9_]
+	 * @return string
+	 */
+	public function getID(): string {
+		return 'files_sharing';
+	}
+
+	/**
+	 * Human readable name describing the notifier
+	 * @return string
+	 */
+	public function getName(): string {
+		return $this->factory->get('files_sharing')->t('File sharing');
+	}
+
+	/**
 	 * @param INotification $notification
 	 * @param string $languageCode The code of the language that should be used to prepare the notification
 	 */
-	public function prepare(INotification $notification, $languageCode) {
+	public function prepare(INotification $notification, string $languageCode): INotification {
 		if ($notification->getApp() !== 'files_sharing') {
 			// Not my app => throw
 			throw new \InvalidArgumentException();
@@ -99,6 +105,13 @@ class Notifier implements \OCP\Notification\INotifier {
 		switch ($notification->getSubject()) {
 			// Deal with known subjects
 			case 'remote_share':
+				try {
+					$this->shareManager->getShareById($notification->getObjectId(), $notification->getUser());
+				} catch (ShareNotFound $e) {
+					// Throw AlreadyProcessedException exception when the notification has already been solved and can be removed.
+					throw new \OCP\Notification\AlreadyProcessedException();
+				}
+
 				$notification->setIcon($this->url->getAbsoluteURL($this->url->imagePath('core', 'actions/share.svg')))
 					->setLink($this->url->linkToRouteAbsolute('files_sharing.RemoteShare.overview', ['id' => $notification->getObjectId()]));
 
@@ -163,11 +176,11 @@ class Notifier implements \OCP\Notification\INotifier {
 
 If the user accepted the share or the share was removed/unshared, we want to remove
 the notification, because no user action is needed anymore. To do this, we simply have to
-call the `markProcessed()` method on the manager with the neccessary information on a
+call the `markProcessed()` method on the manager with the necessary information on a
 notification object:
 
 ```php
-$manager = \OC::$server->getNotificationManager();
+$manager = \OC::$server->get(\OCP\Notification\IManager::class);
 $notification->setApp('files_sharing')
     ->setObject('remote', 1337)
     ->setUser('recipient1');
@@ -179,9 +192,25 @@ will be marked as processed for all users that have it. So the following example
 remove all notifications for the app files_sharing on the object "remote #1337":
 
 ```php
-$manager = \OC::$server->getNotificationManager();
+$manager = \OC::$server->get(\OCP\Notification\IManager::class);
 $notification->setApp('files_sharing')
     ->setObject('remote', 1337);
 $manager->markProcessed($notification);
 ```
 
+### Defer and flush
+
+Sometimes you might send multiple notifications in one request.
+In that case it makes sense to defer the sending, so in the end only one connection
+is done to the push server instead of 1 per notification.
+```php
+$manager = \OC::$server->get(\OCP\Notification\IManager::class);
+$shouldFlush = $manager->defer();
+
+// Your application code generating notifications …
+
+if ($shouldFlush) {
+	// Only flush when defer() returned true, otherwise another app is already deferring
+	$manager->flush();
+}
+```
