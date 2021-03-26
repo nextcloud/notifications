@@ -1,4 +1,4 @@
-name: PHPUnit
+name: Integration
 
 on:
   pull_request:
@@ -22,7 +22,7 @@ jobs:
         databases: ['sqlite']
         server-versions: ['master']
 
-    name: php${{ matrix.php-versions }}-${{ matrix.databases }}
+    name: integration-php${{ matrix.php-versions }}-${{ matrix.databases }}
 
     steps:
       - name: Checkout server
@@ -63,10 +63,13 @@ jobs:
           ./occ maintenance:install --verbose --database=${{ matrix.databases }} --database-name=nextcloud --database-host=127.0.0.1 --database-port=$DB_PORT --database-user=root --database-pass=rootpassword --admin-user admin --admin-pass admin
           php -f index.php
           ./occ app:enable --force ${{ env.APP_NAME }}
+          php -S localhost:8080 &
 
-      - name: PHPUnit
-        working-directory: apps/${{ env.APP_NAME }}/tests/Unit
-        run: phpunit -c phpunit.xml
+      - name: Integration
+        working-directory: apps/${{ env.APP_NAME }}/tests/Integration
+        run: |
+          composer i
+          bash run.sh
 
   mysql:
     runs-on: ubuntu-latest
@@ -79,7 +82,7 @@ jobs:
         databases: ['mysql']
         server-versions: ['master']
 
-    name: php${{ matrix.php-versions }}-${{ matrix.databases }}
+    name: integration-php${{ matrix.php-versions }}-${{ matrix.databases }}
 
     services:
       mysql:
@@ -117,10 +120,6 @@ jobs:
           tools: phpunit:8.5.2
           coverage: none
 
-      - name: Set up PHPUnit
-        working-directory: apps/${{ env.APP_NAME }}
-        run: composer i
-
       - name: Set up Nextcloud
         env:
           DB_PORT: 4444
@@ -129,10 +128,13 @@ jobs:
           ./occ maintenance:install --verbose --database=${{ matrix.databases }} --database-name=nextcloud --database-host=127.0.0.1 --database-port=$DB_PORT --database-user=root --database-pass=rootpassword --admin-user admin --admin-pass admin
           php -f index.php
           ./occ app:enable --force ${{ env.APP_NAME }}
+          php -S localhost:8080 &
 
-      - name: PHPUnit
-        working-directory: apps/${{ env.APP_NAME }}/tests/Unit
-        run: phpunit -c phpunit.xml
+      - name: Integration
+        working-directory: apps/${{ env.APP_NAME }}/tests/Integration
+        run: |
+          composer i
+          bash run.sh
 
   pgsql:
     runs-on: ubuntu-latest
@@ -145,7 +147,7 @@ jobs:
         databases: ['pgsql']
         server-versions: ['master']
 
-    name: php${{ matrix.php-versions }}-${{ matrix.databases }}
+    name: integration-php${{ matrix.php-versions }}-${{ matrix.databases }}
 
     services:
       postgres:
@@ -197,10 +199,13 @@ jobs:
           ./occ maintenance:install --verbose --database=${{ matrix.databases }} --database-name=nextcloud --database-host=127.0.0.1 --database-port=$DB_PORT --database-user=root --database-pass=rootpassword --admin-user admin --admin-pass admin
           php -f index.php
           ./occ app:enable --force ${{ env.APP_NAME }}
+          php -S localhost:8080 &
 
-      - name: PHPUnit
-        working-directory: apps/${{ env.APP_NAME }}/tests/Unit
-        run: phpunit -c phpunit.xml
+      - name: Integration
+        working-directory: apps/${{ env.APP_NAME }}/tests/Integration
+        run: |
+          composer i
+          bash run.sh
 
   oci:
     runs-on: ubuntu-latest
@@ -213,7 +218,7 @@ jobs:
         databases: ['oci']
         server-versions: ['master']
 
-    name: php${{ matrix.php-versions }}-${{ matrix.databases }}
+    name: integration-php${{ matrix.php-versions }}-${{ matrix.databases }}
 
     services:
       oracle:
@@ -258,7 +263,10 @@ jobs:
           ./occ maintenance:install --verbose --database=${{ matrix.databases }} --database-name=XE --database-host=127.0.0.1 --database-port=1521 --database-user=autotest --database-pass=owncloud --admin-user admin --admin-pass admin
           php -f index.php
           ./occ app:enable --force ${{ env.APP_NAME }}
+          php -S localhost:8080 &
 
-      - name: PHPUnit
-        working-directory: apps/${{ env.APP_NAME }}/tests/Unit
-        run: phpunit -c phpunit.xml
+      - name: Integration
+        working-directory: apps/${{ env.APP_NAME }}/tests/Integration
+        run: |
+          composer i
+          bash run.sh
