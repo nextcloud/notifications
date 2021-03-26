@@ -8,6 +8,17 @@ webpackConfig.module.rules[jsRule].exclude = BabelLoaderExcludeNodeModulesExcept
 	'@nextcloud/event-bus',
 	'semver',
 ])
+webpackConfig.module.rules[jsRule].options = {
+	plugins: ['add-module-exports'],
+	presets: [
+		/**
+		 * From "add-module-exports" documentation:
+		 * "webpack doesn't perform commonjs transformation for
+		 * codesplitting. Need to set commonjs conversion."
+		 */
+		['@babel/env', { modules: 'commonjs' }],
+	],
+}
 
 // Merge rules by replacing existing tests
 module.exports = webpackConfig
