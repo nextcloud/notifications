@@ -45,6 +45,7 @@ use OCP\Notification\IManager as INotificationManager;
 use OCP\Notification\INotification;
 use OCP\UserStatus\IManager as IUserStatusManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Class PushTest
@@ -519,8 +520,8 @@ class PushTest extends TestCase {
 				'level' => ILogger::ERROR,
 			]);
 
-		/** @var IResponse|MockObject $response1 */
-		$response1 = $this->createMock(IResponse::class);
+		/** @var ResponseInterface|MockObject $response1 */
+		$response1 = $this->createMock(ResponseInterface::class);
 		$response1->expects($this->once())
 			->method('getStatusCode')
 			->willReturn(Http::STATUS_BAD_REQUEST);
@@ -547,8 +548,8 @@ class PushTest extends TestCase {
 				'app' => 'notifications',
 			]);
 
-		/** @var IResponse|MockObject $response1 */
-		$response2 = $this->createMock(IResponse::class);
+		/** @var ResponseInterface|MockObject $response1 */
+		$response2 = $this->createMock(ResponseInterface::class);
 		$response2->expects($this->once())
 			->method('getBody')
 			->willReturn('Maintenance');
@@ -586,8 +587,8 @@ class PushTest extends TestCase {
 			])
 			->willReturn($response3);
 
-		/** @var IResponse|MockObject $response1 */
-		$response4 = $this->createMock(IResponse::class);
+		/** @var ResponseInterface|MockObject $response1 */
+		$response4 = $this->createMock(ResponseInterface::class);
 		$response4->expects($this->once())
 			->method('getStatusCode')
 			->willReturn(Http::STATUS_BAD_REQUEST);
