@@ -235,7 +235,10 @@ export default {
 			 * @param {Object} notifications The list of notifications
 			 */
 		async _updateDocTitleOnNewNotifications(notifications) {
-			if (notifications.length !== this._oldcount) {
+			if (notifications.length < this._oldcount) {
+				this._restoreTitle()
+				this._oldcount = notifications.length
+			} else if (notifications.length > this._oldcount) {
 				this._oldcount = notifications.length
 				if (document.hidden) {
 					// If we didn't already highlight, store the title so we can restore on tab-view
@@ -245,6 +248,18 @@ export default {
 						document.title = self._setTitle
 					}
 				}
+			}
+		},
+
+		/**
+		 * Restore the title to remove a *
+		 * Only restore title if it's still what we set it to,
+		 * the Talk might have altered it.
+		 */
+		async _restoreTitle() {
+			if (self._setTitle === document.title) {
+				document.title = self._storedTitle
+			   self._setTitle = null
 			}
 		},
 
@@ -292,11 +307,7 @@ export default {
 
 		_visibilityChange(evt) {
 			if (!document.hidden) {
-				// Only restore title if it's still what we set it to, talk might have altered it
-				if (self._setTitle === document.title) {
-					document.title = self._storedTitle
-				   self._setTitle = null
-				}
+			  this._restoreTitle()
 			}
 		},
 
