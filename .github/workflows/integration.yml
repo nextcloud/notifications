@@ -48,11 +48,10 @@ jobs:
         with:
           php-version: ${{ matrix.php-versions }}
           extensions: mbstring, iconv, fileinfo, intl, sqlite, pdo_sqlite
-          tools: phpunit:8.5.2
           coverage: none
 
       - name: Set up PHPUnit
-        working-directory: apps/${{ env.APP_NAME }}
+        working-directory: apps/${{ env.APP_NAME }}/tests/Integration
         run: composer i
 
       - name: Set up Nextcloud
@@ -67,9 +66,7 @@ jobs:
 
       - name: Integration
         working-directory: apps/${{ env.APP_NAME }}/tests/Integration
-        run: |
-          composer i
-          bash run.sh
+        run: bash run.sh
 
   mysql:
     runs-on: ubuntu-latest
@@ -117,8 +114,11 @@ jobs:
         with:
           php-version: ${{ matrix.php-versions }}
           extensions: mbstring, iconv, fileinfo, intl, mysql, pdo_mysql, gd, zip
-          tools: phpunit:8.5.2
           coverage: none
+
+      - name: Set up PHPUnit
+        working-directory: apps/${{ env.APP_NAME }}/tests/Integration
+        run: composer i
 
       - name: Set up Nextcloud
         env:
@@ -132,9 +132,7 @@ jobs:
 
       - name: Integration
         working-directory: apps/${{ env.APP_NAME }}/tests/Integration
-        run: |
-          composer i
-          bash run.sh
+        run: bash run.sh
 
   pgsql:
     runs-on: ubuntu-latest
@@ -184,11 +182,10 @@ jobs:
         with:
           php-version: ${{ matrix.php-versions }}
           extensions: mbstring, iconv, fileinfo, intl, pgsql, pdo_pgsql
-          tools: phpunit:8.5.2
           coverage: none
 
       - name: Set up PHPUnit
-        working-directory: apps/${{ env.APP_NAME }}
+        working-directory: apps/${{ env.APP_NAME }}/tests/Integration
         run: composer i
 
       - name: Set up Nextcloud
@@ -203,9 +200,7 @@ jobs:
 
       - name: Integration
         working-directory: apps/${{ env.APP_NAME }}/tests/Integration
-        run: |
-          composer i
-          bash run.sh
+        run: bash run.sh
 
   oci:
     runs-on: ubuntu-latest
@@ -250,11 +245,10 @@ jobs:
         with:
           php-version: ${{ matrix.php-versions }}
           extensions: mbstring, iconv, fileinfo, intl, oci8
-          tools: phpunit:8.5.2
           coverage: none
 
       - name: Set up PHPUnit
-        working-directory: apps/${{ env.APP_NAME }}
+        working-directory: apps/${{ env.APP_NAME }}/tests/Integration
         run: composer i
 
       - name: Set up Nextcloud
@@ -267,6 +261,4 @@ jobs:
 
       - name: Integration
         working-directory: apps/${{ env.APP_NAME }}/tests/Integration
-        run: |
-          composer i
-          bash run.sh
+        run: bash run.sh
