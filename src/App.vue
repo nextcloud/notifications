@@ -113,7 +113,7 @@ export default {
 			return this.backgroundFetching
 				&& this.webNotificationsGranted
 				&& this.userStatus !== 'dnd'
-				&& this.tabId !== this.lastTabId
+				&& this.tabId === this.lastTabId
 		},
 	},
 
@@ -275,7 +275,7 @@ export default {
 			} else if (response.status === 200) {
 				this.userStatus = response.headers['x-nextcloud-user-status']
 				this.lastETag = response.headers.etag
-				this.lastTabId = response.lastTabId
+				this.lastTabId = response.tabId
 				this.notifications = response.data
 				this._setPollingInterval(this.pollIntervalBase)
 				this._updateDocTitleOnNewNotifications(this.notifications)
