@@ -236,11 +236,11 @@ export default {
 			 */
 		async _updateDocTitleOnNewNotifications(notifications) {
 			if (notifications.length < this._oldcount) {
-				this._restoreTitle()
+				await this._restoreTitle()
 				this._oldcount = notifications.length
 			} else if (notifications.length > this._oldcount) {
 				this._oldcount = notifications.length
-				if (document.hidden) {
+				if (this.backgroundFetching && document.hidden) {
 					// If we didn't already highlight, store the title so we can restore on tab-view
 					if (self._setTitle !== document.title) {
 						self._storedTitle = document.title
@@ -259,7 +259,7 @@ export default {
 		async _restoreTitle() {
 			if (self._setTitle === document.title) {
 				document.title = self._storedTitle
-			   self._setTitle = null
+				self._setTitle = null
 			}
 		},
 
@@ -278,7 +278,7 @@ export default {
 				this.lastTabId = response.lastTabId
 				this.notifications = response.data
 				this._setPollingInterval(this.pollIntervalBase)
-			  this._updateDocTitleOnNewNotifications(this.notifications)
+				this._updateDocTitleOnNewNotifications(this.notifications)
 			} else if (response.status === 304) {
 				// 304 - Not modified
 				this._setPollingInterval(this.pollIntervalBase)
@@ -301,13 +301,13 @@ export default {
 			this._fetch()
 		},
 
-		_watchTabVisibility(pollInterval) {
+		_watchTabVisibility() {
 			document.addEventListener('visibilitychange', this._visibilityChange, false)
 		},
 
-		_visibilityChange(evt) {
+		_visibilityChange() {
 			if (!document.hidden) {
-			  this._restoreTitle()
+				this._restoreTitle()
 			}
 		},
 
