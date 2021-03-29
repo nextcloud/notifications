@@ -209,6 +209,10 @@ export default {
 		this._$el = $(this.$el)
 
 		// Parents: TransitionGroup > NotificationsList
+		if (typeof this.$parent.$parent.showBrowserNotifications === 'undefined') {
+			console.error('Failed to read showBrowserNotifications property from App component')
+		}
+
 		if (this.$parent.$parent.showBrowserNotifications) {
 			this._createWebNotification()
 		}
