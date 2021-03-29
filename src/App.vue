@@ -120,6 +120,7 @@ export default {
 	mounted() {
 		this.tabId = OC.requestToken || ('' + Math.random())
 		this._$icon = $(this.$refs.icon)
+		this._oldcount = 0
 
 		// Bind the button click event
 		OC.registerMenu($(this.$refs.button), $(this.$refs.container), undefined, true)
@@ -139,6 +140,7 @@ export default {
 		// Setup the background checker
 		this._setPollingInterval(this.pollIntervalBase)
 
+		this._watchTabVisibility()
 		subscribe('networkOffline', this.handleNetworkOffline)
 		subscribe('networkOnline', this.handleNetworkOnline)
 	},
@@ -229,6 +231,39 @@ export default {
 		},
 
 		/**
+			 * Update the title to show * if there are new notifications
+			 * @param {Object} notifications The list of notifications
+			 */
+		async _updateDocTitleOnNewNotifications(notifications) {
+			if (notifications.length < this._oldcount) {
+				await this._restoreTitle()
+				this._oldcount = notifications.length
+			} else if (notifications.length > this._oldcount) {
+				this._oldcount = notifications.length
+				if (this.backgroundFetching && document.hidden) {
+					// If we didn't already highlight, store the title so we can restore on tab-view
+					if (self._setTitle !== document.title) {
+						self._storedTitle = document.title
+						self._setTitle = '* ' + document.title
+						document.title = self._setTitle
+					}
+				}
+			}
+		},
+
+		/**
+		 * Restore the title to remove a *
+		 * Only restore title if it's still what we set it to,
+		 * the Talk might have altered it.
+		 */
+		async _restoreTitle() {
+			if (self._setTitle === document.title) {
+				document.title = self._storedTitle
+				self._setTitle = null
+			}
+		},
+
+		/**
 			 * Performs the AJAX request to retrieve the notifications
 			 */
 		async _fetch() {
@@ -243,6 +278,7 @@ export default {
 				this.lastTabId = response.lastTabId
 				this.notifications = response.data
 				this._setPollingInterval(this.pollIntervalBase)
+				this._updateDocTitleOnNewNotifications(this.notifications)
 			} else if (response.status === 304) {
 				// 304 - Not modified
 				this._setPollingInterval(this.pollIntervalBase)
@@ -263,6 +299,16 @@ export default {
 		_backgroundFetch() {
 			this.backgroundFetching = true
 			this._fetch()
+		},
+
+		_watchTabVisibility() {
+			document.addEventListener('visibilitychange', this._visibilityChange, false)
+		},
+
+		_visibilityChange() {
+			if (!document.hidden) {
+				this._restoreTitle()
+			}
 		},
 
 		_setPollingInterval(pollInterval) {
