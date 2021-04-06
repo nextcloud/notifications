@@ -27,7 +27,7 @@ $declineAction->setLabel('decline')
 
 $notification->setApp('files_sharing')
     ->setUser('recipient1')
-    ->setDateTime(new DateTime())
+    ->setDateTime(new \DateTime())
     ->setObject('remote', '1337') // $type and $id
     ->setSubject('remote_share', ['name' => '/fancyFolder']) // $subject and $parameters
     ->addAction($acceptAction)
