@@ -26,7 +26,7 @@ else
 endif
 
 npm-init:
-	npm install
+	npm ci
 
 npm-update:
 	npm update

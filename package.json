@@ -37,7 +37,7 @@
 		"@nextcloud/browserslist-config": "^2.1.0",
 		"@nextcloud/eslint-config": "^5.0.0",
 		"@nextcloud/eslint-plugin": "^2.0.0",
-		"@nextcloud/webpack-vue-config": "^4.0.2",
+		"@nextcloud/webpack-vue-config": "^4.0.3-alpha.2",
 		"babel-eslint": "^10.1.0",
 		"babel-loader": "^8.2.2",
 		"babel-loader-exclude-node-modules-except": "^1.1.2",
@@ -68,6 +68,9 @@
 		"vue-template-compiler": "^2.6.12",
 		"webpack": "^5.31.2",
 		"webpack-cli": "^4.6.0"
+	},
+	"engines": {
+		"node": ">=12.0.0"
 	},
 	"browserslist": [
 		"extends @nextcloud/browserslist-config"
