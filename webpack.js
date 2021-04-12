@@ -1,13 +1,16 @@
 const webpackConfig = require('@nextcloud/webpack-vue-config')
+const webpackRules = require('@nextcloud/webpack-vue-config/rules')
+
 const BabelLoaderExcludeNodeModulesExcept = require('babel-loader-exclude-node-modules-except')
 
-const jsRule = webpackConfig.module.rules.findIndex(t => (t.test.toString() === /\.js$/.toString()))
-
-webpackConfig.module.rules[jsRule].exclude = BabelLoaderExcludeNodeModulesExcept([
+// Edit JS rule
+webpackRules.RULE_JS.exclude = BabelLoaderExcludeNodeModulesExcept([
 	'@juliushaertl/vue-richtext',
 	'@nextcloud/event-bus',
 	'semver',
 ])
 
-// Merge rules by replacing existing tests
+// Replaces rules array
+webpackConfig.module.rules = Object.values(webpackRules)
+
 module.exports = webpackConfig
