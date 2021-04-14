@@ -255,7 +255,7 @@ export default {
 
 		onDismissNotification() {
 			axios
-				.delete(generateOcsUrl('apps/notifications/api/v2', 2) + 'notifications/' + this.notificationId)
+				.delete(generateOcsUrl('apps/notifications/api/v2/notifications/{id}', { id: this.notificationId }))
 				.then(() => {
 					this.$emit('remove', this.index)
 				})
