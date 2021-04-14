@@ -182,7 +182,7 @@ export default {
 
 		onDismissAll() {
 			axios
-				.delete(generateOcsUrl('apps/notifications/api/v2', 2) + 'notifications')
+				.delete(generateOcsUrl('apps/notifications/api/v2/notifications'))
 				.then(() => {
 					this.notifications = []
 				})

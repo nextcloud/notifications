@@ -61,7 +61,7 @@ const refreshData = async(lastETag) => {
 	}
 
 	try {
-		const response = await axios.get(generateOcsUrl('apps/notifications/api/v2', 2) + 'notifications', requestConfig)
+		const response = await axios.get(generateOcsUrl('apps/notifications/api/v2/notifications'), requestConfig)
 
 		BrowserStorage.setItem('status', '' + response.status)
 		if (response.status !== 204) {
