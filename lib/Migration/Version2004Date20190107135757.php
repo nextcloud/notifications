@@ -24,8 +24,8 @@ declare(strict_types=1);
 namespace OCA\Notifications\Migration;
 
 use Closure;
-use Doctrine\DBAL\Types\Types;
 use OCP\DB\ISchemaWrapper;
+use OCP\DB\Types;
 use OCP\Migration\SimpleMigrationStep;
 use OCP\Migration\IOutput;
 

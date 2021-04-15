@@ -80,15 +80,13 @@ class APIController extends OCSController {
 		}
 
 		$notification = $this->notificationManager->createNotification();
-		$time = $this->timeFactory->getTime();
-		$datetime = new \DateTime();
-		$datetime->setTimestamp($time);
+		$datetime = $this->timeFactory->getDateTime();
 
 		try {
 			$notification->setApp('admin_notifications')
 				->setUser($user->getUID())
 				->setDateTime($datetime)
-				->setObject('admin_notifications', dechex($time))
+				->setObject('admin_notifications', dechex($datetime->getTimestamp()))
 				->setSubject('ocs', [$shortMessage]);
 
 			if ($longMessage !== '') {

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @copyright Copyright (c) 2017 Joas Schilling <coding@schilljs.com>
  *
@@ -34,7 +37,6 @@ use OCP\ICache;
 use OCP\ICacheFactory;
 use OCP\IConfig;
 use OCP\IDBConnection;
-use OCP\ILogger;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\L10N\IFactory;
@@ -42,6 +44,7 @@ use OCP\Notification\IManager as INotificationManager;
 use OCP\Notification\INotification;
 use OCP\UserStatus\IManager as IUserStatusManager;
 use OCP\UserStatus\IUserStatus;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Push {
@@ -65,7 +68,7 @@ class Push {
 	protected $userStatusManager;
 	/** @var IFactory */
 	protected $l10nFactory;
-	/** @var ILogger */
+	/** @var LoggerInterface */
 	protected $log;
 	/** @var OutputInterface */
 	protected $output;
@@ -84,7 +87,7 @@ class Push {
 								ICacheFactory $cacheFactory,
 								IUserStatusManager $userStatusManager,
 								IFactory $l10nFactory,
-								ILogger $log) {
+								LoggerInterface $log) {
 		$this->db = $connection;
 		$this->notificationManager = $notificationManager;
 		$this->config = $config;
@@ -304,9 +307,8 @@ class Push {
 				$this->printInfo('Could not send notification to push server [' . $proxyServer . ']: ' . $error);
 				continue;
 			} catch (\Exception $e) {
-				$this->log->logException($e, [
-					'app' => 'notifications',
-					'level' => ILogger::ERROR,
+				$this->log->error($e->getMessage(), [
+					'exception' => $e,
 				]);
 
 				$error = $e->getMessage() ?: 'no reason given';
@@ -333,7 +335,7 @@ class Push {
 					$this->printInfo('Push notification sent successfully');
 				}
 			} elseif ($status !== Http::STATUS_OK) {
-				$error = \is_string($body) && $bodyData === null ? $body : 'no reason given';
+				$error = \is_string($body) && $body && $bodyData === null ? $body : 'no reason given';
 				$this->printInfo('Could not send notification to push server [' . $proxyServer . ']: ' . $error);
 				$this->log->warning('Could not send notification to push server [{url}]: {error}', [
 					'error' => $error,
@@ -341,7 +343,7 @@ class Push {
 					'app' => 'notifications',
 				]);
 			} else {
-				$error = \is_string($body) && $bodyData === null ? $body : 'no reason given';
+				$error = \is_string($body) && $body && $bodyData === null ? $body : 'no reason given';
 				$this->printInfo('Push notification sent but response was not parsable, using an outdated push proxy? [' . $proxyServer . ']: ' . $error);
 				$this->log->info('Push notification sent but response was not parsable, using an outdated push proxy? [{url}]: {error}', [
 					'error' => $error,
@@ -504,7 +506,7 @@ class Push {
 			->from('notifications_pushhash')
 			->where($query->expr()->eq('uid', $query->createNamedParameter($uid)));
 
-		$result = $query->execute();
+		$result = $query->executeQuery();
 		$devices = $result->fetchAll();
 		$result->closeCursor();
 
@@ -520,7 +522,7 @@ class Push {
 		$query->delete('notifications_pushhash')
 			->where($query->expr()->eq('token', $query->createNamedParameter($tokenId, IQueryBuilder::PARAM_INT)));
 
-		return $query->execute() !== 0;
+		return $query->executeUpdate() !== 0;
 	}
 
 	/**
@@ -532,6 +534,6 @@ class Push {
 		$query->delete('notifications_pushhash')
 			->where($query->expr()->eq('deviceidentifier', $query->createNamedParameter($deviceIdentifier)));
 
-		return $query->execute() !== 0;
+		return $query->executeUpdate() !== 0;
 	}
 }

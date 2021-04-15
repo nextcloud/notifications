@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @copyright Copyright (c) 2017 Joas Schilling <coding@schilljs.com>
  *
@@ -52,16 +55,13 @@ class PushController extends OCSController {
 	/** @var Manager */
 	private $identityProof;
 
-	/**
-	 * @param string $appName
-	 * @param IRequest $request
-	 * @param IDBConnection $db
-	 * @param ISession $session
-	 * @param IUserSession $userSession
-	 * @param IProvider $tokenProvider
-	 * @param Manager $identityProof
-	 */
-	public function __construct($appName, IRequest $request, IDBConnection $db, ISession $session, IUserSession $userSession, IProvider $tokenProvider, Manager $identityProof) {
+	public function __construct(string $appName,
+								IRequest $request,
+								IDBConnection $db,
+								ISession $session,
+								IUserSession $userSession,
+								IProvider $tokenProvider,
+								Manager $identityProof) {
 		parent::__construct($appName, $request);
 
 		$this->db = $db;
@@ -223,7 +223,7 @@ class PushController extends OCSController {
 				'proxyserver' => $query->createNamedParameter($proxyServer),
 				'apptype' => $query->createNamedParameter($appType),
 			]);
-		return $query->execute() > 0;
+		return $query->executeUpdate() > 0;
 	}
 
 	/**
@@ -248,7 +248,7 @@ class PushController extends OCSController {
 			->where($query->expr()->eq('uid', $query->createNamedParameter($user->getUID())))
 			->andWhere($query->expr()->eq('token', $query->createNamedParameter($token->getId(), IQueryBuilder::PARAM_INT)));
 
-		return $query->execute() !== 0;
+		return $query->executeUpdate() !== 0;
 	}
 
 	/**
@@ -262,7 +262,7 @@ class PushController extends OCSController {
 			->where($query->expr()->eq('uid', $query->createNamedParameter($user->getUID())))
 			->andWhere($query->expr()->eq('token', $query->createNamedParameter($token->getId(), IQueryBuilder::PARAM_INT)));
 
-		return $query->execute() !== 0;
+		return $query->executeUpdate() !== 0;
 	}
 
 	/**
@@ -276,6 +276,6 @@ class PushController extends OCSController {
 			->where($query->expr()->eq('uid', $query->createNamedParameter($user->getUID())))
 			->andWhere($query->expr()->eq('pushtokenhash', $query->createNamedParameter($pushTokenHash)));
 
-		return $query->execute() !== 0;
+		return $query->executeUpdate() !== 0;
 	}
 }

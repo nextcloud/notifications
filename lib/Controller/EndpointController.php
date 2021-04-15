@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @author Joas Schilling <coding@schilljs.com>
  *
@@ -114,13 +117,11 @@ class EndpointController extends OCSController {
 		}
 
 		$eTag = $this->generateETag($notificationIds);
-
-		$headers['ETag'] = $eTag;
-		if ($apiVersion !== 'v1' && $this->request->getHeader('If-None-Match') === $eTag) {
-			return new DataResponse([], Http::STATUS_NOT_MODIFIED, $headers);
+		$response = new DataResponse($data, Http::STATUS_OK, $headers);
+		if ($apiVersion !== 'v1') {
+			$response->setETag($eTag);
 		}
-
-		return new DataResponse($data, Http::STATUS_OK, $headers);
+		return $response;
 	}
 
 	/**
