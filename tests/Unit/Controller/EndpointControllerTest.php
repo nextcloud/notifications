@@ -117,8 +117,10 @@ class EndpointControllerTest extends TestCase {
 	public function dataListNotifications() {
 		return [
 			[
-				'v1',
-				[], md5(json_encode([])), [],
+				'v2',
+				[],
+				'"' . md5(json_encode([])) . '"',
+				[],
 			],
 			[
 				'v2',
@@ -128,16 +130,16 @@ class EndpointControllerTest extends TestCase {
 					3 => $this->getMockBuilder(INotification::class)
 						->getMock(),
 				],
-				md5(json_encode([1, 3])),
+				'"' . md5(json_encode([1, 3])) . '"',
 				[['$notification'], ['$notification']],
 			],
 			[
-				'v1',
+				'v2',
 				[
 					42 => $this->getMockBuilder(INotification::class)
 						->getMock(),
 				],
-				md5(json_encode([42])),
+				'"' . md5(json_encode([42])) . '"',
 				[['$notification']],
 			],
 		];
@@ -197,14 +199,14 @@ class EndpointControllerTest extends TestCase {
 	public function dataListNotificationsThrows() {
 		return [
 			[
-				'v1',
+				'v2',
 				[
 					1 => $this->getMockBuilder(INotification::class)
 						->getMock(),
 					3 => $this->getMockBuilder(INotification::class)
 						->getMock(),
 				],
-				md5(json_encode([3])),
+				'"' . md5(json_encode([3])) . '"',
 				[['$notification']],
 			],
 		];
