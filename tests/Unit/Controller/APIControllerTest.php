@@ -106,9 +106,11 @@ class APIControllerTest extends \Test\TestCase {
 			->with($userId)
 			->willReturn($u);
 
+		$dateTime = new \DateTime();
+		$dateTime->setTimestamp($time);
 		$this->timeFactory->expects($hexTime === null ? $this->never() : $this->once())
-			->method('getTime')
-			->willReturn($time);
+			->method('getDateTime')
+			->willReturn($dateTime);
 
 		if ($createNotification) {
 			$n = $this->createMock(INotification::class);
