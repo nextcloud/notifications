@@ -37,7 +37,6 @@ use OCP\ICache;
 use OCP\ICacheFactory;
 use OCP\IConfig;
 use OCP\IDBConnection;
-use OCP\ILogger;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\L10N\IFactory;
@@ -45,6 +44,7 @@ use OCP\Notification\IManager as INotificationManager;
 use OCP\Notification\INotification;
 use OCP\UserStatus\IManager as IUserStatusManager;
 use OCP\UserStatus\IUserStatus;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Push {
@@ -68,7 +68,7 @@ class Push {
 	protected $userStatusManager;
 	/** @var IFactory */
 	protected $l10nFactory;
-	/** @var ILogger */
+	/** @var LoggerInterface */
 	protected $log;
 	/** @var OutputInterface */
 	protected $output;
@@ -87,7 +87,7 @@ class Push {
 								ICacheFactory $cacheFactory,
 								IUserStatusManager $userStatusManager,
 								IFactory $l10nFactory,
-								ILogger $log) {
+								LoggerInterface $log) {
 		$this->db = $connection;
 		$this->notificationManager = $notificationManager;
 		$this->config = $config;
@@ -307,9 +307,8 @@ class Push {
 				$this->printInfo('Could not send notification to push server [' . $proxyServer . ']: ' . $error);
 				continue;
 			} catch (\Exception $e) {
-				$this->log->logException($e, [
-					'app' => 'notifications',
-					'level' => ILogger::ERROR,
+				$this->log->error($e->getMessage(), [
+					'exception' => $e,
 				]);
 
 				$error = $e->getMessage() ?: 'no reason given';

@@ -37,7 +37,6 @@ use OCP\ICacheFactory;
 use OCP\IConfig;
 use OCP\Http\Client\IClientService;
 use OCP\IDBConnection;
-use OCP\ILogger;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\L10N\IFactory;
@@ -46,6 +45,7 @@ use OCP\Notification\INotification;
 use OCP\UserStatus\IManager as IUserStatusManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class PushTest
@@ -76,7 +76,7 @@ class PushTest extends TestCase {
 	protected $userStatusManager;
 	/** @var IFactory|MockObject */
 	protected $l10nFactory;
-	/** @var ILogger|MockObject */
+	/** @var LoggerInterface|MockObject */
 	protected $logger;
 
 	protected function setUp(): void {
@@ -93,7 +93,7 @@ class PushTest extends TestCase {
 		$this->cache = $this->createMock(ICache::class);
 		$this->userStatusManager = $this->createMock(IUserStatusManager::class);
 		$this->l10nFactory = $this->createMock(IFactory::class);
-		$this->logger = $this->createMock(ILogger::class);
+		$this->logger = $this->createMock(LoggerInterface::class);
 
 		$this->cacheFactory->method('createDistributed')
 			->with('pushtokens')
@@ -514,10 +514,9 @@ class PushTest extends TestCase {
 			->willThrowException($e);
 
 		$this->logger->expects($this->at(0))
-			->method('logException')
-			->with($e, [
-				'app' => 'notifications',
-				'level' => ILogger::ERROR,
+			->method('error')
+			->with($e->getMessage(), [
+				'exception' => $e,
 			]);
 
 		/** @var ResponseInterface|MockObject $response1 */
