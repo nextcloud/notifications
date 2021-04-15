@@ -223,7 +223,7 @@ class PushController extends OCSController {
 				'proxyserver' => $query->createNamedParameter($proxyServer),
 				'apptype' => $query->createNamedParameter($appType),
 			]);
-		return $query->execute() > 0;
+		return $query->executeUpdate() > 0;
 	}
 
 	/**
@@ -248,7 +248,7 @@ class PushController extends OCSController {
 			->where($query->expr()->eq('uid', $query->createNamedParameter($user->getUID())))
 			->andWhere($query->expr()->eq('token', $query->createNamedParameter($token->getId(), IQueryBuilder::PARAM_INT)));
 
-		return $query->execute() !== 0;
+		return $query->executeUpdate() !== 0;
 	}
 
 	/**
@@ -262,7 +262,7 @@ class PushController extends OCSController {
 			->where($query->expr()->eq('uid', $query->createNamedParameter($user->getUID())))
 			->andWhere($query->expr()->eq('token', $query->createNamedParameter($token->getId(), IQueryBuilder::PARAM_INT)));
 
-		return $query->execute() !== 0;
+		return $query->executeUpdate() !== 0;
 	}
 
 	/**
@@ -276,6 +276,6 @@ class PushController extends OCSController {
 			->where($query->expr()->eq('uid', $query->createNamedParameter($user->getUID())))
 			->andWhere($query->expr()->eq('pushtokenhash', $query->createNamedParameter($pushTokenHash)));
 
-		return $query->execute() !== 0;
+		return $query->executeUpdate() !== 0;
 	}
 }

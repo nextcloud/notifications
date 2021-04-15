@@ -507,7 +507,7 @@ class Push {
 			->from('notifications_pushhash')
 			->where($query->expr()->eq('uid', $query->createNamedParameter($uid)));
 
-		$result = $query->execute();
+		$result = $query->executeQuery();
 		$devices = $result->fetchAll();
 		$result->closeCursor();
 
@@ -523,7 +523,7 @@ class Push {
 		$query->delete('notifications_pushhash')
 			->where($query->expr()->eq('token', $query->createNamedParameter($tokenId, IQueryBuilder::PARAM_INT)));
 
-		return $query->execute() !== 0;
+		return $query->executeUpdate() !== 0;
 	}
 
 	/**
@@ -535,6 +535,6 @@ class Push {
 		$query->delete('notifications_pushhash')
 			->where($query->expr()->eq('deviceidentifier', $query->createNamedParameter($deviceIdentifier)));
 
-		return $query->execute() !== 0;
+		return $query->executeUpdate() !== 0;
 	}
 }

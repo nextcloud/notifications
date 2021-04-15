@@ -54,7 +54,7 @@ class Handler {
 		$sql = $this->connection->getQueryBuilder();
 		$sql->insert('notifications');
 		$this->sqlInsert($sql, $notification);
-		$sql->execute();
+		$sql->executeUpdate();
 
 		return $sql->getLastInsertId();
 	}
@@ -72,7 +72,7 @@ class Handler {
 
 		$this->sqlWhere($sql, $notification);
 
-		$statement = $sql->execute();
+		$statement = $sql->executeQuery();
 		$count = (int) $statement->fetchOne();
 		$statement->closeCursor();
 
@@ -91,7 +91,7 @@ class Handler {
 			->from('notifications');
 
 		$this->sqlWhere($sql, $notification);
-		$statement = $sql->execute();
+		$statement = $sql->executeQuery();
 
 		$deleted = [];
 		$notifications = [];
@@ -150,7 +150,7 @@ class Handler {
 		$sql->delete('notifications')
 			->where($sql->expr()->eq('notification_id', $sql->createNamedParameter($id)))
 			->andWhere($sql->expr()->eq('user', $sql->createNamedParameter($user)));
-		return (bool) $sql->execute();
+		return (bool) $sql->executeUpdate();
 	}
 
 	/**
@@ -167,7 +167,7 @@ class Handler {
 			->from('notifications')
 			->where($sql->expr()->eq('notification_id', $sql->createNamedParameter($id)))
 			->andWhere($sql->expr()->eq('user', $sql->createNamedParameter($user)));
-		$statement = $sql->execute();
+		$statement = $sql->executeQuery();
 		$row = $statement->fetch();
 		$statement->closeCursor();
 
@@ -197,7 +197,7 @@ class Handler {
 			->setMaxResults($limit);
 
 		$this->sqlWhere($sql, $notification);
-		$statement = $sql->execute();
+		$statement = $sql->executeQuery();
 
 		$notifications = [];
 		while ($row = $statement->fetch()) {
