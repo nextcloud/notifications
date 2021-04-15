@@ -90,6 +90,21 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
+	 * @Given /^user "([^"]*)" sends admin notification to "([^"]*)" with$/
+	 *
+	 * @param string $sender
+	 * @param string $recipient
+	 * @param TableNode|null $formData
+	 */
+	public function sendAdminNotification(string $sender, string $recipient, TableNode $formData) {
+		$currentUser = $this->currentUser;
+		$this->setCurrentUser($sender);
+		$this->sendingToWith('POST', '/apps/notifications/api/v2/admin_notifications/' . $recipient . '?format=json', $formData);
+		$this->assertStatusCode($this->response, 200);
+		$this->setCurrentUser($currentUser);
+	}
+
+	/**
 	 * @When /^getting notifications on (v\d+)(| with different etag| with matching etag)$/
 	 * @param string $api
 	 * @param string $eTag
