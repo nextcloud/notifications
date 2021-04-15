@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @copyright Copyright (c) 2017 Joas Schilling <coding@schilljs.com>
  *
@@ -52,16 +55,13 @@ class PushController extends OCSController {
 	/** @var Manager */
 	private $identityProof;
 
-	/**
-	 * @param string $appName
-	 * @param IRequest $request
-	 * @param IDBConnection $db
-	 * @param ISession $session
-	 * @param IUserSession $userSession
-	 * @param IProvider $tokenProvider
-	 * @param Manager $identityProof
-	 */
-	public function __construct($appName, IRequest $request, IDBConnection $db, ISession $session, IUserSession $userSession, IProvider $tokenProvider, Manager $identityProof) {
+	public function __construct(string $appName,
+								IRequest $request,
+								IDBConnection $db,
+								ISession $session,
+								IUserSession $userSession,
+								IProvider $tokenProvider,
+								Manager $identityProof) {
 		parent::__construct($appName, $request);
 
 		$this->db = $db;

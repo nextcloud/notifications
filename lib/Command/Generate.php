@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @copyright Copyright (c) 2017 Joas Schilling <coding@schilljs.com>
  *
@@ -44,12 +47,9 @@ class Generate extends Command {
 	/** @var IManager */
 	protected $notificationManager;
 
-	/**
-	 * @param ITimeFactory $timeFactory
-	 * @param IUserManager $userManager
-	 * @param IManager $notificationManager
-	 */
-	public function __construct(ITimeFactory $timeFactory, IUserManager $userManager, IManager $notificationManager) {
+	public function __construct(ITimeFactory $timeFactory,
+								IUserManager $userManager,
+								IManager $notificationManager) {
 		parent::__construct();
 
 		$this->timeFactory = $timeFactory;
@@ -57,7 +57,7 @@ class Generate extends Command {
 		$this->notificationManager = $notificationManager;
 	}
 
-	protected function configure() {
+	protected function configure(): void {
 		$this
 			->setName('notification:generate')
 			->setDescription('Generate a notification for the given user')

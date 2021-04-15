@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @copyright Copyright (c) 2017 Joas Schilling <coding@schilljs.com>
  *
@@ -333,7 +336,7 @@ class Push {
 					$this->printInfo('Push notification sent successfully');
 				}
 			} elseif ($status !== Http::STATUS_OK) {
-				$error = \is_string($body) && $bodyData === null ? $body : 'no reason given';
+				$error = \is_string($body) && $body && $bodyData === null ? $body : 'no reason given';
 				$this->printInfo('Could not send notification to push server [' . $proxyServer . ']: ' . $error);
 				$this->log->warning('Could not send notification to push server [{url}]: {error}', [
 					'error' => $error,
@@ -341,7 +344,7 @@ class Push {
 					'app' => 'notifications',
 				]);
 			} else {
-				$error = \is_string($body) && $bodyData === null ? $body : 'no reason given';
+				$error = \is_string($body) && $body && $bodyData === null ? $body : 'no reason given';
 				$this->printInfo('Push notification sent but response was not parsable, using an outdated push proxy? [' . $proxyServer . ']: ' . $error);
 				$this->log->info('Push notification sent but response was not parsable, using an outdated push proxy? [{url}]: {error}', [
 					'error' => $error,

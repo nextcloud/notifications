@@ -527,7 +527,7 @@ class PushTest extends TestCase {
 			->willReturn(Http::STATUS_BAD_REQUEST);
 		$response1->expects($this->once())
 			->method('getBody')
-			->willReturn(null);
+			->willReturn('');
 		$e = $this->createMock(ClientException::class);
 		$e->method('getResponse')
 			->willReturn($response1);
@@ -578,6 +578,8 @@ class PushTest extends TestCase {
 		$response3->expects($this->once())
 			->method('getStatusCode')
 			->willReturn(Http::STATUS_OK);
+		$response3->method('getBody')
+			->willReturn('');
 		$client->expects($this->at(3))
 			->method('post')
 			->with('ok/notifications', [
@@ -727,7 +729,7 @@ class PushTest extends TestCase {
 				->willReturn(Http::STATUS_BAD_REQUEST);
 			$response->expects($this->once())
 				->method('getBody')
-				->willReturn(null);
+				->willReturn('');
 			$client->expects($this->once())
 				->method('post')
 				->with('proxyserver/notifications', [

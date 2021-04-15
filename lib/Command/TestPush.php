@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @copyright Copyright (c) 2017 Joas Schilling <coding@schilljs.com>
  *
@@ -58,7 +61,7 @@ class TestPush extends Command {
 		$this->app = $app;
 	}
 
-	protected function configure() {
+	protected function configure(): void {
 		$this
 			->setName('notification:test-push')
 			->setDescription('Generate a notification for the given user')

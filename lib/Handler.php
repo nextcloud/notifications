@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @author Joas Schilling <coding@schilljs.com>
  *
@@ -35,11 +38,8 @@ class Handler {
 	/** @var IManager */
 	protected $manager;
 
-	/**
-	 * @param IDBConnection $connection
-	 * @param IManager $manager
-	 */
-	public function __construct(IDBConnection $connection, IManager $manager) {
+	public function __construct(IDBConnection $connection,
+								IManager $manager) {
 		$this->connection = $connection;
 		$this->manager = $manager;
 	}

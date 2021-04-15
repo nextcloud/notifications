@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @author Joas Schilling <coding@schilljs.com>
  *
@@ -32,7 +35,8 @@ class App implements IDeferrableApp {
 	/** @var Push */
 	protected $push;
 
-	public function __construct(Handler $handler, Push $push) {
+	public function __construct(Handler $handler,
+								Push $push) {
 		$this->handler = $handler;
 		$this->push = $push;
 	}
