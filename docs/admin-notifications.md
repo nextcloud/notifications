@@ -28,9 +28,13 @@ Options:
 
 ## HTTP request
 
+> ⚠️ The URL had to be changed when switching from Nextcloud 20 to 21:
+> * 20 and earlier: ocs/v2.php/apps/admin_notifications/api/v1/notifications/{user}
+> * 21 and later: ocs/v2.php/apps/notifications/api/v2/admin_notifications/{user}
+
 ```
 curl -H "OCS-APIREQUEST: true" -X POST \
-  https://admin:admin@localhost/ocs/v2.php/apps/admin_notifications/api/v1/notifications/admin \
+  https://admin:admin@localhost/ocs/v2.php/apps/notifications/api/v1/admin_notifications/admin \
   -d "shortMessage=Short message up to 255 characters" \
   -d "longMessage=Optional: longer message with more details, up to 4000 characters"
 ```

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @copyright Copyright (c) 2017 Joas Schilling <coding@schilljs.com>
  *
@@ -43,14 +46,11 @@ class APIController extends OCSController {
 	/** @var IManager */
 	protected $notificationManager;
 
-	/**
-	 * @param string $appName
-	 * @param IRequest $request
-	 * @param ITimeFactory $timeFactory
-	 * @param IUserManager $userManager
-	 * @param IManager $notificationManager
-	 */
-	public function __construct($appName, IRequest $request, ITimeFactory $timeFactory, IUserManager $userManager, IManager $notificationManager) {
+	public function __construct(string $appName,
+								IRequest $request,
+								ITimeFactory $timeFactory,
+								IUserManager $userManager,
+								IManager $notificationManager) {
 		parent::__construct($appName, $request);
 
 		$this->timeFactory = $timeFactory;
