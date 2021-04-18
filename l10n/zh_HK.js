@@ -9,7 +9,7 @@ OC.L10N.register(
     "Requesting browser permissions to show notifications" : "需要瀏覽器權限以顯示通告",
     "No notifications" : "沒有通告",
     "Failed to dismiss all notifications" : "撤銷所有通告失敗",
-    "Failed to perform action" : "採取動作失敗",
+    "Failed to perform action" : "無法執行操作",
     "Dismiss" : "撤銷",
     "seconds ago" : "幾秒前",
     "Failed to dismiss notification" : "撤銷通告失敗",
