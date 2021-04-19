@@ -1,12 +1,4 @@
 /*!
-   * Toastify js 1.9.3
-   * https://github.com/apvarun/toastify-js
-   * @license MIT licensed
-   *
-   * Copyright (C) 2018 Varun A P
-   */
-
-/*!
  * Determine if an object is a Buffer
  *
  * @author   Feross Aboukhadijeh <https://feross.org>
