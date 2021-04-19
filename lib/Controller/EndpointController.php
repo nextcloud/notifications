@@ -101,6 +101,8 @@ class EndpointController extends OCSController {
 		$language = $this->l10nFactory->getUserLanguage($this->session->getUser());
 		$notifications = $this->handler->get($filter);
 
+		$shouldFlush = $this->manager->defer();
+
 		$data = [];
 		$notificationIds = [];
 		foreach ($notifications as $notificationId => $notification) {
@@ -114,6 +116,10 @@ class EndpointController extends OCSController {
 
 			$notificationIds[] = $notificationId;
 			$data[] = $this->notificationToArray($notificationId, $notification, $apiVersion);
+		}
+
+		if ($shouldFlush) {
+			$this->manager->flush();
 		}
 
 		$eTag = $this->generateETag($notificationIds);
@@ -196,10 +202,17 @@ class EndpointController extends OCSController {
 			return new DataResponse(null, Http::STATUS_FORBIDDEN);
 		}
 
+		$shouldFlush = $this->manager->defer();
+
 		$deletedSomething = $this->handler->deleteByUser($this->getCurrentUser());
 		if ($deletedSomething) {
 			$this->push->pushDeleteToDevice($this->getCurrentUser(), 0);
 		}
+
+		if ($shouldFlush) {
+			$this->manager->flush();
+		}
+
 		return new DataResponse();
 	}
 
