@@ -24,7 +24,7 @@
 		"@nextcloud/moment": "^1.1.1",
 		"@nextcloud/notify_push": "^1.0.1",
 		"@nextcloud/router": "^2.0.0",
-		"@nextcloud/vue": "^3.8.0",
+		"@nextcloud/vue": "^3.9.0",
 		"vue": "^2.6.12",
 		"vue-tooltip": "^0.1.0"
 	},
