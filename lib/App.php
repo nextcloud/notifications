@@ -82,8 +82,8 @@ class App implements IDeferrableApp {
 			$this->push->deferPayloads();
 		}
 		foreach ($deleted as $user => $notifications) {
-			foreach ($notifications as $notificationId) {
-				$this->push->pushDeleteToDevice($user, $notificationId);
+			foreach ($notifications as $data) {
+				$this->push->pushDeleteToDevice($user, $data['id'], $data['app']);
 			}
 		}
 		if (!$isAlreadyDeferring) {
