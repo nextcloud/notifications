@@ -239,12 +239,22 @@ class EndpointControllerTest extends TestCase {
 		$this->manager->expects($this->once())
 			->method('createNotification')
 			->willReturn($filter);
-		$this->manager->expects($this->at(2))
+		$this->manager->expects($this->once())
+			->method('defer')
+			->willReturn(true);
+		$this->manager->expects($this->once())
+			->method('flush');
+
+		$throw = true;
+		$this->manager->expects($this->exactly(2))
 			->method('prepare')
-			->willThrowException(new \InvalidArgumentException());
-		$this->manager->expects($this->at(3))
-			->method('prepare')
-			->willReturnArgument(0);
+			->willReturnCallback(function ($arg) use (&$throw) {
+				if ($throw) {
+					$throw = false;
+					throw new \InvalidArgumentException();
+				}
+				return $arg;
+			});
 
 		$this->l10nFactory
 			->method('getUserLanguage')
@@ -438,6 +448,11 @@ class EndpointControllerTest extends TestCase {
 		$this->handler->expects($this->once())
 			->method('deleteByUser')
 			->with($username);
+		$this->manager->expects($this->once())
+			->method('defer')
+			->willReturn(true);
+		$this->manager->expects($this->once())
+			->method('flush');
 
 		$response = $controller->deleteAllNotifications();
 		$this->assertInstanceOf(DataResponse::class, $response);
