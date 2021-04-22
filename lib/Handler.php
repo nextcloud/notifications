@@ -100,14 +100,17 @@ class Handler {
 				$deleted[$row['user']] = [];
 			}
 
-			$deleted[$row['user']][] = (int) $row['notification_id'];
+			$deleted[$row['user']][] = [
+				'id' => (int) $row['notification_id'],
+				'app' => $row['app'],
+			];
 			$notifications[(int) $row['notification_id']] = $this->notificationFromRow($row);
 		}
 		$statement->closeCursor();
 
-		foreach ($deleted as $user => $notificationIds) {
-			foreach ($notificationIds as $notificationId) {
-				$this->deleteById($notificationId, $user, $notifications[$notificationId]);
+		foreach ($deleted as $user => $entries) {
+			foreach ($entries as $entry) {
+				$this->deleteById($entry['id'], $user, $notifications[$entry['id']]);
 			}
 		}
 

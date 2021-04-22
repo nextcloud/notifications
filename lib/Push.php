@@ -121,6 +121,35 @@ class Push {
 		$this->sendNotificationsToProxies();
 	}
 
+	public function filterDeviceList(array $devices, string $app): array {
+		$isTalkNotification = \in_array($app, ['spreed', 'talk', 'admin_notification_talk'], true);
+
+		$talkDevices = array_filter($devices, static function ($device) {
+			return $device['apptype'] === 'talk';
+		});
+		$otherDevices = array_filter($devices, static function ($device) {
+			return $device['apptype'] !== 'talk';
+		});
+
+		$this->printInfo('Identified ' . count($talkDevices) . ' Talk devices and ' . count($otherDevices) . ' others.');
+
+		if (!$isTalkNotification) {
+			if (empty($otherDevices)) {
+				// We only send file notifications to the files app.
+				// If you don't have such a device, bye!
+				return [];
+			}
+			return $otherDevices;
+		}
+
+		if (empty($talkDevices)) {
+			// If you don't have a talk device,
+			// we fall back to the files app.
+			return $otherDevices;
+		}
+		return $talkDevices;
+	}
+
 	public function pushToDevice(int $id, INotification $notification, ?OutputInterface $output = null): void {
 		if (!$this->config->getSystemValueBool('has_internet_connection', true)) {
 			return;
@@ -170,30 +199,9 @@ class Push {
 		$this->printInfo('Public user key size: ' . strlen($userKey->getPublic()));
 
 		$isTalkNotification = \in_array($notification->getApp(), ['spreed', 'talk', 'admin_notification_talk'], true);
-		$talkDevices = array_filter($devices, function ($device) {
-			return $device['apptype'] === 'talk';
-		});
-		$otherDevices = array_filter($devices, function ($device) {
-			return $device['apptype'] !== 'talk';
-		});
-
-		$this->printInfo('Identified ' . count($talkDevices) . ' Talk devices and ' . count($otherDevices) . ' others.');
-
-		if (!$isTalkNotification) {
-			if (empty($otherDevices)) {
-				// We only send file notifications to the files app.
-				// If you don't have such a device, bye!
-				return;
-			}
-			$devices = $otherDevices;
-		} else {
-			if (empty($talkDevices)) {
-				// If you don't have a talk device,
-				// we fall back to the files app.
-				$devices = $otherDevices;
-			} else {
-				$devices = $talkDevices;
-			}
+		$devices = $this->filterDeviceList($devices, $notification->getApp());
+		if (empty($devices)) {
+			return;
 		}
 
 		// We don't push to devices that are older than 60 days
@@ -227,7 +235,7 @@ class Push {
 		}
 	}
 
-	public function pushDeleteToDevice(string $userId, int $notificationId): void {
+	public function pushDeleteToDevice(string $userId, int $notificationId, string $app = ''): void {
 		if (!$this->config->getSystemValueBool('has_internet_connection', true)) {
 			return;
 		}
@@ -238,6 +246,10 @@ class Push {
 		}
 
 		$devices = $this->getDevicesForUser($userId);
+		if ($notificationId !== 0 && $app !== '') {
+			// Only filter when it's not a single delete
+			$devices = $this->filterDeviceList($devices, $app);
+		}
 		if (empty($devices)) {
 			return;
 		}
