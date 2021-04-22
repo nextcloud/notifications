@@ -74,6 +74,8 @@ class Push {
 	protected $output;
 	/** @var array */
 	protected $payloadsToSend = [];
+	/** @var array */
+	protected $deferredDeletes = [];
 	/** @var bool */
 	protected $deferPayloads = false;
 
@@ -121,6 +123,11 @@ class Push {
 
 	public function flushPayloads(): void {
 		$this->deferPayloads = false;
+
+		foreach ($this->deferredDeletes as $userId => $deletes) {
+			$this->createDeletePayloads($userId, $deletes);
+		}
+
 		$this->sendNotificationsToProxies();
 	}
 
@@ -234,12 +241,35 @@ class Push {
 		}
 
 		if (!$this->deferPayloads) {
-			$this->sendNotificationsToProxies();
+			$this->flushPayloads();
 		}
 	}
 
 	public function pushDeleteToDevice(string $userId, int $notificationId, string $app = ''): void {
 		if (!$this->config->getSystemValueBool('has_internet_connection', true)) {
+			return;
+		}
+
+		if (!isset($this->deferredDeletes[$userId])) {
+			$this->deferredDeletes[$userId] = [];
+		}
+
+		$this->deferredDeletes[$userId] = [
+			'notificationId' => $notificationId,
+			'app' => $app,
+		];
+
+		if (!$this->deferPayloads) {
+			$this->flushPayloads();
+		}
+	}
+
+	public function createDeletePayloads(string $userId, array $deferredDeletes): void {
+		if (!$this->config->getSystemValueBool('has_internet_connection', true)) {
+			return;
+		}
+
+		if (empty($deferredDeletes)) {
 			return;
 		}
 
@@ -249,12 +279,28 @@ class Push {
 		}
 
 		$devices = $this->getDevicesForUser($userId);
-		if ($notificationId !== 0 && $app !== '') {
-			// Only filter when it's not a single delete
-			$devices = $this->filterDeviceList($devices, $app);
-		}
+
 		if (empty($devices)) {
 			return;
+		}
+
+		$deleteAll = !empty(array_filter($deferredDeletes, static function($deferredDelete) {
+			return $deferredDelete['notificationId'] === 0;
+		}));
+
+		$talkIds = $otherIds = [];
+		if (!$deleteAll) {
+			$talkIds = array_map(static function ($deferredDelete) {
+				return $deferredDelete['notificationId'];
+			}, array_filter($deferredDeletes, static function($deferredDelete) {
+				return \in_array($deferredDelete['app'], ['spreed', 'talk', 'admin_notification_talk'], true);
+			}));
+
+			$otherIds = array_map(static function ($deferredDelete) {
+				return $deferredDelete['notificationId'];
+			}, array_filter($deferredDeletes, static function($deferredDelete) {
+				return !\in_array($deferredDelete['app'], ['spreed', 'talk', 'admin_notification_talk'], true);
+			}));
 		}
 
 		// We don't push to devices that are older than 60 days
@@ -267,22 +313,38 @@ class Push {
 				continue;
 			}
 
-			try {
-				$payload = json_encode($this->encryptAndSignDelete($userKey, $device, $notificationId));
-
-				$proxyServer = rtrim($device['proxyserver'], '/');
-				if (!isset($this->payloadsToSend[$proxyServer])) {
-					$this->payloadsToSend[$proxyServer] = [];
+			if ($deleteAll) {
+				$this->createPayloadsInChunks($userKey, $device, []);
+			} else if ($device['apptype'] !== 'talk') {
+				foreach ($otherIds as $id) {
+					// Only talk clients handle delete-multiple
+					$this->createPayloadsInChunks($userKey, $device, [$id]);
 				}
-				$this->payloadsToSend[$proxyServer][] = $payload;
-			} catch (\InvalidArgumentException $e) {
-				// Failed to encrypt message for device: public key is invalid
-				$this->deletePushToken($device['token']);
+			} else {
+				$ids = $talkIds;
+				while (!empty($ids)) {
+					$ids = $this->createPayloadsInChunks($userKey, $device, $ids);
+				}
 			}
 		}
+	}
 
-		if (!$this->deferPayloads) {
-			$this->sendNotificationsToProxies();
+	protected function createPayloadsInChunks(Key $userKey, array $device, array $ids): array {
+		try {
+			$data = $this->encryptAndSignDelete($userKey, $device, $ids);
+			$payload = json_encode($data['payload']);
+
+			$proxyServer = rtrim($device['proxyserver'], '/');
+			if (!isset($this->payloadsToSend[$proxyServer])) {
+				$this->payloadsToSend[$proxyServer] = [];
+			}
+			$this->payloadsToSend[$proxyServer][] = $payload;
+
+			return $data['remaining'];
+		} catch (\InvalidArgumentException $e) {
+			// Failed to encrypt message for device: public key is invalid
+			$this->deletePushToken($device['token']);
+			return [];
 		}
 	}
 
@@ -472,20 +534,27 @@ class Push {
 	/**
 	 * @param Key $userKey
 	 * @param array $device
-	 * @param int $id
+	 * @param int[] $ids
 	 * @return array
 	 * @throws InvalidTokenException
 	 * @throws \InvalidArgumentException
 	 */
-	protected function encryptAndSignDelete(Key $userKey, array $device, int $id): array {
-		if ($id === 0) {
+	protected function encryptAndSignDelete(Key $userKey, array $device, array $ids): array {
+		$remainingIds = [];
+		if (empty($ids)) {
 			$data = [
 				'delete-all' => true,
 			];
-		} else {
+		} else if (count($ids) === 1) {
 			$data = [
-				'nid' => $id,
+				'nid' => array_pop($ids),
 				'delete' => true,
+			];
+		} else {
+			$remainingIds = array_splice($ids, 10);
+			$data = [
+				'nids' => $ids,
+				'delete-multiple' => true,
 			];
 		}
 
@@ -499,12 +568,15 @@ class Push {
 		$base64Signature = base64_encode($signature);
 
 		return [
-			'deviceIdentifier' => $device['deviceidentifier'],
-			'pushTokenHash' => $device['pushtokenhash'],
-			'subject' => $base64EncryptedSubject,
-			'signature' => $base64Signature,
-			'priority' => 'normal',
-			'type' => 'background',
+			'remaining' => $remainingIds,
+			'payload' => [
+				'deviceIdentifier' => $device['deviceidentifier'],
+				'pushTokenHash' => $device['pushtokenhash'],
+				'subject' => $base64EncryptedSubject,
+				'signature' => $base64Signature,
+				'priority' => 'normal',
+				'type' => 'background',
+			],
 		];
 	}
 
