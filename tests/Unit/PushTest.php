@@ -648,11 +648,11 @@ class PushTest extends TestCase {
 			->willReturn('valid');
 
 		if ($isTalkNotification) {
-			$notification->expects($this->once())
+			$notification->expects($this->any())
 				->method('getApp')
 				->willReturn('spreed');
 		} else {
-			$notification->expects($this->once())
+			$notification->expects($this->any())
 				->method('getApp')
 				->willReturn('notifications');
 		}
