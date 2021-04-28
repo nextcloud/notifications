@@ -54,6 +54,7 @@
 import Notification from './Components/Notification'
 import axios from '@nextcloud/axios'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { loadState } from '@nextcloud/initial-state'
 import { showError } from '@nextcloud/dialogs'
 import { imagePath, generateOcsUrl } from '@nextcloud/router'
 import { getNotificationsData } from './services/notificationsService'
@@ -68,10 +69,11 @@ export default {
 
 	data() {
 		return {
-			webNotificationsGranted: null,
+			webNotificationsGranted: false,
 			hadNotifications: false,
 			backgroundFetching: false,
 			shutdown: false,
+			invertedTheme2: false,
 			notifications: [],
 			lastETag: null,
 			lastTabId: null,
@@ -96,17 +98,32 @@ export default {
 			let iconPath = 'notifications'
 
 			if (this.webNotificationsGranted === null || this.notifications.length) {
-				if (this.isRedThemed()) {
+				if (this.isRedThemed) {
 					iconPath += '-red'
 				}
 				iconPath += '-new'
 			}
 
-			if (this.invertedTheme()) {
+			if (this.invertedTheme) {
 				iconPath += '-dark'
 			}
 
 			return imagePath('notifications', iconPath)
+		},
+
+		invertedTheme() {
+			return !!this.theming?.inverted
+		},
+
+		isRedThemed() {
+			if (this.theming?.color) {
+				const hsl = this.rgbToHsl(this.theming.color.substring(1, 3),
+					this.theming.color.substring(3, 5),
+					this.theming.color.substring(5, 7))
+				const h = hsl[0] * 360
+				return (h >= 330 || h <= 15) && hsl[1] > 0.7 && (hsl[2] > 0.1 || hsl[2] < 0.6)
+			}
+			return false
 		},
 
 		showBrowserNotifications() {
@@ -115,6 +132,10 @@ export default {
 				&& this.userStatus !== 'dnd'
 				&& this.tabId === this.lastTabId
 		},
+	},
+
+	beforeMount() {
+		this.theming = loadState('theming', 'data', {})
 	},
 
 	mounted() {
@@ -151,8 +172,6 @@ export default {
 	},
 
 	updated() {
-		this._$icon.attr('src', this.iconPath)
-
 		if (!this.hadNotifications && this.notifications.length) {
 			this._$icon
 				.animate({ opacity: 0.6 }, 600)
@@ -194,21 +213,6 @@ export default {
 			this.notifications.splice(index, 1)
 		},
 
-		invertedTheme() {
-			return OCA.Theming && OCA.Theming.inverted
-		},
-
-		isRedThemed() {
-			if (OCA.Theming && OCA.Theming.color) {
-				const hsl = this.rgbToHsl(OCA.Theming.color.substring(1, 3),
-					OCA.Theming.color.substring(3, 5),
-					OCA.Theming.color.substring(5, 7))
-				const h = hsl[0] * 360
-				return (h >= 330 || h <= 15) && hsl[1] > 0.7 && (hsl[2] > 0.1 || hsl[2] < 0.6)
-			}
-			return false
-		},
-
 		rgbToHsl(r, g, b) {
 			r = parseInt(r, 16) / 255; g = parseInt(g, 16) / 255; b = parseInt(b, 16) / 255
 			const max = Math.max(r, g, b); const min = Math.min(r, g, b)
@@ -231,12 +235,12 @@ export default {
 		},
 
 		/**
-			 * Update the title to show * if there are new notifications
-			 * @param {Object} notifications The list of notifications
-			 */
-		async _updateDocTitleOnNewNotifications(notifications) {
+		 * Update the title to show * if there are new notifications
+		 * @param {Object} notifications The list of notifications
+		 */
+		_updateDocTitleOnNewNotifications(notifications) {
 			if (notifications.length < this._oldcount) {
-				await this._restoreTitle()
+				this._restoreTitle()
 				this._oldcount = notifications.length
 			} else if (notifications.length > this._oldcount) {
 				this._oldcount = notifications.length
@@ -256,7 +260,7 @@ export default {
 		 * Only restore title if it's still what we set it to,
 		 * the Talk might have altered it.
 		 */
-		async _restoreTitle() {
+		_restoreTitle() {
 			if (self._setTitle === document.title) {
 				document.title = self._storedTitle
 				self._setTitle = null
@@ -361,6 +365,7 @@ export default {
 			}
 
 			console.info('Notifications permissions not yet requested')
+			this.webNotificationsGranted = null
 		},
 
 		/**
