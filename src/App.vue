@@ -73,7 +73,7 @@ export default {
 			hadNotifications: false,
 			backgroundFetching: false,
 			shutdown: false,
-			invertedTheme2: false,
+			theming: {},
 			notifications: [],
 			lastETag: null,
 			lastTabId: null,
