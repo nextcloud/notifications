@@ -534,7 +534,7 @@ class Push {
 		$query->delete('notifications_pushhash')
 			->where($query->expr()->eq('token', $query->createNamedParameter($tokenId, IQueryBuilder::PARAM_INT)));
 
-		return $query->executeUpdate() !== 0;
+		return $query->executeStatement() !== 0;
 	}
 
 	/**
@@ -546,6 +546,6 @@ class Push {
 		$query->delete('notifications_pushhash')
 			->where($query->expr()->eq('deviceidentifier', $query->createNamedParameter($deviceIdentifier)));
 
-		return $query->executeUpdate() !== 0;
+		return $query->executeStatement() !== 0;
 	}
 }

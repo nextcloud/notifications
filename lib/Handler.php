@@ -54,7 +54,7 @@ class Handler {
 		$sql = $this->connection->getQueryBuilder();
 		$sql->insert('notifications');
 		$this->sqlInsert($sql, $notification);
-		$sql->executeUpdate();
+		$sql->executeStatement();
 
 		return $sql->getLastInsertId();
 	}
@@ -153,7 +153,7 @@ class Handler {
 		$sql->delete('notifications')
 			->where($sql->expr()->eq('notification_id', $sql->createNamedParameter($id)))
 			->andWhere($sql->expr()->eq('user', $sql->createNamedParameter($user)));
-		return (bool) $sql->executeUpdate();
+		return (bool) $sql->executeStatement();
 	}
 
 	/**
