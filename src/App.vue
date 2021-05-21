@@ -135,6 +135,7 @@ export default {
 	},
 
 	beforeMount() {
+		console.debug('Loading theming data for notification bell styling')
 		this.theming = loadState('theming', 'data', {})
 	},
 
@@ -144,6 +145,7 @@ export default {
 		this._oldcount = 0
 
 		// Bind the button click event
+		console.debug('Registering notifications container as a menu')
 		OC.registerMenu($(this.$refs.button), $(this.$refs.container), undefined, true)
 
 		this.checkWebNotificationPermissions()
@@ -155,6 +157,7 @@ export default {
 			this._fetch()
 		})
 		if (hasPush) {
+			console.debug('Has notify_push enabled, slowing polling to 15 minutes')
 			this.pollIntervalBase = 15 * 60 * 1000
 		}
 
@@ -173,6 +176,7 @@ export default {
 
 	updated() {
 		if (!this.hadNotifications && this.notifications.length) {
+			console.debug('New notification, animating the bell icon')
 			this._$icon
 				.animate({ opacity: 0.6 }, 600)
 				.animate({ opacity: 1 }, 600)
@@ -185,17 +189,22 @@ export default {
 
 	methods: {
 		handleNetworkOffline() {
+			console.debug('Network is offline, slowing down pollingInterval to ' + this.pollIntervalBase * 10)
 			this._setPollingInterval(this.pollIntervalBase * 10)
 		},
 
 		handleNetworkOnline() {
 			this._fetch()
+			console.debug('Network is online, reseting pollingInterval to ' + this.pollIntervalBase)
 			this._setPollingInterval(this.pollIntervalBase)
 		},
 
 		setupBackgroundFetcher() {
 			if (OC.config.session_keepalive) {
+				console.debug('Started background fetcher as session_keepalive is enabled')
 				this.interval = window.setInterval(this._backgroundFetch.bind(this), this.pollIntervalCurrent)
+			} else {
+				console.debug('Did not start background fetcher as session_keepalive is off')
 			}
 		},
 
@@ -275,16 +284,19 @@ export default {
 
 			if (response.status === 204) {
 				// 204 No Content - Intercept when no notifiers are there.
+				console.debug('Fetching notifications but no content, slowing down polling to ' + this.pollIntervalBase * 10)
 				this._setPollingInterval(this.pollIntervalBase * 10)
 			} else if (response.status === 200) {
 				this.userStatus = response.headers['x-nextcloud-user-status']
 				this.lastETag = response.headers.etag
 				this.lastTabId = response.tabId
 				this.notifications = response.data
+				console.debug('Got notification data')
 				this._setPollingInterval(this.pollIntervalBase)
 				this._updateDocTitleOnNewNotifications(this.notifications)
 			} else if (response.status === 304) {
 				// 304 - Not modified
+				console.debug('No new notification data received')
 				this._setPollingInterval(this.pollIntervalBase)
 			} else if (response.status === 503) {
 				// 503 - Maintenance mode
@@ -316,6 +328,7 @@ export default {
 		},
 
 		_setPollingInterval(pollInterval) {
+			console.debug('Polling interval updated to ' + pollInterval)
 			if (this.interval && pollInterval === this.pollIntervalCurrent) {
 				return
 			}
@@ -335,6 +348,7 @@ export default {
 		 * @param {Boolean} temporary If false, the notification bell will be hidden
 		 */
 		_shutDownNotifications(temporary) {
+			console.debug('Shutting down notifications ' + ((temporary) ? 'temporary' : 'bye'))
 			if (this.interval) {
 				window.clearInterval(this.interval)
 				this.interval = null
