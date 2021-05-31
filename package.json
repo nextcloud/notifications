@@ -44,7 +44,7 @@
 		"babel-loader-exclude-node-modules-except": "^1.1.2",
 		"babel-plugin-add-module-exports": "^1.0.4",
 		"css-loader": "^4.3.0",
-		"eslint": "^7.26.0",
+		"eslint": "^7.27.0",
 		"eslint-config-standard": "^16.0.3",
 		"eslint-import-resolver-webpack": "^0.13.0",
 		"eslint-loader": "^4.0.2",
