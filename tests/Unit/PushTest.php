@@ -45,6 +45,7 @@ use OCP\Notification\INotification;
 use OCP\UserStatus\IManager as IUserStatusManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\StreamInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -524,9 +525,14 @@ class PushTest extends TestCase {
 		$response1->expects($this->once())
 			->method('getStatusCode')
 			->willReturn(Http::STATUS_BAD_REQUEST);
+		/** @var StreamInterface|MockObject $body1 */
+		$body1 = $this->createMock(StreamInterface::class);
+		$body1->expects($this->once())
+			->method('getContents')
+			->willReturn('');
 		$response1->expects($this->once())
 			->method('getBody')
-			->willReturn('');
+			->willReturn($body1);
 		$e = $this->createMock(ClientException::class);
 		$e->method('getResponse')
 			->willReturn($response1);
@@ -549,9 +555,14 @@ class PushTest extends TestCase {
 
 		/** @var ResponseInterface|MockObject $response1 */
 		$response2 = $this->createMock(ResponseInterface::class);
+		/** @var StreamInterface|MockObject $body2 */
+		$body2 = $this->createMock(StreamInterface::class);
+		$body2->expects($this->once())
+			->method('getContents')
+			->willReturn('Maintenance');
 		$response2->expects($this->once())
 			->method('getBody')
-			->willReturn('Maintenance');
+			->willReturn($body2);
 		$e = $this->createMock(ServerException::class);
 		$e->method('getResponse')
 			->willReturn($response2);
@@ -577,6 +588,8 @@ class PushTest extends TestCase {
 		$response3->expects($this->once())
 			->method('getStatusCode')
 			->willReturn(Http::STATUS_OK);
+		/** @var StreamInterface|MockObject $body3 */
+		$body3 = $this->createMock(StreamInterface::class);
 		$response3->method('getBody')
 			->willReturn('');
 		$client->expects($this->at(3))
@@ -593,14 +606,19 @@ class PushTest extends TestCase {
 		$response4->expects($this->once())
 			->method('getStatusCode')
 			->willReturn(Http::STATUS_BAD_REQUEST);
-		$response4->expects($this->once())
-			->method('getBody')
+		/** @var StreamInterface|MockObject $body4 */
+		$body4 = $this->createMock(StreamInterface::class);
+		$body4->expects($this->once())
+			->method('getContents')
 			->willReturn(json_encode([
 				'failed' => 1,
 				'unknown' => [
 					'123456'
 				]
 			]));
+		$response4->expects($this->once())
+			->method('getBody')
+			->willReturn($body4);
 		$e = $this->createMock(ClientException::class);
 		$e->method('getResponse')
 			->willReturn($response4);

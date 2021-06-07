@@ -301,13 +301,19 @@ class Push {
 						'notifications' => $notifications,
 					],
 				]);
+				$status = $response->getStatusCode();
+				$body = $response->getBody();
+				$bodyData = json_decode($body, true);
 			} catch (ClientException $e) {
 				// Server responded with 4xx (400 Bad Request mostlikely)
 				$response = $e->getResponse();
+				$status = $response->getStatusCode();
+				$body = $response->getBody()->getContents();
+				$bodyData = json_decode($body, true);
 			} catch (ServerException $e) {
 				// Server responded with 5xx
 				$response = $e->getResponse();
-				$body = $response->getBody();
+				$body = $response->getBody()->getContents();
 				$error = \is_string($body) ? $body : ('no reason given (' . $response->getStatusCode() . ')');
 
 				$this->log->debug('Could not send notification to push server [{url}]: {error}', [
@@ -328,10 +334,6 @@ class Push {
 				continue;
 			}
 
-			$status = $response->getStatusCode();
-			$body = $response->getBody();
-			$bodyData = json_decode($body, true);
-
 			if (is_array($bodyData) && array_key_exists('unknown', $bodyData) && array_key_exists('failed', $bodyData)) {
 				if (is_array($bodyData['unknown'])) {
 					// Proxy returns null when the array is empty
@@ -347,7 +349,7 @@ class Push {
 					$this->printInfo('Push notification sent successfully');
 				}
 			} elseif ($status !== Http::STATUS_OK) {
-				$error = \is_string($body) && $body && $bodyData === null ? $body : 'no reason given';
+				$error = $body && $bodyData === null ? $body : 'no reason given';
 				$this->printInfo('Could not send notification to push server [' . $proxyServer . ']: ' . $error);
 				$this->log->warning('Could not send notification to push server [{url}]: {error}', [
 					'error' => $error,
@@ -355,7 +357,7 @@ class Push {
 					'app' => 'notifications',
 				]);
 			} else {
-				$error = \is_string($body) && $body && $bodyData === null ? $body : 'no reason given';
+				$error = $body && $bodyData === null ? $body : 'no reason given';
 				$this->printInfo('Push notification sent but response was not parsable, using an outdated push proxy? [' . $proxyServer . ']: ' . $error);
 				$this->log->info('Push notification sent but response was not parsable, using an outdated push proxy? [{url}]: {error}', [
 					'error' => $error,
