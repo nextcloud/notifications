@@ -378,6 +378,12 @@ export default {
 				return
 			}
 
+			if (window.location.protocol === 'http:') {
+				console.debug('Notifications require HTTPS')
+				this.webNotificationsGranted = false
+				return
+			}
+
 			console.info('Notifications permissions not yet requested')
 			this.webNotificationsGranted = null
 		},
