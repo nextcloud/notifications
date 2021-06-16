@@ -71,7 +71,8 @@
 		"webpack-cli": "^4.7.2"
 	},
 	"engines": {
-		"node": ">=12.0.0"
+		"node": ">=14.0.0",
+		"npm": ">=7.0.0"
 	},
 	"browserslist": [
 		"extends @nextcloud/browserslist-config"
