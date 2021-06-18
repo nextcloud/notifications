@@ -70,6 +70,7 @@ class Application extends \OCP\AppFramework\App implements IBootstrap {
 		if ($userSession->getUser() !== null
 			&& strpos($request->getPathInfo(), '/s/') !== 0
 			&& strpos($request->getPathInfo(), '/login/') !== 0
+			&& strpos($request->getPathInfo(), '/apps/calendar/embed/') !== 0
 			&& substr($request->getScriptName(), 0 - \strlen('/index.php')) === '/index.php') {
 			Util::addScript('notifications', 'notifications-main');
 			Util::addStyle('notifications', 'styles');
