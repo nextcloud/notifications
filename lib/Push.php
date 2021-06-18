@@ -211,6 +211,7 @@ class Push {
 		$maxAge = time() - 60 * 24 * 60 * 60;
 
 		foreach ($devices as $device) {
+			$device['token'] = (int) $device['token'];
 			$this->printInfo('');
 			$this->printInfo('Device token:' . $device['token']);
 
@@ -262,6 +263,7 @@ class Push {
 
 		$userKey = $this->keyManager->getKey($user);
 		foreach ($devices as $device) {
+			$device['token'] = (int) $device['token'];
 			if (!$this->validateToken($device['token'], $maxAge)) {
 				// Token does not exist anymore
 				continue;
