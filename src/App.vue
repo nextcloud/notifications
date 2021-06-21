@@ -248,17 +248,12 @@ export default {
 		 * @param {Object} notifications The list of notifications
 		 */
 		_updateDocTitleOnNewNotifications(notifications) {
-			if (notifications.length < this._oldcount) {
-				this._restoreTitle()
-				this._oldcount = notifications.length
-			} else if (notifications.length > this._oldcount) {
+			if (notifications.length > this._oldcount) {
 				this._oldcount = notifications.length
 				if (this.backgroundFetching && document.hidden) {
 					// If we didn't already highlight, store the title so we can restore on tab-view
-					if (self._setTitle !== document.title) {
-						self._storedTitle = document.title
-						self._setTitle = '* ' + document.title
-						document.title = self._setTitle
+					if (!document.title.startsWith('* ')) {
+						document.title = '* ' + document.title
 					}
 				}
 			}
@@ -270,9 +265,8 @@ export default {
 		 * the Talk might have altered it.
 		 */
 		_restoreTitle() {
-			if (self._setTitle === document.title) {
-				document.title = self._storedTitle
-				self._setTitle = null
+			if (document.title.startsWith('* ')) {
+				document.title = document.title.substring(2)
 			}
 		},
 
