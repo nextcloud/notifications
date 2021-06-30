@@ -9,6 +9,11 @@
 	padding: 10px;
 	opacity: .6;
 
+	.svg {
+		width: 20px;
+		height: 20px;
+	}
+
 	&:hover,
 	&:focus {
 		opacity: 1 !important;
