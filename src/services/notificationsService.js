@@ -69,7 +69,12 @@ const refreshData = async(lastETag) => {
 			BrowserStorage.setItem('data', JSON.stringify(response.data.ocs.data))
 		}
 	} catch (error) {
-		BrowserStorage.setItem('status', '' + error.response.status)
+		if (error?.response?.status) {
+			BrowserStorage.setItem('status', '' + error.response.status)
+		} else {
+			// Setting to 500 in case no request was made so it's retried on the next attempt
+			BrowserStorage.setItem('status', '500')
+		}
 	}
 }
 
