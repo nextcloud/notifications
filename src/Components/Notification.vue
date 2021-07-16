@@ -283,8 +283,6 @@ export default {
 					window.location.href = this.link
 				}.bind(this)
 			}
-
-			setTimeout(n.close.bind(n), 5000)
 		},
 	},
 }
