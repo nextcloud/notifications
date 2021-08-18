@@ -1,5 +1,6 @@
 const webpackConfig = require('@nextcloud/webpack-vue-config')
 const webpackRules = require('@nextcloud/webpack-vue-config/rules')
+const path = require('path')
 
 const BabelLoaderExcludeNodeModulesExcept = require('babel-loader-exclude-node-modules-except')
 
@@ -12,5 +13,10 @@ webpackRules.RULE_JS.exclude = BabelLoaderExcludeNodeModulesExcept([
 
 // Replaces rules array
 webpackConfig.module.rules = Object.values(webpackRules)
+
+webpackConfig.entry = {
+	main: path.resolve(path.join('src', 'main.js')),
+	userSettings: path.join(__dirname, 'src', 'userSettings.js'),
+}
 
 module.exports = webpackConfig
