@@ -37,6 +37,6 @@ class RoutesTest extends TestCase {
 		$this->assertCount(1, $routes);
 		$this->assertArrayHasKey('ocs', $routes);
 		$this->assertIsArray($routes['ocs']);
-		$this->assertCount(7, $routes['ocs']);
+		$this->assertCount(8, $routes['ocs']);
 	}
 }

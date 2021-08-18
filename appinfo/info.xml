@@ -35,8 +35,17 @@
 		<nextcloud min-version="23" max-version="23" />
 	</dependencies>
 
+	<background-jobs>
+		<job>OCA\Notifications\BackgroundJob\SendNotificationMails</job>
+	</background-jobs>
+
 	<commands>
 		<command>OCA\Notifications\Command\Generate</command>
 		<command>OCA\Notifications\Command\TestPush</command>
 	</commands>
+
+	<settings>
+		<personal>OCA\Notifications\Settings\Personal</personal>
+		<personal-section>OCA\Notifications\Settings\PersonalSection</personal-section>
+	</settings>
 </info>
