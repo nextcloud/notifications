@@ -23,7 +23,7 @@ import axios from '@nextcloud/axios'
 import { generateOcsUrl } from '@nextcloud/router'
 import BrowserStorage from './BrowserStorage'
 
-const getNotificationsData = async(tabId, lastETag, forceRefresh) => {
+const getNotificationsData = async (tabId, lastETag, forceRefresh) => {
 	const lastUpdated = parseInt(BrowserStorage.getItem('lastUpdated'), 10)
 	const lastTab = BrowserStorage.getItem('tabId')
 	const now = moment().format('X')
@@ -50,7 +50,7 @@ const getNotificationsData = async(tabId, lastETag, forceRefresh) => {
 	}
 }
 
-const refreshData = async(lastETag) => {
+const refreshData = async (lastETag) => {
 	let requestConfig = {}
 	if (lastETag) {
 		requestConfig = {
