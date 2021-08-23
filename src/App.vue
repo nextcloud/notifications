@@ -30,7 +30,7 @@
 							:object-type="n.object_type"
 							@remove="onRemove" />
 					</transition-group>
-					<li v-if="notifications.length > 2">
+					<li v-if="notifications.length > 0">
 						<div class="dismiss-all" @click="onDismissAll">
 							<span class="icon icon-close svg" :title="t('notifications', 'Dismiss all notifications')" /> {{ t('notifications', 'Dismiss all notifications') }}
 						</div>
