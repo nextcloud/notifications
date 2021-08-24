@@ -422,6 +422,9 @@ class Push {
 		} elseif ($data['app'] === 'twofactor_nextcloud_notification') {
 			$priority = 'high';
 			$type = 'alert';
+		} elseif ($data['app'] === 'phonetrack') {
+			$priority = 'high';
+			$type = 'alert';
 		} else {
 			$priority = 'normal';
 			$type = 'alert';
