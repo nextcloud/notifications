@@ -401,10 +401,7 @@ class Push {
 		if ($isTalkNotification) {
 			$priority = 'high';
 			$type = $data['type'] === 'call' ? 'voip' : 'alert';
-		} elseif ($data['app'] === 'twofactor_nextcloud_notification') {
-			$priority = 'high';
-			$type = 'alert';
-		} elseif ($data['app'] === 'phonetrack') {
+		} elseif ($data['app'] === 'twofactor_nextcloud_notification' || $data['app'] === 'phonetrack') {
 			$priority = 'high';
 			$type = 'alert';
 		} else {
