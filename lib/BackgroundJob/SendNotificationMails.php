@@ -29,18 +29,13 @@ use OCP\AppFramework\Utility\ITimeFactory;
 
 class SendNotificationMails extends TimedJob {
 
-	/** @var ITimeFactory */
-	protected $timeFactory;
 	/** @var MailNotifications */
 	protected $mailNotifications;
 
-	public function __construct(ITimeFactory $timeFactory, MailNotifications $mailNotifications) {
+	public function __construct(ITimeFactory $timeFactory,
+								MailNotifications $mailNotifications) {
 		parent::__construct($timeFactory);
 
-		// run every 15 min
-		$this->setInterval(60 * 15);
-
-		$this->timeFactory = $timeFactory;
 		$this->mailNotifications = $mailNotifications;
 	}
 

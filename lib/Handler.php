@@ -189,19 +189,18 @@ class Handler {
 	 * Get the notifications after (and excluding) the given id
 	 *
 	 * @param int $startAfterId
-	 * @param string $user
+	 * @param string $userId
 	 * @param int $limit
 	 * @return array [notification_id => INotification]
-	 * @throws NotificationNotFoundException
 	 */
-	public function getAfterId(int $startAfterId, string $user, $limit = 25): array {
+	public function getAfterId(int $startAfterId, string $userId, int $limit = 25): array {
 		$sql = $this->connection->getQueryBuilder();
 		$sql->select('*')
 			->from('notifications')
 			->orderBy('notification_id', 'DESC')
 			->setMaxResults($limit)
 			->where($sql->expr()->gt('notification_id', $sql->createNamedParameter($startAfterId)))
-			->andWhere($sql->expr()->eq('user', $sql->createNamedParameter($user)));
+			->andWhere($sql->expr()->eq('user', $sql->createNamedParameter($userId)));
 		$statement = $sql->executeQuery();
 
 		$notifications = [];
