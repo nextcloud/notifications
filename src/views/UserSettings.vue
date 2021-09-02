@@ -38,9 +38,9 @@
 				<p>
 					<label for="notify_setting_batchtime" class="notification-frequency__label">{{ t('notifications', 'Send notification emails:') }}</label>
 					<select
+						id="notify_setting_batchtime"
 						v-model="config.setting_batchtime"
 						class="notification-frequency__select"
-						name="notify_setting_batchtime"
 						@change="updateSettings()">
 						<option v-for="option in batchtime_options" :key="option.value" :value="option.value">
 							{{ option.text }}
@@ -90,10 +90,11 @@ export default {
 				const form = new FormData()
 				form.append('notifications_email_enabled', this.config.notifications_email_enabled ? '1' : '0')
 				form.append('notify_setting_batchtime', this.config.setting_batchtime)
-				const response = await axios.post(generateOcsUrl('apps/notifications/api/v2/settings'), form)
-				showSuccess(response.data.ocs.data.message)
+				await axios.post(generateOcsUrl('apps/notifications/api/v2/settings'), form)
+				showSuccess(t('notifications', 'Your settings have been updated.'))
 			} catch (error) {
-				showError(t('notifications', 'Error updating settings'))
+				showError(t('notifications', 'An error occurred while updating your settings.'))
+				console.error(error)
 			}
 		},
 	},

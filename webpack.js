@@ -16,7 +16,7 @@ webpackConfig.module.rules = Object.values(webpackRules)
 
 webpackConfig.entry = {
 	main: path.resolve(path.join('src', 'main.js')),
-	userSettings: path.join(__dirname, 'src', 'userSettings.js'),
+	settings: path.resolve(path.join('src', 'settings.js')),
 }
 
 module.exports = webpackConfig

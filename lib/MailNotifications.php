@@ -122,9 +122,9 @@ class MailNotifications {
 
 		foreach ($users as $user) {
 			// Get the settings for this particular user, then check if we have notifications to email them
-			$batchTime = (array_key_exists($user, $userBatchTimes)) ? (int) $userBatchTimes[$user] : self::DEFAULT_BATCH_TIME;
-			$lastSendId = (array_key_exists($user, $userLastSendIds)) ? (int) $userLastSendIds[$user] : -1;
-			$lastSendTime = (array_key_exists($user, $userLastSendTimes)) ? (int) $userLastSendTimes[$user] : -1;
+			$batchTime = (int) ($userBatchTimes[$user] ?? self::DEFAULT_BATCH_TIME);
+			$lastSendId = (int) ($userLastSendIds[$user] ?? -1);
+			$lastSendTime = (int) ($userLastSendTimes[$user] ?? -1);
 
 			if (($now - $lastSendTime) >= $batchTime) {
 				// Enough time passed since last send for the user's desired interval between mails.

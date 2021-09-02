@@ -26,7 +26,5 @@ Vue.prototype.n = n
 
 export default new Vue({
 	el: '#notifications-user-settings',
-	// eslint-disable-next-line vue/match-component-file-name
-	name: 'NotificationUserSettings',
 	render: h => h(UserSettings),
 })

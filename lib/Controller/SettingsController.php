@@ -24,32 +24,26 @@ declare(strict_types=1);
 
 namespace OCA\Notifications\Controller;
 
+use OCA\Notifications\Settings\Personal;
 use OCP\AppFramework\OCSController;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IConfig;
-use OCP\IL10N;
 use OCP\IRequest;
-use OCP\IUserSession;
 
 class SettingsController extends OCSController {
 	/** @var \OCP\IConfig */
 	protected $config;
 
-	/** @var \OCP\IL10N */
-	protected $l10n;
-
 	/** @var string */
-	protected $user;
+	protected $userId;
 
 	public function __construct(string $appName,
 								IRequest $request,
 								IConfig $config,
-								IL10N $l10n,
-								IUserSession $userSession) {
+								string $userId) {
 		parent::__construct($appName, $request);
 		$this->config = $config;
-		$this->l10n = $l10n;
-		$this->user = $userSession->getUser()->getUID();
+		$this->userId = $userId;
 	}
 
 	/**
@@ -60,31 +54,29 @@ class SettingsController extends OCSController {
 	 * @return DataResponse
 	 */
 	public function personal(
-			int $notify_setting_batchtime = \OCA\Notifications\Settings\Personal::EMAIL_SEND_HOURLY,
+			int $notify_setting_batchtime = Personal::EMAIL_SEND_HOURLY,
 			bool $notifications_email_enabled = false
 	): DataResponse {
 		$email_batch_time = 3600;
-		if ($notify_setting_batchtime === \OCA\Notifications\Settings\Personal::EMAIL_SEND_DAILY) {
+		if ($notify_setting_batchtime === Personal::EMAIL_SEND_DAILY) {
 			$email_batch_time = 3600 * 24;
-		} elseif ($notify_setting_batchtime === \OCA\Notifications\Settings\Personal::EMAIL_SEND_WEEKLY) {
+		} elseif ($notify_setting_batchtime === Personal::EMAIL_SEND_WEEKLY) {
 			$email_batch_time = 3600 * 24 * 7;
-		} elseif ($notify_setting_batchtime === \OCA\Notifications\Settings\Personal::EMAIL_SEND_ASAP) {
+		} elseif ($notify_setting_batchtime === Personal::EMAIL_SEND_ASAP) {
 			$email_batch_time = 0;
 		}
 
 		$this->config->setUserValue(
-			$this->user, 'notifications',
+			$this->userId, 'notifications',
 			'notify_setting_batchtime',
 			(string) $email_batch_time
 		);
 		$this->config->setUserValue(
-			$this->user, 'notifications',
+			$this->userId, 'notifications',
 			'notifications_email_enabled',
 			$notifications_email_enabled ? '1' : '0'
 		);
 
-		return new DataResponse([
-			'message' => $this->l10n->t('Your settings have been updated.'),
-		]);
+		return new DataResponse();
 	}
 }
