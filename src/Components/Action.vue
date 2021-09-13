@@ -1,5 +1,12 @@
 <template>
-	<button class="action-button pull-right"
+	<a v-if="isWebLink"
+		class="button action-button pull-right"
+		:class="{ primary: primary }"
+		:href="link">
+		{{ label }}
+	</a>
+	<button v-else
+		class="action-button pull-right"
 		:class="{ primary: primary }"
 		:data-type="type"
 		:data-href="link"
@@ -38,18 +45,22 @@ export default {
 		},
 	},
 
+	computed: {
+		isWebLink() {
+			return this.typeWithDefault === 'WEB'
+		},
+
+		typeWithDefault() {
+			return this.type || 'GET'
+		},
+	},
+
 	methods: {
 		async onClickActionButton() {
-			const type = this.type || 'GET'
-			if (type === 'WEB') {
-				window.location = this.link
-				return
-			}
-
 			try {
 				// execute action
 				await axios({
-					method: type,
+					method: this.typeWithDefault,
 					url: this.link,
 				})
 
@@ -61,7 +72,7 @@ export default {
 						notification: this.$parent,
 						action: {
 							url: this.link,
-							type,
+							type: this.typeWithDefault,
 						},
 					}))
 				// do not do anything but log, the action went fine
