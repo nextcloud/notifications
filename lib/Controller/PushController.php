@@ -118,8 +118,8 @@ class PushController extends OCSController {
 		$key = $this->identityProof->getKey($user);
 
 		$deviceIdentifier = json_encode([$user->getCloudId(), $token->getId()]);
-		openssl_sign($deviceIdentifier, $signature, $key->getPrivate(), OPENSSL_ALGO_SHA512);
 		$deviceIdentifier = base64_encode(hash('sha512', $deviceIdentifier, true));
+		openssl_sign($deviceIdentifier, $signature, $key->getPrivate(), OPENSSL_ALGO_SHA512);
 
 		$appType = 'unknown';
 		if ($this->request->isUserAgent([
