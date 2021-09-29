@@ -75,6 +75,8 @@ class MailNotifications {
 	/** @var ITimeFactory */
 	protected $timeFactory;
 
+	public const BATCH_SIZE_CLI = 500;
+	public const BATCH_SIZE_WEB = 25;
 	public const DEFAULT_BATCH_TIME = 3600 * 24;
 
 	public function __construct(
@@ -105,12 +107,14 @@ class MailNotifications {
 
 	/**
 	 * Send all due notification emails.
+	 *
+	 * @param int $batchSize
 	 */
-	public function sendEmails(): void {
+	public function sendEmails(int $batchSize): void {
 		// Get all users who enabled notification emails.
 		$users = $this->config->getUsersForUserValue('notifications', 'notifications_email_enabled', '1');
 
-		if (count($users) == 0) {
+		if (empty($users)) {
 			return;
 		}
 

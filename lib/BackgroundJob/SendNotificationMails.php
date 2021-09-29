@@ -33,13 +33,16 @@ class SendNotificationMails extends TimedJob {
 	protected $mailNotifications;
 
 	public function __construct(ITimeFactory $timeFactory,
-								MailNotifications $mailNotifications) {
+								MailNotifications $mailNotifications,
+								bool $isCLI) {
 		parent::__construct($timeFactory);
 
 		$this->mailNotifications = $mailNotifications;
+		$this->isCLI = $isCLI;
 	}
 
-	protected function run($argument) {
-		$this->mailNotifications->sendEmails();
+	protected function run($argument): void {
+		$batchSize = $this->isCLI ? MailNotifications::BATCH_SIZE_CLI : MailNotifications::BATCH_SIZE_WEB;
+		$this->mailNotifications->sendEmails($batchSize);
 	}
 }
