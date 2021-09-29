@@ -24,12 +24,13 @@ declare(strict_types=1);
 
 namespace OCA\Notifications\Settings;
 
+use OCA\Notifications\MailNotifications;
 use OCP\AppFramework\Http\TemplateResponse;
+use OCP\AppFramework\Services\IInitialState;
 use OCP\IConfig;
 use OCP\IL10N;
 use OCP\Settings\ISettings;
 use OCP\IUserSession;
-use OCP\IInitialStateService;
 use OCP\Util;
 
 class Personal implements ISettings {
@@ -42,23 +43,18 @@ class Personal implements ISettings {
 	/** @var IUserSession */
 	private $session;
 
-	/** @var IInitialStateService */
-	private $initialStateService;
-
-	public const EMAIL_SEND_HOURLY = 0;
-	public const EMAIL_SEND_DAILY = 1;
-	public const EMAIL_SEND_WEEKLY = 2;
-	public const EMAIL_SEND_ASAP = 3;
+	/** @var IInitialState */
+	private $initialState;
 
 	public function __construct(IConfig $config,
 								IL10N $l10n,
 								IUserSession $session,
-								IInitialStateService $initialStateService) {
+								IInitialState $initialState) {
 		$this->config = $config;
 		$this->l10n = $l10n;
 
 		$this->session = $session;
-		$this->initialStateService = $initialStateService;
+		$this->initialState = $initialState;
 	}
 
 	/**
@@ -66,22 +62,22 @@ class Personal implements ISettings {
 	 */
 	public function getForm(): TemplateResponse {
 		Util::addScript('notifications', 'notifications-userSettings');
-		
-		$settingBatchTime = Personal::EMAIL_SEND_HOURLY;
+
+		$settingBatchTime = MailNotifications::EMAIL_SEND_HOURLY;
 		$user = $this->session->getUser()->getUID();
 		$currentSetting = (int) $this->config->getUserValue($user, 'notifications', 'notify_setting_batchtime', 3600 * 24);
 
 		if ($currentSetting === 3600 * 24 * 7) {
-			$settingBatchTime = Personal::EMAIL_SEND_WEEKLY;
+			$settingBatchTime = MailNotifications::EMAIL_SEND_WEEKLY;
 		} elseif ($currentSetting === 3600 * 24) {
-			$settingBatchTime = Personal::EMAIL_SEND_DAILY;
+			$settingBatchTime = MailNotifications::EMAIL_SEND_DAILY;
 		} elseif ($currentSetting === 0) {
-			$settingBatchTime = Personal::EMAIL_SEND_ASAP;
+			$settingBatchTime = MailNotifications::EMAIL_SEND_ASAP;
 		}
 
 		$emailEnabled = true;
-		
-		$this->initialStateService->provideInitialState('notifications', 'config', [
+
+		$this->initialState->provideInitialState('config', [
 			'setting' => 'personal',
 			'is_email_set' => !empty($this->config->getUserValue($user, 'settings', 'email', '')),
 			'email_enabled' => $emailEnabled,

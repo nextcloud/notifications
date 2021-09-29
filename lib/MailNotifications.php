@@ -41,6 +41,10 @@ use OCP\Util;
 use Psr\Log\LoggerInterface;
 
 class MailNotifications {
+	public const EMAIL_SEND_ASAP = 3;
+	public const EMAIL_SEND_DAILY = 1;
+	public const EMAIL_SEND_WEEKLY = 2;
+	public const EMAIL_SEND_HOURLY = 0;
 
 	/** @var IConfig */
 	private $config;

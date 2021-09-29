@@ -24,7 +24,7 @@ declare(strict_types=1);
 
 namespace OCA\Notifications\Controller;
 
-use OCA\Notifications\Settings\Personal;
+use OCA\Notifications\MailNotifications;
 use OCP\AppFramework\OCSController;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IConfig;
@@ -54,15 +54,15 @@ class SettingsController extends OCSController {
 	 * @return DataResponse
 	 */
 	public function personal(
-			int $notify_setting_batchtime = Personal::EMAIL_SEND_HOURLY,
+			int $notify_setting_batchtime = MailNotifications::EMAIL_SEND_HOURLY,
 			bool $notifications_email_enabled = false
 	): DataResponse {
 		$email_batch_time = 3600;
-		if ($notify_setting_batchtime === Personal::EMAIL_SEND_DAILY) {
+		if ($notify_setting_batchtime === MailNotifications::EMAIL_SEND_DAILY) {
 			$email_batch_time = 3600 * 24;
-		} elseif ($notify_setting_batchtime === Personal::EMAIL_SEND_WEEKLY) {
+		} elseif ($notify_setting_batchtime === MailNotifications::EMAIL_SEND_WEEKLY) {
 			$email_batch_time = 3600 * 24 * 7;
-		} elseif ($notify_setting_batchtime === Personal::EMAIL_SEND_ASAP) {
+		} elseif ($notify_setting_batchtime === MailNotifications::EMAIL_SEND_ASAP) {
 			$email_batch_time = 0;
 		}
 
