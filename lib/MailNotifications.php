@@ -29,6 +29,7 @@ use OCP\Defaults;
 use OCP\IConfig;
 use OCP\IDateTimeFormatter;
 use OCP\IURLGenerator;
+use OCP\IUser;
 use OCP\IUserManager;
 use OCP\L10N\IFactory;
 use OCP\Mail\IMailer;
@@ -192,6 +193,10 @@ class MailNotifications {
 	 */
 	protected function prepareEmailMessage(string $uid, array $notifications, string $language): ?IMessage {
 		$user = $this->userManager->get($uid);
+		if (!$user instanceof IUser) {
+			return null;
+		}
+
 		$userEmailAddress = $user->getEMailAddress();
 
 		if (empty($userEmailAddress)) {
@@ -240,8 +245,8 @@ class MailNotifications {
 
 		// Prepare email footer
 		$template->addBodyText(
-			$l10n->t('You can change the frequency of these emails or disable them <a href="%s">here</a>.', $this->urlGenerator->linkToRouteAbsolute('settings.PersonalSettings.index', ['section' => 'notifications'])),
-			$l10n->t('You can change the frequency of these emails or disable them here: %s', $this->urlGenerator->linkToRouteAbsolute('settings.PersonalSettings.index', ['section' => 'notifications']))
+			$l10n->t('You can change the frequency of these emails or disable them in the <a href="%s">settings</a>.', $this->urlGenerator->linkToRouteAbsolute('settings.PersonalSettings.index', ['section' => 'notifications'])),
+			$l10n->t('You can change the frequency of these emails or disable them in the settings: %s', $this->urlGenerator->linkToRouteAbsolute('settings.PersonalSettings.index', ['section' => 'notifications']))
 		);
 
 		$template->addFooter();
