@@ -42,7 +42,8 @@ class SendNotificationMails extends TimedJob {
 	}
 
 	protected function run($argument): void {
+		$time = $this->time->getTime();
 		$batchSize = $this->isCLI ? MailNotifications::BATCH_SIZE_CLI : MailNotifications::BATCH_SIZE_WEB;
-		$this->mailNotifications->sendEmails($batchSize);
+		$this->mailNotifications->sendEmails($batchSize, $time);
 	}
 }

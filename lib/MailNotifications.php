@@ -24,6 +24,8 @@ declare(strict_types=1);
 
 namespace OCA\Notifications;
 
+use OCA\Notifications\Model\Settings;
+use OCA\Notifications\Model\SettingsMapper;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Defaults;
 use OCP\IConfig;
@@ -41,10 +43,6 @@ use OCP\Util;
 use Psr\Log\LoggerInterface;
 
 class MailNotifications {
-	public const EMAIL_SEND_ASAP = 3;
-	public const EMAIL_SEND_DAILY = 1;
-	public const EMAIL_SEND_WEEKLY = 2;
-	public const EMAIL_SEND_HOURLY = 0;
 
 	/** @var IConfig */
 	private $config;
@@ -79,6 +77,9 @@ class MailNotifications {
 	/** @var ITimeFactory */
 	protected $timeFactory;
 
+	/** @var SettingsMapper */
+	protected $settingsMapper;
+
 	public const BATCH_SIZE_CLI = 500;
 	public const BATCH_SIZE_WEB = 25;
 	public const DEFAULT_BATCH_TIME = 3600 * 24;
@@ -94,7 +95,8 @@ class MailNotifications {
 		Defaults $defaults,
 		IFactory $l10nFactory,
 		IDateTimeFormatter $dateTimeFormatter,
-		ITimeFactory $timeFactory
+		ITimeFactory $timeFactory,
+		SettingsMapper $settingsMapper
 	) {
 		$this->config = $config;
 		$this->manager = $manager;
@@ -107,40 +109,71 @@ class MailNotifications {
 		$this->l10nFactory = $l10nFactory;
 		$this->dateFormatter = $dateTimeFormatter;
 		$this->timeFactory = $timeFactory;
+		$this->settingsMapper = $settingsMapper;
 	}
 
 	/**
 	 * Send all due notification emails.
 	 *
 	 * @param int $batchSize
+	 * @param int $sendTime
 	 */
-	public function sendEmails(int $batchSize): void {
-		// Get all users who enabled notification emails.
-		$users = $this->config->getUsersForUserValue('notifications', 'notifications_email_enabled', '1');
+	public function sendEmails(int $batchSize, int $sendTime): void {
+		$userSettings = $this->settingsMapper->getUsersByNextSendTime($batchSize);
 
-		if (empty($users)) {
+		if (empty($userSettings)) {
 			return;
 		}
 
-		// Batch-read settings that will be used to figure out who needs notifications sent out
-		$userBatchTimes = $this->config->getUserValueForUsers('notifications', 'notify_setting_batchtime', $users);
-		$userLastSendIds = $this->config->getUserValueForUsers('notifications', 'mail_last_send_id', $users);
-		$userLastSendTimes = $this->config->getUserValueForUsers('notifications', 'mail_last_send_time', $users);
+		$userIds = array_map(static function (Settings $settings) {
+			return $settings->getUserId();
+		}, $userSettings);
 
-		$now = $this->timeFactory->getTime();
+		// Batch-read settings
+		$fallbackTimeZone = date_default_timezone_get();
+		$userTimezones = $this->config->getUserValueForUsers('core', 'timezone', $userIds);
+		$userEnabled = $this->config->getUserValueForUsers('core', 'enabled', $userIds);
 
-		foreach ($users as $user) {
+		$fallbackLang = $this->config->getSystemValue('force_language', null);
+		if ($fallbackLang === null) {
+			$fallbackLang = $this->config->getSystemValue('default_language', 'en');
+			$userLanguages = $this->config->getUserValueForUsers('core', 'lang', $userIds);
+		} else {
+			$userLanguages = [];
+		}
+
+		foreach ($userSettings as $settings) {
+			if (isset($userEnabled[$settings->getUserId()]) && $userEnabled[$settings->getUserId()] === 'false') {
+				// User is disabled, skip sending the email for them
+				$settings->setNextSendTime(
+					$settings->getNextSendTime() + $settings->getBatchTime()
+				);
+				$this->settingsMapper->update($settings);
+				continue;
+			}
+
 			// Get the settings for this particular user, then check if we have notifications to email them
-			$batchTime = (int) ($userBatchTimes[$user] ?? self::DEFAULT_BATCH_TIME);
-			$lastSendId = (int) ($userLastSendIds[$user] ?? -1);
-			$lastSendTime = (int) ($userLastSendTimes[$user] ?? -1);
+			$languageCode = $userLanguages[$settings->getUserId()] ?? $fallbackLang;
+			$timezone = $userTimezones[$settings->getUserId()] ?? $fallbackTimeZone;
 
-			if (($now - $lastSendTime) >= $batchTime) {
-				// Enough time passed since last send for the user's desired interval between mails.
-				$notifications = $this->handler->getAfterId($lastSendId, $user);
-				if (!empty($notifications)) {
-					$this->sendEmailToUser($user, $notifications, $now);
+			/** @var INotification[] $notifications */
+			$notifications = $this->handler->getAfterId($settings->getLastSendId(), $settings->getUserId());
+			if (!empty($notifications)) {
+				$oldestNotification = end($notifications);
+				$shouldSendAfter = $oldestNotification->getDateTime()->getTimestamp() + $settings->getBatchTime();
+
+				if ($shouldSendAfter <= $sendTime) {
+					// User has notifications that should send
+					$this->sendEmailToUser($settings, $notifications, $languageCode, $timezone);
+				} else {
+					// User has notifications but we didn't reach the timeout yet,
+					// So delay sending to the time of the notification + batch setting
+					$settings->setNextSendTime($shouldSendAfter);
+					$this->settingsMapper->update($settings);
 				}
+			} else {
+				$settings->setNextSendTime($sendTime + $settings->getBatchTime());
+				$this->settingsMapper->update($settings);
 			}
 		}
 	}
@@ -148,14 +181,14 @@ class MailNotifications {
 	/**
 	 * send an email to the user containing given list of notifications
 	 *
-	 * @param string $uid
+	 * @param Settings $settings
 	 * @param INotification[] $notifications
-	 * @param int $now
+	 * @param string $language
+	 * @param string $timezone
 	 */
-	protected function sendEmailToUser(string $uid, array $notifications, int $now): void {
+	protected function sendEmailToUser(Settings $settings, array $notifications, string $language, string $timezone): void {
 		$lastSendId = array_key_first($notifications);
-
-		$language = $this->config->getUserValue($uid, 'core', 'lang', $this->config->getSystemValue('default_language', 'en'));
+		$lastSendTime = $this->timeFactory->getTime();
 
 		$preparedNotifications = [];
 		foreach ($notifications as $notification) {
@@ -166,7 +199,9 @@ class MailNotifications {
 				// The app was disabled, skip the notification
 				continue;
 			} catch (\Exception $e) {
-				$this->logger->error($e->getMessage());
+				$this->logger->error($e->getMessage(), [
+					'exception' => $e,
+				]);
 				continue;
 			}
 
@@ -174,19 +209,21 @@ class MailNotifications {
 		}
 
 		if (count($preparedNotifications) > 0) {
-			$message = $this->prepareEmailMessage($uid, $preparedNotifications, $language);
+			$message = $this->prepareEmailMessage($settings->getUserId(), $preparedNotifications, $language, $timezone);
 
-			if ($message != null) {
+			if ($message !== null) {
 				try {
 					$this->mailer->send($message);
-
-					// This is handled in config values based on how 'activity_digest_last_send' works,
-					//  but it would likely be a better choice to have this stored in a db like the activity mail queue?
-					$this->config->setUserValue($uid, 'notifications', 'mail_last_send_id', (string)$lastSendId);
-					$this->config->setUserValue($uid, 'notifications', 'mail_last_send_time', (string)$now);
 				} catch (\Exception $e) {
-					$this->logger->error($e->getMessage());
+					$this->logger->error($e->getMessage(), [
+						'exception' => $e,
+					]);
+					return;
 				}
+
+				$settings->setLastSendId($lastSendId);
+				$settings->setNextSendTime($lastSendTime + $settings->getBatchTime());
+				$this->settingsMapper->update($settings);
 			}
 		}
 	}
@@ -197,9 +234,10 @@ class MailNotifications {
 	 * @param string $uid
 	 * @param INotification[] $notifications
 	 * @param string $language
+	 * @param string $timezone
 	 * @return ?IMessage message contents
 	 */
-	protected function prepareEmailMessage(string $uid, array $notifications, string $language): ?IMessage {
+	protected function prepareEmailMessage(string $uid, array $notifications, string $language, string $timezone): ?IMessage {
 		$user = $this->userManager->get($uid);
 		if (!$user instanceof IUser) {
 			return null;
@@ -221,7 +259,7 @@ class MailNotifications {
 
 		// Prepare email header
 		$template->addHeader();
-		$template->addHeading($l10n->t('Hello %s',[$user->getDisplayName()]), $l10n->t('Hello %s,',[$user->getDisplayName()]));
+		$template->addHeading($l10n->t('Hello %s', [$user->getDisplayName()]), $l10n->t('Hello %s,', [$user->getDisplayName()]));
 
 		// Prepare email subject and body mentioning amount of notifications
 		$homeLink = '<a href="' . $this->urlGenerator->getAbsoluteURL('/') . '">' . htmlspecialchars($this->defaults->getName()) . '</a>';
@@ -233,10 +271,8 @@ class MailNotifications {
 		);
 
 		// Prepare email body with the content of missed notifications
-		// Notifications are assumed to be passed in in descending order (latest first). Reversing to present chronologically.
+		// Notifications are assumed to be passed-in in descending order (latest first). Reversing to present chronologically.
 		$notifications = array_reverse($notifications);
-
-		$timezone = $this->config->getUserValue($uid, 'core', 'timezone', date_default_timezone_get());
 
 		foreach ($notifications as $notification) {
 			$relativeDateTime = $this->dateFormatter->formatDateTimeRelativeDay($notification->getDateTime(), 'long', 'short', new \DateTimeZone($timezone), $l10n);
