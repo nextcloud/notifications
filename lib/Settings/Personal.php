@@ -25,10 +25,14 @@ declare(strict_types=1);
 namespace OCA\Notifications\Settings;
 
 use OCA\Notifications\MailNotifications;
+use OCA\Notifications\Model\Settings;
+use OCA\Notifications\Model\SettingsMapper;
+use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Services\IInitialState;
 use OCP\IConfig;
 use OCP\IL10N;
+use OCP\IUser;
 use OCP\Settings\ISettings;
 use OCP\IUserSession;
 use OCP\Util;
@@ -40,6 +44,9 @@ class Personal implements ISettings {
 	/** @var \OCP\IL10N */
 	protected $l10n;
 
+	/** @var SettingsMapper */
+	private $settingsMapper;
+
 	/** @var IUserSession */
 	private $session;
 
@@ -49,10 +56,11 @@ class Personal implements ISettings {
 	public function __construct(IConfig $config,
 								IL10N $l10n,
 								IUserSession $session,
+								SettingsMapper $settingsMapper,
 								IInitialState $initialState) {
 		$this->config = $config;
 		$this->l10n = $l10n;
-
+		$this->settingsMapper = $settingsMapper;
 		$this->session = $session;
 		$this->initialState = $initialState;
 	}
@@ -61,28 +69,37 @@ class Personal implements ISettings {
 	 * @return TemplateResponse
 	 */
 	public function getForm(): TemplateResponse {
-		Util::addScript('notifications', 'notifications-userSettings');
+		Util::addScript('notifications', 'notifications-settings');
 
-		$settingBatchTime = MailNotifications::EMAIL_SEND_HOURLY;
-		$user = $this->session->getUser()->getUID();
-		$currentSetting = (int) $this->config->getUserValue($user, 'notifications', 'notify_setting_batchtime', 3600 * 24);
+		/** @var IUser $user */
+		$user = $this->session->getUser();
+		try {
+			$settings = $this->settingsMapper->getSettingsByUser($user->getUID());
 
-		if ($currentSetting === 3600 * 24 * 7) {
-			$settingBatchTime = MailNotifications::EMAIL_SEND_WEEKLY;
-		} elseif ($currentSetting === 3600 * 24) {
-			$settingBatchTime = MailNotifications::EMAIL_SEND_DAILY;
-		} elseif ($currentSetting === 0) {
-			$settingBatchTime = MailNotifications::EMAIL_SEND_ASAP;
+			$settingBatchTime = Settings::EMAIL_SEND_OFF;
+			if ($settings->getBatchTime() === 3600 * 24 * 7) {
+				$settingBatchTime = Settings::EMAIL_SEND_WEEKLY;
+			} elseif ($settings->getBatchTime() === 3600 * 24) {
+				$settingBatchTime = Settings::EMAIL_SEND_DAILY;
+			} elseif ($settings->getBatchTime() === 3600 * 3) {
+				$settingBatchTime = Settings::EMAIL_SEND_3HOURLY;
+			} elseif ($settings->getBatchTime() === 3600) {
+				$settingBatchTime = Settings::EMAIL_SEND_HOURLY;
+			}
+		} catch (DoesNotExistException $e) {
+			$settings = new Settings();
+			$settings->setUserId($user->getUID());
+			$settings->setBatchTime(3600 * 3);
+			$settings->setNextSendTime(1);
+			$this->settingsMapper->insert($settings);
+
+			$settingBatchTime = Settings::EMAIL_SEND_3HOURLY;
 		}
-
-		$emailEnabled = true;
 
 		$this->initialState->provideInitialState('config', [
 			'setting' => 'personal',
-			'is_email_set' => !empty($this->config->getUserValue($user, 'settings', 'email', '')),
-			'email_enabled' => $emailEnabled,
+			'is_email_set' => (bool)$user->getEMailAddress(),
 			'setting_batchtime' => $settingBatchTime,
-			'notifications_email_enabled' => $this->config->getUserValue($user, 'notifications', 'notifications_email_enabled') == 1
 		]);
 
 		return new TemplateResponse('notifications', 'settings/personal');

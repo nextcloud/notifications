@@ -25,57 +25,72 @@ declare(strict_types=1);
 namespace OCA\Notifications\Controller;
 
 use OCA\Notifications\MailNotifications;
+use OCA\Notifications\Model\Settings;
+use OCA\Notifications\Model\SettingsMapper;
+use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\OCSController;
 use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\IConfig;
 use OCP\IRequest;
 
 class SettingsController extends OCSController {
-	/** @var \OCP\IConfig */
-	protected $config;
+	/** @var SettingsMapper */
+	protected $settingsMapper;
+
+	/** @var ITimeFactory */
+	protected $timeFactory;
 
 	/** @var string */
 	protected $userId;
 
 	public function __construct(string $appName,
 								IRequest $request,
-								IConfig $config,
+								SettingsMapper $settingsMapper,
+								ITimeFactory $timeFactory,
 								string $userId) {
 		parent::__construct($appName, $request);
-		$this->config = $config;
+		$this->settingsMapper = $settingsMapper;
+		$this->timeFactory = $timeFactory;
 		$this->userId = $userId;
 	}
 
 	/**
 	 * @NoAdminRequired
 	 *
-	 * @param int $notify_setting_batchtime
-	 * @param bool $notifications_email_enabled
+	 * @param int $batchSetting
 	 * @return DataResponse
 	 */
-	public function personal(
-			int $notify_setting_batchtime = MailNotifications::EMAIL_SEND_HOURLY,
-			bool $notifications_email_enabled = false
-	): DataResponse {
-		$email_batch_time = 3600;
-		if ($notify_setting_batchtime === MailNotifications::EMAIL_SEND_DAILY) {
-			$email_batch_time = 3600 * 24;
-		} elseif ($notify_setting_batchtime === MailNotifications::EMAIL_SEND_WEEKLY) {
-			$email_batch_time = 3600 * 24 * 7;
-		} elseif ($notify_setting_batchtime === MailNotifications::EMAIL_SEND_ASAP) {
-			$email_batch_time = 0;
+	public function personal(int $batchSetting): DataResponse {
+		try {
+			$settings = $this->settingsMapper->getSettingsByUser($this->userId);
+		} catch (DoesNotExistException $e) {
+			$settings = new Settings();
+			$settings->setUserId($this->userId);
+			$settings = $this->settingsMapper->insert($settings);
 		}
 
-		$this->config->setUserValue(
-			$this->userId, 'notifications',
-			'notify_setting_batchtime',
-			(string) $email_batch_time
-		);
-		$this->config->setUserValue(
-			$this->userId, 'notifications',
-			'notifications_email_enabled',
-			$notifications_email_enabled ? '1' : '0'
-		);
+		$batchTime = 0; // Off
+		if ($batchSetting === Settings::EMAIL_SEND_WEEKLY) {
+			$batchTime = 3600 * 24 * 7;
+		} elseif ($batchSetting === Settings::EMAIL_SEND_DAILY) {
+			$batchTime = 3600 * 24;
+		} elseif ($batchSetting === Settings::EMAIL_SEND_3HOURLY) {
+			$batchTime = 3600 * 3;
+		} elseif ($batchSetting === Settings::EMAIL_SEND_HOURLY) {
+			$batchTime = 3600;
+		}
+
+		$settings->setBatchTime($batchTime);
+		if ($batchTime === 0) {
+			$settings->setNextSendTime(0);
+		} else {
+			// This will automatically heal on the first run of the background job.
+			// We are just setting it to 1, so it's checked soon in case
+			// the time is now shorter and should trigger already.
+			$settings->setNextSendTime(1);
+		}
+		$this->settingsMapper->update($settings);
 
 		return new DataResponse();
 	}

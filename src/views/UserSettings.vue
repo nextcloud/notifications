@@ -21,33 +21,21 @@
 <template>
 	<div>
 		<SettingsSection :title="t('notifications', 'Notifications')">
-			<div v-if="config.email_enabled" class="notification-frequency">
-				<div class="notification-frequency__warning">
-					<strong v-if="!config.is_email_set">{{ t('notifications', 'You need to set up your email address before you can receive notification emails.') }}</strong>
-				</div>
-				<p>
-					<input id="notifications_email_enabled"
-						v-model="config.notifications_email_enabled"
-						type="checkbox"
-						class="checkbox"
-						@change="updateSettings()">
-					<label for="notifications_email_enabled">
-						{{ t('notifications', 'Send unread notifications as email') }}
-					</label>
-				</p>
-				<p>
-					<label for="notify_setting_batchtime" class="notification-frequency__label">{{ t('notifications', 'Send notification emails:') }}</label>
-					<select
-						id="notify_setting_batchtime"
-						v-model="config.setting_batchtime"
-						class="notification-frequency__select"
-						@change="updateSettings()">
-						<option v-for="option in batchtime_options" :key="option.value" :value="option.value">
-							{{ option.text }}
-						</option>
-					</select>
-				</p>
+			<div class="notification-frequency__warning">
+				<strong v-if="!config.is_email_set">{{ t('notifications', 'You need to set up your email address before you can receive notification emails.') }}</strong>
 			</div>
+			<p>
+				<label for="notify_setting_batchtime" class="notification-frequency__label">{{ t('notifications', 'Send notification emails after:') }}</label>
+				<select
+					id="notify_setting_batchtime"
+					v-model="config.setting_batchtime"
+					class="notification-frequency__select"
+					@change="updateSettings()">
+					<option v-for="option in batchtime_options" :key="option.value" :value="option.value">
+						{{ option.text }}
+					</option>
+				</select>
+			</p>
 		</SettingsSection>
 	</div>
 </template>
@@ -60,10 +48,11 @@ import { showSuccess, showError } from '@nextcloud/dialogs'
 import SettingsSection from '@nextcloud/vue/dist/Components/SettingsSection'
 
 const EmailFrequency = {
-	EMAIL_SEND_HOURLY: 0,
-	EMAIL_SEND_DAILY: 1,
-	EMAIL_SEND_WEEKLY: 2,
-	EMAIL_SEND_ASAP: 3,
+	EMAIL_SEND_OFF: 0,
+	EMAIL_SEND_HOURLY: 1,
+	EMAIL_SEND_3HOURLY: 2,
+	EMAIL_SEND_DAILY: 3,
+	EMAIL_SEND_WEEKLY: 4,
 }
 
 export default {
@@ -75,10 +64,11 @@ export default {
 	data() {
 		return {
 			batchtime_options: [
-				{ text: t('notifications', 'As soon as possible'), value: EmailFrequency.EMAIL_SEND_ASAP },
-				{ text: t('notifications', 'Hourly'), value: EmailFrequency.EMAIL_SEND_HOURLY },
-				{ text: t('notifications', 'Daily'), value: EmailFrequency.EMAIL_SEND_DAILY },
-				{ text: t('notifications', 'Weekly'), value: EmailFrequency.EMAIL_SEND_WEEKLY },
+				{ text: t('notifications', 'Never'), value: EmailFrequency.EMAIL_SEND_OFF },
+				{ text: t('notifications', '1 hour'), value: EmailFrequency.EMAIL_SEND_HOURLY },
+				{ text: t('notifications', '3 hours'), value: EmailFrequency.EMAIL_SEND_3HOURLY },
+				{ text: t('notifications', '1 day'), value: EmailFrequency.EMAIL_SEND_DAILY },
+				{ text: t('notifications', '1 week'), value: EmailFrequency.EMAIL_SEND_WEEKLY },
 			],
 			config: loadState('notifications', 'config'),
 		}
@@ -88,8 +78,7 @@ export default {
 		async updateSettings() {
 			try {
 				const form = new FormData()
-				form.append('notifications_email_enabled', this.config.notifications_email_enabled ? '1' : '0')
-				form.append('notify_setting_batchtime', this.config.setting_batchtime)
+				form.append('batchSetting', this.config.setting_batchtime)
 				await axios.post(generateOcsUrl('apps/notifications/api/v2/settings'), form)
 				showSuccess(t('notifications', 'Your settings have been updated.'))
 			} catch (error) {
