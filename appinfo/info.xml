@@ -36,6 +36,7 @@
 	</dependencies>
 
 	<background-jobs>
+		<job>OCA\Notifications\BackgroundJob\GenerateUserSettings</job>
 		<job>OCA\Notifications\BackgroundJob\SendNotificationMails</job>
 	</background-jobs>
 
