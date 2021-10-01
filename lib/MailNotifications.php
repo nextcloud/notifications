@@ -82,7 +82,6 @@ class MailNotifications {
 
 	public const BATCH_SIZE_CLI = 500;
 	public const BATCH_SIZE_WEB = 25;
-	public const DEFAULT_BATCH_TIME = 3600 * 24;
 
 	public function __construct(
 		IConfig $config,

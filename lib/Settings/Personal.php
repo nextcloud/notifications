@@ -24,7 +24,6 @@ declare(strict_types=1);
 
 namespace OCA\Notifications\Settings;
 
-use OCA\Notifications\MailNotifications;
 use OCA\Notifications\Model\Settings;
 use OCA\Notifications\Model\SettingsMapper;
 use OCP\AppFramework\Db\DoesNotExistException;

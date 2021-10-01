@@ -24,14 +24,12 @@ declare(strict_types=1);
 
 namespace OCA\Notifications\Controller;
 
-use OCA\Notifications\MailNotifications;
 use OCA\Notifications\Model\Settings;
 use OCA\Notifications\Model\SettingsMapper;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\OCSController;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Utility\ITimeFactory;
-use OCP\IConfig;
 use OCP\IRequest;
 
 class SettingsController extends OCSController {
