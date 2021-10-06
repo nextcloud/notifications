@@ -45,7 +45,7 @@ Feature: delete-notifications
     Given user "test1" has notifications
     Given user "test1" has notifications
     Given user "test1" has notifications
-    Then user "test1" has 3 notifications on v2
-    And delete all notifications on v2
+    Then user "test1" has 3 notifications on v1
+    And delete all notifications on v1
     And status code is 200
-    And user "test1" has 0 notifications on v2
+    And user "test1" has 0 notifications on v1
