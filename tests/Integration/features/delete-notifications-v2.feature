@@ -1,6 +1,7 @@
 Feature: delete-notifications
   Background:
     Given user "test1" exists
+    Given user "123456" exists
     Given as user "test1"
 
   Scenario: Delete first notification
@@ -11,6 +12,16 @@ Feature: delete-notifications
     And delete first notification on v2
     And status code is 200
     And user "test1" has 2 notifications on v2 missing the first one
+
+  Scenario: Delete first notification as numeric user
+    Given as user "123456"
+    Given user "123456" has notifications
+    Given user "123456" has notifications
+    Given user "123456" has notifications
+    Then user "123456" has 3 notifications on v2
+    And delete first notification on v2
+    And status code is 200
+    And user "123456" has 2 notifications on v2 missing the first one
 
   Scenario: Delete same notification twice
     Given user "test1" has notifications
@@ -45,7 +56,17 @@ Feature: delete-notifications
     Given user "test1" has notifications
     Given user "test1" has notifications
     Given user "test1" has notifications
-    Then user "test1" has 3 notifications on v1
-    And delete all notifications on v1
+    Then user "test1" has 3 notifications on v2
+    And delete all notifications on v2
     And status code is 200
-    And user "test1" has 0 notifications on v1
+    And user "test1" has 0 notifications on v2
+
+  Scenario: Delete all notifications as numeric user
+    Given as user "123456"
+    Given user "123456" has notifications
+    Given user "123456" has notifications
+    Given user "123456" has notifications
+    Then user "123456" has 3 notifications on v2
+    And delete all notifications on v2
+    And status code is 200
+    And user "123456" has 0 notifications on v2

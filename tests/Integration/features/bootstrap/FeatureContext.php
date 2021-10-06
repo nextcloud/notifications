@@ -70,10 +70,8 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	 * @param string $user
 	 */
 	public function hasNotifications(string $user) {
-		if ($user === 'test1') {
-			$response = $this->setTestingValue('POST', 'apps/notificationsintegrationtesting/notifications', null);
-			$this->assertStatusCode($response, 200);
-		}
+		$response = $this->setTestingValue('POST', 'apps/notificationsintegrationtesting/notifications?userId=' . $user, null);
+		$this->assertStatusCode($response, 200);
 	}
 
 	/**
@@ -83,10 +81,8 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	 * @param TableNode|null $formData
 	 */
 	public function receiveNotification(string $user, TableNode $formData) {
-		if ($user === 'test1') {
-			$response = $this->setTestingValue('POST', 'apps/notificationsintegrationtesting/notifications', $formData);
-			$this->assertStatusCode($response, 200);
-		}
+		$response = $this->setTestingValue('POST', 'apps/notificationsintegrationtesting/notifications?userId=' . $user, $formData);
+		$this->assertStatusCode($response, 200);
 	}
 
 	/**
@@ -165,28 +161,26 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	 * @param string $missingLast
 	 */
 	public function userNumNotifications(string $user, int $numNotifications, string $api, string $missingLast) {
-		if ($user === 'test1') {
-			$this->sendingTo('GET', '/apps/notifications/api/' . $api . '/notifications?format=json');
-			$this->assertStatusCode($this->response, 200);
+		$this->sendingTo('GET', '/apps/notifications/api/' . $api . '/notifications?format=json');
+		$this->assertStatusCode($this->response, 200);
 
-			$previousNotificationIds = [];
-			if ($missingLast) {
-				Assert::assertNotEmpty($this->notificationIds);
-				$previousNotificationIds = end($this->notificationIds);
+		$previousNotificationIds = [];
+		if ($missingLast) {
+			Assert::assertNotEmpty($this->notificationIds);
+			$previousNotificationIds = end($this->notificationIds);
+		}
+
+		$this->checkNumNotifications((int) $numNotifications);
+
+		if ($missingLast) {
+			$now = end($this->notificationIds);
+			if ($missingLast === ' missing the last one') {
+				array_unshift($now, $this->deletedNotification);
+			} else {
+				$now[] = $this->deletedNotification;
 			}
 
-			$this->checkNumNotifications((int) $numNotifications);
-
-			if ($missingLast) {
-				$now = end($this->notificationIds);
-				if ($missingLast === ' missing the last one') {
-					array_unshift($now, $this->deletedNotification);
-				} else {
-					$now[] = $this->deletedNotification;
-				}
-
-				Assert::assertEquals($previousNotificationIds, $now);
-			}
+			Assert::assertEquals($previousNotificationIds, $now);
 		}
 	}
 
