@@ -44,13 +44,14 @@ class EndpointController extends OCSController {
 	/**
 	 * @NoCSRFRequired
 	 *
+	 * @param string $userId
 	 * @return DataResponse
 	 */
-	public function addNotification() {
+	public function addNotification(string $userId = 'test1') {
 		$notification = $this->manager->createNotification();
 		$notification->setApp($this->request->getParam('app', 'notificationsintegrationtesting'))
 			->setDateTime(\DateTime::createFromFormat('U', $this->request->getParam('timestamp', 1449585176))) // 2015-12-08T14:32:56+00:00
-			->setUser($this->request->getParam('user', 'test1'))
+			->setUser($this->request->getParam('user', $userId))
 			->setSubject($this->request->getParam('subject', 'testing'))
 			->setLink($this->request->getParam('link', 'https://example.tld/'))
 			->setMessage($this->request->getParam('message', 'message'))
