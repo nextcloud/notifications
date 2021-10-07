@@ -107,7 +107,7 @@ class Handler {
 
 		foreach ($deleted as $user => $notificationIds) {
 			foreach ($notificationIds as $notificationId) {
-				$this->deleteById($notificationId, $user, $notifications[$notificationId]);
+				$this->deleteById($notificationId, (string) $user, $notifications[$notificationId]);
 			}
 		}
 
