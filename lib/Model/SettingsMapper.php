@@ -57,6 +57,39 @@ class SettingsMapper extends QBMapper {
 		return $this->findEntity($query);
 	}
 
+	public function setBatchSettingForUser(string $userId, int $batchSetting): void {
+		try {
+			$settings = $this->getSettingsByUser($userId);
+		} catch (DoesNotExistException $e) {
+			$settings = new Settings();
+			$settings->setUserId($userId);
+			/** @var Settings $settings */
+			$settings = $this->insert($settings);
+		}
+
+		$batchTime = 0; // Off
+		if ($batchSetting === Settings::EMAIL_SEND_WEEKLY) {
+			$batchTime = 3600 * 24 * 7;
+		} elseif ($batchSetting === Settings::EMAIL_SEND_DAILY) {
+			$batchTime = 3600 * 24;
+		} elseif ($batchSetting === Settings::EMAIL_SEND_3HOURLY) {
+			$batchTime = 3600 * 3;
+		} elseif ($batchSetting === Settings::EMAIL_SEND_HOURLY) {
+			$batchTime = 3600;
+		}
+
+		$settings->setBatchTime($batchTime);
+		if ($batchTime === 0) {
+			$settings->setNextSendTime(0);
+		} else {
+			// This will automatically heal on the first run of the background job.
+			// We are just setting it to 1, so it's checked soon in case
+			// the time is now shorter and should trigger already.
+			$settings->setNextSendTime(1);
+		}
+		$this->update($settings);
+	}
+
 	/**
 	 * @param int $limit
 	 * @return Settings[]
