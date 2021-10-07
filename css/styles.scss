@@ -175,6 +175,12 @@
 	.notification-actions {
 		overflow: hidden;
 
+		.button {
+			line-height: normal;
+			vertical-align: baseline;
+			padding: 8px 16px;
+		}
+
 		.action-button.primary {
 			color: var(--color-primary-text);
 		}
