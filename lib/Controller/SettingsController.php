@@ -65,6 +65,7 @@ class SettingsController extends OCSController {
 		} catch (DoesNotExistException $e) {
 			$settings = new Settings();
 			$settings->setUserId($this->userId);
+			/** @var Settings $settings */
 			$settings = $this->settingsMapper->insert($settings);
 		}
 

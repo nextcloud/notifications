@@ -41,6 +41,7 @@ class SettingsMapper extends QBMapper {
 	}
 
 	/**
+	 * @param string $userId
 	 * @return Settings
 	 * @throws DBException
 	 * @throws MultipleObjectsReturnedException

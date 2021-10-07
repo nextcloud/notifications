@@ -31,6 +31,8 @@ class SendNotificationMails extends TimedJob {
 
 	/** @var MailNotifications */
 	protected $mailNotifications;
+	/** @var bool */
+	protected $isCLI;
 
 	public function __construct(ITimeFactory $timeFactory,
 								MailNotifications $mailNotifications,
