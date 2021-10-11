@@ -32,5 +32,7 @@ return [
 		['name' => 'Push#removeDevice', 'url' => '/api/{apiVersion}/push', 'verb' => 'DELETE', 'requirements' => ['apiVersion' => 'v2']],
 
 		['name' => 'API#generateNotification', 'url' => '/api/{apiVersion}/admin_notifications/{userId}', 'verb' => 'POST', 'requirements' => ['apiVersion' => 'v(1|2)']],
+
+		['name' => 'Settings#personal', 'url' => '/api/{apiVersion}/settings', 'verb' => 'POST', 'requirements' => ['apiVersion' => 'v2']],
 	],
 ];

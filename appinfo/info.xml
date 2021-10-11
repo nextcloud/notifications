@@ -15,7 +15,7 @@
 
 📣 Announcement center: An announcement was posted by an admin]]></description>
 
-	<version>2.11.0</version>
+	<version>2.11.1</version>
 	<licence>agpl</licence>
 	<author>Joas Schilling</author>
 
@@ -35,8 +35,18 @@
 		<nextcloud min-version="23" max-version="23" />
 	</dependencies>
 
+	<background-jobs>
+		<job>OCA\Notifications\BackgroundJob\GenerateUserSettings</job>
+		<job>OCA\Notifications\BackgroundJob\SendNotificationMails</job>
+	</background-jobs>
+
 	<commands>
 		<command>OCA\Notifications\Command\Generate</command>
 		<command>OCA\Notifications\Command\TestPush</command>
 	</commands>
+
+	<settings>
+		<personal>OCA\Notifications\Settings\Personal</personal>
+		<personal-section>OCA\Notifications\Settings\PersonalSection</personal-section>
+	</settings>
 </info>
