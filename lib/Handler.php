@@ -197,10 +197,10 @@ class Handler {
 		$sql = $this->connection->getQueryBuilder();
 		$sql->select('*')
 			->from('notifications')
-			->orderBy('notification_id', 'DESC')
-			->setMaxResults($limit)
 			->where($sql->expr()->gt('notification_id', $sql->createNamedParameter($startAfterId)))
-			->andWhere($sql->expr()->eq('user', $sql->createNamedParameter($userId)));
+			->andWhere($sql->expr()->eq('user', $sql->createNamedParameter($userId)))
+			->orderBy('notification_id', 'DESC')
+			->setMaxResults($limit);
 		$statement = $sql->executeQuery();
 
 		$notifications = [];

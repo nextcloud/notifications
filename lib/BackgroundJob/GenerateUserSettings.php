@@ -56,7 +56,7 @@ class GenerateUserSettings extends TimedJob {
 		$this->setInterval(24 * 60 * 60);
 	}
 
-	protected function run($argument) {
+	protected function run($argument): void {
 		$query = $this->connection->getQueryBuilder();
 		$query->selectAlias('id', 'max_id')
 			->from('notifications')

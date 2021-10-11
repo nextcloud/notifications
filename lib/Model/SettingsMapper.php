@@ -67,7 +67,6 @@ class SettingsMapper extends QBMapper {
 			$settings = $this->insert($settings);
 		}
 
-		$batchTime = 0; // Off
 		if ($batchSetting === Settings::EMAIL_SEND_WEEKLY) {
 			$batchTime = 3600 * 24 * 7;
 		} elseif ($batchSetting === Settings::EMAIL_SEND_DAILY) {
@@ -76,10 +75,14 @@ class SettingsMapper extends QBMapper {
 			$batchTime = 3600 * 3;
 		} elseif ($batchSetting === Settings::EMAIL_SEND_HOURLY) {
 			$batchTime = 3600;
+		} else {
+			$batchTime = 0; // Off
 		}
 
 		$settings->setBatchTime($batchTime);
 		if ($batchTime === 0) {
+			// When mails are Off, we don't set a "next send time" so it can be
+			// skipped in the background job.
 			$settings->setNextSendTime(0);
 		} else {
 			// This will automatically heal on the first run of the background job.

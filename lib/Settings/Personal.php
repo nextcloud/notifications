@@ -75,7 +75,6 @@ class Personal implements ISettings {
 		try {
 			$settings = $this->settingsMapper->getSettingsByUser($user->getUID());
 
-			$settingBatchTime = Settings::EMAIL_SEND_OFF;
 			if ($settings->getBatchTime() === 3600 * 24 * 7) {
 				$settingBatchTime = Settings::EMAIL_SEND_WEEKLY;
 			} elseif ($settings->getBatchTime() === 3600 * 24) {
@@ -84,6 +83,8 @@ class Personal implements ISettings {
 				$settingBatchTime = Settings::EMAIL_SEND_3HOURLY;
 			} elseif ($settings->getBatchTime() === 3600) {
 				$settingBatchTime = Settings::EMAIL_SEND_HOURLY;
+			} else {
+				$settingBatchTime = Settings::EMAIL_SEND_OFF;
 			}
 		} catch (DoesNotExistException $e) {
 			$settings = new Settings();
