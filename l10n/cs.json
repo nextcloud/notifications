@@ -1,4 +1,10 @@
 { "translations": {
+    "Hello %s" : "Zdravím %s",
+    "Hello %s," : "Zdravím %s,",
+    "_New notification for %s_::_%n new notifications for %s_" : ["Nové upozornění ohledně %s","%n nová upozornění ohledně %s","%n nových upozornění ohledně %s","%n nová upozornění ohledně %s"],
+    "_You have a new notification for %s_::_You have %n new notifications for %s_" : ["Máte nové upozornění ohledně %s","Máte %n nová upozornění ohledně %s","Máte %n nových upozornění ohledně %s","Máte %n nová upozornění ohledně %s"],
+    "You can change the frequency of these emails or disable them in the <a href=\"%s\">settings</a>." : "Je možné změnit četnost těchto e-mailů nebo je vypnout v <a href=\"%s\">nastavení</a>.",
+    "You can change the frequency of these emails or disable them in the settings: %s" : "Je možné změnit četnost těchto e-mailů nebo je vypnout v nastavení: %s",
     "Admin notifications" : "Upozornění správce",
     "Notifications" : "Upozornění",
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "Tato aplikace poskytuje podpůrnou vrstvu a nadstavbu nad aplikačním program. rozhraním (API) pro upozorňování, které je v Nextcloud k dispozici.",
@@ -11,6 +17,15 @@
     "Dismiss" : "Zavřít",
     "seconds ago" : "před několika sekundami",
     "Failed to dismiss notification" : "Upozornění se nepodařilo zahodit",
-    "in {path}" : "v {path}"
+    "in {path}" : "v {path}",
+    "You need to set up your email address before you can receive notification emails." : "Pokud chcete dostávat upozornění e-mailem, je třeba nejprve nastavit svou e-mailovou adresu.",
+    "Send email reminders about unhandled notifications after:" : "Posílat upozornění e-mailem ohledně nezpracovaných upozornění po uplynutí:",
+    "Never" : "Nikdy",
+    "1 hour" : "1 hodiny",
+    "3 hours" : "3 hodin",
+    "1 day" : "1 den",
+    "1 week" : "1 týdne",
+    "Your settings have been updated." : "Vaše nastavení byla aktualizována.",
+    "An error occurred while updating your settings." : "Při aktualizaci vašich nastavení došlo k chybě."
 },"pluralForm" :"nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;"
 }

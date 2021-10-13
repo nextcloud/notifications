@@ -1,4 +1,6 @@
 { "translations": {
+    "Hello %s" : "Ahoj %s",
+    "Hello %s," : "Ahoj %s,",
     "Admin notifications" : "Notifikácie od administrátora",
     "Notifications" : "Upozornenia",
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "Táto aplikácia poskytuje backend a frontend pre notifikačné API dostupné v Nextcloud.",
@@ -11,6 +13,13 @@
     "Dismiss" : "Odmietnuť",
     "seconds ago" : "pred niekoľkými sekundami",
     "Failed to dismiss notification" : "Nepoadrilo sa odstrániť notifikáciu",
-    "in {path}" : "v {path}"
+    "in {path}" : "v {path}",
+    "Never" : "Nikdy",
+    "1 hour" : "1 hodina",
+    "3 hours" : "3 hodiny",
+    "1 day" : "1 deň",
+    "1 week" : "1 týždeň",
+    "Your settings have been updated." : "Vaše nastavenia boli aktualizované.",
+    "An error occurred while updating your settings." : "Nastala chyba počas ukladania nastavení."
 },"pluralForm" :"nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);"
 }
