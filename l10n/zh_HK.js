@@ -1,6 +1,12 @@
 OC.L10N.register(
     "notifications",
     {
+    "Hello %s" : "%s 你好",
+    "Hello %s," : "%s你好，",
+    "_New notification for %s_::_%n new notifications for %s_" : ["%s 有 %n 個新通知"],
+    "_You have a new notification for %s_::_You have %n new notifications for %s_" : ["您有 %n 個關於 %s 的新通知"],
+    "You can change the frequency of these emails or disable them in the <a href=\"%s\">settings</a>." : "您可在<a href=\"%s\">設定</a>中更改這些電郵的頻率或停用。",
+    "You can change the frequency of these emails or disable them in the settings: %s" : "您可在設定中更改這些電郵地址的頻率或停用：%s",
     "Admin notifications" : "管理員通告",
     "Notifications" : "通告",
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "此應用程式為 Nextcloud 中提供的通告 API 提供了前後端。",
@@ -13,6 +19,15 @@ OC.L10N.register(
     "Dismiss" : "撤銷",
     "seconds ago" : "幾秒前",
     "Failed to dismiss notification" : "撤銷通告失敗",
-    "in {path}" : "在 {path}"
+    "in {path}" : "在 {path}",
+    "You need to set up your email address before you can receive notification emails." : "您必須先設定電郵地址，才能接收通知。",
+    "Send email reminders about unhandled notifications after:" : "發送有關未處理通知的電郵提醒：",
+    "Never" : "從不",
+    "1 hour" : "1 小時",
+    "3 hours" : "3 小時",
+    "1 day" : "1 日",
+    "1 week" : "1 個星期",
+    "Your settings have been updated." : "您的設定已更新。",
+    "An error occurred while updating your settings." : "更新設置時發生錯誤"
 },
 "nplurals=1; plural=0;");

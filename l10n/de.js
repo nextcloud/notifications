@@ -1,6 +1,9 @@
 OC.L10N.register(
     "notifications",
     {
+    "_You have a new notification for %s_::_You have %n new notifications for %s_" : ["Du hast eine neue Benachrichtigungen für %s","Du hast %n neue Benachrichtigungen für %s"],
+    "You can change the frequency of these emails or disable them in the <a href=\"%s\">settings</a>." : "Du kannst in den <a href=\"%s\">Einstellungen</a> die Häufigkeit dieser E-Mails ändern oder sie deaktivieren",
+    "You can change the frequency of these emails or disable them in the settings: %s" : "Du kannst in den Einstellungen die Häufigkeit dieser E-Mails ändern oder sie deaktivieren: %s",
     "Admin notifications" : "Administrator-Benachrichtigungen",
     "Notifications" : "Benachrichtigungen",
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "Diese App bietet ein Backend und ein Frontend für die in Nextcloud verfügbare Benachrichtigungs-API.",
@@ -13,6 +16,9 @@ OC.L10N.register(
     "Dismiss" : "Verwerfen",
     "seconds ago" : "Gerade eben",
     "Failed to dismiss notification" : "Benachrichtigung konnte nicht verworfen werden",
-    "in {path}" : "in {path}"
+    "in {path}" : "in {path}",
+    "You need to set up your email address before you can receive notification emails." : "Bevor Du E-Mail-Benachrichtigungen empfangen kannst, musst Du Deine E-Mail-Adresse einrichten.",
+    "Your settings have been updated." : "Deine Einstellungen wurden aktualisiert.",
+    "An error occurred while updating your settings." : "Fehler beim Aktualisieren Deiner Einstellungen."
 },
 "nplurals=2; plural=(n != 1);");
