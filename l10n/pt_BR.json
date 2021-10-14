@@ -1,4 +1,10 @@
 { "translations": {
+    "Hello %s" : "Olá %s",
+    "Hello %s," : "Olá %s,",
+    "_New notification for %s_::_%n new notifications for %s_" : ["Nova notificação para %s","%n novas notificações para %s"],
+    "_You have a new notification for %s_::_You have %n new notifications for %s_" : ["Você tem uma nova notificação para %s","Você tem %n nova notificação para %s"],
+    "You can change the frequency of these emails or disable them in the <a href=\"%s\">settings</a>." : "Você pode alterar a frequência desses e-mails ou desabilitá-los nas <a href=\"%s\">configurações</a>.",
+    "You can change the frequency of these emails or disable them in the settings: %s" : "Você pode alterar a frequência desses e-mails ou desabilitá-los nas configurações: %s",
     "Admin notifications" : "Notificações administrativas",
     "Notifications" : "Notificações",
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "Este aplicativo fornece uma estrutura e interface para a API de notificação do Nextcloud.",
@@ -11,6 +17,15 @@
     "Dismiss" : "Rejeitar",
     "seconds ago" : "segundos atrás",
     "Failed to dismiss notification" : "Falha ao ignorar a notificação",
-    "in {path}" : "em {path}"
+    "in {path}" : "em {path}",
+    "You need to set up your email address before you can receive notification emails." : "Você precisa configurar seu endereço de e-mail antes de receber e-mails de notificação.",
+    "Send email reminders about unhandled notifications after:" : "Envie lembretes de e-mail sobre notificações não foram vistas após:",
+    "Never" : "Nunca",
+    "1 hour" : "1 hora",
+    "3 hours" : "3 horas",
+    "1 day" : "1 dia",
+    "1 week" : "1 semana",
+    "Your settings have been updated." : "Suas configurações foram atualizadas.",
+    "An error occurred while updating your settings." : "Ocorreu um erro ao atualizar suas configurações."
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }
