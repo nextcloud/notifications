@@ -245,7 +245,8 @@ export default {
 
 		/**
 		 * Update the title to show * if there are new notifications
-		 * @param {Object} notifications The list of notifications
+		 *
+		 * @param {object} notifications The list of notifications
 		 */
 		_updateDocTitleOnNewNotifications(notifications) {
 			if (notifications.length > this._oldcount) {
@@ -271,8 +272,8 @@ export default {
 		},
 
 		/**
-			 * Performs the AJAX request to retrieve the notifications
-			 */
+		 * Performs the AJAX request to retrieve the notifications
+		 */
 		async _fetch() {
 			const response = await getNotificationsData(this.tabId, this.lastETag, !this.backgroundFetching)
 
@@ -339,7 +340,8 @@ export default {
 		/**
 		 * The app was disabled or has no notifiers, so we can stop polling
 		 * And hide the UI as well
-		 * @param {Boolean} temporary If false, the notification bell will be hidden
+		 *
+		 * @param {boolean} temporary If false, the notification bell will be hidden
 		 */
 		_shutDownNotifications(temporary) {
 			console.debug('Shutting down notifications ' + ((temporary) ? 'temporary' : 'bye'))

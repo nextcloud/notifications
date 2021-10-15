@@ -20,7 +20,11 @@
 -->
 
 <template>
-	<a v-if="link"
+	<a v-if="hasInternalLink"
+		:href="link">
+		<strong>{{ name }}</strong>
+	</a>
+	<a v-else-if="link"
 		:href="link"
 		class="external"
 		target="_blank"
@@ -49,6 +53,15 @@ export default {
 		link: {
 			type: String,
 			default: '',
+		},
+	},
+
+	computed: {
+		hasInternalLink() {
+			return this.link && (
+				this.type === 'deck-board'
+				|| this.type === 'deck-card'
+			)
 		},
 	},
 }

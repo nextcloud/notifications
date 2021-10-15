@@ -266,6 +266,7 @@ export default {
 
 		/**
 		 * Create a browser notification
+		 *
 		 * @see https://developer.mozilla.org/en/docs/Web/API/notification
 		 */
 		_createWebNotification() {
