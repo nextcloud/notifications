@@ -58,9 +58,9 @@ class GenerateUserSettings extends TimedJob {
 
 	protected function run($argument): void {
 		$query = $this->connection->getQueryBuilder();
-		$query->selectAlias('id', 'max_id')
+		$query->select('notification_id')
 			->from('notifications')
-			->orderBy('id', 'DESC')
+			->orderBy('notification_id', 'DESC')
 			->setMaxResults(1);
 
 		$result = $query->executeQuery();
