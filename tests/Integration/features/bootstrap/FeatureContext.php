@@ -56,6 +56,12 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	/** @var string */
 	protected $lastEtag;
 
+	/** @var resource */
+	protected $deviceKey;
+
+	/** @var string[] */
+	protected $appPasswords;
+
 	/**
 	 * FeatureContext constructor.
 	 */
@@ -222,6 +228,99 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
+	 * @Then /^user "([^"]*)" unregisters from push notifications/
+	 *
+	 * @param string $user
+	 */
+	public function unregisterForPushNotifications(string $user) {
+		$currentUser = $this->currentUser;
+		$this->setCurrentUser($user);
+		$this->sendingToWith('DELETE', '/apps/notifications/api/v2/push?format=json');
+		$this->setCurrentUser($currentUser);
+	}
+
+	/**
+	 * @Then /^user "([^"]*)" registers for push notifications with$/
+	 *
+	 * @param string $user
+	 * @param TableNode|null $formData
+	 */
+	public function registerForPushNotifications(string $user, TableNode $formData) {
+		$data = $formData->getRowsHash();
+
+		if ($data['devicePublicKey'] === 'VALID_KEY') {
+			$config = [
+				'digest_alg' => 'sha512',
+				'private_key_bits' => 2048,
+				'private_key_type' => OPENSSL_KEYTYPE_RSA,
+			];
+			$this->deviceKey = openssl_pkey_new($config);
+			$keyDetails = openssl_pkey_get_details($this->deviceKey);
+			$publicKey = $keyDetails['key'];
+
+			$data['devicePublicKey'] = $publicKey;
+		}
+
+		$currentUser = $this->currentUser;
+		$this->setCurrentUser($user);
+		$this->sendingToWith('POST', '/apps/notifications/api/v2/push?format=json', $data);
+		$this->setCurrentUser($currentUser);
+	}
+
+	/**
+	 * @Then /^can validate the response and signature$/
+	 */
+	public function validateResponseAndSignature(): void {
+		$response = $this->getArrayOfNotificationsResponded($this->response);
+
+		Assert::assertStringStartsWith('-----BEGIN PUBLIC KEY-----' . "\n", $response['publicKey']);
+		Assert::assertStringEndsWith('-----END PUBLIC KEY-----' . "\n", $response['publicKey']);
+		Assert::assertNotEmpty($response['deviceIdentifier'], 'Device identifier should not be empty');
+		Assert::assertNotEmpty($response['signature'], 'Signature should not be empty');
+
+		$result = openssl_verify($response['deviceIdentifier'], base64_decode($response['signature']), $response['publicKey'], OPENSSL_ALGO_SHA512);
+		Assert::assertEquals(true, $result, 'Failed to verify the signature');
+	}
+
+	/**
+	 * @Then /^user "([^"]*)" creates an app password$/
+	 *
+	 * @param string $user
+	 */
+	public function createAppPassword(string $user) {
+		$currentUser = $this->currentUser;
+		$this->setCurrentUser($user);
+		$this->sendingToWith('GET', '/core/getapppassword?format=json');
+		$this->setCurrentUser($currentUser);
+
+		$response = $this->getArrayOfNotificationsResponded($this->response);
+		Assert::assertNotEquals('', $response['apppassword']);
+		$this->appPasswords[$user] = $response['apppassword'];
+	}
+
+	/**
+	 * @Then /^user "([^"]*)" forgets the app password$/
+	 *
+	 * @param string $user
+	 */
+	public function removeAppPassword(string $user) {
+		unset($this->appPasswords[$user]);
+	}
+
+	/**
+	 * @Then /^error "([^"]*)" is expected with status code ([0-9]*)$/
+	 *
+	 * @param string $error
+	 * @param int $statusCode
+	 */
+	public function expectedErrorOnLastRequest(string $error, int $statusCode) {
+		$this->assertStatusCode($this->response, $statusCode);
+		$response = $this->getArrayOfNotificationsResponded($this->response);
+
+		Assert::assertEquals($error, $response['message']);
+	}
+
+	/**
 	 * @Then /^status code is ([0-9]*)$/
 	 *
 	 * @param int $statusCode
@@ -347,15 +446,17 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	 * @When /^sending "([^"]*)" to "([^"]*)" with$/
 	 * @param string $verb
 	 * @param string $url
-	 * @param TableNode $body
+	 * @param TableNode|array|null $body
 	 * @param array $headers
 	 */
-	public function sendingToWith(string $verb, string $url, TableNode $body = null, array $headers = []) {
+	public function sendingToWith(string $verb, string $url, $body = null, array $headers = []) {
 		$fullUrl = $this->baseUrl . 'ocs/v2.php' . $url;
 		$client = new Client();
 		$options = [];
-		if ($this->currentUser === 'admin') {
-			$options['auth'] = ['admin', 'admin'];
+		if (isset($this->appPasswords[$this->currentUser])) {
+			$options['auth'] = [$this->currentUser, $this->appPasswords[$this->currentUser]];
+		} elseif ($this->currentUser === 'admin') {
+			$options['auth'] = [$this->currentUser, 'admin'];
 		} else {
 			$options['auth'] = [$this->currentUser, '123456'];
 		}
