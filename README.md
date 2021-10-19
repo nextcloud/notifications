@@ -15,10 +15,18 @@ The API is used by other apps to notify users in the web UI and sync clients abo
 
 ## Developers
 
-### Build the notifications app
+### Install and enable the notifications app
 
-To set up this app for development, you need to run `make dev-setup` from within the app´s root folder. If anytime later you need to rebuild the javascript files the quicker `make build-js` is enough.
+- Clone this app into the "apps" folder of your nextcloud instance.
+```bash
+git clone https://github.com/nextcloud/notifications.git
+```
 
+- Enable the app (Log in as the admin into your nextcloud, go to "+ Apps" and search for the "notifications" app to
+ enable it).
+
+- When you modified the code make sure to execute `make dev-setup` from within the app´s root folder to install develop dependencies and afterwards build the javascript with `make build-js-production`.
+ 
 ### Creating notifications for your app
 
 For information how to make your app interact with the notifications app, see
