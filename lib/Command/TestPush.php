@@ -85,6 +85,14 @@ class TestPush extends Command {
 	 * @return int
 	 */
 	protected function execute(InputInterface $input, OutputInterface $output): int {
+		if (!$this->notificationManager->isFairUseOfFreePushService()) {
+			$output->writeln('<error>We want to keep offering our push notification service for free, but large</error>');
+			$output->writeln('<error>users overload our infrastructure. For this reason we have to rate-limit the</error>');
+			$output->writeln('<error>use of push notifications. If you need this feature, consider setting up your</error>');
+			$output->writeln('<error>own push server or using Nextcloud Enterprise.</error>');
+			return 1;
+		}
+
 		$userId = $input->getArgument('user-id');
 		$subject = 'Testing push notifications';
 
