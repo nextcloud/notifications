@@ -302,7 +302,7 @@ FwIDAQAB
 				[
 					'publicKey' => $this->userPublicKey,
 					'deviceIdentifier' => 'XUCEZ1EHvTUcVhIvrQQQ1XcP0ZD2BFdFqw4EYbOhBfiEgXgirurR4x/ve4GSSyfivvbQOdOkZUM+g4m+tSb0Ew==',
-					'signature' => 'LRhbXO71WYX9qqDbQX7C+87YaaFfWoT/vG0DlaXdBz6+lhyOA0dw/1Ggz3fd7RerCQ0MfgnnTyxO+cSeRpUaPdA2yPjfoiPpfYA5SOJQGF3comS/HYna3fHiFDbOoM3BJOnjvqiSZdxA/ICdyl2mEEC5wO7AZ4OZKBTa5XfL7eSCXZLEv1YldqcLOStbXrI7voDQocTMJxoQZI/j8BVcf2i3D6F454aXIFDrYYzC2PQY+CKJoXZW0m0RMWaTM2B8tBmFFwrmaGLDqcjjpd33TsTtsV5DB7WimffLBPpOuGV4Z1Kiagp/mxpPLz2NImNV79mDX9gY3ZppCZTwChP5qQ==',
+					'signature' => 'X9+J7NNLfG9Ft6C36zrYLVJ5aH5euIROzdV937hsU81jL7WvOwzBfc7bImzxU3Bnev5wEKwkw7Ts/2q/+UUkOxgtEZinp52s87S5obKtsVXsczHbsqg4p/ueoBPhF17VsP1e8kMtxZ4snk/iArX4Eu1cfaM3+OckmpO0MYXy0rUbYpQPAJo4VgRFKKjFvfEVOj8N74DTIJ+TjRsvvDhJbb9KpeFe3a6Rv9mIo0AqoK+deAbUkWY0aM+74noVXvPtNzExgK4mWJ02+JHEuQEUbCuQsgoBia0vC3fILbwVxHzrieWGEnE7vkRyFEzlkeo7ZSMawDPxsPN5HxwBs2SZig==',
 				],
 				Http::STATUS_CREATED,
 			],
@@ -317,7 +317,7 @@ FwIDAQAB
 				[
 					'publicKey' => $this->userPublicKey,
 					'deviceIdentifier' => 'x9vSImcGjhzR9BfZ/XbbUqqCCNC4bHKsX7vkQWNZRd1/MiY+OuF02fx8K08My0RpkNnwj/rQ/gVSU1oEdFwkww==',
-					'signature' => 'J9AcdJt5youJmMnBhS+Cc9ytArynIKtCRoNf/m0oOFO/e0hWHqs1NRdQBe81qzYIjf0+bj0Q97X9Xv1rnVJesPkQUbGaa4nAPt+viGSfvzTptjX4LKgqm8B3UkduBA262IcaWgM5P84gUqelkQIC1nIqq/MJTuC6oQ5lUwIV1a92ZurDjhwH4b3f7/ZLTTOTRD0DWN9W/yOyF1qECivgePR3eu+mkcBzXVU/TDZDJic9G7xhqcTnWV6qk+aKyzdNo1tu5W7mF+v5vF6rrGZrq55vPLWAHApTD7P+NFV01BnaCuN7/qGJNVs7m7EH03jpOw7y3jqNMmcmonYrJSMVqg==',
+					'signature' => 'GFpnv3MO7mcBef2RJ4Ayrl6RQakGM7AvlKhoTr3DUWnv+iBzwGy8YV34HIPoArz4tyqonHRlLsxPYq4ENPfGO99KrIS16z4RUq0wiCBGf+S8/K8lM9cE9EBKE9yrkTsSvZGICEusvxQ+cTfVr30bnavvi1wL1UuxxDBlJebda9FJ9HfaS24j4rT7K78oMguqDVM+4hhr6BMhcpUVV+kTpOaBpluw5pRDwUP3jJBmkkOa57WRKFcu0Lr/XIx/G0c8Si+BAfM//CTMstwp5XDFn4W9EYSStjNrvsULdV+tOKFwnowqts+UFzEDvmZ1g4qIMWUUPBF4/pjaiDqtMojgrA==',
 				],
 				Http::STATUS_OK,
 			],
