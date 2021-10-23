@@ -3,6 +3,10 @@ OC.L10N.register(
     {
     "Hello %s" : "Kaixo %s",
     "Hello %s," : "Kaixo %s,",
+    "_New notification for %s_::_%n new notifications for %s_" : ["Jakinarazpen berria %s(r)entzat","%n jakinarazpen berri %s(r)entzat"],
+    "_You have a new notification for %s_::_You have %n new notifications for %s_" : ["Jakinarazpen berri bat duzu %s(r)entzat","%n jakinarazpen berri dituzu %s(r)entzat"],
+    "You can change the frequency of these emails or disable them in the <a href=\"%s\">settings</a>." : "E-posta hauen maiztasuna aldatu edo desgaitu ditzakezu <a href=\"%s\">ezarpenetan</a>.",
+    "You can change the frequency of these emails or disable them in the settings: %s" : "E-posta hauen maiztasuna aldatu edo desgaitu ditzakezu ezarpenetan: %s",
     "Admin notifications" : "Administratzailearen jakinarazpenak",
     "Notifications" : "Jakinarazpenak",
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "Aplikazio honek Nextclouden dagoen jakinarazpen APIaren backend eta frontend zerbitzua eskaintzen du",
@@ -17,11 +21,13 @@ OC.L10N.register(
     "Failed to dismiss notification" : "Huts egin du jakinarazpena baztertzean",
     "in {path}" : "{path} -en",
     "You need to set up your email address before you can receive notification emails." : "Zure helbide elektronikoa konfiguratu behar duzu jakinarazpenak posta elektronikoz jasotzeko.",
+    "Send email reminders about unhandled notifications after:" : "Bidali e-posta abisuak kudeatu gabeko jakinarazpenei buruz honen ondoren:",
     "Never" : "Inoiz ez",
     "1 hour" : "Ordu 1",
     "3 hours" : "3 ordu",
     "1 day" : "egun 1",
     "1 week" : "Aste 1",
-    "Your settings have been updated." : "Zure ezarpenak eguneratu dira."
+    "Your settings have been updated." : "Zure ezarpenak eguneratu dira.",
+    "An error occurred while updating your settings." : "Errore bat gertatu da ezarpenak eguneratzean."
 },
 "nplurals=2; plural=(n != 1);");
