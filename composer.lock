@@ -163,12 +163,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ChristophWurst/nextcloud_composer.git",
-                "reference": "b8a6f713939cf124a3798de106c1798486d5d781"
+                "reference": "6abf5b57c32e6cb6093487723a37315451fa74bd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ChristophWurst/nextcloud_composer/zipball/b8a6f713939cf124a3798de106c1798486d5d781",
-                "reference": "b8a6f713939cf124a3798de106c1798486d5d781",
+                "url": "https://api.github.com/repos/ChristophWurst/nextcloud_composer/zipball/6abf5b57c32e6cb6093487723a37315451fa74bd",
+                "reference": "6abf5b57c32e6cb6093487723a37315451fa74bd",
                 "shasum": ""
             },
             "require": {
@@ -177,10 +177,11 @@
                 "psr/event-dispatcher": "^1.0",
                 "psr/log": "^1.1"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "22.0.0-dev"
+                    "dev-master": "23.0.0-dev"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -194,7 +195,11 @@
                 }
             ],
             "description": "Composer package containing Nextcloud's public API (classes, interfaces)",
-            "time": "2021-03-26T23:34:29+00:00"
+            "support": {
+                "issues": "https://github.com/ChristophWurst/nextcloud_composer/issues",
+                "source": "https://github.com/ChristophWurst/nextcloud_composer/tree/master"
+            },
+            "time": "2021-10-24T01:09:47+00:00"
         },
         {
             "name": "composer/package-versions-deprecated",
@@ -4627,5 +4632,5 @@
     "platform-overrides": {
         "php": "7.3"
     },
-    "plugin-api-version": "1.1.0"
+    "plugin-api-version": "2.1.0"
 }
