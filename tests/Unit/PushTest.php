@@ -394,6 +394,83 @@ class PushTest extends TestCase {
 
 		$push->pushToDevice(1970, $notification);
 	}
+	public function testPushToDeviceNoFairUse() {
+		$push = $this->getPush(['getDevicesForUser', 'encryptAndSign', 'deletePushToken', 'validateToken', 'deletePushTokenByDeviceIdentifier']);
+
+		/** @var INotification|MockObject $notification */
+		$notification = $this->createMock(INotification::class);
+		$notification
+			->method('getUser')
+			->willReturn('valid');
+
+		/** @var IUser|MockObject $user */
+		$user = $this->createMock(IUser::class);
+
+		$this->userManager->expects($this->once())
+			->method('get')
+			->with('valid')
+			->willReturn($user);
+
+		$push->expects($this->once())
+			->method('getDevicesForUser')
+			->willReturn([
+				[
+					'proxyserver' => 'proxyserver',
+					'token' => 16,
+					'apptype' => 'other',
+				],
+			]);
+
+		$this->config
+			->method('getSystemValue')
+			->with('debug', false)
+			->willReturn(false);
+
+		$this->l10nFactory
+			->method('getUserLanguage')
+			->with($user)
+			->willReturn('ru');
+
+		$this->notificationManager->expects($this->once())
+			->method('prepare')
+			->with($notification, 'ru')
+			->willReturnArgument(0);
+
+		/** @var Key|MockObject $key */
+		$key = $this->createMock(Key::class);
+
+		$this->keyManager->expects($this->once())
+			->method('getKey')
+			->with($user)
+			->willReturn($key);
+
+		$push->expects($this->exactly(1))
+			->method('validateToken')
+			->willReturn(true);
+
+		$push->expects($this->exactly(1))
+			->method('encryptAndSign')
+			->willReturn(['Payload']);
+
+		$push->expects($this->never())
+			->method('deletePushToken');
+
+		$this->clientService->expects($this->never())
+			->method('newClient');
+
+		$this->config->expects($this->once())
+			->method('getSystemValueBool')
+			->with('has_internet_connection', true)
+			->willReturn(true);
+
+		$this->notificationManager->method('isFairUseOfFreePushService')
+			->willReturn(false);
+
+		$push->method('deletePushTokenByDeviceIdentifier')
+			->with('123456');
+
+		$push->pushToDevice(207787, $notification);
+	}
 
 	public function dataPushToDeviceSending() {
 		return [
@@ -631,6 +708,9 @@ class PushTest extends TestCase {
 			])
 			->willThrowException($e);
 
+		$this->notificationManager->method('isFairUseOfFreePushService')
+			->willReturn(true);
+
 		$push->method('deletePushTokenByDeviceIdentifier')
 			->with('123456');
 
@@ -760,6 +840,9 @@ class PushTest extends TestCase {
 		$this->config->expects($this->once())
 			->method('getSystemValueBool')
 			->with('has_internet_connection', true)
+			->willReturn(true);
+
+		$this->notificationManager->method('isFairUseOfFreePushService')
 			->willReturn(true);
 
 		$push->pushToDevice(200718, $notification);
