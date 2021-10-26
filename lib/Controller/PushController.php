@@ -118,8 +118,13 @@ class PushController extends OCSController {
 		$key = $this->identityProof->getKey($user);
 
 		$deviceIdentifier = json_encode([$user->getCloudId(), $token->getId()]);
-		$deviceIdentifier = base64_encode(hash('sha512', $deviceIdentifier, true));
 		openssl_sign($deviceIdentifier, $signature, $key->getPrivate(), OPENSSL_ALGO_SHA512);
+		/**
+		 * For some reason the push proxy's golang code needs the signature
+		 * of the deviceIdentifier before the sha512 hashing. Assumption is that
+		 * openssl_sign already does the sha512 internally.
+		 */
+		$deviceIdentifier = base64_encode(hash('sha512', $deviceIdentifier, true));
 
 		$appType = 'unknown';
 		if ($this->request->isUserAgent([
