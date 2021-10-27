@@ -285,9 +285,9 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
-	 * @Then /^can validate the response and signature$/
+	 * @Then /^can validate the response and (skip verifying|verify) signature$/
 	 */
-	public function validateResponseAndSignature(): void {
+	public function validateResponseAndSignature(string $verify): void {
 		$response = $this->getArrayOfNotificationsResponded($this->response);
 
 		Assert::assertStringStartsWith('-----BEGIN PUBLIC KEY-----' . "\n", $response['publicKey']);
@@ -295,8 +295,18 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 		Assert::assertNotEmpty($response['deviceIdentifier'], 'Device identifier should not be empty');
 		Assert::assertNotEmpty($response['signature'], 'Signature should not be empty');
 
-		$result = openssl_verify($response['deviceIdentifier'], base64_decode($response['signature']), $response['publicKey'], OPENSSL_ALGO_SHA512);
-		Assert::assertEquals(true, $result, 'Failed to verify the signature');
+		if ($verify === 'verify') {
+			$result = openssl_verify($response['deviceIdentifier'], base64_decode($response['signature']), $response['publicKey'], OPENSSL_ALGO_SHA512);
+			Assert::assertEquals(true, $result, 'Failed to verify the signature');
+		} else {
+			/**
+			 * For some weird reason the push proxy's golang code needs the signature
+			 * of the deviceIdentifier before the sha512 hashing. Assumption is that
+			 * openssl_sign already does the sha512 internally.
+			 * The problem is we can not revert the sha512 of the deviceIdentifier
+			 */
+			var_dump("\n\nEnjoy with care, signature was not verified!\n\n");
+		}
 	}
 
 	/**
