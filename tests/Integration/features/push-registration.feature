@@ -38,7 +38,7 @@ Feature: Push registration
     | devicePublicKey | VALID_KEY |
     | proxyServer | https://push-notifications.nextcloud.com/ |
     Then status code is 201
-    And can validate the response and signature
+    And can validate the response and skip verifying signature
 
   Scenario: Unregistering from push notifications without app password
     Given user "test1" forgets the app password
@@ -52,7 +52,7 @@ Feature: Push registration
       | devicePublicKey | VALID_KEY |
       | proxyServer | https://push-notifications.nextcloud.com/ |
     Then status code is 201
-    And can validate the response and signature
+    And can validate the response and skip verifying signature
     Given user "test1" unregisters from push notifications
     Then status code is 202
     Given user "test1" unregisters from push notifications
