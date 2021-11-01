@@ -170,7 +170,7 @@ class Push {
 		if (isset($userStatus[$notification->getUser()])) {
 			$userStatus = $userStatus[$notification->getUser()];
 			if ($userStatus->getStatus() === IUserStatus::DND) {
-				$this->printInfo('User status is set to DND');
+				$this->printInfo('<error>User status is set to DND - no push notifications will be sent</error>');
 				return;
 			}
 		}
@@ -389,6 +389,11 @@ class Push {
 			// Check if the token is still valid...
 			$token = $this->tokenProvider->getTokenById($tokenId);
 			$this->cache->set('t' . $tokenId, $token->getLastCheck(), 600);
+			if ($token->getLastCheck() > $maxAge) {
+				$this->printInfo('Device token is valid');
+			} else {
+				$this->printInfo('Device token "last checked" is older than 60 days: ' . $token->getLastCheck());
+			}
 			return $token->getLastCheck() > $maxAge;
 		} catch (InvalidTokenException $e) {
 			// Token does not exist anymore, should drop the push device entry
