@@ -3,6 +3,7 @@ name: PHPUnit
 on:
   pull_request:
     paths:
+      - '.github/workflows/phpunit.yml'
       - 'appinfo/**'
       - 'lib/**'
       - 'templates/**'

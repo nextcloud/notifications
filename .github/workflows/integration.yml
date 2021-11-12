@@ -3,6 +3,7 @@ name: Integration
 on:
   pull_request:
     paths:
+      - '.github/workflows/integration.yml'
       - 'appinfo/**'
       - 'lib/**'
       - 'templates/**'
