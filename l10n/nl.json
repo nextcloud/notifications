@@ -1,4 +1,7 @@
 { "translations": {
+    "Hello %s" : "Hallo %s",
+    "Hello %s," : "Hallo %s,",
+    "_New notification for %s_::_%n new notifications for %s_" : ["Nieuwe melding voor %s","%n nieuwe meldingen voor %s"],
     "Admin notifications" : "Beheermeldingen",
     "Notifications" : "Meldingen",
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "Deze app levert de back-end en front-end voor de meldingen-API in Nextcloud.",
@@ -11,6 +14,12 @@
     "Dismiss" : "Wissen",
     "seconds ago" : "seconden geleden",
     "Failed to dismiss notification" : "Niet gelukt om melding te wissen",
-    "in {path}" : "in {path}"
+    "in {path}" : "in {path}",
+    "Never" : "Nooit",
+    "1 hour" : "1 uur",
+    "3 hours" : "3 uur",
+    "1 day" : "1 dag",
+    "1 week" : "1 week",
+    "Your settings have been updated." : "Je instellingen zijn bijgewerkt."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
