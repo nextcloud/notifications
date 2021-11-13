@@ -1,6 +1,8 @@
 OC.L10N.register(
     "notifications",
     {
+    "Hello %s" : "Hei %s",
+    "Hello %s," : "Hei %s,",
     "Admin notifications" : "Ylläpitoilmoitukset",
     "Notifications" : "Ilmoitukset",
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "Taustasovellus ja käyttöliittymä Nextcloudin ilmoitusten ohjelmointirajapinnalle.",
@@ -13,6 +15,13 @@ OC.L10N.register(
     "Dismiss" : "Hylkää",
     "seconds ago" : "sekuntia sitten",
     "Failed to dismiss notification" : "Ilmoituksen hylkääminen epäonnistui",
-    "in {path}" : "polussa {path}"
+    "in {path}" : "polussa {path}",
+    "Never" : "Ei koskaan",
+    "1 hour" : "1 tunti",
+    "3 hours" : "3 tuntia",
+    "1 day" : "1 päivä",
+    "1 week" : "1 viikko",
+    "Your settings have been updated." : "Asetukset on päivitetty.",
+    "An error occurred while updating your settings." : "Asetuksia tallentaessa tapahtui virhe."
 },
 "nplurals=2; plural=(n != 1);");
