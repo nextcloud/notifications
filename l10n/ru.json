@@ -1,4 +1,10 @@
 { "translations": {
+    "Hello %s" : "Здравствуйте, %s!",
+    "Hello %s," : "Здравствуйте, %s,",
+    "_New notification for %s_::_%n new notifications for %s_" : ["Новое уведомление для %s","%n новых уведомления для %s","%n новых уведомления для %s","%n новых уведомления для %s"],
+    "_You have a new notification for %s_::_You have %n new notifications for %s_" : ["У вас новое уведомление для %s","У вас %n новых уведомления для %s","У вас %n новых уведомлений для %s","У вас %n новых уведомлений для %s"],
+    "You can change the frequency of these emails or disable them in the <a href=\"%s\">settings</a>." : "Вы можете <a href=\"%s\">настроить</a> частоту отправления таких писем, или даже вообще отключить рассылку.",
+    "You can change the frequency of these emails or disable them in the settings: %s" : "Вы можете настроить частоту отправления таких писем, или даже вообще отключить рассылку: %s",
     "Admin notifications" : "Уведомления администратора",
     "Notifications" : "Уведомления",
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "Это приложение для создания и показа уведомлений в Nextcloud.",
@@ -11,6 +17,15 @@
     "Dismiss" : "Закрыть",
     "seconds ago" : "несколько секунд назад",
     "Failed to dismiss notification" : "Не удалось скрыть уведомление",
-    "in {path}" : "в {path}"
+    "in {path}" : "в {path}",
+    "You need to set up your email address before you can receive notification emails." : "Для получения уведомлений укажите свой адрес электронной почты в настройках профиля.",
+    "Send email reminders about unhandled notifications after:" : "Интервал времени до отправки эл. письма с напоминанием о непрочитанных уведомлениях:",
+    "Never" : "Никогда",
+    "1 hour" : "1 час",
+    "3 hours" : "3 часа",
+    "1 day" : "1 день",
+    "1 week" : "1 неделя",
+    "Your settings have been updated." : "Параметры обновлены.",
+    "An error occurred while updating your settings." : "Не удалось сохранить изменённые параметры."
 },"pluralForm" :"nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);"
 }
