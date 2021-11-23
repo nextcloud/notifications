@@ -1,6 +1,12 @@
 OC.L10N.register(
     "notifications",
     {
+    "Hello %s" : "Hej %s",
+    "Hello %s," : "Hej %s,",
+    "_New notification for %s_::_%n new notifications for %s_" : ["Ny notifikation för %s","%n nya notifikationer för %s"],
+    "_You have a new notification for %s_::_You have %n new notifications for %s_" : [" Du har en ny notifikation för %s","Du har %n nya notifikationer för %s"],
+    "You can change the frequency of these emails or disable them in the <a href=\"%s\">settings</a>." : "Du kan ändra frekvensen av dessa meddelanden eller stänga av dem i <a href=\"%s\">inställningarna</a>.",
+    "You can change the frequency of these emails or disable them in the settings: %s" : "Du kan ändra frekvensen av dessa meddelanden eller stänga av dem i inställningarna: %s",
     "Admin notifications" : "Administratörsaviseringar",
     "Notifications" : "Aviseringar",
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "Denna app ger en backend och frontend för aviserings-API:n tillgänglig i Nextcloud.",
@@ -13,6 +19,15 @@ OC.L10N.register(
     "Dismiss" : "Avfärda",
     "seconds ago" : "sekunder sedan",
     "Failed to dismiss notification" : "Misslyckades att avfärda notifiering",
-    "in {path}" : "i {path}"
+    "in {path}" : "i {path}",
+    "You need to set up your email address before you can receive notification emails." : "Du måste ställa in din e-postadress innan du kan ta emot notifikationer via e-post.",
+    "Send email reminders about unhandled notifications after:" : "Skicka påminnelser via e-post för ej hanterade notifikationer efter:",
+    "Never" : "Aldrig",
+    "1 hour" : "1 timme",
+    "3 hours" : "3 timmar",
+    "1 day" : "1 dag",
+    "1 week" : "1 vecka",
+    "Your settings have been updated." : "Dina inställningar har uppdaterats.",
+    "An error occurred while updating your settings." : "Ett fel inträffade vid uppdatering av dina inställningar."
 },
 "nplurals=2; plural=(n != 1);");
