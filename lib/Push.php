@@ -44,6 +44,7 @@ use OCP\Notification\IManager as INotificationManager;
 use OCP\Notification\INotification;
 use OCP\UserStatus\IManager as IUserStatusManager;
 use OCP\UserStatus\IUserStatus;
+use OCP\Util;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -424,8 +425,9 @@ class Push {
 		];
 
 		// Max length of encryption is ~240, so we need to make sure the subject is shorter.
-		$maxDataLength = 200 - strlen(json_encode($data));
-		$data['subject'] = $this->shortenJsonEncodedMultibyte($notification->getParsedSubject(), $maxDataLength);
+		// Also, subtract two for encapsulating quotes will be added.
+		$maxDataLength = 200 - strlen(json_encode($data)) - 2;
+		$data['subject'] = Util::shortenMultibyteString($notification->getParsedSubject(), $maxDataLength);
 		if ($notification->getParsedSubject() !== $data['subject']) {
 			$data['subject'] .= '…';
 		}
@@ -467,27 +469,6 @@ class Push {
 			'priority' => $priority,
 			'type' => $type,
 		];
-	}
-
-	/**
-	 * json_encode is messing with multibyte characters a lot,
-	 * replacing them with something along "\u1234".
-	 * The data length in our encryption is a hard limit, but we don't want to
-	 * make non-utf8 subjects unnecessary short. So this function tries to cut
-	 * it off first.
-	 * If that is not enough it always cuts off 5 characters in multibyte-safe
-	 * fashion until the json_encode-d string is shorter then the given limit.
-	 *
-	 * @param string $subject
-	 * @param int $dataLength
-	 * @return string
-	 */
-	protected function shortenJsonEncodedMultibyte(string $subject, int $dataLength): string {
-		$temp = mb_substr($subject, 0, $dataLength);
-		while (strlen(json_encode($temp)) > $dataLength) {
-			$temp = mb_substr($temp, 0, -5);
-		}
-		return $temp;
 	}
 
 	/**
