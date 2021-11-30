@@ -1,6 +1,9 @@
 OC.L10N.register(
     "notifications",
     {
+    "Hello %s" : "Pozdravljeni, %s,",
+    "Hello %s," : "Pozdravljeni, %s,",
+    "_You have a new notification for %s_::_You have %n new notifications for %s_" : ["Prejeli ste %n novo obvestilo za %s.","Prejeli ste %n novi obvestili za %s.","Prejeli ste %n nova obvestila za %s.","Prejeli ste %n novih obvestil za %s."],
     "Admin notifications" : "Skrbniška obvestila",
     "Notifications" : "Obvestila",
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "Program podpira ozadnji program in vmesnik API za obvestila Nextcloud.",
@@ -13,6 +16,13 @@ OC.L10N.register(
     "Dismiss" : "Opusti",
     "seconds ago" : "pred nekaj sekundami",
     "Failed to dismiss notification" : "Opuščanje obvestila je spodletelo!",
-    "in {path}" : "v {path}"
+    "in {path}" : "v {path}",
+    "Send email reminders about unhandled notifications after:" : "Po elektronski pošti pošlji opomnik o neodgovorjenih obvestilih po:",
+    "Never" : "Nikoli",
+    "1 hour" : "1 uri",
+    "3 hours" : "3 urah",
+    "1 week" : "1 tednu",
+    "Your settings have been updated." : "Nastavitve so posodobljene.",
+    "An error occurred while updating your settings." : "Prišlo je do napake med posodabljanjem nastavitev."
 },
 "nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);");
