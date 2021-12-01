@@ -1,6 +1,12 @@
 OC.L10N.register(
     "notifications",
     {
+    "Hello %s" : "Witaj %s",
+    "Hello %s," : "Witaj %s,",
+    "_New notification for %s_::_%n new notifications for %s_" : ["Nowe powiadomienie dla %s","%n nowe powiadomienia dla %s","%n nowych powiadomień dla %s","%n nowych powiadomień dla %s"],
+    "_You have a new notification for %s_::_You have %n new notifications for %s_" : ["Masz nowe powiadomienie dla %s","Masz %n nowe powiadomienia dla %s","Masz %n nowych powiadomień dla %s","Masz %n nowych powiadomień dla %s"],
+    "You can change the frequency of these emails or disable them in the <a href=\"%s\">settings</a>." : "Możesz zmienić częstotliwość e-maili lub wyłączyć je w <a href=\"%s\">ustawieniach</a>.",
+    "You can change the frequency of these emails or disable them in the settings: %s" : "Możesz zmienić częstotliwość e-maili lub wyłączyć je w ustawieniach: %s",
     "Admin notifications" : "Powiadomienia administratora",
     "Notifications" : "Powiadomienia",
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "Ta aplikacja zapewnia backend i frontend dla interfejsu API powiadomień dostępnego w Nextcloud.",
@@ -12,7 +18,16 @@ OC.L10N.register(
     "Failed to perform action" : "Nie udało się wykonać działania",
     "Dismiss" : "Odrzuć",
     "seconds ago" : "przed chwilą",
-    "Failed to dismiss notification" : "Nie udało się usunąć powiadomienia ",
-    "in {path}" : "w {path}"
+    "Failed to dismiss notification" : "Nie udało się usunąć powiadomienia",
+    "in {path}" : "w {path}",
+    "You need to set up your email address before you can receive notification emails." : "Aby otrzymywać powiadomienia e-mail, musisz skonfigurować swój adres e-mail.",
+    "Send email reminders about unhandled notifications after:" : "Wysyłaj przypomnienia e-mail o nieobsłużonych powiadomieniach po:",
+    "Never" : "Nigdy",
+    "1 hour" : "1 godzina",
+    "3 hours" : "3 godziny",
+    "1 day" : "1 dzień",
+    "1 week" : "1 tydzień",
+    "Your settings have been updated." : "Twoje ustawienia zostały zaktualizowane.",
+    "An error occurred while updating your settings." : "Wystąpił błąd podczas aktualizowania ustawień."
 },
 "nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);");

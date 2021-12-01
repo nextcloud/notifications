@@ -1,6 +1,12 @@
 OC.L10N.register(
     "notifications",
     {
+    "Hello %s" : "Ahoj %s",
+    "Hello %s," : "Ahoj %s,",
+    "_New notification for %s_::_%n new notifications for %s_" : ["%n nové oznámenie pre %s","%n nových oznámení pre %s","%n nových oznámení pre %s","%n nových oznámení pre %s"],
+    "_You have a new notification for %s_::_You have %n new notifications for %s_" : ["Máte %n nové oznámenie pre %s","Máte %n nových oznámení pre %s","Máte %n nových oznámení pre %s","Máte %n nových oznámení pre %s"],
+    "You can change the frequency of these emails or disable them in the <a href=\"%s\">settings</a>." : "Frekvenciu týchto e-mailov môžete zmeniť alebo ich zakázať v <a href=\"%s\"> nastaveniach </a>.",
+    "You can change the frequency of these emails or disable them in the settings: %s" : "Frekvenciu týchto e-mailov môžete zmeniť alebo ich zakázať v nastaveniach: %s",
     "Admin notifications" : "Notifikácie od administrátora",
     "Notifications" : "Upozornenia",
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "Táto aplikácia poskytuje backend a frontend pre notifikačné API dostupné v Nextcloud.",
@@ -13,6 +19,15 @@ OC.L10N.register(
     "Dismiss" : "Odmietnuť",
     "seconds ago" : "pred niekoľkými sekundami",
     "Failed to dismiss notification" : "Nepoadrilo sa odstrániť notifikáciu",
-    "in {path}" : "v {path}"
+    "in {path}" : "v {path}",
+    "You need to set up your email address before you can receive notification emails." : "Ak chcete dostávať oznámenia emailom, musíte najskôr vyplniť vašu emailovú adresu.",
+    "Send email reminders about unhandled notifications after:" : "Odoslať e-mailové pripomenutia nezachytených upozornení po:",
+    "Never" : "Nikdy",
+    "1 hour" : "1 hodina",
+    "3 hours" : "3 hodiny",
+    "1 day" : "1 deň",
+    "1 week" : "1 týždeň",
+    "Your settings have been updated." : "Vaše nastavenia boli aktualizované.",
+    "An error occurred while updating your settings." : "Nastala chyba počas ukladania nastavení."
 },
 "nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);");
