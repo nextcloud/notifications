@@ -1,4 +1,10 @@
 { "translations": {
+    "Hello %s" : "Pozdrav %s",
+    "Hello %s," : "Pozdrav %s,",
+    "_New notification for %s_::_%n new notifications for %s_" : ["Nova obavijest za %s","%n nove obavijesti za %s","%n novih obavijesti za %s"],
+    "_You have a new notification for %s_::_You have %n new notifications for %s_" : ["Imate novu obavijest za %s","Imate %n nove obavijesti za %s","Imate %n novih obavijesti za %s"],
+    "You can change the frequency of these emails or disable them in the <a href=\"%s\">settings</a>." : "Možete promijeniti učestalost ovih poruka e-pošte ili ih onemogućiti u <a href=\"%s\">postavkama</a>.",
+    "You can change the frequency of these emails or disable them in the settings: %s" : "Možete promijeniti učestalost ovih poruka e-pošte ili ih onemogućiti u postavkama: %s",
     "Admin notifications" : "Obavijesti administratora",
     "Notifications" : "Obavijesti",
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "Ova aplikacija pruža pozadinske mehanizme i sučelje za API za obavijesti koji je dostupan u Nextcloudu.",
@@ -11,6 +17,15 @@
     "Dismiss" : "Zanemari",
     "seconds ago" : "prije nekoliko sekundi",
     "Failed to dismiss notification" : "Zanemarivanje obavijesti nije uspjelo",
-    "in {path}" : "u {path}"
+    "in {path}" : "u {path}",
+    "You need to set up your email address before you can receive notification emails." : "Morate navesti svoju adresu e-pošte kako biste primali poruke s obavijestima.",
+    "Send email reminders about unhandled notifications after:" : "Pošaljite podsjetnike o neobrađenim obavijestima putem e-pošte nakon:",
+    "Never" : "Nikad",
+    "1 hour" : "1 sat",
+    "3 hours" : "3 sata",
+    "1 day" : "1 dan",
+    "1 week" : "1 tjedan",
+    "Your settings have been updated." : "Vaše su postavke ažurirane.",
+    "An error occurred while updating your settings." : "Došlo je do pogreške pri ažuriranju postavki."
 },"pluralForm" :"nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;"
 }
