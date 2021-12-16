@@ -1,6 +1,10 @@
 OC.L10N.register(
     "notifications",
     {
+    "Hello %s" : "Γεια σας 1%s",
+    "Hello %s," : "Γεια σας 1%s,",
+    "You can change the frequency of these emails or disable them in the <a href=\"%s\">settings</a>." : "Μπορείτε να αλλάξετε τη συχνότητα αυτών των email ή να τα απενεργοποιήσετε στις <a href=\"%s\"> ρυθμίσεις </a>.",
+    "You can change the frequency of these emails or disable them in the settings: %s" : "Μπορείτε να αλλάξετε τη συχνότητα αυτών των email ή να τα απενεργοποιήσετε στις ρυθμίσεις: 1%s",
     "Admin notifications" : "Ειδοποιήσεις διαχειριστή",
     "Notifications" : "Ειδοποιήσεις",
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "Εφαρμογή ειδοποιήσεων API για  backend και frontend διαθέσιμο στο Nextcloud.",
@@ -13,6 +17,15 @@ OC.L10N.register(
     "Dismiss" : "Αποδέσμευση",
     "seconds ago" : " δευτερόλεπτα πριν ",
     "Failed to dismiss notification" : "Αποτυχία αποδέσμευσης της ειδοποίησης",
-    "in {path}" : "στο {path}"
+    "in {path}" : "στο {path}",
+    "You need to set up your email address before you can receive notification emails." : "Πρέπει να ρυθμίσετε τη διεύθυνση email σας για να μπορείτε να λαμβάνετε μηνύματα ηλεκτρονικού ταχυδρομείου ειδοποίησης.",
+    "Send email reminders about unhandled notifications after:" : "Στείλτε υπενθυμίσεις μέσω email για μη χειριζόμενες ειδοποιήσεις μετά από:",
+    "Never" : "Ποτέ",
+    "1 hour" : "1 ώρα",
+    "3 hours" : "3 ώρες",
+    "1 day" : "1 μέρα",
+    "1 week" : "1 εβδομάδα",
+    "Your settings have been updated." : "Οι ρυθμίσεις σας έχουν ενημερωθεί.",
+    "An error occurred while updating your settings." : "Παρουσιάστηκε σφάλμα κατά την ενημέρωση των ρυθμίσεών σας."
 },
 "nplurals=2; plural=(n != 1);");
