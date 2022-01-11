@@ -1,4 +1,10 @@
 { "translations": {
+    "Hello %s" : "Здравейте %s",
+    "Hello %s," : "Здравейте %s,",
+    "_New notification for %s_::_%n new notifications for %s_" : ["нови известия за %s","%n нови известия за %s "],
+    "_You have a new notification for %s_::_You have %n new notifications for %s_" : ["Имате %n нови известия за %s","Имате %n нови известия за %s"],
+    "You can change the frequency of these emails or disable them in the <a href=\"%s\">settings</a>." : "Можете да промените честотата на тези имейли или да ги деактивирате в <a href=\"%s\">настройките</a>.",
+    "You can change the frequency of these emails or disable them in the settings: %s" : "Можете да промените честотата на тези имейли или да ги деактивирате в настройките: %s",
     "Admin notifications" : "Административни известия",
     "Notifications" : "Известия",
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "Това приложение осигурява сървър и интерфейс за API известие, наличен в Nextcloud.",
@@ -11,6 +17,15 @@
     "Dismiss" : "Отхвърляне",
     "seconds ago" : "преди секунди",
     "Failed to dismiss notification" : "Неуспешен опит за отхвърляне на известие",
-    "in {path}" : "в {path}"
+    "in {path}" : "в {path}",
+    "You need to set up your email address before you can receive notification emails." : "Първо трябва да въведете вашия имейл адрес, за да получавате имейли с известия.",
+    "Send email reminders about unhandled notifications after:" : "Изпращайте напомняния по имейл за необработени известия след: ",
+    "Never" : "Никога",
+    "1 hour" : "1 час",
+    "3 hours" : "3 часа",
+    "1 day" : "1 ден",
+    "1 week" : "1 седмица",
+    "Your settings have been updated." : "Вашите настройки са актуализирани.",
+    "An error occurred while updating your settings." : "Възникна грешка при актуализиране на настройките ви."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

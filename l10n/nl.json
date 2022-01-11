@@ -1,4 +1,10 @@
 { "translations": {
+    "Hello %s" : "Hallo %s",
+    "Hello %s," : "Hallo %s,",
+    "_New notification for %s_::_%n new notifications for %s_" : ["Nieuwe melding voor %s","%n nieuwe meldingen voor %s"],
+    "_You have a new notification for %s_::_You have %n new notifications for %s_" : ["You have a new notification for %s","Je hebt %n nieuwe meldingen voor %s"],
+    "You can change the frequency of these emails or disable them in the <a href=\"%s\">settings</a>." : "Je kunt deze e-mails uitschakelen of de frequentie aanpassen in de <a href=\"%s\">instellingen</a>.",
+    "You can change the frequency of these emails or disable them in the settings: %s" : "Je kunt deze e-mails uitschakelen of de frequentie aanpassen in de instellingen: %s",
     "Admin notifications" : "Beheermeldingen",
     "Notifications" : "Meldingen",
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "Deze app levert de back-end en front-end voor de meldingen-API in Nextcloud.",
@@ -11,6 +17,15 @@
     "Dismiss" : "Wissen",
     "seconds ago" : "seconden geleden",
     "Failed to dismiss notification" : "Niet gelukt om melding te wissen",
-    "in {path}" : "in {path}"
+    "in {path}" : "in {path}",
+    "You need to set up your email address before you can receive notification emails." : "Je moet je e-mailadres instellen voor je meldingse-mails kunt ontvangen.",
+    "Send email reminders about unhandled notifications after:" : "Verzend e-mailherinneringen over onverwerkte meldingen na:",
+    "Never" : "Nooit",
+    "1 hour" : "1 uur",
+    "3 hours" : "3 uur",
+    "1 day" : "1 dag",
+    "1 week" : "1 week",
+    "Your settings have been updated." : "Je instellingen zijn bijgewerkt.",
+    "An error occurred while updating your settings." : "Fout opgetreden bij het updaten van je instellingen."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
