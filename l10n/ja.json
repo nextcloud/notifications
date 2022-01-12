@@ -1,4 +1,6 @@
 { "translations": {
+    "Hello %s" : "こんにちは %s さん",
+    "Hello %s," : "こんにちは %s さん、",
     "Admin notifications" : "管理者の通知",
     "Notifications" : "通知",
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "このアプリは、Nextcloudで利用可能な通知APIのバックエンドとフロントエンドを提供します。",
@@ -11,6 +13,12 @@
     "Dismiss" : "閉じる",
     "seconds ago" : "数秒前",
     "Failed to dismiss notification" : "通知の却下に失敗しました",
-    "in {path}" : "{path}に"
+    "in {path}" : "{path}に",
+    "1 hour" : "1時間",
+    "3 hours" : "3時間",
+    "1 day" : "1日",
+    "1 week" : "1週間",
+    "Your settings have been updated." : "設定を更新しました。",
+    "An error occurred while updating your settings." : "設定の更新中にエラーが発生しました。"
 },"pluralForm" :"nplurals=1; plural=0;"
 }
