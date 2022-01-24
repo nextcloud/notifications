@@ -1,8 +1,7 @@
 <template>
 	<div class="notification" :data-id="notificationId" :data-timestamp="timestamp">
 		<div class="notification-heading">
-			<span
-				v-tooltip.bottom="absoluteDate"
+			<span v-tooltip.bottom="absoluteDate"
 				class="notification-time live-relative-timestamp"
 				:data-timestamp="timestamp">{{ relativeDate }}</span>
 			<div class="notification-delete" @click="onDismissNotification">
@@ -11,24 +10,21 @@
 		</div>
 		<a v-if="useLink" :href="link" class="notification-subject full-subject-link">
 			<span v-if="icon" class="image"><img :src="icon" class="notification-icon"></span>
-			<RichText
-				v-if="subjectRich"
+			<RichText v-if="subjectRich"
 				:text="subjectRich"
 				:arguments="preparedSubjectParameters" />
 			<span v-else class="subject">{{ subject }}</span>
 		</a>
 		<div v-else class="notification-subject">
 			<span v-if="icon" class="image"><img :src="icon" class="notification-icon"></span>
-			<RichText
-				v-if="subjectRich"
+			<RichText v-if="subjectRich"
 				:text="subjectRich"
 				:arguments="preparedSubjectParameters" />
 			<span v-else class="subject">{{ subject }}</span>
 		</div>
 		<div v-if="message" class="notification-message" @click="onClickMessage">
 			<div class="message-container" :class="{ collapsed: isCollapsedMessage }">
-				<RichText
-					v-if="messageRich"
+				<RichText v-if="messageRich"
 					:text="messageRich"
 					:arguments="preparedMessageParameters"
 					:autolink="true" />
