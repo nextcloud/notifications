@@ -20,8 +20,7 @@
 -->
 
 <template>
-	<a
-		v-tooltip.bottom="title"
+	<a v-tooltip.bottom="title"
 		class="filename"
 		:href="link">{{ name }}</a>
 </template>

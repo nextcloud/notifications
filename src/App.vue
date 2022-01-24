@@ -20,8 +20,7 @@
 			<transition name="fade">
 				<ul v-if="notifications.length > 0" class="notification-wrapper">
 					<transition-group name="fade-collapse" tag="li">
-						<Notification
-							v-for="(n, index) in notifications"
+						<Notification v-for="(n, index) in notifications"
 							:key="n.notification_id"
 							v-bind="n"
 							:index="index"
