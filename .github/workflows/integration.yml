@@ -27,7 +27,7 @@ jobs:
       matrix:
         php-versions: ['7.4']
         databases: ['sqlite']
-        server-versions: ['master']
+        server-versions: ['enh/http-auth-session']
 
     name: integration-php${{ matrix.php-versions }}-${{ matrix.databases }}
 
@@ -132,7 +132,7 @@ jobs:
       matrix:
         php-versions: ['7.4', '8.0']
         databases: ['mysql']
-        server-versions: ['master']
+        server-versions: ['enh/http-auth-session']
 
     name: integration-php${{ matrix.php-versions }}-${{ matrix.databases }}
 
@@ -198,7 +198,7 @@ jobs:
       matrix:
         php-versions: ['7.4']
         databases: ['pgsql']
-        server-versions: ['master']
+        server-versions: ['enh/http-auth-session']
 
     name: integration-php${{ matrix.php-versions }}-${{ matrix.databases }}
 
@@ -266,7 +266,7 @@ jobs:
       matrix:
         php-versions: ['7.4']
         databases: ['oci']
-        server-versions: ['master']
+        server-versions: ['enh/http-auth-session']
 
     name: integration-php${{ matrix.php-versions }}-${{ matrix.databases }}
 
