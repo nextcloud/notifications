@@ -1,10 +1,16 @@
 OC.L10N.register(
     "notifications",
     {
+    "Hello %s" : "Hola, %s",
+    "Hello %s," : "Hola, %s,",
+    "_New notification for %s_::_%n new notifications for %s_" : ["Notificació nova per a %s","%n notificacions noves per a %s"],
+    "_You have a new notification for %s_::_You have %n new notifications for %s_" : ["Teniu una notificació nova per a %s","Teniu %n notificacions noves per a %s"],
+    "You can change the frequency of these emails or disable them in the <a href=\"%s\">settings</a>." : "Podeu canviar la freqüència d'aquests correus electrònics o inhabilitar-los als <a href=\"%s\">paràmetres</a>.",
+    "You can change the frequency of these emails or disable them in the settings: %s" : "Podeu canviar la freqüència d'aquests correus electrònics o inhabilitar-los als paràmetres: %s",
     "Admin notifications" : "Notificacions de l'administrador",
     "Notifications" : "Notificacions",
-    "This app provides a backend and frontend for the notification API available in Nextcloud." : "Aquesta aplicació proporciona un rerefons i un frontal per a l'API de notificacions disponible al Nextcloud.",
-    "This app provides a backend and frontend for the notification API available in Nextcloud.\n\t\tThe API is used by other apps to notify users in the web UI and sync clients about various things. Some examples are:\n\n📬 Federated file sharing: You received a new remote share\n\n📑 Comments: Another user mentioned you in a comment on a file\n\n🚢 Update notification: Available update for an app or nextcloud itself\n\n📣 Announcement center: An announcement was posted by an admin" : "Aquesta aplicació proporciona un rerefons i un frontal per a l'API de notificacions disponible al Nextcloud.\n\t\tL'API l'utilitzen altres aplicacions per a notificar als usuaris de la interfície web i als clients de sincronització sobre diversos aspectes. Per exemple:\n\n Compartició de fitxers federats: rebeu una nova compartició remota.\n\n Comentaris: un altre usuari us ha esmentat en un comentari en un fitxer.\n\n Notificació d'actualització: hi ha una actualització disponible per a una aplicació o per al Nextcloud.\n\n Centre d'anuncis: un administrador ha publicat un anunci.",
+    "This app provides a backend and frontend for the notification API available in Nextcloud." : "Aquesta aplicació proporciona un rerefons i un frontal per a l'API de notificacions disponible en el Nextcloud.",
+    "This app provides a backend and frontend for the notification API available in Nextcloud.\n\t\tThe API is used by other apps to notify users in the web UI and sync clients about various things. Some examples are:\n\n📬 Federated file sharing: You received a new remote share\n\n📑 Comments: Another user mentioned you in a comment on a file\n\n🚢 Update notification: Available update for an app or nextcloud itself\n\n📣 Announcement center: An announcement was posted by an admin" : "Aquesta aplicació proporciona un rerefons i un frontal per a l'API de notificacions disponible en el Nextcloud.\n\t\tL'API l'utilitzen altres aplicacions per a notificar els usuaris de la interfície web i els clients de sincronització sobre diversos aspectes. Per exemple:\n\n Ús compartit de fitxers federats: rebeu un element compartit remot nou.\n\n Comentaris: un altre usuari us ha esmentat en un comentari en un fitxer.\n\n Notificació d'actualització: hi ha una actualització disponible per a una aplicació o per al Nextcloud.\n\n Centre d'anuncis: un administrador ha publicat un anunci.",
     "Dismiss all notifications" : "Descarta totes les notificacions",
     "Requesting browser permissions to show notifications" : "S'està demanant permís al navegador web per a mostrar notificacions",
     "No notifications" : "No hi ha cap notificació.",
@@ -13,6 +19,15 @@ OC.L10N.register(
     "Dismiss" : "Descarta",
     "seconds ago" : "fa uns segons",
     "Failed to dismiss notification" : "No s'ha pogut descartar la notificació",
-    "in {path}" : "a {path}"
+    "in {path}" : "a {path}",
+    "You need to set up your email address before you can receive notification emails." : "Heu de configurar la vostra adreça electrònica per a poder rebre notificacions per correu electrònic.",
+    "Send email reminders about unhandled notifications after:" : "Envia recordatoris per correu electrònic sobre notificacions sense resposta després de:",
+    "Never" : "Mai",
+    "1 hour" : "1 hora",
+    "3 hours" : "3 hores",
+    "1 day" : "1 dia",
+    "1 week" : "1 setmana",
+    "Your settings have been updated." : "S'han actualitzat els paràmetres.",
+    "An error occurred while updating your settings." : "S'ha produït un error en actualitzar els paràmetres."
 },
 "nplurals=2; plural=(n != 1);");
