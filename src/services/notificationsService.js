@@ -23,7 +23,7 @@ import axios from '@nextcloud/axios'
 import { generateOcsUrl } from '@nextcloud/router'
 import BrowserStorage from './BrowserStorage'
 
-const getNotificationsData = async (tabId, lastETag, forceRefresh) => {
+const getNotificationsData = async (tabId, lastETag, forceRefresh, hasNotifyPush) => {
 	const lastUpdated = parseInt(BrowserStorage.getItem('lastUpdated'), 10)
 	const lastTab = BrowserStorage.getItem('tabId')
 	const now = moment().format('X')
@@ -31,6 +31,8 @@ const getNotificationsData = async (tabId, lastETag, forceRefresh) => {
 	if (forceRefresh
 		// Allow the same tab to refresh with less than the timeout,
 		|| (lastTab === tabId && lastUpdated + 25 < now)
+		// Allow the same tab to refresh with notify push,
+		|| (lastTab === tabId && hasNotifyPush)
 		// and at the same time give it some more time against other tabs.
 		|| lastUpdated + 35 < now) {
 		BrowserStorage.setItem('tabId', tabId)
