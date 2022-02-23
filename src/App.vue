@@ -72,6 +72,7 @@ export default {
 			webNotificationsGranted: false,
 			hadNotifications: false,
 			backgroundFetching: false,
+			hasNotifyPush: false,
 			shutdown: false,
 			theming: {},
 			notifications: [],
@@ -159,6 +160,7 @@ export default {
 		if (hasPush) {
 			console.debug('Has notify_push enabled, slowing polling to 15 minutes')
 			this.pollIntervalBase = 15 * 60 * 1000
+			this.hasNotifyPush = true
 		}
 
 		// Setup the background checker
@@ -291,7 +293,7 @@ export default {
 		 * Performs the AJAX request to retrieve the notifications
 		 */
 		async _fetch() {
-			const response = await getNotificationsData(this.tabId, this.lastETag, !this.backgroundFetching)
+			const response = await getNotificationsData(this.tabId, this.lastETag, !this.backgroundFetching, this.hasNotifyPush)
 
 			if (response.status === 204) {
 				// 204 No Content - Intercept when no notifiers are there.
