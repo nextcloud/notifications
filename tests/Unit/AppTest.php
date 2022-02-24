@@ -53,8 +53,8 @@ class AppTest extends TestCase {
 
 	public function dataNotify() {
 		return [
-			[23, 'user1'],
-			[42, 'user2'],
+			[23],
+			[42],
 		];
 	}
 
@@ -62,21 +62,12 @@ class AppTest extends TestCase {
 	 * @dataProvider dataNotify
 	 *
 	 * @param int $id
-	 * @param string $user
 	 */
-	public function testNotify($id, $user) {
-		$this->notification->expects($this->once())
-			->method('getUser')
-			->willReturn($user);
-
+	public function testNotify($id) {
 		$this->handler->expects($this->once())
 			->method('add')
 			->with($this->notification)
 			->willReturn($id);
-		$this->handler->expects($this->once())
-			->method('getById')
-			->with($id, $user)
-			->willReturn($this->notification);
 		$this->push->expects($this->once())
 			->method('pushToDevice')
 			->with($id, $this->notification);

@@ -54,8 +54,7 @@ class App implements IDeferrableApp {
 		$notificationId = $this->handler->add($notification);
 
 		try {
-			$notificationToPush = $this->handler->getById($notificationId, $notification->getUser());
-			$this->push->pushToDevice($notificationId, $notificationToPush);
+			$this->push->pushToDevice($notificationId, $notification);
 		} catch (NotificationNotFoundException $e) {
 			throw new \InvalidArgumentException('Error while preparing push notification');
 		}
