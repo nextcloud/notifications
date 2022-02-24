@@ -28,6 +28,6 @@ OC.L10N.register(
     "1 day" : "1 Tag",
     "1 week" : "1 Woche",
     "Your settings have been updated." : "Ihre Einstellungen wurden aktualisiert.",
-    "An error occurred while updating your settings." : "Fehler beim Aktualisieren Ihrer Einstellungen."
+    "An error occurred while updating your settings." : "Es ist ein Fehler beim Aktualisieren Ihrer Einstellungen aufgetreten."
 },
 "nplurals=2; plural=(n != 1);");
