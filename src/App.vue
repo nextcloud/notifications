@@ -72,6 +72,7 @@ export default {
 			webNotificationsGranted: false,
 			hadNotifications: false,
 			backgroundFetching: false,
+			hasNotifyPush: false,
 			shutdown: false,
 			theming: {},
 			notifications: [],
@@ -154,11 +155,12 @@ export default {
 		this._fetch()
 
 		const hasPush = listen('notify_notification', () => {
-			this._fetch()
+			this._fetchAfterNotifyPush()
 		})
 		if (hasPush) {
 			console.debug('Has notify_push enabled, slowing polling to 15 minutes')
 			this.pollIntervalBase = 15 * 60 * 1000
+			this.hasNotifyPush = true
 		}
 
 		// Setup the background checker
@@ -274,8 +276,24 @@ export default {
 		/**
 		 * Performs the AJAX request to retrieve the notifications
 		 */
+		_fetchAfterNotifyPush() {
+			this.backgroundFetching = true
+			if (this.notifyPush && this.tabId !== this.lastTabId) {
+				console.debug('Deferring notification refresh from browser storage are notify_push event to give the last tab the chance to do it')
+				setTimeout(() => {
+					this._fetch()
+				}, 5000)
+			} else {
+				console.debug('Refreshing notifications are notify_push event')
+				this._fetch()
+			}
+		},
+
+		/**
+		 * Performs the AJAX request to retrieve the notifications
+		 */
 		async _fetch() {
-			const response = await getNotificationsData(this.tabId, this.lastETag, !this.backgroundFetching)
+			const response = await getNotificationsData(this.tabId, this.lastETag, !this.backgroundFetching, this.hasNotifyPush)
 
 			if (response.status === 204) {
 				// 204 No Content - Intercept when no notifiers are there.
