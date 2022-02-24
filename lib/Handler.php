@@ -108,11 +108,27 @@ class Handler {
 		}
 		$statement->closeCursor();
 
-		foreach ($deleted as $user => $entries) {
-			foreach ($entries as $entry) {
-				$this->deleteById($entry['id'], (string) $user, $notifications[$entry['id']]);
+		$this->connection->beginTransaction();
+		try {
+			$shouldFlush = $this->manager->defer();
+
+			foreach ($notifications as $n) {
+				$this->manager->dismissNotification($n);
 			}
+
+			$notificationIds = array_keys($notifications);
+			foreach (array_chunk($notificationIds, 1000) as $chunk) {
+				$this->deleteIds($chunk);
+			}
+
+			if ($shouldFlush) {
+				$this->manager->flush();
+			}
+		} catch (\Throwable $e) {
+			$this->connection->rollBack();
+			throw $e;
 		}
+		$this->connection->commit();
 
 		return $deleted;
 	}
@@ -154,6 +170,18 @@ class Handler {
 			->where($sql->expr()->eq('notification_id', $sql->createNamedParameter($id)))
 			->andWhere($sql->expr()->eq('user', $sql->createNamedParameter($user)));
 		return (bool) $sql->executeStatement();
+	}
+
+	/**
+	 * Delete the notification matching the given ids
+	 *
+	 * @param int[] $ids
+	 */
+	public function deleteIds(array $ids): void {
+		$sql = $this->connection->getQueryBuilder();
+		$sql->delete('notifications')
+			->where($sql->expr()->in('notification_id', $sql->createNamedParameter($ids, IQueryBuilder::PARAM_INT_ARRAY)));
+		$sql->executeStatement();
 	}
 
 	/**
