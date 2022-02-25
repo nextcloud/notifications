@@ -75,6 +75,13 @@ class Push {
 	/** @var bool */
 	protected $deferPayloads = false;
 
+	protected $notificationsToPush = [];
+	protected $deletesToPush = [];
+	protected $usersToPush = [];
+	/** @var IUserStatus[] */
+	protected $userStatuses = [];
+	protected $userDevices = [];
+
 	public function __construct(IDBConnection $connection,
 								INotificationManager $notificationManager,
 								IConfig $config,
@@ -117,6 +124,25 @@ class Push {
 
 	public function flushPayloads(): void {
 		$this->deferPayloads = false;
+
+		$this->userDevices = $this->getDevicesForUsers($this->usersToPush); // FIXME unique before load, filter cached once, merge results
+
+		if (!empty($this->notificationsToPush)) {
+			$this->userStatuses = $this->userStatusManager->getUserStatuses($this->usersToPush); // FIXME unique before load, filter cached once, merge results
+
+			foreach ($this->notificationsToPush as $id => $notification) {
+				$this->pushToDevice($id, $notification, null, true);
+			}
+			$this->notificationsToPush = [];
+		}
+
+		if (!empty($this->deletesToPush)) {
+			foreach ($this->deletesToPush as $id => $data) {
+				$this->pushDeleteToDevice($data['userId'], $id, $data['app'], true);
+			}
+			$this->deletesToPush = [];
+		}
+
 		$this->sendNotificationsToProxies();
 	}
 
@@ -149,18 +175,28 @@ class Push {
 		return $talkDevices;
 	}
 
-	public function pushToDevice(int $id, INotification $notification, ?OutputInterface $output = null): void {
+	public function pushToDevice(int $id, INotification $notification, ?OutputInterface $output = null, bool $isPreloaded = false): void {
 		if (!$this->config->getSystemValueBool('has_internet_connection', true)) {
+			return;
+		}
+
+		if ($this->deferPayloads) {
+			$this->notificationsToPush[$id] = clone $notification;
+			$this->usersToPush[] = $notification->getUser();
 			return;
 		}
 
 		$user = $this->createFakeUserObject($notification->getUser());
 
-		$userStatus = $this->userStatusManager->getUserStatuses([
+		$userStatus = $isPreloaded ? $this->userStatuses : $this->userStatusManager->getUserStatuses([
 			$notification->getUser(),
 		]);
 
 		if (isset($userStatus[$notification->getUser()])) {
+			if (!isset($this->userStatuses[$notification->getUser()])) {
+				$this->userStatuses[$notification->getUser()] = $userStatus[$notification->getUser()];
+			}
+
 			$userStatus = $userStatus[$notification->getUser()];
 			if ($userStatus->getStatus() === IUserStatus::DND) {
 				$this->printInfo('<error>User status is set to DND - no push notifications will be sent</error>');
@@ -168,7 +204,7 @@ class Push {
 			}
 		}
 
-		$devices = $this->getDevicesForUser($notification->getUser());
+		$devices = $isPreloaded ? ($this->userDevices[$notification->getUser()] ?? []) : $this->getDevicesForUser($notification->getUser());
 		if (empty($devices)) {
 			$this->printInfo('No devices found for user');
 			return;
@@ -232,14 +268,20 @@ class Push {
 		}
 	}
 
-	public function pushDeleteToDevice(string $userId, int $notificationId, string $app = ''): void {
+	public function pushDeleteToDevice(string $userId, int $notificationId, string $app = '', bool $isPreloaded = false): void {
 		if (!$this->config->getSystemValueBool('has_internet_connection', true)) {
 			return;
 		}
 
-		$user = $this->createFakeUserObject($userId);
+		if ($this->deferPayloads) {
+			$this->deletesToPush[$notificationId] = ['userId' => $userId, 'app' => $app];
+			$this->usersToPush[] = $userId;
+			return;
+		}
 
-		$devices = $this->getDevicesForUser($userId);
+		$user = $this->createFakeUserObject($notification->getUser());
+
+		$devices = $isPreloaded ? ($this->userDevices[$userId] ?? []) : $this->getDevicesForUser($userId);
 		if ($notificationId !== 0 && $app !== '') {
 			// Only filter when it's not a single delete
 			$devices = $this->filterDeviceList($devices, $app);
@@ -511,6 +553,28 @@ class Push {
 
 		$result = $query->executeQuery();
 		$devices = $result->fetchAll();
+		$result->closeCursor();
+
+		return $devices;
+	}
+
+	/**
+	 * @param string[] $userIds
+	 * @return array[]
+	 */
+	protected function getDevicesForUsers(array $userIds): array {
+		$query = $this->db->getQueryBuilder();
+		$query->select('*')
+			->from('notifications_pushhash')
+			->where($query->expr()->in('uid', $query->createNamedParameter($userIds, IQueryBuilder::PARAM_STR_ARRAY)));
+
+		$result = $query->executeQuery();
+		$devices = [];
+		while ($row = $result->fetch()) {
+			$devices[$row['uid']] = $devices[$row['uid']] ?? [];
+			$devices[$row['uid']][] = $row;
+		}
+
 		$result->closeCursor();
 
 		return $devices;
