@@ -86,6 +86,10 @@ class Push {
 	protected $userStatuses = [];
 	/** @var array[] */
 	protected $userDevices = [];
+	/** @var string[] */
+	protected $loadDevicesForUsers = [];
+	/** @var string[] */
+	protected $loadStatusForUsers = [];
 
 	public function __construct(IDBConnection $connection,
 								INotificationManager $notificationManager,
@@ -130,6 +134,26 @@ class Push {
 
 	public function flushPayloads(): void {
 		$this->deferPreparing = false;
+
+		if (!empty($this->loadDevicesForUsers)) {
+			$this->loadDevicesForUsers = array_unique($this->loadDevicesForUsers);
+			$missingDevicesFor = array_diff($this->loadDevicesForUsers, array_keys($this->userDevices));
+			$newUserDevices = $this->getDevicesForUsers($missingDevicesFor);
+			foreach ($missingDevicesFor as $userId) {
+				$this->userDevices[$userId] = $newUserDevices[$userId] ?? [];
+			}
+			$this->loadDevicesForUsers = [];
+		}
+
+		if (!empty($this->loadStatusForUsers)) {
+			$this->loadStatusForUsers = array_unique($this->loadStatusForUsers);
+			$missingStatusFor = array_diff($this->loadStatusForUsers, array_keys($this->userStatuses));
+			$newUserStatuses = $this->userStatusManager->getUserStatuses($missingStatusFor);
+			foreach ($missingStatusFor as $userId) {
+				$this->userStatuses[$userId] = $newUserStatuses[$userId] ?? null;
+			}
+			$this->loadStatusForUsers = [];
+		}
 
 		if (!empty($this->notificationsToPush)) {
 			foreach ($this->notificationsToPush as $id => $notification) {
@@ -185,6 +209,8 @@ class Push {
 
 		if ($this->deferPreparing) {
 			$this->notificationsToPush[$id] = clone $notification;
+			$this->loadDevicesForUsers[] = $notification->getUser();
+			$this->loadStatusForUsers[] = $notification->getUser();
 			return;
 		}
 
@@ -210,7 +236,7 @@ class Push {
 			$devices = $this->getDevicesForUser($notification->getUser());
 			$this->userDevices[$notification->getUser()] = $devices;
 		} else {
-			$devices = $this->userDevices[$notification->getUser()] ?? [];
+			$devices = $this->userDevices[$notification->getUser()];
 		}
 
 		if (empty($devices)) {
@@ -283,6 +309,7 @@ class Push {
 
 		if ($this->deferPreparing) {
 			$this->deletesToPush[$notificationId] = ['userId' => $userId, 'app' => $app];
+			$this->loadDevicesForUsers[] = $userId;
 			return;
 		}
 
@@ -292,7 +319,7 @@ class Push {
 			$devices = $this->getDevicesForUser($userId);
 			$this->userDevices[$userId] = $devices;
 		} else {
-			$devices = $this->userDevices[$userId] ?? [];
+			$devices = $this->userDevices[$userId];
 		}
 
 		if ($notificationId !== 0 && $app !== '') {
@@ -566,6 +593,30 @@ class Push {
 
 		$result = $query->executeQuery();
 		$devices = $result->fetchAll();
+		$result->closeCursor();
+
+		return $devices;
+	}
+
+	/**
+	 * @param string[] $userIds
+	 * @return array[]
+	 */
+	protected function getDevicesForUsers(array $userIds): array {
+		$query = $this->db->getQueryBuilder();
+		$query->select('*')
+			->from('notifications_pushhash')
+			->where($query->expr()->in('uid', $query->createNamedParameter($userIds, IQueryBuilder::PARAM_STR_ARRAY)));
+
+		$devices = [];
+		$result = $query->executeQuery();
+		while ($row = $result->fetch()) {
+			if (!isset($devices[$row['uid']])) {
+				$devices[$row['uid']] = [];
+			}
+			$devices[$row['uid']][] = $row;
+		}
+
 		$result->closeCursor();
 
 		return $devices;
