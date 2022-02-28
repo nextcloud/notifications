@@ -75,6 +75,9 @@ class Push {
 	/** @var bool */
 	protected $deferPayloads = false;
 
+	/** @var null[]|IUserStatus[] */
+	protected $userStatuses = [];
+
 	public function __construct(IDBConnection $connection,
 								INotificationManager $notificationManager,
 								IConfig $config,
@@ -156,12 +159,16 @@ class Push {
 
 		$user = $this->createFakeUserObject($notification->getUser());
 
-		$userStatus = $this->userStatusManager->getUserStatuses([
-			$notification->getUser(),
-		]);
+		if (!array_key_exists($notification->getUser(), $this->userStatuses)) {
+			$userStatus = $this->userStatusManager->getUserStatuses([
+				$notification->getUser(),
+			]);
 
-		if (isset($userStatus[$notification->getUser()])) {
-			$userStatus = $userStatus[$notification->getUser()];
+			$this->userStatuses[$notification->getUser()] = $userStatus[$notification->getUser()] ?? null;
+		}
+
+		if (isset($this->userStatuses[$notification->getUser()])) {
+			$userStatus = $this->userStatuses[$notification->getUser()];
 			if ($userStatus->getStatus() === IUserStatus::DND) {
 				$this->printInfo('<error>User status is set to DND - no push notifications will be sent</error>');
 				return;
