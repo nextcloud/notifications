@@ -77,6 +77,8 @@ class Push {
 
 	/** @var null[]|IUserStatus[] */
 	protected $userStatuses = [];
+	/** @var array[] */
+	protected $userDevices = [];
 
 	public function __construct(IDBConnection $connection,
 								INotificationManager $notificationManager,
@@ -175,7 +177,13 @@ class Push {
 			}
 		}
 
-		$devices = $this->getDevicesForUser($notification->getUser());
+		if (!array_key_exists($notification->getUser(), $this->userDevices)) {
+			$devices = $this->getDevicesForUser($notification->getUser());
+			$this->userDevices[$notification->getUser()] = $devices;
+		} else {
+			$devices = $this->userDevices[$notification->getUser()] ?? [];
+		}
+
 		if (empty($devices)) {
 			$this->printInfo('No devices found for user');
 			return;
@@ -246,7 +254,13 @@ class Push {
 
 		$user = $this->createFakeUserObject($userId);
 
-		$devices = $this->getDevicesForUser($userId);
+		if (!array_key_exists($userId, $this->userDevices)) {
+			$devices = $this->getDevicesForUser($userId);
+			$this->userDevices[$userId] = $devices;
+		} else {
+			$devices = $this->userDevices[$userId] ?? [];
+		}
+
 		if ($notificationId !== 0 && $app !== '') {
 			// Only filter when it's not a single delete
 			$devices = $this->filterDeviceList($devices, $app);
