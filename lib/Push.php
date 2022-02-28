@@ -72,8 +72,15 @@ class Push {
 	protected $output;
 	/** @var array */
 	protected $payloadsToSend = [];
+
+	/** @var bool */
+	protected $deferPreparing = false;
 	/** @var bool */
 	protected $deferPayloads = false;
+	/** @var array[] */
+	protected $deletesToPush = [];
+	/** @var INotification[] */
+	protected $notificationsToPush = [];
 
 	/** @var null[]|IUserStatus[] */
 	protected $userStatuses = [];
@@ -117,10 +124,27 @@ class Push {
 	}
 
 	public function deferPayloads(): void {
+		$this->deferPreparing = true;
 		$this->deferPayloads = true;
 	}
 
 	public function flushPayloads(): void {
+		$this->deferPreparing = false;
+
+		if (!empty($this->notificationsToPush)) {
+			foreach ($this->notificationsToPush as $id => $notification) {
+				$this->pushToDevice($id, $notification);
+			}
+			$this->notificationsToPush = [];
+		}
+
+		if (!empty($this->deletesToPush)) {
+			foreach ($this->deletesToPush as $id => $data) {
+				$this->pushDeleteToDevice($data['userId'], $id, $data['app']);
+			}
+			$this->deletesToPush = [];
+		}
+
 		$this->deferPayloads = false;
 		$this->sendNotificationsToProxies();
 	}
@@ -156,6 +180,11 @@ class Push {
 
 	public function pushToDevice(int $id, INotification $notification, ?OutputInterface $output = null): void {
 		if (!$this->config->getSystemValueBool('has_internet_connection', true)) {
+			return;
+		}
+
+		if ($this->deferPreparing) {
+			$this->notificationsToPush[$id] = clone $notification;
 			return;
 		}
 
@@ -249,6 +278,11 @@ class Push {
 
 	public function pushDeleteToDevice(string $userId, int $notificationId, string $app = ''): void {
 		if (!$this->config->getSystemValueBool('has_internet_connection', true)) {
+			return;
+		}
+
+		if ($this->deferPreparing) {
+			$this->deletesToPush[$notificationId] = ['userId' => $userId, 'app' => $app];
 			return;
 		}
 
