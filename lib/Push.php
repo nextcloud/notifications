@@ -38,7 +38,6 @@ use OCP\ICacheFactory;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IUser;
-use OCP\IUserManager;
 use OCP\L10N\IFactory;
 use OCP\Notification\IManager as INotificationManager;
 use OCP\Notification\INotification;
@@ -59,8 +58,6 @@ class Push {
 	protected $tokenProvider;
 	/** @var Manager */
 	private $keyManager;
-	/** @var IUserManager */
-	private $userManager;
 	/** @var IClientService */
 	protected $clientService;
 	/** @var ICache */
@@ -83,7 +80,6 @@ class Push {
 								IConfig $config,
 								IProvider $tokenProvider,
 								Manager $keyManager,
-								IUserManager $userManager,
 								IClientService $clientService,
 								ICacheFactory $cacheFactory,
 								IUserStatusManager $userStatusManager,
@@ -94,7 +90,6 @@ class Push {
 		$this->config = $config;
 		$this->tokenProvider = $tokenProvider;
 		$this->keyManager = $keyManager;
-		$this->userManager = $userManager;
 		$this->clientService = $clientService;
 		$this->cache = $cacheFactory->createDistributed('pushtokens');
 		$this->userStatusManager = $userStatusManager;
@@ -159,10 +154,7 @@ class Push {
 			return;
 		}
 
-		$user = $this->userManager->get($notification->getUser());
-		if (!($user instanceof IUser)) {
-			return;
-		}
+		$user = $this->createFakeUserObject($notification->getUser());
 
 		$userStatus = $this->userStatusManager->getUserStatuses([
 			$notification->getUser(),
@@ -245,10 +237,7 @@ class Push {
 			return;
 		}
 
-		$user = $this->userManager->get($userId);
-		if (!($user instanceof IUser)) {
-			return;
-		}
+		$user = $this->createFakeUserObject($userId);
 
 		$devices = $this->getDevicesForUser($userId);
 		if ($notificationId !== 0 && $app !== '') {
@@ -549,5 +538,9 @@ class Push {
 			->where($query->expr()->eq('deviceidentifier', $query->createNamedParameter($deviceIdentifier)));
 
 		return $query->executeStatement() !== 0;
+	}
+
+	protected function createFakeUserObject(string $userId): IUser {
+		return new FakeUser($userId);
 	}
 }
