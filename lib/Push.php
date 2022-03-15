@@ -72,8 +72,24 @@ class Push {
 	protected $output;
 	/** @var array */
 	protected $payloadsToSend = [];
+
+	/** @var bool */
+	protected $deferPreparing = false;
 	/** @var bool */
 	protected $deferPayloads = false;
+	/** @var array[] */
+	protected $deletesToPush = [];
+	/** @var INotification[] */
+	protected $notificationsToPush = [];
+
+	/** @var null[]|IUserStatus[] */
+	protected $userStatuses = [];
+	/** @var array[] */
+	protected $userDevices = [];
+	/** @var string[] */
+	protected $loadDevicesForUsers = [];
+	/** @var string[] */
+	protected $loadStatusForUsers = [];
 
 	public function __construct(IDBConnection $connection,
 								INotificationManager $notificationManager,
@@ -112,10 +128,47 @@ class Push {
 	}
 
 	public function deferPayloads(): void {
+		$this->deferPreparing = true;
 		$this->deferPayloads = true;
 	}
 
 	public function flushPayloads(): void {
+		$this->deferPreparing = false;
+
+		if (!empty($this->loadDevicesForUsers)) {
+			$this->loadDevicesForUsers = array_unique($this->loadDevicesForUsers);
+			$missingDevicesFor = array_diff($this->loadDevicesForUsers, array_keys($this->userDevices));
+			$newUserDevices = $this->getDevicesForUsers($missingDevicesFor);
+			foreach ($missingDevicesFor as $userId) {
+				$this->userDevices[$userId] = $newUserDevices[$userId] ?? [];
+			}
+			$this->loadDevicesForUsers = [];
+		}
+
+		if (!empty($this->loadStatusForUsers)) {
+			$this->loadStatusForUsers = array_unique($this->loadStatusForUsers);
+			$missingStatusFor = array_diff($this->loadStatusForUsers, array_keys($this->userStatuses));
+			$newUserStatuses = $this->userStatusManager->getUserStatuses($missingStatusFor);
+			foreach ($missingStatusFor as $userId) {
+				$this->userStatuses[$userId] = $newUserStatuses[$userId] ?? null;
+			}
+			$this->loadStatusForUsers = [];
+		}
+
+		if (!empty($this->notificationsToPush)) {
+			foreach ($this->notificationsToPush as $id => $notification) {
+				$this->pushToDevice($id, $notification);
+			}
+			$this->notificationsToPush = [];
+		}
+
+		if (!empty($this->deletesToPush)) {
+			foreach ($this->deletesToPush as $id => $data) {
+				$this->pushDeleteToDevice($data['userId'], $id, $data['app']);
+			}
+			$this->deletesToPush = [];
+		}
+
 		$this->deferPayloads = false;
 		$this->sendNotificationsToProxies();
 	}
@@ -154,21 +207,38 @@ class Push {
 			return;
 		}
 
+		if ($this->deferPreparing) {
+			$this->notificationsToPush[$id] = clone $notification;
+			$this->loadDevicesForUsers[] = $notification->getUser();
+			$this->loadStatusForUsers[] = $notification->getUser();
+			return;
+		}
+
 		$user = $this->createFakeUserObject($notification->getUser());
 
-		$userStatus = $this->userStatusManager->getUserStatuses([
-			$notification->getUser(),
-		]);
+		if (!array_key_exists($notification->getUser(), $this->userStatuses)) {
+			$userStatus = $this->userStatusManager->getUserStatuses([
+				$notification->getUser(),
+			]);
 
-		if (isset($userStatus[$notification->getUser()])) {
-			$userStatus = $userStatus[$notification->getUser()];
+			$this->userStatuses[$notification->getUser()] = $userStatus[$notification->getUser()] ?? null;
+		}
+
+		if (isset($this->userStatuses[$notification->getUser()])) {
+			$userStatus = $this->userStatuses[$notification->getUser()];
 			if ($userStatus->getStatus() === IUserStatus::DND) {
 				$this->printInfo('<error>User status is set to DND - no push notifications will be sent</error>');
 				return;
 			}
 		}
 
-		$devices = $this->getDevicesForUser($notification->getUser());
+		if (!array_key_exists($notification->getUser(), $this->userDevices)) {
+			$devices = $this->getDevicesForUser($notification->getUser());
+			$this->userDevices[$notification->getUser()] = $devices;
+		} else {
+			$devices = $this->userDevices[$notification->getUser()];
+		}
+
 		if (empty($devices)) {
 			$this->printInfo('No devices found for user');
 			return;
@@ -237,9 +307,21 @@ class Push {
 			return;
 		}
 
+		if ($this->deferPreparing) {
+			$this->deletesToPush[$notificationId] = ['userId' => $userId, 'app' => $app];
+			$this->loadDevicesForUsers[] = $userId;
+			return;
+		}
+
 		$user = $this->createFakeUserObject($userId);
 
-		$devices = $this->getDevicesForUser($userId);
+		if (!array_key_exists($userId, $this->userDevices)) {
+			$devices = $this->getDevicesForUser($userId);
+			$this->userDevices[$userId] = $devices;
+		} else {
+			$devices = $this->userDevices[$userId];
+		}
+
 		if ($notificationId !== 0 && $app !== '') {
 			// Only filter when it's not a single delete
 			$devices = $this->filterDeviceList($devices, $app);
@@ -511,6 +593,30 @@ class Push {
 
 		$result = $query->executeQuery();
 		$devices = $result->fetchAll();
+		$result->closeCursor();
+
+		return $devices;
+	}
+
+	/**
+	 * @param string[] $userIds
+	 * @return array[]
+	 */
+	protected function getDevicesForUsers(array $userIds): array {
+		$query = $this->db->getQueryBuilder();
+		$query->select('*')
+			->from('notifications_pushhash')
+			->where($query->expr()->in('uid', $query->createNamedParameter($userIds, IQueryBuilder::PARAM_STR_ARRAY)));
+
+		$devices = [];
+		$result = $query->executeQuery();
+		while ($row = $result->fetch()) {
+			if (!isset($devices[$row['uid']])) {
+				$devices[$row['uid']] = [];
+			}
+			$devices[$row['uid']][] = $row;
+		}
+
 		$result->closeCursor();
 
 		return $devices;
