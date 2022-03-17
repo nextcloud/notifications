@@ -42,8 +42,9 @@
 import axios from '@nextcloud/axios'
 import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip'
 import { showError } from '@nextcloud/dialogs'
+import { Howl } from 'howler'
 import Action from './Action'
-import { generateOcsUrl } from '@nextcloud/router'
+import { generateOcsUrl, generateFilePath } from '@nextcloud/router'
 import moment from '@nextcloud/moment'
 import RichText from '@juliushaertl/vue-richtext'
 import DefaultParameter from './Parameters/DefaultParameter'
@@ -211,6 +212,16 @@ export default {
 
 		if (this.$parent.$parent.showBrowserNotifications) {
 			this._createWebNotification()
+
+			if (this.app === 'spreed' && this.objectType === 'call') {
+				const sound = new Howl({
+					src: [
+						generateFilePath('notifications', 'img', 'LibremPhoneCall.ogg'),
+					],
+				})
+
+				sound.play()
+			}
 		}
 	},
 
