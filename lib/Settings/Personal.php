@@ -24,6 +24,7 @@ declare(strict_types=1);
 
 namespace OCA\Notifications\Settings;
 
+use OCA\Notifications\AppInfo\Application;
 use OCA\Notifications\Model\Settings;
 use OCA\Notifications\Model\SettingsMapper;
 use OCP\AppFramework\Db\DoesNotExistException;
@@ -100,6 +101,8 @@ class Personal implements ISettings {
 			'setting' => 'personal',
 			'is_email_set' => (bool)$user->getEMailAddress(),
 			'setting_batchtime' => $settingBatchTime,
+			'sound_notification' => $this->config->getUserValue($user->getUID(), Application::APP_ID, 'sound_notification', 'yes') === 'yes',
+			'sound_talk' => $this->config->getUserValue($user->getUID(), Application::APP_ID, 'sound_talk', 'yes') === 'yes',
 		]);
 
 		return new TemplateResponse('notifications', 'settings/personal');
