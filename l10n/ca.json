@@ -1,8 +1,8 @@
 { "translations": {
     "Hello %s" : "Hola, %s",
     "Hello %s," : "Hola, %s,",
-    "_New notification for %s_::_%n new notifications for %s_" : ["Notificació nova per a %s","%n notificacions noves per a %s"],
-    "_You have a new notification for %s_::_You have %n new notifications for %s_" : ["Teniu una notificació nova per a %s","Teniu %n notificacions noves per a %s"],
+    "_New notification for %s_::_%n new notifications for %s_" : ["Notificació nova del %s","%n notificacions noves del %s"],
+    "_You have a new notification for %s_::_You have %n new notifications for %s_" : ["Teniu una notificació nova del %s","Teniu %n notificacions noves del %s"],
     "You can change the frequency of these emails or disable them in the <a href=\"%s\">settings</a>." : "Podeu canviar la freqüència d'aquests correus electrònics o inhabilitar-los als <a href=\"%s\">paràmetres</a>.",
     "You can change the frequency of these emails or disable them in the settings: %s" : "Podeu canviar la freqüència d'aquests correus electrònics o inhabilitar-los als paràmetres: %s",
     "Admin notifications" : "Notificacions de l'administrador",
