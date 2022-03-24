@@ -37,6 +37,15 @@
 					</option>
 				</select>
 			</p>
+
+			<CheckboxRadioSwitch :checked.sync="config.sound_notification"
+				@update:checked="updateSettings">
+				{{ t('notifications', 'Play sound when a new notification arrives') }}
+			</CheckboxRadioSwitch>
+			<CheckboxRadioSwitch :checked.sync="config.sound_talk"
+				@update:checked="updateSettings">
+				{{ t('notifications', 'Play sound when a call started (requires Nextcloud Talk)') }}
+			</CheckboxRadioSwitch>
 		</SettingsSection>
 	</div>
 </template>
@@ -46,6 +55,7 @@ import axios from '@nextcloud/axios'
 import { generateOcsUrl } from '@nextcloud/router'
 import { loadState } from '@nextcloud/initial-state'
 import { showSuccess, showError } from '@nextcloud/dialogs'
+import CheckboxRadioSwitch from '@nextcloud/vue/dist/Components/CheckboxRadioSwitch'
 import SettingsSection from '@nextcloud/vue/dist/Components/SettingsSection'
 
 const EmailFrequency = {
@@ -59,6 +69,7 @@ const EmailFrequency = {
 export default {
 	name: 'UserSettings',
 	components: {
+		CheckboxRadioSwitch,
 		SettingsSection,
 	},
 
@@ -80,6 +91,8 @@ export default {
 			try {
 				const form = new FormData()
 				form.append('batchSetting', this.config.setting_batchtime)
+				form.append('soundNotification', this.config.sound_notification ? 'yes' : 'no')
+				form.append('soundTalk', this.config.sound_talk ? 'yes' : 'no')
 				await axios.post(generateOcsUrl('apps/notifications/api/v2/settings'), form)
 				showSuccess(t('notifications', 'Your settings have been updated.'))
 			} catch (error) {
