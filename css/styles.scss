@@ -172,6 +172,7 @@
 			justify-content: center;
 
 			cursor: pointer;
+
 			& * {
 				cursor: pointer;
 			}
@@ -180,12 +181,13 @@
 			transition: background-color 0.1s linear !important;
 			transition: border 0.1s linear;
 
-
 			color: var(--color-main-text);
 			background-color: var(--color-background-dark);
+
 			&:hover {
 				background-color: var(--color-primary-light-hover);
 			}
+
 			// Back to the default color for this button when active
 			// TODO: add ripple effect
 			&:active {
@@ -198,11 +200,13 @@
 
 			&:not(.primary) {
 				box-shadow: 0 0 0 2px var(--color-border-dark);
+
 				&:hover {
 					color: var(--color-main-text);
 					background-color: var(--color-background-dark);
 					box-shadow: 0 0 0 2px var(--color-primary-element);
 				}
+
 				&:active {
 					box-shadow: 0 0 0 2px var(--color-main-text);
 				}
@@ -223,9 +227,11 @@
 				box-shadow: none;
 				background-color: var(--color-primary-element);
 				color: var(--color-primary-text);
+
 				&:hover {
 					background-color: var(--color-primary-element-hover);
 				}
+
 				&:active {
 					background-color: var(--color-primary-element);
 				}
