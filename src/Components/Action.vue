@@ -1,7 +1,7 @@
 <template>
 	<a v-if="isWebLink"
 		class="button action-button pull-right"
-		:class="{ primary: primary, 'button--tabbed': this.tabbed }"
+		:class="{ primary: primary, 'button--tabbed': tabbed }"
 		:href="link"
 		@keydown.enter="makeActive"
 		@keyup.enter="makeInactive"
