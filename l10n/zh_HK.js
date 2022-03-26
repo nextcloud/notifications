@@ -22,6 +22,8 @@ OC.L10N.register(
     "in {path}" : "在 {path}",
     "You need to set up your email address before you can receive notification emails." : "您必須先設定電郵地址，才能接收通知。",
     "Send email reminders about unhandled notifications after:" : "發送有關未處理通知的電郵提醒：",
+    "Play sound when a new notification arrives" : "收到新通知時播放聲音",
+    "Play sound when a call started (requires Nextcloud Talk)" : "通話開始時播放聲音（需要 Nextcloud Talk）",
     "Never" : "從不",
     "1 hour" : "1 小時",
     "3 hours" : "3 小時",
