@@ -20,6 +20,8 @@
     "in {path}" : "a {path}",
     "You need to set up your email address before you can receive notification emails." : "Heu de configurar la vostra adreça electrònica per a poder rebre notificacions per correu electrònic.",
     "Send email reminders about unhandled notifications after:" : "Envia recordatoris per correu electrònic sobre notificacions sense resposta després de:",
+    "Play sound when a new notification arrives" : "Reprodueix un so quan arribi una notificació nova",
+    "Play sound when a call started (requires Nextcloud Talk)" : "Reprodueix un so quan s'iniciï una trucada (requereix Converses del Nextcloud)",
     "Never" : "Mai",
     "1 hour" : "1 hora",
     "3 hours" : "3 hores",

@@ -22,6 +22,8 @@ OC.L10N.register(
     "in {path}" : "в {path}",
     "You need to set up your email address before you can receive notification emails." : "Для получения уведомлений укажите свой адрес электронной почты в настройках профиля.",
     "Send email reminders about unhandled notifications after:" : "Интервал времени до отправки эл. письма с напоминанием о непрочитанных уведомлениях:",
+    "Play sound when a new notification arrives" : "Воспроизведение звука при новом уведомлении",
+    "Play sound when a call started (requires Nextcloud Talk)" : "Воспроизведение звука при начале вызова (требуется Nextcloud Talk)",
     "Never" : "Никогда",
     "1 hour" : "1 час",
     "3 hours" : "3 часа",
