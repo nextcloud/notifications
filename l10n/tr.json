@@ -20,6 +20,8 @@
     "in {path}" : "{path} içinde",
     "You need to set up your email address before you can receive notification emails." : "Bildirim e-postalarını alabilmek için e-posta adresinizi belirtmelisiniz.",
     "Send email reminders about unhandled notifications after:" : "Şu kadar zaman sonra işlenmeyen bildirimler için e-posta anımsatıcıları gönderilsin:",
+    "Play sound when a new notification arrives" : "Bildirimlerde ses çalınsın",
+    "Play sound when a call started (requires Nextcloud Talk)" : "Bir çağrı başlatıldığında ses çalınsın (Nextcloud Talk gereklidir)",
     "Never" : "Asla",
     "1 hour" : "1 saat",
     "3 hours" : "3 saat",

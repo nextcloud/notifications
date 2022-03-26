@@ -20,6 +20,8 @@
     "in {path}" : "v {path}",
     "You need to set up your email address before you can receive notification emails." : "Pokud chcete dostávat upozornění e-mailem, je třeba nejprve nastavit svou e-mailovou adresu.",
     "Send email reminders about unhandled notifications after:" : "Posílat upozornění e-mailem ohledně nezpracovaných upozornění po uplynutí:",
+    "Play sound when a new notification arrives" : "Při příchodu nového upozornění přehrát zvuk",
+    "Play sound when a call started (requires Nextcloud Talk)" : "Při zahájení hovoru přehrát zvuk (vyžaduje Nextcloud Talk)",
     "Never" : "Nikdy",
     "1 hour" : "1 hodiny",
     "3 hours" : "3 hodin",
