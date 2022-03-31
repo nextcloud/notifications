@@ -22,6 +22,8 @@ OC.L10N.register(
     "in {path}" : "itt: {path}",
     "You need to set up your email address before you can receive notification emails." : "Be kell állítania az e-mail-címét, mielőtt értesítési leveleket kaphatna.",
     "Send email reminders about unhandled notifications after:" : "Értesítések küldése levélben a nem kezelt értesítésekről ennyi idő után:",
+    "Play sound when a new notification arrives" : "Hang lejátszása, ha új értesítés érkezik",
+    "Play sound when a call started (requires Nextcloud Talk)" : "Hang lejátszása, ha hívás indul (Nextcloud Beszélgetés szükséges)",
     "Never" : "Soha",
     "1 hour" : "1 óra múlva",
     "3 hours" : "3 óra múlva",
