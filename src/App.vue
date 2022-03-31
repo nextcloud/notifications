@@ -10,12 +10,25 @@
 			aria-controls="notification-container"
 			aria-expanded="false"
 			@click="requestWebNotificationPermissions">
-			<img ref="icon"
-				class="svg"
-				alt=""
+			<Bell v-if="notifications.length === 0"
+				:size="20"
 				:title="t('notifications', 'Notifications')"
-				:src="iconPath">
+				fill-color="var(--color-primary-text)" />
+			<!-- From material design icons -->
+			<svg v-else
+				xmlns="http://www.w3.org/2000/svg"
+				xmlns:xlink="http://www.w3.org/1999/xlink"
+				version="1.1"
+				width="20"
+				height="20"
+				viewBox="0 0 24 24"
+				fill="var(--color-primary-text)">
+				<path d="M 19,11.79 C 18.5,11.92 18,12 17.5,12 14.47,12 12,9.53 12,6.5 12,5.03 12.58,3.7 13.5,2.71 13.15,2.28 12.61,2 12,2 10.9,2 10,2.9 10,4 V 4.29 C 7.03,5.17 5,7.9 5,11 v 6 l -2,2 v 1 H 21 V 19 L 19,17 V 11.79 M 12,23 c 1.11,0 2,-0.89 2,-2 h -4 c 0,1.11 0.9,2 2,2 z" />
+				<path :class="isRedThemed ? 'notification__dot--white' : ''" class="notification__dot" d="M 21,6.5 C 21,8.43 19.43,10 17.5,10 15.57,10 14,8.43 14,6.5 14,4.57 15.57,3 17.5,3 19.43,3 21,4.57 21,6.5" />
+			</svg>
 		</div>
+
+		<!-- Notifications list content -->
 		<div ref="container" class="notification-container">
 			<transition name="fade">
 				<ul v-if="notifications.length > 0" class="notification-wrapper">
@@ -29,6 +42,8 @@
 							:object-type="n.object_type"
 							@remove="onRemove" />
 					</transition-group>
+
+					<!-- Dismiss all -->
 					<li v-if="notifications.length > 0">
 						<div class="dismiss-all" @click="onDismissAll">
 							<Button type="tertiary"
@@ -36,22 +51,23 @@
 								<template #icon>
 									<Close decorative
 										title=""
-										size="20" />
+										:size="20" />
 								</template>
 								{{ t('notifications', 'Dismiss all notifications') }}
 							</Button>
 						</div>
 					</li>
 				</ul>
-				<div v-else class="emptycontent">
-					<div class="icon icon-notifications-dark" />
-					<h2 v-if="webNotificationsGranted === null">
-						{{ t('notifications', 'Requesting browser permissions to show notifications') }}
-					</h2>
-					<h2 v-else>
-						{{ t('notifications', 'No notifications') }}
-					</h2>
-				</div>
+
+				<!-- No notifications -->
+				<EmptyContent v-else>
+					{{ webNotificationsGranted === null
+						? t('notifications', 'Requesting browser permissions to show notifications')
+						: t('notifications', 'No notifications') }}
+					<template #icon>
+						<Bell title="" decorative />
+					</template>
+				</EmptyContent>
 			</transition>
 		</div>
 	</div>
@@ -63,11 +79,13 @@ import Button from '@nextcloud/vue/dist/Components/Button'
 import Close from 'vue-material-design-icons/Close'
 import axios from '@nextcloud/axios'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-import { loadState } from '@nextcloud/initial-state'
 import { showError } from '@nextcloud/dialogs'
-import { imagePath, generateOcsUrl } from '@nextcloud/router'
+import { generateOcsUrl } from '@nextcloud/router'
 import { getNotificationsData } from './services/notificationsService'
 import { listen } from '@nextcloud/notify_push'
+import Bell from 'vue-material-design-icons/Bell'
+import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
+import { getCapabilities } from '@nextcloud/capabilities'
 
 export default {
 	name: 'App',
@@ -75,17 +93,18 @@ export default {
 	components: {
 		Button,
 		Close,
+		Bell,
+		EmptyContent,
 		Notification,
 	},
 
 	data() {
 		return {
 			webNotificationsGranted: false,
-			hadNotifications: false,
 			backgroundFetching: false,
 			hasNotifyPush: false,
 			shutdown: false,
-			theming: {},
+			theming: getCapabilities()?.theming || {},
 			notifications: [],
 			lastETag: null,
 			lastTabId: null,
@@ -106,27 +125,6 @@ export default {
 	_$icon: null,
 
 	computed: {
-		iconPath() {
-			let iconPath = 'notifications'
-
-			if (this.webNotificationsGranted === null || this.notifications.length) {
-				if (this.isRedThemed) {
-					iconPath += '-red'
-				}
-				iconPath += '-new'
-			}
-
-			if (this.invertedTheme) {
-				iconPath += '-dark'
-			}
-
-			return imagePath('notifications', iconPath)
-		},
-
-		invertedTheme() {
-			return !!this.theming?.inverted
-		},
-
 		isRedThemed() {
 			if (this.theming?.color) {
 				const hsl = this.rgbToHsl(this.theming.color.substring(1, 3),
@@ -144,11 +142,6 @@ export default {
 				&& this.userStatus !== 'dnd'
 				&& this.tabId === this.lastTabId
 		},
-	},
-
-	beforeMount() {
-		console.debug('Loading theming data for notification bell styling')
-		this.theming = loadState('theming', 'data', {})
 	},
 
 	mounted() {
@@ -185,19 +178,6 @@ export default {
 	beforeDestroy() {
 		unsubscribe('networkOffline', this.handleNetworkOffline)
 		unsubscribe('networkOnline', this.handleNetworkOnline)
-	},
-
-	updated() {
-		if (!this.hadNotifications && this.notifications.length) {
-			console.debug('New notification, animating the bell icon')
-			this._$icon
-				.animate({ opacity: 0.6 }, 600)
-				.animate({ opacity: 1 }, 600)
-				.animate({ opacity: 0.6 }, 600)
-				.animate({ opacity: 1 }, 600)
-		}
-
-		this.hadNotifications = this.notifications.length > 0
 	},
 
 	methods: {
@@ -432,21 +412,25 @@ export default {
 </script>
 
 <style scoped>
-	.fade-enter-active,
-	.fade-leave-active,
-	.fade-collapse-enter-active,
-	.fade-collapse-leave-active {
-		transition: opacity var(--animation-quick), max-height var(--animation-quick);
-	}
+.empty-content {
+	margin: 12vh 0;
+}
 
-	.fade-collapse-enter,
-	.fade-collapse-leave-to {
-		opacity: 0;
-		max-height: 0;
-	}
+.fade-enter-active,
+.fade-leave-active,
+.fade-collapse-enter-active,
+.fade-collapse-leave-active {
+	transition: opacity var(--animation-quick), max-height var(--animation-quick);
+}
 
-	.fade-enter,
-	.fade-leave-to {
-		opacity: 0;
-	}
+.fade-collapse-enter,
+.fade-collapse-leave-to {
+	opacity: 0;
+	max-height: 0;
+}
+
+.fade-enter,
+.fade-leave-to {
+	opacity: 0;
+}
 </style>
