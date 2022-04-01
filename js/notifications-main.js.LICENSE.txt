@@ -62,6 +62,8 @@
  * Licensed under the MIT License.
  */
 
+/*! For license information please see EmptyContent.js.LICENSE.txt */
+
 /*! For license information please see Tooltip.js.LICENSE.txt */
 
 /*! For license information please see UserBubble.js.LICENSE.txt */
