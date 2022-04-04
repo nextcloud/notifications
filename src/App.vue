@@ -31,7 +31,15 @@
 					</transition-group>
 					<li v-if="notifications.length > 0">
 						<div class="dismiss-all" @click="onDismissAll">
-							<span class="icon icon-close svg" :title="t('notifications', 'Dismiss all notifications')" /> {{ t('notifications', 'Dismiss all notifications') }}
+							<Button type="tertiary"
+								@click="onDismissAll">
+								<template #icon>
+									<Close decorative
+										title=""
+										size="20" />
+								</template>
+								{{ t('notifications', 'Dismiss all notifications') }}
+							</Button>
 						</div>
 					</li>
 				</ul>
@@ -51,6 +59,8 @@
 
 <script>
 import Notification from './Components/Notification'
+import Button from '@nextcloud/vue/dist/Components/Button'
+import Close from 'vue-material-design-icons/Close'
 import axios from '@nextcloud/axios'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { loadState } from '@nextcloud/initial-state'
@@ -63,6 +73,8 @@ export default {
 	name: 'App',
 
 	components: {
+		Button,
+		Close,
 		Notification,
 	},
 

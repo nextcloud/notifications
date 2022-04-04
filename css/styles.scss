@@ -43,7 +43,7 @@
 	.notification-wrapper {
 		display: flex;
 		flex-direction: column;
-		margin-bottom: 44px;
+		margin-bottom: 66px;
 		max-height: calc(100vh - 50px * 4 - 44px) !important;
 	}
 
@@ -62,7 +62,7 @@
 		padding: 10px;
 		width: calc(100% - 10px * 2);
 		position: absolute;
-		bottom: 0px;
+		bottom: 0;
 		background-color: var(--color-main-background);
 
 		&:hover,
@@ -98,24 +98,7 @@
 			color: var(--color-text-maxcontrast);
 			margin: 13px 0 13px auto;
 		}
-
-		.notification-delete {
-			display: flex;
-			color: var(--color-text-maxcontrast);
-			padding: 14px;
-
-			&:hover,
-			.icon-close {
-				opacity: 1;
-				cursor: pointer;
-			}
-
-			.icon-close {
-				opacity: .5;
-			}
-		}
 	}
-
 
 	.notification-subject,
 	.notification-message,
@@ -176,13 +159,90 @@
 		overflow: hidden;
 
 		.button {
+			position: relative;
+			width: fit-content;
+			overflow: hidden;
+			border: none;
+			font-size: var(--default-font-size);
+			font-weight: bold;
+			min-height: 44px;
+			min-width: 44px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			cursor: pointer;
+			border-radius: 44px / 2;
+			transition: background-color 0.1s linear !important;
+			transition: border 0.1s linear;
+			color: var(--color-main-text);
+			background-color: var(--color-background-dark);
 			line-height: normal;
 			vertical-align: baseline;
 			padding: 8px 16px;
+
+			& * {
+				cursor: pointer;
+			}
+
+			&:hover {
+				background-color: var(--color-primary-light-hover);
+			}
+
+			// Back to the default color for this button when active
+			// TODO: add ripple effect
+			&:active {
+				background-color: var(--color-primary-element-lighter);
+			}
+
+			&:not(.primary) {
+				box-shadow: 0 0 0 2px var(--color-border-dark);
+
+				&:hover {
+					color: var(--color-main-text);
+					background-color: var(--color-background-dark);
+					box-shadow: 0 0 0 2px var(--color-primary-element);
+				}
+
+				&:active {
+					box-shadow: 0 0 0 2px var(--color-main-text);
+				}
+
+				&--tabbed {
+					box-shadow: 0 0 0 2px var(--color-main-text);
+					background-color: var(--color-primary-light-hover);
+
+					&.button-vue--vue-primary {
+						background-color: var(--color-primary-hover);
+					}
+
+					&.button-vue--vue-secondary {
+						box-shadow: 0 0 0 2px var(--color-main-text);
+					}
+				}
+			}
+
+			&.primary {
+				box-shadow: none;
+				background-color: var(--color-primary-element);
+				color: var(--color-primary-text);
+
+				&:hover {
+					background-color: var(--color-primary-element-hover);
+				}
+
+				&:active {
+					background-color: var(--color-primary-element);
+				}
+
+				&.button--tabbed {
+					background-color: var(--color-primary-hover);
+				}
+			}
 		}
 
-		.action-button.primary {
-			color: var(--color-primary-text);
+		.button-vue {
+			line-height: normal;
+			margin: 2px 8px;
 		}
 
 		&:first-child {

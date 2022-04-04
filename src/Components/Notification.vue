@@ -4,9 +4,15 @@
 			<span v-tooltip.bottom="absoluteDate"
 				class="notification-time live-relative-timestamp"
 				:data-timestamp="timestamp">{{ relativeDate }}</span>
-			<div class="notification-delete" @click="onDismissNotification">
-				<span class="icon icon-close svg" :title="t('notifications', 'Dismiss')" />
-			</div>
+			<Button type="tertiary"
+				:aria-label="t('notifications', 'Dismiss')"
+				@click="onDismissNotification">
+				<template #icon>
+					<Close decorative
+						title=""
+						size="20" />
+				</template>
+			</Button>
 		</div>
 		<a v-if="useLink" :href="link" class="notification-subject full-subject-link">
 			<span v-if="icon" class="image"><img :src="icon" class="notification-icon"></span>
@@ -40,7 +46,9 @@
 
 <script>
 import axios from '@nextcloud/axios'
+import Button from '@nextcloud/vue/dist/Components/Button'
 import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip'
+import Close from 'vue-material-design-icons/Close'
 import { showError } from '@nextcloud/dialogs'
 import { loadState } from '@nextcloud/initial-state'
 import { Howl } from 'howler'
@@ -57,6 +65,8 @@ export default {
 
 	components: {
 		Action,
+		Button,
+		Close,
 		RichText,
 	},
 

@@ -1,26 +1,35 @@
 <template>
 	<a v-if="isWebLink"
 		class="button action-button pull-right"
-		:class="{ primary: primary }"
-		:href="link">
+		:class="{ primary: primary, 'button--tabbed': tabbed }"
+		:href="link"
+		@keydown.enter="makeActive"
+		@keyup.enter="makeInactive"
+		@click="handleClick"
+		@blur="handleBlur"
+		@keyup.tab.exact="handleTabUp"
+		@keyup.shift.tab="handleTabUp">
 		{{ label }}
 	</a>
-	<button v-else
+	<Button v-else-if="!isWebLink"
+		:type="buttonType"
 		class="action-button pull-right"
-		:class="{ primary: primary }"
-		:data-type="type"
-		:data-href="link"
 		@click="onClickActionButton">
 		{{ label }}
-	</button>
+	</Button>
 </template>
 
 <script>
 import axios from '@nextcloud/axios'
 import { showError } from '@nextcloud/dialogs'
+import Button from '@nextcloud/vue/dist/Components/Button'
 
 export default {
 	name: 'Action',
+
+	components: {
+		Button,
+	},
 
 	props: {
 		label: {
@@ -45,6 +54,12 @@ export default {
 		},
 	},
 
+	data() {
+		return {
+			tabbed: false,
+		}
+	},
+
 	computed: {
 		isWebLink() {
 			return this.typeWithDefault === 'WEB'
@@ -52,6 +67,10 @@ export default {
 
 		typeWithDefault() {
 			return this.type || 'GET'
+		},
+
+		buttonType() {
+			return this.primary ? 'primary' : 'secondary'
 		},
 	},
 
@@ -84,6 +103,37 @@ export default {
 				console.error('Failed to perform action', error)
 				showError(t('notifications', 'Failed to perform action'))
 			}
+		},
+
+		/**
+		 * Removes the tabbed state of the button.
+		 */
+		handleClick() {
+			this.tabbed = false
+		},
+		/**
+		 * When the tab key is lifted, the button has been "tabbed in",
+		 * see comments on the `tabbed` variable declared in the data.
+		 */
+		handleTabUp() {
+			this.tabbed = true
+		},
+		/**
+		 * Everytime the button is blurred, we remove the tabbed state.
+		 */
+		handleBlur() {
+			this.tabbed = false
+		},
+		/**
+		 * When the button is reached via keyboard navigation and pressed using
+		 * the enter key, we slightly change the styles to provide an "active-like"
+		 * feedback. When using the mouse this is achieved with the ripple effect.
+		 */
+		makeActive() {
+			this.tabbed = false
+		},
+		makeInactive() {
+			this.tabbed = true
 		},
 	},
 }
