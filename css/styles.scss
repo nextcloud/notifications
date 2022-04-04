@@ -170,19 +170,19 @@
 			display: flex;
 			align-items: center;
 			justify-content: center;
-
 			cursor: pointer;
+			border-radius: 44px / 2;
+			transition: background-color 0.1s linear !important;
+			transition: border 0.1s linear;
+			color: var(--color-main-text);
+			background-color: var(--color-background-dark);
+			line-height: normal;
+			vertical-align: baseline;
+			padding: 8px 16px;
 
 			& * {
 				cursor: pointer;
 			}
-
-			border-radius: 44px / 2;
-			transition: background-color 0.1s linear !important;
-			transition: border 0.1s linear;
-
-			color: var(--color-main-text);
-			background-color: var(--color-background-dark);
 
 			&:hover {
 				background-color: var(--color-primary-light-hover);
@@ -193,10 +193,6 @@
 			&:active {
 				background-color: var(--color-primary-element-lighter);
 			}
-
-			line-height: normal;
-			vertical-align: baseline;
-			padding: 8px 16px;
 
 			&:not(.primary) {
 				box-shadow: 0 0 0 2px var(--color-border-dark);
@@ -214,9 +210,11 @@
 				&--tabbed {
 					box-shadow: 0 0 0 2px var(--color-main-text);
 					background-color: var(--color-primary-light-hover);
+
 					&.button-vue--vue-primary {
 						background-color: var(--color-primary-hover);
 					}
+
 					&.button-vue--vue-secondary {
 						box-shadow: 0 0 0 2px var(--color-main-text);
 					}
