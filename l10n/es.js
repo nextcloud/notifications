@@ -22,6 +22,8 @@ OC.L10N.register(
     "in {path}" : "en {path}",
     "You need to set up your email address before you can receive notification emails." : "Debes configurar tu dirección de correo electrónico antes de poder recibir notificaciones.",
     "Send email reminders about unhandled notifications after:" : "Enviar recordatorios por email sobre las notificaciones no resueltas tras:",
+    "Play sound when a new notification arrives" : "Reproducir sonido cuando llega una nueva notificación",
+    "Play sound when a call started (requires Nextcloud Talk)" : "Reproducir sonido cuando se inicia una llamada (requiere Nextcloud Talk)",
     "Never" : "Nunca",
     "1 hour" : "1 hora",
     "3 hours" : "3 horas",
