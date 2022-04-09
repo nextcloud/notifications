@@ -20,6 +20,8 @@
     "in {path}" : "em {path}",
     "You need to set up your email address before you can receive notification emails." : "Você precisa configurar seu endereço de e-mail antes de receber e-mails de notificação.",
     "Send email reminders about unhandled notifications after:" : "Envie lembretes de e-mail sobre notificações não foram vistas após:",
+    "Play sound when a new notification arrives" : "Reproduzir som quando uma nova notificação chegar",
+    "Play sound when a call started (requires Nextcloud Talk)" : "Reproduzir som quando uma chamada é iniciada (requer Nextcloud Talk)",
     "Never" : "Nunca",
     "1 hour" : "1 hora",
     "3 hours" : "3 horas",
