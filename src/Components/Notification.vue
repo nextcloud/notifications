@@ -230,6 +230,7 @@ export default {
 						src: [
 							generateFilePath('notifications', 'img', 'talk.ogg'),
 						],
+						volume: 0.5,
 					})
 
 					sound.play()
@@ -239,6 +240,7 @@ export default {
 					src: [
 						generateFilePath('notifications', 'img', 'notification.ogg'),
 					],
+					volume: 0.5,
 				})
 
 				sound.play()
