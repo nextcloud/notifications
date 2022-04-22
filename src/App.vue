@@ -30,9 +30,11 @@
 
 		<!-- Notifications list content -->
 		<div ref="container" class="notification-container">
-			<transition name="fade">
-				<ul v-if="notifications.length > 0" class="notification-wrapper">
-					<transition-group name="fade-collapse" tag="li">
+			<transition name="fade" mode="out-in">
+				<div v-if="notifications.length > 0">
+					<transition-group class="notification-wrapper"
+						name="list"
+						tag="ul">
 						<Notification v-for="(n, index) in notifications"
 							:key="n.notification_id"
 							v-bind="n"
@@ -44,20 +46,20 @@
 					</transition-group>
 
 					<!-- Dismiss all -->
-					<li v-if="notifications.length > 0">
-						<div class="dismiss-all" @click="onDismissAll">
-							<Button type="tertiary"
-								@click="onDismissAll">
-								<template #icon>
-									<Close decorative
-										title=""
-										:size="20" />
-								</template>
-								{{ t('notifications', 'Dismiss all notifications') }}
-							</Button>
-						</div>
-					</li>
-				</ul>
+					<span v-if="notifications.length > 0"
+						class="dismiss-all"
+						@click="onDismissAll">
+						<Button type="tertiary"
+							@click="onDismissAll">
+							<template #icon>
+								<Close decorative
+									:size="20"
+									title="" />
+							</template>
+							{{ t('notifications', 'Dismiss all notifications') }}
+						</Button>
+					</span>
+				</div>
 
 				<!-- No notifications -->
 				<EmptyContent v-else>
@@ -411,26 +413,40 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.notification-container {
+	/* Prevent slide animation to go out of the div */
+	overflow: hidden;
+}
+
 .empty-content {
 	margin: 12vh 0;
 }
 
 .fade-enter-active,
-.fade-leave-active,
-.fade-collapse-enter-active,
-.fade-collapse-leave-active {
-	transition: opacity var(--animation-quick), max-height var(--animation-quick);
+.fade-leave-active {
+	transition: opacity var(--animation-quick) ease;
 }
 
-.fade-collapse-enter,
-.fade-collapse-leave-to {
-	opacity: 0;
-	max-height: 0;
-}
-
-.fade-enter,
+.fade-enter-from,
 .fade-leave-to {
 	opacity: 0;
 }
+
+.list-move,
+.list-enter-active,
+.list-leave-active {
+	transition: all var(--animation-quick) ease;
+}
+
+.list-enter-from,
+.list-leave-to {
+	opacity: 0;
+	transform: translateX(30px);
+}
+
+.list-leave-active {
+	width: 100%;
+}
+
 </style>
