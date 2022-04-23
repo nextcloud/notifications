@@ -5,7 +5,7 @@ OC.L10N.register(
     "Hello %s," : "%s你好，",
     "_New notification for %s_::_%n new notifications for %s_" : ["%s 有 %n 個新通知"],
     "_You have a new notification for %s_::_You have %n new notifications for %s_" : ["您有 %n 個關於 %s 的新通知"],
-    "You can change the frequency of these emails or disable them in the <a href=\"%s\">settings</a>." : "您可在<a href=\"%s\">設定</a>中更改這些電郵的頻率或停用。",
+    "You can change the frequency of these emails or disable them in the <a href=\"%s\">settings</a>." : "您可在<a href=\"%s\">設定</a>中更改通知電郵的接收次數或停用。",
     "You can change the frequency of these emails or disable them in the settings: %s" : "您可在設定中更改這些電郵地址的頻率或停用：%s",
     "Admin notifications" : "管理員通告",
     "Notifications" : "通告",
