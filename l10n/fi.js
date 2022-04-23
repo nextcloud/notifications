@@ -16,6 +16,8 @@ OC.L10N.register(
     "seconds ago" : "sekuntia sitten",
     "Failed to dismiss notification" : "Ilmoituksen hylkääminen epäonnistui",
     "in {path}" : "polussa {path}",
+    "Play sound when a new notification arrives" : "Toista ääni kun uusi ilmoitus vastaanotetaan",
+    "Play sound when a call started (requires Nextcloud Talk)" : "Toista ääni kun puhelu on aloitettu (vaatii Nextcloud Talkin)",
     "Never" : "Ei koskaan",
     "1 hour" : "1 tunti",
     "3 hours" : "3 tuntia",
