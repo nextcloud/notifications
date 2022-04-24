@@ -1,0 +1,8 @@
+{ "translations": {
+    "Hello %s" : "سلامونه %s",
+    "Hello %s," : "سلامونه %s،",
+    "in {path}" : "په {path} کې",
+    "You need to set up your email address before you can receive notification emails." : "د خبرتياوو ترلاسه کولو نه مخکې بايد خپل ايمېل ادرس ترتيب کړئ.",
+    "Your settings have been updated." : "په سمونو کې بدلون ثبت شو"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}

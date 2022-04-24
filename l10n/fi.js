@@ -16,6 +16,7 @@ OC.L10N.register(
     "seconds ago" : "sekuntia sitten",
     "Failed to dismiss notification" : "Ilmoituksen hylkääminen epäonnistui",
     "in {path}" : "polussa {path}",
+    "You need to set up your email address before you can receive notification emails." : "Aseta sähköpostiosoite, jotta voit vastaanottaa sähköposti-ilmoituksia.",
     "Play sound when a new notification arrives" : "Toista ääni kun uusi ilmoitus vastaanotetaan",
     "Play sound when a call started (requires Nextcloud Talk)" : "Toista ääni kun puhelu on aloitettu (vaatii Nextcloud Talkin)",
     "Never" : "Ei koskaan",

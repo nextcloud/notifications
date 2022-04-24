@@ -1,6 +1,8 @@
 OC.L10N.register(
     "notifications",
     {
+    "Hello %s" : "سلام %s",
+    "Hello %s," : "سلام %s",
     "Admin notifications" : "اعلان های مدیر",
     "Notifications" : "آگاهی‌ها",
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "این برنامه دارای یک پس زمینه و مقدمه برای API اعلان موجود در نکست کلود است.",
@@ -12,6 +14,11 @@ OC.L10N.register(
     "Dismiss" : "پنهان کن",
     "seconds ago" : "ثانیه‌هایی پیش",
     "Failed to dismiss notification" : "رد اخطار انجام نشد",
-    "in {path}" : "در { مسیر }"
+    "in {path}" : "در { مسیر }",
+    "You need to set up your email address before you can receive notification emails." : "قبل از دریافت ایمیل های هشدار می بایست ادرس ایمیل خود را تنظیم کنید",
+    "Never" : "هرگز",
+    "1 hour" : "۱ ساعت",
+    "3 hours" : "۳ ساعت",
+    "Your settings have been updated." : "تنظیمات شما به روز رسانی شد"
 },
 "nplurals=2; plural=(n > 1);");
