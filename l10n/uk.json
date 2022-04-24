@@ -1,4 +1,6 @@
 { "translations": {
+    "Hello %s" : "Вітаємо %s",
+    "Hello %s," : "Вітаємо %s,",
     "Admin notifications" : "Сповіщення адміністратора",
     "Notifications" : "Сповіщення",
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "Цей застосунок забезпечує бекендовий та фронтендовий інтерфейс для API сповіщень у Nextcloud.",
@@ -11,6 +13,11 @@
     "Dismiss" : "Припинити",
     "seconds ago" : "секунд тому",
     "Failed to dismiss notification" : "Не вдалося відпустити сповіщення",
-    "in {path}" : "в {path}"
+    "in {path}" : "в {path}",
+    "You need to set up your email address before you can receive notification emails." : "Для отримання повідомлень зазначте електронну адресу в особистих налаштуваннях.",
+    "Never" : "Ніколи",
+    "1 hour" : "1 година",
+    "3 hours" : "3 години",
+    "Your settings have been updated." : "Налаштування успішно оновлено."
 },"pluralForm" :"nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);"
 }

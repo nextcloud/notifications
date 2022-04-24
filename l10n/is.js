@@ -1,6 +1,8 @@
 OC.L10N.register(
     "notifications",
     {
+    "Hello %s" : "Halló %s",
+    "Hello %s," : "Halló %s,",
     "Admin notifications" : "Tilkynningar kerfisstjóra",
     "Notifications" : "Tilkynningar",
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "Þetta forrit sér um bakenda og viðmót fyrir API-forritaviðmót tilkynninga í Nextcloud.",
@@ -13,6 +15,11 @@ OC.L10N.register(
     "Dismiss" : "Hafna",
     "seconds ago" : "sekúndum síðan",
     "Failed to dismiss notification" : "Mistókst að afgreiða tilkynningu",
-    "in {path}" : "í {path}"
+    "in {path}" : "í {path}",
+    "You need to set up your email address before you can receive notification emails." : "Þú verður að gefa upp netfangið þitt svo að þú farir að fá tilkynningapósta.",
+    "Never" : "Aldrei",
+    "1 hour" : "1 klukkustund",
+    "3 hours" : "3 klukkustundir",
+    "Your settings have been updated." : "Stillingar þínar eru breyttar."
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");

@@ -1,4 +1,6 @@
 { "translations": {
+    "Hello %s" : "Xin chào %s",
+    "Hello %s," : "Xin chào %s,",
     "Admin notifications" : "Thông báo quản trị",
     "Notifications" : "Thông báo",
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "Ứng dụng này cung cấp kết nối giữa dữ liệu nền / backend / và lớp tương tác / frontend /  với API hiển thị thông báo trên Nextcloud",
@@ -11,6 +13,11 @@
     "Dismiss" : "Bỏ qua",
     "seconds ago" : "vài giây trước",
     "Failed to dismiss notification" : "Lỗi bỏ qua thông báo",
-    "in {path}" : "trong {path}"
+    "in {path}" : "trong {path}",
+    "You need to set up your email address before you can receive notification emails." : "Bạn cần phải thiết lập địa chỉ email trước khi nhận được email thông báo.",
+    "Never" : "Không bao giờ",
+    "1 hour" : "1 tiếng",
+    "3 hours" : "3 tiếng",
+    "Your settings have been updated." : "Các thiết lập của bạn vừa được cập nhật"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

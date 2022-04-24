@@ -1,10 +1,17 @@
 { "translations": {
+    "Hello %s" : "%sHola ",
+    "Hello %s," : "Hola %s,",
     "Notifications" : "Avisos",
     "No notifications" : "Nun hai avisos",
     "Failed to dismiss all notifications" : "Fall al escartar tolos avisos",
     "Dismiss" : "Escartar",
     "seconds ago" : "hai segundos",
     "Failed to dismiss notification" : "Fallu al escartar l'avisu",
-    "in {path}" : "en {path}"
+    "in {path}" : "en {path}",
+    "You need to set up your email address before you can receive notification emails." : "Precises configurar la to direición de corréu enantes que pueas recibir correos d'avisu.",
+    "Never" : "Enxamás",
+    "1 hour" : "1 hora",
+    "3 hours" : "3 hores",
+    "Your settings have been updated." : "Anováronse los tos axustes."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

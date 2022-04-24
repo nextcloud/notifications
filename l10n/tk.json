@@ -1,0 +1,9 @@
+{ "translations": {
+    "Hello %s" : "Salam%s",
+    "Notifications" : "Duýduryşlar",
+    "No notifications" : "Duýduryş ýok",
+    "Dismiss" : "Ýapmak.",
+    "seconds ago" : "Sekunt öň",
+    "1 hour" : "1 sagat"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}
