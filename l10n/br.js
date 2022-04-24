@@ -1,6 +1,8 @@
 OC.L10N.register(
     "notifications",
     {
+    "Hello %s" : "Demat deoc'h %s",
+    "Hello %s," : "Demat deoc'h %s, ",
     "Admin notifications" : "Kemenadennoù ar merour",
     "Notifications" : "Kemenadenoù",
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "Ar meziant a ro ur vackend ha frontend evit ar gemenadennoù API a zo posupl kaout e Nextcloud",
@@ -13,6 +15,9 @@ OC.L10N.register(
     "Dismiss" : "Arrest",
     "seconds ago" : "eilenn zo",
     "Failed to dismiss notification" : "C'hwitet da deurel ar gemenadenn",
-    "in {path}" : "e {treug}"
+    "in {path}" : "e {treug}",
+    "You need to set up your email address before you can receive notification emails." : "Ret eo dec'h merkañ ho chomlec'h postel a-raok gallout resev kemennadennoù dre bostel.",
+    "Never" : "James",
+    "Your settings have been updated." : "Nevesaet eo bet hoc'h arventennoù"
 },
 "nplurals=5; plural=((n%10 == 1) && (n%100 != 11) && (n%100 !=71) && (n%100 !=91) ? 0 :(n%10 == 2) && (n%100 != 12) && (n%100 !=72) && (n%100 !=92) ? 1 :(n%10 ==3 || n%10==4 || n%10==9) && (n%100 < 10 || n% 100 > 19) && (n%100 < 70 || n%100 > 79) && (n%100 < 90 || n%100 > 99) ? 2 :(n != 0 && n % 1000000 == 0) ? 3 : 4);");

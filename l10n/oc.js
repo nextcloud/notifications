@@ -11,6 +11,7 @@ OC.L10N.register(
     "No notifications" : "Cap de notificacion",
     "Dismiss" : "Ignorar",
     "seconds ago" : "fa qualques segondas",
+    "in {path}" : "dins {path}",
     "Never" : "Jamai",
     "1 hour" : " 1 ora",
     "3 hours" : "3 oras",

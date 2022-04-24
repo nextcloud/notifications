@@ -1,6 +1,8 @@
 OC.L10N.register(
     "notifications",
     {
+    "Hello %s" : "გამარჯობა, %s",
+    "Hello %s," : "გამარჯობა %s,",
     "Admin notifications" : "ადმინისტრაციული შეტყობინებები",
     "Notifications" : "შეტყობინებები",
     "No notifications" : "შეტყობინებები არაა",
@@ -9,6 +11,11 @@ OC.L10N.register(
     "Dismiss" : "უარყოფა",
     "seconds ago" : "წამის წინ",
     "Failed to dismiss notification" : "შეტყობინების გათავისუფლება ვერ მოხერხდა",
-    "in {path}" : "{path}-ში"
+    "in {path}" : "{path}-ში",
+    "You need to set up your email address before you can receive notification emails." : "ელ-ფოსტაზე შეტყობინების მიღებამდე, საჭიროა მიუთითოთ თქვენი მისამართი.",
+    "Never" : "არასდროს",
+    "1 hour" : "1 საათი",
+    "3 hours" : "3 საათი",
+    "Your settings have been updated." : "თქვენი პარამეტრები განახლდა."
 },
 "nplurals=2; plural=(n!=1);");

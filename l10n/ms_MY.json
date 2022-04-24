@@ -1,0 +1,7 @@
+{ "translations": {
+    "Hello %s" : "Hai %s",
+    "Hello %s," : "Hai %s,",
+    "in {path}" : "dalam {haluan}",
+    "Your settings have been updated." : "Tetapan anda sudah dikemaskini."
+},"pluralForm" :"nplurals=1; plural=0;"
+}
