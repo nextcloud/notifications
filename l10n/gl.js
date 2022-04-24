@@ -1,6 +1,8 @@
 OC.L10N.register(
     "notifications",
     {
+    "Hello %s" : "Ola %s",
+    "Hello %s," : "Ola %s,",
     "Admin notifications" : "Notificacións de administración",
     "Notifications" : "Notificacións",
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "Esta aplicación fornece unha infraestrutura e un contorno para a API de notificacións dispoñíbeis no Nextcloud.",
@@ -13,6 +15,12 @@ OC.L10N.register(
     "Dismiss" : "Rexeitar",
     "seconds ago" : "hai uns segundos",
     "Failed to dismiss notification" : "Produciuse un erro ao rexeitar  a notificación",
-    "in {path}" : "en {path}"
+    "in {path}" : "en {path}",
+    "You need to set up your email address before you can receive notification emails." : "É necesario estabelecer o enderezo de correo para poder recibir correos de notificación.",
+    "Never" : "Nunca",
+    "1 hour" : "1 hora",
+    "3 hours" : "3 horas",
+    "1 day" : "1 día",
+    "Your settings have been updated." : "Actualizaronse os axustes."
 },
 "nplurals=2; plural=(n != 1);");
