@@ -12,7 +12,7 @@ composer install
 
 cp -R ./app ../../../notificationsintegrationtesting
 ${ROOT_DIR}/occ app:enable notifications
-${ROOT_DIR}/occ app:enable notificationsintegrationtesting
+${ROOT_DIR}/occ app:enable --force notificationsintegrationtesting
 ${ROOT_DIR}/occ app:enable provisioning_api
 ${ROOT_DIR}/occ app:list | grep notifications
 ${ROOT_DIR}/occ app:list | grep provisioning_api
