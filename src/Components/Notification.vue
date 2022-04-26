@@ -1,5 +1,5 @@
 <template>
-	<div class="notification" :data-id="notificationId" :data-timestamp="timestamp">
+	<li class="notification" :data-id="notificationId" :data-timestamp="timestamp">
 		<div class="notification-heading">
 			<span v-tooltip.bottom="absoluteDate"
 				class="notification-time live-relative-timestamp"
@@ -10,10 +10,11 @@
 				<template #icon>
 					<Close decorative
 						title=""
-						size="20" />
+						:size="20" />
 				</template>
 			</Button>
 		</div>
+
 		<a v-if="useLink" :href="link" class="notification-subject full-subject-link">
 			<span v-if="icon" class="image"><img :src="icon" class="notification-icon"></span>
 			<RichText v-if="subjectRich"
@@ -28,6 +29,7 @@
 				:arguments="preparedSubjectParameters" />
 			<span v-else class="subject">{{ subject }}</span>
 		</div>
+
 		<div v-if="message" class="notification-message" @click="onClickMessage">
 			<div class="message-container" :class="{ collapsed: isCollapsedMessage }">
 				<RichText v-if="messageRich"
@@ -38,10 +40,11 @@
 			</div>
 			<div v-if="isCollapsedMessage" class="notification-overflow" />
 		</div>
+
 		<div v-if="actions.length" class="notification-actions">
 			<Action v-for="(a, i) in actions" :key="i" v-bind="a" />
 		</div>
-	</div>
+	</li>
 </template>
 
 <script>
@@ -320,8 +323,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::v-deep .rich-text--wrapper {
-	white-space: pre-wrap;
-	word-break: break-word;
+.notification {
+	background-color: var(--color-main-background);
+
+	&::v-deep {
+		img.notification-icon {
+			display: flex;
+			width: 32px;
+			height: 32px;
+			filter: var(--background-invert-if-dark);
+		}
+		.rich-text--wrapper {
+			white-space: pre-wrap;
+			word-break: break-word;
+		}
+	}
 }
+
 </style>

@@ -9,18 +9,23 @@
 	padding: 10px;
 	opacity: .6;
 
-	.svg {
-		width: 20px;
-		height: 20px;
-	}
-
 	&:hover,
 	&:focus {
 		opacity: 1 !important;
 	}
 
+	.notification__dot {
+		fill: #ff4402;
+		&--white {
+			fill: var(--color-primary-text);
+		}
+	}
+
 	&.hasNotifications {
 		opacity: 1 !important;
+		animation-name: pulse;
+		animation-duration: 1600ms;
+		animation-iteration-count: 4;
 
 		&:hover,
 		&:focus {
@@ -28,9 +33,20 @@
 		}
 	}
 
-	&,
-	img {
+	* {
 		cursor: pointer;
+	}
+}
+
+@keyframes pulse {
+	0% {
+		opacity: 1;
+	}
+	60% {
+		opacity: .6;
+	}
+	100% {
+		opacity: 1;
 	}
 }
 
@@ -43,15 +59,13 @@
 	.notification-wrapper {
 		display: flex;
 		flex-direction: column;
-		margin-bottom: 66px;
-		max-height: calc(100vh - 50px * 4 - 44px) !important;
 	}
 
 	.emptycontent {
 		padding: 50px 0;
 		margin: 0;
 
-		@include icon-black-white('notifications-dark', 'notifications', 1);
+		@include icon-black-white('notifications', 'notifications', 1);
 	}
 
 	.dismiss-all {
@@ -60,21 +74,7 @@
 		color: var(--color-text-maxcontrast);
 		border-top: 1px solid var(--color-border);
 		padding: 10px;
-		width: calc(100% - 10px * 2);
-		position: absolute;
-		bottom: 0;
 		background-color: var(--color-main-background);
-
-		&:hover,
-		.icon-close {
-			opacity: 1;
-			cursor: pointer;
-		}
-
-		.icon-close {
-			opacity: .5;
-			margin-right: 5px;
-		}
 	}
 
 	/* Menu arrow */
@@ -137,16 +137,6 @@
 		& > .notification-overflow {
 			box-shadow: 0 0 20px 20px var(--color-main-background);
 			position: relative;
-		}
-	}
-
-	img.notification-icon {
-		width: 32px;
-		height: 32px;
-		display: flex;
-
-		body.theme--dark & {
-			filter: invert(1);
 		}
 	}
 
