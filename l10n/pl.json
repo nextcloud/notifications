@@ -1,8 +1,8 @@
 { "translations": {
     "Hello %s" : "Witaj %s",
     "Hello %s," : "Witaj %s,",
-    "_New notification for %s_::_%n new notifications for %s_" : ["Nowe powiadomienie dla %s","%n nowe powiadomienia dla %s","%n nowych powiadomień dla %s","%n nowych powiadomień dla %s"],
-    "_You have a new notification for %s_::_You have %n new notifications for %s_" : ["Masz nowe powiadomienie dla %s","Masz %n nowe powiadomienia dla %s","Masz %n nowych powiadomień dla %s","Masz %n nowych powiadomień dla %s"],
+    "_New notification for %s_::_%n new notifications for %s_" : ["Nowe powiadomienie z %s","%n nowe powiadomienia z %s","%n nowych powiadomień z %s","%n nowych powiadomień z %s"],
+    "_You have a new notification for %s_::_You have %n new notifications for %s_" : ["Masz nowe powiadomienie na %s","Masz %n nowe powiadomienia na %s","Masz %n nowych powiadomień na %s","Masz %n nowych powiadomień na %s"],
     "You can change the frequency of these emails or disable them in the <a href=\"%s\">settings</a>." : "Możesz zmienić częstotliwość e-maili lub wyłączyć je w <a href=\"%s\">ustawieniach</a>.",
     "You can change the frequency of these emails or disable them in the settings: %s" : "Możesz zmienić częstotliwość e-maili lub wyłączyć je w ustawieniach: %s",
     "Admin notifications" : "Powiadomienia administratora",
