@@ -13,6 +13,7 @@ OC.L10N.register(
     "seconds ago" : "segundos atrás",
     "Failed to dismiss notification" : "Falhou a dispensar notificação",
     "in {path}" : "em {path}",
+    "You need to set up your email address before you can receive notification emails." : "Precisa de configurar o seu endereço de e-mail antes de poder receber mensagens de notificação.",
     "Never" : "Nunca",
     "1 hour" : "1 hora",
     "3 hours" : "3 horas",

@@ -14,6 +14,8 @@
     "seconds ago" : "数秒前",
     "Failed to dismiss notification" : "通知の却下に失敗しました",
     "in {path}" : "{path}に",
+    "You need to set up your email address before you can receive notification emails." : "通知メールを受け取る前にメールアドレスを設定してください。",
+    "Never" : "なし",
     "1 hour" : "1時間",
     "3 hours" : "3時間",
     "1 day" : "1日",

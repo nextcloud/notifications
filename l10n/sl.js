@@ -17,10 +17,12 @@ OC.L10N.register(
     "seconds ago" : "pred nekaj sekundami",
     "Failed to dismiss notification" : "Opuščanje obvestila je spodletelo!",
     "in {path}" : "v {path}",
+    "You need to set up your email address before you can receive notification emails." : "Za prejemanje obvestil po elektronski pošti je treba najprej nastaviti elektronski poštni naslov.",
     "Send email reminders about unhandled notifications after:" : "Po elektronski pošti pošlji opomnik o neodgovorjenih obvestilih po:",
     "Never" : "Nikoli",
     "1 hour" : "1 uri",
     "3 hours" : "3 urah",
+    "1 day" : "1 dan",
     "1 week" : "1 tednu",
     "Your settings have been updated." : "Nastavitve so posodobljene.",
     "An error occurred while updating your settings." : "Prišlo je do napake med posodabljanjem nastavitev."

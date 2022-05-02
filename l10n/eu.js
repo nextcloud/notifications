@@ -22,6 +22,8 @@ OC.L10N.register(
     "in {path}" : "{path} -en",
     "You need to set up your email address before you can receive notification emails." : "Zure helbide elektronikoa konfiguratu behar duzu jakinarazpenak posta elektronikoz jasotzeko.",
     "Send email reminders about unhandled notifications after:" : "Bidali e-posta abisuak kudeatu gabeko jakinarazpenei buruz honen ondoren:",
+    "Play sound when a new notification arrives" : "Erreproduzitu soinua jakinarazpen berri bat iristen denean",
+    "Play sound when a call started (requires Nextcloud Talk)" : "Erreproduzitu soinua deia hasten denean (Nextcloud Talk behar da)",
     "Never" : "Inoiz ez",
     "1 hour" : "Ordu 1",
     "3 hours" : "3 ordu",

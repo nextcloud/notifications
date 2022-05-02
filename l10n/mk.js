@@ -1,6 +1,8 @@
 OC.L10N.register(
     "notifications",
     {
+    "Hello %s" : "Здраво %s",
+    "Hello %s," : "Здраво %s,",
     "Admin notifications" : "Известувања за администраторот",
     "Notifications" : "Известувања",
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "Оваа апликација обезбедува backend и frontend за известувачкиот API достапен во Nextcloud.",
@@ -13,6 +15,11 @@ OC.L10N.register(
     "Dismiss" : "Отфрли",
     "seconds ago" : "пред неколку секунди",
     "Failed to dismiss notification" : "Неуспешно отфрлање на известувањето",
-    "in {path}" : "во {path}"
+    "in {path}" : "во {path}",
+    "You need to set up your email address before you can receive notification emails." : "Треба да ја внесете Вашата адреса на е-пошта за да можете да примате известувања по електронска пошта.",
+    "Never" : "Никогаш",
+    "1 hour" : "1 час",
+    "3 hours" : "3 часа",
+    "Your settings have been updated." : "Вашите параметри се ажурирани."
 },
 "nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;");
