@@ -80,7 +80,7 @@ class FakeUser implements IUser {
 		throw new \RuntimeException('Not implemented');
 	}
 
-	public function getBackend() {
+	public function getBackend(): ?\OCP\UserInterface {
 		throw new \RuntimeException('Not implemented');
 	}
 
