@@ -1,6 +1,8 @@
 { "translations": {
     "Hello %s" : "Hei %s",
     "Hello %s," : "Hei %s,",
+    "You can change the frequency of these emails or disable them in the <a href=\"%s\">settings</a>." : "Voit muuttaa näiden sähköpostien lähetystiheyttä tai ottaa ne pois käytöstä <a href=\"%s\">asetuksissa</a>.",
+    "You can change the frequency of these emails or disable them in the settings: %s" : "Voit muuttaa näiden sähköpostien lähetystiheyttä tai ottaa ne pois käytöstä asetuksissa:%s",
     "Admin notifications" : "Ylläpitoilmoitukset",
     "Notifications" : "Ilmoitukset",
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "Taustasovellus ja käyttöliittymä Nextcloudin ilmoitusten ohjelmointirajapinnalle.",
@@ -15,6 +17,7 @@
     "Failed to dismiss notification" : "Ilmoituksen hylkääminen epäonnistui",
     "in {path}" : "polussa {path}",
     "You need to set up your email address before you can receive notification emails." : "Aseta sähköpostiosoite, jotta voit vastaanottaa sähköposti-ilmoituksia.",
+    "Send email reminders about unhandled notifications after:" : "Lähetä sähköpostimuistutuksia käsittelemättömistä ilmoituksista, kun on kulunut:",
     "Play sound when a new notification arrives" : "Toista ääni kun uusi ilmoitus vastaanotetaan",
     "Play sound when a call started (requires Nextcloud Talk)" : "Toista ääni kun puhelu on aloitettu (vaatii Nextcloud Talkin)",
     "Never" : "Ei koskaan",
