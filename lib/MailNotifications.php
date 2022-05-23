@@ -366,6 +366,10 @@ class MailNotifications {
 				$replacement = $parameter['name'];
 			}
 
+			if (!$replacement) {
+				continue;
+			}
+
 			if (isset($parameter['link'])) {
 				$replacements[] = '<a href="' . $parameter['link'] . '">' . htmlspecialchars($replacement) . '</a>';
 			} else {
