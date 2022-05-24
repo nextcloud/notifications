@@ -22,4 +22,4 @@ OC.L10N.register(
     "Your settings have been updated." : "As suas definições foram atualizadas.",
     "An error occurred while updating your settings." : "Ocorreu um erro ao atualizar as suas definições."
 },
-"nplurals=2; plural=(n != 1);");
+"nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
