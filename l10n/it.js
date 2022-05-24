@@ -3,8 +3,8 @@ OC.L10N.register(
     {
     "Hello %s" : "Ciao %s",
     "Hello %s," : "Ciao %s,",
-    "_New notification for %s_::_%n new notifications for %s_" : ["Nuova notifica per %s","%n nuove notifiche per %s"],
-    "_You have a new notification for %s_::_You have %n new notifications for %s_" : ["Hai una nuova notifica per %s","Hai %n nuove notifiche per %s"],
+    "_New notification for %s_::_%n new notifications for %s_" : ["Nuova notifica per %s","%n nuove notifiche per %s","%n nuove notifiche per %s"],
+    "_You have a new notification for %s_::_You have %n new notifications for %s_" : ["Hai una nuova notifica per %s","Hai %n nuove notifiche per %s","Hai %n nuove notifiche per %s"],
     "You can change the frequency of these emails or disable them in the <a href=\"%s\">settings</a>." : "Puoi cambiare la frequenza di queste email o disattivarle nelle <a href=\"%s\">impostazioni</a>.",
     "You can change the frequency of these emails or disable them in the settings: %s" : "Puoi cambiare la frequenza di queste email o disattivarle nelle impostazioni: %s",
     "Admin notifications" : "Notifiche amministratore ",
@@ -32,4 +32,4 @@ OC.L10N.register(
     "Your settings have been updated." : "Le impostazioni sono state aggiornate.",
     "An error occurred while updating your settings." : "Si è verificato un errore durante l'aggiornamento delle impostazioni."
 },
-"nplurals=2; plural=(n != 1);");
+"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
