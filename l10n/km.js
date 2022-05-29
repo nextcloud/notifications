@@ -1,6 +1,7 @@
 OC.L10N.register(
     "notifications",
     {
+    "Hello %s" : "សួស្ដី %s",
     "Hello %s," : "សួស្ដី %s,",
     "Notifications" : "ការ​ជូន​ដំណឹង",
     "seconds ago" : "វិនាទី​មុន",
