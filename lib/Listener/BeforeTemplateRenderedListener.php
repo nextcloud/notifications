@@ -85,6 +85,5 @@ class BeforeTemplateRenderedListener implements IEventListener {
 		);
 
 		Util::addScript('notifications', 'notifications-main');
-		Util::addStyle('notifications', 'styles');
 	}
 }
