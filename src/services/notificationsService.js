@@ -1,7 +1,7 @@
 /**
  * @copyright Copyright (c) 2020 Joas Schilling <coding@schilljs.com>
  *
- * @license GNU AGPL version 3 or any later version
+ * @license AGPL-3.0-or-later
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -37,8 +37,8 @@ const getNotificationsData = async (tabId, lastETag, forceRefresh) => {
 		BrowserStorage.setItem('lastUpdated', now)
 		// console.debug('Refetching data in ' + tabId + ' (prev: ' + lastTab + ' age: ' + (now - lastUpdated) + ')')
 		await refreshData(lastETag)
-	// } else {
-	// console.debug('Reusing data in ' + tabId + ' (prev: ' + lastTab + ' age: ' + (now - lastUpdated) + ')')
+		// } else {
+		// console.debug('Reusing data in ' + tabId + ' (prev: ' + lastTab + ' age: ' + (now - lastUpdated) + ')')
 	}
 
 	return {
