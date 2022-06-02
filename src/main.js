@@ -22,6 +22,7 @@ import Vue from 'vue'
 import NotificationsApp from './NotificationsApp.vue'
 
 // Styles
+import './styles/styles.scss'
 import '@nextcloud/dialogs/styles/toast.scss'
 
 Vue.prototype.t = t
