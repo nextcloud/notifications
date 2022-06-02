@@ -86,10 +86,15 @@
 
 	.notification-heading {
 		display: flex;
+		align-items: baseline; // Else children will stretch in height as container is absolutely-positioned.
 
 		.notification-time {
 			color: var(--color-text-maxcontrast);
 			margin: 13px 0 13px auto;
+		}
+
+		.notification-dismiss-button {
+			margin: 6px;
 		}
 	}
 

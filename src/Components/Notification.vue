@@ -4,7 +4,8 @@
 			<span v-tooltip.bottom="absoluteDate"
 				class="notification-time live-relative-timestamp"
 				:data-timestamp="timestamp">{{ relativeDate }}</span>
-			<Button type="tertiary"
+			<Button class="notification-dismiss-button"
+				type="tertiary"
 				:aria-label="t('notifications', 'Dismiss')"
 				@click="onDismissNotification">
 				<template #icon>
