@@ -7,11 +7,17 @@
 	border-radius: 50%;
 	text-align: center;
 	padding: 10px;
-	opacity: .6;
+	opacity: 1 !important;
+
+	svg {
+		opacity: .85;
+	}
 
 	&:hover,
 	&:focus {
-		opacity: 1 !important;
+		svg {
+			opacity: 1;
+		}
 	}
 
 	.notification__dot {
@@ -22,14 +28,12 @@
 	}
 
 	&.hasNotifications {
-		opacity: 1 !important;
 		animation-name: pulse;
 		animation-duration: 1600ms;
 		animation-iteration-count: 4;
 
-		&:hover,
-		&:focus {
-			opacity: .6 !important;
+		svg {
+			opacity: 1;
 		}
 	}
 
@@ -38,15 +42,19 @@
 	}
 }
 
-@keyframes pulse {
-	0% {
-		opacity: 1;
-	}
-	60% {
-		opacity: .6;
-	}
-	100% {
-		opacity: 1;
+svg {
+	@keyframes pulse {
+		0% {
+			opacity: 1;
+		}
+
+		60% {
+			opacity: .85;
+		}
+
+		100% {
+			opacity: 1;
+		}
 	}
 }
 
