@@ -90,7 +90,7 @@ import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
 import { getCapabilities } from '@nextcloud/capabilities'
 
 export default {
-	name: 'App',
+	name: 'NotificationsApp',
 
 	components: {
 		Button,

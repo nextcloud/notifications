@@ -19,7 +19,7 @@
  */
 
 import Vue from 'vue'
-import App from './App'
+import NotificationsApp from './NotificationsApp.vue'
 
 // Styles
 import '@nextcloud/dialogs/styles/toast.scss'
@@ -31,5 +31,7 @@ Vue.prototype.OCA = OCA
 
 export default new Vue({
 	el: '#notifications',
-	render: h => h(App),
+	// eslint-disable-next-line vue/match-component-file-name
+	name: 'NotificationsApp',
+	render: h => h(NotificationsApp),
 })
