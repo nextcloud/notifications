@@ -339,6 +339,14 @@ export default {
 			word-break: break-word;
 		}
 	}
+
+	.notification-subject {
+		padding: 4px;
+	}
+
+	a.notification-subject:focus-visible {
+		box-shadow: inset 0 0 0 2px var(--color-main-text) !important; // override rule in core/css/headers.scss #header a:focus-visible
+	}
 }
 
 </style>
