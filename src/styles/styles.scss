@@ -94,7 +94,7 @@ svg {
 
 	.notification-heading {
 		display: flex;
-		align-items: baseline; // Else children will stretch in height as container is absolutely-positioned.
+		align-items: center; // Else children will stretch in height as container is absolutely-positioned.
 
 		.notification-time {
 			color: var(--color-text-maxcontrast);
