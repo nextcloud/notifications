@@ -31,7 +31,8 @@
 		<!-- Notifications list content -->
 		<div ref="container" class="notification-container">
 			<transition name="fade" mode="out-in">
-				<div v-if="notifications.length > 0">
+				<!-- Add tabindex because Firefox focus scrollable elements. -->
+				<div v-if="notifications.length > 0" tabindex="-1">
 					<transition-group class="notification-wrapper"
 						name="list"
 						tag="ul">
