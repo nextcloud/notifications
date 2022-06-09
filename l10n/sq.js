@@ -12,6 +12,7 @@ OC.L10N.register(
     "Never" : "Kurrë",
     "1 hour" : "1 Orë",
     "3 hours" : "3 orë",
+    "1 day" : "1 ditë ",
     "Your settings have been updated." : "Rregullimet tuaja u përditësuan"
 },
 "nplurals=2; plural=(n != 1);");
