@@ -1,6 +1,10 @@
 { "translations": {
     "Hello %s" : "こんにちは %s さん",
     "Hello %s," : "こんにちは %s さん、",
+    "_New notification for %s_::_%n new notifications for %s_" : ["%sの新着通知が%n件あります"],
+    "_You have a new notification for %s_::_You have %n new notifications for %s_" : ["%sに関する新着通知が%n件あります"],
+    "You can change the frequency of these emails or disable them in the <a href=\"%s\">settings</a>." : "これらのメールの頻度または完全に無効化することは<a href=\"%s\">設定</a>から行えます。",
+    "You can change the frequency of these emails or disable them in the settings: %s" : "これらのメールの頻度または完全に無効化することは設定の次から行えます: %s",
     "Admin notifications" : "管理者の通知",
     "Notifications" : "通知",
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "このアプリは、Nextcloudで利用可能な通知APIのバックエンドとフロントエンドを提供します。",
