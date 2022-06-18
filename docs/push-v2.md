@@ -150,7 +150,7 @@ The server replies with the following status codes:
 
 | Status code | Meaning                                  |
 | ----------- | ---------------------------------------- |
-| 200         | Push token was written to the databse    |
+| 200         | Push token was written to the database    |
 | 400         | Push token, public key or device identifier is malformed, the signature does not match |
 | 403         | Device is not allowed to write the push token of the device identifier |
 | 409         | In case of a conflict the device can retry with the additional field `cloudId` with the value `{{userid}}@{{serverurl}}` which allows the proxy to verify the public key and device identifier belongs to the given user on the instance |
