@@ -52,9 +52,7 @@
 						<Button type="tertiary"
 							@click="onDismissAll">
 							<template #icon>
-								<Close decorative
-									:size="20"
-									title="" />
+								<Close :size="20" />
 							</template>
 							{{ t('notifications', 'Dismiss all notifications') }}
 						</Button>
@@ -67,7 +65,7 @@
 						? t('notifications', 'Requesting browser permissions to show notifications')
 						: t('notifications', 'No notifications') }}
 					<template #icon>
-						<Bell title="" decorative />
+						<Bell />
 					</template>
 				</EmptyContent>
 			</transition>
