@@ -9,7 +9,8 @@
 			aria-haspopup="true"
 			aria-controls="notification-container"
 			aria-expanded="false"
-			@click="requestWebNotificationPermissions">
+			@click="requestWebNotificationPermissions"
+			@keydown.enter="requestWebNotificationPermissions">
 			<Bell v-if="notifications.length === 0"
 				:size="20"
 				:title="t('notifications', 'Notifications')"
