@@ -100,7 +100,7 @@ class PushController extends OCSController {
 		if (
 			!filter_var($proxyServer, FILTER_VALIDATE_URL) ||
 			\strlen($proxyServer) > 256 ||
-			!preg_match('/^(https\:\/\/|http\:\/\/localhost(\:\d{0,5})?\/)/', $proxyServer)
+			!preg_match('/^(https\:\/\/|http\:\/\/(localhost|[a-z0-9\.-]*\.(internal|local))(\:\d{0,5})?\/)/', $proxyServer)
 		) {
 			return new DataResponse(['message' => 'INVALID_PROXY_SERVER'], Http::STATUS_BAD_REQUEST);
 		}
