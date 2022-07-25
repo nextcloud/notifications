@@ -27,6 +27,7 @@
 		"@nextcloud/router": "^2.0.0",
 		"@nextcloud/vue": "^5.3.1",
 		"howler": "^2.2.3",
+		"v-click-outside": "^3.2.0",
 		"vue": "^2.7.4",
 		"vue-material-design-icons": "^5.1.2",
 		"vue-tooltip": "^0.1.0"

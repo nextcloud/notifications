@@ -218,8 +218,8 @@ export default {
 	mounted() {
 		this._$el = $(this.$el)
 
-		// Parents: TransitionGroup > NotificationsList
-		if (typeof this.$parent.$parent.showBrowserNotifications === 'undefined') {
+		// Parents: TransitionGroup > Transition > HeaderMenu
+		if (typeof this.$parent.$parent.$parent.showBrowserNotifications === 'undefined') {
 			console.error('Failed to read showBrowserNotifications property from App component')
 		}
 
