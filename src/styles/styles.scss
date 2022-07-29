@@ -1,25 +1,4 @@
 .notifications-button {
-	position: relative;
-	float: right;
-	width: 16px;
-	height: 16px;
-	display: block;
-	border-radius: 50%;
-	text-align: center;
-	padding: 10px;
-	opacity: 1 !important;
-
-	svg {
-		opacity: .85;
-	}
-
-	&:hover,
-	&:focus {
-		svg {
-			opacity: 1;
-		}
-	}
-
 	.notification__dot {
 		fill: #ff4402;
 		&--white {
@@ -59,11 +38,6 @@ svg {
 }
 
 .notification-container {
-	display: none;
-	right: 13px;
-	width: 350px;
-	max-width: 90%;
-
 	.notification-wrapper {
 		display: flex;
 		flex-direction: column;
