@@ -33,12 +33,9 @@
 						name="list"
 						tag="ul">
 						<Notification v-for="(n, index) in notifications"
-							:key="n.notification_id"
+							:key="n.notificationId"
 							v-bind="n"
 							:index="index"
-							:notification-id="n.notification_id"
-							:object-id="n.object_id"
-							:object-type="n.object_type"
 							@remove="onRemove" />
 					</transition-group>
 

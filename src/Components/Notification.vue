@@ -15,14 +15,14 @@
 		</div>
 
 		<a v-if="useLink" :href="link" class="notification-subject full-subject-link">
-			<span v-if="icon" class="image"><img :src="icon" class="notification-icon"></span>
+			<span v-if="icon" class="image"><img :src="icon" class="notification-icon" alt=""></span>
 			<RichText v-if="subjectRich"
 				:text="subjectRich"
 				:arguments="preparedSubjectParameters" />
 			<span v-else class="subject">{{ subject }}</span>
 		</a>
 		<div v-else class="notification-subject">
-			<span v-if="icon" class="image"><img :src="icon" class="notification-icon"></span>
+			<span v-if="icon" class="image"><img :src="icon" class="notification-icon" alt=""></span>
 			<RichText v-if="subjectRich"
 				:text="subjectRich"
 				:arguments="preparedSubjectParameters" />
