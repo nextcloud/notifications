@@ -52,6 +52,18 @@ const getNotificationsData = async (tabId, lastETag, forceRefresh, hasNotifyPush
 	}
 }
 
+const remapAttributes = (notification) => {
+	notification.notificationId = notification.notification_id
+	notification.objectId = notification.object_id
+	notification.objectType = notification.object_type
+
+	delete notification.notification_id
+	delete notification.object_id
+	delete notification.object_type
+
+	return notification
+}
+
 const refreshData = async (lastETag) => {
 	let requestConfig = {}
 	if (lastETag) {
@@ -68,7 +80,7 @@ const refreshData = async (lastETag) => {
 		BrowserStorage.setItem('status', '' + response.status)
 		if (response.status !== 204) {
 			BrowserStorage.setItem('headers', JSON.stringify(response.headers))
-			BrowserStorage.setItem('data', JSON.stringify(response.data.ocs.data))
+			BrowserStorage.setItem('data', JSON.stringify(response.data.ocs.data.map(remapAttributes)))
 		}
 	} catch (error) {
 		if (error?.response?.status) {
