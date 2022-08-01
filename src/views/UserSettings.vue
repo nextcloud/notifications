@@ -19,35 +19,33 @@
   -->
 
 <template>
-	<div>
-		<SettingsSection :title="t('notifications', 'Notifications')">
-			<div class="notification-frequency__warning">
-				<strong v-if="!config.is_email_set">{{ t('notifications', 'You need to set up your email address before you can receive notification emails.') }}</strong>
-			</div>
-			<p>
-				<label for="notify_setting_batchtime" class="notification-frequency__label">
-					{{ t('notifications', 'Send email reminders about unhandled notifications after:') }}
-				</label>
-				<select id="notify_setting_batchtime"
-					v-model="config.setting_batchtime"
-					class="notification-frequency__select"
-					@change="updateSettings()">
-					<option v-for="option in batchtime_options" :key="option.value" :value="option.value">
-						{{ option.text }}
-					</option>
-				</select>
-			</p>
+	<SettingsSection :title="t('notifications', 'Notifications')">
+		<div class="notification-frequency__warning">
+			<strong v-if="!config.is_email_set">{{ t('notifications', 'You need to set up your email address before you can receive notification emails.') }}</strong>
+		</div>
+		<p>
+			<label for="notify_setting_batchtime" class="notification-frequency__label">
+				{{ t('notifications', 'Send email reminders about unhandled notifications after:') }}
+			</label>
+			<select id="notify_setting_batchtime"
+				v-model="config.setting_batchtime"
+				class="notification-frequency__select"
+				@change="updateSettings()">
+				<option v-for="option in batchtime_options" :key="option.value" :value="option.value">
+					{{ option.text }}
+				</option>
+			</select>
+		</p>
 
-			<CheckboxRadioSwitch :checked.sync="config.sound_notification"
-				@update:checked="updateSettings">
-				{{ t('notifications', 'Play sound when a new notification arrives') }}
-			</CheckboxRadioSwitch>
-			<CheckboxRadioSwitch :checked.sync="config.sound_talk"
-				@update:checked="updateSettings">
-				{{ t('notifications', 'Play sound when a call started (requires Nextcloud Talk)') }}
-			</CheckboxRadioSwitch>
-		</SettingsSection>
-	</div>
+		<CheckboxRadioSwitch :checked.sync="config.sound_notification"
+			@update:checked="updateSettings">
+			{{ t('notifications', 'Play sound when a new notification arrives') }}
+		</CheckboxRadioSwitch>
+		<CheckboxRadioSwitch :checked.sync="config.sound_talk"
+			@update:checked="updateSettings">
+			{{ t('notifications', 'Play sound when a call started (requires Nextcloud Talk)') }}
+		</CheckboxRadioSwitch>
+	</SettingsSection>
 </template>
 
 <script>
