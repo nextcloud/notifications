@@ -276,7 +276,7 @@ export default {
 		},
 
 		onClickMessage(e) {
-			if (e.target.classList.contains('rich-text--wrapper')) {
+			if (e.target.closest('.rich-text--wrapper')) {
 				// Vue RichText
 				this.showFullMessage = !this.showFullMessage
 			} else if (!this.messageRich && !!this.message) {
