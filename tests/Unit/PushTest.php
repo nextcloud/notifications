@@ -623,7 +623,7 @@ class PushTest extends TestCase {
 			->withConsecutive(
 				[
 					'proxyserver1/notifications',
-					 [
+					[
 						'body' => [
 							'notifications' => ['["Payload"]', '["Payload"]'],
 						]
@@ -631,7 +631,7 @@ class PushTest extends TestCase {
 				],
 				[
 					'badrequest/notifications',
-					 [
+					[
 						'body' => [
 							'notifications' => ['["Payload"]'],
 						]
@@ -639,7 +639,7 @@ class PushTest extends TestCase {
 				],
 				[
 					'unavailable/notifications',
-					 [
+					[
 						'body' => [
 							'notifications' => ['["Payload"]'],
 						]
@@ -647,7 +647,7 @@ class PushTest extends TestCase {
 				],
 				[
 					'ok/notifications',
-					 [
+					[
 						'body' => [
 							'notifications' => ['["Payload"]'],
 						]
