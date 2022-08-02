@@ -549,22 +549,7 @@ class PushTest extends TestCase {
 			->with('has_internet_connection', true)
 			->willReturn(true);
 
-		$e = new \Exception();
-		$client->expects($this->at(0))
-			->method('post')
-			->with('proxyserver1/notifications', [
-				'body' => [
-					'notifications' => ['["Payload"]', '["Payload"]'],
-				],
-			])
-			->willThrowException($e);
-
-		$this->logger->expects($this->at(0))
-			->method('error')
-			->with($e->getMessage(), [
-				'exception' => $e,
-			]);
-
+		// Call 1
 		/** @var ResponseInterface|MockObject $response1 */
 		$response1 = $this->createMock(ResponseInterface::class);
 		$response1->expects($this->once())
@@ -578,26 +563,11 @@ class PushTest extends TestCase {
 		$response1->expects($this->once())
 			->method('getBody')
 			->willReturn($body1);
-		$e = $this->createMock(ClientException::class);
-		$e->method('getResponse')
+		$exception1 = $this->createMock(ClientException::class);
+		$exception1->method('getResponse')
 			->willReturn($response1);
-		$client->expects($this->at(1))
-			->method('post')
-			->with('badrequest/notifications', [
-				'body' => [
-					'notifications' => ['["Payload"]'],
-				],
-			])
-			->willThrowException($e);
 
-		$this->logger->expects($this->at(1))
-			->method('warning')
-			->with('Could not send notification to push server [{url}]: {error}', [
-				'error' => 'no reason given',
-				'url' => 'badrequest',
-				'app' => 'notifications',
-			]);
-
+		// Call 2
 		/** @var ResponseInterface|MockObject $response1 */
 		$response2 = $this->createMock(ResponseInterface::class);
 		/** @var StreamInterface|MockObject $body2 */
@@ -608,26 +578,12 @@ class PushTest extends TestCase {
 		$response2->expects($this->once())
 			->method('getBody')
 			->willReturn($body2);
-		$e = $this->createMock(ServerException::class);
-		$e->method('getResponse')
+		$exception2 = $this->createMock(ServerException::class);
+		$exception2->method('getResponse')
 			->willReturn($response2);
-		$client->expects($this->at(2))
-			->method('post')
-			->with('unavailable/notifications', [
-				'body' => [
-					'notifications' => ['["Payload"]'],
-				],
-			])
-			->willThrowException($e);
 
-		$this->logger->expects($this->at(2))
-			->method('debug')
-			->with('Could not send notification to push server [{url}]: {error}', [
-				'error' => 'Maintenance',
-				'url' => 'unavailable',
-				'app' => 'notifications',
-			]);
 
+		// Call 3
 		/** @var IResponse|MockObject $response1 */
 		$response3 = $this->createMock(IResponse::class);
 		$response3->expects($this->once())
@@ -637,15 +593,8 @@ class PushTest extends TestCase {
 		$body3 = $this->createMock(StreamInterface::class);
 		$response3->method('getBody')
 			->willReturn('');
-		$client->expects($this->at(3))
-			->method('post')
-			->with('ok/notifications', [
-				'body' => [
-					'notifications' => ['["Payload"]'],
-				],
-			])
-			->willReturn($response3);
 
+		// Call 4
 		/** @var ResponseInterface|MockObject $response1 */
 		$response4 = $this->createMock(ResponseInterface::class);
 		$response4->expects($this->once())
@@ -664,17 +613,74 @@ class PushTest extends TestCase {
 		$response4->expects($this->once())
 			->method('getBody')
 			->willReturn($body4);
-		$e = $this->createMock(ClientException::class);
-		$e->method('getResponse')
+		$exception4 = $this->createMock(ClientException::class);
+		$exception4->method('getResponse')
 			->willReturn($response4);
-		$client->expects($this->at(4))
+
+		$exception0 = new \Exception();
+		$client->expects($this->exactly(5))
 			->method('post')
-			->with('badrequest-with-devices/notifications', [
-				'body' => [
-					'notifications' => ['["Payload"]'],
+			->withConsecutive(
+				[
+					'proxyserver1/notifications',
+					[
+						'body' => [
+							'notifications' => ['["Payload"]', '["Payload"]'],
+						]
+					]
 				],
-			])
-			->willThrowException($e);
+				[
+					'badrequest/notifications',
+					[
+						'body' => [
+							'notifications' => ['["Payload"]'],
+						]
+					]
+				],
+				[
+					'unavailable/notifications',
+					[
+						'body' => [
+							'notifications' => ['["Payload"]'],
+						]
+					],
+				],
+				[
+					'ok/notifications',
+					[
+						'body' => [
+							'notifications' => ['["Payload"]'],
+						]
+					],
+				]
+			)
+			->willReturnOnConsecutiveCalls(
+				$this->throwException($exception0),
+				$this->throwException($exception1),
+				$this->throwException($exception2),
+				$response3,
+				$this->throwException($exception4),
+			);
+
+		$this->logger->expects($this->atLeastOnce())
+			->method('error')
+			->with($exception0->getMessage(), [
+				'exception' => $exception0,
+			]);
+		$this->logger->expects($this->once())
+			->method('warning')
+			->with('Could not send notification to push server [{url}]: {error}', [
+				'error' => 'no reason given',
+				'url' => 'badrequest',
+				'app' => 'notifications',
+			]);
+		$this->logger->expects($this->once())
+			->method('debug')
+			->with('Could not send notification to push server [{url}]: {error}', [
+				'error' => 'Maintenance',
+				'url' => 'unavailable',
+				'app' => 'notifications',
+			]);
 
 		$this->notificationManager->method('isFairUseOfFreePushService')
 			->willReturn(true);
