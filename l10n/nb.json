@@ -1,19 +1,24 @@
 { "translations": {
     "Hello %s" : "Hei %s",
     "Hello %s," : "Hei %s,",
+    "_New notification for %s_::_%n new notifications for %s_" : ["Nytt varsel for %s","%n nye varsler for %s"],
+    "_You have a new notification for %s_::_You have %n new notifications for %s_" : ["Du har ett nytt varsel for %s","Du har %n nye varsler for %s"],
     "Admin notifications" : "Administrator- notifikasjoner",
     "Notifications" : "Varsel",
     "Failed to perform action" : "Klarte ikke å utføre handling",
-    "Dismiss" : "Forkast",
+    "Dismiss" : "Avvis",
     "seconds ago" : "sekunder siden",
-    "Failed to dismiss notification" : "Klarte ikke fjerne varsel",
+    "Failed to dismiss notification" : "Klarte ikke avvise varsel",
     "in {path}" : "i {path}",
+    "Dismiss all notifications" : "Avvis alle varsler",
     "No notifications" : "Ingen varsel",
-    "Failed to dismiss all notifications" : "Klarte ikke å fjerne alle varslene",
+    "Failed to dismiss all notifications" : "Klarte ikke å avvise alle varslene",
     "You need to set up your email address before you can receive notification emails." : "Du må sette opp e-postadressen din før du kan motta varslinger på e-post.",
     "Never" : "Aldri",
     "1 hour" : "1 time",
     "3 hours" : "3 timer",
+    "1 day" : "1 dag",
+    "1 week" : "1 uke",
     "Your settings have been updated." : "Innstillingene dine ble oppdatert."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
