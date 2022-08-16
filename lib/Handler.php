@@ -108,6 +108,10 @@ class Handler {
 		}
 		$statement->closeCursor();
 
+		if (count($notifications) === 0) {
+			return [];
+		}
+
 		$this->connection->beginTransaction();
 		try {
 			$shouldFlush = $this->manager->defer();
