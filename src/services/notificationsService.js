@@ -21,7 +21,7 @@
 import moment from '@nextcloud/moment'
 import axios from '@nextcloud/axios'
 import { generateOcsUrl } from '@nextcloud/router'
-import BrowserStorage from './BrowserStorage'
+import BrowserStorage from './BrowserStorage.js'
 
 const getNotificationsData = async (tabId, lastETag, forceRefresh, hasNotifyPush) => {
 	const lastUpdated = parseInt(BrowserStorage.getItem('lastUpdated'), 10)
