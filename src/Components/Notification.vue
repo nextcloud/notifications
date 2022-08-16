@@ -4,14 +4,14 @@
 			<span v-tooltip.bottom="absoluteDate"
 				class="notification-time live-relative-timestamp"
 				:data-timestamp="timestamp">{{ relativeDate }}</span>
-			<Button class="notification-dismiss-button"
+			<ButtonVue class="notification-dismiss-button"
 				type="tertiary"
 				:aria-label="t('notifications', 'Dismiss')"
 				@click="onDismissNotification">
 				<template #icon>
 					<Close :size="20" />
 				</template>
-			</Button>
+			</ButtonVue>
 		</div>
 
 		<a v-if="useLink" :href="link" class="notification-subject full-subject-link">
@@ -48,26 +48,26 @@
 
 <script>
 import axios from '@nextcloud/axios'
-import Button from '@nextcloud/vue/dist/Components/Button'
-import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip'
-import Close from 'vue-material-design-icons/Close'
+import ButtonVue from '@nextcloud/vue/dist/Components/Button.js'
+import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip.js'
+import Close from 'vue-material-design-icons/Close.vue'
 import { showError } from '@nextcloud/dialogs'
 import { loadState } from '@nextcloud/initial-state'
 import { Howl } from 'howler'
-import Action from './Action'
+import Action from './Action.vue'
 import { generateOcsUrl, generateFilePath } from '@nextcloud/router'
 import moment from '@nextcloud/moment'
 import RichText from '@juliushaertl/vue-richtext'
-import DefaultParameter from './Parameters/DefaultParameter'
-import File from './Parameters/File'
-import User from './Parameters/User'
+import DefaultParameter from './Parameters/DefaultParameter.vue'
+import File from './Parameters/File.vue'
+import User from './Parameters/User.vue'
 
 export default {
 	name: 'Notification',
 
 	components: {
 		Action,
-		Button,
+		ButtonVue,
 		Close,
 		RichText,
 	},

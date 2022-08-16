@@ -47,7 +47,7 @@
 
 <script>
 import { directive as ClickOutside } from 'v-click-outside'
-import excludeClickOutsideClasses from '@nextcloud/vue/dist/Mixins/excludeClickOutsideClasses'
+import excludeClickOutsideClasses from '@nextcloud/vue/dist/Mixins/excludeClickOutsideClasses.js'
 
 export default {
 	name: 'HeaderMenu',

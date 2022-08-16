@@ -19,7 +19,7 @@
  */
 
 import Vue from 'vue'
-import UserSettings from './views/UserSettings'
+import UserSettings from './views/UserSettings.vue'
 
 Vue.prototype.t = t
 Vue.prototype.n = n

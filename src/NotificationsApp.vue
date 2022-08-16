@@ -43,13 +43,13 @@
 					<span v-if="notifications.length > 0"
 						class="dismiss-all"
 						@click="onDismissAll">
-						<Button type="tertiary"
+						<ButtonVue type="tertiary"
 							@click="onDismissAll">
 							<template #icon>
 								<Close :size="20" />
 							</template>
 							{{ t('notifications', 'Dismiss all notifications') }}
-						</Button>
+						</ButtonVue>
 					</span>
 				</div>
 
@@ -68,25 +68,25 @@
 </template>
 
 <script>
-import Notification from './Components/Notification'
-import Button from '@nextcloud/vue/dist/Components/Button'
-import Close from 'vue-material-design-icons/Close'
+import Notification from './Components/Notification.vue'
+import ButtonVue from '@nextcloud/vue/dist/Components/Button.js'
+import Close from 'vue-material-design-icons/Close.vue'
 import axios from '@nextcloud/axios'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { showError } from '@nextcloud/dialogs'
 import { generateOcsUrl } from '@nextcloud/router'
-import { getNotificationsData } from './services/notificationsService'
+import { getNotificationsData } from './services/notificationsService.js'
 import { listen } from '@nextcloud/notify_push'
-import Bell from 'vue-material-design-icons/Bell'
-import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
+import Bell from 'vue-material-design-icons/Bell.vue'
+import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent.js'
 import { getCapabilities } from '@nextcloud/capabilities'
-import HeaderMenu from './Components/HeaderMenu'
+import HeaderMenu from './Components/HeaderMenu.vue'
 
 export default {
 	name: 'NotificationsApp',
 
 	components: {
-		Button,
+		ButtonVue,
 		Close,
 		Bell,
 		EmptyContent,
