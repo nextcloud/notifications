@@ -1,10 +1,12 @@
 <template>
 	<li class="notification" :data-id="notificationId" :data-timestamp="timestamp">
 		<div class="notification-heading">
-			<span v-tooltip.bottom="absoluteDate"
+			<span v-if="timestamp"
+				v-tooltip.bottom="absoluteDate"
 				class="notification-time live-relative-timestamp"
 				:data-timestamp="timestamp">{{ relativeDate }}</span>
-			<NcButton class="notification-dismiss-button"
+			<NcButton v-if="timestamp"
+				class="notification-dismiss-button"
 				type="tertiary"
 				:aria-label="t('notifications', 'Dismiss')"
 				@click="onDismissNotification">
@@ -14,7 +16,15 @@
 			</NcButton>
 		</div>
 
-		<a v-if="useLink" :href="link" class="notification-subject full-subject-link">
+		<a v-if="externalLink"
+			:href="externalLink"
+			class="notification-subject full-subject-link external"
+			target="_blank"
+			rel="noreferrer noopener">
+			<span class="image"><img :src="icon" class="notification-icon" alt=""></span>
+			<span class="subject">{{ subject }} ↗</span>
+		</a>
+		<a v-else-if="useLink" :href="link" class="notification-subject full-subject-link">
 			<span v-if="icon" class="image"><img :src="icon" class="notification-icon" alt=""></span>
 			<RichText v-if="subjectRich"
 				:text="subjectRich"
@@ -43,6 +53,18 @@
 		<div v-if="actions.length" class="notification-actions">
 			<Action v-for="(a, i) in actions" :key="i" v-bind="a" />
 		</div>
+		<div v-else-if="externalLink" class="notification-actions">
+			<NcButton type="primary"
+				href="https://nextcloud.com/pushnotifications"
+				class="action-button pull-right"
+				target="_blank"
+				rel="noreferrer noopener">
+				<template #icon>
+					<Message :size="20" />
+				</template>
+				{{ t('notifications', 'Contact Nextcloud GmbH') }} ↗
+			</NcButton>
+		</div>
 	</li>
 </template>
 
@@ -51,6 +73,7 @@ import axios from '@nextcloud/axios'
 import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
 import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip.js'
 import Close from 'vue-material-design-icons/Close.vue'
+import Message from 'vue-material-design-icons/Message.vue'
 import { showError } from '@nextcloud/dialogs'
 import { loadState } from '@nextcloud/initial-state'
 import { Howl } from 'howler'
@@ -69,6 +92,7 @@ export default {
 		Action,
 		NcButton,
 		Close,
+		Message,
 		RichText,
 	},
 
@@ -80,89 +104,77 @@ export default {
 		notificationId: {
 			type: Number,
 			default: -1,
-			required: true,
 		},
 		datetime: {
 			type: String,
 			default: '',
-			required: true,
 		},
 		app: {
 			type: String,
 			default: '',
-			required: true,
 		},
 		icon: {
 			type: String,
 			default: '',
-			required: true,
 		},
 		link: {
 			type: String,
 			default: '',
-			required: true,
+		},
+		externalLink: {
+			type: String,
+			default: '',
 		},
 		user: {
 			type: String,
 			default: '',
-			required: true,
 		},
 		message: {
 			type: String,
 			default: '',
-			required: true,
 		},
 		messageRich: {
 			type: String,
 			default: '',
-			required: true,
 		},
 		messageRichParameters: {
 			type: [Object, Array],
 			default() {
 				return {}
 			},
-			required: true,
 		},
 		subject: {
 			type: String,
 			default: '',
-			required: true,
 		},
 		subjectRich: {
 			type: String,
 			default: '',
-			required: true,
 		},
 		subjectRichParameters: {
 			type: [Object, Array],
 			default() {
 				return {}
 			},
-			required: true,
 		},
 		objectType: {
 			type: String,
 			default: '',
-			required: true,
 		},
 		objectId: {
 			type: String,
 			default: '',
-			required: true,
 		},
 		actions: {
 			type: Array,
 			default() {
 				return []
 			},
-			required: true,
 		},
 
 		index: {
 			type: Number,
 			default: -1,
-			required: true,
 		},
 	},
 
@@ -176,12 +188,22 @@ export default {
 
 	computed: {
 		timestamp() {
+			if (this.datetime === 'warning') {
+				return 0
+			}
 			return (new Date(this.datetime)).valueOf()
 		},
 		absoluteDate() {
+			if (this.datetime === 'warning') {
+				return ''
+			}
 			return moment(this.timestamp).format('LLL')
 		},
 		relativeDate() {
+			if (this.datetime === 'warning') {
+				return ''
+			}
+
 			const diff = moment().diff(moment(this.timestamp))
 			if (diff >= 0 && diff < 45000) {
 				return t('core', 'seconds ago')

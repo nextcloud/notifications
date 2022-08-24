@@ -1,6 +1,9 @@
 .notifications-button {
 	.notification__dot {
 		fill: #ff4402;
+		&--warning {
+			fill: var(--color-warning);
+		}
 		&--white {
 			fill: var(--color-primary-text);
 		}
@@ -69,6 +72,7 @@ svg {
 	.notification-heading {
 		display: flex;
 		align-items: center; // Else children will stretch in height as container is absolutely-positioned.
+		min-height: 26px;
 
 		.notification-time {
 			color: var(--color-text-maxcontrast);
