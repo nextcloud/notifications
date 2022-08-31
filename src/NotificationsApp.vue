@@ -43,25 +43,25 @@
 					<span v-if="notifications.length > 0"
 						class="dismiss-all"
 						@click="onDismissAll">
-						<ButtonVue type="tertiary"
+						<NcButton type="tertiary"
 							@click="onDismissAll">
 							<template #icon>
 								<Close :size="20" />
 							</template>
 							{{ t('notifications', 'Dismiss all notifications') }}
-						</ButtonVue>
+						</NcButton>
 					</span>
 				</div>
 
 				<!-- No notifications -->
-				<EmptyContent v-else>
-					{{ webNotificationsGranted === null
+				<NcEmptyContent v-else
+					:title="webNotificationsGranted === null
 						? t('notifications', 'Requesting browser permissions to show notifications')
-						: t('notifications', 'No notifications') }}
+						: t('notifications', 'No notifications')">
 					<template #icon>
 						<Bell />
 					</template>
-				</EmptyContent>
+				</NcEmptyContent>
 			</transition>
 		</div>
 	</HeaderMenu>
@@ -69,7 +69,7 @@
 
 <script>
 import Notification from './Components/Notification.vue'
-import ButtonVue from '@nextcloud/vue/dist/Components/Button.js'
+import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
 import Close from 'vue-material-design-icons/Close.vue'
 import axios from '@nextcloud/axios'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
@@ -78,7 +78,7 @@ import { generateOcsUrl } from '@nextcloud/router'
 import { getNotificationsData } from './services/notificationsService.js'
 import { listen } from '@nextcloud/notify_push'
 import Bell from 'vue-material-design-icons/Bell.vue'
-import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent.js'
+import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
 import { getCapabilities } from '@nextcloud/capabilities'
 import HeaderMenu from './Components/HeaderMenu.vue'
 
@@ -86,10 +86,10 @@ export default {
 	name: 'NotificationsApp',
 
 	components: {
-		ButtonVue,
+		NcButton,
 		Close,
 		Bell,
-		EmptyContent,
+		NcEmptyContent,
 		HeaderMenu,
 		Notification,
 	},

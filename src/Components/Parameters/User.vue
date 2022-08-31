@@ -21,7 +21,7 @@
 
 <template>
 	<div class="mention">
-		<UserBubble v-if="!cloudId"
+		<NcUserBubble v-if="!cloudId"
 			:display-name="name"
 			:user="id" />
 		<strong v-else
@@ -33,13 +33,13 @@
 
 <script>
 
-import UserBubble from '@nextcloud/vue/dist/Components/UserBubble.js'
+import NcUserBubble from '@nextcloud/vue/dist/Components/NcUserBubble.js'
 
 export default {
 	name: 'User',
 
 	components: {
-		UserBubble,
+		NcUserBubble,
 	},
 
 	props: {

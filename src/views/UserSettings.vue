@@ -19,7 +19,7 @@
   -->
 
 <template>
-	<SettingsSection :title="t('notifications', 'Notifications')">
+	<NcSettingsSection :title="t('notifications', 'Notifications')">
 		<div class="notification-frequency__warning">
 			<strong v-if="!config.is_email_set">{{ t('notifications', 'You need to set up your email address before you can receive notification emails.') }}</strong>
 		</div>
@@ -38,15 +38,15 @@
 			</select>
 		</p>
 
-		<CheckboxRadioSwitch :checked.sync="config.sound_notification"
+		<NcCheckboxRadioSwitch :checked.sync="config.sound_notification"
 			@update:checked="updateSettings">
 			{{ t('notifications', 'Play sound when a new notification arrives') }}
-		</CheckboxRadioSwitch>
-		<CheckboxRadioSwitch :checked.sync="config.sound_talk"
+		</NcCheckboxRadioSwitch>
+		<NcCheckboxRadioSwitch :checked.sync="config.sound_talk"
 			@update:checked="updateSettings">
 			{{ t('notifications', 'Play sound when a call started (requires Nextcloud Talk)') }}
-		</CheckboxRadioSwitch>
-	</SettingsSection>
+		</NcCheckboxRadioSwitch>
+	</NcSettingsSection>
 </template>
 
 <script>
@@ -54,8 +54,8 @@ import axios from '@nextcloud/axios'
 import { generateOcsUrl } from '@nextcloud/router'
 import { loadState } from '@nextcloud/initial-state'
 import { showSuccess, showError } from '@nextcloud/dialogs'
-import CheckboxRadioSwitch from '@nextcloud/vue/dist/Components/CheckboxRadioSwitch.js'
-import SettingsSection from '@nextcloud/vue/dist/Components/SettingsSection.js'
+import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
+import NcSettingsSection from '@nextcloud/vue/dist/Components/NcSettingsSection.js'
 
 const EmailFrequency = {
 	EMAIL_SEND_OFF: 0,
@@ -68,8 +68,8 @@ const EmailFrequency = {
 export default {
 	name: 'UserSettings',
 	components: {
-		CheckboxRadioSwitch,
-		SettingsSection,
+		NcCheckboxRadioSwitch,
+		NcSettingsSection,
 	},
 
 	data() {
