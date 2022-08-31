@@ -4,14 +4,14 @@
 			<span v-tooltip.bottom="absoluteDate"
 				class="notification-time live-relative-timestamp"
 				:data-timestamp="timestamp">{{ relativeDate }}</span>
-			<ButtonVue class="notification-dismiss-button"
+			<NcButton class="notification-dismiss-button"
 				type="tertiary"
 				:aria-label="t('notifications', 'Dismiss')"
 				@click="onDismissNotification">
 				<template #icon>
 					<Close :size="20" />
 				</template>
-			</ButtonVue>
+			</NcButton>
 		</div>
 
 		<a v-if="useLink" :href="link" class="notification-subject full-subject-link">
@@ -48,7 +48,7 @@
 
 <script>
 import axios from '@nextcloud/axios'
-import ButtonVue from '@nextcloud/vue/dist/Components/Button.js'
+import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
 import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip.js'
 import Close from 'vue-material-design-icons/Close.vue'
 import { showError } from '@nextcloud/dialogs'
@@ -67,7 +67,7 @@ export default {
 
 	components: {
 		Action,
-		ButtonVue,
+		NcButton,
 		Close,
 		RichText,
 	},
