@@ -35,19 +35,23 @@ use OCP\EventDispatcher\IEventListener;
 use OCP\IConfig;
 use OCP\IUser;
 use OCP\IUserSession;
+use OCP\Notification\IManager;
 use OCP\Util;
 
 class BeforeTemplateRenderedListener implements IEventListener {
 	protected IConfig $config;
 	protected IUserSession $userSession;
 	protected IInitialState $initialState;
+	protected IManager $notificationManager;
 
 	public function __construct(IConfig $config,
 								IUserSession $userSession,
-								IInitialState $initialState) {
+								IInitialState $initialState,
+								IManager $notificationManager) {
 		$this->config = $config;
 		$this->userSession = $userSession;
 		$this->initialState = $initialState;
+		$this->notificationManager = $notificationManager;
 	}
 
 	public function handle(Event $event): void {
@@ -82,6 +86,16 @@ class BeforeTemplateRenderedListener implements IEventListener {
 				'sound_talk',
 				'yes'
 			) === 'yes'
+		);
+
+		/**
+		 * We want to keep offering our push notification service for free, but large
+		 * users overload our infrastructure. For this reason we have to rate-limit the
+		 * use of push notifications. If you need this feature, consider using Nextcloud Enterprise.
+		 */
+		$this->initialState->provideInitialState(
+			'throttled_push_notifications',
+			!$this->notificationManager->isFairUseOfFreePushService()
 		);
 
 		Util::addScript('notifications', 'notifications-main');
