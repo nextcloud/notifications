@@ -3,6 +3,10 @@ OC.L10N.register(
     {
     "Hello %s" : "Hola %s",
     "Hello %s," : "Hola %s,",
-    "Notifications" : "Notificazions"
+    "Notifications" : "Notificazions",
+    "in {path}" : "en {path}",
+    "You need to set up your email address before you can receive notification emails." : "Ye nezesario que configures a tuya direzión de correu electronico pa poder rezibir os correus de notificazión.",
+    "Never" : "Nunca",
+    "Your settings have been updated." : "A suya configurazión ha estau autualizada."
 },
 "nplurals=2; plural=(n != 1);");
