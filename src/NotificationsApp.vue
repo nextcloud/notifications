@@ -75,7 +75,7 @@
 						<span v-else class="icon icon-alert-outline" />
 					</template>
 
-					<template #action>
+					<template v-if="hasThrottledPushNotifications" #action>
 						<NcButton type="primary"
 							href="https://nextcloud.com/pushnotifications"
 							target="_blank"
