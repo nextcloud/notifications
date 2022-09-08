@@ -162,6 +162,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+$margin: 8px;
+
 .header-menu {
 	&__trigger {
 		display: flex;
@@ -192,9 +194,10 @@ export default {
 		top: 50px;
 		right: 0;
 		box-sizing: border-box;
-		margin: 0;
-		border-radius: 0 0 var(--border-radius) var(--border-radius);
+		margin: 0 $margin;
+		border-radius: var(--border-radius-large);
 		background-color: var(--color-main-background);
+		overflow: hidden;
 
 		filter: drop-shadow(0 1px 5px var(--color-box-shadow));
 	}
@@ -215,7 +218,7 @@ export default {
 	&__content {
 		overflow: auto;
 		width: 350px;
-		max-width: 100vw;
+		max-width: calc(100vw - 2 * $margin);
 		min-height: calc(44px * 1.5);
 		max-height: calc(100vh - 50px * 2);
 	}
