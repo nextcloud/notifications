@@ -34,12 +34,9 @@ use OCP\EventDispatcher\Event;
 use OCP\IConfig;
 
 class UserCreatedListener implements IEventListener {
-    /** @var IUserManager */
-    private $userManager;
-    /** @var SettingsMapper */
-    private $settingsMapper;
-    /** @var IConfig */
-    private $config;
+    private IUserManager $userManager;
+    private SettingsMapper $settingsMapper;
+    private IConfig $config;
 
 
     public function __construct(IUserManager $userManager, SettingsMapper $settingsMapper, IConfig $config) {

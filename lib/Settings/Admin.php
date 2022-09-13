@@ -39,22 +39,12 @@ use OCP\Settings\ISettings;
 use OCP\IUserSession;
 use OCP\Util;
 
-class Admin implements ISettings
-{
-    /** @var \OCP\IConfig */
-    protected $config;
-
-    /** @var \OCP\IL10N */
-    protected $l10n;
-
-    /** @var SettingsMapper */
-    private $settingsMapper;
-
-    /** @var IUserSession */
-    private $session;
-
-    /** @var IInitialState */
-    private $initialState;
+class Admin implements ISettings {
+    protected IConfig $config;
+    protected IL10N $l10n;
+    private SettingsMapper$settingsMapper;
+    private IUserSession $session;
+    private IInitialState $initialState;
 
     public function __construct(IConfig        $config,
                                 IL10N          $l10n,
@@ -69,11 +59,7 @@ class Admin implements ISettings
         $this->initialState = $initialState;
     }
 
-    /**
-     * @return TemplateResponse
-     */
-    public function getForm(): TemplateResponse
-    {
+    public function getForm(): TemplateResponse {
         Util::addScript('notifications', 'notifications-adminSettings');
 
         $default_sound_notification = $this->config->getAppValue(Application::APP_ID, 'sound_notification') === 'yes' ? 'yes' : 'no';
