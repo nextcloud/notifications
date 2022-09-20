@@ -193,7 +193,7 @@ export default {
 
 			let parametersHaveLink = false
 			Object.keys(this.subjectRichParameters).forEach(p => {
-				if (p.link) {
+				if (this.subjectRichParameters[p].link) {
 					parametersHaveLink = true
 				}
 			})
