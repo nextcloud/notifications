@@ -3,6 +3,10 @@ OC.L10N.register(
     {
     "Hello %s" : "Вітаємо %s",
     "Hello %s," : "Вітаємо %s,",
+    "_New notification for %s_::_%n new notifications for %s_" : ["Нове сповіщення для %s","%n нові сповіщення для %s","%n нові сповіщення для %s","%n нові сповіщення для %s"],
+    "_You have a new notification for %s_::_You have %n new notifications for %s_" : ["У вас є нове сповіщення для %s","У вас є нові сповіщення %n для %s","У вас є нові сповіщення %n для %s","У вас є нові сповіщення %n для %s"],
+    "You can change the frequency of these emails or disable them in the <a href=\"%s\">settings</a>." : "Ви можете змінити частоту цих електронних листів або вимкнути їх у <a href=\"%s\">налаштуваннях</a>.",
+    "You can change the frequency of these emails or disable them in the settings: %s" : "Ви можете змінити частоту цих листів або вимкнути їх у налаштуваннях: %s",
     "Admin notifications" : "Сповіщення адміністратора",
     "Notifications" : "Сповіщення",
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "Цей застосунок забезпечує бекендовий та фронтендовий інтерфейс для API сповіщень у Nextcloud.",
@@ -20,9 +24,15 @@ OC.L10N.register(
     "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "Nextcloud GmbH спонсорує безкоштовний шлюз push-повідомлень для приватних користувачів. Щоб забезпечити якісне обслуговування, шлюз обмежує кількість push-повідомлень на сервер. Для корпоративних користувачів доступний більш масштабований шлюз. Зверніться до Nextcloud GmbH для отримання додаткової інформації.",
     "Failed to dismiss all notifications" : "Не вдалося відхилити всі сповіщення",
     "You need to set up your email address before you can receive notification emails." : "Для отримання повідомлень зазначте електронну адресу в особистих налаштуваннях.",
+    "Send email reminders about unhandled notifications after:" : "Надсилати нагадування електронною поштою про необроблені сповіщення після:",
+    "Play sound when a new notification arrives" : "Відтворювати звук, коли надходить нове сповіщення",
+    "Play sound when a call started (requires Nextcloud Talk)" : "Відтворення звуку під час виклику (потрібно Nextcloud Talk)",
     "Never" : "Ніколи",
     "1 hour" : "1 година",
     "3 hours" : "3 години",
-    "Your settings have been updated." : "Налаштування успішно оновлено."
+    "1 day" : "1 день",
+    "1 week" : "1 тиждень",
+    "Your settings have been updated." : "Налаштування успішно оновлено.",
+    "An error occurred while updating your settings." : "Під час оновлення налаштувань сталася помилка."
 },
 "nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);");
