@@ -19,6 +19,7 @@ OC.L10N.register(
     "in {path}" : "{path} -en",
     "Dismiss all notifications" : "Baztertu jakinarazpen guztiak",
     "Requesting browser permissions to show notifications" : "Jakinarazpenak erakusteko nabigatzaileari baimena eskatzen",
+    "Push notifications might be unreliable" : "Push jakinarazpenak fidagarritasun gutxi izan ditzakete",
     "No notifications" : "Ez dago jakinarazpenik",
     "Failed to dismiss all notifications" : "Huts egin du jakinarazpen guztiak baztertzean",
     "You need to set up your email address before you can receive notification emails." : "Zure helbide elektronikoa konfiguratu behar duzu jakinarazpenak posta elektronikoz jasotzeko.",
