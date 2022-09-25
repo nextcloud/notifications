@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a302cab2d34495c261aafb5d120ad068",
+    "content-hash": "00ac321d8f96867d72dc7c62072b44c1",
     "packages": [],
     "packages-dev": [
         {
@@ -179,17 +179,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ChristophWurst/nextcloud_composer.git",
-                "reference": "6aec9c3521c554466bb7d92559782cf61f391c79"
+                "reference": "f5ba6d163e242b7971adc3a7544075ac0a57f0fd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ChristophWurst/nextcloud_composer/zipball/6aec9c3521c554466bb7d92559782cf61f391c79",
-                "reference": "6aec9c3521c554466bb7d92559782cf61f391c79",
+                "url": "https://api.github.com/repos/ChristophWurst/nextcloud_composer/zipball/f5ba6d163e242b7971adc3a7544075ac0a57f0fd",
+                "reference": "f5ba6d163e242b7971adc3a7544075ac0a57f0fd",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.4 || ~8.0 || ~8.1",
-                "psr/container": "^1.0",
+                "psr/container": "^1.1.1",
                 "psr/event-dispatcher": "^1.0",
                 "psr/log": "^1.1"
             },
@@ -197,7 +197,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "24.0.0-dev"
+                    "dev-master": "26.0.0-dev"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -215,7 +215,8 @@
                 "issues": "https://github.com/ChristophWurst/nextcloud_composer/issues",
                 "source": "https://github.com/ChristophWurst/nextcloud_composer/tree/master"
             },
-            "time": "2022-02-07T08:09:24+00:00"
+            "abandoned": "nextcloud/ocp",
+            "time": "2022-09-22T12:30:27+00:00"
         },
         {
             "name": "composer/package-versions-deprecated",
@@ -4851,5 +4852,5 @@
     "platform-overrides": {
         "php": "7.4"
     },
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.3.0"
 }
