@@ -245,7 +245,7 @@ export default {
 			console.error('Failed to read showBrowserNotifications property from App component')
 		}
 
-		if (this.$parent.$parent.showBrowserNotifications) {
+		if (this.$parent.$parent.$parent.showBrowserNotifications) {
 			this._createWebNotification()
 
 			if (this.app === 'spreed' && this.objectType === 'call') {
