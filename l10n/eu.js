@@ -21,6 +21,7 @@ OC.L10N.register(
     "Requesting browser permissions to show notifications" : "Jakinarazpenak erakusteko nabigatzaileari baimena eskatzen",
     "Push notifications might be unreliable" : "Push jakinarazpenak fidagarritasun gutxi izan ditzakete",
     "No notifications" : "Ez dago jakinarazpenik",
+    "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "Nextcloud GmbH-k erabiltzaile pribatuentzako doako push jakinarazpen-sarbide bat babesten du. Zerbitzu ona bermatzeko, sarbideak zerbitzari bakoitzeko push jakinarazpen kopurua mugatzen du. Enpresako erabiltzaileentzat sarbide zabalgarriagoa dago. Jarri harremanetan Nextcloud GmbH-rekin informazio gehiago lortzeko.",
     "Failed to dismiss all notifications" : "Huts egin du jakinarazpen guztiak baztertzean",
     "You need to set up your email address before you can receive notification emails." : "Zure helbide elektronikoa konfiguratu behar duzu jakinarazpenak posta elektronikoz jasotzeko.",
     "Send email reminders about unhandled notifications after:" : "Bidali e-posta abisuak kudeatu gabeko jakinarazpenei buruz honen ondoren:",
