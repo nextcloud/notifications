@@ -17,6 +17,7 @@ OC.L10N.register(
     "in {path}" : "polussa {path}",
     "Dismiss all notifications" : "Hylkää kaikki ilmoitukset",
     "Requesting browser permissions to show notifications" : "Pyydetään selaimelta oikeuksia ilmoitusten näyttämiseen",
+    "Push notifications might be unreliable" : "Push-ilmoitukset eivät välttämättä ole luotettavia",
     "No notifications" : "Ei ilmoituksia",
     "Failed to dismiss all notifications" : "Kaikki ilmoitusten hylkääminen epäonnistui",
     "You need to set up your email address before you can receive notification emails." : "Aseta sähköpostiosoite, jotta voit vastaanottaa sähköposti-ilmoituksia.",
