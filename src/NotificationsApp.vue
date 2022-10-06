@@ -336,7 +336,7 @@ export default {
 		 */
 		_fetchAfterNotifyPush() {
 			this.backgroundFetching = true
-			if (this.notifyPush && this.tabId !== this.lastTabId) {
+			if (this.hasNotifyPush && this.tabId !== this.lastTabId) {
 				console.debug('Deferring notification refresh from browser storage are notify_push event to give the last tab the chance to do it')
 				setTimeout(() => {
 					this._fetch()
