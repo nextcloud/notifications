@@ -22,7 +22,7 @@ OC.L10N.register(
     "No notifications" : "Aucune notification",
     "Failed to dismiss all notifications" : "Impossible d'ignorer toutes les notifications",
     "You need to set up your email address before you can receive notification emails." : "Vous devez définir votre adresse e-mail avant de pouvoir recevoir des e-mails de notification.",
-    "Send email reminders about unhandled notifications after:" : "Envoyer des rappels par e-mail à propos des notifications non prises en charge après :",
+    "Send email reminders about unhandled notifications after:" : "Envoyer par e-mail des rappels des notifications non gérées après :",
     "Play sound when a new notification arrives" : "Jouer un son quand une notification arrive",
     "Play sound when a call started (requires Nextcloud Talk)" : "Jouer un son quand un appel démarre (l'application Nextcloud Talk est requise)",
     "Never" : "Jamais",
