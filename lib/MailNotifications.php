@@ -292,9 +292,9 @@ class MailNotifications {
 					'An error occurred while preparing a notification ('
 					. $notification->getApp() . '|' . $notification->getSubject()
 					. '|' . $notification->getObjectType() . '|' . $notification->getObjectId()
-					. ') for sending', [
-					'exception' => $e,
-				]);
+					. ') for sending',
+					['exception' => $e]
+				);
 				return null;
 			}
 		}
