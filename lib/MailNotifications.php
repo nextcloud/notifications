@@ -276,15 +276,26 @@ class MailNotifications {
 		$notifications = array_reverse($notifications);
 
 		foreach ($notifications as $notification) {
-			$relativeDateTime = $this->dateFormatter->formatDateTimeRelativeDay($notification->getDateTime(), 'long', 'short', new \DateTimeZone($timezone), $l10n);
-			$template->addBodyListItem($this->getHTMLContents($notification), $relativeDateTime, $notification->getIcon(), $notification->getParsedSubject());
+			try {
+				$relativeDateTime = $this->dateFormatter->formatDateTimeRelativeDay($notification->getDateTime(), 'long', 'short', new \DateTimeZone($timezone), $l10n);
+				$template->addBodyListItem($this->getHTMLContents($notification), $relativeDateTime, $notification->getIcon(), $notification->getParsedSubject());
 
-			// Buttons probably were not intended for this, but it works ok enough for showing the idea.
-			$actions = $notification->getParsedActions();
-			foreach ($actions as $action) {
-				if ($action->getRequestType() === IAction::TYPE_WEB) {
-					$template->addBodyButton($action->getLabel(), $action->getLink());
+				// Buttons probably were not intended for this, but it works ok enough for showing the idea.
+				$actions = $notification->getParsedActions();
+				foreach ($actions as $action) {
+					if ($action->getRequestType() === IAction::TYPE_WEB) {
+						$template->addBodyButton($action->getLabel(), $action->getLink());
+					}
 				}
+			} catch (\Throwable $e) {
+				$this->logger->error(
+					'An error occurred while preparing a notification ('
+					. $notification->getApp() . '|' . $notification->getSubject()
+					. '|' . $notification->getObjectType() . '|' . $notification->getObjectId()
+					. ') for sending',
+					['exception' => $e]
+				);
+				return null;
 			}
 		}
 
