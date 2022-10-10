@@ -484,6 +484,11 @@ export default {
 	overflow: hidden;
 }
 
+.notification-wrapper {
+	max-height: calc(100vh - 50px * 4);
+	overflow: auto;
+}
+
 ::v-deep .empty-content {
 	margin: 12vh 10px;
 
