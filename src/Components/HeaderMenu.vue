@@ -216,11 +216,9 @@ $margin: 8px;
 	}
 
 	&__content {
-		overflow: auto;
 		width: 350px;
 		max-width: calc(100vw - 2 * $margin);
 		min-height: calc(44px * 1.5);
-		max-height: calc(100vh - 50px * 2);
 	}
 }
 
