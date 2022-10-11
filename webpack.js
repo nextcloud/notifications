@@ -6,7 +6,7 @@ const BabelLoaderExcludeNodeModulesExcept = require('babel-loader-exclude-node-m
 
 // Edit JS rule
 webpackRules.RULE_JS.exclude = BabelLoaderExcludeNodeModulesExcept([
-	'@juliushaertl/vue-richtext',
+	'@nextcloud/vue-richtext',
 	'@nextcloud/event-bus',
 	'semver',
 ])

@@ -15,7 +15,6 @@
 		"stylelint:fix": "stylelint css/*.css css/*.scss src/**/*.scss src/**/*.vue --fix"
 	},
 	"dependencies": {
-		"@juliushaertl/vue-richtext": "^1.0.1",
 		"@nextcloud/axios": "^1.9.0",
 		"@nextcloud/browser-storage": "^0.1.1",
 		"@nextcloud/capabilities": "^1.0.4",
@@ -26,6 +25,7 @@
 		"@nextcloud/notify_push": "^1.1.2",
 		"@nextcloud/router": "^2.0.0",
 		"@nextcloud/vue": "^5.3.1",
+		"@nextcloud/vue-richtext": "^2.0.4",
 		"howler": "^2.2.3",
 		"vue": "^2.6.14",
 		"vue-material-design-icons": "^5.0.0",
@@ -44,6 +44,7 @@
 		"@nextcloud/eslint-config": "^7.0.2",
 		"@nextcloud/stylelint-config": "^2.1.2",
 		"@nextcloud/webpack-vue-config": "^5.0.0",
-		"babel-loader-exclude-node-modules-except": "^1.2.1"
+		"babel-loader-exclude-node-modules-except": "^1.2.1",
+		"vue-template-compiler": "^2.7.10"
 	}
 }

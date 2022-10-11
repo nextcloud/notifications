@@ -42,8 +42,8 @@
  */
 
 /*!
- * Vue.js v2.6.14
- * (c) 2014-2021 Evan You
+ * Vue.js v2.7.10
+ * (c) 2014-2022 Evan You
  * Released under the MIT License.
  */
 
@@ -53,13 +53,6 @@
  * Copyright(c) 2015 Andreas Lubbe
  * Copyright(c) 2015 Tiancheng "Timothy" Gu
  * MIT Licensed
- */
-
-/*!
- * repeat-string <https://github.com/jonschlinkert/repeat-string>
- *
- * Copyright (c) 2014-2015, Jon Schlinkert.
- * Licensed under the MIT License.
  */
 
 /*! For license information please see Tooltip.js.LICENSE.txt */
@@ -143,4 +136,4 @@
 
 //! momentjs.com
 
-//! version : 2.29.1
+//! version : 2.29.4
