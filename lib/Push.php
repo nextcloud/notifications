@@ -260,11 +260,20 @@ class Push {
 		$client = $this->clientService->newClient();
 		foreach ($pushNotifications as $proxyServer => $notifications) {
 			try {
-				$response = $client->post($proxyServer . '/notifications', [
+				$requestData = [
 					'body' => [
 						'notifications' => $notifications,
 					],
-				]);
+				];
+
+				if ($proxyServer === 'https://push-notifications.nextcloud.com') {
+					$subscriptionKey = $this->config->getAppValue('support', 'subscription_key');
+					if ($subscriptionKey) {
+						$requestData['headers']['X-Nextcloud-Subscription-Key'] = $subscriptionKey;
+					}
+				}
+
+				$response = $client->post($proxyServer . '/notifications', $requestData);
 			} catch (ClientException $e) {
 				// Server responded with 4xx (400 Bad Request mostlikely)
 				$response = $e->getResponse();
