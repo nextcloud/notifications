@@ -8,11 +8,13 @@
 		@open="onOpen">
 		<template #trigger>
 			<Bell v-if="notifications.length === 0 && webNotificationsGranted !== null && !hasThrottledPushNotifications"
+				class="notifications-button__icon"
 				:size="20"
 				:title="t('notifications', 'Notifications')"
 				fill-color="var(--color-primary-text)" />
 			<!-- From material design icons -->
 			<svg v-else
+				class="notifications-button__icon"
 				xmlns="http://www.w3.org/2000/svg"
 				xmlns:xlink="http://www.w3.org/1999/xlink"
 				version="1.1"
@@ -479,6 +481,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.notifications-button__icon {
+	filter: var(--background-image-invert-if-bright);
+}
+
 .notification-container {
 	/* Prevent slide animation to go out of the div */
 	overflow: hidden;
