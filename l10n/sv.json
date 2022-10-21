@@ -20,6 +20,8 @@
     "Failed to dismiss all notifications" : "Misslyckades att avfärda alla aviseringar",
     "You need to set up your email address before you can receive notification emails." : "Du måste ställa in din e-postadress innan du kan ta emot notifikationer via e-post.",
     "Send email reminders about unhandled notifications after:" : "Skicka påminnelser via e-post för ej hanterade notifikationer efter:",
+    "Play sound when a new notification arrives" : "Spela upp ljud när en ny avisering kommer",
+    "Play sound when a call started (requires Nextcloud Talk)" : "Spela upp ljud när ett samtal startade (kräver Nextcloud Talk)",
     "Never" : "Aldrig",
     "1 hour" : "1 timme",
     "3 hours" : "3 timmar",
