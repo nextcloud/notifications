@@ -22,7 +22,7 @@
 		"@nextcloud/event-bus": "^3.0.2",
 		"@nextcloud/initial-state": "^2.0.0",
 		"@nextcloud/moment": "^1.2.1",
-		"@nextcloud/notify_push": "^1.1.2",
+		"@nextcloud/notify_push": "^1.1.3",
 		"@nextcloud/router": "^2.0.0",
 		"@nextcloud/vue": "^7.0.0-beta.4",
 		"@nextcloud/vue-richtext": "^2.0.4",
