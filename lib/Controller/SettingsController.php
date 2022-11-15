@@ -60,7 +60,6 @@ class SettingsController extends OCSController {
 	}
 
     /**
-     * @PasswordConfirmationRequired
      * @AuthorizedAdminSetting(settings=OCA\Notifications\Settings\Admin)
      */
     public function admin(int $batchSetting, string $soundNotification, string $soundTalk): DataResponse {

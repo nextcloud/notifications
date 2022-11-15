@@ -59,8 +59,8 @@ class Application extends \OCP\AppFramework\App implements IBootstrap {
 
 		$context->registerEventListener(UserDeletedEvent::class, UserDeletedListener::class);
 		$context->registerEventListener(BeforeTemplateRenderedEvent::class, BeforeTemplateRenderedListener::class);
-        $context->registerEventListener(UserCreatedEvent::class, UserCreatedListener::class);
-        $context->registerEventListener(PostLoginEvent::class, PostLoginListener::class);
+		$context->registerEventListener(UserCreatedEvent::class, UserCreatedListener::class);
+		$context->registerEventListener(PostLoginEvent::class, PostLoginListener::class);
 	}
 
 	public function boot(IBootContext $context): void {

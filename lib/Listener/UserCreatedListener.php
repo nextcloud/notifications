@@ -57,11 +57,11 @@ class UserCreatedListener implements IEventListener {
         $default_sound_talk = $this->config->getAppValue(Application::APP_ID, 'sound_talk') === 'yes' ? 'yes' : 'no';
         $default_batchtime = $this->config->getAppValue(Application::APP_ID, 'setting_batchtime');
 
-        if ($default_batchtime != Settings::EMAIL_SEND_WEEKLY
-            && $default_batchtime != Settings::EMAIL_SEND_DAILY
-            && $default_batchtime != Settings::EMAIL_SEND_3HOURLY
-            && $default_batchtime != Settings::EMAIL_SEND_HOURLY
-            && $default_batchtime != Settings::EMAIL_SEND_OFF) {
+        if ($default_batchtime !== Settings::EMAIL_SEND_WEEKLY
+            && $default_batchtime !== Settings::EMAIL_SEND_DAILY
+            && $default_batchtime !== Settings::EMAIL_SEND_3HOURLY
+            && $default_batchtime !== Settings::EMAIL_SEND_HOURLY
+            && $default_batchtime !== Settings::EMAIL_SEND_OFF) {
             $default_batchtime = Settings::EMAIL_SEND_3HOURLY;
         }
 
