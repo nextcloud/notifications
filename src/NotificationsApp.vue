@@ -248,8 +248,16 @@ export default {
 
 	methods: {
 		onOpen() {
+			this.focusFirstFocusable()
 			this.requestWebNotificationPermissions()
 		},
+
+		focusFirstFocusable() {
+			this.$nextTick(() => {
+				this.$el.querySelector('.button-vue').focus()
+			})
+		},
+
 		handleNetworkOffline() {
 			console.debug('Network is offline, slowing down pollingInterval to ' + this.pollIntervalBase * 10)
 			this._setPollingInterval(this.pollIntervalBase * 10)
@@ -481,6 +489,12 @@ export default {
 </script>
 
 <style scoped lang="scss">
+:deep(.button-vue) {
+	&:focus {
+		outline: 2px solid var(--color-main-text) !important;
+	}
+}
+
 .notifications-button__icon {
 	filter: var(--background-image-invert-if-bright);
 }
