@@ -62,23 +62,23 @@ class Admin implements ISettings {
     public function getForm(): TemplateResponse {
         Util::addScript('notifications', 'notifications-adminSettings');
 
-        $default_sound_notification = $this->config->getAppValue(Application::APP_ID, 'sound_notification') === 'yes' ? 'yes' : 'no';
-        $default_sound_talk = $this->config->getAppValue(Application::APP_ID, 'sound_talk') === 'yes' ? 'yes' : 'no';
-        $default_batchtime = $this->config->getAppValue(Application::APP_ID, 'setting_batchtime');
+        $defaultSoundNotification = $this->config->getAppValue(Application::APP_ID, 'sound_notification') === 'yes' ? 'yes' : 'no';
+        $defaultSoundTalk = $this->config->getAppValue(Application::APP_ID, 'sound_talk') === 'yes' ? 'yes' : 'no';
+        $defaultBatchtime = $this->config->getAppValue(Application::APP_ID, 'setting_batchtime');
 
-        if ($default_batchtime != Settings::EMAIL_SEND_WEEKLY
-            && $default_batchtime != Settings::EMAIL_SEND_DAILY
-            && $default_batchtime != Settings::EMAIL_SEND_3HOURLY
-            && $default_batchtime != Settings::EMAIL_SEND_HOURLY
-            && $default_batchtime != Settings::EMAIL_SEND_OFF) {
-            $default_batchtime = Settings::EMAIL_SEND_3HOURLY;
+        if ($defaultBatchtime != Settings::EMAIL_SEND_WEEKLY
+            && $defaultBatchtime != Settings::EMAIL_SEND_DAILY
+            && $defaultBatchtime != Settings::EMAIL_SEND_3HOURLY
+            && $defaultBatchtime != Settings::EMAIL_SEND_HOURLY
+            && $defaultBatchtime != Settings::EMAIL_SEND_OFF) {
+            $defaultBatchtime = Settings::EMAIL_SEND_3HOURLY;
         }
 
         $this->initialState->provideInitialState('config', [
             'setting' => 'admin',
-            'setting_batchtime' => $default_batchtime,
-            'sound_notification' => $default_sound_notification === 'yes',
-            'sound_talk' => $default_sound_talk === 'yes',
+            'setting_batchtime' => $defaultBatchtime,
+            'sound_notification' => $defaultSoundNotification === 'yes',
+            'sound_talk' => $defaultSoundTalk === 'yes',
         ]);
 
         return new TemplateResponse('notifications', 'settings/admin');
