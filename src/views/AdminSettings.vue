@@ -1,5 +1,5 @@
 <!--
-  - @copyright Copyright (c) 2021 Julien Barnoin <julien@barnoin.com>
+  - @copyright Copyright (c) 2022 Nikita Toponen <natoponen@gmail.com>
   -
   - @license GNU AGPL version 3 or any later version
   -
@@ -19,17 +19,14 @@
   -->
 
 <template>
-	<NcSettingsSection :title="t('notifications', 'Notifications')">
-		<div class="notification-frequency__warning">
-			<strong v-if="!config.is_email_set">{{ t('notifications', 'You need to set up your email address before you can receive notification emails.') }}</strong>
-		</div>
+	<NcSettingsSection :title="t('notifications', 'Notifications defaults')"
+		:description="t('notifications', 'Configure the default notification settings for new users')">
 		<p>
-			<label for="notification_reminder_batchtime" class="notification-frequency__label">
+			<label for="notify_setting_batchtime" class="notification-frequency__label">
 				{{ t('notifications', 'Send email reminders about unhandled notifications after:') }}
 			</label>
-			<select id="notification_reminder_batchtime"
+			<select id="notify_setting_batchtime"
 				v-model="config.setting_batchtime"
-				name="notification_reminder_batchtime"
 				class="notification-frequency__select"
 				@change="updateSettings()">
 				<option v-for="option in batchtime_options" :key="option.value" :value="option.value">
@@ -66,7 +63,7 @@ const EmailFrequency = {
 }
 
 export default {
-	name: 'UserSettings',
+	name: 'AdminSettings',
 	components: {
 		NcCheckboxRadioSwitch,
 		NcSettingsSection,
@@ -92,7 +89,7 @@ export default {
 				form.append('batchSetting', this.config.setting_batchtime)
 				form.append('soundNotification', this.config.sound_notification ? 'yes' : 'no')
 				form.append('soundTalk', this.config.sound_talk ? 'yes' : 'no')
-				await axios.post(generateOcsUrl('apps/notifications/api/v2/settings'), form)
+				await axios.post(generateOcsUrl('apps/notifications/api/v2/settings/admin'), form)
 				showSuccess(t('notifications', 'Your settings have been updated.'))
 			} catch (error) {
 				showError(t('notifications', 'An error occurred while updating your settings.'))
