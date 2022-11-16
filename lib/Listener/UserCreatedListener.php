@@ -53,20 +53,20 @@ class UserCreatedListener implements IEventListener {
 
         $userId = $event->getUser()->getUID();
 
-        $default_sound_notification = $this->config->getAppValue(Application::APP_ID, 'sound_notification') === 'yes' ? 'yes' : 'no';
-        $default_sound_talk = $this->config->getAppValue(Application::APP_ID, 'sound_talk') === 'yes' ? 'yes' : 'no';
-        $default_batchtime = $this->config->getAppValue(Application::APP_ID, 'setting_batchtime');
+        $defaultSoundNotification = $this->config->getAppValue(Application::APP_ID, 'sound_notification') === 'yes' ? 'yes' : 'no';
+        $defaultSoundTalk = $this->config->getAppValue(Application::APP_ID, 'sound_talk') === 'yes' ? 'yes' : 'no';
+        $defaultBatchtime = $this->config->getAppValue(Application::APP_ID, 'setting_batchtime');
 
-        if ($default_batchtime !== Settings::EMAIL_SEND_WEEKLY
-            && $default_batchtime !== Settings::EMAIL_SEND_DAILY
-            && $default_batchtime !== Settings::EMAIL_SEND_3HOURLY
-            && $default_batchtime !== Settings::EMAIL_SEND_HOURLY
-            && $default_batchtime !== Settings::EMAIL_SEND_OFF) {
-            $default_batchtime = Settings::EMAIL_SEND_3HOURLY;
+        if ($defaultBatchtime !== Settings::EMAIL_SEND_WEEKLY
+            && $defaultBatchtime !== Settings::EMAIL_SEND_DAILY
+            && $defaultBatchtime !== Settings::EMAIL_SEND_3HOURLY
+            && $defaultBatchtime !== Settings::EMAIL_SEND_HOURLY
+            && $defaultBatchtime !== Settings::EMAIL_SEND_OFF) {
+            $defaultBatchtime = Settings::EMAIL_SEND_3HOURLY;
         }
 
-        $this->config->setUserValue($userId, Application::APP_ID, 'sound_notification', $default_sound_notification);
-        $this->config->setUserValue($userId, Application::APP_ID, 'sound_talk', $default_sound_talk);
-        $this->settingsMapper->setBatchSettingForUser($userId, $default_batchtime);
+        $this->config->setUserValue($userId, Application::APP_ID, 'sound_notification', $defaultSoundNotification);
+        $this->config->setUserValue($userId, Application::APP_ID, 'sound_talk', $defaultSoundTalk);
+        $this->settingsMapper->setBatchSettingForUser($userId, $defaultBatchtime);
     }
 }
