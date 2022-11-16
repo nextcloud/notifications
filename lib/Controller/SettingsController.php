@@ -59,14 +59,14 @@ class SettingsController extends OCSController {
 		return new DataResponse();
 	}
 
-    /**
-     * @AuthorizedAdminSetting(settings=OCA\Notifications\Settings\Admin)
-     */
-    public function admin(int $batchSetting, string $soundNotification, string $soundTalk): DataResponse {
-        $this->config->setAppValue(Application::APP_ID, 'setting_batchtime', $batchSetting);
-        $this->config->setAppValue(Application::APP_ID, 'sound_notification', $soundNotification !== 'no' ? 'yes' : 'no');
-        $this->config->setAppValue(Application::APP_ID, 'sound_talk', $soundTalk !== 'no' ? 'yes' : 'no');
+	/**
+	 * @AuthorizedAdminSetting(settings=OCA\Notifications\Settings\Admin)
+	 */
+	public function admin(int $batchSetting, string $soundNotification, string $soundTalk): DataResponse {
+		$this->config->setAppValue(Application::APP_ID, 'setting_batchtime', $batchSetting);
+		$this->config->setAppValue(Application::APP_ID, 'sound_notification', $soundNotification !== 'no' ? 'yes' : 'no');
+		$this->config->setAppValue(Application::APP_ID, 'sound_talk', $soundTalk !== 'no' ? 'yes' : 'no');
 
-        return new DataResponse();
-    }
+		return new DataResponse();
+	}
 }

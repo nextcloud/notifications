@@ -37,42 +37,42 @@ use OCP\IUserManager;
 use OCP\IConfig;
 
 class PostLoginListener implements IEventListener {
-    private IUserManager $userManager;
-    private SettingsMapper $settingsMapper;
-    private IConfig $config;
+	private IUserManager $userManager;
+	private SettingsMapper $settingsMapper;
+	private IConfig $config;
 
-    public function __construct(IUserManager $userManager, SettingsMapper $settingsMapper, IConfig $config) {
-        $this->userManager = $userManager;
-        $this->settingsMapper = $settingsMapper;
-        $this->config = $config;
-    }
+	public function __construct(IUserManager $userManager, SettingsMapper $settingsMapper, IConfig $config) {
+		$this->userManager = $userManager;
+		$this->settingsMapper = $settingsMapper;
+		$this->config = $config;
+	}
 
-    public function handle(Event $event): void {
-        if (!($event instanceof PostLoginEvent)) {
-            // Unrelated
-            return;
-        }
+	public function handle(Event $event): void {
+		if (!($event instanceof PostLoginEvent)) {
+			// Unrelated
+			return;
+		}
 
-        $userId = $event->getUser()->getUID();
+		$userId = $event->getUser()->getUID();
 
-        try {
-            $this->settingsMapper->getSettingsByUser($userId);
-        } catch (DoesNotExistException $e) {
-            $defaultSoundNotification = $this->config->getAppValue(Application::APP_ID, 'sound_notification') === 'yes' ? 'yes' : 'no';
-            $defaultSoundTalk = $this->config->getAppValue(Application::APP_ID, 'sound_talk') === 'yes' ? 'yes' : 'no';
-            $defaultBatchtime = $this->config->getAppValue(Application::APP_ID, 'setting_batchtime');
+		try {
+			$this->settingsMapper->getSettingsByUser($userId);
+		} catch (DoesNotExistException $e) {
+			$defaultSoundNotification = $this->config->getAppValue(Application::APP_ID, 'sound_notification') === 'yes' ? 'yes' : 'no';
+			$defaultSoundTalk = $this->config->getAppValue(Application::APP_ID, 'sound_talk') === 'yes' ? 'yes' : 'no';
+			$defaultBatchtime = $this->config->getAppValue(Application::APP_ID, 'setting_batchtime');
 
-            if ($defaultBatchtime !== Settings::EMAIL_SEND_WEEKLY
-                && $defaultBatchtime !== Settings::EMAIL_SEND_DAILY
-                && $defaultBatchtime !== Settings::EMAIL_SEND_3HOURLY
-                && $defaultBatchtime !== Settings::EMAIL_SEND_HOURLY
-                && $defaultBatchtime !== Settings::EMAIL_SEND_OFF) {
-                $defaultBatchtime = Settings::EMAIL_SEND_3HOURLY;
-            }
+			if ($defaultBatchtime !== Settings::EMAIL_SEND_WEEKLY
+				&& $defaultBatchtime !== Settings::EMAIL_SEND_DAILY
+				&& $defaultBatchtime !== Settings::EMAIL_SEND_3HOURLY
+				&& $defaultBatchtime !== Settings::EMAIL_SEND_HOURLY
+				&& $defaultBatchtime !== Settings::EMAIL_SEND_OFF) {
+				$defaultBatchtime = Settings::EMAIL_SEND_3HOURLY;
+			}
 
-            $this->config->setUserValue($userId, Application::APP_ID, 'sound_notification', $defaultSoundNotification);
-            $this->config->setUserValue($userId, Application::APP_ID, 'sound_talk', $defaultSoundTalk);
-            $this->settingsMapper->setBatchSettingForUser($userId, $defaultBatchtime);
-        }
-    }
+			$this->config->setUserValue($userId, Application::APP_ID, 'sound_notification', $defaultSoundNotification);
+			$this->config->setUserValue($userId, Application::APP_ID, 'sound_talk', $defaultSoundTalk);
+			$this->settingsMapper->setBatchSettingForUser($userId, $defaultBatchtime);
+		}
+	}
 }
