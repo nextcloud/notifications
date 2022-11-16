@@ -81,6 +81,6 @@ class AdminSection implements IIconSection {
      * @since 9.1
      */
     public function getPriority(): int {
-        return 10;
+        return 55;
     }
 }
