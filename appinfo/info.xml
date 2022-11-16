@@ -46,6 +46,8 @@
 	</commands>
 
 	<settings>
+		<admin>OCA\Notifications\Settings\Admin</admin>
+		<admin-section>OCA\Notifications\Settings\AdminSection</admin-section>
 		<personal>OCA\Notifications\Settings\Personal</personal>
 		<personal-section>OCA\Notifications\Settings\PersonalSection</personal-section>
 	</settings>
