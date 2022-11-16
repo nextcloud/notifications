@@ -28,8 +28,8 @@
 				{{ t('notifications', 'Send email reminders about unhandled notifications after:') }}
 			</label>
 			<select id="notification_reminder_batchtime"
-				name="notification_reminder_batchtime"
 				v-model="config.setting_batchtime"
+				name="notification_reminder_batchtime"
 				class="notification-frequency__select"
 				@change="updateSettings()">
 				<option v-for="option in batchtime_options" :key="option.value" :value="option.value">

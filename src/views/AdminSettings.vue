@@ -19,40 +19,40 @@
   -->
 
 <template>
-	<SettingsSection :title="t('notifications', 'Notifications defaults')"
+	<NcSettingsSection :title="t('notifications', 'Notifications defaults')"
 		:description="t('notifications', 'Configure the default notification settings for new users')">
 		<p>
 			<label for="notify_setting_batchtime" class="notification-frequency__label">
 				{{ t('notifications', 'Send email reminders about unhandled notifications after:') }}
 			</label>
 			<select id="notify_setting_batchtime"
-							v-model="config.setting_batchtime"
-							class="notification-frequency__select"
-							@change="updateSettings()">
+				v-model="config.setting_batchtime"
+				class="notification-frequency__select"
+				@change="updateSettings()">
 				<option v-for="option in batchtime_options" :key="option.value" :value="option.value">
 					{{ option.text }}
 				</option>
 			</select>
 		</p>
 
-		<CheckboxRadioSwitch :checked.sync="config.sound_notification"
-												 @update:checked="updateSettings">
+		<NcCheckboxRadioSwitch :checked.sync="config.sound_notification"
+			@update:checked="updateSettings">
 			{{ t('notifications', 'Play sound when a new notification arrives') }}
-		</CheckboxRadioSwitch>
-		<CheckboxRadioSwitch :checked.sync="config.sound_talk"
-												 @update:checked="updateSettings">
+		</NcCheckboxRadioSwitch>
+		<NcCheckboxRadioSwitch :checked.sync="config.sound_talk"
+			@update:checked="updateSettings">
 			{{ t('notifications', 'Play sound when a call started (requires Nextcloud Talk)') }}
-		</CheckboxRadioSwitch>
-	</SettingsSection>
+		</NcCheckboxRadioSwitch>
+	</NcSettingsSection>
 </template>
 
 <script>
 import axios from '@nextcloud/axios'
-import {generateOcsUrl} from '@nextcloud/router'
-import {loadState} from '@nextcloud/initial-state'
-import {showSuccess, showError} from '@nextcloud/dialogs'
-import CheckboxRadioSwitch from '@nextcloud/vue/dist/Components/CheckboxRadioSwitch'
-import SettingsSection from '@nextcloud/vue/dist/Components/SettingsSection'
+import { generateOcsUrl } from '@nextcloud/router'
+import { loadState } from '@nextcloud/initial-state'
+import { showSuccess, showError } from '@nextcloud/dialogs'
+import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
+import NcSettingsSection from '@nextcloud/vue/dist/Components/NcSettingsSection.js'
 
 const EmailFrequency = {
 	EMAIL_SEND_OFF: 0,
@@ -65,18 +65,18 @@ const EmailFrequency = {
 export default {
 	name: 'AdminSettings',
 	components: {
-		CheckboxRadioSwitch,
-		SettingsSection,
+		NcCheckboxRadioSwitch,
+		NcSettingsSection,
 	},
 
 	data() {
 		return {
 			batchtime_options: [
-				{text: t('notifications', 'Never'), value: EmailFrequency.EMAIL_SEND_OFF},
-				{text: t('notifications', '1 hour'), value: EmailFrequency.EMAIL_SEND_HOURLY},
-				{text: t('notifications', '3 hours'), value: EmailFrequency.EMAIL_SEND_3HOURLY},
-				{text: t('notifications', '1 day'), value: EmailFrequency.EMAIL_SEND_DAILY},
-				{text: t('notifications', '1 week'), value: EmailFrequency.EMAIL_SEND_WEEKLY},
+				{ text: t('notifications', 'Never'), value: EmailFrequency.EMAIL_SEND_OFF },
+				{ text: t('notifications', '1 hour'), value: EmailFrequency.EMAIL_SEND_HOURLY },
+				{ text: t('notifications', '3 hours'), value: EmailFrequency.EMAIL_SEND_3HOURLY },
+				{ text: t('notifications', '1 day'), value: EmailFrequency.EMAIL_SEND_DAILY },
+				{ text: t('notifications', '1 week'), value: EmailFrequency.EMAIL_SEND_WEEKLY },
 			],
 			config: loadState('notifications', 'config'),
 		}
