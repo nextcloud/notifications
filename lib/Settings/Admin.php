@@ -57,7 +57,7 @@ class Admin implements ISettings {
 	}
 
 	public function getForm(): TemplateResponse {
-		Util::addScript('notifications', 'notifications-adminSettings');
+		Util::addScript('notifications', 'notifications-admin-settings');
 
 		$defaultSoundNotification = $this->config->getAppValue(Application::APP_ID, 'sound_notification') === 'yes' ? 'yes' : 'no';
 		$defaultSoundTalk = $this->config->getAppValue(Application::APP_ID, 'sound_talk') === 'yes' ? 'yes' : 'no';
