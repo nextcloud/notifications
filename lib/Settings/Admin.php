@@ -61,7 +61,7 @@ class Admin implements ISettings {
 
 		$defaultSoundNotification = $this->config->getAppValue(Application::APP_ID, 'sound_notification') === 'yes' ? 'yes' : 'no';
 		$defaultSoundTalk = $this->config->getAppValue(Application::APP_ID, 'sound_talk') === 'yes' ? 'yes' : 'no';
-		$defaultBatchtime = $this->config->getAppValue(Application::APP_ID, 'setting_batchtime');
+		$defaultBatchtime = (int) $this->config->getAppValue(Application::APP_ID, 'setting_batchtime');
 
 		if ($defaultBatchtime != Settings::EMAIL_SEND_WEEKLY
 			&& $defaultBatchtime != Settings::EMAIL_SEND_DAILY
