@@ -23,7 +23,6 @@ OC.L10N.register(
     "No notifications" : "Ingen notifikationer",
     "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "Nextcloud GmbH sponsorerer en gratis push-notifikationsgateway til private brugere. For at sikre god service begrænser gatewayen antallet af push-beskeder pr. server. For virksomhedsbrugere er en mere skalerbar gateway tilgængelig. Kontakt Nextcloud GmbH for mere information.",
     "Failed to dismiss all notifications" : "Kunne ikke afvise alle underretninger",
-    "You need to set up your email address before you can receive notification emails." : "Du skal konfigurere din e-mailadresse, før du kan modtage notifikations-e-mails.",
     "Send email reminders about unhandled notifications after:" : "Send e-mail-påmindelser om ubehandlede meddelelser efter:",
     "Play sound when a new notification arrives" : "Afspil lyd, når der kommer en ny notifikation",
     "Play sound when a call started (requires Nextcloud Talk)" : "Afspil lyd, når et opkald startede (kræver Nextcloud Talk)",
@@ -33,6 +32,7 @@ OC.L10N.register(
     "1 day" : "1 dag",
     "1 week" : "1 uge",
     "Your settings have been updated." : "Dine indstillinger er blevet opdateret.",
-    "An error occurred while updating your settings." : "Der opstod en fejl under opdatering af dine indstillinger."
+    "An error occurred while updating your settings." : "Der opstod en fejl under opdatering af dine indstillinger.",
+    "You need to set up your email address before you can receive notification emails." : "Du skal konfigurere din e-mailadresse, før du kan modtage notifikations-e-mails."
 },
 "nplurals=2; plural=(n != 1);");

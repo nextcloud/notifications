@@ -23,7 +23,6 @@ OC.L10N.register(
     "No notifications" : "Ez dago jakinarazpenik",
     "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "Nextcloud GmbH-k erabiltzaile pribatuentzako doako push jakinarazpen-sarbide bat babesten du. Zerbitzu ona bermatzeko, sarbideak zerbitzari bakoitzeko push jakinarazpen kopurua mugatzen du. Enpresako erabiltzaileentzat sarbide zabalgarriagoa dago. Jarri harremanetan Nextcloud GmbH-rekin informazio gehiago lortzeko.",
     "Failed to dismiss all notifications" : "Huts egin du jakinarazpen guztiak baztertzean",
-    "You need to set up your email address before you can receive notification emails." : "Zure helbide elektronikoa konfiguratu behar duzu jakinarazpenak posta elektronikoz jasotzeko.",
     "Send email reminders about unhandled notifications after:" : "Bidali e-posta abisuak kudeatu gabeko jakinarazpenei buruz honen ondoren:",
     "Play sound when a new notification arrives" : "Erreproduzitu soinua jakinarazpen berri bat iristen denean",
     "Play sound when a call started (requires Nextcloud Talk)" : "Erreproduzitu soinua deia hasten denean (Nextcloud Talk behar da)",
@@ -33,6 +32,7 @@ OC.L10N.register(
     "1 day" : "egun 1",
     "1 week" : "Aste 1",
     "Your settings have been updated." : "Zure ezarpenak eguneratu dira.",
-    "An error occurred while updating your settings." : "Errore bat gertatu da ezarpenak eguneratzean."
+    "An error occurred while updating your settings." : "Errore bat gertatu da ezarpenak eguneratzean.",
+    "You need to set up your email address before you can receive notification emails." : "Zure helbide elektronikoa konfiguratu behar duzu jakinarazpenak posta elektronikoz jasotzeko."
 },
 "nplurals=2; plural=(n != 1);");

@@ -14,10 +14,10 @@
     "Requesting browser permissions to show notifications" : "Đang gửi yêu cầu tới trình duyệt để cấp phép hiển thị thông báo ",
     "No notifications" : "Không thông báo ",
     "Failed to dismiss all notifications" : "Bỏ qua thông báo thất bại",
-    "You need to set up your email address before you can receive notification emails." : "Bạn cần phải thiết lập địa chỉ email trước khi nhận được email thông báo.",
     "Never" : "Không bao giờ",
     "1 hour" : "1 tiếng",
     "3 hours" : "3 tiếng",
-    "Your settings have been updated." : "Các thiết lập của bạn vừa được cập nhật"
+    "Your settings have been updated." : "Các thiết lập của bạn vừa được cập nhật",
+    "You need to set up your email address before you can receive notification emails." : "Bạn cần phải thiết lập địa chỉ email trước khi nhận được email thông báo."
 },"pluralForm" :"nplurals=1; plural=0;"
 }

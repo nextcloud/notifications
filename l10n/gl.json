@@ -14,11 +14,11 @@
     "Requesting browser permissions to show notifications" : "Solicitude de permisos do navegador para amosar as notificacións",
     "No notifications" : "Non hai notificacións",
     "Failed to dismiss all notifications" : "Produciuse un fallo ao rexeitar todas as notificacións",
-    "You need to set up your email address before you can receive notification emails." : "É necesario estabelecer o enderezo de correo para poder recibir correos de notificación.",
     "Never" : "Nunca",
     "1 hour" : "1 hora",
     "3 hours" : "3 horas",
     "1 day" : "1 día",
-    "Your settings have been updated." : "Actualizaronse os axustes."
+    "Your settings have been updated." : "Actualizaronse os axustes.",
+    "You need to set up your email address before you can receive notification emails." : "É necesario estabelecer o enderezo de correo para poder recibir correos de notificación."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

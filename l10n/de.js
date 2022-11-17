@@ -22,7 +22,6 @@ OC.L10N.register(
     "No notifications" : "Keine Benachrichtigungen",
     "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "Die Nextcloud GmbH sponsort ein kostenloses Push-Benachrichtigungs-Gateway für private Nutzer. Um einen guten Service sicherzustellen beschränkt das Gateway die Anzahl von Push-Benachrichtigungen pro Server. Für Enterprise-Benutzer steht ein besser skalierbares Gatway zur Verfügung. Kontaktiere die Nextcloud GmbH für weitere Informationen.",
     "Failed to dismiss all notifications" : "Es konnten nicht alle Benachrichtigungen verworfen werden",
-    "You need to set up your email address before you can receive notification emails." : "Bevor du E-Mail-Benachrichtigungen empfangen kannst, musst du deine E-Mail-Adresse einrichten.",
     "Send email reminders about unhandled notifications after:" : "E-Mail-Erinnerungen für unbearbeitete Benachrichtigungen senden nach:",
     "Play sound when a new notification arrives" : "Ton abspielen, wenn eine neue Benachrichtigung eintrifft",
     "Play sound when a call started (requires Nextcloud Talk)" : "Ton abspielen, wenn ein Anruf gestartet wird (erfordert Nextcloud Talk)",
@@ -32,6 +31,7 @@ OC.L10N.register(
     "1 day" : "1 Tag",
     "1 week" : "1 Woche",
     "Your settings have been updated." : "Deine Einstellungen wurden aktualisiert.",
-    "An error occurred while updating your settings." : "Es ist ein Fehler beim Aktualisieren deiner Einstellungen aufgetreten"
+    "An error occurred while updating your settings." : "Es ist ein Fehler beim Aktualisieren deiner Einstellungen aufgetreten",
+    "You need to set up your email address before you can receive notification emails." : "Bevor du E-Mail-Benachrichtigungen empfangen kannst, musst du deine E-Mail-Adresse einrichten."
 },
 "nplurals=2; plural=(n != 1);");

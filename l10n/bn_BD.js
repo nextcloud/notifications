@@ -6,7 +6,7 @@ OC.L10N.register(
     "Notifications" : "বার্তাসমূহ",
     "seconds ago" : "সেকেন্ড পূর্বে",
     "in {path}" : "{পথে}",
-    "You need to set up your email address before you can receive notification emails." : "ইমেইল বারতা পাওয়ার আগে আপনাকে নিজের ইমেইল ঠিকানা নিরধারন করতে হবে৷",
-    "Your settings have been updated." : "আপনার সেটিং নবায়ন করা হয়েছে৷"
+    "Your settings have been updated." : "আপনার সেটিং নবায়ন করা হয়েছে৷",
+    "You need to set up your email address before you can receive notification emails." : "ইমেইল বারতা পাওয়ার আগে আপনাকে নিজের ইমেইল ঠিকানা নিরধারন করতে হবে৷"
 },
 "nplurals=2; plural=(n != 1);");

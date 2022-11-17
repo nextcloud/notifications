@@ -12,10 +12,10 @@ OC.L10N.register(
     "in {path}" : "{path}-ში",
     "No notifications" : "შეტყობინებები არაა",
     "Failed to dismiss all notifications" : "ყველა შეტყობინების გათავისუფლება ვერ მოხერხდა",
-    "You need to set up your email address before you can receive notification emails." : "ელ-ფოსტაზე შეტყობინების მიღებამდე, საჭიროა მიუთითოთ თქვენი მისამართი.",
     "Never" : "არასდროს",
     "1 hour" : "1 საათი",
     "3 hours" : "3 საათი",
-    "Your settings have been updated." : "თქვენი პარამეტრები განახლდა."
+    "Your settings have been updated." : "თქვენი პარამეტრები განახლდა.",
+    "You need to set up your email address before you can receive notification emails." : "ელ-ფოსტაზე შეტყობინების მიღებამდე, საჭიროა მიუთითოთ თქვენი მისამართი."
 },
 "nplurals=2; plural=(n!=1);");

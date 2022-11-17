@@ -20,7 +20,6 @@ OC.L10N.register(
     "Requesting browser permissions to show notifications" : "Αίτηση άδειας φυλλομετρητή για εμφάνιση ειδοποιήσεων",
     "No notifications" : "Καμία ειδοποίηση",
     "Failed to dismiss all notifications" : "Αποτυχία αποδέσμευσης όλων των ειδοποιήσεων",
-    "You need to set up your email address before you can receive notification emails." : "Πρέπει να ρυθμίσετε τη διεύθυνση email σας για να μπορείτε να λαμβάνετε μηνύματα ηλεκτρονικού ταχυδρομείου ειδοποίησης.",
     "Send email reminders about unhandled notifications after:" : "Αποστολή υπενθυμίσεων μέσω email για μη χειριζόμενες ειδοποιήσεις μετά από:",
     "Play sound when a new notification arrives" : "Αναπαραγωγή ήχου όταν φτάσει μια νέα ειδοποίηση",
     "Play sound when a call started (requires Nextcloud Talk)" : "Αναπαραγωγή ήχου κατά την έναρξη μιας κλήσης (απαιτείται το Nextcloud Talk)",
@@ -30,6 +29,7 @@ OC.L10N.register(
     "1 day" : "1 μέρα",
     "1 week" : "1 εβδομάδα",
     "Your settings have been updated." : "Οι ρυθμίσεις σας έχουν ενημερωθεί.",
-    "An error occurred while updating your settings." : "Παρουσιάστηκε σφάλμα κατά την ενημέρωση των ρυθμίσεών σας."
+    "An error occurred while updating your settings." : "Παρουσιάστηκε σφάλμα κατά την ενημέρωση των ρυθμίσεών σας.",
+    "You need to set up your email address before you can receive notification emails." : "Πρέπει να ρυθμίσετε τη διεύθυνση email σας για να μπορείτε να λαμβάνετε μηνύματα ηλεκτρονικού ταχυδρομείου ειδοποίησης."
 },
 "nplurals=2; plural=(n != 1);");

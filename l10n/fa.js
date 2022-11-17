@@ -15,10 +15,10 @@ OC.L10N.register(
     "Dismiss all notifications" : "رد همه اعلان ها",
     "No notifications" : "بدون اعلان",
     "Failed to dismiss all notifications" : "رد همه اعلان ها انجام نشد",
-    "You need to set up your email address before you can receive notification emails." : "قبل از دریافت ایمیل های هشدار می بایست ادرس ایمیل خود را تنظیم کنید",
     "Never" : "هرگز",
     "1 hour" : "۱ ساعت",
     "3 hours" : "۳ ساعت",
-    "Your settings have been updated." : "تنظیمات شما به روز رسانی شد"
+    "Your settings have been updated." : "تنظیمات شما به روز رسانی شد",
+    "You need to set up your email address before you can receive notification emails." : "قبل از دریافت ایمیل های هشدار می بایست ادرس ایمیل خود را تنظیم کنید"
 },
 "nplurals=2; plural=(n > 1);");
