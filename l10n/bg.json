@@ -21,7 +21,6 @@
     "No notifications" : "Няма известия",
     "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "Nextcloud GmbH спонсорира безплатен портал за push известия за частни потребители. За да осигури добро обслужване, шлюзът ограничава броя на push известия на сървър. За корпоративните потребители е наличен по-мащабируем шлюз. Свържете се с Nextcloud GmbH за повече информация.",
     "Failed to dismiss all notifications" : "Неуспешно отхвърляне на всичко известия",
-    "You need to set up your email address before you can receive notification emails." : "Първо трябва да въведете вашия имейл адрес, за да получавате имейли с известия.",
     "Send email reminders about unhandled notifications after:" : "Изпращайте напомняния по имейл за необработени известия след: ",
     "Play sound when a new notification arrives" : "Възпроизвеждане на звук при получаване на ново известие",
     "Play sound when a call started (requires Nextcloud Talk)" : "Възпроизвеждане на звук при стартиране на разговор (изисква Nextcloud Talk)",
@@ -31,6 +30,7 @@
     "1 day" : "1 ден",
     "1 week" : "1 седмица",
     "Your settings have been updated." : "Вашите настройки са актуализирани.",
-    "An error occurred while updating your settings." : "Възникна грешка при актуализиране на настройките ви."
+    "An error occurred while updating your settings." : "Възникна грешка при актуализиране на настройките ви.",
+    "You need to set up your email address before you can receive notification emails." : "Първо трябва да въведете вашия имейл адрес, за да получавате имейли с известия."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

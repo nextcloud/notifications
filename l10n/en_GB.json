@@ -14,10 +14,10 @@
     "Requesting browser permissions to show notifications" : "Requesting browser permissions to show notifications",
     "No notifications" : "No notifications",
     "Failed to dismiss all notifications" : "Failed to dismiss all notifications",
-    "You need to set up your email address before you can receive notification emails." : "You need to set up your email address before you can receive notification emails.",
     "Never" : "Never",
     "1 hour" : "1 hour",
     "3 hours" : "3 hours",
-    "Your settings have been updated." : "Your settings have been updated."
+    "Your settings have been updated." : "Your settings have been updated.",
+    "You need to set up your email address before you can receive notification emails." : "You need to set up your email address before you can receive notification emails."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

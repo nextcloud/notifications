@@ -8,10 +8,10 @@ OC.L10N.register(
     "seconds ago" : "хоёрдахь өмнө",
     "in {path}" : "{path}-д",
     "No notifications" : "Мэдэгдэл байхгүй",
-    "You need to set up your email address before you can receive notification emails." : "Та цахим шуудангаар мэдэгдэл хүлээн авахын тулд цахим шуудангаа тохируулна уу?",
     "Never" : "хэзээч",
     "1 hour" : "1 цаг",
     "3 hours" : "3 цаг",
-    "Your settings have been updated." : "Таны тохиргоог шинэчлэв"
+    "Your settings have been updated." : "Таны тохиргоог шинэчлэв",
+    "You need to set up your email address before you can receive notification emails." : "Та цахим шуудангаар мэдэгдэл хүлээн авахын тулд цахим шуудангаа тохируулна уу?"
 },
 "nplurals=2; plural=(n != 1);");

@@ -15,7 +15,6 @@
     "Requesting browser permissions to show notifications" : "Poteka pridobivanje dovoljenja za prikaz obvestil",
     "No notifications" : "Ni obvestil",
     "Failed to dismiss all notifications" : "Opuščanje obvestil je spodletelo!",
-    "You need to set up your email address before you can receive notification emails." : "Za prejemanje obvestil po elektronski pošti je treba najprej nastaviti elektronski poštni naslov.",
     "Send email reminders about unhandled notifications after:" : "Po elektronski pošti pošlji opomnik o neodgovorjenih obvestilih po:",
     "Never" : "Nikoli",
     "1 hour" : "1 uri",
@@ -23,6 +22,7 @@
     "1 day" : "1 dan",
     "1 week" : "1 tednu",
     "Your settings have been updated." : "Nastavitve so posodobljene.",
-    "An error occurred while updating your settings." : "Prišlo je do napake med posodabljanjem nastavitev."
+    "An error occurred while updating your settings." : "Prišlo je do napake med posodabljanjem nastavitev.",
+    "You need to set up your email address before you can receive notification emails." : "Za prejemanje obvestil po elektronski pošti je treba najprej nastaviti elektronski poštni naslov."
 },"pluralForm" :"nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);"
 }

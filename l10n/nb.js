@@ -15,12 +15,12 @@ OC.L10N.register(
     "Dismiss all notifications" : "Avvis alle varsler",
     "No notifications" : "Ingen varsel",
     "Failed to dismiss all notifications" : "Klarte ikke å avvise alle varslene",
-    "You need to set up your email address before you can receive notification emails." : "Du må sette opp e-postadressen din før du kan motta varslinger på e-post.",
     "Never" : "Aldri",
     "1 hour" : "1 time",
     "3 hours" : "3 timer",
     "1 day" : "1 dag",
     "1 week" : "1 uke",
-    "Your settings have been updated." : "Innstillingene dine ble oppdatert."
+    "Your settings have been updated." : "Innstillingene dine ble oppdatert.",
+    "You need to set up your email address before you can receive notification emails." : "Du må sette opp e-postadressen din før du kan motta varslinger på e-post."
 },
 "nplurals=2; plural=(n != 1);");

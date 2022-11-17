@@ -23,7 +23,6 @@ OC.L10N.register(
     "No notifications" : "Bildirimler kapalı",
     "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "Nextcloud GmbH, bireysel kullanıcılar için ücretsiz bir anında bildirim ağ geçidini karşılıyor. İyi bir hizmet sunabilmek için ağ geçidi, sunucu başına anında bildirim sayısını sınırlıyor. Enterprise sürüm kullanıcıları için daha ölçeklenebilir bir ağ geçidi kullanılıyor. Ayrıntılı bilgi almak için Nextcloud GmbH ile görüşebilirsiniz.",
     "Failed to dismiss all notifications" : "Tüm bildirimler yok sayılamadı",
-    "You need to set up your email address before you can receive notification emails." : "Bildirim e-postalarını alabilmek için e-posta adresinizi belirtmelisiniz.",
     "Send email reminders about unhandled notifications after:" : "Şu kadar zaman sonra işlenmeyen bildirimler için e-posta anımsatıcıları gönderilsin:",
     "Play sound when a new notification arrives" : "Bildirimlerde ses çalınsın",
     "Play sound when a call started (requires Nextcloud Talk)" : "Bir çağrı başlatıldığında ses çalınsın (Nextcloud Talk gereklidir)",
@@ -33,6 +32,7 @@ OC.L10N.register(
     "1 day" : "1 gün",
     "1 week" : "1 hafta",
     "Your settings have been updated." : "Ayarlarınız güncellendi.",
-    "An error occurred while updating your settings." : "Ayarlarınız güncellenirken bir sorun çıktı."
+    "An error occurred while updating your settings." : "Ayarlarınız güncellenirken bir sorun çıktı.",
+    "You need to set up your email address before you can receive notification emails." : "Bildirim e-postalarını alabilmek için e-posta adresinizi belirtmelisiniz."
 },
 "nplurals=2; plural=(n > 1);");

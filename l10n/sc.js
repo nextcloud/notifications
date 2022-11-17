@@ -16,12 +16,12 @@ OC.L10N.register(
     "Requesting browser permissions to show notifications" : "Permissos de su navigadore rechertos pro mustrare is notìficas",
     "No notifications" : "Peruna notìfica",
     "Failed to dismiss all notifications" : "No at fatu a iscartare totu is notìficas",
-    "You need to set up your email address before you can receive notification emails." : "Deves impostare s'indiritzu de posta eletrònica tuo pro retzire is messàgios de notìfica.",
     "Never" : "Mai",
     "1 hour" : "1 ora",
     "3 hours" : "3 oras",
     "1 day" : "1 die",
     "1 week" : "1 chida",
-    "Your settings have been updated." : "Is impostatziones tuas sunt istadas agiornadas."
+    "Your settings have been updated." : "Is impostatziones tuas sunt istadas agiornadas.",
+    "You need to set up your email address before you can receive notification emails." : "Deves impostare s'indiritzu de posta eletrònica tuo pro retzire is messàgios de notìfica."
 },
 "nplurals=2; plural=(n != 1);");
