@@ -23,7 +23,6 @@ OC.L10N.register(
     "No notifications" : "Sem notificações",
     "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "A Nextcloud GmbH patrocina um gateway de notificação por push gratuito para usuários privados. Para garantir um bom serviço, o gateway limita o número de notificações push por servidor. Para usuários corporativos, um gateway mais escalável está disponível. Entre em contato com a Nextcloud GmbH para obter mais informações.",
     "Failed to dismiss all notifications" : "Falha ao ignorar todas as notificações",
-    "You need to set up your email address before you can receive notification emails." : "Você precisa configurar seu endereço de e-mail antes de receber e-mails de notificação.",
     "Send email reminders about unhandled notifications after:" : "Envie lembretes de e-mail sobre notificações não foram vistas após:",
     "Play sound when a new notification arrives" : "Reproduzir som quando uma nova notificação chegar",
     "Play sound when a call started (requires Nextcloud Talk)" : "Reproduzir som quando uma chamada é iniciada (requer Nextcloud Talk)",
@@ -33,6 +32,7 @@ OC.L10N.register(
     "1 day" : "1 dia",
     "1 week" : "1 semana",
     "Your settings have been updated." : "Suas configurações foram atualizadas.",
-    "An error occurred while updating your settings." : "Ocorreu um erro ao atualizar suas configurações."
+    "An error occurred while updating your settings." : "Ocorreu um erro ao atualizar suas configurações.",
+    "You need to set up your email address before you can receive notification emails." : "Você precisa configurar seu endereço de e-mail antes de receber e-mails de notificação."
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

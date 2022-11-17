@@ -20,7 +20,6 @@ OC.L10N.register(
     "Push notifications might be unreliable" : "Push-ilmoitukset eivät välttämättä ole luotettavia",
     "No notifications" : "Ei ilmoituksia",
     "Failed to dismiss all notifications" : "Kaikki ilmoitusten hylkääminen epäonnistui",
-    "You need to set up your email address before you can receive notification emails." : "Aseta sähköpostiosoite, jotta voit vastaanottaa sähköposti-ilmoituksia.",
     "Send email reminders about unhandled notifications after:" : "Lähetä sähköpostimuistutuksia käsittelemättömistä ilmoituksista, kun on kulunut:",
     "Play sound when a new notification arrives" : "Toista ääni kun uusi ilmoitus vastaanotetaan",
     "Play sound when a call started (requires Nextcloud Talk)" : "Toista ääni kun puhelu on aloitettu (vaatii Nextcloud Talkin)",
@@ -30,6 +29,7 @@ OC.L10N.register(
     "1 day" : "1 päivä",
     "1 week" : "1 viikko",
     "Your settings have been updated." : "Asetukset on päivitetty.",
-    "An error occurred while updating your settings." : "Asetuksia tallentaessa tapahtui virhe."
+    "An error occurred while updating your settings." : "Asetuksia tallentaessa tapahtui virhe.",
+    "You need to set up your email address before you can receive notification emails." : "Aseta sähköpostiosoite, jotta voit vastaanottaa sähköposti-ilmoituksia."
 },
 "nplurals=2; plural=(n != 1);");

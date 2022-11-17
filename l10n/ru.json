@@ -18,7 +18,6 @@
     "Requesting browser permissions to show notifications" : "Запрос разрешений для показа уведомлений в браузере",
     "No notifications" : "Уведомлений нет",
     "Failed to dismiss all notifications" : "Не удалось скрыть все уведомления",
-    "You need to set up your email address before you can receive notification emails." : "Для получения уведомлений укажите свой адрес электронной почты в настройках профиля.",
     "Send email reminders about unhandled notifications after:" : "Интервал времени до отправки эл. письма с напоминанием о непрочитанных уведомлениях:",
     "Play sound when a new notification arrives" : "Воспроизведение звука при новом уведомлении",
     "Play sound when a call started (requires Nextcloud Talk)" : "Воспроизведение звука при начале вызова (требуется Nextcloud Talk)",
@@ -28,6 +27,7 @@
     "1 day" : "1 день",
     "1 week" : "1 неделя",
     "Your settings have been updated." : "Параметры обновлены.",
-    "An error occurred while updating your settings." : "Не удалось сохранить изменённые параметры."
+    "An error occurred while updating your settings." : "Не удалось сохранить изменённые параметры.",
+    "You need to set up your email address before you can receive notification emails." : "Для получения уведомлений укажите свой адрес электронной почты в настройках профиля."
 },"pluralForm" :"nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);"
 }

@@ -21,7 +21,6 @@
     "No notifications" : "Žádná upozornění",
     "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "Nextcloud GmbH sponzoruje bránu pro push upozorňování zdarma pro domácí uživatele. Kvůli zajištění dobré služby brána omezuje počet push upozornění z jednotlivých serverů. Pro podnikové uživatele je k dispozici kapacitnější brána. Ohledně dalších informací se obraťte na Nextcloud GmbH.",
     "Failed to dismiss all notifications" : "Zahození všech upozornění se nezdařilo",
-    "You need to set up your email address before you can receive notification emails." : "Pokud chcete dostávat upozornění e-mailem, je třeba nejprve nastavit svou e-mailovou adresu.",
     "Send email reminders about unhandled notifications after:" : "Posílat upozornění e-mailem ohledně nezpracovaných upozornění po uplynutí:",
     "Play sound when a new notification arrives" : "Při příchodu nového upozornění přehrát zvuk",
     "Play sound when a call started (requires Nextcloud Talk)" : "Při zahájení hovoru přehrát zvuk (vyžaduje Nextcloud Talk)",
@@ -31,6 +30,7 @@
     "1 day" : "1 den",
     "1 week" : "1 týdne",
     "Your settings have been updated." : "Vaše nastavení byla aktualizována.",
-    "An error occurred while updating your settings." : "Při aktualizaci vašich nastavení došlo k chybě."
+    "An error occurred while updating your settings." : "Při aktualizaci vašich nastavení došlo k chybě.",
+    "You need to set up your email address before you can receive notification emails." : "Pokud chcete dostávat upozornění e-mailem, je třeba nejprve nastavit svou e-mailovou adresu."
 },"pluralForm" :"nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;"
 }

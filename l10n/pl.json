@@ -21,7 +21,6 @@
     "No notifications" : "Brak powiadomień",
     "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "Nextcloud GmbH sponsoruje bezpłatną bramkę powiadomień Push dla użytkowników prywatnych. Aby zapewnić dobrą obsługę, brama ogranicza liczbę powiadomień Push na serwer. Dla użytkowników korporacyjnych dostępna jest bardziej skalowalna brama. Skontaktuj się z Nextcloud GmbH, aby uzyskać więcej informacji.",
     "Failed to dismiss all notifications" : "Nie udało się usunąć wszystkich powiadomień",
-    "You need to set up your email address before you can receive notification emails." : "Aby otrzymywać powiadomienia e-mail, musisz skonfigurować swój adres e-mail.",
     "Send email reminders about unhandled notifications after:" : "Wysyłaj przypomnienia e-mail o nieobsłużonych powiadomieniach po:",
     "Play sound when a new notification arrives" : "Odtwórz dźwięk, gdy nadejdzie nowe powiadomienie",
     "Play sound when a call started (requires Nextcloud Talk)" : "Odtwórz dźwięk po rozpoczęciu połączenia (wymaga Nextcloud Talk)",
@@ -31,6 +30,7 @@
     "1 day" : "1 dzień",
     "1 week" : "1 tydzień",
     "Your settings have been updated." : "Twoje ustawienia zostały zaktualizowane.",
-    "An error occurred while updating your settings." : "Wystąpił błąd podczas aktualizowania ustawień."
+    "An error occurred while updating your settings." : "Wystąpił błąd podczas aktualizowania ustawień.",
+    "You need to set up your email address before you can receive notification emails." : "Aby otrzymywać powiadomienia e-mail, musisz skonfigurować swój adres e-mail."
 },"pluralForm" :"nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);"
 }

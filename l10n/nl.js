@@ -20,7 +20,6 @@ OC.L10N.register(
     "Requesting browser permissions to show notifications" : "Browsermachtigingen aanvragen om meldingen weer te geven",
     "No notifications" : "Geen meldingen",
     "Failed to dismiss all notifications" : "Alle meldingen wissen mislukt",
-    "You need to set up your email address before you can receive notification emails." : "Je moet je e-mailadres instellen voor je meldingse-mails kunt ontvangen.",
     "Send email reminders about unhandled notifications after:" : "Verzend e-mailherinneringen over onverwerkte meldingen na:",
     "Never" : "Nooit",
     "1 hour" : "1 uur",
@@ -28,6 +27,7 @@ OC.L10N.register(
     "1 day" : "1 dag",
     "1 week" : "1 week",
     "Your settings have been updated." : "Je instellingen zijn bijgewerkt.",
-    "An error occurred while updating your settings." : "Fout opgetreden bij het updaten van je instellingen."
+    "An error occurred while updating your settings." : "Fout opgetreden bij het updaten van je instellingen.",
+    "You need to set up your email address before you can receive notification emails." : "Je moet je e-mailadres instellen voor je meldingse-mails kunt ontvangen."
 },
 "nplurals=2; plural=(n != 1);");

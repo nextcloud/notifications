@@ -23,7 +23,6 @@ OC.L10N.register(
     "No notifications" : "没有通知",
     "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "对于个人用户，Nextcloud GmbH 提供一个免费的推送网关。为保证良好的服务，网关对每个服务器发送的推送通知数量进行了限制。企业用户若需要更具扩展性的网关，请与 Nextcloud GmbH 联系以了解详情。",
     "Failed to dismiss all notifications" : "无法清除所有通知",
-    "You need to set up your email address before you can receive notification emails." : "您需要设置您的电子邮件地址，然后才能收到通知电子邮件。",
     "Send email reminders about unhandled notifications after:" : "多久之后发送电子邮件提醒未处理的通知：",
     "Play sound when a new notification arrives" : "收到新通知時播放提示音",
     "Play sound when a call started (requires Nextcloud Talk)" : "通话开始时播放提示音（需要 Nextcloud Talk）",
@@ -33,6 +32,7 @@ OC.L10N.register(
     "1 day" : "1 天 ",
     "1 week" : "1 周 ",
     "Your settings have been updated." : "已更新设置",
-    "An error occurred while updating your settings." : "更新设置时出错"
+    "An error occurred while updating your settings." : "更新设置时出错",
+    "You need to set up your email address before you can receive notification emails." : "您需要设置您的电子邮件地址，然后才能收到通知电子邮件。"
 },
 "nplurals=1; plural=0;");

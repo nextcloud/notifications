@@ -23,7 +23,6 @@ OC.L10N.register(
     "No notifications" : "Nincsenek értesítések",
     "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "A magánfelhasználók ingyenes leküldéses értesítéseit nyújtó átjárót a Nextcloud GmbH szponzorálja. A jó szolgáltató biztosítása érdekében az átjáró korlátozza a leküldéses értesítések számát kiszolgálónként. A vállalati felhasználók számára egy skálázhatóbb átjáró érhető el. További információkért vegye fel a kapcsolatot a Nextcloud GmbH-val.",
     "Failed to dismiss all notifications" : "Az összes értesítés mellőzése sikertelen",
-    "You need to set up your email address before you can receive notification emails." : "Be kell állítania az e-mail-címét, mielőtt értesítési leveleket kaphatna.",
     "Send email reminders about unhandled notifications after:" : "Értesítések küldése levélben a nem kezelt értesítésekről ennyi idő után:",
     "Play sound when a new notification arrives" : "Hang lejátszása, ha új értesítés érkezik",
     "Play sound when a call started (requires Nextcloud Talk)" : "Hang lejátszása, ha hívás indul (Nextcloud Beszélgetés szükséges)",
@@ -33,6 +32,7 @@ OC.L10N.register(
     "1 day" : "1 nap múlva",
     "1 week" : "1 hét múlva",
     "Your settings have been updated." : "A beállításai frissítve lettek.",
-    "An error occurred while updating your settings." : "Hiba történt a beállítások frissítése során."
+    "An error occurred while updating your settings." : "Hiba történt a beállítások frissítése során.",
+    "You need to set up your email address before you can receive notification emails." : "Be kell állítania az e-mail-címét, mielőtt értesítési leveleket kaphatna."
 },
 "nplurals=2; plural=(n != 1);");

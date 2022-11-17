@@ -7,8 +7,8 @@ OC.L10N.register(
     "Dismiss" : "Forkast",
     "seconds ago" : "sekund sidan",
     "in {path}" : "i {spor}",
-    "You need to set up your email address before you can receive notification emails." : "Du må skriva inn e-postadressa di før du kan få e-postvarsel.",
     "Never" : "Aldri",
-    "Your settings have been updated." : "Innstillingane dine har blitt oppdaterte."
+    "Your settings have been updated." : "Innstillingane dine har blitt oppdaterte.",
+    "You need to set up your email address before you can receive notification emails." : "Du må skriva inn e-postadressa di før du kan få e-postvarsel."
 },
 "nplurals=2; plural=(n != 1);");

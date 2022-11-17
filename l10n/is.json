@@ -14,10 +14,10 @@
     "Requesting browser permissions to show notifications" : "Biður um heimild vafra til að birta tilkynningar",
     "No notifications" : "Engar tilkynningar",
     "Failed to dismiss all notifications" : "Mistókst að afgreiða allar tilkynningar",
-    "You need to set up your email address before you can receive notification emails." : "Þú verður að gefa upp netfangið þitt svo að þú farir að fá tilkynningapósta.",
     "Never" : "Aldrei",
     "1 hour" : "1 klukkustund",
     "3 hours" : "3 klukkustundir",
-    "Your settings have been updated." : "Stillingar þínar eru breyttar."
+    "Your settings have been updated." : "Stillingar þínar eru breyttar.",
+    "You need to set up your email address before you can receive notification emails." : "Þú verður að gefa upp netfangið þitt svo að þú farir að fá tilkynningapósta."
 },"pluralForm" :"nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);"
 }

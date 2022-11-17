@@ -15,9 +15,9 @@ OC.L10N.register(
     "Dismiss all notifications" : "Forsendi ĉiujn sciigojn",
     "No notifications" : "Neniu sciigoj",
     "Failed to dismiss all notifications" : "Malsukcesis forsendi ĉiujn sciigojn",
-    "You need to set up your email address before you can receive notification emails." : "Vi bezonas agordi vian retpoŝtadreson, por povi ricevi sciigojn retmesaĝe.",
     "Never" : "Neniam",
     "1 hour" : "1 horo",
-    "Your settings have been updated." : "Viaj agordoj ĝisdatiĝis."
+    "Your settings have been updated." : "Viaj agordoj ĝisdatiĝis.",
+    "You need to set up your email address before you can receive notification emails." : "Vi bezonas agordi vian retpoŝtadreson, por povi ricevi sciigojn retmesaĝe."
 },
 "nplurals=2; plural=(n != 1);");
