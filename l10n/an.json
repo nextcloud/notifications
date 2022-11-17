@@ -3,8 +3,8 @@
     "Hello %s," : "Hola %s,",
     "Notifications" : "Notificazions",
     "in {path}" : "en {path}",
-    "You need to set up your email address before you can receive notification emails." : "Ye nezesario que configures a tuya direzión de correu electronico pa poder rezibir os correus de notificazión.",
     "Never" : "Nunca",
-    "Your settings have been updated." : "A suya configurazión ha estau autualizada."
+    "Your settings have been updated." : "A suya configurazión ha estau autualizada.",
+    "You need to set up your email address before you can receive notification emails." : "Ye nezesario que configures a tuya direzión de correu electronico pa poder rezibir os correus de notificazión."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

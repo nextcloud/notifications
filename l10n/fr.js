@@ -21,7 +21,6 @@ OC.L10N.register(
     "Requesting browser permissions to show notifications" : "Nécessite les autorisations du navigateur pour afficher les notifications",
     "No notifications" : "Aucune notification",
     "Failed to dismiss all notifications" : "Impossible d'ignorer toutes les notifications",
-    "You need to set up your email address before you can receive notification emails." : "Vous devez définir votre adresse e-mail avant de pouvoir recevoir des e-mails de notification.",
     "Send email reminders about unhandled notifications after:" : "Envoyer par e-mail des rappels des notifications non gérées après :",
     "Play sound when a new notification arrives" : "Jouer un son quand une notification arrive",
     "Play sound when a call started (requires Nextcloud Talk)" : "Jouer un son quand un appel démarre (l'application Nextcloud Talk est requise)",
@@ -31,6 +30,7 @@ OC.L10N.register(
     "1 day" : "1 jour",
     "1 week" : "1 semaine",
     "Your settings have been updated." : "Vos paramètres ont été mis à jour.",
-    "An error occurred while updating your settings." : "Un erreur est survenue lors de la mise à jour de vos paramètres."
+    "An error occurred while updating your settings." : "Un erreur est survenue lors de la mise à jour de vos paramètres.",
+    "You need to set up your email address before you can receive notification emails." : "Vous devez définir votre adresse e-mail avant de pouvoir recevoir des e-mails de notification."
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

@@ -23,7 +23,6 @@ OC.L10N.register(
     "No notifications" : "Žiadne upozornenia",
     "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "Nextcloud GmbH sponzoruje bezplatnú bránu push notifikácií pre súkromných užívateľov. Aby sa zabezpečila dobrá služba, brána obmedzuje počet upozornení push na server. Pre podnikových užívateľov je k dispozícii škálovateľnejšia brána. Pre viac informácií kontaktujte Nextcloud GmbH.",
     "Failed to dismiss all notifications" : "Nepodarilo sa odstrániť všetky notifikácie",
-    "You need to set up your email address before you can receive notification emails." : "Ak chcete dostávať oznámenia emailom, musíte najskôr vyplniť vašu emailovú adresu.",
     "Send email reminders about unhandled notifications after:" : "Odoslať e-mailové pripomenutia nezachytených upozornení po:",
     "Play sound when a new notification arrives" : "Prehrať zvuk keď príde nová notifikácia",
     "Play sound when a call started (requires Nextcloud Talk)" : "Prehrať zvuk keď začne hovor (vyžaduje Nextcloud Talk)",
@@ -33,6 +32,7 @@ OC.L10N.register(
     "1 day" : "1 deň",
     "1 week" : "1 týždeň",
     "Your settings have been updated." : "Vaše nastavenia boli aktualizované.",
-    "An error occurred while updating your settings." : "Nastala chyba počas ukladania nastavení."
+    "An error occurred while updating your settings." : "Nastala chyba počas ukladania nastavení.",
+    "You need to set up your email address before you can receive notification emails." : "Ak chcete dostávať oznámenia emailom, musíte najskôr vyplniť vašu emailovú adresu."
 },
 "nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);");

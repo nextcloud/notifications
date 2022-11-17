@@ -13,12 +13,12 @@
     "Dismiss all notifications" : "모든 알림 해제",
     "No notifications" : "알림 없음",
     "Failed to dismiss all notifications" : "모든 알림을 해제할 수 없음",
-    "You need to set up your email address before you can receive notification emails." : "알림 이메일을 받으려면 이메일 주소를 설정해야 합니다.",
     "Never" : "하지 않음",
     "1 hour" : "1시간",
     "3 hours" : "3시간",
     "1 day" : "1일",
     "1 week" : "1주",
-    "Your settings have been updated." : "설정이 업데이트되었습니다."
+    "Your settings have been updated." : "설정이 업데이트되었습니다.",
+    "You need to set up your email address before you can receive notification emails." : "알림 이메일을 받으려면 이메일 주소를 설정해야 합니다."
 },"pluralForm" :"nplurals=1; plural=0;"
 }

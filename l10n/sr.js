@@ -16,10 +16,10 @@ OC.L10N.register(
     "Requesting browser permissions to show notifications" : "Захтевам дозволе од веб читача за приказивање обавештења",
     "No notifications" : "Нема обавештења",
     "Failed to dismiss all notifications" : "Не могу да уклоним сва обавештења",
-    "You need to set up your email address before you can receive notification emails." : "Морате поставити адресу е-поште пре почетка пријема обавештења.",
     "Never" : "Никад",
     "1 hour" : "1 сат",
     "3 hours" : "3 сата",
-    "Your settings have been updated." : "Ваше поставке су ажуриране."
+    "Your settings have been updated." : "Ваше поставке су ажуриране.",
+    "You need to set up your email address before you can receive notification emails." : "Морате поставити адресу е-поште пре почетка пријема обавештења."
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);");

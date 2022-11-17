@@ -8,8 +8,8 @@ OC.L10N.register(
     "seconds ago" : "sekundit tagasi",
     "in {path}" : "rajal {path}",
     "No notifications" : "Märguandeid pole",
-    "You need to set up your email address before you can receive notification emails." : "Enne teavituskirjade saamist pead sa lisama oma e-posti aadressi.",
     "Never" : "Mitte kunagi",
-    "Your settings have been updated." : "Seaded on uuendatud."
+    "Your settings have been updated." : "Seaded on uuendatud.",
+    "You need to set up your email address before you can receive notification emails." : "Enne teavituskirjade saamist pead sa lisama oma e-posti aadressi."
 },
 "nplurals=2; plural=(n != 1);");

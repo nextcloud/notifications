@@ -12,11 +12,11 @@ OC.L10N.register(
     "in {path}" : "in {path}",
     "No notifications" : "Geen kennisgewings",
     "Failed to dismiss all notifications" : "Kon nie alle kennisgewings afwys nie ",
-    "You need to set up your email address before you can receive notification emails." : "U moet u e-posadres opstel alvorens u kennisgewings per e-pos kan ontvang.",
     "Never" : "Nooit",
     "1 hour" : "1 uur",
     "1 day" : "1 dag",
     "1 week" : "1 week",
-    "Your settings have been updated." : "U instellings is bygewerk."
+    "Your settings have been updated." : "U instellings is bygewerk.",
+    "You need to set up your email address before you can receive notification emails." : "U moet u e-posadres opstel alvorens u kennisgewings per e-pos kan ontvang."
 },
 "nplurals=2; plural=(n != 1);");

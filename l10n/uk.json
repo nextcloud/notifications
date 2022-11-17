@@ -21,7 +21,6 @@
     "No notifications" : "Немає сповіщень",
     "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "Nextcloud GmbH спонсорує безкоштовний шлюз push-повідомлень для приватних користувачів. Щоб забезпечити якісне обслуговування, шлюз обмежує кількість push-повідомлень на сервер. Для корпоративних користувачів доступний більш масштабований шлюз. Зверніться до Nextcloud GmbH для отримання додаткової інформації.",
     "Failed to dismiss all notifications" : "Не вдалося відхилити всі сповіщення",
-    "You need to set up your email address before you can receive notification emails." : "Для отримання повідомлень зазначте електронну адресу в особистих налаштуваннях.",
     "Send email reminders about unhandled notifications after:" : "Надсилати нагадування електронною поштою про необроблені сповіщення після:",
     "Play sound when a new notification arrives" : "Відтворювати звук, коли надходить нове сповіщення",
     "Play sound when a call started (requires Nextcloud Talk)" : "Відтворення звуку під час виклику (потрібно Nextcloud Talk)",
@@ -31,6 +30,7 @@
     "1 day" : "1 день",
     "1 week" : "1 тиждень",
     "Your settings have been updated." : "Налаштування успішно оновлено.",
-    "An error occurred while updating your settings." : "Під час оновлення налаштувань сталася помилка."
+    "An error occurred while updating your settings." : "Під час оновлення налаштувань сталася помилка.",
+    "You need to set up your email address before you can receive notification emails." : "Для отримання повідомлень зазначте електронну адресу в особистих налаштуваннях."
 },"pluralForm" :"nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);"
 }

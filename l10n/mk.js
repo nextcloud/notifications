@@ -16,13 +16,13 @@ OC.L10N.register(
     "Requesting browser permissions to show notifications" : "Барање на дозвола од прелистувачот за прикажување на известувања.",
     "No notifications" : "Нема известувања",
     "Failed to dismiss all notifications" : "Неуспешно отфрлање на сите известувања",
-    "You need to set up your email address before you can receive notification emails." : "Треба да ја внесете Вашата адреса на е-пошта за да можете да примате известувања по електронска пошта.",
     "Send email reminders about unhandled notifications after:" : "Испраќај потсетник по е-пошта за непрегледани известувања после:",
     "Play sound when a new notification arrives" : "Пушти звук кога ќе пристигне ново известување",
     "Play sound when a call started (requires Nextcloud Talk)" : "Пушти звук кога ќе започне нов повик (потребнa е апликација разговор)",
     "Never" : "Никогаш",
     "1 hour" : "1 час",
     "3 hours" : "3 часа",
-    "Your settings have been updated." : "Вашите параметри се ажурирани."
+    "Your settings have been updated." : "Вашите параметри се ажурирани.",
+    "You need to set up your email address before you can receive notification emails." : "Треба да ја внесете Вашата адреса на е-пошта за да можете да примате известувања по електронска пошта."
 },
 "nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;");

@@ -21,7 +21,6 @@
     "No notifications" : "No hi ha cap notificació.",
     "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "Nextcloud GmbH patrocina una passarel·la de notificacions automàtiques gratuïta per a usuaris privats. Per a garantir un bon servei, la passarel·la limita el nombre de notificacions automàtiques per servidor. Hi ha una passarel·la més escalable disponible per a usuaris empresarials. Contacteu amb Nextcloud GmbH per a obtenir més informació.",
     "Failed to dismiss all notifications" : "No s'han pogut descartar totes les notificacions",
-    "You need to set up your email address before you can receive notification emails." : "Heu de configurar la vostra adreça electrònica per a poder rebre notificacions per correu electrònic.",
     "Send email reminders about unhandled notifications after:" : "Envia recordatoris per correu electrònic sobre notificacions sense resposta després de:",
     "Play sound when a new notification arrives" : "Reprodueix un so quan arribi una notificació nova",
     "Play sound when a call started (requires Nextcloud Talk)" : "Reprodueix un so quan s'iniciï una trucada (requereix Converses del Nextcloud)",
@@ -31,6 +30,7 @@
     "1 day" : "1 dia",
     "1 week" : "1 setmana",
     "Your settings have been updated." : "S'han actualitzat els paràmetres.",
-    "An error occurred while updating your settings." : "S'ha produït un error en actualitzar els paràmetres."
+    "An error occurred while updating your settings." : "S'ha produït un error en actualitzar els paràmetres.",
+    "You need to set up your email address before you can receive notification emails." : "Heu de configurar la vostra adreça electrònica per a poder rebre notificacions per correu electrònic."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

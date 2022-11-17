@@ -20,7 +20,6 @@ OC.L10N.register(
     "Requesting browser permissions to show notifications" : "Richiesta dei permessi del browser per mostrare le notifiche",
     "No notifications" : "Nessuna notifica",
     "Failed to dismiss all notifications" : "Cancellazione di tutte le notifiche non riuscita",
-    "You need to set up your email address before you can receive notification emails." : "Devi impostare l'indirizzo di posta prima di poter ricevere le email di notifica.",
     "Send email reminders about unhandled notifications after:" : "Invia promemoria via email riguardo notifiche non gestite dopo:",
     "Play sound when a new notification arrives" : "Riproduci un suono quando arriva una nuova notifica",
     "Play sound when a call started (requires Nextcloud Talk)" : "Riproduci un suono all'inizio di una chiamata (richiede Nextcloud Talk)",
@@ -30,6 +29,7 @@ OC.L10N.register(
     "1 day" : "1 giorno",
     "1 week" : "1 settimana",
     "Your settings have been updated." : "Le impostazioni sono state aggiornate.",
-    "An error occurred while updating your settings." : "Si è verificato un errore durante l'aggiornamento delle impostazioni."
+    "An error occurred while updating your settings." : "Si è verificato un errore durante l'aggiornamento delle impostazioni.",
+    "You need to set up your email address before you can receive notification emails." : "Devi impostare l'indirizzo di posta prima di poter ricevere le email di notifica."
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
