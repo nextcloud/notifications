@@ -23,6 +23,8 @@ OC.L10N.register(
     "No notifications" : "No hay notificaciones",
     "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "Nextcloud GmbH patrocina un servicio de puerta de enlace de notificaciones para usuarios privados. Para asegurarse de tener un buen servicio, la puerta de enlace limita el número de notificaciones push por servidor. Para usuarios enterprise, una puerta de enlace más escalable está disponible. Contacte a Nextcloud GmbH para más información.",
     "Failed to dismiss all notifications" : "Error al descartar todas las notificaciones",
+    "Notifications defaults" : "Valores por defecto para notificaciones",
+    "Configure the default notification settings for new users" : "Configure las opciones predeterminadas de notificaciones para nuevos usuarios",
     "Send email reminders about unhandled notifications after:" : "Enviar recordatorios por email sobre las notificaciones no resueltas tras:",
     "Play sound when a new notification arrives" : "Reproducir sonido cuando llega una nueva notificación",
     "Play sound when a call started (requires Nextcloud Talk)" : "Reproducir sonido cuando se inicia una llamada (requiere Nextcloud Talk)",

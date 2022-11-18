@@ -21,6 +21,8 @@
     "No notifications" : "沒有通告",
     "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "Nextcloud GmbH 為私人使用者贊助了一個免費的推送通知閘道。 為了確保良好的服務，閘道限制了每台服務器的推播通知數量。 對於企業使用者，可以使用更具擴展性的閘道。如需更多資訊，請聯絡 Nextcloud GmbH。",
     "Failed to dismiss all notifications" : "撤銷所有通告失敗",
+    "Notifications defaults" : "默認通知設定",
+    "Configure the default notification settings for new users" : "為新用戶配置默認通知設定",
     "Send email reminders about unhandled notifications after:" : "發送有關未處理通知的電郵提醒：",
     "Play sound when a new notification arrives" : "收到新通知時播放聲音",
     "Play sound when a call started (requires Nextcloud Talk)" : "通話開始時播放聲音（需要 Nextcloud Talk）",
