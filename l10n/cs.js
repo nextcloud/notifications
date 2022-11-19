@@ -23,6 +23,8 @@ OC.L10N.register(
     "No notifications" : "Žádná upozornění",
     "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "Nextcloud GmbH sponzoruje bránu pro push upozorňování zdarma pro domácí uživatele. Kvůli zajištění dobré služby brána omezuje počet push upozornění z jednotlivých serverů. Pro podnikové uživatele je k dispozici kapacitnější brána. Ohledně dalších informací se obraťte na Nextcloud GmbH.",
     "Failed to dismiss all notifications" : "Zahození všech upozornění se nezdařilo",
+    "Notifications defaults" : "Výchozí pro upozornění",
+    "Configure the default notification settings for new users" : "Nastavit výchozí hodnoty upozorňování pro nové uživatele",
     "Send email reminders about unhandled notifications after:" : "Posílat upozornění e-mailem ohledně nezpracovaných upozornění po uplynutí:",
     "Play sound when a new notification arrives" : "Při příchodu nového upozornění přehrát zvuk",
     "Play sound when a call started (requires Nextcloud Talk)" : "Při zahájení hovoru přehrát zvuk (vyžaduje Nextcloud Talk)",
