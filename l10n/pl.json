@@ -21,6 +21,8 @@
     "No notifications" : "Brak powiadomień",
     "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "Nextcloud GmbH sponsoruje bezpłatną bramkę powiadomień Push dla użytkowników prywatnych. Aby zapewnić dobrą obsługę, brama ogranicza liczbę powiadomień Push na serwer. Dla użytkowników korporacyjnych dostępna jest bardziej skalowalna brama. Skontaktuj się z Nextcloud GmbH, aby uzyskać więcej informacji.",
     "Failed to dismiss all notifications" : "Nie udało się usunąć wszystkich powiadomień",
+    "Notifications defaults" : "Domyślne ustawienia powiadomień",
+    "Configure the default notification settings for new users" : "Skonfiguruj domyślne ustawienia powiadomień dla nowych użytkowników",
     "Send email reminders about unhandled notifications after:" : "Wysyłaj przypomnienia e-mail o nieobsłużonych powiadomieniach po:",
     "Play sound when a new notification arrives" : "Odtwórz dźwięk, gdy nadejdzie nowe powiadomienie",
     "Play sound when a call started (requires Nextcloud Talk)" : "Odtwórz dźwięk po rozpoczęciu połączenia (wymaga Nextcloud Talk)",
