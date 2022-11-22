@@ -22,6 +22,8 @@ OC.L10N.register(
     "Push notifications might be unreliable" : "Push-meddelanden kan vara opålitliga",
     "No notifications" : "Inga aviseringar",
     "Failed to dismiss all notifications" : "Misslyckades att avfärda alla aviseringar",
+    "Notifications defaults" : "Standardinställningar för meddelanden",
+    "Configure the default notification settings for new users" : "Konfigurera standardinställningar av meddelanden för nya användare",
     "Send email reminders about unhandled notifications after:" : "Skicka påminnelser via e-post för ej hanterade notifikationer efter:",
     "Play sound when a new notification arrives" : "Spela upp ljud när en ny avisering kommer",
     "Play sound when a call started (requires Nextcloud Talk)" : "Spela upp ljud när ett samtal startade (kräver Nextcloud Talk)",
