@@ -99,6 +99,7 @@ import Notification from './Components/Notification.vue'
 import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
 import Close from 'vue-material-design-icons/Close.vue'
 import axios from '@nextcloud/axios'
+import { getCurrentUser } from '@nextcloud/auth'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { showError } from '@nextcloud/dialogs'
 import { loadState } from '@nextcloud/initial-state'
@@ -233,20 +234,28 @@ export default {
 			this.hasNotifyPush = true
 		}
 
-		// Setup the background checker
+		// Set up the background checker
 		this._setPollingInterval(this.pollIntervalBase)
 
 		this._watchTabVisibility()
 		subscribe('networkOffline', this.handleNetworkOffline)
 		subscribe('networkOnline', this.handleNetworkOnline)
+		subscribe('user_status:status.updated', this.userStatusUpdated)
 	},
 
 	beforeDestroy() {
+		unsubscribe('user_status:status.updated', this.userStatusUpdated)
 		unsubscribe('networkOffline', this.handleNetworkOffline)
 		unsubscribe('networkOnline', this.handleNetworkOnline)
 	},
 
 	methods: {
+		userStatusUpdated(state) {
+			if (getCurrentUser().uid === state.userId) {
+				this.userStatus = state.status
+			}
+		},
+
 		onOpen() {
 			this.focusFirstFocusable()
 			this.requestWebNotificationPermissions()
