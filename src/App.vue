@@ -62,6 +62,7 @@ import Notification from './Components/Notification'
 import Button from '@nextcloud/vue/dist/Components/Button'
 import Close from 'vue-material-design-icons/Close'
 import axios from '@nextcloud/axios'
+import { getCurrentUser } from '@nextcloud/auth'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { loadState } from '@nextcloud/initial-state'
 import { showError } from '@nextcloud/dialogs'
@@ -174,15 +175,17 @@ export default {
 			this.hasNotifyPush = true
 		}
 
-		// Setup the background checker
+		// Set up the background checker
 		this._setPollingInterval(this.pollIntervalBase)
 
 		this._watchTabVisibility()
 		subscribe('networkOffline', this.handleNetworkOffline)
 		subscribe('networkOnline', this.handleNetworkOnline)
+		subscribe('user_status:status.updated', this.userStatusUpdated)
 	},
 
 	beforeDestroy() {
+		unsubscribe('user_status:status.updated', this.userStatusUpdated)
 		unsubscribe('networkOffline', this.handleNetworkOffline)
 		unsubscribe('networkOnline', this.handleNetworkOnline)
 	},
@@ -201,6 +204,12 @@ export default {
 	},
 
 	methods: {
+		userStatusUpdated(state) {
+			if (getCurrentUser().uid === state.userId) {
+				this.userStatus = state.status
+			}
+		},
+
 		handleNetworkOffline() {
 			console.debug('Network is offline, slowing down pollingInterval to ' + this.pollIntervalBase * 10)
 			this._setPollingInterval(this.pollIntervalBase * 10)
