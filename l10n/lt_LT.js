@@ -1,7 +1,7 @@
 OC.L10N.register(
     "notifications",
     {
-    "Hello %s" : "Sveiki, %s",
+    "Hello %s" : "Sveiki, %s,",
     "Hello %s," : "Sveiki, %s,",
     "You can change the frequency of these emails or disable them in the <a href=\"%s\">settings</a>." : "<a href=\"%s\">Nustatymuose</a> galite keisti šių el. laiškų dažnumą ar juos išjungti.",
     "You can change the frequency of these emails or disable them in the settings: %s" : "Nustatymuose galite keisti šių el. laiškų dažnumą ar juos išjungti: %s",
