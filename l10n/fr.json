@@ -17,6 +17,7 @@
     "in {path}" : "dans {path}",
     "Dismiss all notifications" : "Ignorer toutes les notifications",
     "Requesting browser permissions to show notifications" : "Nécessite les autorisations du navigateur pour afficher les notifications",
+    "Push notifications might be unreliable" : "Les notifications push peuvent ne pas être fiables",
     "No notifications" : "Aucune notification",
     "Failed to dismiss all notifications" : "Impossible d'ignorer toutes les notifications",
     "Send email reminders about unhandled notifications after:" : "Envoyer par e-mail des rappels des notifications non gérées après :",
