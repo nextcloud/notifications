@@ -22,6 +22,7 @@ OC.L10N.register(
     "Push notifications might be unreliable" : "Les notifications push peuvent ne pas être fiables",
     "No notifications" : "Aucune notification",
     "Failed to dismiss all notifications" : "Impossible d'ignorer toutes les notifications",
+    "Configure the default notification settings for new users" : "Configurez les paramètres de notification par défaut pour les nouveaux utilisateurs.",
     "Send email reminders about unhandled notifications after:" : "Envoyer par e-mail des rappels des notifications non gérées après :",
     "Play sound when a new notification arrives" : "Jouer un son quand une notification arrive",
     "Play sound when a call started (requires Nextcloud Talk)" : "Jouer un son quand un appel démarre (l'application Nextcloud Talk est requise)",
