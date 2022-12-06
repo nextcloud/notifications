@@ -31,6 +31,8 @@ use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 
 /**
+ * @template-extends QBMapper<Settings>
+ *
  * @method Settings mapRowToEntity(array $row)
  * @method Settings findEntity(IQueryBuilder $query)
  * @method Settings[] findEntities(IQueryBuilder $query)

@@ -38,6 +38,9 @@ use OCP\IUserSession;
 use OCP\Notification\IManager;
 use OCP\Util;
 
+/**
+ * @template-implements IEventListener<Event|BeforeTemplateRenderedEvent>
+ */
 class BeforeTemplateRenderedListener implements IEventListener {
 	protected IConfig $config;
 	protected IUserSession $userSession;
