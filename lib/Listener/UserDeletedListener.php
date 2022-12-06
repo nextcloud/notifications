@@ -31,10 +31,11 @@ use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
 use OCP\User\Events\UserDeletedEvent;
 
+/**
+ * @template-implements IEventListener<Event|UserDeletedEvent>
+ */
 class UserDeletedListener implements IEventListener {
-
-	/** @var Handler */
-	private $handler;
+	private Handler $handler;
 
 	public function __construct(Handler $handler) {
 		$this->handler = $handler;
