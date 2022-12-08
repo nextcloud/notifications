@@ -19,6 +19,7 @@ OC.L10N.register(
     "Dismiss all notifications" : "Εκκαθάριση όλων των ειδοποιήσεων",
     "Requesting browser permissions to show notifications" : "Αίτηση άδειας φυλλομετρητή για εμφάνιση ειδοποιήσεων",
     "No notifications" : "Καμία ειδοποίηση",
+    "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "Η Nextcloud GmbH χορηγεί μια δωρεάν πύλη ειδοποιήσεων push για ιδιώτες χρήστες. Για να διασφαλιστεί η καλή εξυπηρέτηση, η πύλη περιορίζει τον αριθμό των ειδοποιήσεων push ανά διακομιστή. Για εταιρικούς χρήστες, είναι διαθέσιμη μια πιο επεκτάσιμη πύλη. Επικοινωνήστε με την Nextcloud GmbH για περισσότερες πληροφορίες.",
     "Failed to dismiss all notifications" : "Αποτυχία αποδέσμευσης όλων των ειδοποιήσεων",
     "Send email reminders about unhandled notifications after:" : "Αποστολή υπενθυμίσεων μέσω email για μη χειριζόμενες ειδοποιήσεις μετά από:",
     "Play sound when a new notification arrives" : "Αναπαραγωγή ήχου όταν φτάσει μια νέα ειδοποίηση",
