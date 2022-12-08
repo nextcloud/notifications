@@ -46,7 +46,7 @@ paste the results here.
 ```
 If you have access to your command line run e.g.:
 sudo -u www-data php occ app:list
-from within your ownCloud installation folder
+from within your Nextcloud installation folder
 ```
 
 **Nextcloud configuration:**
@@ -54,7 +54,7 @@ from within your ownCloud installation folder
 ```
 If you have access to your command line run e.g.:
 sudo -u www-data php occ config:list system
-from within your ownCloud installation folder
+from within your Nextcloud installation folder
 
 or 
 
@@ -71,7 +71,7 @@ Make sure to remove all sensitive content such as passwords. (e.g. database pass
 
 ### Logs
 
-#### Nextcloud log (data/owncloud.log)
+#### Nextcloud log (data/nextcloud.log)
 ```
 Insert your Nextcloud log here
 ```
