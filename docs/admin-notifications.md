@@ -32,6 +32,7 @@ Options:
 > * 20 and earlier: ocs/v2.php/apps/admin_notifications/api/v1/notifications/{user}
 > * 21 and later: ocs/v2.php/apps/notifications/api/v2/admin_notifications/{user}
 
+20 and earlier:
 ```
 curl -H "OCS-APIREQUEST: true" -X POST \
   https://admin:admin@localhost/ocs/v2.php/apps/notifications/api/v1/admin_notifications/admin \
@@ -39,10 +40,18 @@ curl -H "OCS-APIREQUEST: true" -X POST \
   -d "longMessage=Optional: longer message with more details, up to 4000 characters"
 ```
 
-### Help
+21 and later:
 ```
 curl -H "OCS-APIREQUEST: true" -X POST \
-  https://<admin-user>:<admin-app-password-token>@<server-url>/ocs/v2.php/apps/admin_notifications/api/v1/notifications/<user-id> \
+  https://admin:admin@localhost/ocs/v2.php/apps/notifications/api/v2/admin_notifications/admin \
+  -d "shortMessage=Short message up to 255 characters" \
+  -d "longMessage=Optional: longer message with more details, up to 4000 characters"
+```
+
+### Help (for 21 and later)
+```
+curl -H "OCS-APIREQUEST: true" -X POST \
+  https://<admin-user>:<admin-app-password-token>@<server-url>/ocs/v2.php/apps/notifications/api/v2/admin_notifications/<user-id> \
   -d "shortMessage=<short-message>" \
   -d "longMessage=<long-message>"
 
@@ -56,13 +65,13 @@ long-message:              Long mesage to be sent to the user (max. 4000 charact
 
 ### Return codes
 
-Status | Description
------- | -----------
-200 | Notification was created successfully
-400 | Too long or empty `short-message`, too long `long-message`
-404 | Unknown user
-500 | Unexpected server error
-503 | Instance is in maintenance mode
+ | Status | Description                                                |
+|--------|------------------------------------------------------------|
+ | 200    | Notification was created successfully                      |
+ | 400    | Too long or empty `short-message`, too long `long-message` |
+ | 404    | Unknown user                                               |
+ | 500    | Unexpected server error                                    |
+| 503    | Instance is in maintenance mode                            |
 
 ## Screenshot
 
