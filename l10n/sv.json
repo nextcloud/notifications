@@ -19,6 +19,7 @@
     "Requesting browser permissions to show notifications" : "Begär webbläsartillstånd för att visa aviseringar",
     "Push notifications might be unreliable" : "Push-meddelanden kan vara opålitliga",
     "No notifications" : "Inga aviseringar",
+    "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "Nextcloud GmbH sponsrar en gratis push-notifieringsgateway för privata användare. För att säkerställa god service begränsar gatewayen antalet pushnotiser per server. För företagsanvändare finns en mer skalbar gateway tillgänglig. Kontakta Nextcloud GmbH för mer information.",
     "Failed to dismiss all notifications" : "Misslyckades att avfärda alla aviseringar",
     "Notifications defaults" : "Standardinställningar för meddelanden",
     "Configure the default notification settings for new users" : "Konfigurera standardinställningar av meddelanden för nya användare",
