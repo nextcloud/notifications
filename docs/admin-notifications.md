@@ -28,19 +28,8 @@ Options:
 
 ## HTTP request
 
-> ⚠️ The URL had to be changed when switching from Nextcloud 20 to 21:
-> * 20 and earlier: ocs/v2.php/apps/admin_notifications/api/v1/notifications/{user}
-> * 21 and later: ocs/v2.php/apps/notifications/api/v2/admin_notifications/{user}
+*The URL had to be changed when upgrading from Nextcloud 20 to 21*
 
-20 and earlier:
-```
-curl -H "OCS-APIREQUEST: true" -X POST \
-  https://admin:admin@localhost/ocs/v2.php/apps/notifications/api/v1/admin_notifications/admin \
-  -d "shortMessage=Short message up to 255 characters" \
-  -d "longMessage=Optional: longer message with more details, up to 4000 characters"
-```
-
-21 and later:
 ```
 curl -H "OCS-APIREQUEST: true" -X POST \
   https://admin:admin@localhost/ocs/v2.php/apps/notifications/api/v2/admin_notifications/admin \
@@ -48,29 +37,33 @@ curl -H "OCS-APIREQUEST: true" -X POST \
   -d "longMessage=Optional: longer message with more details, up to 4000 characters"
 ```
 
-### Help (for 21 and later)
+### Help
 ```
 curl -H "OCS-APIREQUEST: true" -X POST \
   https://<admin-user>:<admin-app-password-token>@<server-url>/ocs/v2.php/apps/notifications/api/v2/admin_notifications/<user-id> \
   -d "shortMessage=<short-message>" \
   -d "longMessage=<long-message>"
-
-admin-user:                User ID of a user with admin priviliges
-admin-app-password-token:  Password or an "app password" of the "admin-user"
-server-url:                URL with Webroot of your Nextcloud installation
-user-id:                   User ID of the user to notify
-short-message:             Short message to be sent to the user (max. 255 characters)
-long-message:              Long mesage to be sent to the user (max. 4000 characters)
 ```
+
+#### Placeholders
+
+| Placeholder                  | Description                                                |
+|------------------------------|------------------------------------------------------------|
+| `<admin-user>`               | User ID of a user with admin privileges                    |
+| `<admin-app-password-token>` | Password or an "app password" of the "admin-user"          |
+| `<server-url>`               | URL with Webroot of your Nextcloud installation            |
+| `<user-id>`                  | User ID of the user to notify                              |
+| `<short-message>`            | Short message to be sent to the user (max. 255 characters) |
+| `<long-message>`             | Long message to be sent to the user (max. 4000 characters) |
 
 ### Return codes
 
- | Status | Description                                                |
+| Status | Description                                                |
 |--------|------------------------------------------------------------|
- | 200    | Notification was created successfully                      |
- | 400    | Too long or empty `short-message`, too long `long-message` |
- | 404    | Unknown user                                               |
- | 500    | Unexpected server error                                    |
+| 200    | Notification was created successfully                      |
+| 400    | Too long or empty `short-message`, too long `long-message` |
+| 404    | Unknown user                                               |
+| 500    | Unexpected server error                                    |
 | 503    | Instance is in maintenance mode                            |
 
 ## Screenshot
