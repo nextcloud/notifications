@@ -1,5 +1,5 @@
 <template>
-	<HeaderMenu v-if="!shutdown"
+	<NcHeaderMenu v-if="!shutdown"
 		id="notifications"
 		class="notifications-button"
 		exclude-click-outside-classes="popover"
@@ -91,7 +91,7 @@
 				</NcEmptyContent>
 			</transition>
 		</div>
-	</HeaderMenu>
+	</NcHeaderMenu>
 </template>
 
 <script>
@@ -113,7 +113,7 @@ import Bell from 'vue-material-design-icons/Bell.vue'
 import Message from 'vue-material-design-icons/Message.vue'
 import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
 import { getCapabilities } from '@nextcloud/capabilities'
-import HeaderMenu from './Components/HeaderMenu.vue'
+import NcHeaderMenu from '@nextcloud/vue/dist/Components/NcHeaderMenu.js'
 
 export default {
 	name: 'NotificationsApp',
@@ -124,7 +124,7 @@ export default {
 		Bell,
 		Message,
 		NcEmptyContent,
-		HeaderMenu,
+		NcHeaderMenu,
 		Notification,
 	},
 
