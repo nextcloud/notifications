@@ -42,7 +42,7 @@
  */
 
 /*!
- * Vue.js v2.7.10
+ * Vue.js v2.7.14
  * (c) 2014-2022 Evan You
  * Released under the MIT License.
  */
@@ -65,11 +65,7 @@
 * @license MIT, https://github.com/focus-trap/tabbable/blob/master/LICENSE
 */
 
-/*! For license information please see NcUserBubble.js.LICENSE.txt */
-
-/*! For license information please see Tooltip.js.LICENSE.txt */
-
-/*! For license information please see excludeClickOutsideClasses.js.LICENSE.txt */
+/*! For license information please see NcButton.js.LICENSE.txt */
 
 /*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
 
