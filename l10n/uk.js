@@ -3,7 +3,7 @@ OC.L10N.register(
     {
     "Hello %s" : "Вітаємо %s",
     "Hello %s," : "Вітаємо %s,",
-    "_New notification for %s_::_%n new notifications for %s_" : ["Нове сповіщення для %s","%n нові сповіщення для %s","%n нові сповіщення для %s","%n нові сповіщення для %s"],
+    "_New notification for %s_::_%n new notifications for %s_" : ["Нове сповіщення для %s","%n нових сповіщення для %s","%n нових сповіщень для %s","%n нових сповіщень для %s"],
     "_You have a new notification for %s_::_You have %n new notifications for %s_" : ["У вас є нове сповіщення для %s","У вас є нові сповіщення %n для %s","У вас є нові сповіщення %n для %s","Для вас є нові сповіщення %n у %s"],
     "You can change the frequency of these emails or disable them in the <a href=\"%s\">settings</a>." : "Ви можете змінити частоту отримання сповіщень ел.поштою або взагалі вимкнути отримання листів зі сповіщеннями у <a href=\"%s\">налаштуваннях</a>.",
     "You can change the frequency of these emails or disable them in the settings: %s" : "Ви можете змінити частоту отримання сповіщень на ел.пошту або взагалі вимкнути отримання листів зі сповіщеннями у налаштуваннях: %s",
