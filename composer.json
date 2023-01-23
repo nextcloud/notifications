@@ -28,6 +28,8 @@
 		"psalm": "psalm --threads=1",
 		"psalm:update-baseline": "psalm --threads=1 --update-baseline --set-baseline=tests/psalm-baseline.xml",
 		"psalm:clear": "psalm --clear-cache && psalm --clear-global-cache",
-		"psalm:fix": "psalm --alter --issues=InvalidReturnType,InvalidNullableReturnType,MissingParamType,InvalidFalsableReturnType"
+		"psalm:fix": "psalm --alter --issues=InvalidReturnType,InvalidNullableReturnType,MissingParamType,InvalidFalsableReturnType",
+		"test:unit": "vendor/bin/phpunit --color -c tests/Unit/phpunit.xml",
+		"test:integration": "cd tests/Integration && ./run.sh"
 	}
 }
