@@ -5,7 +5,7 @@ OC.L10N.register(
     "Hello %s," : "สวัสดีคุณ %s",
     "Notifications" : "การแจ้งเตือน",
     "Dismiss" : "ปิดทิ้ง",
-    "seconds ago" : "วินาที ก่อนหน้านี้",
+    "seconds ago" : "วินาทีที่ผ่านมา",
     "in {path}" : "ใน {path}",
     "Never" : "ไม่เคย",
     "1 hour" : "1 ชั่วโมง",
