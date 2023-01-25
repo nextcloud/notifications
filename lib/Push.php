@@ -79,6 +79,8 @@ class Push {
 	protected $deferPayloads = false;
 	/** @var array[] */
 	protected $deletesToPush = [];
+	/** @var string[] */
+	protected $deleteAllsToPush = [];
 	/** @var INotification[] */
 	protected $notificationsToPush = [];
 
@@ -170,9 +172,18 @@ class Push {
 			$this->notificationsToPush = [];
 		}
 
+		if (!empty($this->deleteAllsToPush)) {
+			foreach ($this->deleteAllsToPush as $userId) {
+				$this->pushDeleteToDevice($userId, null);
+			}
+			$this->deleteAllsToPush = [];
+		}
+
 		if (!empty($this->deletesToPush)) {
-			foreach ($this->deletesToPush as $id => $data) {
-				$this->pushDeleteToDevice($data['userId'], $id, $data['app']);
+			foreach ($this->deletesToPush as $userId => $data) {
+				foreach ($data as $client => $notificationIds) {
+					$this->pushDeleteToDevice($userId, $notificationIds, $client);
+				}
 			}
 			$this->deletesToPush = [];
 		}
@@ -310,21 +321,47 @@ class Push {
 		}
 	}
 
-	public function pushDeleteToDevice(string $userId, ?int $notificationId, string $app = ''): void {
+	/**
+	 * @param string $userId
+	 * @param ?int[] $notificationIds
+	 * @param string $app
+	 * @throws InvalidTokenException FIXME investigate
+	 */
+	public function pushDeleteToDevice(string $userId, ?array $notificationIds, string $app = ''): void {
 		if (!$this->config->getSystemValueBool('has_internet_connection', true)) {
 			return;
 		}
 
 		if ($this->deferPreparing) {
-			if ($notificationId === null) {
-				$notificationId = 0;
+			if ($notificationIds === null) {
+				$this->deleteAllsToPush[$userId] = true;
+				if (isset($this->deletesToPush[$userId])) {
+					unset($this->deletesToPush[$userId]);
+				}
+			} else {
+				if (isset($this->deleteAllsToPush[$userId])) {
+					return;
+				}
+
+				$isTalkNotification = \in_array($app, ['spreed', 'talk', 'admin_notification_talk'], true);
+				$clientGroup = $isTalkNotification ? 'talk' : 'files';
+
+				if (!isset($this->deletesToPush[$userId])) {
+					$this->deletesToPush[$userId] = [];
+				}
+				if (!isset($this->deletesToPush[$userId][$clientGroup])) {
+					$this->deletesToPush[$userId][$clientGroup] = [];
+				}
+
+				foreach ($notificationIds as $notificationId) {
+					$this->deletesToPush[$userId][$clientGroup][] = $notificationId;
+				}
 			}
-			$this->deletesToPush[$notificationId] = ['userId' => $userId, 'app' => $app]; // FIXME this assumes there is only 1 delete-all per request
 			$this->loadDevicesForUsers[] = $userId;
 			return;
 		}
 
-		$deleteAll = $notificationId !== null;
+		$deleteAll = $notificationIds === null;
 
 		$user = $this->createFakeUserObject($userId);
 
@@ -355,17 +392,21 @@ class Push {
 			}
 
 			try {
-				if ($deleteAll) {
-					$payload = json_encode($this->encryptAndSignDelete($userKey, $device, null));
-				} else {
-					$payload = json_encode($this->encryptAndSignDelete($userKey, $device, [$notificationId]));
-				}
-
 				$proxyServer = rtrim($device['proxyserver'], '/');
 				if (!isset($this->payloadsToSend[$proxyServer])) {
 					$this->payloadsToSend[$proxyServer] = [];
 				}
-				$this->payloadsToSend[$proxyServer][] = $payload;
+
+				if ($deleteAll) {
+					$data = $this->encryptAndSignDelete($userKey, $device, null);
+					$this->payloadsToSend[$proxyServer][] = json_encode($data['payload']);
+				} else {
+					while (!empty($notificationIds)) {
+						$data = $this->encryptAndSignDelete($userKey, $device, $notificationIds);
+						$notificationIds = $data['remaining'];
+						$this->payloadsToSend[$proxyServer][] = json_encode($data['payload']);
+					}
+				}
 			} catch (\InvalidArgumentException $e) {
 				// Failed to encrypt message for device: public key is invalid
 				$this->deletePushToken($device['token']);
