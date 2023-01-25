@@ -310,16 +310,21 @@ class Push {
 		}
 	}
 
-	public function pushDeleteToDevice(string $userId, int $notificationId, string $app = ''): void {
+	public function pushDeleteToDevice(string $userId, ?int $notificationId, string $app = ''): void {
 		if (!$this->config->getSystemValueBool('has_internet_connection', true)) {
 			return;
 		}
 
 		if ($this->deferPreparing) {
-			$this->deletesToPush[$notificationId] = ['userId' => $userId, 'app' => $app];
+			if ($notificationId === null) {
+				$notificationId = 0;
+			}
+			$this->deletesToPush[$notificationId] = ['userId' => $userId, 'app' => $app]; // FIXME this assumes there is only 1 delete-all per request
 			$this->loadDevicesForUsers[] = $userId;
 			return;
 		}
+
+		$deleteAll = $notificationId !== null;
 
 		$user = $this->createFakeUserObject($userId);
 
@@ -330,8 +335,8 @@ class Push {
 			$devices = $this->userDevices[$userId];
 		}
 
-		if ($notificationId !== 0 && $app !== '') {
-			// Only filter when it's not a single delete
+		if (!$deleteAll) {
+			// Only filter when it's not delete-all
 			$devices = $this->filterDeviceList($devices, $app);
 		}
 		if (empty($devices)) {
@@ -350,7 +355,11 @@ class Push {
 			}
 
 			try {
-				$payload = json_encode($this->encryptAndSignDelete($userKey, $device, [$notificationId]));
+				if ($deleteAll) {
+					$payload = json_encode($this->encryptAndSignDelete($userKey, $device, null));
+				} else {
+					$payload = json_encode($this->encryptAndSignDelete($userKey, $device, [$notificationId]));
+				}
 
 				$proxyServer = rtrim($device['proxyserver'], '/');
 				if (!isset($this->payloadsToSend[$proxyServer])) {

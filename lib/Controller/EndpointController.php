@@ -207,7 +207,7 @@ class EndpointController extends OCSController {
 
 		$deletedSomething = $this->handler->deleteByUser($this->getCurrentUser());
 		if ($deletedSomething) {
-			$this->push->pushDeleteToDevice($this->getCurrentUser(), 0);
+			$this->push->pushDeleteToDevice($this->getCurrentUser(), null);
 		}
 
 		if ($shouldFlush) {
