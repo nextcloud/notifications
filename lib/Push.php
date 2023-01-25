@@ -350,7 +350,7 @@ class Push {
 			}
 
 			try {
-				$payload = json_encode($this->encryptAndSignDelete($userKey, $device, $notificationId));
+				$payload = json_encode($this->encryptAndSignDelete($userKey, $device, [$notificationId]));
 
 				$proxyServer = rtrim($device['proxyserver'], '/');
 				if (!isset($this->payloadsToSend[$proxyServer])) {
@@ -562,20 +562,27 @@ class Push {
 	/**
 	 * @param Key $userKey
 	 * @param array $device
-	 * @param int $id
+	 * @param ?int[] $ids
 	 * @return array
 	 * @throws InvalidTokenException
 	 * @throws \InvalidArgumentException
 	 */
-	protected function encryptAndSignDelete(Key $userKey, array $device, int $id): array {
-		if ($id === 0) {
+	protected function encryptAndSignDelete(Key $userKey, array $device, ?array $ids): array {
+		$remainingIds = [];
+		if ($ids === null) {
 			$data = [
 				'delete-all' => true,
 			];
-		} else {
+		} elseif (count($ids) === 1) {
 			$data = [
-				'nid' => $id,
+				'nid' => array_pop($ids),
 				'delete' => true,
+			];
+		} else {
+			$remainingIds = array_splice($ids, 10);
+			$data = [
+				'nids' => $ids,
+				'delete-multiple' => true,
 			];
 		}
 
@@ -589,12 +596,15 @@ class Push {
 		$base64Signature = base64_encode($signature);
 
 		return [
-			'deviceIdentifier' => $device['deviceidentifier'],
-			'pushTokenHash' => $device['pushtokenhash'],
-			'subject' => $base64EncryptedSubject,
-			'signature' => $base64Signature,
-			'priority' => 'normal',
-			'type' => 'background',
+			'remaining' => $remainingIds,
+			'payload' => [
+				'deviceIdentifier' => $device['deviceidentifier'],
+				'pushTokenHash' => $device['pushtokenhash'],
+				'subject' => $base64EncryptedSubject,
+				'signature' => $base64Signature,
+				'priority' => 'normal',
+				'type' => 'background',
+			]
 		];
 	}
 
