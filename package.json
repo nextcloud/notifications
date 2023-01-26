@@ -30,8 +30,7 @@
 		"howler": "^2.2.3",
 		"v-click-outside": "^3.2.0",
 		"vue": "^2.7.10",
-		"vue-material-design-icons": "^5.1.2",
-		"vue-tooltip": "^0.1.0"
+		"vue-material-design-icons": "^5.1.2"
 	},
 	"engines": {
 		"node": "^16.0.0",
