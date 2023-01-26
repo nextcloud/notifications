@@ -26,9 +26,11 @@ declare(strict_types=1);
 
 namespace OCA\Notifications\Command;
 
+use OC\Notification\Action;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\IUser;
 use OCP\IUserManager;
+use OCP\Notification\IAction;
 use OCP\Notification\IManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -78,6 +80,13 @@ class Generate extends Command {
 				'Long mesage to be sent to the user (max. 4000 characters)',
 				''
 			)
+            ->addOption(
+                'test-actions',
+                'a',
+                InputOption::VALUE_OPTIONAL,
+                'generates n amount of dummy actions',
+                ''
+            )
 		;
 	}
 
@@ -90,6 +99,7 @@ class Generate extends Command {
 		$userId = $input->getArgument('user-id');
 		$subject = $input->getArgument('short-message');
 		$message = $input->getOption('long-message');
+        $actionsCount = $input->getOption('test-actions');
 
 		$user = $this->userManager->get($userId);
 		if (!$user instanceof IUser) {
@@ -118,8 +128,23 @@ class Generate extends Command {
 				->setSubject('cli', [$subject]);
 
 			if ($message !== '') {
-				$notification->setMessage('cli', [$message]);
+				$notification->setMessage('cli', [$message, "action: " . $actionsCount]);
 			}
+
+            if ($actionsCount !== 0) {
+                for ($i = 1; $i <= $actionsCount; $i++) {
+					$action = $notification->createAction();
+					$action->setLabel("Action 1");
+					$action->setPrimary($i == 1);
+					$action->setLink("http://localhost", IAction::TYPE_GET);
+
+
+                    $notification->addAction($action);
+					$output->writeln('Add ' . $i);
+                }
+
+				$output->writeln('Sent ' . $actionsCount);
+            }
 
 			$this->notificationManager->notify($notification);
 		} catch (\InvalidArgumentException $e) {
