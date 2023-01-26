@@ -70,23 +70,38 @@ class Push {
 	protected $log;
 	/** @var OutputInterface */
 	protected $output;
-	/** @var array */
+	/**
+	 * @var array
+	 * @psalm-var array<string, list<string>>
+	 */
 	protected $payloadsToSend = [];
 
 	/** @var bool */
 	protected $deferPreparing = false;
 	/** @var bool */
 	protected $deferPayloads = false;
-	/** @var array[] */
+	/**
+	 * @var array[] $userId => $appId => $notificationIds
+	 * @psalm-var array<string, array<string, list<int>>>
+	 */
 	protected $deletesToPush = [];
-	/** @var string[] */
+	/**
+	 * @var bool[] $userId => true
+	 * @psalm-var array<string, bool>
+	 */
 	protected $deleteAllsToPush = [];
 	/** @var INotification[] */
 	protected $notificationsToPush = [];
 
-	/** @var null[]|IUserStatus[] */
+	/**
+	 * @var ?IUserStatus[]
+	 * @psalm-var array<string, ?IUserStatus>
+	 */
 	protected $userStatuses = [];
-	/** @var array[] */
+	/**
+	 * @var array[]
+	 * @psalm-var array<string, list<array{id: int, uid: string, token: int, deviceidentifier: string, devicepublickey: string, devicepublickeyhash: string, pushtokenhash: string, proxyserver: string, apptype: string}>>
+	 */
 	protected $userDevices = [];
 	/** @var string[] */
 	protected $loadDevicesForUsers = [];
@@ -173,7 +188,7 @@ class Push {
 		}
 
 		if (!empty($this->deleteAllsToPush)) {
-			foreach ($this->deleteAllsToPush as $userId) {
+			foreach ($this->deleteAllsToPush as $userId => $bool) {
 				$this->pushDeleteToDevice($userId, null);
 			}
 			$this->deleteAllsToPush = [];
@@ -192,6 +207,13 @@ class Push {
 		$this->sendNotificationsToProxies();
 	}
 
+	/**
+	 * @param array $devices
+	 * @psalm-param $devices list<array{id: int, uid: string, token: int, deviceidentifier: string, devicepublickey: string, devicepublickeyhash: string, pushtokenhash: string, proxyserver: string, apptype: string}>
+	 * @param string $app
+	 * @return array
+	 * @psalm-return list<array{id: int, uid: string, token: int, deviceidentifier: string, devicepublickey: string, devicepublickeyhash: string, pushtokenhash: string, proxyserver: string, apptype: string}>
+	 */
 	public function filterDeviceList(array $devices, string $app): array {
 		$isTalkNotification = \in_array($app, ['spreed', 'talk', 'admin_notification_talk'], true);
 
@@ -325,7 +347,6 @@ class Push {
 	 * @param string $userId
 	 * @param ?int[] $notificationIds
 	 * @param string $app
-	 * @throws InvalidTokenException FIXME investigate
 	 */
 	public function pushDeleteToDevice(string $userId, ?array $notificationIds, string $app = ''): void {
 		if (!$this->config->getSystemValueBool('has_internet_connection', true)) {
@@ -550,6 +571,7 @@ class Push {
 	 * @param INotification $notification
 	 * @param bool $isTalkNotification
 	 * @return array
+	 * @psalm-return array{deviceIdentifier: string, pushTokenHash: string, subject: string, signature: string, priority: string, type: string}
 	 * @throws InvalidTokenException
 	 * @throws \InvalidArgumentException
 	 */
@@ -614,6 +636,7 @@ class Push {
 	 * @param array $device
 	 * @param ?int[] $ids
 	 * @return array
+	 * @psalm-return array{remaining: list<int>, payload: array{deviceIdentifier: string, pushTokenHash: string, subject: string, signature: string, priority: string, type: string}}
 	 * @throws InvalidTokenException
 	 * @throws \InvalidArgumentException
 	 */
@@ -661,6 +684,7 @@ class Push {
 	/**
 	 * @param string $uid
 	 * @return array[]
+	 * @psalm-return list<array{id: int, uid: string, token: int, deviceidentifier: string, devicepublickey: string, devicepublickeyhash: string, pushtokenhash: string, proxyserver: string, apptype: string}>
 	 */
 	protected function getDevicesForUser(string $uid): array {
 		$query = $this->db->getQueryBuilder();
@@ -678,6 +702,7 @@ class Push {
 	/**
 	 * @param string[] $userIds
 	 * @return array[]
+	 * @psalm-return array<string, list<array{id: int, uid: string, token: int, deviceidentifier: string, devicepublickey: string, devicepublickeyhash: string, pushtokenhash: string, proxyserver: string, apptype: string}>>
 	 */
 	protected function getDevicesForUsers(array $userIds): array {
 		$query = $this->db->getQueryBuilder();
