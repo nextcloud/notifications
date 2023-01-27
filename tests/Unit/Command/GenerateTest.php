@@ -162,10 +162,11 @@ class GenerateTest extends \Test\TestCase {
 				['user-id', $userId],
 				['short-message', $short],
 			]);
-		$input->expects($this->exactly(1))
+		$input->expects($this->exactly(2))
 			->method('getOption')
 			->willReturnMap([
 				['long-message', $long],
+				['dummy', false],
 			]);
 		$output = $this->createMock(OutputInterface::class);
 

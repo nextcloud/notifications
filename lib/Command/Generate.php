@@ -78,6 +78,12 @@ class Generate extends Command {
 				'Long mesage to be sent to the user (max. 4000 characters)',
 				''
 			)
+			->addOption(
+				'dummy',
+				'd',
+				InputOption::VALUE_NONE,
+				'Create a full-flexed dummy notification for client debugging with actions and parameters (short-message will be casted to integer and is the number of actions (max 3))'
+			)
 		;
 	}
 
@@ -90,6 +96,7 @@ class Generate extends Command {
 		$userId = $input->getArgument('user-id');
 		$subject = $input->getArgument('short-message');
 		$message = $input->getOption('long-message');
+		$dummy = $input->getOption('dummy');
 
 		$user = $this->userManager->get($userId);
 		if (!$user instanceof IUser) {
@@ -97,14 +104,21 @@ class Generate extends Command {
 			return 1;
 		}
 
-		if ($subject === '' || strlen($subject) > 255) {
-			$output->writeln('Too long or empty short-message');
-			return 1;
-		}
+		if (!$dummy) {
+			if ($subject === '' || strlen($subject) > 255) {
+				$output->writeln('Too long or empty short-message');
+				return 1;
+			}
 
-		if ($message !== '' && strlen($message) > 4000) {
-			$output->writeln('Too long long-message');
-			return 1;
+			if ($message !== '' && strlen($message) > 4000) {
+				$output->writeln('Too long long-message');
+				return 1;
+			}
+
+			$subjectTitle = 'cli';
+		} else {
+			$subject = (int) $subject;
+			$subjectTitle = 'dummy';
 		}
 
 		$notification = $this->notificationManager->createNotification();
@@ -115,7 +129,7 @@ class Generate extends Command {
 				->setUser($user->getUID())
 				->setDateTime($datetime)
 				->setObject('admin_notifications', dechex($datetime->getTimestamp()))
-				->setSubject('cli', [$subject]);
+				->setSubject($subjectTitle, [$subject]);
 
 			if ($message !== '') {
 				$notification->setMessage('cli', [$message]);

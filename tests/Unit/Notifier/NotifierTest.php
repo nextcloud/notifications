@@ -24,20 +24,27 @@
 namespace OCA\Notifications\Tests\Unit\Notifier;
 
 use OCA\Notifications\Notifier\AdminNotifications;
+use OCP\Files\IRootFolder;
 use OCP\IL10N;
 use OCP\IURLGenerator;
+use OCP\IUserManager;
 use OCP\L10N\IFactory;
 use OCP\Notification\INotification;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class NotifierTest extends \Test\TestCase {
 	/** @var AdminNotifications */
 	protected $notifier;
 
-	/** @var IFactory|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var IFactory|MockObject */
 	protected $factory;
-	/** @var IURLGenerator|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var IURLGenerator|MockObject */
 	protected $urlGenerator;
-	/** @var IL10N|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var IUserManager|MockObject */
+	protected $userManager;
+	/** @var IRootFolder|MockObject */
+	protected $rootFolder;
+	/** @var IL10N|MockObject */
 	protected $l;
 
 	protected function setUp(): void {
@@ -54,10 +61,14 @@ class NotifierTest extends \Test\TestCase {
 		$this->factory->expects($this->any())
 			->method('get')
 			->willReturn($this->l);
+		$this->userManager = $this->createMock(IUserManager::class);
+		$this->rootFolder = $this->createMock(IRootFolder::class);
 
 		$this->notifier = new AdminNotifications(
 			$this->factory,
-			$this->urlGenerator
+			$this->urlGenerator,
+			$this->userManager,
+			$this->rootFolder
 		);
 	}
 
