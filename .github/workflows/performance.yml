@@ -1,4 +1,4 @@
-name: Integration
+name: Performance
 
 on:
   pull_request:
@@ -14,21 +14,15 @@ on:
       - 'composer.json'
       - 'composer.lock'
 
-  push:
-    branches:
-      - main
-      - master
-      - stable*
-
 permissions:
   contents: read
-  issues: write
+  pull-requests: write
 
 concurrency:
-  group: phpunit-sqlite-${{ github.head_ref || github.run_id }}
+  group: performance-sqlite-${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
 jobs:
-  integration-sqlite:
+  performance-sqlite:
     runs-on: ubuntu-latest
 
     strategy:
