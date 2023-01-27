@@ -197,7 +197,13 @@ class Push {
 		if (!empty($this->deletesToPush)) {
 			foreach ($this->deletesToPush as $userId => $data) {
 				foreach ($data as $client => $notificationIds) {
-					$this->pushDeleteToDevice((string) $userId, $notificationIds, $client);
+					if ($client === 'talk') {
+						$this->pushDeleteToDevice((string) $userId, $notificationIds, $client);
+					} else {
+						foreach ($notificationIds as $notificationId) {
+							$this->pushDeleteToDevice((string) $userId, [$notificationId], $client);
+						}
+					}
 				}
 			}
 			$this->deletesToPush = [];
