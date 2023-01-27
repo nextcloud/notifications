@@ -20,20 +20,15 @@
 -->
 
 <template>
-	<a v-tooltip.bottom="title"
+	<a :title="title"
 		class="filename"
 		:href="link">{{ name }}</a>
 </template>
 
 <script>
-import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip.js'
 
 export default {
 	name: 'File',
-
-	directives: {
-		tooltip: Tooltip,
-	},
 
 	props: {
 		type: {
