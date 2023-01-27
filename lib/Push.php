@@ -82,12 +82,12 @@ class Push {
 	protected $deferPayloads = false;
 	/**
 	 * @var array[] $userId => $appId => $notificationIds
-	 * @psalm-var array<string, array<string, list<int>>>
+	 * @psalm-var array<string|int, array<string, list<int>>>
 	 */
 	protected $deletesToPush = [];
 	/**
 	 * @var bool[] $userId => true
-	 * @psalm-var array<string, bool>
+	 * @psalm-var array<string|int, bool>
 	 */
 	protected $deleteAllsToPush = [];
 	/** @var INotification[] */
@@ -189,7 +189,7 @@ class Push {
 
 		if (!empty($this->deleteAllsToPush)) {
 			foreach ($this->deleteAllsToPush as $userId => $bool) {
-				$this->pushDeleteToDevice($userId, null);
+				$this->pushDeleteToDevice((string) $userId, null);
 			}
 			$this->deleteAllsToPush = [];
 		}
@@ -197,7 +197,7 @@ class Push {
 		if (!empty($this->deletesToPush)) {
 			foreach ($this->deletesToPush as $userId => $data) {
 				foreach ($data as $client => $notificationIds) {
-					$this->pushDeleteToDevice($userId, $notificationIds, $client);
+					$this->pushDeleteToDevice((string) $userId, $notificationIds, $client);
 				}
 			}
 			$this->deletesToPush = [];
