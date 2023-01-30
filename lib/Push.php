@@ -428,9 +428,11 @@ class Push {
 					$data = $this->encryptAndSignDelete($userKey, $device, null);
 					$this->payloadsToSend[$proxyServer][] = json_encode($data['payload']);
 				} else {
-					while (!empty($notificationIds)) {
-						$data = $this->encryptAndSignDelete($userKey, $device, $notificationIds);
-						$notificationIds = $data['remaining'];
+					$temp = $notificationIds;
+
+					while (!empty($temp)) {
+						$data = $this->encryptAndSignDelete($userKey, $device, $temp);
+						$temp = $data['remaining'];
 						$this->payloadsToSend[$proxyServer][] = json_encode($data['payload']);
 					}
 				}
