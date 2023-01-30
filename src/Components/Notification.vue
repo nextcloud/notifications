@@ -1,8 +1,9 @@
 <template>
 	<li class="notification" :data-id="notificationId" :data-timestamp="timestamp">
 		<div class="notification-heading">
+			<span class="hidden-visually">{{ absoluteDate }}</span>
 			<span v-if="timestamp"
-				v-tooltip.bottom="absoluteDate"
+				:title="absoluteDate"
 				class="notification-time live-relative-timestamp"
 				:data-timestamp="timestamp">{{ relativeDate }}</span>
 			<NcButton v-if="timestamp"
@@ -71,7 +72,6 @@
 <script>
 import axios from '@nextcloud/axios'
 import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
-import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip.js'
 import Close from 'vue-material-design-icons/Close.vue'
 import Message from 'vue-material-design-icons/Message.vue'
 import { showError } from '@nextcloud/dialogs'
@@ -94,10 +94,6 @@ export default {
 		Close,
 		Message,
 		RichText,
-	},
-
-	directives: {
-		tooltip: Tooltip,
 	},
 
 	props: {
