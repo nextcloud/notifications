@@ -21,6 +21,8 @@ OC.L10N.register(
     "No notifications" : "Geen meldingen",
     "Failed to dismiss all notifications" : "Alle meldingen wissen mislukt",
     "Send email reminders about unhandled notifications after:" : "Verzend e-mailherinneringen over onverwerkte meldingen na:",
+    "Play sound when a new notification arrives" : "Geluid afspelen wanneer er een nieuwe melding binnenkomt",
+    "Play sound when a call started (requires Nextcloud Talk)" : "Geluid afspelen wanneer een gesprek is gestart (vereist Nextcloud Talk)",
     "Never" : "Nooit",
     "1 hour" : "1 uur",
     "3 hours" : "3 uur",
