@@ -70,21 +70,38 @@ class Push {
 	protected $log;
 	/** @var OutputInterface */
 	protected $output;
-	/** @var array */
+	/**
+	 * @var array
+	 * @psalm-var array<string, list<string>>
+	 */
 	protected $payloadsToSend = [];
 
 	/** @var bool */
 	protected $deferPreparing = false;
 	/** @var bool */
 	protected $deferPayloads = false;
-	/** @var array[] */
+	/**
+	 * @var array[] $userId => $appId => $notificationIds
+	 * @psalm-var array<string|int, array<string, list<int>>>
+	 */
 	protected $deletesToPush = [];
+	/**
+	 * @var bool[] $userId => true
+	 * @psalm-var array<string|int, bool>
+	 */
+	protected $deleteAllsToPush = [];
 	/** @var INotification[] */
 	protected $notificationsToPush = [];
 
-	/** @var null[]|IUserStatus[] */
+	/**
+	 * @var ?IUserStatus[]
+	 * @psalm-var array<string, ?IUserStatus>
+	 */
 	protected $userStatuses = [];
-	/** @var array[] */
+	/**
+	 * @var array[]
+	 * @psalm-var array<string, list<array{id: int, uid: string, token: int, deviceidentifier: string, devicepublickey: string, devicepublickeyhash: string, pushtokenhash: string, proxyserver: string, apptype: string}>>
+	 */
 	protected $userDevices = [];
 	/** @var string[] */
 	protected $loadDevicesForUsers = [];
@@ -170,9 +187,24 @@ class Push {
 			$this->notificationsToPush = [];
 		}
 
+		if (!empty($this->deleteAllsToPush)) {
+			foreach ($this->deleteAllsToPush as $userId => $bool) {
+				$this->pushDeleteToDevice((string) $userId, null);
+			}
+			$this->deleteAllsToPush = [];
+		}
+
 		if (!empty($this->deletesToPush)) {
-			foreach ($this->deletesToPush as $id => $data) {
-				$this->pushDeleteToDevice($data['userId'], $id, $data['app']);
+			foreach ($this->deletesToPush as $userId => $data) {
+				foreach ($data as $client => $notificationIds) {
+					if ($client === 'talk') {
+						$this->pushDeleteToDevice((string) $userId, $notificationIds, $client);
+					} else {
+						foreach ($notificationIds as $notificationId) {
+							$this->pushDeleteToDevice((string) $userId, [$notificationId], $client);
+						}
+					}
+				}
 			}
 			$this->deletesToPush = [];
 		}
@@ -181,6 +213,13 @@ class Push {
 		$this->sendNotificationsToProxies();
 	}
 
+	/**
+	 * @param array $devices
+	 * @psalm-param $devices list<array{id: int, uid: string, token: int, deviceidentifier: string, devicepublickey: string, devicepublickeyhash: string, pushtokenhash: string, proxyserver: string, apptype: string}>
+	 * @param string $app
+	 * @return array
+	 * @psalm-return list<array{id: int, uid: string, token: int, deviceidentifier: string, devicepublickey: string, devicepublickeyhash: string, pushtokenhash: string, proxyserver: string, apptype: string}>
+	 */
 	public function filterDeviceList(array $devices, string $app): array {
 		$isTalkNotification = \in_array($app, ['spreed', 'talk', 'admin_notification_talk'], true);
 
@@ -310,16 +349,46 @@ class Push {
 		}
 	}
 
-	public function pushDeleteToDevice(string $userId, int $notificationId, string $app = ''): void {
+	/**
+	 * @param string $userId
+	 * @param ?int[] $notificationIds
+	 * @param string $app
+	 */
+	public function pushDeleteToDevice(string $userId, ?array $notificationIds, string $app = ''): void {
 		if (!$this->config->getSystemValueBool('has_internet_connection', true)) {
 			return;
 		}
 
 		if ($this->deferPreparing) {
-			$this->deletesToPush[$notificationId] = ['userId' => $userId, 'app' => $app];
+			if ($notificationIds === null) {
+				$this->deleteAllsToPush[$userId] = true;
+				if (isset($this->deletesToPush[$userId])) {
+					unset($this->deletesToPush[$userId]);
+				}
+			} else {
+				if (isset($this->deleteAllsToPush[$userId])) {
+					return;
+				}
+
+				$isTalkNotification = \in_array($app, ['spreed', 'talk', 'admin_notification_talk'], true);
+				$clientGroup = $isTalkNotification ? 'talk' : 'files';
+
+				if (!isset($this->deletesToPush[$userId])) {
+					$this->deletesToPush[$userId] = [];
+				}
+				if (!isset($this->deletesToPush[$userId][$clientGroup])) {
+					$this->deletesToPush[$userId][$clientGroup] = [];
+				}
+
+				foreach ($notificationIds as $notificationId) {
+					$this->deletesToPush[$userId][$clientGroup][] = $notificationId;
+				}
+			}
 			$this->loadDevicesForUsers[] = $userId;
 			return;
 		}
+
+		$deleteAll = $notificationIds === null;
 
 		$user = $this->createFakeUserObject($userId);
 
@@ -330,8 +399,8 @@ class Push {
 			$devices = $this->userDevices[$userId];
 		}
 
-		if ($notificationId !== 0 && $app !== '') {
-			// Only filter when it's not a single delete
+		if (!$deleteAll) {
+			// Only filter when it's not delete-all
 			$devices = $this->filterDeviceList($devices, $app);
 		}
 		if (empty($devices)) {
@@ -350,13 +419,23 @@ class Push {
 			}
 
 			try {
-				$payload = json_encode($this->encryptAndSignDelete($userKey, $device, $notificationId));
-
 				$proxyServer = rtrim($device['proxyserver'], '/');
 				if (!isset($this->payloadsToSend[$proxyServer])) {
 					$this->payloadsToSend[$proxyServer] = [];
 				}
-				$this->payloadsToSend[$proxyServer][] = $payload;
+
+				if ($deleteAll) {
+					$data = $this->encryptAndSignDelete($userKey, $device, null);
+					$this->payloadsToSend[$proxyServer][] = json_encode($data['payload']);
+				} else {
+					$temp = $notificationIds;
+
+					while (!empty($temp)) {
+						$data = $this->encryptAndSignDelete($userKey, $device, $temp);
+						$temp = $data['remaining'];
+						$this->payloadsToSend[$proxyServer][] = json_encode($data['payload']);
+					}
+				}
 			} catch (\InvalidArgumentException $e) {
 				// Failed to encrypt message for device: public key is invalid
 				$this->deletePushToken($device['token']);
@@ -500,6 +579,7 @@ class Push {
 	 * @param INotification $notification
 	 * @param bool $isTalkNotification
 	 * @return array
+	 * @psalm-return array{deviceIdentifier: string, pushTokenHash: string, subject: string, signature: string, priority: string, type: string}
 	 * @throws InvalidTokenException
 	 * @throws \InvalidArgumentException
 	 */
@@ -562,20 +642,28 @@ class Push {
 	/**
 	 * @param Key $userKey
 	 * @param array $device
-	 * @param int $id
+	 * @param ?int[] $ids
 	 * @return array
+	 * @psalm-return array{remaining: list<int>, payload: array{deviceIdentifier: string, pushTokenHash: string, subject: string, signature: string, priority: string, type: string}}
 	 * @throws InvalidTokenException
 	 * @throws \InvalidArgumentException
 	 */
-	protected function encryptAndSignDelete(Key $userKey, array $device, int $id): array {
-		if ($id === 0) {
+	protected function encryptAndSignDelete(Key $userKey, array $device, ?array $ids): array {
+		$remainingIds = [];
+		if ($ids === null) {
 			$data = [
 				'delete-all' => true,
 			];
-		} else {
+		} elseif (count($ids) === 1) {
 			$data = [
-				'nid' => $id,
+				'nid' => array_pop($ids),
 				'delete' => true,
+			];
+		} else {
+			$remainingIds = array_splice($ids, 10);
+			$data = [
+				'nids' => $ids,
+				'delete-multiple' => true,
 			];
 		}
 
@@ -589,18 +677,22 @@ class Push {
 		$base64Signature = base64_encode($signature);
 
 		return [
-			'deviceIdentifier' => $device['deviceidentifier'],
-			'pushTokenHash' => $device['pushtokenhash'],
-			'subject' => $base64EncryptedSubject,
-			'signature' => $base64Signature,
-			'priority' => 'normal',
-			'type' => 'background',
+			'remaining' => $remainingIds,
+			'payload' => [
+				'deviceIdentifier' => $device['deviceidentifier'],
+				'pushTokenHash' => $device['pushtokenhash'],
+				'subject' => $base64EncryptedSubject,
+				'signature' => $base64Signature,
+				'priority' => 'normal',
+				'type' => 'background',
+			]
 		];
 	}
 
 	/**
 	 * @param string $uid
 	 * @return array[]
+	 * @psalm-return list<array{id: int, uid: string, token: int, deviceidentifier: string, devicepublickey: string, devicepublickeyhash: string, pushtokenhash: string, proxyserver: string, apptype: string}>
 	 */
 	protected function getDevicesForUser(string $uid): array {
 		$query = $this->db->getQueryBuilder();
@@ -618,6 +710,7 @@ class Push {
 	/**
 	 * @param string[] $userIds
 	 * @return array[]
+	 * @psalm-return array<string, list<array{id: int, uid: string, token: int, deviceidentifier: string, devicepublickey: string, devicepublickeyhash: string, pushtokenhash: string, proxyserver: string, apptype: string}>>
 	 */
 	protected function getDevicesForUsers(array $userIds): array {
 		$query = $this->db->getQueryBuilder();
