@@ -20,6 +20,8 @@ OC.L10N.register(
     "Push notifications might be unreliable" : "Push-ilmoitukset eivät välttämättä ole luotettavia",
     "No notifications" : "Ei ilmoituksia",
     "Failed to dismiss all notifications" : "Kaikki ilmoitusten hylkääminen epäonnistui",
+    "Notifications defaults" : "Ilmoitusten oletukset",
+    "Configure the default notification settings for new users" : "Määritä uusien käyttäjien oletusarvoiset ilmoitusasetukset",
     "Send email reminders about unhandled notifications after:" : "Lähetä sähköpostimuistutuksia käsittelemättömistä ilmoituksista, kun on kulunut:",
     "Play sound when a new notification arrives" : "Toista ääni kun uusi ilmoitus vastaanotetaan",
     "Play sound when a call started (requires Nextcloud Talk)" : "Toista ääni kun puhelu on aloitettu (vaatii Nextcloud Talkin)",
