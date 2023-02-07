@@ -84,6 +84,7 @@ import RichText from '@nextcloud/vue-richtext'
 import DefaultParameter from './Parameters/DefaultParameter.vue'
 import File from './Parameters/File.vue'
 import User from './Parameters/User.vue'
+import { emit } from '@nextcloud/event-bus'
 
 export default {
 	name: 'Notification',
@@ -329,9 +330,24 @@ export default {
 			})
 
 			if (this.link) {
-				n.onclick = function(event) {
-					event.preventDefault()
-					window.location.href = this.link
+				n.onclick = async function(e) {
+					const event = {
+						cancelAction: false,
+						notification: this.$props,
+						action: {
+							url: this.link,
+							type: 'WEB',
+						},
+					}
+					await emit('notifications:action:execute', event)
+
+					if (!event.cancelAction) {
+						console.debug('Redirecting because of a click onto a notification', this.link)
+						window.location.href = this.link
+					}
+
+					// Best effort try to bring the tab to the foreground (works at least in Chrome, not in Firefox)
+					window.focus()
 				}.bind(this)
 			}
 		},
