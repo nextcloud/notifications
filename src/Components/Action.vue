@@ -2,7 +2,8 @@
 	<NcButton v-if="isWebLink"
 		type="primary"
 		class="action-button pull-right"
-		:href="link">
+		:href="link"
+		@click="onClickActionButtonWeb">
 		{{ label }}
 	</NcButton>
 	<NcButton v-else-if="!isWebLink"
@@ -17,6 +18,7 @@
 import axios from '@nextcloud/axios'
 import { showError } from '@nextcloud/dialogs'
 import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
+import { emit } from '@nextcloud/event-bus'
 
 export default {
 	name: 'Action',
@@ -69,8 +71,45 @@ export default {
 	},
 
 	methods: {
+		async onClickActionButtonWeb(e) {
+			try {
+				const event = {
+					cancelAction: false,
+					notification: this.$parent.$props,
+					action: {
+						url: this.link,
+						type: this.typeWithDefault,
+					},
+				}
+				await emit('notifications:action:execute', event)
+
+				if (event.cancelAction) {
+					// Action cancelled by event
+					e.preventDefault()
+				}
+			} catch (error) {
+				console.error('Failed to perform action', error)
+				showError(t('notifications', 'Failed to perform action'))
+			}
+		},
+
 		async onClickActionButton() {
 			try {
+				const event = {
+					cancelAction: false,
+					notification: this.$parent.$props,
+					action: {
+						url: this.link,
+						type: this.typeWithDefault,
+					},
+				}
+				await emit('notifications:action:execute', event)
+
+				if (event.cancelAction) {
+					// Action cancelled by event
+					return
+				}
+
 				// execute action
 				await axios({
 					method: this.typeWithDefault,
@@ -80,6 +119,9 @@ export default {
 				// emit event to current app
 				this.$parent._$el.fadeOut(OC.menuSpeed)
 				this.$parent.$emit('remove')
+
+				emit('notifications:action:executed', event)
+
 				try {
 					$('body').trigger(new $.Event('OCA.Notification.Action', {
 						notification: this.$parent,
