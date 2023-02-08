@@ -242,6 +242,16 @@ export default {
 			console.error('Failed to read showBrowserNotifications property from App component')
 		}
 
+		if (this.$parent.$parent.$parent.backgroundFetching) {
+			// Can not rely on showBrowserNotifications because each tab should
+			// be able to utilize the data from the notification in events.
+			const event = {
+				notification: this.$props,
+			}
+
+			emit('notifications:notification:received', event)
+		}
+
 		if (this.$parent.$parent.$parent.showBrowserNotifications) {
 			this._createWebNotification()
 
