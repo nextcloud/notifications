@@ -76,6 +76,9 @@ jobs:
         working-directory: apps/${{ env.APP_NAME }}/tests/Integration
         run: bash run.sh
 
+      - name: Print query.log
+        run: cat /home/runner/work/notifications/notifications/query.log
+
       - name: Query count
         uses: actions/github-script@v5
         with:
