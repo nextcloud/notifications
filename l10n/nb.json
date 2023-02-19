@@ -13,6 +13,8 @@
     "Dismiss all notifications" : "Avvis alle varsler",
     "No notifications" : "Ingen varsel",
     "Failed to dismiss all notifications" : "Klarte ikke å avvise alle varslene",
+    "Play sound when a new notification arrives" : "Spill av lyd når et nytt varsel kommer",
+    "Play sound when a call started (requires Nextcloud Talk)" : "Spill av lyd når en samtale startet (krever Nextcloud Talk)",
     "Never" : "Aldri",
     "1 hour" : "1 time",
     "3 hours" : "3 timer",
