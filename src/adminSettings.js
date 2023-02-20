@@ -21,6 +21,9 @@
 import Vue from 'vue'
 import AdminSettings from './views/AdminSettings.vue'
 
+// Styles
+import '@nextcloud/dialogs/dist/index.css'
+
 Vue.prototype.t = t
 Vue.prototype.n = n
 

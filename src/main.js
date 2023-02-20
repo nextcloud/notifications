@@ -22,7 +22,7 @@ import Vue from 'vue'
 
 // Styles
 import './styles/styles.scss'
-import '@nextcloud/dialogs/styles/toast.scss'
+import '@nextcloud/dialogs/dist/index.css'
 
 Vue.prototype.t = t
 Vue.prototype.n = n
