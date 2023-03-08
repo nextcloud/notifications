@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.7.0@d4377c0baf3ffbf0b1ec6998e8d1be2a40971005">
+<files psalm-version="5.7.7@e028ba46ba0d7f9a78bc3201c251e137383e145f">
   <file src="lib/AppInfo/Application.php">
-    <UndefinedClass occurrences="2">
+    <UndefinedClass>
       <code>IProvider</code>
       <code>IProvider</code>
     </UndefinedClass>
   </file>
   <file src="lib/Controller/APIController.php">
-    <NullArgument occurrences="4">
+    <NullArgument>
       <code>null</code>
       <code>null</code>
       <code>null</code>
@@ -15,7 +15,7 @@
     </NullArgument>
   </file>
   <file src="lib/Controller/EndpointController.php">
-    <NullArgument occurrences="8">
+    <NullArgument>
       <code>null</code>
       <code>null</code>
       <code>null</code>
@@ -27,7 +27,7 @@
     </NullArgument>
   </file>
   <file src="lib/Controller/PushController.php">
-    <UndefinedClass occurrences="8">
+    <UndefinedClass>
       <code>IProvider</code>
       <code>IToken</code>
       <code>IToken</code>
@@ -37,16 +37,16 @@
       <code>InvalidTokenException</code>
       <code>Manager</code>
     </UndefinedClass>
-    <UndefinedDocblockClass occurrences="5">
-      <code>$this-&gt;identityProof</code>
-      <code>$this-&gt;tokenProvider</code>
-      <code>$this-&gt;tokenProvider</code>
+    <UndefinedDocblockClass>
+      <code><![CDATA[$this->identityProof]]></code>
+      <code><![CDATA[$this->tokenProvider]]></code>
+      <code><![CDATA[$this->tokenProvider]]></code>
       <code>IProvider</code>
       <code>Manager</code>
     </UndefinedDocblockClass>
   </file>
   <file src="lib/Push.php">
-    <UndefinedClass occurrences="9">
+    <UndefinedClass>
       <code>$e</code>
       <code>$e</code>
       <code>ClientException</code>
@@ -57,10 +57,10 @@
       <code>Manager</code>
       <code>ServerException</code>
     </UndefinedClass>
-    <UndefinedDocblockClass occurrences="5">
-      <code>$this-&gt;keyManager</code>
-      <code>$this-&gt;keyManager</code>
-      <code>$this-&gt;tokenProvider</code>
+    <UndefinedDocblockClass>
+      <code><![CDATA[$this->keyManager]]></code>
+      <code><![CDATA[$this->keyManager]]></code>
+      <code><![CDATA[$this->tokenProvider]]></code>
       <code>IProvider</code>
       <code>Manager</code>
     </UndefinedDocblockClass>
