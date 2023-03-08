@@ -36,7 +36,6 @@ use OCP\Migration\SimpleMigrationStep;
  * Recreate notifications_pushtoken(s) with a primary key for cluster support
  */
 class Version2010Date20210218082811 extends SimpleMigrationStep {
-
 	/** @var IDBConnection */
 	protected $connection;
 

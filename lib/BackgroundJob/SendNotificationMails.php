@@ -28,7 +28,6 @@ use OCA\Notifications\MailNotifications;
 use OCP\AppFramework\Utility\ITimeFactory;
 
 class SendNotificationMails extends TimedJob {
-
 	/** @var MailNotifications */
 	protected $mailNotifications;
 	/** @var bool */

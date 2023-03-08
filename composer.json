@@ -9,17 +9,18 @@
 	"description": "notifications",
 	"license": "AGPL",
 	"require-dev": {
+		"nextcloud/coding-standard": "^1.0",
+		"nextcloud/ocp": "dev-master",
 		"phpunit/phpunit": "^9.5",
-		"nextcloud/coding-standard": "^1.0.0",
-		"vimeo/psalm": "^5.1.0",
-		"nextcloud/ocp": "dev-master"
+		"vimeo/psalm": "^5.7"
 	},
 	"config": {
 		"optimize-autoloader": true,
 		"classmap-authoritative": true,
 		"platform": {
 			"php": "8.0"
-		}
+		},
+		"sort-packages": true
 	},
 	"scripts": {
 		"lint": "find . -name \\*.php -not -path './vendor/*' -not -path './build/*' -print0 | xargs -0 -n1 php -l",

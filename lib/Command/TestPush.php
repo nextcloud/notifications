@@ -38,7 +38,6 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class TestPush extends Command {
-
 	/** @var ITimeFactory */
 	protected $timeFactory;
 	/** @var IUserManager */

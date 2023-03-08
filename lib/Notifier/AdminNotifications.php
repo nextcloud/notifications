@@ -38,7 +38,6 @@ use OCP\Notification\INotification;
 use OCP\Notification\INotifier;
 
 class AdminNotifications implements INotifier {
-
 	/** @var IFactory */
 	protected $l10nFactory;
 
@@ -203,7 +202,7 @@ class AdminNotifications implements INotifier {
 				$notification->setIcon($this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('notifications', 'notifications-dark.svg')));
 				return $notification;
 
-			// Deal with known subjects
+				// Deal with known subjects
 			case 'cli':
 			case 'ocs':
 				$subjectParams = $notification->getSubjectParameters();

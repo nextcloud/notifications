@@ -43,7 +43,6 @@ use OCP\Util;
 use Psr\Log\LoggerInterface;
 
 class MailNotifications {
-
 	/** @var IConfig */
 	private $config;
 

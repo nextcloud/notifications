@@ -36,7 +36,6 @@ use OCP\IUserManager;
 use OCP\Notification\IManager;
 
 class APIController extends OCSController {
-
 	/** @var ITimeFactory */
 	protected $timeFactory;
 
