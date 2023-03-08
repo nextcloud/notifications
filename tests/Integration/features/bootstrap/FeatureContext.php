@@ -34,7 +34,6 @@ use Psr\Http\Message\ResponseInterface;
  * Defines application features from the specific context.
  */
 class FeatureContext implements Context, SnippetAcceptingContext {
-
 	/** @var array[] */
 	protected $notificationIds;
 
@@ -201,7 +200,7 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 		$lastNotifications = end($this->notificationIds);
 		if ($notification === 'first') {
 			$notificationId = reset($lastNotifications);
-		} else /* if ($notification === 'last')*/ {
+		} else { /* if ($notification === 'last')*/
 			$notificationId = end($lastNotifications);
 		}
 

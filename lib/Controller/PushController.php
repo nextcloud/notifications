@@ -39,7 +39,6 @@ use OCP\IUser;
 use OCP\IUserSession;
 
 class PushController extends OCSController {
-
 	/** @var IDBConnection */
 	private $db;
 
@@ -93,7 +92,7 @@ class PushController extends OCSController {
 			strpos($devicePublicKey, '-----BEGIN PUBLIC KEY-----' . "\n") !== 0 ||
 			((\strlen($devicePublicKey) !== 450 || strpos($devicePublicKey, "\n" . '-----END PUBLIC KEY-----') !== 425) &&
 				(\strlen($devicePublicKey) !== 451 || strpos($devicePublicKey, "\n" . '-----END PUBLIC KEY-----' . "\n") !== 425))
-			) {
+		) {
 			return new DataResponse(['message' => 'INVALID_DEVICE_KEY'], Http::STATUS_BAD_REQUEST);
 		}
 

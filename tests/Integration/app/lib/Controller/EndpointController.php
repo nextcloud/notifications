@@ -27,7 +27,6 @@ use OCP\IRequest;
 use OCP\Notification\IManager;
 
 class EndpointController extends OCSController {
-
 	/** @var IManager */
 	private $manager;
 
