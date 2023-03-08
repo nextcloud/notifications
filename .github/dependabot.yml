@@ -11,6 +11,17 @@ updates:
   labels:
   - 3. to review
   - dependencies
+- package-ecosystem: composer
+  directory: "/tests/Integration"
+  schedule:
+    interval: weekly
+    day: saturday
+    time: "03:00"
+    timezone: Europe/Paris
+  open-pull-requests-limit: 10
+  labels:
+  - 3. to review
+  - dependencies
 - package-ecosystem: npm
   directory: "/"
   schedule:
