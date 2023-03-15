@@ -27,9 +27,11 @@ namespace OCA\Notifications\Controller;
 use OCA\Notifications\Exceptions\NotificationNotFoundException;
 use OCA\Notifications\Handler;
 use OCA\Notifications\Push;
+use OCA\Notifications\Service\ClientService;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
+use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\IRequest;
 use OCP\IUser;
 use OCP\IUserSession;
@@ -41,35 +43,19 @@ use OCP\UserStatus\IManager as IUserStatusManager;
 use OCP\UserStatus\IUserStatus;
 
 class EndpointController extends OCSController {
-	/** @var Handler */
-	private $handler;
-	/** @var IManager */
-	private $manager;
-	/** @var IFactory */
-	private $l10nFactory;
-	/** @var IUserSession */
-	private $session;
-	/** @var IUserStatusManager */
-	private $userStatusManager;
-	/** @var Push */
-	private $push;
-
-	public function __construct(string $appName,
-								IRequest $request,
-								Handler $handler,
-								IManager $manager,
-								IFactory $l10nFactory,
-								IUserSession $session,
-								IUserStatusManager $userStatusManager,
-								Push $push) {
+	public function __construct(
+		string $appName,
+		IRequest $request,
+		protected Handler $handler,
+		protected IManager $manager,
+		protected IFactory $l10nFactory,
+		protected IUserSession $session,
+		protected ITimeFactory $timeFactory,
+		protected IUserStatusManager $userStatusManager,
+		protected ClientService $clientService,
+		protected Push $push,
+	) {
 		parent::__construct($appName, $request);
-
-		$this->handler = $handler;
-		$this->manager = $manager;
-		$this->l10nFactory = $l10nFactory;
-		$this->session = $session;
-		$this->userStatusManager = $userStatusManager;
-		$this->push = $push;
 	}
 
 	/**
@@ -96,12 +82,21 @@ class EndpointController extends OCSController {
 			return new DataResponse(null, Http::STATUS_NO_CONTENT, $headers);
 		}
 
+		$user = $this->session->getUser();
 		$filter = $this->manager->createNotification();
 		$filter->setUser($this->getCurrentUser());
-		$language = $this->l10nFactory->getUserLanguage($this->session->getUser());
+		$language = $this->l10nFactory->getUserLanguage($user);
 		$notifications = $this->handler->get($filter);
 
 		$shouldFlush = $this->manager->defer();
+
+		$hasActiveTalkDesktop = false;
+		if ($user instanceof IUser) {
+			$hasActiveTalkDesktop = $this->clientService->hasTalkDesktop(
+				$user->getUID(),
+				$this->timeFactory->getTime() - ClientService::DESKTOP_CLIENT_TIMEOUT
+			);
+		}
 
 		$data = [];
 		$notificationIds = [];
@@ -115,7 +110,7 @@ class EndpointController extends OCSController {
 			}
 
 			$notificationIds[] = $notificationId;
-			$data[] = $this->notificationToArray($notificationId, $notification, $apiVersion);
+			$data[] = $this->notificationToArray($notificationId, $notification, $apiVersion, $hasActiveTalkDesktop);
 		}
 
 		if ($shouldFlush) {
@@ -153,7 +148,8 @@ class EndpointController extends OCSController {
 			return new DataResponse(null, Http::STATUS_NOT_FOUND);
 		}
 
-		$language = $this->l10nFactory->getUserLanguage($this->session->getUser());
+		$user = $this->session->getUser();
+		$language = $this->l10nFactory->getUserLanguage($user);
 
 		try {
 			$notification = $this->manager->prepare($notification, $language);
@@ -162,7 +158,15 @@ class EndpointController extends OCSController {
 			return new DataResponse(null, Http::STATUS_NOT_FOUND);
 		}
 
-		return new DataResponse($this->notificationToArray($id, $notification, $apiVersion));
+		$hasActiveTalkDesktop = false;
+		if ($user instanceof IUser) {
+			$hasActiveTalkDesktop = $this->clientService->hasTalkDesktop(
+				$user->getUID(),
+				$this->timeFactory->getTime() - ClientService::DESKTOP_CLIENT_TIMEOUT
+			);
+		}
+
+		return new DataResponse($this->notificationToArray($id, $notification, $apiVersion, $hasActiveTalkDesktop));
 	}
 
 	/**
@@ -231,9 +235,10 @@ class EndpointController extends OCSController {
 	 * @param int $notificationId
 	 * @param INotification $notification
 	 * @param string $apiVersion
+	 * @param bool $hasActiveTalkDesktop
 	 * @return array
 	 */
-	protected function notificationToArray(int $notificationId, INotification $notification, string $apiVersion): array {
+	protected function notificationToArray(int $notificationId, INotification $notification, string $apiVersion, bool $hasActiveTalkDesktop = false): array {
 		$data = [
 			'notification_id' => $notificationId,
 			'app' => $notification->getApp(),
@@ -247,12 +252,19 @@ class EndpointController extends OCSController {
 		];
 
 		if ($apiVersion !== 'v1') {
+			if ($this->request->isUserAgent([IRequest::USER_AGENT_TALK_DESKTOP])) {
+				$shouldNotify = $notification->getApp() === 'spreed';
+			} else {
+				$shouldNotify = !$hasActiveTalkDesktop || $notification->getApp() !== 'spreed';
+			}
+
 			$data = array_merge($data, [
 				'subjectRich' => $notification->getRichSubject(),
 				'subjectRichParameters' => $notification->getRichSubjectParameters(),
 				'messageRich' => $notification->getRichMessage(),
 				'messageRichParameters' => $notification->getRichMessageParameters(),
 				'icon' => $notification->getIcon(),
+				'shouldNotify' => $shouldNotify,
 			]);
 		}
 
