@@ -162,6 +162,10 @@ export default {
 			type: String,
 			default: '',
 		},
+		shouldNotify: {
+			type: Boolean,
+			default: true,
+		},
 		actions: {
 			type: Array,
 			default() {
@@ -252,7 +256,7 @@ export default {
 			emit('notifications:notification:received', event)
 		}
 
-		if (this.$parent.$parent.$parent.showBrowserNotifications) {
+		if (this.shouldNotify && this.$parent.$parent.$parent.showBrowserNotifications) {
 			this._createWebNotification()
 
 			if (this.app === 'spreed' && this.objectType === 'call') {
