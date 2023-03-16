@@ -77,6 +77,7 @@ The user needs to be identified/logged in by the server. Then you can just run a
         "messageRichParameters": [],
         "link": "http://localhost/index.php/apps/files_sharing/pending",
         "icon": "http://localhost/img/icon.svg",
+        "shouldNotify": true,
         "actions": [
           {
             "label": "Accept",
