@@ -3,7 +3,6 @@
 namespace OCA\Notifications\Service;
 
 use OCP\DB\QueryBuilder\IQueryBuilder;
-use OCP\Diagnostics\IQuery;
 use OCP\IDBConnection;
 use OCP\IRequest;
 
