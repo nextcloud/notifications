@@ -53,7 +53,6 @@ class ClientService {
 
 		$result = $query->executeQuery();
 		while ($row = $result->fetch()) {
-			\OC::$server->getLogger()->error(json_encode($row['name']));
 			if (preg_match('/ \(Talk Desktop Client - [A-Za-z ]+\)$/', $row['name'])) {
 				$result->closeCursor();
 				return true;
