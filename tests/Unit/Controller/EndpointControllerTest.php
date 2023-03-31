@@ -26,9 +26,11 @@ use OCA\Notifications\Controller\EndpointController;
 use OCA\Notifications\Exceptions\NotificationNotFoundException;
 use OCA\Notifications\Handler;
 use OCA\Notifications\Push;
+use OCA\Notifications\Service\ClientService;
 use OCA\Notifications\Tests\Unit\TestCase;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\IRequest;
 use OCP\IUser;
 use OCP\IUserSession;
@@ -61,6 +63,10 @@ class EndpointControllerTest extends TestCase {
 
 	/** @var IUser|MockObject */
 	protected $user;
+	/** @var ITimeFactory|MockObject */
+	protected $timeFactory;
+	/** @var ClientService|MockObject */
+	protected $clientService;
 	/** @var Push|MockObject */
 	protected $push;
 
@@ -74,6 +80,8 @@ class EndpointControllerTest extends TestCase {
 		$this->session = $this->createMock(IUserSession::class);
 		$this->userStatusManager = $this->createMock(IUserStatusManager::class);
 		$this->user = $this->createMock(IUser::class);
+		$this->timeFactory = $this->createMock(ITimeFactory::class);
+		$this->clientService = $this->createMock(ClientService::class);
 		$this->push = $this->createMock(Push::class);
 
 		$this->session->expects($this->any())
@@ -94,8 +102,10 @@ class EndpointControllerTest extends TestCase {
 				$this->manager,
 				$this->l10nFactory,
 				$this->session,
+				$this->timeFactory,
 				$this->userStatusManager,
-				$this->push
+				$this->clientService,
+				$this->push,
 			);
 		}
 
@@ -107,7 +117,9 @@ class EndpointControllerTest extends TestCase {
 				$this->manager,
 				$this->l10nFactory,
 				$this->session,
+				$this->timeFactory,
 				$this->userStatusManager,
+				$this->clientService,
 				$this->push,
 			])
 			->setMethods($methods)
@@ -588,6 +600,7 @@ class EndpointControllerTest extends TestCase {
 				'messageRich' => $messageRich,
 				'messageRichParameters' => $messageRichParameters,
 				'icon' => $icon,
+				'shouldNotify' => true,
 			]);
 		}
 
