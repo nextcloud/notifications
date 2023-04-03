@@ -331,13 +331,15 @@ class Push {
 			}
 
 			try {
-				$payload = json_encode($this->encryptAndSign($userKey, $device, $id, $notification, $isTalkNotification));
+				$payload = json_encode($this->encryptAndSign($userKey, $device, $id, $notification, $isTalkNotification), JSON_THROW_ON_ERROR);
 
 				$proxyServer = rtrim($device['proxyserver'], '/');
 				if (!isset($this->payloadsToSend[$proxyServer])) {
 					$this->payloadsToSend[$proxyServer] = [];
 				}
 				$this->payloadsToSend[$proxyServer][] = $payload;
+			} catch (\JsonException $e) {
+				$this->log->error('JSON error while encoding push notification: ' . $e->getMessage(), ['exception' => $e]);
 			} catch (\InvalidArgumentException $e) {
 				// Failed to encrypt message for device: public key is invalid
 				$this->deletePushToken($device['token']);
@@ -426,14 +428,22 @@ class Push {
 
 				if ($deleteAll) {
 					$data = $this->encryptAndSignDelete($userKey, $device, null);
-					$this->payloadsToSend[$proxyServer][] = json_encode($data['payload']);
+					try {
+						$this->payloadsToSend[$proxyServer][] = json_encode($data['payload'], JSON_THROW_ON_ERROR);
+					} catch (\JsonException $e) {
+						$this->log->error('JSON error while encoding push notification: ' . $e->getMessage(), ['exception' => $e]);
+					}
 				} else {
 					$temp = $notificationIds;
 
 					while (!empty($temp)) {
 						$data = $this->encryptAndSignDelete($userKey, $device, $temp);
 						$temp = $data['remaining'];
-						$this->payloadsToSend[$proxyServer][] = json_encode($data['payload']);
+						try {
+							$this->payloadsToSend[$proxyServer][] = json_encode($data['payload'], JSON_THROW_ON_ERROR);
+						} catch (\JsonException $e) {
+							$this->log->error('JSON error while encoding push notification: ' . $e->getMessage(), ['exception' => $e]);
+						}
 					}
 				}
 			} catch (\InvalidArgumentException $e) {
