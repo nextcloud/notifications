@@ -49,6 +49,7 @@ class Capabilities implements ICapability {
 					'rich-strings',
 					'action-web',
 					'user-status',
+					'exists',
 				],
 				'push' => [
 					'devices',
