@@ -1,5 +1,9 @@
 <template>
-	<li class="notification" :data-id="notificationId" :data-timestamp="timestamp">
+	<li class="notification"
+		:data-id="notificationId"
+		:data-timestamp="timestamp"
+		:data-object-type="objectType"
+		:data-app="app">
 		<div class="notification-heading">
 			<span class="hidden-visually">{{ absoluteDate }}</span>
 			<span v-if="timestamp"
