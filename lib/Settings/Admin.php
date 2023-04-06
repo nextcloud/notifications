@@ -3,11 +3,11 @@
 declare(strict_types=1);
 
 /**
- * @copyright Copyright (c) 2022 Nikita Toponen <natoponen@gmail.com>
+ * @copyright Copyright (c) 2022, Nikita Toponen <natoponen@gmail.com>
  *
  * @author Nikita Toponen <natoponen@gmail.com>
  *
- * @license GNU AGPL version 3 or any later version
+ * @license AGPL-3.0-or-later
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -40,7 +40,7 @@ use OCP\Util;
 class Admin implements ISettings {
 	protected IConfig $config;
 	protected IL10N $l10n;
-	private SettingsMapper$settingsMapper;
+	private SettingsMapper $settingsMapper;
 	private IUserSession $session;
 	private IInitialState $initialState;
 
