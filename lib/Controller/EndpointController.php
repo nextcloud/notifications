@@ -3,9 +3,11 @@
 declare(strict_types=1);
 
 /**
+ * @copyright Copyright (c) 2023, Joas Schilling <coding@schilljs.com>
+ * @copyright Copyright (c) 2016, ownCloud, Inc.
+ *
  * @author Joas Schilling <coding@schilljs.com>
  *
- * @copyright Copyright (c) 2016, ownCloud, Inc.
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -167,6 +169,35 @@ class EndpointController extends OCSController {
 		}
 
 		return new DataResponse($this->notificationToArray($id, $notification, $apiVersion, $hasActiveTalkDesktop));
+	}
+
+	/**
+	 * @NoAdminRequired
+	 *
+	 * @param string $apiVersion
+	 * @param int[] $ids
+	 * @return DataResponse
+	 */
+	public function confirmIdsForUser(string $apiVersion, array $ids): DataResponse {
+		if (!$this->manager->hasNotifiers()) {
+			return new DataResponse([], Http::STATUS_OK);
+		}
+
+		if (empty($ids)) {
+			return new DataResponse([], Http::STATUS_OK);
+		}
+
+		if (count($ids) > 200) {
+			return new DataResponse([], Http::STATUS_BAD_REQUEST);
+		}
+
+		$ids = array_unique(array_filter(array_map(
+			static fn ($id) => is_numeric($id) ? (int) $id : 0,
+			$ids
+		)));
+
+		$existingIds = $this->handler->confirmIdsForUser($this->getCurrentUser(), $ids);
+		return new DataResponse($existingIds, Http::STATUS_OK);
 	}
 
 	/**

@@ -39,6 +39,7 @@ class CapabilitiesTest extends TestCase {
 					'rich-strings',
 					'action-web',
 					'user-status',
+					'exists',
 				],
 				'push' => [
 					'devices',

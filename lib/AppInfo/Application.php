@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 /**
+ * @copyright Copyright (c) 2023, Joas Schilling <coding@schilljs.com>
+ * @copyright Copyright (c) 2016, ownCloud, Inc.
+ *
  * @author Joas Schilling <coding@schilljs.com>
  *
- * @copyright Copyright (c) 2016, ownCloud, Inc.
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
