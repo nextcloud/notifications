@@ -82,7 +82,7 @@ class Notifier implements \OCP\Notification\INotifier {
 	}
 
 	/**
-	 * Human readable name describing the notifier
+	 * Human-readable name describing the notifier
 	 * @return string
 	 */
 	public function getName(): string {
@@ -154,9 +154,15 @@ class Notifier implements \OCP\Notification\INotifier {
 		}
 	}
 
-	// This is a little helper function which automatically sets the simple parsed subject
-	// based on the rich subject you set.
-	protected function setParsedSubjectFromRichSubject(INotification $notification) {
+	/**
+	 * This is a little helper function which automatically sets the simple parsed subject
+	 * based on the rich subject you set. This is also the default behaviour of the API
+	 * since Nextcloud 26, but in case you would like to return simpler or other strings,
+	 * this function allows you to take over.
+	 *
+	 * @param INotification $notification
+	 */
+	protected function setParsedSubjectFromRichSubject(INotification $notification): void {
 		$placeholders = $replacements = [];
 		foreach ($notification->getRichSubjectParameters() as $placeholder => $parameter) {
 			$placeholders[] = '{' . $placeholder . '}';
