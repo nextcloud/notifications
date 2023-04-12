@@ -176,4 +176,4 @@ In order to check whether a set of notification ids (max. 200 items per request)
 a client can send a POST request against `/ocs/v2.php/apps/notifications/api/v2/notifications/exists` with
 the integer list provided as `ids` field on the POST body.
 
-**Note:** This endpoint was added for Nextcloud 27, so check for the `exists` capability first.
+**Note:** This endpoint was added for Nextcloud 27 and 26.0.1, so check for the `exists` capability first.
