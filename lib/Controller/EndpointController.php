@@ -191,6 +191,11 @@ class EndpointController extends OCSController {
 			return new DataResponse([], Http::STATUS_BAD_REQUEST);
 		}
 
+		$ids = array_unique(array_filter(array_map(
+			static fn ($id) => is_numeric($id) ? (int) $id : 0,
+			$ids
+		)));
+
 		$existingIds = $this->handler->confirmIdsForUser($this->getCurrentUser(), $ids);
 		return new DataResponse($existingIds, Http::STATUS_OK);
 	}
