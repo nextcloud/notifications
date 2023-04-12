@@ -228,7 +228,7 @@ class Handler {
 	 */
 	public function confirmIdsForUser(string $user, array $ids): array {
 		$query = $this->connection->getQueryBuilder();
-		$query->select('*')
+		$query->select('notification_id')
 			->from('notifications')
 			->where($query->expr()->in('notification_id', $query->createNamedParameter($ids, IQueryBuilder::PARAM_INT_ARRAY)))
 			->andWhere($query->expr()->eq('user', $query->createNamedParameter($user)));
