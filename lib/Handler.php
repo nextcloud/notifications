@@ -3,9 +3,11 @@
 declare(strict_types=1);
 
 /**
+ * @copyright Copyright (c) 2023, Joas Schilling <coding@schilljs.com>
+ * @copyright Copyright (c) 2016, ownCloud, Inc.
+ *
  * @author Joas Schilling <coding@schilljs.com>
  *
- * @copyright Copyright (c) 2016, ownCloud, Inc.
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -215,6 +217,30 @@ class Handler {
 		} catch (\InvalidArgumentException $e) {
 			throw new NotificationNotFoundException('Could not create notification from database row');
 		}
+	}
+
+	/**
+	 * Confirm that the notification ids still exist for the user
+	 *
+	 * @param string $user
+	 * @param int[] $ids
+	 * @return int[]
+	 */
+	public function confirmIdsForUser(string $user, array $ids): array {
+		$query = $this->connection->getQueryBuilder();
+		$query->select('notification_id')
+			->from('notifications')
+			->where($query->expr()->in('notification_id', $query->createNamedParameter($ids, IQueryBuilder::PARAM_INT_ARRAY)))
+			->andWhere($query->expr()->eq('user', $query->createNamedParameter($user)));
+		$result = $query->executeQuery();
+
+		$existing = [];
+		while ($row = $result->fetch()) {
+			$existing[] = (int) $row['notification_id'];
+		}
+		$result->closeCursor();
+
+		return $existing;
 	}
 
 	/**

@@ -3,9 +3,11 @@
 declare(strict_types=1);
 
 /**
+ * @copyright Copyright (c) 2023, Joas Schilling <coding@schilljs.com>
+ * @copyright Copyright (c) 2016, ownCloud, Inc.
+ *
  * @author Joas Schilling <coding@schilljs.com>
  *
- * @copyright Copyright (c) 2016, ownCloud, Inc.
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -26,6 +28,7 @@ return [
 	'ocs' => [
 		['name' => 'Endpoint#listNotifications', 'url' => '/api/{apiVersion}/notifications', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v(1|2)']],
 		['name' => 'Endpoint#getNotification', 'url' => '/api/{apiVersion}/notifications/{id}', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v(1|2)', 'id' => '\d+']],
+		['name' => 'Endpoint#confirmIdsForUser', 'url' => '/api/{apiVersion}/notifications/exists', 'verb' => 'POST', 'requirements' => ['apiVersion' => 'v(1|2)']],
 		['name' => 'Endpoint#deleteNotification', 'url' => '/api/{apiVersion}/notifications/{id}', 'verb' => 'DELETE', 'requirements' => ['apiVersion' => 'v(1|2)', 'id' => '\d+']],
 		['name' => 'Endpoint#deleteAllNotifications', 'url' => '/api/{apiVersion}/notifications', 'verb' => 'DELETE', 'requirements' => ['apiVersion' => 'v(1|2)']],
 		['name' => 'Push#registerDevice', 'url' => '/api/{apiVersion}/push', 'verb' => 'POST', 'requirements' => ['apiVersion' => 'v2']],

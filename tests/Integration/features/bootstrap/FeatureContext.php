@@ -148,11 +148,34 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
-	 * Parses the xml answer to get the array of users returned.
-	 * @param ResponseInterface $response
-	 * @return array
+	 * @Then /^confirms previously fetched notification ids exist on (v\d+)$/
 	 */
+	public function checkNotificationsExists(string $api) {
+		$notificationIds = end($this->notificationIds);
+
+		$sendingWithGarbage = $notificationIds;
+		// An array instead of int
+		$sendingWithGarbage[] = $notificationIds;
+		// A string instead of int
+		$sendingWithGarbage[] = '$notificationIds';
+		// A duplicate
+		$sendingWithGarbage[] = reset($notificationIds);
+
+		$this->sendingToWith('POST', '/apps/notifications/api/' . $api . '/notifications/exists?format=json', [
+			'ids' => $sendingWithGarbage,
+		]);
+
+		$this->assertStatusCode($this->response, 200);
+		$actualIds = $this->getDataFromOCSResponse($this->response);
+
+		Assert::assertSame($notificationIds, $actualIds);
+	}
+
 	protected function getArrayOfNotificationsResponded(ResponseInterface $response): array {
+		return $this->getDataFromOCSResponse($response);
+	}
+
+	protected function getDataFromOCSResponse(ResponseInterface $response): array {
 		$jsonBody = json_decode($response->getBody()->getContents(), true);
 		return $jsonBody['ocs']['data'];
 	}
