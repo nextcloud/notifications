@@ -374,12 +374,11 @@ export default {
 				this.lastETag = response.headers.etag
 				this.lastTabId = response.tabId
 				this.notifications = response.data
-				console.debug('Got notification data')
+				console.debug('Got notification data, restoring default polling interval.')
 				this._setPollingInterval(this.pollIntervalBase)
 				this._updateDocTitleOnNewNotifications(this.notifications)
 			} else if (response.status === 304) {
 				// 304 - Not modified
-				console.debug('No new notification data received')
 				this._setPollingInterval(this.pollIntervalBase)
 			} else if (response.status === 503) {
 				// 503 - Maintenance mode
@@ -411,10 +410,11 @@ export default {
 		},
 
 		_setPollingInterval(pollInterval) {
-			console.debug('Polling interval updated to ' + pollInterval)
 			if (this.interval && pollInterval === this.pollIntervalCurrent) {
 				return
 			}
+
+			console.debug('Polling interval updated to ' + pollInterval)
 
 			if (this.interval) {
 				window.clearInterval(this.interval)
