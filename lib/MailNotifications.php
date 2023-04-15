@@ -38,9 +38,9 @@ use OCP\IUserManager;
 use OCP\L10N\IFactory;
 use OCP\Mail\IMailer;
 use OCP\Mail\IMessage;
+use OCP\Notification\IAction;
 use OCP\Notification\IManager;
 use OCP\Notification\INotification;
-use OCP\Notification\IAction;
 use OCP\Util;
 use Psr\Log\LoggerInterface;
 

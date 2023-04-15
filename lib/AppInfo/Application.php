@@ -39,9 +39,9 @@ use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\AppFramework\Http\Events\BeforeTemplateRenderedEvent;
 use OCP\AppFramework\IAppContainer;
 use OCP\Notification\IManager;
-use OCP\User\Events\UserDeletedEvent;
-use OCP\User\Events\UserCreatedEvent;
 use OCP\User\Events\PostLoginEvent;
+use OCP\User\Events\UserCreatedEvent;
+use OCP\User\Events\UserDeletedEvent;
 
 class Application extends \OCP\AppFramework\App implements IBootstrap {
 	public const APP_ID = 'notifications';

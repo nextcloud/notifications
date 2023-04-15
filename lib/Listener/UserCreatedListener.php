@@ -28,10 +28,10 @@ namespace OCA\Notifications\Listener;
 use OCA\Notifications\AppInfo\Application;
 use OCA\Notifications\Model\Settings;
 use OCA\Notifications\Model\SettingsMapper;
-use OCP\User\Events\UserCreatedEvent;
-use OCP\EventDispatcher\IEventListener;
 use OCP\EventDispatcher\Event;
+use OCP\EventDispatcher\IEventListener;
 use OCP\IConfig;
+use OCP\User\Events\UserCreatedEvent;
 
 /**
  * @template-implements IEventListener<Event|UserCreatedEvent>
