@@ -37,7 +37,7 @@ class App implements IDeferrableApp {
 	protected $push;
 
 	public function __construct(Handler $handler,
-								Push $push) {
+		Push $push) {
 		$this->handler = $handler;
 		$this->push = $push;
 	}

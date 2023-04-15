@@ -48,9 +48,9 @@ class BeforeTemplateRenderedListener implements IEventListener {
 	protected IManager $notificationManager;
 
 	public function __construct(IConfig $config,
-								IUserSession $userSession,
-								IInitialState $initialState,
-								IManager $notificationManager) {
+		IUserSession $userSession,
+		IInitialState $initialState,
+		IManager $notificationManager) {
 		$this->config = $config;
 		$this->userSession = $userSession;
 		$this->initialState = $initialState;

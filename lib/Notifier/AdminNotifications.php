@@ -49,9 +49,9 @@ class AdminNotifications implements INotifier {
 	protected $rootFolder;
 
 	public function __construct(IFactory $l10nFactory,
-								IURLGenerator $urlGenerator,
-								IUserManager $userManager,
-								IRootFolder $rootFolder) {
+		IURLGenerator $urlGenerator,
+		IUserManager $userManager,
+		IRootFolder $rootFolder) {
 		$this->l10nFactory = $l10nFactory;
 		$this->urlGenerator = $urlGenerator;
 		$this->userManager = $userManager;

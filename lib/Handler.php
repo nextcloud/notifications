@@ -41,7 +41,7 @@ class Handler {
 	protected $manager;
 
 	public function __construct(IDBConnection $connection,
-								IManager $manager) {
+		IManager $manager) {
 		$this->connection = $connection;
 		$this->manager = $manager;
 	}

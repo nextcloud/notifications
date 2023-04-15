@@ -57,12 +57,12 @@ class PushController extends OCSController {
 	private $identityProof;
 
 	public function __construct(string $appName,
-								IRequest $request,
-								IDBConnection $db,
-								ISession $session,
-								IUserSession $userSession,
-								IProvider $tokenProvider,
-								Manager $identityProof) {
+		IRequest $request,
+		IDBConnection $db,
+		ISession $session,
+		IUserSession $userSession,
+		IProvider $tokenProvider,
+		Manager $identityProof) {
 		parent::__construct($appName, $request);
 
 		$this->db = $db;

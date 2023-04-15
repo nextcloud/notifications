@@ -47,8 +47,8 @@ class Generate extends Command {
 	protected $notificationManager;
 
 	public function __construct(ITimeFactory $timeFactory,
-								IUserManager $userManager,
-								IManager $notificationManager) {
+		IUserManager $userManager,
+		IManager $notificationManager) {
 		parent::__construct();
 
 		$this->timeFactory = $timeFactory;

@@ -30,10 +30,10 @@ use OCA\Notifications\AppInfo\Application;
 use OCA\Notifications\Model\Settings;
 use OCA\Notifications\Model\SettingsMapper;
 use OCP\AppFramework\Db\DoesNotExistException;
-use OCP\User\Events\PostLoginEvent;
-use OCP\EventDispatcher\IEventListener;
 use OCP\EventDispatcher\Event;
+use OCP\EventDispatcher\IEventListener;
 use OCP\IConfig;
+use OCP\User\Events\PostLoginEvent;
 
 /**
  * @template-implements IEventListener<Event|PostLoginEvent>

@@ -28,8 +28,8 @@ namespace OCA\Notifications\Controller;
 
 use OCA\Notifications\AppInfo\Application;
 use OCA\Notifications\Model\SettingsMapper;
-use OCP\AppFramework\OCSController;
 use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\OCSController;
 use OCP\IConfig;
 use OCP\IRequest;
 
@@ -39,10 +39,10 @@ class SettingsController extends OCSController {
 	protected string $userId;
 
 	public function __construct(string $appName,
-								IRequest $request,
-								IConfig $config,
-								SettingsMapper $settingsMapper,
-								string $userId) {
+		IRequest $request,
+		IConfig $config,
+		SettingsMapper $settingsMapper,
+		string $userId) {
 		parent::__construct($appName, $request);
 		$this->config = $config;
 		$this->settingsMapper = $settingsMapper;

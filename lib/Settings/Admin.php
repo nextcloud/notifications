@@ -33,8 +33,8 @@ use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Services\IInitialState;
 use OCP\IConfig;
 use OCP\IL10N;
-use OCP\Settings\ISettings;
 use OCP\IUserSession;
+use OCP\Settings\ISettings;
 use OCP\Util;
 
 class Admin implements ISettings {
@@ -45,10 +45,10 @@ class Admin implements ISettings {
 	private IInitialState $initialState;
 
 	public function __construct(IConfig        $config,
-								IL10N          $l10n,
-								IUserSession   $session,
-								SettingsMapper $settingsMapper,
-								IInitialState  $initialState) {
+		IL10N          $l10n,
+		IUserSession   $session,
+		SettingsMapper $settingsMapper,
+		IInitialState  $initialState) {
 		$this->config = $config;
 		$this->l10n = $l10n;
 		$this->settingsMapper = $settingsMapper;

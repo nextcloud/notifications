@@ -28,8 +28,8 @@ namespace OCA\Notifications\Migration;
 use Closure;
 use OCP\DB\ISchemaWrapper;
 use OCP\DB\Types;
-use OCP\Migration\SimpleMigrationStep;
 use OCP\Migration\IOutput;
+use OCP\Migration\SimpleMigrationStep;
 
 class Version2004Date20190107135757 extends SimpleMigrationStep {
 	/**

@@ -35,8 +35,8 @@ use OCP\AppFramework\Services\IInitialState;
 use OCP\IConfig;
 use OCP\IL10N;
 use OCP\IUser;
-use OCP\Settings\ISettings;
 use OCP\IUserSession;
+use OCP\Settings\ISettings;
 use OCP\Util;
 
 class Personal implements ISettings {
@@ -56,10 +56,10 @@ class Personal implements ISettings {
 	private $initialState;
 
 	public function __construct(IConfig $config,
-								IL10N $l10n,
-								IUserSession $session,
-								SettingsMapper $settingsMapper,
-								IInitialState $initialState) {
+		IL10N $l10n,
+		IUserSession $session,
+		SettingsMapper $settingsMapper,
+		IInitialState $initialState) {
 		$this->config = $config;
 		$this->l10n = $l10n;
 		$this->settingsMapper = $settingsMapper;

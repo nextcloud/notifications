@@ -119,15 +119,15 @@ class Push {
 	];
 
 	public function __construct(IDBConnection $connection,
-								INotificationManager $notificationManager,
-								IConfig $config,
-								IProvider $tokenProvider,
-								Manager $keyManager,
-								IClientService $clientService,
-								ICacheFactory $cacheFactory,
-								IUserStatusManager $userStatusManager,
-								IFactory $l10nFactory,
-								LoggerInterface $log) {
+		INotificationManager $notificationManager,
+		IConfig $config,
+		IProvider $tokenProvider,
+		Manager $keyManager,
+		IClientService $clientService,
+		ICacheFactory $cacheFactory,
+		IUserStatusManager $userStatusManager,
+		IFactory $l10nFactory,
+		LoggerInterface $log) {
 		$this->db = $connection;
 		$this->notificationManager = $notificationManager;
 		$this->config = $config;

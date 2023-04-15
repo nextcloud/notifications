@@ -21,8 +21,8 @@
 
 namespace OCA\NotificationsIntegrationTesting\Controller;
 
-use OCP\AppFramework\OCSController;
 use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\OCSController;
 use OCP\IRequest;
 use OCP\Notification\IManager;
 
