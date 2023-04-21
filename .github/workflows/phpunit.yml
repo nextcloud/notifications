@@ -265,3 +265,59 @@ jobs:
       - name: PHPUnit
         working-directory: apps/${{ env.APP_NAME }}/tests/Unit
         run: ../../vendor/bin/phpunit -c phpunit.xml
+
+  summary-sqlite:
+    permissions:
+      contents: none
+    runs-on: ubuntu-latest
+    needs: sqlite
+
+    if: always()
+
+    name: phpunit-sqlite-summary
+
+    steps:
+      - name: Summary status
+        run: if ${{ needs.sqlite.result != 'success' }}; then exit 1; fi
+
+  summary-mysql:
+    permissions:
+      contents: none
+    runs-on: ubuntu-latest
+    needs: mysql
+
+    if: always()
+
+    name: phpunit-mysql-summary
+
+    steps:
+      - name: Summary status
+        run: if ${{ needs.mysql.result != 'success' }}; then exit 1; fi
+
+  summary-pgsql:
+    permissions:
+      contents: none
+    runs-on: ubuntu-latest
+    needs: pgsql
+
+    if: always()
+
+    name: phpunit-pgsql-summary
+
+    steps:
+      - name: Summary status
+        run: if ${{ needs.pgsql.result != 'success' }}; then exit 1; fi
+
+  summary-oci:
+    permissions:
+      contents: none
+    runs-on: ubuntu-latest
+    needs: oci
+
+    if: always()
+
+    name: phpunit-oci-summary
+
+    steps:
+      - name: Summary status
+        run: if ${{ needs.oci.result != 'success' }}; then exit 1; fi
