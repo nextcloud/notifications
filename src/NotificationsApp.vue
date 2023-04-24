@@ -10,8 +10,7 @@
 			<Bell v-if="notifications.length === 0 && webNotificationsGranted !== null && !hasThrottledPushNotifications"
 				class="notifications-button__icon"
 				:size="20"
-				:title="t('notifications', 'Notifications')"
-				fill="currentColor" />
+				:title="t('notifications', 'Notifications')" />
 			<!-- From material design icons -->
 			<svg v-else
 				class="notifications-button__icon"
