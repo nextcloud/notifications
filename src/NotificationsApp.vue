@@ -11,7 +11,7 @@
 				class="notifications-button__icon"
 				:size="20"
 				:title="t('notifications', 'Notifications')"
-				fill-color="var(--color-primary-text)" />
+				fill="currentColor" />
 			<!-- From material design icons -->
 			<svg v-else
 				class="notifications-button__icon"
@@ -21,7 +21,7 @@
 				width="20"
 				height="20"
 				viewBox="0 0 24 24"
-				fill="var(--color-primary-text)">
+				fill="currentColor">
 				<path d="M 19,11.79 C 18.5,11.92 18,12 17.5,12 14.47,12 12,9.53 12,6.5 12,5.03 12.58,3.7 13.5,2.71 13.15,2.28 12.61,2 12,2 10.9,2 10,2.9 10,4 V 4.29 C 7.03,5.17 5,7.9 5,11 v 6 l -2,2 v 1 H 21 V 19 L 19,17 V 11.79 M 12,23 c 1.11,0 2,-0.89 2,-2 h -4 c 0,1.11 0.9,2 2,2 z" />
 				<path :class="isRedThemed ? 'notification__dot--white' : ''" class="notification__dot" d="M 21,6.5 C 21,8.43 19.43,10 17.5,10 15.57,10 14,8.43 14,6.5 14,4.57 15.57,3 17.5,3 19.43,3 21,4.57 21,6.5" />
 				<path v-if="hasThrottledPushNotifications"
@@ -164,7 +164,7 @@ export default {
 					this.theming.color.substring(3, 5),
 					this.theming.color.substring(5, 7))
 				const h = hsl[0] * 360
-				return (h >= 330 || h <= 15) && hsl[1] > 0.7 && (hsl[2] > 0.1 || hsl[2] < 0.6)
+				return (h >= 330 || h <= 15) && hsl[1] > 0.4 && (hsl[2] > 0.1 || hsl[2] < 0.6)
 			}
 			return false
 		},
@@ -491,10 +491,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.notifications-button__icon {
-	filter: var(--background-image-invert-if-bright);
-}
-
 .notification-container {
 	/* Prevent slide animation to go out of the div */
 	overflow: hidden;
