@@ -133,4 +133,12 @@ class FakeUser implements IUser {
 	public function setPrimaryEMailAddress(string $mailAddress): void {
 		throw new \RuntimeException('Not implemented');
 	}
+
+	public function getManagerUids(): array {
+		throw new \RuntimeException('Not implemented');
+	}
+
+	public function setManagerUids(array $uids): void {
+		throw new \RuntimeException('Not implemented');
+	}
 }
