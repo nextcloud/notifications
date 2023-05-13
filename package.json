@@ -29,7 +29,7 @@
 		"@nextcloud/vue-richtext": "^2.0.4",
 		"howler": "^2.2.3",
 		"v-click-outside": "^3.2.0",
-		"vue": "^2.7.10",
+		"vue": "^3.3.2",
 		"vue-material-design-icons": "^5.2.0"
 	},
 	"engines": {
