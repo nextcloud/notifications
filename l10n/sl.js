@@ -4,6 +4,8 @@ OC.L10N.register(
     "Hello %s" : "Pozdravljeni, %s,",
     "Hello %s," : "Pozdravljeni, %s,",
     "_You have a new notification for %s_::_You have %n new notifications for %s_" : ["Prejeli ste %n novo obvestilo za %s.","Prejeli ste %n novi obvestili za %s.","Prejeli ste %n nova obvestila za %s.","Prejeli ste %n novih obvestil za %s."],
+    "You can change the frequency of these emails or disable them in the <a href=\"%s\">settings</a>." : "Spremeniti je mogoče pogostost prejemanja teh sporočil oziroma jih v celoti onemogočiti med <a href=\"%s\">nastavitvami</a>.",
+    "You can change the frequency of these emails or disable them in the settings: %s" : "Spremeniti je mogoče pogostost prejemanja teh sporočil oziroma jih v celoti onemogočiti med nastavitvami: %s",
     "Admin notifications" : "Skrbniška obvestila",
     "Notifications" : "Obvestila",
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "Program podpira ozadnji program in vmesnik API za obvestila Nextcloud.",
