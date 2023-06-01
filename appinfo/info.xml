@@ -19,8 +19,6 @@
 	<licence>agpl</licence>
 	<author>Joas Schilling</author>
 
-	<default_enable/>
-
 	<types>
 		<logging/>
 	</types>
