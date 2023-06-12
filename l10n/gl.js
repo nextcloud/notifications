@@ -19,7 +19,7 @@ OC.L10N.register(
     "in {path}" : "en {path}",
     "Dismiss all notifications" : "Rexeitar todas as notificacións",
     "Requesting browser permissions to show notifications" : "Solicitude de permisos do navegador para amosar as notificacións",
-    "Push notifications might be unreliable" : "É posible que as notificacións automáticas non sexan fiábeis",
+    "Push notifications might be unreliable" : "É posíbel que as notificacións automáticas non sexan fiábeis",
     "No notifications" : "Non hai notificacións",
     "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "Nextcloud GmbH patrocina unha pasarela de notificación automática libre para usuarios privados. Para garantir un bo servizo, a pasarela limita o número de notificacións automáticas por servidor. Para os usuarios empresariais, hai dispoñíbel unha pasarela máis escalábel. Póñase en contacto con Nextcloud GmbH para obter máis información.",
     "Failed to dismiss all notifications" : "Produciuse un fallo ao rexeitar todas as notificacións",
