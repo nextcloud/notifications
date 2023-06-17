@@ -9,6 +9,7 @@ OC.L10N.register(
     "in {path}" : "rajal {path}",
     "No notifications" : "Märguandeid pole",
     "Never" : "Mitte kunagi",
+    "1 hour" : "1 tund",
     "Your settings have been updated." : "Seaded on uuendatud.",
     "You need to set up your email address before you can receive notification emails." : "Enne teavituskirjade saamist pead sa lisama oma e-posti aadressi."
 },
