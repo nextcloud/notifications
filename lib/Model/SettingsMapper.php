@@ -61,6 +61,19 @@ class SettingsMapper extends QBMapper {
 		return $this->findEntity($query);
 	}
 
+	/**
+	 * @param string $userId
+	 * @throws DBException
+	 */
+	public function deleteSettingsByUser(string $userId): void {
+		$query = $this->db->getQueryBuilder();
+
+		$query->delete($this->getTableName())
+			->where($query->expr()->eq('user_id', $query->createNamedParameter($userId)));
+
+		$query->executeStatement();
+	}
+
 	public function setBatchSettingForUser(string $userId, int $batchSetting): void {
 		try {
 			$settings = $this->getSettingsByUser($userId);
