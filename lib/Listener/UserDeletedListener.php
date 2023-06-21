@@ -42,7 +42,7 @@ class UserDeletedListener implements IEventListener {
 
 	public function __construct(
 		Handler $handler,
-		SettingsMapper $settingsMapper,
+		SettingsMapper $settingsMapper
 	) {
 		$this->handler = $handler;
 		$this->settingsMapper = $settingsMapper;
