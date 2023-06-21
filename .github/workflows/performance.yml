@@ -28,7 +28,7 @@ jobs:
     strategy:
       matrix:
         php-versions: ['8.1']
-        server-versions: ['master']
+        server-versions: ['stable26']
 
     steps:
       - name: Set app env
@@ -76,7 +76,7 @@ jobs:
           mkdir data
           ./occ maintenance:install --verbose --database=sqlite --database-name=nextcloud --database-host=127.0.0.1 --database-port=$DB_PORT --database-user=root --database-pass=rootpassword --admin-user admin --admin-pass admin
           ./occ app:enable --force ${{ env.APP_NAME }}
-          ./occ config:system:set query_log_file --value '/home/runner/work/notifications/notifications/query.log'
+          ./occ config:system:set query_log_file --value "$PWD/query.log"
 
 #      - name: Check PHPUnit script is defined
 #        id: check_phpunit
@@ -110,7 +110,7 @@ jobs:
         run: composer run test:integration
 
       - name: Print query.log
-        run: cat /home/runner/work/notifications/notifications/query.log
+        run: cat query.log
 
       - name: Query count
         uses: actions/github-script@v5
@@ -129,12 +129,12 @@ jobs:
                 myError += data.toString()
               }
             }
-            await exec.exec(`/bin/bash -c "cat /home/runner/work/notifications/notifications/query.log | wc -l"`, [], options)
+            await exec.exec(`/bin/bash -c "cat query.log | wc -l"`, [], options)
             msg = myOutput
             const queryCount = parseInt(myOutput, 10)
 
             myOutput = ''
-            await exec.exec('cat', ['/home/runner/work/notifications/notifications/apps/notifications/tests/Integration/base-query-count.txt'], options)
+            await exec.exec('cat', ['apps/notifications/tests/Integration/base-query-count.txt'], options)
             const baseCount = parseInt(myOutput, 10)
 
             const absoluteIncrease = queryCount - baseCount
@@ -150,7 +150,7 @@ jobs:
               })
             }
             if (queryCount < 100) {
-              const comment = `🐈 Performance messuring seems broken. Failed to get query count.`
+              const comment = `🐈 Performance measuring seems broken. Failed to get query count.`
               github.rest.issues.createComment({
                 issue_number: context.issue.number,
                 owner: context.repo.owner,
