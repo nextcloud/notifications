@@ -30,10 +30,10 @@ jobs:
         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
 
       - name: Download schema
-        run: wget https://raw.githubusercontent.com/nextcloud/appstore/master/nextcloudappstore/api/v1/release/info.xsd
+        run: wget https://raw.githubusercontent.com/nextcloud/server/master/resources/app-info-shipped.xsd
 
       - name: Lint info.xml
         uses: ChristophWurst/xmllint-action@39155a91429af431d65fafc21fa52ba5c4f5cb71 # v1.1
         with:
           xml-file: ./appinfo/info.xml
-          xml-schema-file: ./info.xsd
+          xml-schema-file: ./app-info-shipped.xsd
