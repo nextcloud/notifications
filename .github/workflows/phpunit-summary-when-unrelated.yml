@@ -3,16 +3,21 @@
 # https://github.com/nextcloud/.github
 # https://docs.github.com/en/actions/learn-github-actions/sharing-workflows-with-your-organization
 
-name: PHPUnit
+name: PHPUnit summary
 
 on:
   pull_request:
     paths-ignore:
-      - '.github/workflows/phpunit.yml'
+      - '.github/workflows/**'
       - 'appinfo/**'
       - 'lib/**'
       - 'templates/**'
       - 'tests/**'
+      - 'vendor/**'
+      - 'vendor-bin/**'
+      - '.php-cs-fixer.dist.php'
+      - 'composer.json'
+      - 'composer.lock'
 
 permissions:
   contents: read
