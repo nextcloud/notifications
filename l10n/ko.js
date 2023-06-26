@@ -17,7 +17,7 @@ OC.L10N.register(
     "Failed to dismiss all notifications" : "모든 알림을 해제할 수 없음",
     "Send email reminders about unhandled notifications after:" : "다음 기간동안 확인하지 않은 알림을 이메일로 보내기:",
     "Play sound when a new notification arrives" : "새로운 알림이 도착할 때 소리 재생하기",
-    "Play sound when a call started (requires Nextcloud Talk)" : "새 통화가 시작될 때 소리 재생하기 (Nextcloud Talk가 필요합니다)",
+    "Play sound when a call started (requires Nextcloud Talk)" : "새 통화가 시작될 때 소리 재생하기 (Nextcloud 토크 필요}",
     "Never" : "하지 않음",
     "1 hour" : "1시간",
     "3 hours" : "3시간",
