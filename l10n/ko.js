@@ -1,8 +1,8 @@
 OC.L10N.register(
     "notifications",
     {
-    "Hello %s" : "%s 님 안녕하세요",
-    "Hello %s," : "안녕하세요 %s 님,",
+    "Hello %s" : "%s님 안녕하세요.",
+    "Hello %s," : "안녕하세요 %s님,",
     "Admin notifications" : "관리자 알림",
     "Notifications" : "알림",
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "이 앱은 Nextcloud 알림 API의 백엔드 및 프론트엔드입니다.",
