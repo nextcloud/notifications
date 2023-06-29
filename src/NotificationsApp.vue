@@ -2,7 +2,7 @@
 	<NcHeaderMenu v-if="!shutdown"
 		id="notifications"
 		class="notifications-button"
-		exclude-click-outside-classes="popover"
+		:exclude-click-outside-selectors="['.popover']"
 		:open.sync="open"
 		:aria-label="t('notifications', 'Notifications')"
 		@open="onOpen">
