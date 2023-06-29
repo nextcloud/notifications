@@ -27,7 +27,7 @@ OC.L10N.register(
     "Configure the default notification settings for new users" : "Prilagodi privzete nastavitve obveščanja za nove uporabnike.",
     "Send email reminders about unhandled notifications after:" : "Po elektronski pošti pošlji opomnik o neodgovorjenih obvestilih po:",
     "Play sound when a new notification arrives" : "Predvajaj zvok ob prejemu novega obvestila",
-    "Play sound when a call started (requires Nextcloud Talk)" : "Predvajaj zvok ko se prejmete klic (zahteva program Nextcloud Talk)",
+    "Play sound when a call started (requires Nextcloud Talk)" : "Predvajaj zvok ob prejetem klicu (zahteva program Nextcloud Talk)",
     "Never" : "Nikoli",
     "1 hour" : "1 uri",
     "3 hours" : "3 urah",
