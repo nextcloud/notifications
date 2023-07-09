@@ -3,6 +3,8 @@ OC.L10N.register(
     {
     "Hello %s" : "أهلاً %s",
     "Hello %s," : "أهلاً %s،",
+    "_New notification for %s_::_%n new notifications for %s_" : ["%nإخطارات جديدة لـ%s","إخطار جديد لـ%s","%n إخطارات جديدة لـ %s","%n إخطارات جديدة لـ %s","%n إخطارات جديدة لـ %s","%nإخطارات جديدة لـ %s"],
+    "_You have a new notification for %s_::_You have %n new notifications for %s_" : ["لديك %n إخطارات جديدة لـ %s","لديك إخطار جديد لـ %s","لديك %n إخطارات جديدة لـ %s","لديك %n إخطارات جديدة لـ  %s","لديك %n إخطارات جديدة لـ %s ","لديك %n إخطارات جديدة لـ %s"],
     "You can change the frequency of these emails or disable them in the <a href=\"%s\">settings</a>." : "يٌمكنك تغيير مُعدّل تردُّد هذه الإيميلات؛ أو إيقافها من  <a href=\"%s\"> الإعدادات </a>.",
     "You can change the frequency of these emails or disable them in the settings: %s" : "يٌمكنك تغيير مُعدّل تردُّد هذه الإيميلات؛ أو إيقافها من الإعدادات: %s",
     "Admin notifications" : "إشعارات المُشرف",
