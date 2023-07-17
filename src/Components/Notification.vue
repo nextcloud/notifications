@@ -377,17 +377,15 @@ export default {
 .notification {
 	background-color: var(--color-main-background);
 
-	&::v-deep {
-		img.notification-icon {
-			display: flex;
-			width: 32px;
-			height: 32px;
-			filter: var(--background-invert-if-dark);
-		}
-		.rich-text--wrapper {
-			white-space: pre-wrap;
-			word-break: break-word;
-		}
+	:deep(img.notification-icon) {
+		display: flex;
+		width: 32px;
+		height: 32px;
+		filter: var(--background-invert-if-dark);
+	}
+	:deep(.rich-text--wrapper) {
+		white-space: pre-wrap;
+		word-break: break-word;
 	}
 
 	.notification-subject {
