@@ -15,6 +15,7 @@ OC.L10N.register(
     "Never" : "Nunca",
     "1 hour" : "1 hora",
     "3 hours" : "3 horas",
+    "1 day" : "1 día",
     "Your settings have been updated." : "Tus configuraciones se han actualizado.",
     "You need to set up your email address before you can receive notification emails." : "Necesitas configurar tu dirección de correo electrónico antes de que puedas recibir correos de notificación"
 },
