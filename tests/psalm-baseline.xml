@@ -1,30 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="5.7.7@e028ba46ba0d7f9a78bc3201c251e137383e145f">
+<files psalm-version="5.14.1@b9d355e0829c397b9b3b47d0c0ed042a8a70284d">
   <file src="lib/AppInfo/Application.php">
     <UndefinedClass>
       <code>IProvider</code>
       <code>IProvider</code>
     </UndefinedClass>
-  </file>
-  <file src="lib/Controller/APIController.php">
-    <NullArgument>
-      <code>null</code>
-      <code>null</code>
-      <code>null</code>
-      <code>null</code>
-    </NullArgument>
-  </file>
-  <file src="lib/Controller/EndpointController.php">
-    <NullArgument>
-      <code>null</code>
-      <code>null</code>
-      <code>null</code>
-      <code>null</code>
-      <code>null</code>
-      <code>null</code>
-      <code>null</code>
-      <code>null</code>
-    </NullArgument>
   </file>
   <file src="lib/Controller/PushController.php">
     <UndefinedClass>

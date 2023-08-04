@@ -106,7 +106,7 @@ class EndpointController extends OCSController {
 			/** @var INotification $notification */
 			try {
 				$notification = $this->manager->prepare($notification, $language);
-			} catch (\InvalidArgumentException $e) {
+			} catch (\InvalidArgumentException) {
 				// The app was disabled, skip the notification
 				continue;
 			}

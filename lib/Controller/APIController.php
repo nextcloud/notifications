@@ -45,11 +45,13 @@ class APIController extends OCSController {
 	/** @var IManager */
 	protected $notificationManager;
 
-	public function __construct(string $appName,
+	public function __construct(
+		string $appName,
 		IRequest $request,
 		ITimeFactory $timeFactory,
 		IUserManager $userManager,
-		IManager $notificationManager) {
+		IManager $notificationManager,
+	) {
 		parent::__construct($appName, $request);
 
 		$this->timeFactory = $timeFactory;
@@ -93,7 +95,7 @@ class APIController extends OCSController {
 			}
 
 			$this->notificationManager->notify($notification);
-		} catch (\InvalidArgumentException $e) {
+		} catch (\InvalidArgumentException) {
 			return new DataResponse(null, Http::STATUS_INTERNAL_SERVER_ERROR);
 		}
 
