@@ -36,7 +36,7 @@ class Capabilities implements ICapability {
 	/**
 	 * Return this classes capabilities
 	 *
-	 * @return array
+	 * @return array<string, array<string, array<string>>>
 	 */
 	public function getCapabilities(): array {
 		return [

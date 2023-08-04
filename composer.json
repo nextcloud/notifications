@@ -9,16 +9,16 @@
 	"description": "notifications",
 	"license": "AGPL",
 	"require-dev": {
-		"nextcloud/coding-standard": "^1.0",
+		"nextcloud/coding-standard": "^1.1",
 		"nextcloud/ocp": "dev-master",
-		"phpunit/phpunit": "^9.5",
-		"vimeo/psalm": "^5.7"
+		"phpunit/phpunit": "^9.6",
+		"vimeo/psalm": "^5.14"
 	},
 	"config": {
 		"optimize-autoloader": true,
 		"classmap-authoritative": true,
 		"platform": {
-			"php": "8.0"
+			"php": "8.0.2"
 		},
 		"sort-packages": true
 	},
