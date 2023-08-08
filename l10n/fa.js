@@ -18,6 +18,7 @@ OC.L10N.register(
     "Never" : "هرگز",
     "1 hour" : "۱ ساعت",
     "3 hours" : "۳ ساعت",
+    "1 day" : "1 روز",
     "Your settings have been updated." : "تنظیمات شما به روز رسانی شد",
     "You need to set up your email address before you can receive notification emails." : "قبل از دریافت ایمیل های هشدار می بایست ادرس ایمیل خود را تنظیم کنید"
 },
