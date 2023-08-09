@@ -21,6 +21,8 @@
     "No notifications" : "Ingen notifikationer",
     "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "Nextcloud GmbH sponsorerer en gratis push-notifikationsgateway til private brugere. For at sikre god service begrænser gatewayen antallet af push-beskeder pr. server. For virksomhedsbrugere er en mere skalerbar gateway tilgængelig. Kontakt Nextcloud GmbH for mere information.",
     "Failed to dismiss all notifications" : "Kunne ikke afvise alle underretninger",
+    "Notifications defaults" : "Standardindstillinger for meddelelser",
+    "Configure the default notification settings for new users" : "Konfigurer standardmeddelelsesindstillingerne for nye brugere",
     "Send email reminders about unhandled notifications after:" : "Send e-mail-påmindelser om ubehandlede meddelelser efter:",
     "Play sound when a new notification arrives" : "Afspil lyd, når der kommer en ny notifikation",
     "Play sound when a call started (requires Nextcloud Talk)" : "Afspil lyd, når et opkald startede (kræver Nextcloud Talk)",
