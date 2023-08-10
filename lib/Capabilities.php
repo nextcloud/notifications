@@ -6,6 +6,7 @@ declare(strict_types=1);
  * @copyright Copyright (c) 2016, ownCloud, Inc.
  *
  * @author Joas Schilling <coding@schilljs.com>
+ * @author Kate Döen <kate.doeen@nextcloud.com>
  *
  * @license AGPL-3.0
  *
@@ -36,7 +37,13 @@ class Capabilities implements ICapability {
 	/**
 	 * Return this classes capabilities
 	 *
-	 * @return array<string, array<string, array<string>>>
+	 * @return array{
+	 *     notifications: array{
+	 *         ocs-endpoints: string[],
+	 *         push: string[],
+	 *         admin-notifications: string[],
+	 *     },
+	 * }
 	 */
 	public function getCapabilities(): array {
 		return [
