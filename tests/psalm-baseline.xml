@@ -26,6 +26,16 @@
     </UndefinedDocblockClass>
   </file>
   <file src="lib/Push.php">
+    <LessSpecificReturnStatement>
+      <code>$devices</code>
+      <code>$otherDevices</code>
+      <code>$otherDevices</code>
+      <code>$talkDevices</code>
+    </LessSpecificReturnStatement>
+    <MoreSpecificReturnType>
+      <code><![CDATA[list<array{id: int, uid: string, token: int, deviceidentifier: string, devicepublickey: string, devicepublickeyhash: string, pushtokenhash: string, proxyserver: string, apptype: string}>]]></code>
+      <code><![CDATA[list<array{id: int, uid: string, token: int, deviceidentifier: string, devicepublickey: string, devicepublickeyhash: string, pushtokenhash: string, proxyserver: string, apptype: string}>]]></code>
+    </MoreSpecificReturnType>
     <UndefinedClass>
       <code>$e</code>
       <code>$e</code>
