@@ -28,6 +28,7 @@ namespace OCA\Notifications\Controller;
 
 use OCA\Notifications\AppInfo\Application;
 use OCA\Notifications\Model\SettingsMapper;
+use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
 use OCP\IConfig;
@@ -51,6 +52,13 @@ class SettingsController extends OCSController {
 
 	/**
 	 * @NoAdminRequired
+	 *
+	 * Update personal notification settings
+	 *
+	 * @param int $batchSetting How often E-mails about missed notifications should be sent (hourly: 1; every three hours: 2; daily: 3; weekly: 4)
+	 * @param string $soundNotification Enable sound for notifications ('yes' or 'no')
+	 * @param string $soundTalk Enable sound for Talk notifications ('yes' or 'no')
+	 * @return DataResponse<Http::STATUS_OK, array<empty>, array{}>
 	 */
 	public function personal(int $batchSetting, string $soundNotification, string $soundTalk): DataResponse {
 		$this->settingsMapper->setBatchSettingForUser($this->userId, $batchSetting);
@@ -63,6 +71,13 @@ class SettingsController extends OCSController {
 
 	/**
 	 * @AuthorizedAdminSetting(settings=OCA\Notifications\Settings\Admin)
+	 *
+	 * Update default notification settings for new users
+	 *
+	 * @param int $batchSetting How often E-mails about missed notifications should be sent (hourly: 1; every three hours: 2; daily: 3; weekly: 4)
+	 * @param string $soundNotification Enable sound for notifications ('yes' or 'no')
+	 * @param string $soundTalk Enable sound for Talk notifications ('yes' or 'no')
+	 * @return DataResponse<Http::STATUS_OK, array<empty>, array{}>
 	 */
 	public function admin(int $batchSetting, string $soundNotification, string $soundTalk): DataResponse {
 		$this->config->setAppValue(Application::APP_ID, 'setting_batchtime', (string) $batchSetting);

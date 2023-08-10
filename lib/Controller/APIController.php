@@ -60,10 +60,16 @@ class APIController extends OCSController {
 	}
 
 	/**
-	 * @param string $userId
-	 * @param string $shortMessage
-	 * @param string $longMessage
-	 * @return DataResponse
+	 * Generate a notification for a user
+	 *
+	 * @param string $userId ID of the user
+	 * @param string $shortMessage Subject of the notification
+	 * @param string $longMessage Message of the notification
+	 * @return DataResponse<Http::STATUS_OK, array<empty>, array{}>|DataResponse<Http::STATUS_BAD_REQUEST|Http::STATUS_NOT_FOUND|Http::STATUS_INTERNAL_SERVER_ERROR, null, array{}>
+	 *
+	 * 200: Notification generated successfully
+	 * 400: Generating notification is not possible
+	 * 404: User not found
 	 */
 	public function generateNotification(string $userId, string $shortMessage, string $longMessage = ''): DataResponse {
 		$user = $this->userManager->get($userId);

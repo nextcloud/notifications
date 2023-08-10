@@ -29,6 +29,7 @@ namespace OCA\Notifications\Controller;
 use OCA\Notifications\Exceptions\NotificationNotFoundException;
 use OCA\Notifications\Handler;
 use OCA\Notifications\Push;
+use OCA\Notifications\ResponseDefinitions;
 use OCA\Notifications\Service\ClientService;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
@@ -44,6 +45,10 @@ use OCP\Notification\INotification;
 use OCP\UserStatus\IManager as IUserStatusManager;
 use OCP\UserStatus\IUserStatus;
 
+/**
+ * @psalm-import-type NotificationsNotification from ResponseDefinitions
+ * @psalm-import-type NotificationsNotificationAction from ResponseDefinitions
+ */
 class EndpointController extends OCSController {
 	public function __construct(
 		string $appName,
@@ -64,8 +69,13 @@ class EndpointController extends OCSController {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 *
-	 * @param string $apiVersion
-	 * @return DataResponse
+	 * Get all notifications
+	 *
+	 * @param string $apiVersion Version of the API to use
+	 * @return DataResponse<Http::STATUS_OK, NotificationsNotification[], array{'X-Nextcloud-User-Status': string}>|DataResponse<Http::STATUS_NO_CONTENT, null, array{X-Nextcloud-User-Status: string}>
+	 *
+	 * 200: Notifications returned
+	 * 204: No app uses notifications
 	 */
 	public function listNotifications(string $apiVersion): DataResponse {
 		$userStatus = $this->userStatusManager->getUserStatuses([
@@ -131,9 +141,14 @@ class EndpointController extends OCSController {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 *
-	 * @param string $apiVersion
-	 * @param int $id
-	 * @return DataResponse
+	 * Get a notification
+	 *
+	 * @param string $apiVersion Version of the API to use
+	 * @param int $id ID of the notification
+	 * @return DataResponse<Http::STATUS_OK, NotificationsNotification, array{}>|DataResponse<Http::STATUS_NOT_FOUND, null, array{}>
+	 *
+	 * 200: Notification returned
+	 * 404: Notification not found
 	 */
 	public function getNotification(string $apiVersion, int $id): DataResponse {
 		if (!$this->manager->hasNotifiers()) {
@@ -174,9 +189,14 @@ class EndpointController extends OCSController {
 	/**
 	 * @NoAdminRequired
 	 *
-	 * @param string $apiVersion
-	 * @param int[] $ids
-	 * @return DataResponse
+	 * Check if notification IDs exist
+	 *
+	 * @param string $apiVersion Version of the API to use
+	 * @param int[] $ids IDs of the notifications to check
+	 * @return DataResponse<Http::STATUS_OK|Http::STATUS_BAD_REQUEST, int[], array{}>
+	 *
+	 * 200: Existing nsotification IDs returned
+	 * 400: Too many notification IDs requested
 	 */
 	public function confirmIdsForUser(string $apiVersion, array $ids): DataResponse {
 		if (!$this->manager->hasNotifiers()) {
@@ -203,8 +223,14 @@ class EndpointController extends OCSController {
 	/**
 	 * @NoAdminRequired
 	 *
-	 * @param int $id
-	 * @return DataResponse
+	 * Delete a notification
+	 *
+	 * @param int $id ID of the notification
+	 * @return DataResponse<Http::STATUS_OK, array<empty>, array{}>|DataResponse<Http::STATUS_FORBIDDEN|Http::STATUS_NOT_FOUND, null, array{}>
+	 *
+	 * 200: Notification deleted successfully
+	 * 403: Deleting notification for impersonated user is not allowed
+	 * 404: Notification not found
 	 */
 	public function deleteNotification(int $id): DataResponse {
 		if ($id === 0) {
@@ -231,7 +257,12 @@ class EndpointController extends OCSController {
 	/**
 	 * @NoAdminRequired
 	 *
-	 * @return DataResponse
+	 * Delete all notifications
+	 *
+	 * @return DataResponse<Http::STATUS_OK, array<empty>, array{}>|DataResponse<Http::STATUS_FORBIDDEN, null, array{}>
+	 *
+	 * 200: All notifications deleted successfully
+	 * 403: Deleting notification for impersonated user is not allowed
 	 */
 	public function deleteAllNotifications(): DataResponse {
 		if ($this->session->getImpersonatingUserID() !== null) {
@@ -267,7 +298,7 @@ class EndpointController extends OCSController {
 	 * @param INotification $notification
 	 * @param string $apiVersion
 	 * @param bool $hasActiveTalkDesktop
-	 * @return array
+	 * @return NotificationsNotification
 	 */
 	protected function notificationToArray(int $notificationId, INotification $notification, string $apiVersion, bool $hasActiveTalkDesktop = false): array {
 		$data = [
@@ -309,7 +340,7 @@ class EndpointController extends OCSController {
 
 	/**
 	 * @param IAction $action
-	 * @return array
+	 * @return NotificationsNotificationAction
 	 */
 	protected function actionToArray(IAction $action): array {
 		return [
