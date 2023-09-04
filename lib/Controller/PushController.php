@@ -30,6 +30,7 @@ use OC\Authentication\Exceptions\InvalidTokenException;
 use OC\Authentication\Token\IProvider;
 use OC\Authentication\Token\IToken;
 use OC\Security\IdentityProof\Manager;
+use OCA\Notifications\ResponseDefinitions;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
@@ -40,6 +41,9 @@ use OCP\ISession;
 use OCP\IUser;
 use OCP\IUserSession;
 
+/**
+ * @psalm-import-type NotificationsPushDevice from ResponseDefinitions
+ */
 class PushController extends OCSController {
 	/** @var IDBConnection */
 	private $db;
@@ -75,10 +79,17 @@ class PushController extends OCSController {
 	/**
 	 * @NoAdminRequired
 	 *
-	 * @param string $pushTokenHash
-	 * @param string $devicePublicKey
-	 * @param string $proxyServer
-	 * @return DataResponse
+	 * Register device for push notifications
+	 *
+	 * @param string $pushTokenHash Hash of the push token
+	 * @param string $devicePublicKey Public key of the device
+	 * @param string $proxyServer Proxy server to be used
+	 * @return DataResponse<Http::STATUS_OK|Http::STATUS_CREATED, NotificationsPushDevice, array{}>|DataResponse<Http::STATUS_BAD_REQUEST, array{message: string}, array{}>|DataResponse<Http::STATUS_UNAUTHORIZED, array<empty>, array{}>
+	 *
+	 * 200: Device was already registered
+	 * 201: Device registered successfully
+	 * 400: Registering device is not possible
+	 * 401: Missing permissions to register device
 	 */
 	public function registerDevice(string $pushTokenHash, string $devicePublicKey, string $proxyServer): DataResponse {
 		$user = $this->userSession->getUser();
@@ -152,7 +163,14 @@ class PushController extends OCSController {
 	/**
 	 * @NoAdminRequired
 	 *
-	 * @return DataResponse
+	 * Remove a device from push notifications
+	 *
+	 * @return DataResponse<Http::STATUS_OK|Http::STATUS_ACCEPTED|Http::STATUS_UNAUTHORIZED, array<empty>, array{}>|DataResponse<Http::STATUS_BAD_REQUEST, array{message: string}, array{}>
+	 *
+	 * 200: No device registered
+	 * 202: Device removed successfully
+	 * 400: Removing device is not possible
+	 * 401: Missing permissions to remove device
 	 */
 	public function removeDevice(): DataResponse {
 		$user = $this->userSession->getUser();

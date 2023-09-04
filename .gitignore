@@ -67,3 +67,4 @@ nbproject
 /npm-debug.log
 /build
 /vendor
+/vendor-bin/*/vendor

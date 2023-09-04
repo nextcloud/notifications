@@ -12,7 +12,8 @@
 		"nextcloud/coding-standard": "^1.1",
 		"nextcloud/ocp": "dev-master",
 		"phpunit/phpunit": "^9.6",
-		"vimeo/psalm": "^5.14"
+		"vimeo/psalm": "^5.14",
+		"bamarni/composer-bin-plugin": "^1.8"
 	},
 	"config": {
 		"optimize-autoloader": true,
@@ -20,9 +21,20 @@
 		"platform": {
 			"php": "8.0.2"
 		},
-		"sort-packages": true
+		"sort-packages": true,
+		"allow-plugins": {
+			"bamarni/composer-bin-plugin": true
+		}
 	},
 	"scripts": {
+		"post-install-cmd": [
+			"[ $COMPOSER_DEV_MODE -eq 0 ] || composer bin all install",
+			"composer dump-autoload"
+		],
+		"post-update-cmd": [
+			"[ $COMPOSER_DEV_MODE -eq 0 ] || composer bin all update --ansi",
+			"composer dump-autoload"
+		],
 		"lint": "find . -name \\*.php -not -path './vendor/*' -not -path './build/*' -print0 | xargs -0 -n1 php -l",
 		"cs:check": "php-cs-fixer fix --dry-run --diff",
 		"cs:fix": "php-cs-fixer fix",

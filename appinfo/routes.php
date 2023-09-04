@@ -26,17 +26,17 @@ declare(strict_types=1);
 
 return [
 	'ocs' => [
-		['name' => 'Endpoint#listNotifications', 'url' => '/api/{apiVersion}/notifications', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v(1|2)']],
-		['name' => 'Endpoint#getNotification', 'url' => '/api/{apiVersion}/notifications/{id}', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v(1|2)', 'id' => '\d+']],
-		['name' => 'Endpoint#confirmIdsForUser', 'url' => '/api/{apiVersion}/notifications/exists', 'verb' => 'POST', 'requirements' => ['apiVersion' => 'v(1|2)']],
-		['name' => 'Endpoint#deleteNotification', 'url' => '/api/{apiVersion}/notifications/{id}', 'verb' => 'DELETE', 'requirements' => ['apiVersion' => 'v(1|2)', 'id' => '\d+']],
-		['name' => 'Endpoint#deleteAllNotifications', 'url' => '/api/{apiVersion}/notifications', 'verb' => 'DELETE', 'requirements' => ['apiVersion' => 'v(1|2)']],
-		['name' => 'Push#registerDevice', 'url' => '/api/{apiVersion}/push', 'verb' => 'POST', 'requirements' => ['apiVersion' => 'v2']],
-		['name' => 'Push#removeDevice', 'url' => '/api/{apiVersion}/push', 'verb' => 'DELETE', 'requirements' => ['apiVersion' => 'v2']],
+		['name' => 'Endpoint#listNotifications', 'url' => '/api/{apiVersion}/notifications', 'verb' => 'GET', 'requirements' => ['apiVersion' => '(v1|v2)']],
+		['name' => 'Endpoint#getNotification', 'url' => '/api/{apiVersion}/notifications/{id}', 'verb' => 'GET', 'requirements' => ['apiVersion' => '(v1|v2)', 'id' => '\d+']],
+		['name' => 'Endpoint#confirmIdsForUser', 'url' => '/api/{apiVersion}/notifications/exists', 'verb' => 'POST', 'requirements' => ['apiVersion' => '(v1|v2)']],
+		['name' => 'Endpoint#deleteNotification', 'url' => '/api/{apiVersion}/notifications/{id}', 'verb' => 'DELETE', 'requirements' => ['apiVersion' => '(v1|v2)', 'id' => '\d+']],
+		['name' => 'Endpoint#deleteAllNotifications', 'url' => '/api/{apiVersion}/notifications', 'verb' => 'DELETE', 'requirements' => ['apiVersion' => '(v1|v2)']],
+		['name' => 'Push#registerDevice', 'url' => '/api/{apiVersion}/push', 'verb' => 'POST', 'requirements' => ['apiVersion' => '(v2)']],
+		['name' => 'Push#removeDevice', 'url' => '/api/{apiVersion}/push', 'verb' => 'DELETE', 'requirements' => ['apiVersion' => '(v2)']],
 
-		['name' => 'API#generateNotification', 'url' => '/api/{apiVersion}/admin_notifications/{userId}', 'verb' => 'POST', 'requirements' => ['apiVersion' => 'v(1|2)']],
+		['name' => 'API#generateNotification', 'url' => '/api/{apiVersion}/admin_notifications/{userId}', 'verb' => 'POST', 'requirements' => ['apiVersion' => '(v1|v2)']],
 
-		['name' => 'Settings#personal', 'url' => '/api/{apiVersion}/settings', 'verb' => 'POST', 'requirements' => ['apiVersion' => 'v2']],
-		['name' => 'Settings#admin', 'url' => '/api/{apiVersion}/settings/admin', 'verb' => 'POST', 'requirements' => ['apiVersion' => 'v2']],
+		['name' => 'Settings#personal', 'url' => '/api/{apiVersion}/settings', 'verb' => 'POST', 'requirements' => ['apiVersion' => '(v2)']],
+		['name' => 'Settings#admin', 'url' => '/api/{apiVersion}/settings/admin', 'verb' => 'POST', 'requirements' => ['apiVersion' => '(v2)']],
 	],
 ];
