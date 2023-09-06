@@ -56,7 +56,10 @@
 		</div>
 
 		<div v-if="actions.length" class="notification-actions">
-			<Action v-for="(a, i) in actions" :key="i" v-bind="a" />
+			<Action v-for="(a, i) in actions"
+				:key="i"
+				v-bind="a"
+				:notification-index="index" />
 		</div>
 		<div v-else-if="externalLink" class="notification-actions">
 			<NcButton type="primary"
