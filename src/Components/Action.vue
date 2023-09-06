@@ -46,6 +46,10 @@ export default {
 			default: false,
 			required: true,
 		},
+		notificationIndex: {
+			type: Number,
+			required: true,
+		},
 	},
 
 	data() {
@@ -79,7 +83,7 @@ export default {
 
 				// emit event to current app
 				this.$parent._$el.fadeOut(OC.menuSpeed)
-				this.$parent.$emit('remove')
+				this.$parent.$emit('remove', this.notificationIndex)
 				try {
 					$('body').trigger(new $.Event('OCA.Notification.Action', {
 						notification: this.$parent,
