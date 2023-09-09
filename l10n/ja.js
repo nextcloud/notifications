@@ -23,6 +23,8 @@ OC.L10N.register(
     "No notifications" : "通知はありません",
     "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "Nextcloud GmbHは、個人ユーザー向けに無料のプッシュ通知ゲートウェイをスポンサー提供しています。安定したサービスを提供するために、ゲートウェイはサーバーごとのプッシュ通知の数を制限しています。企業ユーザー向けには、よりスケーラブルなゲートウェイを用意します。詳しくは、Nextcloud GmbHにお問い合わせください。",
     "Failed to dismiss all notifications" : "すべての通知を破棄できませんでした",
+    "Notifications defaults" : "通知の初期設定",
+    "Configure the default notification settings for new users" : "新規ユーザーの通知設定の既定値を設定する",
     "Send email reminders about unhandled notifications after:" : "未処理の通知に関するリマインダーメールを設定時間後に送る：",
     "Play sound when a new notification arrives" : "新着通知時に音を鳴らす",
     "Play sound when a call started (requires Nextcloud Talk)" : "通話開始時に音を鳴らす（要 Nextcloud Talk）",
