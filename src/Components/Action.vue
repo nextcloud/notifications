@@ -48,6 +48,10 @@ export default {
 			default: false,
 			required: true,
 		},
+		notificationIndex: {
+			type: Number,
+			required: true,
+		},
 	},
 
 	data() {
@@ -118,7 +122,7 @@ export default {
 
 				// emit event to current app
 				this.$parent._$el.fadeOut(OC.menuSpeed)
-				this.$parent.$emit('remove')
+				this.$parent.$emit('remove', this.notificationIndex)
 
 				emit('notifications:action:executed', event)
 
