@@ -195,7 +195,7 @@ class EndpointController extends OCSController {
 	 * @param int[] $ids IDs of the notifications to check
 	 * @return DataResponse<Http::STATUS_OK|Http::STATUS_BAD_REQUEST, int[], array{}>
 	 *
-	 * 200: Existing nsotification IDs returned
+	 * 200: Existing notification IDs returned
 	 * 400: Too many notification IDs requested
 	 */
 	public function confirmIdsForUser(string $apiVersion, array $ids): DataResponse {
