@@ -1,7 +1,6 @@
 {
-	"autoload-dev": {
+	"autoload": {
 		"psr-4": {
-			"OCP\\": "vendor/nextcloud/ocp/OCP",
 			"OCA\\Notifications\\": "lib/"
 		}
 	},
