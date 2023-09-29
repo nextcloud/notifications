@@ -19,7 +19,7 @@
   -->
 
 <template>
-	<NcSettingsSection :title="t('notifications', 'Notifications defaults')"
+	<NcSettingsSection :name="t('notifications', 'Notifications defaults')"
 		:description="t('notifications', 'Configure the default notification settings for new users')">
 		<p>
 			<label for="notify_setting_batchtime" class="notification-frequency__label">
