@@ -19,7 +19,7 @@
   -->
 
 <template>
-	<NcSettingsSection :title="t('notifications', 'Notifications')">
+	<NcSettingsSection :name="t('notifications', 'Notifications')">
 		<div class="notification-frequency__warning">
 			<strong v-if="!config.is_email_set">{{ t('notifications', 'You need to set up your email address before you can receive notification emails.') }}</strong>
 		</div>

@@ -69,7 +69,7 @@
 
 				<!-- No notifications -->
 				<NcEmptyContent v-else
-					:title="emptyContentMessage"
+					:name="emptyContentMessage"
 					:description="emptyContentDescription">
 					<template #icon>
 						<Bell v-if="!hasThrottledPushNotifications" />
