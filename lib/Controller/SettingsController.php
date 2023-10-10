@@ -59,6 +59,8 @@ class SettingsController extends OCSController {
 	 * @param string $soundNotification Enable sound for notifications ('yes' or 'no')
 	 * @param string $soundTalk Enable sound for Talk notifications ('yes' or 'no')
 	 * @return DataResponse<Http::STATUS_OK, array<empty>, array{}>
+	 *
+	 * 200: Personal settings updated
 	 */
 	public function personal(int $batchSetting, string $soundNotification, string $soundTalk): DataResponse {
 		$this->settingsMapper->setBatchSettingForUser($this->userId, $batchSetting);
@@ -78,6 +80,8 @@ class SettingsController extends OCSController {
 	 * @param string $soundNotification Enable sound for notifications ('yes' or 'no')
 	 * @param string $soundTalk Enable sound for Talk notifications ('yes' or 'no')
 	 * @return DataResponse<Http::STATUS_OK, array<empty>, array{}>
+	 *
+	 * 200: Admin settings updated
 	 */
 	public function admin(int $batchSetting, string $soundNotification, string $soundTalk): DataResponse {
 		$this->config->setAppValue(Application::APP_ID, 'setting_batchtime', (string) $batchSetting);
