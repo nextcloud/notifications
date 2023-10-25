@@ -30,6 +30,7 @@ use OC\Security\IdentityProof\Key;
 use OC\Security\IdentityProof\Manager;
 use OCA\Notifications\Push;
 use OCP\AppFramework\Http;
+use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Http\Client\IClient;
 use OCP\Http\Client\IClientService;
 use OCP\Http\Client\IResponse;
@@ -74,6 +75,8 @@ class PushTest extends TestCase {
 	protected $userStatusManager;
 	/** @var IFactory|MockObject */
 	protected $l10nFactory;
+	/** @var ITimeFactory|MockObject */
+	protected $timeFactory;
 	/** @var LoggerInterface|MockObject */
 	protected $logger;
 
@@ -90,6 +93,7 @@ class PushTest extends TestCase {
 		$this->cache = $this->createMock(ICache::class);
 		$this->userStatusManager = $this->createMock(IUserStatusManager::class);
 		$this->l10nFactory = $this->createMock(IFactory::class);
+		$this->timeFactory = $this->createMock(ITimeFactory::class);
 		$this->logger = $this->createMock(LoggerInterface::class);
 
 		$this->cacheFactory->method('createDistributed')
@@ -114,6 +118,7 @@ class PushTest extends TestCase {
 					$this->cacheFactory,
 					$this->userStatusManager,
 					$this->l10nFactory,
+					$this->timeFactory,
 					$this->logger,
 				])
 				->setMethods($methods)

@@ -32,7 +32,9 @@ use OC\Authentication\Exceptions\InvalidTokenException;
 use OC\Authentication\Token\IProvider;
 use OC\Security\IdentityProof\Key;
 use OC\Security\IdentityProof\Manager;
+use OCA\Notifications\AppInfo\Application;
 use OCP\AppFramework\Http;
+use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Http\Client\IClientService;
 use OCP\ICache;
@@ -118,7 +120,8 @@ class Push {
 		'twofactor_nextcloud_notification' => true,
 	];
 
-	public function __construct(IDBConnection $connection,
+	public function __construct(
+		IDBConnection $connection,
 		INotificationManager $notificationManager,
 		IConfig $config,
 		IProvider $tokenProvider,
@@ -127,7 +130,9 @@ class Push {
 		ICacheFactory $cacheFactory,
 		IUserStatusManager $userStatusManager,
 		IFactory $l10nFactory,
-		LoggerInterface $log) {
+		protected ITimeFactory $timeFactory,
+		LoggerInterface $log,
+	) {
 		$this->db = $connection;
 		$this->notificationManager = $notificationManager;
 		$this->config = $config;
@@ -540,6 +545,9 @@ class Push {
 					$this->printInfo('Push notification sent successfully');
 				}
 			} elseif ($status !== Http::STATUS_OK) {
+				if ($status === Http::STATUS_TOO_MANY_REQUESTS) {
+					$this->config->setAppValue(Application::APP_ID, 'rate_limit_reached', (string) $this->timeFactory->getTime());
+				}
 				$error = $body && $bodyData === null ? $body : 'no reason given';
 				$this->printInfo('Could not send notification to push server [' . $proxyServer . ']: ' . $error);
 				$this->log->warning('Could not send notification to push server [{url}]: {error}', [

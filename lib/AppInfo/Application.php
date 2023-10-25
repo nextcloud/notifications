@@ -33,6 +33,7 @@ use OCA\Notifications\Listener\PostLoginListener;
 use OCA\Notifications\Listener\UserCreatedListener;
 use OCA\Notifications\Listener\UserDeletedListener;
 use OCA\Notifications\Notifier\AdminNotifications;
+use OCA\Notifications\Settings\SetupWarningOnRateLimitReached;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
@@ -56,6 +57,8 @@ class Application extends \OCP\AppFramework\App implements IBootstrap {
 		$context->registerService(IProvider::class, function (IAppContainer $c) {
 			return $c->getServer()->get(IProvider::class);
 		});
+
+		$context->registerSetupCheck(SetupWarningOnRateLimitReached::class);
 
 		$context->registerNotifierService(AdminNotifications::class);
 
