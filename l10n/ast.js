@@ -4,9 +4,12 @@ OC.L10N.register(
     "Hello %s" : "Hola, %s",
     "Hello %s," : "Hola, %s.",
     "Notifications" : "Avisos",
+    "in {path}" : "en {path}",
     "1 hour" : "1 hora",
     "3 hours" : "3 hores",
     "1 day" : "1 día",
-    "1 week" : "1 selmana"
+    "1 week" : "1 selmana",
+    "Your settings have been updated." : "Anovóse la configuración.",
+    "You need to set up your email address before you can receive notification emails." : "Tienes de configurar una direición de corréu electrónicu enantes de poder recibir mensaxes d'avisu."
 },
 "nplurals=2; plural=(n != 1);");
