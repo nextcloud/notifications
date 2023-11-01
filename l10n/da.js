@@ -14,7 +14,7 @@ OC.L10N.register(
     "Failed to perform action" : "Mislykkedes at udføre handling",
     "Dismiss" : "Afvis",
     "Contact Nextcloud GmbH" : "Kontakt Nextcloud GmbH",
-    "seconds ago" : "sekunder siden",
+    "seconds ago" : "få sekunder siden",
     "Failed to dismiss notification" : "Kunne ikke fjerne notifikation",
     "in {path}" : "i {path}",
     "Dismiss all notifications" : "Afvis alle underretninger",
