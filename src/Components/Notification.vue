@@ -46,7 +46,7 @@
 
 		<div v-if="message" class="notification-message" @click="onClickMessage">
 			<div class="message-container" :class="{ collapsed: isCollapsedMessage }">
-				<RichText v-if="messageRich"
+				<NcRichText v-if="messageRich"
 					:text="messageRich"
 					:arguments="preparedMessageParameters"
 					:autolink="true" />
@@ -79,6 +79,7 @@
 <script>
 import axios from '@nextcloud/axios'
 import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
+import NcRichText from '@nextcloud/vue/dist/Components/NcRichText.js'
 import Close from 'vue-material-design-icons/Close.vue'
 import Message from 'vue-material-design-icons/Message.vue'
 import { showError } from '@nextcloud/dialogs'
@@ -87,7 +88,6 @@ import { Howl } from 'howler'
 import Action from './Action.vue'
 import { generateOcsUrl, generateFilePath } from '@nextcloud/router'
 import moment from '@nextcloud/moment'
-import RichText from '@nextcloud/vue-richtext'
 import DefaultParameter from './Parameters/DefaultParameter.vue'
 import File from './Parameters/File.vue'
 import User from './Parameters/User.vue'
@@ -101,7 +101,7 @@ export default {
 		NcButton,
 		Close,
 		Message,
-		RichText,
+		NcRichText,
 	},
 
 	props: {
