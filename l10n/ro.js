@@ -3,6 +3,8 @@ OC.L10N.register(
     {
     "Hello %s" : "Salut %s",
     "Hello %s," : "Salut %s,",
+    "_New notification for %s_::_%n new notifications for %s_" : ["Notificare nouă pentru %s","%n notificări noi pentru %s","%n notificări noi pentru %s"],
+    "_You have a new notification for %s_::_You have %n new notifications for %s_" : ["Aveți o notificare nouă pentru %s","Aveți %n notificări noi pentru %s","Aveți %n notificări noi pentru %s"],
     "You can change the frequency of these emails or disable them in the <a href=\"%s\">settings</a>." : "Puteți schimba frecvența acestor emailuri sau să le dezactivați din <a href=\"%s\">setări</a>.",
     "You can change the frequency of these emails or disable them in the settings: %s" : "Puteți schimba frecvența acestor emailuri sau să le dezactivați din setări: %s",
     "Admin notifications" : "Notificări admin",
