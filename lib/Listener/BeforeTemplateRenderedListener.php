@@ -67,14 +67,15 @@ class BeforeTemplateRenderedListener implements IEventListener {
 			return;
 		}
 
-		if (!$this->userSession->getUser() instanceof IUser) {
+		$user = $this->userSession->getUser();
+		if (!$user instanceof IUser) {
 			return;
 		}
 
 		$this->initialState->provideInitialState(
 			'sound_notification',
 			$this->config->getUserValue(
-				$this->userSession->getUser()->getUID(),
+				$user->getUID(),
 				Application::APP_ID,
 				'sound_notification',
 				'yes'
@@ -84,7 +85,7 @@ class BeforeTemplateRenderedListener implements IEventListener {
 		$this->initialState->provideInitialState(
 			'sound_talk',
 			$this->config->getUserValue(
-				$this->userSession->getUser()->getUID(),
+				$user->getUID(),
 				Application::APP_ID,
 				'sound_talk',
 				'yes'
