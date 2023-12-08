@@ -160,7 +160,7 @@ class MailNotifications {
 			$languageCode = $userLanguages[$settings->getUserId()] ?? $fallbackLang;
 			$timezone = $userTimezones[$settings->getUserId()] ?? $fallbackTimeZone;
 
-			/** @var INotification[] $notifications */
+			/** @var array<int, INotification> $notifications */
 			$notifications = $this->handler->getAfterId($settings->getLastSendId(), $settings->getUserId());
 			if (!empty($notifications)) {
 				$oldestNotification = end($notifications);
@@ -183,10 +183,10 @@ class MailNotifications {
 	}
 
 	/**
-	 * send an email to the user containing given list of notifications
+	 * Send an email to the user containing given list of notifications
 	 *
 	 * @param Settings $settings
-	 * @param INotification[] $notifications
+	 * @param non-empty-array<int, INotification> $notifications
 	 * @param string $language
 	 * @param string $timezone
 	 */

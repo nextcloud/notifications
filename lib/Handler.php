@@ -249,7 +249,7 @@ class Handler {
 	 * @param int $startAfterId
 	 * @param string $userId
 	 * @param int $limit
-	 * @return array [notification_id => INotification]
+	 * @return array<int, INotification> [notification_id => INotification]
 	 */
 	public function getAfterId(int $startAfterId, string $userId, int $limit = 25): array {
 		$sql = $this->connection->getQueryBuilder();
