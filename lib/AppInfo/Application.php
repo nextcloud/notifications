@@ -25,7 +25,6 @@ declare(strict_types=1);
 
 namespace OCA\Notifications\AppInfo;
 
-use OC\Authentication\Token\IProvider;
 use OCA\Notifications\App;
 use OCA\Notifications\Capabilities;
 use OCA\Notifications\Listener\BeforeTemplateRenderedListener;
@@ -38,7 +37,6 @@ use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\AppFramework\Http\Events\BeforeTemplateRenderedEvent;
-use OCP\AppFramework\IAppContainer;
 use OCP\Notification\IManager;
 use OCP\User\Events\PostLoginEvent;
 use OCP\User\Events\UserCreatedEvent;
@@ -53,10 +51,6 @@ class Application extends \OCP\AppFramework\App implements IBootstrap {
 
 	public function register(IRegistrationContext $context): void {
 		$context->registerCapability(Capabilities::class);
-
-		$context->registerService(IProvider::class, function (IAppContainer $c) {
-			return $c->getServer()->get(IProvider::class);
-		});
 
 		$context->registerSetupCheck(SetupWarningOnRateLimitReached::class);
 
