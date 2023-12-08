@@ -280,7 +280,9 @@ class Push {
 
 		if (isset($this->userStatuses[$notification->getUser()])) {
 			$userStatus = $this->userStatuses[$notification->getUser()];
-			if ($userStatus->getStatus() === IUserStatus::DND && empty($this->allowedDNDPushList[$notification->getApp()])) {
+			if ($userStatus instanceof IUserStatus
+				&& $userStatus->getStatus() === IUserStatus::DND
+				&& empty($this->allowedDNDPushList[$notification->getApp()])) {
 				$this->printInfo('<error>User status is set to DND - no push notifications will be sent</error>');
 				return;
 			}
@@ -498,14 +500,14 @@ class Push {
 
 				$response = $client->post($proxyServer . '/notifications', $requestData);
 				$status = $response->getStatusCode();
-				$body = $response->getBody();
-				$bodyData = json_decode($body, true);
+				$body = (string) $response->getBody();
+				$bodyData = json_decode($body, true, flags: JSON_THROW_ON_ERROR);
 			} catch (ClientException $e) {
 				// Server responded with 4xx (400 Bad Request mostlikely)
 				$response = $e->getResponse();
 				$status = $response->getStatusCode();
 				$body = $response->getBody()->getContents();
-				$bodyData = json_decode($body, true);
+				$bodyData = json_decode($body, true, flags: JSON_THROW_ON_ERROR);
 			} catch (ServerException $e) {
 				// Server responded with 5xx
 				$response = $e->getResponse();
