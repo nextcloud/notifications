@@ -501,13 +501,21 @@ class Push {
 				$response = $client->post($proxyServer . '/notifications', $requestData);
 				$status = $response->getStatusCode();
 				$body = (string) $response->getBody();
-				$bodyData = json_decode($body, true, flags: JSON_THROW_ON_ERROR);
+				try {
+					$bodyData = json_decode($body, true);
+				} catch (\JsonException $e) {
+					$bodyData = null;
+				}
 			} catch (ClientException $e) {
 				// Server responded with 4xx (400 Bad Request mostlikely)
 				$response = $e->getResponse();
 				$status = $response->getStatusCode();
 				$body = $response->getBody()->getContents();
-				$bodyData = json_decode($body, true, flags: JSON_THROW_ON_ERROR);
+				try {
+					$bodyData = json_decode($body, true);
+				} catch (\JsonException $e) {
+					$bodyData = null;
+				}
 			} catch (ServerException $e) {
 				// Server responded with 5xx
 				$response = $e->getResponse();
