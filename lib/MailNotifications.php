@@ -131,6 +131,7 @@ class MailNotifications {
 
 		// Batch-read settings
 		$fallbackTimeZone = date_default_timezone_get();
+		/** @psalm-var array<string, string> $userTimezones */
 		$userTimezones = $this->config->getUserValueForUsers('core', 'timezone', $userIds);
 		$userEnabled = $this->config->getUserValueForUsers('core', 'enabled', $userIds);
 
@@ -160,7 +161,7 @@ class MailNotifications {
 			$languageCode = $userLanguages[$settings->getUserId()] ?? $fallbackLang;
 			$timezone = $userTimezones[$settings->getUserId()] ?? $fallbackTimeZone;
 
-			/** @var INotification[] $notifications */
+			/** @var array<int, INotification> $notifications */
 			$notifications = $this->handler->getAfterId($settings->getLastSendId(), $settings->getUserId());
 			if (!empty($notifications)) {
 				$oldestNotification = end($notifications);
@@ -183,10 +184,10 @@ class MailNotifications {
 	}
 
 	/**
-	 * send an email to the user containing given list of notifications
+	 * Send an email to the user containing given list of notifications
 	 *
 	 * @param Settings $settings
-	 * @param INotification[] $notifications
+	 * @param non-empty-array<int, INotification> $notifications
 	 * @param string $language
 	 * @param string $timezone
 	 */
@@ -280,7 +281,13 @@ class MailNotifications {
 
 		foreach ($notifications as $notification) {
 			try {
-				$relativeDateTime = $this->dateFormatter->formatDateTimeRelativeDay($notification->getDateTime(), 'long', 'short', new \DateTimeZone($timezone), $l10n);
+				$relativeDateTime = $this->dateFormatter->formatDateTimeRelativeDay(
+					$notification->getDateTime(),
+					'long',
+					'short',
+					new \DateTimeZone($timezone ?: 'UTC'),
+					$l10n
+				);
 				$template->addBodyListItem($this->getHTMLContents($notification), $relativeDateTime, $notification->getIcon(), $notification->getParsedSubject());
 
 				// Buttons probably were not intended for this, but it works ok enough for showing the idea.

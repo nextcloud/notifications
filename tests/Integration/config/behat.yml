@@ -1,4 +1,10 @@
 default:
+  formatters:
+    junit:
+      output_path: '%paths.base%/../output'
+    pretty:
+      output_styles:
+        comment: [ 'bright-blue' ]
   autoload:
     '': '%paths.base%/../features/bootstrap'
   suites:
@@ -7,8 +13,3 @@ default:
         - '%paths.base%/../features'
       contexts:
         - FeatureContext
-
-  extensions:
-      jarnaiz\JUnitFormatter\JUnitFormatterExtension:
-          filename: report.xml
-          outputDir: '%paths.base%/../output/'

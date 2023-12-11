@@ -128,7 +128,7 @@ class Version2010Date20210218082811 extends SimpleMigrationStep {
 		$query = $this->connection->getQueryBuilder();
 		$query->select('*')
 			->from('notifications_pushtokens');
-		$result = $query->execute();
+		$result = $query->executeQuery();
 
 		while ($row = $result->fetch()) {
 			$insert
@@ -142,7 +142,7 @@ class Version2010Date20210218082811 extends SimpleMigrationStep {
 				->setParameter('apptype', $row['apptype'])
 			;
 
-			$insert->execute();
+			$insert->executeStatement();
 		}
 		$result->closeCursor();
 	}

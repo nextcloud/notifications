@@ -1,20 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="5.14.1@b9d355e0829c397b9b3b47d0c0ed042a8a70284d">
-  <file src="lib/AppInfo/Application.php">
-    <UndefinedClass>
-      <code>IProvider</code>
-      <code>IProvider</code>
-    </UndefinedClass>
-  </file>
+<files psalm-version="5.16.0@2897ba636551a8cb61601cc26f6ccfbba6c36591">
   <file src="lib/Controller/PushController.php">
     <UndefinedClass>
       <code>IProvider</code>
-      <code>IToken</code>
-      <code>IToken</code>
-      <code>IToken</code>
-      <code>IToken</code>
-      <code>InvalidTokenException</code>
-      <code>InvalidTokenException</code>
       <code>Manager</code>
     </UndefinedClass>
     <UndefinedDocblockClass>
