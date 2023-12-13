@@ -306,13 +306,15 @@ class Push {
 		$language = $this->l10nFactory->getUserLanguage($user);
 		$this->printInfo('Language is set to ' . $language);
 
-		try {
-			$this->notificationManager->setPreparingPushNotification(true);
-			$notification = $this->notificationManager->prepare($notification, $language);
-		} catch (\InvalidArgumentException $e) {
-			return;
-		} finally {
-			$this->notificationManager->setPreparingPushNotification(false);
+		if (!$notification->isValidParsed()) {
+			try {
+				$this->notificationManager->setPreparingPushNotification(true);
+				$notification = $this->notificationManager->prepare($notification, $language);
+			} catch (\InvalidArgumentException $e) {
+				return;
+			} finally {
+				$this->notificationManager->setPreparingPushNotification(false);
+			}
 		}
 
 		$userKey = $this->keyManager->getKey($user);
