@@ -493,6 +493,7 @@ class Push {
 
 		$client = $this->clientService->newClient();
 		foreach ($pushNotifications as $proxyServer => $notifications) {
+			$start = microtime(true);
 			try {
 				$requestData = [
 					'body' => [
@@ -574,6 +575,11 @@ class Push {
 					'url' => $proxyServer,
 					'app' => 'notifications',
 				]);
+			}
+
+			$end = microtime(true);
+			if (isset($_SERVER['REQUEST_URI']) && str_contains($_SERVER['REQUEST_URI'], 'apps/spreed/api/v4/call/')) {
+				error_log('[' . get_class($this) . '] Pushing to ' . $proxyServer . ' - ' . ($end - $start));
 			}
 		}
 	}
