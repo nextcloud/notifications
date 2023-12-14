@@ -268,6 +268,7 @@ class Push {
 			return;
 		}
 
+		$start = microtime(true);
 		$user = $this->createFakeUserObject($notification->getUser());
 
 		if (!array_key_exists($notification->getUser(), $this->userStatuses)) {
@@ -304,6 +305,7 @@ class Push {
 		$language = $this->l10nFactory->getUserLanguage($user);
 		$this->printInfo('Language is set to ' . $language);
 
+		$start1 = microtime(true);
 		try {
 			$this->notificationManager->setPreparingPushNotification(true);
 			$notification = $this->notificationManager->prepare($notification, $language);
@@ -311,6 +313,10 @@ class Push {
 			return;
 		} finally {
 			$this->notificationManager->setPreparingPushNotification(false);
+		}
+		$end1 = microtime(true);
+		if (isset($_SERVER['REQUEST_URI']) && str_contains($_SERVER['REQUEST_URI'], 'apps/spreed/api/v4/call/')) {
+			error_log('[' . get_class($this) . '] Preparing Notification #' . $id . ' - ' . ($end1 - $start1));
 		}
 
 		$userKey = $this->keyManager->getKey($user);
@@ -351,6 +357,11 @@ class Push {
 				// Failed to encrypt message for device: public key is invalid
 				$this->deletePushToken($device['token']);
 			}
+		}
+
+		$end = microtime(true);
+		if (isset($_SERVER['REQUEST_URI']) && str_contains($_SERVER['REQUEST_URI'], 'apps/spreed/api/v4/call/')) {
+			error_log('[' . get_class($this) . '] Total Notification for ' . $notification->getUser() . ' - ' . ($end - $start));
 		}
 
 		if (!$this->deferPayloads) {
