@@ -4,6 +4,7 @@ OC.L10N.register(
     "Hello %s" : "Salam %s",
     "Hello %s," : "Salam %s,",
     "Notifications" : "Xəbərdarlıqlar",
+    "Dismiss" : "Rədd et",
     "seconds ago" : "saniyələr öncə",
     "in {path}" : "{path} daxilində",
     "Never" : "Heç vaxt",
