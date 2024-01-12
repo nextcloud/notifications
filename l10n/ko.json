@@ -1,6 +1,8 @@
 { "translations": {
     "Hello %s" : "%s님 안녕하세요.",
     "Hello %s," : "안녕하세요 %s님,",
+    "_New notification for %s_::_%n new notifications for %s_" : ["%s에 대한 %n개의 새 알림"],
+    "_You have a new notification for %s_::_You have %n new notifications for %s_" : ["%s에 대한 %n개의 새 알림이 있습니다"],
     "Admin notifications" : "관리자 알림",
     "Notifications" : "알림",
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "이 앱은 Nextcloud 알림 API의 백엔드 및 프론트엔드입니다.",
@@ -13,6 +15,7 @@
     "Dismiss all notifications" : "모든 알림 해제",
     "No notifications" : "알림 없음",
     "Failed to dismiss all notifications" : "모든 알림을 해제할 수 없음",
+    "Configure the default notification settings for new users" : "새 사용자의 기본 알림 설정값을 변경합니다",
     "Send email reminders about unhandled notifications after:" : "다음 기간동안 확인하지 않은 알림을 이메일로 보내기:",
     "Play sound when a new notification arrives" : "새로운 알림이 도착할 때 소리 재생하기",
     "Play sound when a call started (requires Nextcloud Talk)" : "새 통화가 시작될 때 소리 재생하기 (Nextcloud 토크 필요}",
