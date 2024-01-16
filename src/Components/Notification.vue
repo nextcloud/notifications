@@ -63,7 +63,7 @@
 		</div>
 		<div v-else-if="externalLink" class="notification-actions">
 			<NcButton type="primary"
-				href="https://nextcloud.com/pushnotifications"
+				href="https://nextcloud.com/fairusepolicy"
 				class="action-button pull-right"
 				target="_blank"
 				rel="noreferrer noopener">
