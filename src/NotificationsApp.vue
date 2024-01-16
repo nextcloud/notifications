@@ -43,7 +43,7 @@
 							datetime="warning"
 							app="core"
 							:icon="warningIcon"
-							external-link="https://nextcloud.com/pushnotifications"
+							external-link="https://nextcloud.com/fairusepolicy"
 							:message="emptyContentDescription"
 							:subject="emptyContentMessage"
 							:index="2016" />
@@ -79,7 +79,7 @@
 
 					<template v-if="hasThrottledPushNotifications" #action>
 						<NcButton type="primary"
-							href="https://nextcloud.com/pushnotifications"
+							href="https://nextcloud.com/fairusepolicy"
 							target="_blank"
 							rel="noreferrer noopener">
 							<template #icon>
