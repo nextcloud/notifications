@@ -27,7 +27,7 @@ OC.L10N.register(
     "Failed to dismiss all notifications" : "Error al descartar todas las notificaciones",
     "Notifications defaults" : "Valores por defecto para notificaciones",
     "Configure the default notification settings for new users" : "Configure las opciones predeterminadas de notificaciones para nuevos usuarios",
-    "Send email reminders about unhandled notifications after:" : "Enviar recordatorios por email sobre las notificaciones no resueltas tras:",
+    "Send email reminders about unhandled notifications after:" : "Enviar recordatorios por correo electrónico sobre notificaciones no gestionadas después de:",
     "Play sound when a new notification arrives" : "Reproducir sonido cuando llega una nueva notificación",
     "Play sound when a call started (requires Nextcloud Talk)" : "Reproducir sonido cuando se inicia una llamada (requiere Nextcloud Talk)",
     "Never" : "Nunca",
