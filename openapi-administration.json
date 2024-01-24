@@ -20,30 +20,6 @@
             }
         },
         "schemas": {
-            "OCSMeta": {
-                "type": "object",
-                "required": [
-                    "status",
-                    "statuscode"
-                ],
-                "properties": {
-                    "status": {
-                        "type": "string"
-                    },
-                    "statuscode": {
-                        "type": "integer"
-                    },
-                    "message": {
-                        "type": "string"
-                    },
-                    "totalitems": {
-                        "type": "string"
-                    },
-                    "itemsperpage": {
-                        "type": "string"
-                    }
-                }
-            },
             "Capabilities": {
                 "type": "object",
                 "required": [
@@ -77,6 +53,30 @@
                                 }
                             }
                         }
+                    }
+                }
+            },
+            "OCSMeta": {
+                "type": "object",
+                "required": [
+                    "status",
+                    "statuscode"
+                ],
+                "properties": {
+                    "status": {
+                        "type": "string"
+                    },
+                    "statuscode": {
+                        "type": "integer"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "totalitems": {
+                        "type": "string"
+                    },
+                    "itemsperpage": {
+                        "type": "string"
                     }
                 }
             }

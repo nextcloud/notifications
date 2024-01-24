@@ -20,6 +20,42 @@
             }
         },
         "schemas": {
+            "Capabilities": {
+                "type": "object",
+                "required": [
+                    "notifications"
+                ],
+                "properties": {
+                    "notifications": {
+                        "type": "object",
+                        "required": [
+                            "ocs-endpoints",
+                            "push",
+                            "admin-notifications"
+                        ],
+                        "properties": {
+                            "ocs-endpoints": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "push": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "admin-notifications": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             "OCSMeta": {
                 "type": "object",
                 "required": [
@@ -60,42 +96,6 @@
                     },
                     "signature": {
                         "type": "string"
-                    }
-                }
-            },
-            "Capabilities": {
-                "type": "object",
-                "required": [
-                    "notifications"
-                ],
-                "properties": {
-                    "notifications": {
-                        "type": "object",
-                        "required": [
-                            "ocs-endpoints",
-                            "push",
-                            "admin-notifications"
-                        ],
-                        "properties": {
-                            "ocs-endpoints": {
-                                "type": "array",
-                                "items": {
-                                    "type": "string"
-                                }
-                            },
-                            "push": {
-                                "type": "array",
-                                "items": {
-                                    "type": "string"
-                                }
-                            },
-                            "admin-notifications": {
-                                "type": "array",
-                                "items": {
-                                    "type": "string"
-                                }
-                            }
-                        }
                     }
                 }
             }

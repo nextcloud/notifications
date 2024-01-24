@@ -20,27 +20,39 @@
             }
         },
         "schemas": {
-            "OCSMeta": {
+            "Capabilities": {
                 "type": "object",
                 "required": [
-                    "status",
-                    "statuscode"
+                    "notifications"
                 ],
                 "properties": {
-                    "status": {
-                        "type": "string"
-                    },
-                    "statuscode": {
-                        "type": "integer"
-                    },
-                    "message": {
-                        "type": "string"
-                    },
-                    "totalitems": {
-                        "type": "string"
-                    },
-                    "itemsperpage": {
-                        "type": "string"
+                    "notifications": {
+                        "type": "object",
+                        "required": [
+                            "ocs-endpoints",
+                            "push",
+                            "admin-notifications"
+                        ],
+                        "properties": {
+                            "ocs-endpoints": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "push": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "admin-notifications": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            }
+                        }
                     }
                 }
             },
@@ -142,39 +154,27 @@
                     }
                 }
             },
-            "Capabilities": {
+            "OCSMeta": {
                 "type": "object",
                 "required": [
-                    "notifications"
+                    "status",
+                    "statuscode"
                 ],
                 "properties": {
-                    "notifications": {
-                        "type": "object",
-                        "required": [
-                            "ocs-endpoints",
-                            "push",
-                            "admin-notifications"
-                        ],
-                        "properties": {
-                            "ocs-endpoints": {
-                                "type": "array",
-                                "items": {
-                                    "type": "string"
-                                }
-                            },
-                            "push": {
-                                "type": "array",
-                                "items": {
-                                    "type": "string"
-                                }
-                            },
-                            "admin-notifications": {
-                                "type": "array",
-                                "items": {
-                                    "type": "string"
-                                }
-                            }
-                        }
+                    "status": {
+                        "type": "string"
+                    },
+                    "statuscode": {
+                        "type": "integer"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "totalitems": {
+                        "type": "string"
+                    },
+                    "itemsperpage": {
+                        "type": "string"
                     }
                 }
             }
