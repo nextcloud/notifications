@@ -82,12 +82,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nextcloud/openapi-extractor.git",
-                "reference": "aef9a921bebdcdc42b110a51bfb1e2ca281c307a"
+                "reference": "3b7b6ff9659a5f15612d4749e085bbcb83509049"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nextcloud/openapi-extractor/zipball/aef9a921bebdcdc42b110a51bfb1e2ca281c307a",
-                "reference": "aef9a921bebdcdc42b110a51bfb1e2ca281c307a",
+                "url": "https://api.github.com/repos/nextcloud/openapi-extractor/zipball/3b7b6ff9659a5f15612d4749e085bbcb83509049",
+                "reference": "3b7b6ff9659a5f15612d4749e085bbcb83509049",
                 "shasum": ""
             },
             "require": {
@@ -96,6 +96,9 @@
                 "nikic/php-parser": "^4.16",
                 "php": "^8.1",
                 "phpstan/phpdoc-parser": "^1.23"
+            },
+            "require-dev": {
+                "nextcloud/coding-standard": "^1.1"
             },
             "default-branch": true,
             "bin": [
@@ -108,11 +111,25 @@
                     "OpenAPIExtractor\\": "src"
                 }
             },
+            "scripts": {
+                "lint": [
+                    "find . -name \\*.php -not -path './tests/*' -not -path './vendor/*' -not -path './build/*' -print0 | xargs -0 -n1 php -l && php -l generate-spec && php -l merge-specs"
+                ],
+                "cs:check": [
+                    "php-cs-fixer fix --dry-run --diff"
+                ],
+                "cs:fix": [
+                    "php-cs-fixer fix"
+                ],
+                "test:unit": [
+                    "cd tests && ../generate-spec"
+                ]
+            },
             "support": {
                 "source": "https://github.com/nextcloud/openapi-extractor/tree/main",
                 "issues": "https://github.com/nextcloud/openapi-extractor/issues"
             },
-            "time": "2023-10-06T05:18:46+00:00"
+            "time": "2024-01-18T14:53:21+00:00"
         },
         {
             "name": "nikic/php-parser",
