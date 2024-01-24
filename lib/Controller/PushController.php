@@ -30,6 +30,7 @@ use OC\Authentication\Token\IProvider;
 use OC\Security\IdentityProof\Manager;
 use OCA\Notifications\ResponseDefinitions;
 use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\Attribute\OpenAPI;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
 use OCP\Authentication\Exceptions\InvalidTokenException;
@@ -44,6 +45,7 @@ use OCP\IUserSession;
 /**
  * @psalm-import-type NotificationsPushDevice from ResponseDefinitions
  */
+#[OpenAPI(scope: 'push')]
 class PushController extends OCSController {
 	/** @var IDBConnection */
 	private $db;

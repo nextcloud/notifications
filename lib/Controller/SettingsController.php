@@ -29,6 +29,7 @@ namespace OCA\Notifications\Controller;
 use OCA\Notifications\AppInfo\Application;
 use OCA\Notifications\Model\SettingsMapper;
 use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\Attribute\OpenAPI;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
 use OCP\IConfig;
@@ -62,6 +63,7 @@ class SettingsController extends OCSController {
 	 *
 	 * 200: Personal settings updated
 	 */
+	#[OpenAPI]
 	public function personal(int $batchSetting, string $soundNotification, string $soundTalk): DataResponse {
 		$this->settingsMapper->setBatchSettingForUser($this->userId, $batchSetting);
 
@@ -83,6 +85,7 @@ class SettingsController extends OCSController {
 	 *
 	 * 200: Admin settings updated
 	 */
+	#[OpenAPI(scope: OpenAPI::SCOPE_ADMINISTRATION)]
 	public function admin(int $batchSetting, string $soundNotification, string $soundTalk): DataResponse {
 		$this->config->setAppValue(Application::APP_ID, 'setting_batchtime', (string) $batchSetting);
 		$this->config->setAppValue(Application::APP_ID, 'sound_notification', $soundNotification !== 'no' ? 'yes' : 'no');

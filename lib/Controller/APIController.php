@@ -27,6 +27,7 @@ declare(strict_types=1);
 namespace OCA\Notifications\Controller;
 
 use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\Attribute\OpenAPI;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
 use OCP\AppFramework\Utility\ITimeFactory;
@@ -71,6 +72,7 @@ class APIController extends OCSController {
 	 * 400: Generating notification is not possible
 	 * 404: User not found
 	 */
+	#[OpenAPI(scope: OpenAPI::SCOPE_ADMINISTRATION)]
 	public function generateNotification(string $userId, string $shortMessage, string $longMessage = ''): DataResponse {
 		$user = $this->userManager->get($userId);
 
