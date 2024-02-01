@@ -9,7 +9,7 @@
 	"license": "AGPL",
 	"require-dev": {
 		"bamarni/composer-bin-plugin": "^1.8",
-		"nextcloud/coding-standard": "^1.1",
+		"nextcloud/coding-standard": "^1.2",
 		"nextcloud/ocp": "dev-master",
 		"phpunit/phpunit": "^9.6",
 		"vimeo/psalm": "^5.14"

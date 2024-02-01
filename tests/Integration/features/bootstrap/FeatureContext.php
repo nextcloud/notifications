@@ -219,7 +219,7 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	 * @param string $api
 	 * @param TableNode|null $formData
 	 */
-	public function matchNotification(string $notification, string $api, TableNode $formData = null) {
+	public function matchNotification(string $notification, string $api, ?TableNode $formData = null) {
 		$lastNotifications = end($this->notificationIds);
 		if ($notification === 'first') {
 			$notificationId = reset($lastNotifications);
@@ -393,7 +393,7 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	 * @param TableNode $body
 	 * @return \GuzzleHttp\Message\FutureResponse|ResponseInterface|null
 	 */
-	protected function setTestingValue(string $verb, string $url, TableNode $body = null) {
+	protected function setTestingValue(string $verb, string $url, ?TableNode $body = null) {
 		$fullUrl = $this->baseUrl . 'ocs/v2.php/' . $url;
 		$client = new Client();
 		$options = [
