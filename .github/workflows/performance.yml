@@ -22,13 +22,53 @@ concurrency:
   group: performance-sqlite-${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
 jobs:
+  matrix:
+    runs-on: ubuntu-latest-low
+    outputs:
+      php-available: ${{ steps.versions.outputs.php-available-list }}
+      server-max: ${{ steps.versions.outputs.branches-max-list }}
+    steps:
+      - name: Checkout app
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Get version matrix
+        id: versions
+        uses: icewind1991/nextcloud-version-matrix@7d433286e92318f51ed0537b6c77374759e12f46 # v1.3.0
+
+  changes:
+    runs-on: ubuntu-latest-low
+
+    outputs:
+      src: ${{ steps.changes.outputs.src}}
+
+    steps:
+      - uses: dorny/paths-filter@0bc4621a3135347011ad047f9ecf449bf72ce2bd # v3.0.0
+        id: changes
+        continue-on-error: true
+        with:
+          filters: |
+            src:
+              - '.github/workflows/**'
+              - 'appinfo/**'
+              - 'lib/**'
+              - 'templates/**'
+              - 'tests/**'
+              - 'vendor/**'
+              - 'vendor-bin/**'
+              - '.php-cs-fixer.dist.php'
+              - 'composer.json'
+              - 'composer.lock'
+
   performance-sqlite:
     runs-on: ubuntu-latest
 
+    needs: [changes, matrix]
+    if: needs.changes.outputs.src != 'false'
+
     strategy:
       matrix:
-        php-versions: ['8.1']
-        server-versions: ['master']
+        php-versions: ${{ fromJson(needs.matrix.outputs.php-available) }}
+        server-versions: ${{ fromJson(needs.matrix.outputs.server-max) }}
 
     steps:
       - name: Set app env
@@ -37,30 +77,31 @@ jobs:
           echo "APP_NAME=${GITHUB_REPOSITORY##*/}" >> $GITHUB_ENV
 
       - name: Checkout server
-        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         with:
           submodules: true
           repository: nextcloud/server
           ref: ${{ matrix.server-versions }}
 
       - name: Checkout app
-        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         with:
           path: apps/${{ env.APP_NAME }}
 
       - name: Set up php ${{ matrix.php-versions }}
-        uses: shivammathur/setup-php@1a18b2267f80291a81ca1d33e7c851fe09e7dfc4 # v2
+        uses: shivammathur/setup-php@6d7209f44a25a59e904b1ee9f3b0c33ab2cd888d # v2
         with:
           php-version: ${{ matrix.php-versions }}
           # https://docs.nextcloud.com/server/stable/admin_manual/installation/source_installation.html#prerequisites-for-manual-installation
           extensions: bz2, ctype, curl, dom, fileinfo, gd, iconv, intl, json, libxml, mbstring, openssl, pcntl, posix, session, simplexml, xmlreader, xmlwriter, zip, zlib, sqlite, pdo_sqlite
           coverage: none
+          ini-file: development
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Check composer file existence
         id: check_composer
-        uses: andstor/file-existence-action@20b4d2e596410855db8f9ca21e96fbe18e12930b # v2
+        uses: andstor/file-existence-action@076e0072799f4942c8bc574a82233e1e4d13e9d6 # v2
         with:
           files: apps/${{ env.APP_NAME }}/composer.json
 
@@ -130,7 +171,7 @@ jobs:
                 myError += data.toString()
               }
             }
-            await exec.exec(`/bin/bash -c "cat query.log | wc -l"`, [], options)
+            await exec.exec(`/bin/bash -c "cat query.log | egrep '(DELETE|UPDATE|INSERT|SELECT)' | awk 'sub(/^[^DISU]*/, \\"\\")' | wc -l"`, [], options)
             msg = myOutput
             const queryCount = parseInt(myOutput, 10)
 
