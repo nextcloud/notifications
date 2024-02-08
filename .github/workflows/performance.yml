@@ -200,3 +200,8 @@ jobs:
                 body: comment
               })
             }
+
+      - name: Print logs
+        if: always()
+        run: |
+          cat data/nextcloud.log
