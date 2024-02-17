@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="5.16.0@2897ba636551a8cb61601cc26f6ccfbba6c36591">
+<files psalm-version="5.21.0@04ba9358e3f7d14a9dc3edd4e814a9d51d8c637f">
+  <file src="lib/Command/TestKeys.php">
+    <UndefinedClass>
+      <code><![CDATA[$this->keyManager]]></code>
+      <code>protected</code>
+    </UndefinedClass>
+  </file>
   <file src="lib/Controller/PushController.php">
     <UndefinedClass>
       <code>IProvider</code>

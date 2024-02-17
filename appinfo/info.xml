@@ -41,6 +41,7 @@
 	<commands>
 		<command>OCA\Notifications\Command\Generate</command>
 		<command>OCA\Notifications\Command\TestPush</command>
+		<command>OCA\Notifications\Command\TestKeys</command>
 	</commands>
 
 	<settings>
