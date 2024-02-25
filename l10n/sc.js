@@ -21,7 +21,7 @@ OC.L10N.register(
     "3 hours" : "3 oras",
     "1 day" : "1 die",
     "1 week" : "1 chida",
-    "Your settings have been updated." : "Is impostatziones tuas sunt istadas agiornadas.",
+    "Your settings have been updated." : "Cunfiguratzione atualizada.",
     "You need to set up your email address before you can receive notification emails." : "Deves impostare s'indiritzu de posta eletrònica tuo pro retzire is messàgios de notìfica."
 },
 "nplurals=2; plural=(n != 1);");
