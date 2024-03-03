@@ -77,21 +77,23 @@
 </template>
 
 <script>
+import { showError } from '@nextcloud/dialogs'
+import { emit } from '@nextcloud/event-bus'
+import { loadState } from '@nextcloud/initial-state'
+import { generateOcsUrl, generateFilePath } from '@nextcloud/router'
+import { Howl } from 'howler'
+
 import axios from '@nextcloud/axios'
+import moment from '@nextcloud/moment'
 import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
 import NcRichText from '@nextcloud/vue/dist/Components/NcRichText.js'
 import Close from 'vue-material-design-icons/Close.vue'
 import Message from 'vue-material-design-icons/Message.vue'
-import { showError } from '@nextcloud/dialogs'
-import { loadState } from '@nextcloud/initial-state'
-import { Howl } from 'howler'
 import Action from './Action.vue'
-import { generateOcsUrl, generateFilePath } from '@nextcloud/router'
-import moment from '@nextcloud/moment'
 import DefaultParameter from './Parameters/DefaultParameter.vue'
 import File from './Parameters/File.vue'
 import User from './Parameters/User.vue'
-import { emit } from '@nextcloud/event-bus'
+import AppChangelog from './Parameters/AppChangelog.vue'
 
 export default {
 	name: 'Notification',
@@ -304,6 +306,11 @@ export default {
 					richParameters[p] = {
 						component: File,
 						props: parameters[p],
+					}
+				} else if (type === 'app-changelog') {
+					richParameters[p] = {
+						component: AppChangelog,
+						props: { ...parameters[p], dismissNotification: this.onDismissNotification },
 					}
 				} else {
 					richParameters[p] = {
