@@ -287,7 +287,7 @@ class MailNotifications {
 				$actions = $notification->getParsedActions();
 				foreach ($actions as $action) {
 					if ($action->getRequestType() === IAction::TYPE_WEB) {
-						$template->addBodyButton($action->getLabel(), $action->getLink());
+						$template->addBodyButton($action->getParsedLabel(), $action->getLink());
 					}
 				}
 			} catch (\Throwable $e) {
