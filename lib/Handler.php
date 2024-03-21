@@ -339,14 +339,6 @@ class Handler {
 		if ($notification->getMessage() !== '') {
 			$sql->andWhere($sql->expr()->eq('message', $sql->createNamedParameter($notification->getMessage())));
 		}
-
-		if ($notification->getLink() !== '') {
-			$sql->andWhere($sql->expr()->eq('link', $sql->createNamedParameter($notification->getLink())));
-		}
-
-		if ($notification->getIcon() !== '') {
-			$sql->andWhere($sql->expr()->eq('icon', $sql->createNamedParameter($notification->getIcon())));
-		}
 	}
 
 	/**
