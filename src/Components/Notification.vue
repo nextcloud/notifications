@@ -290,6 +290,13 @@ export default {
 		}
 	},
 
+	beforeDestroy() {
+		const event = {
+			notification: this.$props,
+		}
+		emit('notifications:notification:dismissed', event)
+	},
+
 	methods: {
 		prepareParameters(parameters) {
 			const richParameters = {}
