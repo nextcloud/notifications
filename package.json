@@ -1,7 +1,7 @@
 {
   "name": "notifications",
   "description": "This app provides a backend and frontend for the notification API available in Nextcloud.",
-  "version": "2.17.0",
+  "version": "3.0.0",
   "author": "Joas Schilling <coding@schilljs.com>",
   "license": "agpl",
   "private": true,
