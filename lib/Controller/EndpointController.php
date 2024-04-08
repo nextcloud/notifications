@@ -72,7 +72,7 @@ class EndpointController extends OCSController {
 	 * Get all notifications
 	 *
 	 * @param string $apiVersion Version of the API to use
-	 * @return DataResponse<Http::STATUS_OK, NotificationsNotification[], array{'X-Nextcloud-User-Status': string}>|DataResponse<Http::STATUS_NO_CONTENT, null, array{X-Nextcloud-User-Status: string}>
+	 * @return DataResponse<Http::STATUS_OK, NotificationsNotification[], array{'X-Nextcloud-User-Status': string}>|DataResponse<Http::STATUS_NO_CONTENT, null, array<empty>>
 	 *
 	 * 200: Notifications returned
 	 * 204: No app uses notifications
@@ -91,7 +91,7 @@ class EndpointController extends OCSController {
 		// When there are no apps registered that use the notifications
 		// We stop polling for them.
 		if (!$this->manager->hasNotifiers()) {
-			return new DataResponse(null, Http::STATUS_NO_CONTENT, $headers);
+			return new DataResponse(null, Http::STATUS_NO_CONTENT);
 		}
 
 		$user = $this->session->getUser();
