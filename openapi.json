@@ -265,13 +265,6 @@
                     },
                     "204": {
                         "description": "No app uses notifications",
-                        "headers": {
-                            "X-Nextcloud-User-Status": {
-                                "schema": {
-                                    "type": "string"
-                                }
-                            }
-                        },
                         "content": {
                             "application/json": {
                                 "schema": {
