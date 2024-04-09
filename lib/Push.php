@@ -303,10 +303,10 @@ class Push {
 		$this->printInfo('Trying to push to ' . count($devices) . ' devices');
 		$this->printInfo('');
 
-		$language = $this->l10nFactory->getUserLanguage($user);
-		$this->printInfo('Language is set to ' . $language);
-
 		if (!$notification->isValidParsed()) {
+			$language = $this->l10nFactory->getUserLanguage($user);
+			$this->printInfo('Language is set to ' . $language);
+
 			try {
 				$this->notificationManager->setPreparingPushNotification(true);
 				$notification = $this->notificationManager->prepare($notification, $language);
