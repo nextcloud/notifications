@@ -28,18 +28,15 @@ namespace OCA\Notifications;
 use OCA\Notifications\Exceptions\NotificationNotFoundException;
 use OCP\Notification\IDeferrableApp;
 use OCP\Notification\INotification;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class App implements IDeferrableApp {
-	/** @var Handler */
-	protected $handler;
-	/** @var Push */
-	protected $push;
-
-	public function __construct(Handler $handler,
-		Push $push) {
-		$this->handler = $handler;
-		$this->push = $push;
+	public function __construct(
+		protected Handler $handler,
+		protected Push $push,
+		protected LoggerInterface $logger,
+	) {
 	}
 
 	public function setOutput(OutputInterface $output): void {
@@ -48,7 +45,6 @@ class App implements IDeferrableApp {
 
 	/**
 	 * @param INotification $notification
-	 * @throws \InvalidArgumentException When the notification is not valid
 	 * @since 8.2.0
 	 */
 	public function notify(INotification $notification): void {
@@ -57,7 +53,7 @@ class App implements IDeferrableApp {
 		try {
 			$this->push->pushToDevice($notificationId, $notification);
 		} catch (NotificationNotFoundException $e) {
-			throw new \InvalidArgumentException('Error while preparing push notification');
+			$this->logger->error('Error while preparing push notification', ['exception' => $e]);
 		}
 	}
 

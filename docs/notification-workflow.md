@@ -11,7 +11,7 @@ with it, we want to remove the notification again.
   1. Grab a new notification object (`\OCP\Notification\INotification`) from the manager
   (`\OCP\Notification\IManager`):
 ```php
-$manager = \OC::$server->get(\OCP\Notification\IManager::class);
+$manager = \OCP\Server::get(\OCP\Notification\IManager::class);
 $notification = $manager->createNotification();
 ```
 
@@ -51,16 +51,18 @@ $manager->notify($notification);
 
 ### Preparing a notification for display
 
-  1. In `app.php` register your Notifier (`\OCP\Notification\INotifier`) interface to the manager,
+1. In `OCA\MyApp\Application::register(IRegistrationContext $context)` register your Notifier (implementing the `\OCP\Notification\INotifier` interface) to the manager,
   using a `\Closure` returning the Notifier and a `\Closure` returning an array of the id and name:
 ```php
-$manager = \OC::$server->get(\OCP\Notification\IManager::class);
-$manager->registerNotifierService(\OCA\Files_Sharing\Notification\Notifier::class);
+	public function register(IRegistrationContext $context): void {
+		$context->registerNotifierService(\OCA\Files_Sharing\Notification\Notifier::class);
+	}
 ```
 
-  2. The manager will execute the closure and then call the `prepare()` method on your notifier.
-  If the notification is not known by your app, just throw an `\InvalidArgumentException`,
-  but if it is actually from your app, you must set the parsed subject, message and action labels:
+2. The manager will execute the closure and then call the `prepare()` method on your notifier.
+  If the notification is not known by your app, just throw an `OCP\Notification\UnknownNotificationException` (*Added in Nextcloud 30, before throw `\InvalidArgumentException`*),
+  but if it is actually from your app, you must set the parsed subject, message and action labels.
+  If the notification is obsolete by now, e.g. because the share was revoked already, you can throw a `OCP\Notification\AlreadyProcessedException` which will remove the notification also from the devices.
 ```php
 
 class Notifier implements \OCP\Notification\INotifier {
@@ -96,7 +98,7 @@ class Notifier implements \OCP\Notification\INotifier {
 	public function prepare(INotification $notification, string $languageCode): INotification {
 		if ($notification->getApp() !== 'files_sharing') {
 			// Not my app => throw
-			throw new \InvalidArgumentException();
+			throw new \OCP\Notification\UnknownNotificationException();
 		}
 
 		// Read the language from the notification
@@ -150,7 +152,7 @@ class Notifier implements \OCP\Notification\INotifier {
 
 			default:
 				// Unknown subject => Unknown notification => throw
-				throw new \InvalidArgumentException();
+				throw new \OCP\Notification\UnknownNotificationException();
 		}
 	}
 
@@ -186,7 +188,7 @@ call the `markProcessed()` method on the manager with the necessary information 
 notification object:
 
 ```php
-$manager = \OC::$server->get(\OCP\Notification\IManager::class);
+$manager = \OCP\Server::get(\OCP\Notification\IManager::class);
 $notification->setApp('files_sharing')
     ->setObject('remote', 1337)
     ->setUser('recipient1');
@@ -198,7 +200,7 @@ will be marked as processed for all users that have it. So the following example
 remove all notifications for the app files_sharing on the object "remote #1337":
 
 ```php
-$manager = \OC::$server->get(\OCP\Notification\IManager::class);
+$manager = \OCP\Server::get(\OCP\Notification\IManager::class);
 $notification->setApp('files_sharing')
     ->setObject('remote', 1337);
 $manager->markProcessed($notification);
@@ -210,7 +212,7 @@ Sometimes you might send multiple notifications in one request.
 In that case it makes sense to defer the sending, so in the end only one connection
 is done to the push server instead of 1 per notification.
 ```php
-$manager = \OC::$server->get(\OCP\Notification\IManager::class);
+$manager = \OCP\Server::get(\OCP\Notification\IManager::class);
 $shouldFlush = $manager->defer();
 
 // Your application code generating notifications …
