@@ -26,17 +26,15 @@ use OCA\Notifications\App;
 use OCA\Notifications\Handler;
 use OCA\Notifications\Push;
 use OCP\Notification\INotification;
+use PHPUnit\Framework\MockObject\MockObject;
+use Psr\Log\LoggerInterface;
 
 class AppTest extends TestCase {
-	/** @var Handler|\PHPUnit_Framework_MockObject_MockObject */
-	protected $handler;
-	/** @var Push|\PHPUnit_Framework_MockObject_MockObject */
-	protected $push;
-	/** @var INotification|\PHPUnit_Framework_MockObject_MockObject */
-	protected $notification;
-
-	/** @var App */
-	protected $app;
+	protected Handler|MockObject $handler;
+	protected Push|MockObject $push;
+	protected INotification|MockObject $notification;
+	protected LoggerInterface|MockObject $logger;
+	protected App $app;
 
 	protected function setUp(): void {
 		parent::setUp();
@@ -44,14 +42,16 @@ class AppTest extends TestCase {
 		$this->handler = $this->createMock(Handler::class);
 		$this->push = $this->createMock(Push::class);
 		$this->notification = $this->createMock(INotification::class);
+		$this->logger = $this->createMock(LoggerInterface::class);
 
 		$this->app = new App(
 			$this->handler,
-			$this->push
+			$this->push,
+			$this->logger,
 		);
 	}
 
-	public function dataNotify() {
+	public static function dataNotify(): array {
 		return [
 			[23],
 			[42],
@@ -63,7 +63,7 @@ class AppTest extends TestCase {
 	 *
 	 * @param int $id
 	 */
-	public function testNotify($id) {
+	public function testNotify(int $id): void {
 		$this->handler->expects($this->once())
 			->method('add')
 			->with($this->notification)
@@ -75,7 +75,7 @@ class AppTest extends TestCase {
 		$this->app->notify($this->notification);
 	}
 
-	public function dataGetCount() {
+	public static function dataGetCount(): array {
 		return [
 			[23],
 			[42],
@@ -87,7 +87,7 @@ class AppTest extends TestCase {
 	 *
 	 * @param int $count
 	 */
-	public function testGetCount($count) {
+	public function testGetCount(int $count): void {
 		$this->handler->expects($this->once())
 			->method('count')
 			->with($this->notification)
@@ -96,7 +96,7 @@ class AppTest extends TestCase {
 		$this->assertSame($count, $this->app->getCount($this->notification));
 	}
 
-	public function testMarkProcessed() {
+	public function testMarkProcessed(): void {
 		$this->handler->expects($this->once())
 			->method('delete')
 			->with($this->notification);

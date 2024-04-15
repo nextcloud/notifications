@@ -30,22 +30,16 @@ use OCP\IURLGenerator;
 use OCP\IUserManager;
 use OCP\L10N\IFactory;
 use OCP\Notification\INotification;
+use OCP\Notification\UnknownNotificationException;
 use PHPUnit\Framework\MockObject\MockObject;
 
 class NotifierTest extends \Test\TestCase {
-	/** @var AdminNotifications */
-	protected $notifier;
-
-	/** @var IFactory|MockObject */
-	protected $factory;
-	/** @var IURLGenerator|MockObject */
-	protected $urlGenerator;
-	/** @var IUserManager|MockObject */
-	protected $userManager;
-	/** @var IRootFolder|MockObject */
-	protected $rootFolder;
-	/** @var IL10N|MockObject */
-	protected $l;
+	protected IFactory|MockObject $factory;
+	protected IURLGenerator|MockObject $urlGenerator;
+	protected IUserManager|MockObject $userManager;
+	protected IRootFolder|MockObject $rootFolder;
+	protected IL10N|MockObject $l;
+	protected AdminNotifications $notifier;
 
 	protected function setUp(): void {
 		parent::setUp();
@@ -72,8 +66,8 @@ class NotifierTest extends \Test\TestCase {
 		);
 	}
 
-	public function testPrepareWrongApp() {
-		/** @var INotification|\PHPUnit_Framework_MockObject_MockObject $notification */
+	public function testPrepareWrongApp(): void {
+		/** @var INotification|MockObject $notification */
 		$notification = $this->createMock(INotification::class);
 
 		$notification->expects($this->exactly(2))
@@ -82,13 +76,13 @@ class NotifierTest extends \Test\TestCase {
 		$notification->expects($this->never())
 			->method('getSubject');
 
-		$this->expectException(\InvalidArgumentException::class);
-		$this->expectExceptionMessage('Unknown app');
+		$this->expectException(UnknownNotificationException::class);
+		$this->expectExceptionMessage('app');
 		$this->notifier->prepare($notification, 'en');
 	}
 
-	public function testPrepareWrongSubject() {
-		/** @var INotification|\PHPUnit_Framework_MockObject_MockObject $notification */
+	public function testPrepareWrongSubject(): void {
+		/** @var INotification|MockObject $notification */
 		$notification = $this->createMock(INotification::class);
 
 		$notification->expects($this->once())
@@ -98,12 +92,12 @@ class NotifierTest extends \Test\TestCase {
 			->method('getSubject')
 			->willReturn('wrong subject');
 
-		$this->expectException(\InvalidArgumentException::class);
-		$this->expectExceptionMessage('Unknown subject');
+		$this->expectException(UnknownNotificationException::class);
+		$this->expectExceptionMessage('subject');
 		$this->notifier->prepare($notification, 'en');
 	}
 
-	public function dataPrepare() {
+	public static function dataPrepare(): array {
 		return [
 			['ocs', ['subject'], ['message'], true],
 		];
@@ -111,14 +105,9 @@ class NotifierTest extends \Test\TestCase {
 
 	/**
 	 * @dataProvider dataPrepare
-	 *
-	 * @param string $subject
-	 * @param array $subjectParams
-	 * @param array $messageParams
-	 * @param bool $setMessage
 	 */
-	public function testPrepare($subject, $subjectParams, $messageParams, $setMessage) {
-		/** @var INotification|\PHPUnit_Framework_MockObject_MockObject $notification */
+	public function testPrepare(string $subject, array $subjectParams, array $messageParams, bool $setMessage): void {
+		/** @var INotification|MockObject $notification */
 		$notification = $this->createMock(INotification::class);
 
 		$notification->expects($this->once())

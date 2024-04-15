@@ -32,30 +32,18 @@ use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\L10N\IFactory;
-use OCP\Notification\AlreadyProcessedException;
 use OCP\Notification\IAction;
 use OCP\Notification\INotification;
 use OCP\Notification\INotifier;
+use OCP\Notification\UnknownNotificationException;
 
 class AdminNotifications implements INotifier {
-	/** @var IFactory */
-	protected $l10nFactory;
-
-	/** @var IURLGenerator */
-	protected $urlGenerator;
-	/** @var IUserManager */
-	protected $userManager;
-	/** @var IRootFolder */
-	protected $rootFolder;
-
-	public function __construct(IFactory $l10nFactory,
-		IURLGenerator $urlGenerator,
-		IUserManager $userManager,
-		IRootFolder $rootFolder) {
-		$this->l10nFactory = $l10nFactory;
-		$this->urlGenerator = $urlGenerator;
-		$this->userManager = $userManager;
-		$this->rootFolder = $rootFolder;
+	public function __construct(
+		protected IFactory $l10nFactory,
+		protected IURLGenerator $urlGenerator,
+		protected IUserManager $userManager,
+		protected IRootFolder $rootFolder,
+	) {
 	}
 
 	/**
@@ -82,12 +70,11 @@ class AdminNotifications implements INotifier {
 	 * @param INotification $notification
 	 * @param string $languageCode The code of the language that should be used to prepare the notification
 	 * @return INotification
-	 * @throws \InvalidArgumentException When the notification was not prepared by a notifier
-	 * @throws AlreadyProcessedException When the notification is not needed anymore and should be deleted
+	 * @throws UnknownNotificationException When the notification was not prepared by a notifier
 	 */
 	public function prepare(INotification $notification, string $languageCode): INotification {
 		if ($notification->getApp() !== 'admin_notifications' && $notification->getApp() !== 'admin_notification_talk') {
-			throw new \InvalidArgumentException('Unknown app');
+			throw new UnknownNotificationException('app');
 		}
 
 		switch ($notification->getSubject()) {
@@ -216,7 +203,7 @@ class AdminNotifications implements INotifier {
 				return $notification;
 
 			default:
-				throw new \InvalidArgumentException('Unknown subject');
+				throw new UnknownNotificationException('subject');
 		}
 	}
 }
