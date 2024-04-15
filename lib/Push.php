@@ -43,7 +43,9 @@ use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IUser;
 use OCP\L10N\IFactory;
+use OCP\Notification\AlreadyProcessedException;
 use OCP\Notification\IManager as INotificationManager;
+use OCP\Notification\IncompleteParsedNotificationException;
 use OCP\Notification\INotification;
 use OCP\UserStatus\IManager as IUserStatusManager;
 use OCP\UserStatus\IUserStatus;
@@ -310,7 +312,8 @@ class Push {
 			try {
 				$this->notificationManager->setPreparingPushNotification(true);
 				$notification = $this->notificationManager->prepare($notification, $language);
-			} catch (\InvalidArgumentException $e) {
+			} catch (AlreadyProcessedException|IncompleteParsedNotificationException|\InvalidArgumentException) {
+				// FIXME remove \InvalidArgumentException in Nextcloud 39
 				return;
 			} finally {
 				$this->notificationManager->setPreparingPushNotification(false);

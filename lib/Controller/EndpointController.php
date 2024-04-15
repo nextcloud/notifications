@@ -39,8 +39,10 @@ use OCP\IRequest;
 use OCP\IUser;
 use OCP\IUserSession;
 use OCP\L10N\IFactory;
+use OCP\Notification\AlreadyProcessedException;
 use OCP\Notification\IAction;
 use OCP\Notification\IManager;
+use OCP\Notification\IncompleteParsedNotificationException;
 use OCP\Notification\INotification;
 use OCP\UserStatus\IManager as IUserStatusManager;
 use OCP\UserStatus\IUserStatus;
@@ -116,7 +118,8 @@ class EndpointController extends OCSController {
 			/** @var INotification $notification */
 			try {
 				$notification = $this->manager->prepare($notification, $language);
-			} catch (\InvalidArgumentException) {
+			} catch (AlreadyProcessedException|IncompleteParsedNotificationException|\InvalidArgumentException) {
+				// FIXME remove \InvalidArgumentException in Nextcloud 39
 				// The app was disabled, skip the notification
 				continue;
 			}
@@ -170,7 +173,8 @@ class EndpointController extends OCSController {
 
 		try {
 			$notification = $this->manager->prepare($notification, $language);
-		} catch (\InvalidArgumentException $e) {
+		} catch (AlreadyProcessedException|IncompleteParsedNotificationException|\InvalidArgumentException) {
+			// FIXME remove \InvalidArgumentException in Nextcloud 39
 			// The app was disabled
 			return new DataResponse(null, Http::STATUS_NOT_FOUND);
 		}

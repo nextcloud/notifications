@@ -38,8 +38,10 @@ use OCP\IUserManager;
 use OCP\L10N\IFactory;
 use OCP\Mail\IMailer;
 use OCP\Mail\IMessage;
+use OCP\Notification\AlreadyProcessedException;
 use OCP\Notification\IAction;
 use OCP\Notification\IManager;
+use OCP\Notification\IncompleteParsedNotificationException;
 use OCP\Notification\INotification;
 use OCP\Util;
 use Psr\Log\LoggerInterface;
@@ -200,7 +202,8 @@ class MailNotifications {
 			/** @var INotification $preparedNotification */
 			try {
 				$preparedNotification = $this->manager->prepare($notification, $language);
-			} catch (\InvalidArgumentException $e) {
+			} catch (AlreadyProcessedException|IncompleteParsedNotificationException|\InvalidArgumentException) {
+				// FIXME remove \InvalidArgumentException in Nextcloud 39
 				// The app was disabled, skip the notification
 				continue;
 			} catch (\Exception $e) {
