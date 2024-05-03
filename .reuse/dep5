@@ -1,0 +1,43 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: notifications
+Upstream-Contact: Nextcloud <info@nextcloud.com>
+Source: https://github.com/nextcloud/notifications/
+
+
+Files: l10n/*.js l10n/*.json
+Copyright: 2016 Nextcloud GmbH and Nextcloud and ownCloud contributors
+License: AGPL-3.0-or-later
+
+Files: js/*.js js/*.js.map
+Copyright: 2016 Nextcloud GmbH and Nextcloud contributors
+License: AGPL-3.0-or-later
+
+Files: openapi.json openapi-*.json src/types/openapi/*.ts
+Copyright: 2023 Nextcloud GmbH and Nextcloud contributors
+License: AGPL-3.0-or-later
+
+Files: .github/CODEOWNERS .github/dependabot.yml tests/Integration/base-query-count.txt
+Copyright: none
+License: CC0-1.0
+
+Files: docs .github/issue_template.md .github/contributing.md AUTHORS.md README.md
+Copyright: 2016 Nextcloud GmbH and Nextcloud contributors
+License: CC0-1.0
+
+Files: tests/Integration/features/*.feature
+Copyright: 2016 Nextcloud GmbH and Nextcloud contributors
+License: CC0-1.0
+
+Files: package.json package-lock.json */package.json */package-lock.json composer.json composer.lock */composer.json */composer.lock .gitignore .l10nignore psalm.xml tests/psalm-baseline.xml vendor-bin/*/composer.json vendor-bin/*/composer.lock .tx/config */phpunit.xml tsconfig.json
+Copyright: none
+License: CC0-1.0
+
+# Icons
+Files: img/notifications-dark.svg img/notifications.png img/notifications.svg
+Copyright: Nextcloud GmbH and Nextcloud contributors
+License: CC0-1.0
+
+# Sounds
+Files: img/notification.ogg img/talk.ogg
+Copyright: 2017 Feandesign https://soundcloud.com/feandesign
+License: CC0-1.0
