@@ -1,5 +1,7 @@
 # Notifications
 
+[![REUSE status](https://api.reuse.software/badge/github.com/nextcloud/notifications)](https://api.reuse.software/info/github.com/nextcloud/notifications)
+
 This app provides a backend and frontend for the notification API available in [Nextcloud](https://github.com/nextcloud/server/).
 The API is used by other apps to notify users in the web UI and sync clients about various things. Some examples are:
 
