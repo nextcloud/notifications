@@ -4,7 +4,7 @@ OC.L10N.register(
     "Hello %s" : "Hola %s",
     "Hello %s," : "Hola %s,",
     "_New notification for %s_::_%n new notifications for %s_" : ["Una nueva notificación para %s","%n notificaciones nuevas para %s","%n notificaciones nuevas para %s"],
-    "_You have a new notification for %s_::_You have %n new notifications for %s_" : ["Tienes una nueva notificación para %s","Tienes %n nuevas notificaciones para %s","Tienes %n nuevas notificaciones para %s"],
+    "_You have a new notification for %s_::_You have %n new notifications for %s_" : ["Tiene una nueva notificación para %s","Tiene %n nuevas notificaciones para %s","Tiene %n nuevas notificaciones para %s"],
     "You can change the frequency of these emails or disable them in the <a href=\"%s\">settings</a>." : "Puedes cambiar la frecuencia de estos emails o deshabilitarlos en los <a href=\"%s\">Ajustes</a>.",
     "You can change the frequency of these emails or disable them in the settings: %s" : "Puedes cambiar la frecuencia de estos emails o deshabilitarlos en los Ajustes: %s",
     "Admin notifications" : "Notificaciones de admin",
