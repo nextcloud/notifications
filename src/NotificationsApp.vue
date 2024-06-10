@@ -145,6 +145,23 @@ export default {
 			userStatus: null,
 			tabId: null,
 
+			/**
+			 * Notifications older than this ID will not do a web notification.
+			 *
+			 * Sometimes a notification got "newly mounted" while being old.
+			 * This can happen when a user has many notifications (100-1).
+			 * The UI first only loads (100-76), if any notification is then
+			 * resolved (e.g. by deleting or reading a chat), further old
+			 * notifications (75+74) would be added to the UI and triggered
+			 * a web notification (including call sound) in the past.
+			 *
+			 * This threshold ID is therefore updated to only higher values,
+			 * before each pulling of notifications to ensure that we only ever
+			 * web-notify on new notifications and not newly loaded old
+			 * notifications.
+			 */
+			webNotificationsThresholdId: 0,
+
 			/** @type {number} */
 			pollIntervalBase: 30000, // milliseconds
 			/** @type {number} */
@@ -366,6 +383,10 @@ export default {
 		 * Performs the AJAX request to retrieve the notifications
 		 */
 		async _fetch() {
+			if (this.notifications.length && this.notifications[0].notificationId > this.webNotificationsThresholdId) {
+				this.webNotificationsThresholdId = this.notifications[0].notificationId
+			}
+
 			const response = await getNotificationsData(this.tabId, this.lastETag, !this.backgroundFetching, this.hasNotifyPush)
 
 			if (response.status === 204) {
@@ -380,6 +401,10 @@ export default {
 				console.debug('Got notification data, restoring default polling interval.')
 				this._setPollingInterval(this.pollIntervalBase)
 				this._updateDocTitleOnNewNotifications(this.notifications)
+
+				if (!this.backgroundFetching && this.notifications.length) {
+					this.webNotificationsThresholdId = this.notifications[0].notificationId
+				}
 			} else if (response.status === 304) {
 				// 304 - Not modified
 				this._setPollingInterval(this.pollIntervalBase)
