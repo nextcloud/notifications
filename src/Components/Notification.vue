@@ -263,7 +263,9 @@ export default {
 			emit('notifications:notification:received', event)
 		}
 
-		if (this.shouldNotify && this.$parent.$parent.$parent.showBrowserNotifications) {
+		if (this.shouldNotify
+			&& this.$parent.$parent.$parent.showBrowserNotifications
+			&& this.$parent.$parent.$parent.webNotificationsThresholdId < this.notificationId) {
 			this._createWebNotification()
 
 			if (this.app === 'spreed' && this.objectType === 'call') {
