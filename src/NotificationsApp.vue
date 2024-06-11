@@ -99,7 +99,7 @@ import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
 import Close from 'vue-material-design-icons/Close.vue'
 import axios from '@nextcloud/axios'
 import { getCurrentUser } from '@nextcloud/auth'
-import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { showError } from '@nextcloud/dialogs'
 import { loadState } from '@nextcloud/initial-state'
 import {
@@ -113,6 +113,7 @@ import Message from 'vue-material-design-icons/Message.vue'
 import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
 import { getCapabilities } from '@nextcloud/capabilities'
 import NcHeaderMenu from '@nextcloud/vue/dist/Components/NcHeaderMenu.js'
+import { createWebNotification } from './services/webNotificationsService.js'
 
 export default {
 	name: 'NotificationsApp',
@@ -373,6 +374,7 @@ export default {
 				this.lastETag = response.headers.etag
 				this.lastTabId = response.tabId
 				this.notifications = response.data
+				this.processWebNotifications(response.data)
 				console.debug('Got notification data, restoring default polling interval.')
 				this._setPollingInterval(this.pollIntervalBase)
 				this._updateDocTitleOnNewNotifications(this.notifications)
@@ -484,6 +486,21 @@ export default {
 				.then((permissions) => {
 					this.webNotificationsGranted = permissions === 'granted'
 				})
+		},
+
+		processWebNotifications(notifications) {
+			notifications.forEach(notification => {
+				if (this.backgroundFetching) {
+					// Can not rely on showBrowserNotifications because each tab should
+					// be able to utilize the data from the notification in events.
+					const event = { notification }
+					emit('notifications:notification:received', event)
+				}
+
+				if (this.showBrowserNotifications && this.webNotificationsThresholdId < notification.notificationId) {
+					createWebNotification(notification)
+				}
+			})
 		},
 	},
 }
