@@ -93,8 +93,6 @@ import moment from '@nextcloud/moment'
 import DefaultParameter from './Parameters/DefaultParameter.vue'
 import File from './Parameters/File.vue'
 import User from './Parameters/User.vue'
-import { emit } from '@nextcloud/event-bus'
-import { createWebNotification } from '../services/webNotificationsService.js'
 
 export default {
 	name: 'Notification',
@@ -250,26 +248,6 @@ export default {
 
 	mounted() {
 		this._$el = $(this.$el)
-
-		// Parents: TransitionGroup > Transition > HeaderMenu
-		if (typeof this.$parent.$parent.$parent.showBrowserNotifications === 'undefined') {
-			console.error('Failed to read showBrowserNotifications property from App component')
-		}
-
-		if (this.$parent.$parent.$parent.backgroundFetching) {
-			// Can not rely on showBrowserNotifications because each tab should
-			// be able to utilize the data from the notification in events.
-			const event = {
-				notification: this.$props,
-			}
-
-			emit('notifications:notification:received', event)
-		}
-
-		if (this.$parent.$parent.$parent.showBrowserNotifications
-			&& this.$parent.$parent.$parent.webNotificationsThresholdId < this.notificationId) {
-			createWebNotification(this)
-		}
 	},
 
 	methods: {
