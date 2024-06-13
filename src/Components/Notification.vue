@@ -87,15 +87,12 @@ import NcRichText from '@nextcloud/vue/dist/Components/NcRichText.js'
 import Close from 'vue-material-design-icons/Close.vue'
 import Message from 'vue-material-design-icons/Message.vue'
 import { showError } from '@nextcloud/dialogs'
-import { loadState } from '@nextcloud/initial-state'
-import { Howl } from 'howler'
 import Action from './Action.vue'
-import { generateOcsUrl, generateFilePath } from '@nextcloud/router'
+import { generateOcsUrl } from '@nextcloud/router'
 import moment from '@nextcloud/moment'
 import DefaultParameter from './Parameters/DefaultParameter.vue'
 import File from './Parameters/File.vue'
 import User from './Parameters/User.vue'
-import { emit } from '@nextcloud/event-bus'
 
 export default {
 	name: 'Notification',
@@ -251,49 +248,6 @@ export default {
 
 	mounted() {
 		this._$el = $(this.$el)
-
-		// Parents: TransitionGroup > Transition > HeaderMenu
-		if (typeof this.$parent.$parent.$parent.showBrowserNotifications === 'undefined') {
-			console.error('Failed to read showBrowserNotifications property from App component')
-		}
-
-		if (this.$parent.$parent.$parent.backgroundFetching) {
-			// Can not rely on showBrowserNotifications because each tab should
-			// be able to utilize the data from the notification in events.
-			const event = {
-				notification: this.$props,
-			}
-
-			emit('notifications:notification:received', event)
-		}
-
-		if (this.shouldNotify
-			&& this.$parent.$parent.$parent.showBrowserNotifications
-			&& this.$parent.$parent.$parent.webNotificationsThresholdId < this.notificationId) {
-			this._createWebNotification()
-
-			if (this.app === 'spreed' && this.objectType === 'call') {
-				if (loadState('notifications', 'sound_talk')) {
-					const sound = new Howl({
-						src: [
-							generateFilePath('notifications', 'img', 'talk.ogg'),
-						],
-						volume: 0.5,
-					})
-
-					sound.play()
-				}
-			} else if (loadState('notifications', 'sound_notification')) {
-				const sound = new Howl({
-					src: [
-						generateFilePath('notifications', 'img', 'notification.ogg'),
-					],
-					volume: 0.5,
-				})
-
-				sound.play()
-			}
-		}
 	},
 
 	methods: {
@@ -340,43 +294,6 @@ export default {
 				.catch(() => {
 					showError(t('notifications', 'Failed to dismiss notification'))
 				})
-		},
-
-		/**
-		 * Create a browser notification
-		 *
-		 * @see https://developer.mozilla.org/en/docs/Web/API/notification
-		 */
-		_createWebNotification() {
-			const n = new Notification(this.subject, {
-				title: this.subject,
-				lang: OC.getLocale(),
-				body: this.message,
-				icon: this.icon,
-				tag: this.notificationId,
-			})
-
-			if (this.link) {
-				n.onclick = async function(e) {
-					const event = {
-						cancelAction: false,
-						notification: this.$props,
-						action: {
-							url: this.link,
-							type: 'WEB',
-						},
-					}
-					await emit('notifications:action:execute', event)
-
-					if (!event.cancelAction) {
-						console.debug('Redirecting because of a click onto a notification', this.link)
-						window.location.href = this.link
-					}
-
-					// Best effort try to bring the tab to the foreground (works at least in Chrome, not in Firefox)
-					window.focus()
-				}.bind(this)
-			}
 		},
 	},
 }
