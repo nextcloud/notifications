@@ -124,4 +124,12 @@ class FakeUser implements IUser {
 	public function setManagerUids(array $uids): void {
 		throw new \RuntimeException('Not implemented');
 	}
+
+	public function getPasswordHash(): ?string {
+		throw new \RuntimeException('Not implemented');
+	}
+
+	public function setPasswordHash(string $passwordHash): bool {
+		throw new \RuntimeException('Not implemented');
+	}
 }
