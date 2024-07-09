@@ -176,10 +176,20 @@ class AdminNotifications implements INotifier {
 			case 'cli':
 			case 'ocs':
 				$subjectParams = $notification->getSubjectParameters();
-				$notification->setParsedSubject($subjectParams[0]);
+				if ($subjectParams['parsed'] !== '') {
+					$notification->setParsedSubject($subjectParams['parsed']);
+				}
+				if ($subjectParams['rich'] !== '') {
+					$notification->setRichSubject($subjectParams['rich'], $subjectParams['parameters']);
+				}
 				$messageParams = $notification->getMessageParameters();
-				if (isset($messageParams[0]) && $messageParams[0] !== '') {
-					$notification->setParsedMessage($messageParams[0]);
+				if (!empty($messageParams)) {
+					if ($messageParams['parsed'] !== '') {
+						$notification->setParsedMessage($messageParams['parsed']);
+					}
+					if ($messageParams['rich'] !== '') {
+						$notification->setRichMessage($messageParams['rich'], $messageParams['parameters']);
+					}
 				}
 
 				$notification->setIcon($this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('notifications', 'notifications-dark.svg')));
