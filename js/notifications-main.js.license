@@ -1,7 +1,8 @@
+SPDX-License-Identifier: agpl
 SPDX-License-Identifier: MIT
 SPDX-License-Identifier: AGPL-3.0-or-later
 SPDX-FileCopyrightText: Tobias Koppers @sokra
-SPDX-FileCopyrightText: Nextcloud GmbH and Nextcloud contributors
+SPDX-FileCopyrightText: Joas Schilling <coding@schilljs.com>
 SPDX-FileCopyrightText: Evan You
 SPDX-FileCopyrightText: @nextcloud/dialogs developers
 
@@ -22,6 +23,6 @@ This file is generated from multiple sources. Included packages:
 - webpack
 	- version: 5.88.2
 	- license: MIT
-- nextcloud
-	- version: 1.0.0
-	- license: AGPL-3.0-or-later
+- notifications
+	- version: 3.0.0
+	- license: agpl
