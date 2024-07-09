@@ -3,7 +3,7 @@
   "description": "This app provides a backend and frontend for the notification API available in Nextcloud.",
   "version": "3.0.0",
   "author": "Joas Schilling <coding@schilljs.com>",
-  "license": "agpl",
+  "license": "AGPL-3.0-only",
   "private": true,
   "scripts": {
     "build": "NODE_ENV=production webpack --progress --config webpack.js",
