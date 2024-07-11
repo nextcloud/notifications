@@ -1,3 +1,7 @@
+<!--
+  - SPDX-FileCopyrightText: 2018-2024 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
 # Admin notifications
 
 Allows admins to generate notifications for users via the console or an HTTP endpoint
