@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace OCA\Notifications\Controller;
 
 use OCA\Notifications\App;
+use OCA\Notifications\ResponseDefinitions;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\OpenAPI;
 use OCP\AppFramework\Http\DataResponse;
@@ -24,6 +25,9 @@ use OCP\RichObjectStrings\InvalidObjectExeption;
 use OCP\RichObjectStrings\IValidator;
 use Psr\Log\LoggerInterface;
 
+/**
+ * @psalm-import-type NotificationsRichObjectParameter from ResponseDefinitions
+ */
 class APIController extends OCSController {
 	public function __construct(
 		string $appName,
@@ -75,9 +79,9 @@ class APIController extends OCSController {
 	 * @param string $userId ID of the user
 	 * @param string $subject Subject of the notification
 	 * @param string $message Message of the notification
-	 * @param array $subjectParameters Rich objects to fill the subject placeholders, {@see \OCP\RichObjectStrings\Definitions}
-	 * @param array $messageParameters Rich objects to fill the message placeholders, {@see \OCP\RichObjectStrings\Definitions}
-	 * @return DataResponse<Http::STATUS_OK, array{id: int}, array<string, mixed>>|DataResponse<Http::STATUS_BAD_REQUEST, array{error: string}, array<string, mixed>>
+	 * @param array<string, NotificationsRichObjectParameter> $subjectParameters Rich objects to fill the subject placeholders, {@see \OCP\RichObjectStrings\Definitions}
+	 * @param array<string, NotificationsRichObjectParameter> $messageParameters Rich objects to fill the message placeholders, {@see \OCP\RichObjectStrings\Definitions}
+	 * @return DataResponse<Http::STATUS_OK, array{id: int}, array{}>|DataResponse<Http::STATUS_BAD_REQUEST, array{error: string}, array{}>
 	 *
 	 * 200: Notification generated successfully, returned id is the notification ID for future delete requests
 	 * 400: Provided data was invalid, check error field of the response of log file for details
