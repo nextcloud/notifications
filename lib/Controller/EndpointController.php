@@ -16,6 +16,7 @@ use OCA\Notifications\Push;
 use OCA\Notifications\ResponseDefinitions;
 use OCA\Notifications\Service\ClientService;
 use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
 use OCP\AppFramework\Utility\ITimeFactory;
@@ -52,9 +53,6 @@ class EndpointController extends OCSController {
 	}
 
 	/**
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 *
 	 * Get all notifications
 	 *
 	 * @param string $apiVersion Version of the API to use
@@ -63,6 +61,7 @@ class EndpointController extends OCSController {
 	 * 200: Notifications returned
 	 * 204: No app uses notifications
 	 */
+	#[NoAdminRequired]
 	public function listNotifications(string $apiVersion): DataResponse {
 		$userStatus = $this->userStatusManager->getUserStatuses([
 			$this->getCurrentUser(),
@@ -125,9 +124,6 @@ class EndpointController extends OCSController {
 	}
 
 	/**
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 *
 	 * Get a notification
 	 *
 	 * @param string $apiVersion Version of the API to use
@@ -137,6 +133,7 @@ class EndpointController extends OCSController {
 	 * 200: Notification returned
 	 * 404: Notification not found
 	 */
+	#[NoAdminRequired]
 	public function getNotification(string $apiVersion, int $id): DataResponse {
 		if (!$this->manager->hasNotifiers()) {
 			return new DataResponse(null, Http::STATUS_NOT_FOUND);
@@ -175,8 +172,6 @@ class EndpointController extends OCSController {
 	}
 
 	/**
-	 * @NoAdminRequired
-	 *
 	 * Check if notification IDs exist
 	 *
 	 * @param string $apiVersion Version of the API to use
@@ -186,6 +181,7 @@ class EndpointController extends OCSController {
 	 * 200: Existing notification IDs returned
 	 * 400: Too many notification IDs requested
 	 */
+	#[NoAdminRequired]
 	public function confirmIdsForUser(string $apiVersion, array $ids): DataResponse {
 		if (!$this->manager->hasNotifiers()) {
 			return new DataResponse([], Http::STATUS_OK);
@@ -209,8 +205,6 @@ class EndpointController extends OCSController {
 	}
 
 	/**
-	 * @NoAdminRequired
-	 *
 	 * Delete a notification
 	 *
 	 * @param int $id ID of the notification
@@ -220,6 +214,7 @@ class EndpointController extends OCSController {
 	 * 403: Deleting notification for impersonated user is not allowed
 	 * 404: Notification not found
 	 */
+	#[NoAdminRequired]
 	public function deleteNotification(int $id): DataResponse {
 		if ($id === 0) {
 			return new DataResponse(null, Http::STATUS_NOT_FOUND);
@@ -243,8 +238,6 @@ class EndpointController extends OCSController {
 	}
 
 	/**
-	 * @NoAdminRequired
-	 *
 	 * Delete all notifications
 	 *
 	 * @return DataResponse<Http::STATUS_OK, array<empty>, array{}>|DataResponse<Http::STATUS_FORBIDDEN, null, array{}>
@@ -252,6 +245,7 @@ class EndpointController extends OCSController {
 	 * 200: All notifications deleted successfully
 	 * 403: Deleting notification for impersonated user is not allowed
 	 */
+	#[NoAdminRequired]
 	public function deleteAllNotifications(): DataResponse {
 		if ($this->session->getImpersonatingUserID() !== null) {
 			return new DataResponse(null, Http::STATUS_FORBIDDEN);
@@ -274,7 +268,6 @@ class EndpointController extends OCSController {
 	/**
 	 * Get an ETag for the notification ids
 	 *
-	 * @param array $notifications
 	 * @return string
 	 */
 	protected function generateETag(array $notifications): string {
@@ -282,10 +275,6 @@ class EndpointController extends OCSController {
 	}
 
 	/**
-	 * @param int $notificationId
-	 * @param INotification $notification
-	 * @param string $apiVersion
-	 * @param bool $hasActiveTalkDesktop
 	 * @return NotificationsNotification
 	 */
 	protected function notificationToArray(int $notificationId, INotification $notification, string $apiVersion, bool $hasActiveTalkDesktop = false): array {
@@ -327,7 +316,6 @@ class EndpointController extends OCSController {
 	}
 
 	/**
-	 * @param IAction $action
 	 * @return NotificationsNotificationAction
 	 */
 	protected function actionToArray(IAction $action): array {
@@ -339,9 +327,6 @@ class EndpointController extends OCSController {
 		];
 	}
 
-	/**
-	 * @return string
-	 */
 	protected function getCurrentUser(): string {
 		$user = $this->session->getUser();
 		if ($user instanceof IUser) {

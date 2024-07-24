@@ -1,45 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="5.21.1@8c473e2437be8b6a8fd8f630f0f11a16b114c494">
+<files psalm-version="5.25.0@01a8eb06b9e9cc6cfb6a320bf9fb14331919d505">
   <file src="lib/Controller/PushController.php">
     <UndefinedClass>
-      <code>IProvider</code>
-      <code>Manager</code>
-    </UndefinedClass>
-    <UndefinedDocblockClass>
       <code><![CDATA[$this->identityProof]]></code>
       <code><![CDATA[$this->tokenProvider]]></code>
       <code><![CDATA[$this->tokenProvider]]></code>
-      <code>IProvider</code>
-      <code>Manager</code>
-    </UndefinedDocblockClass>
+      <code><![CDATA[protected]]></code>
+      <code><![CDATA[protected]]></code>
+    </UndefinedClass>
   </file>
   <file src="lib/Push.php">
     <LessSpecificReturnStatement>
-      <code>$devices</code>
-      <code>$otherDevices</code>
-      <code>$otherDevices</code>
-      <code>$talkDevices</code>
+      <code><![CDATA[$devices]]></code>
+      <code><![CDATA[$otherDevices]]></code>
+      <code><![CDATA[$otherDevices]]></code>
+      <code><![CDATA[$talkDevices]]></code>
     </LessSpecificReturnStatement>
     <MoreSpecificReturnType>
       <code><![CDATA[list<array{id: int, uid: string, token: int, deviceidentifier: string, devicepublickey: string, devicepublickeyhash: string, pushtokenhash: string, proxyserver: string, apptype: string}>]]></code>
       <code><![CDATA[list<array{id: int, uid: string, token: int, deviceidentifier: string, devicepublickey: string, devicepublickeyhash: string, pushtokenhash: string, proxyserver: string, apptype: string}>]]></code>
     </MoreSpecificReturnType>
     <UndefinedClass>
-      <code>$e</code>
-      <code>$e</code>
-      <code>ClientException</code>
-      <code>IProvider</code>
-      <code>Key</code>
-      <code>Key</code>
-      <code>Manager</code>
-      <code>ServerException</code>
+      <code><![CDATA[$e]]></code>
+      <code><![CDATA[$e]]></code>
+      <code><![CDATA[ClientException]]></code>
+      <code><![CDATA[IProvider]]></code>
+      <code><![CDATA[Key]]></code>
+      <code><![CDATA[Key]]></code>
+      <code><![CDATA[Manager]]></code>
+      <code><![CDATA[ServerException]]></code>
     </UndefinedClass>
     <UndefinedDocblockClass>
       <code><![CDATA[$this->keyManager]]></code>
       <code><![CDATA[$this->keyManager]]></code>
       <code><![CDATA[$this->tokenProvider]]></code>
-      <code>IProvider</code>
-      <code>Manager</code>
+      <code><![CDATA[IProvider]]></code>
+      <code><![CDATA[Manager]]></code>
     </UndefinedDocblockClass>
   </file>
 </files>

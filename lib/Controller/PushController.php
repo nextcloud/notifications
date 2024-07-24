@@ -32,35 +32,16 @@ use OCP\IUserSession;
  */
 #[OpenAPI(scope: 'push')]
 class PushController extends OCSController {
-	/** @var IDBConnection */
-	private $db;
-
-	/** @var ISession */
-	private $session;
-
-	/** @var IUserSession */
-	private $userSession;
-
-	/** @var IProvider */
-	private $tokenProvider;
-
-	/** @var Manager */
-	private $identityProof;
-
-	public function __construct(string $appName,
+	public function __construct(
+		string $appName,
 		IRequest $request,
-		IDBConnection $db,
-		ISession $session,
-		IUserSession $userSession,
-		IProvider $tokenProvider,
-		Manager $identityProof) {
+		protected IDBConnection $db,
+		protected ISession $session,
+		protected IUserSession $userSession,
+		protected IProvider $tokenProvider,
+		protected Manager $identityProof,
+	) {
 		parent::__construct($appName, $request);
-
-		$this->db = $db;
-		$this->session = $session;
-		$this->userSession = $userSession;
-		$this->tokenProvider = $tokenProvider;
-		$this->identityProof = $identityProof;
 	}
 
 	/**
@@ -180,13 +161,6 @@ class PushController extends OCSController {
 	}
 
 	/**
-	 * @param IUser $user
-	 * @param IToken $token
-	 * @param string $deviceIdentifier
-	 * @param string $devicePublicKey
-	 * @param string $pushTokenHash
-	 * @param string $proxyServer
-	 * @param string $appType
 	 * @return bool If the hash was new to the database
 	 */
 	protected function savePushToken(IUser $user, IToken $token, string $deviceIdentifier, string $devicePublicKey, string $pushTokenHash, string $proxyServer, string $appType): bool {
@@ -210,13 +184,6 @@ class PushController extends OCSController {
 	}
 
 	/**
-	 * @param IUser $user
-	 * @param IToken $token
-	 * @param string $deviceIdentifier
-	 * @param string $devicePublicKey
-	 * @param string $pushTokenHash
-	 * @param string $proxyServer
-	 * @param string $appType
 	 * @return bool If the entry was created
 	 */
 	protected function insertPushToken(IUser $user, IToken $token, string $deviceIdentifier, string $devicePublicKey, string $pushTokenHash, string $proxyServer, string $appType): bool {
@@ -238,12 +205,6 @@ class PushController extends OCSController {
 	}
 
 	/**
-	 * @param IUser $user
-	 * @param IToken $token
-	 * @param string $devicePublicKey
-	 * @param string $pushTokenHash
-	 * @param string $proxyServer
-	 * @param string $appType
 	 * @return bool If the entry was updated
 	 */
 	protected function updatePushToken(IUser $user, IToken $token, string $devicePublicKey, string $pushTokenHash, string $proxyServer, string $appType): bool {
@@ -263,8 +224,6 @@ class PushController extends OCSController {
 	}
 
 	/**
-	 * @param IUser $user
-	 * @param IToken $token
 	 * @return bool If the entry was deleted
 	 */
 	protected function deletePushToken(IUser $user, IToken $token): bool {
@@ -277,8 +236,6 @@ class PushController extends OCSController {
 	}
 
 	/**
-	 * @param IUser $user
-	 * @param string $pushTokenHash
 	 * @return bool If the entry was deleted
 	 */
 	protected function deletePushTokenByHash(IUser $user, string $pushTokenHash): bool {

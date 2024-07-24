@@ -20,27 +20,14 @@ use OCP\IUserManager;
 use OCP\Notification\IManager;
 
 class APIController extends OCSController {
-	/** @var ITimeFactory */
-	protected $timeFactory;
-
-	/** @var IUserManager */
-	protected $userManager;
-
-	/** @var IManager */
-	protected $notificationManager;
-
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		ITimeFactory $timeFactory,
-		IUserManager $userManager,
-		IManager $notificationManager,
+		protected ITimeFactory $timeFactory,
+		protected IUserManager $userManager,
+		protected IManager $notificationManager,
 	) {
 		parent::__construct($appName, $request);
-
-		$this->timeFactory = $timeFactory;
-		$this->userManager = $userManager;
-		$this->notificationManager = $notificationManager;
 	}
 
 	/**
