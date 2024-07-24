@@ -7,6 +7,7 @@ import { emit } from '@nextcloud/event-bus'
 import { loadState } from '@nextcloud/initial-state'
 import { generateFilePath } from '@nextcloud/router'
 import { Howl } from 'howler'
+import BrowserStorage from './BrowserStorage.js'
 
 /**
  * Create a browser notification
@@ -59,14 +60,26 @@ const createWebNotification = (notification) => {
 const playNotificationSound = (notification) => {
 	if (notification.app === 'spreed' && notification.objectType === 'call') {
 		if (loadState('notifications', 'sound_talk')) {
-			const sound = new Howl({
-				src: [
-					generateFilePath('notifications', 'img', 'talk.ogg'),
-				],
+			const howlPayload = {
+				src: [generateFilePath('notifications', 'img', 'talk.ogg')],
+				html5: true, // to access HTMLAudioElement property 'sinkId'
 				volume: 0.5,
-			})
-
+			}
+			const sound = new Howl(howlPayload)
+			const primaryDeviceId = sound._sounds[0]._node.sinkId ?? ''
 			sound.play()
+
+			const secondarySpeakerEnabled = BrowserStorage.getItem('secondary_speaker') === 'true'
+			const secondaryDeviceId = JSON.parse(BrowserStorage.getItem('secondary_speaker_device'))?.id ?? null
+			// Play only if secondary device is enabled, selected and different from primary device
+			if (secondarySpeakerEnabled && secondaryDeviceId && primaryDeviceId !== secondaryDeviceId) {
+				const soundDuped = new Howl(howlPayload)
+				const audioElement = sound._sounds[0]._node // Access the underlying HTMLAudioElement
+				audioElement.setSinkId?.(secondaryDeviceId)
+					.then(() => console.debug('Audio output successfully redirected to secondary speaker'))
+					.catch((error) => console.error('Failed to redirect audio output:', error))
+				soundDuped.play()
+			}
 		}
 	} else if (loadState('notifications', 'sound_notification')) {
 		const sound = new Howl({
