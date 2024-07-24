@@ -17,7 +17,7 @@
 				name="notification_reminder_batchtime"
 				class="notification-frequency__select"
 				@change="updateSettings()">
-				<option v-for="option in batchtime_options" :key="option.value" :value="option.value">
+				<option v-for="option in BATCHTIME_OPTIONS" :key="option.value" :value="option.value">
 					{{ option.text }}
 				</option>
 			</select>
@@ -31,16 +31,42 @@
 			@update:checked="updateSettings">
 			{{ t('notifications', 'Play sound when a call started (requires Nextcloud Talk)') }}
 		</NcCheckboxRadioSwitch>
+
+		<template v-if="config.sound_talk">
+			<NcCheckboxRadioSwitch class="additional-margin-top"
+				:checked.sync="storage.secondary_speaker"
+				:disabled="isSafari"
+				@update:checked="updateLocalSettings">
+				{{ t('notifications', 'Also repeat sound on a secondary speaker') }}
+			</NcCheckboxRadioSwitch>
+			<div v-if="isSafari" class="notification-frequency__warning">
+				<strong>{{ t('notifications', 'Selection of the speaker device is currently not supported by Safari') }}</strong>
+			</div>
+			<NcSelect v-if="!isSafari && storage.secondary_speaker"
+				v-model="storage.secondary_speaker_device"
+				input-id="device-selector-audio-output"
+				:options="devices"
+				label="label"
+				:aria-label-combobox="t('notifications', 'Select a device')"
+				:clearable="false"
+				:placeholder="t('notifications', 'Select a device')"
+				@open="initializeDevices"
+				@input="updateLocalSettings" />
+		</template>
 	</NcSettingsSection>
 </template>
 
 <script>
+import UAParser from 'ua-parser-js'
+import { reactive, ref } from 'vue'
 import axios from '@nextcloud/axios'
 import { generateOcsUrl } from '@nextcloud/router'
 import { loadState } from '@nextcloud/initial-state'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
+import NcSelect from '@nextcloud/vue/dist/Components/NcSelect.js'
 import NcSettingsSection from '@nextcloud/vue/dist/Components/NcSettingsSection.js'
+import BrowserStorage from '../services/BrowserStorage.js'
 
 const EmailFrequency = {
 	EMAIL_SEND_OFF: 0,
@@ -49,24 +75,40 @@ const EmailFrequency = {
 	EMAIL_SEND_DAILY: 3,
 	EMAIL_SEND_WEEKLY: 4,
 }
+const BATCHTIME_OPTIONS = [
+	{ text: t('notifications', 'Never'), value: EmailFrequency.EMAIL_SEND_OFF },
+	{ text: t('notifications', '1 hour'), value: EmailFrequency.EMAIL_SEND_HOURLY },
+	{ text: t('notifications', '3 hours'), value: EmailFrequency.EMAIL_SEND_3HOURLY },
+	{ text: t('notifications', '1 day'), value: EmailFrequency.EMAIL_SEND_DAILY },
+	{ text: t('notifications', '1 week'), value: EmailFrequency.EMAIL_SEND_WEEKLY },
+]
+const EMPTY_DEVICE_OPTION = { id: null, label: t('notifications', 'None') }
+const parser = new UAParser()
+const browser = parser.getBrowser()
+const isSafari = browser.name === 'Safari' || browser.name === 'Mobile Safari'
 
 export default {
 	name: 'UserSettings',
 	components: {
 		NcCheckboxRadioSwitch,
+		NcSelect,
 		NcSettingsSection,
 	},
 
-	data() {
+	setup() {
+		const config = reactive(loadState('notifications', 'config'))
+		const storage = reactive({
+			secondary_speaker: BrowserStorage.getItem('secondary_speaker') === 'true',
+			secondary_speaker_device: JSON.parse(BrowserStorage.getItem('secondary_speaker_device')) ?? EMPTY_DEVICE_OPTION,
+		})
+		const devices = ref([])
+
 		return {
-			batchtime_options: [
-				{ text: t('notifications', 'Never'), value: EmailFrequency.EMAIL_SEND_OFF },
-				{ text: t('notifications', '1 hour'), value: EmailFrequency.EMAIL_SEND_HOURLY },
-				{ text: t('notifications', '3 hours'), value: EmailFrequency.EMAIL_SEND_3HOURLY },
-				{ text: t('notifications', '1 day'), value: EmailFrequency.EMAIL_SEND_DAILY },
-				{ text: t('notifications', '1 week'), value: EmailFrequency.EMAIL_SEND_WEEKLY },
-			],
-			config: loadState('notifications', 'config'),
+			BATCHTIME_OPTIONS,
+			isSafari,
+			config,
+			storage,
+			devices,
 		}
 	},
 
@@ -84,7 +126,56 @@ export default {
 				console.error(error)
 			}
 		},
+
+		updateLocalSettings() {
+			try {
+				BrowserStorage.setItem('secondary_speaker', this.storage.secondary_speaker)
+				if (this.storage.secondary_speaker && this.storage.secondary_speaker_device.id) {
+					BrowserStorage.setItem('secondary_speaker_device', JSON.stringify(this.storage.secondary_speaker_device))
+				} else {
+					BrowserStorage.removeItem('secondary_speaker_device')
+				}
+				showSuccess(t('notifications', 'Your settings have been updated.'))
+			} catch (error) {
+				showError(t('notifications', 'An error occurred while updating your settings.'))
+				console.error(error)
+			}
+		},
+
+		async initializeDevices() {
+			const isAudioSupported = !isSafari && navigator?.mediaDevices?.getUserMedia && navigator?.mediaDevices?.enumerateDevices
+			if (!isAudioSupported || this.devices.length > 0) {
+				return
+			}
+
+			let stream = null
+			try {
+				// Request permissions to get audio devices
+				stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+				// Enumerate devices and populate NcSelect options
+				this.devices = (await navigator.mediaDevices.enumerateDevices() ?? [])
+					.filter(device => device.kind === 'audiooutput')
+					.map(device => ({
+						id: device.deviceId,
+						label: device.label ? device.label : device.fallbackLabel,
+					}))
+					.concat([EMPTY_DEVICE_OPTION])
+			} catch (error) {
+				showError(t('notifications', 'An error occurred while updating your settings.'))
+				console.error('Error while requesting or initializing audio devices: ', error)
+			} finally {
+				if (stream) {
+					stream.getTracks().forEach(track => track.stop())
+				}
+			}
+		},
 	},
 }
 
 </script>
+
+<style lang="scss" scoped>
+.additional-margin-top {
+	margin-top: 12px;
+}
+</style>
