@@ -268,7 +268,6 @@ class EndpointController extends OCSController {
 	/**
 	 * Get an ETag for the notification ids
 	 *
-	 * @param array $notifications
 	 * @return string
 	 */
 	protected function generateETag(array $notifications): string {
@@ -276,10 +275,6 @@ class EndpointController extends OCSController {
 	}
 
 	/**
-	 * @param int $notificationId
-	 * @param INotification $notification
-	 * @param string $apiVersion
-	 * @param bool $hasActiveTalkDesktop
 	 * @return NotificationsNotification
 	 */
 	protected function notificationToArray(int $notificationId, INotification $notification, string $apiVersion, bool $hasActiveTalkDesktop = false): array {
@@ -321,7 +316,6 @@ class EndpointController extends OCSController {
 	}
 
 	/**
-	 * @param IAction $action
 	 * @return NotificationsNotificationAction
 	 */
 	protected function actionToArray(IAction $action): array {
@@ -333,9 +327,6 @@ class EndpointController extends OCSController {
 		];
 	}
 
-	/**
-	 * @return string
-	 */
 	protected function getCurrentUser(): string {
 		$user = $this->session->getUser();
 		if ($user instanceof IUser) {

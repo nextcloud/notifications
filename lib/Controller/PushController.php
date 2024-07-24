@@ -161,13 +161,6 @@ class PushController extends OCSController {
 	}
 
 	/**
-	 * @param IUser $user
-	 * @param IToken $token
-	 * @param string $deviceIdentifier
-	 * @param string $devicePublicKey
-	 * @param string $pushTokenHash
-	 * @param string $proxyServer
-	 * @param string $appType
 	 * @return bool If the hash was new to the database
 	 */
 	protected function savePushToken(IUser $user, IToken $token, string $deviceIdentifier, string $devicePublicKey, string $pushTokenHash, string $proxyServer, string $appType): bool {
@@ -191,13 +184,6 @@ class PushController extends OCSController {
 	}
 
 	/**
-	 * @param IUser $user
-	 * @param IToken $token
-	 * @param string $deviceIdentifier
-	 * @param string $devicePublicKey
-	 * @param string $pushTokenHash
-	 * @param string $proxyServer
-	 * @param string $appType
 	 * @return bool If the entry was created
 	 */
 	protected function insertPushToken(IUser $user, IToken $token, string $deviceIdentifier, string $devicePublicKey, string $pushTokenHash, string $proxyServer, string $appType): bool {
@@ -219,12 +205,6 @@ class PushController extends OCSController {
 	}
 
 	/**
-	 * @param IUser $user
-	 * @param IToken $token
-	 * @param string $devicePublicKey
-	 * @param string $pushTokenHash
-	 * @param string $proxyServer
-	 * @param string $appType
 	 * @return bool If the entry was updated
 	 */
 	protected function updatePushToken(IUser $user, IToken $token, string $devicePublicKey, string $pushTokenHash, string $proxyServer, string $appType): bool {
@@ -244,8 +224,6 @@ class PushController extends OCSController {
 	}
 
 	/**
-	 * @param IUser $user
-	 * @param IToken $token
 	 * @return bool If the entry was deleted
 	 */
 	protected function deletePushToken(IUser $user, IToken $token): bool {
@@ -258,8 +236,6 @@ class PushController extends OCSController {
 	}
 
 	/**
-	 * @param IUser $user
-	 * @param string $pushTokenHash
 	 * @return bool If the entry was deleted
 	 */
 	protected function deletePushTokenByHash(IUser $user, string $pushTokenHash): bool {
