@@ -11,32 +11,17 @@ namespace OCA\Notifications\Settings;
 
 use OCA\Notifications\AppInfo\Application;
 use OCA\Notifications\Model\Settings;
-use OCA\Notifications\Model\SettingsMapper;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Services\IInitialState;
 use OCP\IConfig;
-use OCP\IL10N;
-use OCP\IUserSession;
 use OCP\Settings\ISettings;
 use OCP\Util;
 
 class Admin implements ISettings {
-	protected IConfig $config;
-	protected IL10N $l10n;
-	private SettingsMapper $settingsMapper;
-	private IUserSession $session;
-	private IInitialState $initialState;
-
-	public function __construct(IConfig        $config,
-		IL10N          $l10n,
-		IUserSession   $session,
-		SettingsMapper $settingsMapper,
-		IInitialState  $initialState) {
-		$this->config = $config;
-		$this->l10n = $l10n;
-		$this->settingsMapper = $settingsMapper;
-		$this->session = $session;
-		$this->initialState = $initialState;
+	public function __construct(
+		protected IConfig $config,
+		protected IInitialState $initialState,
+	) {
 	}
 
 	public function getForm(): TemplateResponse {
@@ -46,11 +31,11 @@ class Admin implements ISettings {
 		$defaultSoundTalk = $this->config->getAppValue(Application::APP_ID, 'sound_talk') === 'yes' ? 'yes' : 'no';
 		$defaultBatchtime = (int) $this->config->getAppValue(Application::APP_ID, 'setting_batchtime');
 
-		if ($defaultBatchtime != Settings::EMAIL_SEND_WEEKLY
-			&& $defaultBatchtime != Settings::EMAIL_SEND_DAILY
-			&& $defaultBatchtime != Settings::EMAIL_SEND_3HOURLY
-			&& $defaultBatchtime != Settings::EMAIL_SEND_HOURLY
-			&& $defaultBatchtime != Settings::EMAIL_SEND_OFF) {
+		if ($defaultBatchtime !== Settings::EMAIL_SEND_WEEKLY
+			&& $defaultBatchtime !== Settings::EMAIL_SEND_DAILY
+			&& $defaultBatchtime !== Settings::EMAIL_SEND_3HOURLY
+			&& $defaultBatchtime !== Settings::EMAIL_SEND_HOURLY
+			&& $defaultBatchtime !== Settings::EMAIL_SEND_OFF) {
 			$defaultBatchtime = Settings::EMAIL_SEND_3HOURLY;
 		}
 
