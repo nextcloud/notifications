@@ -12,6 +12,7 @@ namespace OCA\Notifications\Controller;
 use OCA\Notifications\AppInfo\Application;
 use OCA\Notifications\Model\SettingsMapper;
 use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\OpenAPI;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
@@ -35,8 +36,6 @@ class SettingsController extends OCSController {
 	}
 
 	/**
-	 * @NoAdminRequired
-	 *
 	 * Update personal notification settings
 	 *
 	 * @param int $batchSetting How often E-mails about missed notifications should be sent (hourly: 1; every three hours: 2; daily: 3; weekly: 4)
@@ -46,6 +45,7 @@ class SettingsController extends OCSController {
 	 *
 	 * 200: Personal settings updated
 	 */
+	#[NoAdminRequired]
 	#[OpenAPI]
 	public function personal(int $batchSetting, string $soundNotification, string $soundTalk): DataResponse {
 		$this->settingsMapper->setBatchSettingForUser($this->userId, $batchSetting);
