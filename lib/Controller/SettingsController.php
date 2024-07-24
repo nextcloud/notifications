@@ -52,8 +52,6 @@ class SettingsController extends OCSController {
 	}
 
 	/**
-	 * @AuthorizedAdminSetting(settings=OCA\Notifications\Settings\Admin)
-	 *
 	 * Update default notification settings for new users
 	 *
 	 * @param int $batchSetting How often E-mails about missed notifications should be sent (hourly: 1; every three hours: 2; daily: 3; weekly: 4)
