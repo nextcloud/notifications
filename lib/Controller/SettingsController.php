@@ -20,19 +20,14 @@ use OCP\IConfig;
 use OCP\IRequest;
 
 class SettingsController extends OCSController {
-	protected IConfig $config;
-	protected SettingsMapper $settingsMapper;
-	protected string $userId;
-
-	public function __construct(string $appName,
+	public function __construct(
+		string $appName,
 		IRequest $request,
-		IConfig $config,
-		SettingsMapper $settingsMapper,
-		string $userId) {
+		protected IConfig $config,
+		protected SettingsMapper $settingsMapper,
+		protected string $userId,
+	) {
 		parent::__construct($appName, $request);
-		$this->config = $config;
-		$this->settingsMapper = $settingsMapper;
-		$this->userId = $userId;
 	}
 
 	/**

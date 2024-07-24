@@ -32,35 +32,16 @@ use OCP\IUserSession;
  */
 #[OpenAPI(scope: 'push')]
 class PushController extends OCSController {
-	/** @var IDBConnection */
-	private $db;
-
-	/** @var ISession */
-	private $session;
-
-	/** @var IUserSession */
-	private $userSession;
-
-	/** @var IProvider */
-	private $tokenProvider;
-
-	/** @var Manager */
-	private $identityProof;
-
-	public function __construct(string $appName,
+	public function __construct(
+		string $appName,
 		IRequest $request,
-		IDBConnection $db,
-		ISession $session,
-		IUserSession $userSession,
-		IProvider $tokenProvider,
-		Manager $identityProof) {
+		protected IDBConnection $db,
+		protected ISession $session,
+		protected IUserSession $userSession,
+		protected IProvider $tokenProvider,
+		protected Manager $identityProof,
+	) {
 		parent::__construct($appName, $request);
-
-		$this->db = $db;
-		$this->session = $session;
-		$this->userSession = $userSession;
-		$this->tokenProvider = $tokenProvider;
-		$this->identityProof = $identityProof;
 	}
 
 	/**
