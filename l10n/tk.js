@@ -6,6 +6,7 @@ OC.L10N.register(
     "Dismiss" : "Ýapmak.",
     "seconds ago" : "Sekunt öň",
     "No notifications" : "Duýduryş ýok",
-    "1 hour" : "1 sagat"
+    "1 hour" : "1 sagat",
+    "None" : "Hiç"
 },
 "nplurals=2; plural=(n != 1);");

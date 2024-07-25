@@ -36,6 +36,7 @@ OC.L10N.register(
     "1 week" : "1 săptămână",
     "Your settings have been updated." : "Setările dvs. au fost actualizate.",
     "An error occurred while updating your settings." : "A apărut o eroare la actualizarea setărilor.",
-    "You need to set up your email address before you can receive notification emails." : "Trebuie să-ți configurezi adresa de email înainte de a putea primi emailurile de notificare."
+    "You need to set up your email address before you can receive notification emails." : "Trebuie să-ți configurezi adresa de email înainte de a putea primi emailurile de notificare.",
+    "None" : "Niciuna"
 },
 "nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));");

@@ -35,6 +35,7 @@ OC.L10N.register(
     "1 week" : "1 недела",
     "Your settings have been updated." : "Вашите параметри се ажурирани.",
     "An error occurred while updating your settings." : "Настана грешка при обидот за ажурирање на параметрите.",
-    "You need to set up your email address before you can receive notification emails." : "Треба да ја внесете Вашата адреса на е-пошта за да можете да примате известувања по електронска пошта."
+    "You need to set up your email address before you can receive notification emails." : "Треба да ја внесете Вашата адреса на е-пошта за да можете да примате известувања по електронска пошта.",
+    "None" : "Ништо"
 },
 "nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;");

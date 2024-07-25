@@ -35,6 +35,7 @@ OC.L10N.register(
     "1 week" : "1 week",
     "Your settings have been updated." : "تنظیمات شما به روز رسانی شد",
     "An error occurred while updating your settings." : "An error occurred while updating your settings.",
-    "You need to set up your email address before you can receive notification emails." : "قبل از دریافت ایمیل های هشدار می بایست ادرس ایمیل خود را تنظیم کنید"
+    "You need to set up your email address before you can receive notification emails." : "قبل از دریافت ایمیل های هشدار می بایست ادرس ایمیل خود را تنظیم کنید",
+    "None" : "هیچ‌کدام"
 },
 "nplurals=2; plural=(n > 1);");

@@ -18,6 +18,7 @@ OC.L10N.register(
     "1 day" : "1 jorn",
     "1 week" : "1 setmana",
     "Your settings have been updated." : "Paramètres actualizats.",
-    "An error occurred while updating your settings." : "Una error s’es producha pendent l’actualizacion dels paramètres."
+    "An error occurred while updating your settings." : "Una error s’es producha pendent l’actualizacion dels paramètres.",
+    "None" : "Cap"
 },
 "nplurals=2; plural=(n > 1);");

@@ -35,6 +35,8 @@
     "1 week" : "1 semana",
     "Your settings have been updated." : "Suas configurações foram atualizadas.",
     "An error occurred while updating your settings." : "Ocorreu um erro ao atualizar suas configurações.",
-    "You need to set up your email address before you can receive notification emails." : "Você precisa configurar seu endereço de e-mail antes de receber e-mails de notificação."
+    "You need to set up your email address before you can receive notification emails." : "Você precisa configurar seu endereço de e-mail antes de receber e-mails de notificação.",
+    "Select a device" : "Selecione um dispositivo",
+    "None" : "Nenhum"
 },"pluralForm" :"nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }
