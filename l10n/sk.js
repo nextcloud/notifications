@@ -37,6 +37,8 @@ OC.L10N.register(
     "1 week" : "1 týždeň",
     "Your settings have been updated." : "Vaše nastavenia boli aktualizované.",
     "An error occurred while updating your settings." : "Nastala chyba počas ukladania nastavení.",
-    "You need to set up your email address before you can receive notification emails." : "Ak chcete dostávať oznámenia emailom, musíte najskôr vyplniť vašu emailovú adresu."
+    "You need to set up your email address before you can receive notification emails." : "Ak chcete dostávať oznámenia emailom, musíte najskôr vyplniť vašu emailovú adresu.",
+    "Select a device" : "Vyberte zariadenie",
+    "None" : "Žiadne"
 },
 "nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);");

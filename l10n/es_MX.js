@@ -37,6 +37,7 @@ OC.L10N.register(
     "1 week" : "1 semana",
     "Your settings have been updated." : "Tus configuraciones se han actualizado.",
     "An error occurred while updating your settings." : "Ocurrió un error al actualizar la configuración.",
-    "You need to set up your email address before you can receive notification emails." : "Necesitas configurar tu dirección de correo electrónico antes de que puedas recibir correos de notificación"
+    "You need to set up your email address before you can receive notification emails." : "Necesitas configurar tu dirección de correo electrónico antes de que puedas recibir correos de notificación",
+    "None" : "Ninguno"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

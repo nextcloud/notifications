@@ -10,6 +10,7 @@ OC.L10N.register(
     "1 hour" : "1 n usrag",
     "1 day" : "1 n wass",
     "Your settings have been updated." : "Iɣewwaren-innek ttwaleqqmen",
-    "You need to set up your email address before you can receive notification emails." : "Ilaq ad tesɣewreḍ tansa imayl iwakken ad tizmireḍ ad teṭṭfeḍ talɣut s imayl."
+    "You need to set up your email address before you can receive notification emails." : "Ilaq ad tesɣewreḍ tansa imayl iwakken ad tizmireḍ ad teṭṭfeḍ talɣut s imayl.",
+    "None" : "Ula d yiwen"
 },
 "nplurals=2; plural=(n != 1);");

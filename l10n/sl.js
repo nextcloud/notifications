@@ -37,6 +37,8 @@ OC.L10N.register(
     "1 week" : "po 1 tednu",
     "Your settings have been updated." : "Nastavitve so posodobljene.",
     "An error occurred while updating your settings." : "Prišlo je do napake med posodabljanjem nastavitev.",
-    "You need to set up your email address before you can receive notification emails." : "Za prejemanje obvestil po elektronski pošti je treba najprej nastaviti elektronski poštni naslov."
+    "You need to set up your email address before you can receive notification emails." : "Za prejemanje obvestil po elektronski pošti je treba najprej nastaviti elektronski poštni naslov.",
+    "Select a device" : "Izbor naprave",
+    "None" : "Brez"
 },
 "nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);");

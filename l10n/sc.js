@@ -22,6 +22,7 @@ OC.L10N.register(
     "1 day" : "1 die",
     "1 week" : "1 chida",
     "Your settings have been updated." : "Cunfiguratzione atualizada.",
-    "You need to set up your email address before you can receive notification emails." : "Deves impostare s'indiritzu de posta eletrònica tuo pro retzire is messàgios de notìfica."
+    "You need to set up your email address before you can receive notification emails." : "Deves impostare s'indiritzu de posta eletrònica tuo pro retzire is messàgios de notìfica.",
+    "None" : "Perunu"
 },
 "nplurals=2; plural=(n != 1);");

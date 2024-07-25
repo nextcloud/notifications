@@ -34,6 +34,7 @@ OC.L10N.register(
     "1 week" : "1 week",
     "Your settings have been updated." : "Je instellingen zijn bijgewerkt.",
     "An error occurred while updating your settings." : "Fout opgetreden bij het updaten van je instellingen.",
-    "You need to set up your email address before you can receive notification emails." : "Je moet je e-mailadres instellen voor je meldingse-mails kunt ontvangen."
+    "You need to set up your email address before you can receive notification emails." : "Je moet je e-mailadres instellen voor je meldingse-mails kunt ontvangen.",
+    "None" : "Geen"
 },
 "nplurals=2; plural=(n != 1);");

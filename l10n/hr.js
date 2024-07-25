@@ -28,6 +28,7 @@ OC.L10N.register(
     "1 week" : "1 tjedan",
     "Your settings have been updated." : "Vaše su postavke ažurirane.",
     "An error occurred while updating your settings." : "Došlo je do pogreške pri ažuriranju postavki.",
-    "You need to set up your email address before you can receive notification emails." : "Morate navesti svoju adresu e-pošte kako biste primali poruke s obavijestima."
+    "You need to set up your email address before you can receive notification emails." : "Morate navesti svoju adresu e-pošte kako biste primali poruke s obavijestima.",
+    "None" : "Nema"
 },
 "nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;");

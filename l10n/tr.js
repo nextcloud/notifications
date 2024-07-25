@@ -37,6 +37,8 @@ OC.L10N.register(
     "1 week" : "1 hafta",
     "Your settings have been updated." : "Ayarlarınız güncellendi.",
     "An error occurred while updating your settings." : "Ayarlarınız güncellenirken bir sorun çıktı.",
-    "You need to set up your email address before you can receive notification emails." : "Bildirim e-postalarını alabilmek için e-posta adresinizi belirtmelisiniz."
+    "You need to set up your email address before you can receive notification emails." : "Bildirim e-postalarını alabilmek için e-posta adresinizi belirtmelisiniz.",
+    "Select a device" : "Bir aygıt seçin",
+    "None" : "Yok"
 },
 "nplurals=2; plural=(n > 1);");

@@ -32,6 +32,7 @@
     "1 week" : "1 tuần",
     "Your settings have been updated." : "Các thiết lập của bạn vừa được cập nhật",
     "An error occurred while updating your settings." : "Đã xảy ra lỗi khi cập nhật cài đặt của bạn.",
-    "You need to set up your email address before you can receive notification emails." : "Bạn cần phải thiết lập địa chỉ email trước khi nhận được email thông báo."
+    "You need to set up your email address before you can receive notification emails." : "Bạn cần phải thiết lập địa chỉ email trước khi nhận được email thông báo.",
+    "None" : "Không có"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

@@ -37,6 +37,8 @@ OC.L10N.register(
     "1 week" : "1 個星期",
     "Your settings have been updated." : "您的設定已更新。",
     "An error occurred while updating your settings." : "更新設置時發生錯誤",
-    "You need to set up your email address before you can receive notification emails." : "您必須先設定電郵地址，才能接收通知。"
+    "You need to set up your email address before you can receive notification emails." : "您必須先設定電郵地址，才能接收通知。",
+    "Select a device" : "選取裝置",
+    "None" : "無"
 },
 "nplurals=1; plural=0;");

@@ -35,6 +35,7 @@ OC.L10N.register(
     "1 week" : "1 εβδομάδα",
     "Your settings have been updated." : "Οι ρυθμίσεις σας έχουν ενημερωθεί.",
     "An error occurred while updating your settings." : "Παρουσιάστηκε σφάλμα κατά την ενημέρωση των ρυθμίσεών σας.",
-    "You need to set up your email address before you can receive notification emails." : "Πρέπει να ρυθμίσετε τη διεύθυνση email σας για να μπορείτε να λαμβάνετε μηνύματα ηλεκτρονικού ταχυδρομείου ειδοποίησης."
+    "You need to set up your email address before you can receive notification emails." : "Πρέπει να ρυθμίσετε τη διεύθυνση email σας για να μπορείτε να λαμβάνετε μηνύματα ηλεκτρονικού ταχυδρομείου ειδοποίησης.",
+    "None" : "Καμμία"
 },
 "nplurals=2; plural=(n != 1);");

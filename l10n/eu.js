@@ -37,6 +37,7 @@ OC.L10N.register(
     "1 week" : "Aste 1",
     "Your settings have been updated." : "Zure ezarpenak eguneratu dira.",
     "An error occurred while updating your settings." : "Errore bat gertatu da ezarpenak eguneratzean.",
-    "You need to set up your email address before you can receive notification emails." : "Zure helbide elektronikoa konfiguratu behar duzu jakinarazpenak posta elektronikoz jasotzeko."
+    "You need to set up your email address before you can receive notification emails." : "Zure helbide elektronikoa konfiguratu behar duzu jakinarazpenak posta elektronikoz jasotzeko.",
+    "None" : "Bat ere ez"
 },
 "nplurals=2; plural=(n != 1);");

@@ -15,6 +15,7 @@ OC.L10N.register(
     "1 day" : "1 hari",
     "1 week" : "1 minggu",
     "Your settings have been updated." : "Pengaturan Anda telah diperbarui.",
-    "You need to set up your email address before you can receive notification emails." : "Anda perlu menyetel alamat surel sebelum Anda dapat menerima surel pemberitahuan."
+    "You need to set up your email address before you can receive notification emails." : "Anda perlu menyetel alamat surel sebelum Anda dapat menerima surel pemberitahuan.",
+    "None" : "Tidak ada"
 },
 "nplurals=1; plural=0;");
