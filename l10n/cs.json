@@ -35,6 +35,7 @@
     "1 week" : "1 týdne",
     "Your settings have been updated." : "Vaše nastavení byla aktualizována.",
     "An error occurred while updating your settings." : "Při aktualizaci vašich nastavení došlo k chybě.",
-    "You need to set up your email address before you can receive notification emails." : "Pokud chcete dostávat upozornění e-mailem, je třeba nejprve nastavit svou e-mailovou adresu."
+    "You need to set up your email address before you can receive notification emails." : "Pokud chcete dostávat upozornění e-mailem, je třeba nejprve nastavit svou e-mailovou adresu.",
+    "None" : "Žádná"
 },"pluralForm" :"nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;"
 }

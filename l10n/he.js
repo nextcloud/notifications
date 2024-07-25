@@ -24,6 +24,7 @@ OC.L10N.register(
     "3 hours" : "3 שעות",
     "1 day" : "יום",
     "Your settings have been updated." : "ההגדרות שלך עודכנו",
-    "You need to set up your email address before you can receive notification emails." : "יש להגדיר כתובת דואר אלקטרוני לפני שניתן יהיה לקבל דיווחים."
+    "You need to set up your email address before you can receive notification emails." : "יש להגדיר כתובת דואר אלקטרוני לפני שניתן יהיה לקבל דיווחים.",
+    "None" : "ללא"
 },
 "nplurals=3; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: 2;");

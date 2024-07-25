@@ -32,6 +32,8 @@ OC.L10N.register(
     "1 week" : "1 viikko",
     "Your settings have been updated." : "Asetukset on päivitetty.",
     "An error occurred while updating your settings." : "Asetuksia tallentaessa tapahtui virhe.",
-    "You need to set up your email address before you can receive notification emails." : "Aseta sähköpostiosoite, jotta voit vastaanottaa sähköposti-ilmoituksia."
+    "You need to set up your email address before you can receive notification emails." : "Aseta sähköpostiosoite, jotta voit vastaanottaa sähköposti-ilmoituksia.",
+    "Select a device" : "Valitse laite",
+    "None" : "Ei mitään"
 },
 "nplurals=2; plural=(n != 1);");

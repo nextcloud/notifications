@@ -35,6 +35,7 @@ OC.L10N.register(
     "1 week" : "1 hét múlva",
     "Your settings have been updated." : "A beállításai frissítve lettek.",
     "An error occurred while updating your settings." : "Hiba történt a beállítások frissítése során.",
-    "You need to set up your email address before you can receive notification emails." : "Be kell állítania az e-mail-címét, mielőtt értesítési leveleket kaphatna."
+    "You need to set up your email address before you can receive notification emails." : "Be kell állítania az e-mail-címét, mielőtt értesítési leveleket kaphatna.",
+    "None" : "Egyik sem"
 },
 "nplurals=2; plural=(n != 1);");
