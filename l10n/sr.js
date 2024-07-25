@@ -37,6 +37,8 @@ OC.L10N.register(
     "1 week" : "1 недеље",
     "Your settings have been updated." : "Ваше поставке су ажуриране.",
     "An error occurred while updating your settings." : "Јавила се грешка током ажурирања ваших подешавања.",
-    "You need to set up your email address before you can receive notification emails." : "Морате поставити адресу е-поште пре почетка пријема обавештења."
+    "You need to set up your email address before you can receive notification emails." : "Морате поставити адресу е-поште пре почетка пријема обавештења.",
+    "Select a device" : "Изаберите уређај",
+    "None" : "Ништа"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);");

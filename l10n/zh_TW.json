@@ -35,6 +35,8 @@
     "1 week" : "1週",
     "Your settings have been updated." : "您的設定已更新。",
     "An error occurred while updating your settings." : "更新您的設定時發生錯誤。",
-    "You need to set up your email address before you can receive notification emails." : "在您開始接收通知電子郵件前，您必須先設定您的電子郵件地址。"
+    "You need to set up your email address before you can receive notification emails." : "在您開始接收通知電子郵件前，您必須先設定您的電子郵件地址。",
+    "Select a device" : "選取裝置",
+    "None" : "無"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

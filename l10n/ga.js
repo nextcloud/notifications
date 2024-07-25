@@ -37,6 +37,8 @@ OC.L10N.register(
     "1 week" : "1 seachtain",
     "Your settings have been updated." : "Nuashonraíodh do shocruithe.",
     "An error occurred while updating your settings." : "Tharla earráid agus do shocruithe á nuashonrú.",
-    "You need to set up your email address before you can receive notification emails." : "Ní mór duit do sheoladh ríomhphoist a shocrú sula mbeidh tú in ann ríomhphoist fógra a fháil."
+    "You need to set up your email address before you can receive notification emails." : "Ní mór duit do sheoladh ríomhphoist a shocrú sula mbeidh tú in ann ríomhphoist fógra a fháil.",
+    "Select a device" : "Roghnaigh gléas",
+    "None" : "aon cheann"
 },
 "nplurals=5; plural=(n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n<11 ? 3 : 4);");

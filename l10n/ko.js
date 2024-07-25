@@ -34,6 +34,8 @@ OC.L10N.register(
     "1 week" : "1주",
     "Your settings have been updated." : "설정이 업데이트되었습니다.",
     "An error occurred while updating your settings." : "설정을 갱신하는 중 오류 발생",
-    "You need to set up your email address before you can receive notification emails." : "알림 이메일을 받으려면 이메일 주소를 설정해야 합니다."
+    "You need to set up your email address before you can receive notification emails." : "알림 이메일을 받으려면 이메일 주소를 설정해야 합니다.",
+    "Select a device" : "장치 선택",
+    "None" : "없음"
 },
 "nplurals=1; plural=0;");

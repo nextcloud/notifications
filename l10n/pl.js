@@ -37,6 +37,7 @@ OC.L10N.register(
     "1 week" : "1 tydzień",
     "Your settings have been updated." : "Twoje ustawienia zostały zaktualizowane.",
     "An error occurred while updating your settings." : "Wystąpił błąd podczas aktualizowania ustawień.",
-    "You need to set up your email address before you can receive notification emails." : "Aby otrzymywać powiadomienia e-mail, musisz skonfigurować swój adres e-mail."
+    "You need to set up your email address before you can receive notification emails." : "Aby otrzymywać powiadomienia e-mail, musisz skonfigurować swój adres e-mail.",
+    "None" : "Brak"
 },
 "nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);");

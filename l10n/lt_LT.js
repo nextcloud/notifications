@@ -26,6 +26,7 @@ OC.L10N.register(
     "1 week" : "1 savaitės",
     "Your settings have been updated." : "Jūsų nustatymai atnaujinti.",
     "An error occurred while updating your settings." : "Atnaujinant nustatymus, įvyko klaida.",
-    "You need to set up your email address before you can receive notification emails." : "Prieš galėdami gauti pranešimus el. laiškais, turite nusistatyti el. pašto adresą."
+    "You need to set up your email address before you can receive notification emails." : "Prieš galėdami gauti pranešimus el. laiškais, turite nusistatyti el. pašto adresą.",
+    "None" : "Nėra"
 },
 "nplurals=4; plural=(n % 10 == 1 && (n % 100 > 19 || n % 100 < 11) ? 0 : (n % 10 >= 2 && n % 10 <=9) && (n % 100 > 19 || n % 100 < 11) ? 1 : n % 1 != 0 ? 2: 3);");
