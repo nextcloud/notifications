@@ -38,6 +38,8 @@ OC.L10N.register(
     "Your settings have been updated." : "Dina inställningar har uppdaterats.",
     "An error occurred while updating your settings." : "Ett fel inträffade vid uppdatering av dina inställningar.",
     "You need to set up your email address before you can receive notification emails." : "Du måste ställa in din e-postadress innan du kan ta emot notifikationer via e-post.",
+    "Also repeat sound on a secondary speaker" : "Upprepa även ljudet på en sekundär högtalare",
+    "Selection of the speaker device is currently not supported by Safari" : "Val av högtalarenhet stöds för närvarande inte av Safari",
     "Select a device" : "Välj en enhet",
     "None" : "Ingen"
 },

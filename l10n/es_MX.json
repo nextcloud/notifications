@@ -36,6 +36,9 @@
     "Your settings have been updated." : "Tus configuraciones se han actualizado.",
     "An error occurred while updating your settings." : "Ocurrió un error al actualizar la configuración.",
     "You need to set up your email address before you can receive notification emails." : "Necesitas configurar tu dirección de correo electrónico antes de que puedas recibir correos de notificación",
+    "Also repeat sound on a secondary speaker" : "Repetir el sonido también en un altavoz secundario",
+    "Selection of the speaker device is currently not supported by Safari" : "La selección del dispositivo altavoz no está actualmente soportada por Safari",
+    "Select a device" : "Seleccionar un dispositivo",
     "None" : "Ninguno"
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }
