@@ -38,6 +38,8 @@ OC.L10N.register(
     "Your settings have been updated." : "您的設定已更新。",
     "An error occurred while updating your settings." : "更新設置時發生錯誤",
     "You need to set up your email address before you can receive notification emails." : "您必須先設定電郵地址，才能接收通知。",
+    "Also repeat sound on a secondary speaker" : "在輔助喇叭上重複播放聲音",
+    "Selection of the speaker device is currently not supported by Safari" : "Safari 目前不支持選擇喇叭設備",
     "Select a device" : "選取裝置",
     "None" : "無"
 },
