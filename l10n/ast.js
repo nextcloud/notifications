@@ -37,6 +37,7 @@ OC.L10N.register(
     "1 week" : "1 selmana",
     "Your settings have been updated." : "Anovóse la configuración.",
     "An error occurred while updating your settings." : "Prodúxose un error mentanto s'anovaba la configuración.",
-    "You need to set up your email address before you can receive notification emails." : "Tienes de configurar una direición de corréu electrónicu enantes de poder recibir mensaxes d'avisu."
+    "You need to set up your email address before you can receive notification emails." : "Tienes de configurar una direición de corréu electrónicu enantes de poder recibir mensaxes d'avisu.",
+    "None" : "Nada"
 },
 "nplurals=2; plural=(n != 1);");
