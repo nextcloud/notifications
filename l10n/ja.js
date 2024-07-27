@@ -38,6 +38,8 @@ OC.L10N.register(
     "Your settings have been updated." : "設定を更新しました。",
     "An error occurred while updating your settings." : "設定の更新中にエラーが発生しました。",
     "You need to set up your email address before you can receive notification emails." : "通知メールを受け取る前にメールアドレスを設定してください。",
+    "Also repeat sound on a secondary speaker" : "セカンダリスピーカーでも音をリピートする",
+    "Selection of the speaker device is currently not supported by Safari" : "スピーカーデバイスの選択は現在Safariではサポートされていません",
     "Select a device" : "デバイスを選択する",
     "None" : "なし"
 },
