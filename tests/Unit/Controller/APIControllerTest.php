@@ -6,6 +6,7 @@
 
 namespace OCA\Notifications\Tests\Unit\Controller;
 
+use OCA\Notifications\App;
 use OCA\Notifications\Controller\APIController;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
@@ -14,7 +15,11 @@ use OCP\IRequest;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\Notification\IManager;
+use OCP\Notification\IncompleteNotificationException;
 use OCP\Notification\INotification;
+use OCP\RichObjectStrings\IValidator;
+use PHPUnit\Framework\MockObject\MockObject;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class APIControllerTest
@@ -23,14 +28,14 @@ use OCP\Notification\INotification;
  * @group DB
  */
 class APIControllerTest extends \Test\TestCase {
-	/** @var ITimeFactory|\PHPUnit_Framework_MockObject_MockObject */
-	protected $timeFactory;
-	/** @var IUserManager|\PHPUnit_Framework_MockObject_MockObject */
-	protected $userManager;
-	/** @var IManager|\PHPUnit_Framework_MockObject_MockObject */
-	protected $notificationManager;
-	/** @var APIController */
-	protected $controller;
+	protected ITimeFactory&MockObject $timeFactory;
+	protected IUserManager&MockObject $userManager;
+	protected IManager&MockObject $notificationManager;
+	protected App&MockObject $notificationApp;
+	protected IValidator&MockObject $richValidator;
+	protected LoggerInterface&MockObject $logger;
+
+	protected APIController $controller;
 
 	protected function setUp(): void {
 		parent::setUp();
@@ -40,13 +45,19 @@ class APIControllerTest extends \Test\TestCase {
 		$this->timeFactory = $this->createMock(ITimeFactory::class);
 		$this->userManager = $this->createMock(IUserManager::class);
 		$this->notificationManager = $this->createMock(IManager::class);
+		$this->notificationApp = $this->createMock(App::class);
+		$this->richValidator = $this->createMock(IValidator::class);
+		$this->logger = $this->createMock(LoggerInterface::class);
 
 		$this->controller = new APIController(
 			'notifications',
 			$request,
 			$this->timeFactory,
 			$this->userManager,
-			$this->notificationManager
+			$this->notificationManager,
+			$this->notificationApp,
+			$this->richValidator,
+			$this->logger,
 		);
 	}
 
@@ -114,12 +125,12 @@ class APIControllerTest extends \Test\TestCase {
 				->willReturnSelf();
 			$n->expects($this->once())
 				->method('setSubject')
-				->with('ocs', [$short])
+				->with('ocs', ['subject' => $short, 'parameters' => []])
 				->willReturnSelf();
 			if ($validLong) {
 				$n->expects($this->once())
 					->method('setMessage')
-					->with('ocs', [$long])
+					->with('ocs', ['message' => $long, 'parameters' => []])
 					->willReturnSelf();
 			} else {
 				$n->expects($this->never())
@@ -140,7 +151,7 @@ class APIControllerTest extends \Test\TestCase {
 			} elseif ($notifyThrows === true) {
 				$this->notificationManager->expects($this->once())
 					->method('notify')
-					->willThrowException(new \InvalidArgumentException());
+					->willThrowException(new IncompleteNotificationException());
 			}
 		}
 

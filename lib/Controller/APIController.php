@@ -20,6 +20,7 @@ use OCP\IRequest;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\Notification\IManager;
+use OCP\Notification\IncompleteNotificationException;
 use OCP\Notification\InvalidValueException;
 use OCP\RichObjectStrings\InvalidObjectExeption;
 use OCP\RichObjectStrings\IValidator;
@@ -144,7 +145,7 @@ class APIController extends OCSController {
 		} catch (InvalidObjectExeption $e) {
 			$this->logger->error('Invalid rich object parameter provided: ' . $e->getMessage(), ['exception' => $e]);
 			return new DataResponse(['error' => 'parameters'], Http::STATUS_BAD_REQUEST);
-		} catch (InvalidValueException $e) {
+		} catch (InvalidValueException|IncompleteNotificationException $e) {
 			$this->logger->error('Invalid value for notification provided: ' . $e->getMessage(), ['exception' => $e]);
 			return new DataResponse(['error' => $e->getMessage()], Http::STATUS_BAD_REQUEST);
 		}
