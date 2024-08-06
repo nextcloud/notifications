@@ -10,6 +10,36 @@ declare(strict_types=1);
 namespace OCA\Notifications;
 
 /**
+ * @psalm-type NotificationsRichObjectParameter = array{
+ *     type: string,
+ *     id: string,
+ *     name: string,
+ *     server?: string,
+ *     link?: string,
+ *     'call-type'?: 'one2one'|'group'|'public',
+ *     'icon-url'?: string,
+ *     'message-id'?: string,
+ *     boardname?: string,
+ *     stackname?: string,
+ *     size?: string,
+ *     path?: string,
+ *     mimetype?: string,
+ *     'preview-available'?: 'yes'|'no',
+ *     mtime?: string,
+ *     latitude?: string,
+ *     longitude?: string,
+ *     description?: string,
+ *     thumb?: string,
+ *     website?: string,
+ *     visibility?: '0'|'1',
+ *     assignable?: '0'|'1',
+ *     conversation?: string,
+ *     etag?: string,
+ *     permissions?: string,
+ *     width?: string,
+ *     height?: string,
+ * }
+ *
  * @psalm-type NotificationsNotificationAction = array{
  *     label: string,
  *     link: string,
@@ -29,9 +59,9 @@ namespace OCA\Notifications;
  *     link: string,
  *     actions: NotificationsNotificationAction[],
  *     subjectRich?: string,
- *     subjectRichParameters?: array<string, mixed>,
+ *     subjectRichParameters?: array<string, NotificationsRichObjectParameter>,
  *     messageRich?: string,
- *     messageRichParameters?: array<string, mixed>,
+ *     messageRichParameters?: array<string, NotificationsRichObjectParameter>,
  *     icon?: string,
  *     shouldNotify?: bool,
  * }

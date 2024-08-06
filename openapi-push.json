@@ -117,34 +117,36 @@
                         "basic_auth": []
                     }
                 ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "pushTokenHash",
+                                    "devicePublicKey",
+                                    "proxyServer"
+                                ],
+                                "properties": {
+                                    "pushTokenHash": {
+                                        "type": "string",
+                                        "description": "Hash of the push token"
+                                    },
+                                    "devicePublicKey": {
+                                        "type": "string",
+                                        "description": "Public key of the device"
+                                    },
+                                    "proxyServer": {
+                                        "type": "string",
+                                        "description": "Proxy server to be used"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
                 "parameters": [
-                    {
-                        "name": "pushTokenHash",
-                        "in": "query",
-                        "description": "Hash of the push token",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "devicePublicKey",
-                        "in": "query",
-                        "description": "Public key of the device",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "proxyServer",
-                        "in": "query",
-                        "description": "Proxy server to be used",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
                     {
                         "name": "apiVersion",
                         "in": "path",
