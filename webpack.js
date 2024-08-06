@@ -3,8 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 const webpackConfig = require('@nextcloud/webpack-vue-config')
-// eslint-disable-next-line n/no-extraneous-require
-const TerserPlugin = require('terser-webpack-plugin')
+const { EsbuildPlugin } = require('esbuild-loader')
 const WebpackSPDXPlugin = require('./build-js/WebpackSPDXPlugin.js')
 const webpackRules = require('@nextcloud/webpack-vue-config/rules')
 const path = require('path')
@@ -27,14 +26,11 @@ webpackConfig.entry = {
 	'admin-settings': path.resolve(path.join('src', 'adminSettings.js')),
 }
 
-webpackConfig.optimization.minimizer = [new TerserPlugin({
-	extractComments: false,
-	terserOptions: {
-		format: {
-			comments: false,
-		},
-	},
-})]
+webpackConfig.optimization.minimizer = [
+	new EsbuildPlugin({
+		target: 'es2020',
+	})
+]
 
 webpackConfig.plugins = [
 	...webpackConfig.plugins,
