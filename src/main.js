@@ -14,11 +14,6 @@ Vue.prototype.n = n
 Vue.prototype.OC = OC
 Vue.prototype.OCA = OCA
 
-// eslint-disable-next-line
-__webpack_nonce__ = btoa(OC.requestToken);
-// eslint-disable-next-line
-__webpack_public_path__ = OC.linkTo('notifications', 'js/');
-
 export default new Vue({
 	el: '#notifications',
 	// eslint-disable-next-line vue/match-component-file-name
