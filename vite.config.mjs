@@ -20,5 +20,6 @@ export default createAppConfig({
 		overwriteLicenses: {
 			'@nextcloud/axios': 'GPL-3.0-or-later',
 		},
+		includeSourceMaps: true,
 	},
 })
