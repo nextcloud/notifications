@@ -1,0 +1,15 @@
+SPDX-License-Identifier: AGPL-3.0-only
+SPDX-License-Identifier: MIT
+SPDX-FileCopyrightText: Faisal Salman <f@faisalman.com> (http://faisalman.com)
+SPDX-FileCopyrightText: Joas Schilling <coding@schilljs.com>
+
+This file is generated from multiple sources. Included packages:
+- notifications
+	- version: 3.0.0
+	- license: AGPL-3.0-only
+- ua-parser-js
+	- version: 1.0.38
+	- license: MIT
+- ua-parser-js
+	- version: 1.0.38
+	- license: MIT
