@@ -7,7 +7,6 @@
   "private": true,
   "scripts": {
     "build": "vite build",
-    "postbuild": "build-js/npm-post-build.sh",
     "dev": "vite build --mode development",
     "watch": "vite build --mode development --watch",
     "lint": "eslint --ext .js,.vue src",
