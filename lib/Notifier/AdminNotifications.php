@@ -176,10 +176,22 @@ class AdminNotifications implements INotifier {
 			case 'cli':
 			case 'ocs':
 				$subjectParams = $notification->getSubjectParameters();
-				$notification->setParsedSubject($subjectParams[0]);
+				if (isset($subjectParams['subject'])) {
+					// Nextcloud 30+
+					$notification->setRichSubject($subjectParams['subject'], $subjectParams['parameters']);
+				} else {
+					// Legacy before Nextcloud 30 (v3)
+					$notification->setParsedSubject($subjectParams[0]);
+				}
 				$messageParams = $notification->getMessageParameters();
-				if (isset($messageParams[0]) && $messageParams[0] !== '') {
-					$notification->setParsedMessage($messageParams[0]);
+				if (!empty($messageParams)) {
+					if (!empty($messageParams['message'])) {
+						// Nextcloud 30+
+						$notification->setRichMessage($messageParams['message'], $messageParams['parameters']);
+					} elseif (!empty($messageParams[0])) {
+						// Legacy before Nextcloud 30 (v3)
+						$notification->setParsedMessage($messageParams[0]);
+					}
 				}
 
 				$notification->setIcon($this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('notifications', 'notifications-dark.svg')));

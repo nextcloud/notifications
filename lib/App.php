@@ -17,6 +17,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class App implements IDeferrableApp {
+	protected ?int $lastInsertedId = null;
 	public function __construct(
 		protected Handler $handler,
 		protected Push $push,
@@ -33,13 +34,17 @@ class App implements IDeferrableApp {
 	 * @since 8.2.0
 	 */
 	public function notify(INotification $notification): void {
-		$notificationId = $this->handler->add($notification);
+		$this->lastInsertedId = $this->handler->add($notification);
 
 		try {
-			$this->push->pushToDevice($notificationId, $notification);
+			$this->push->pushToDevice($this->lastInsertedId, $notification);
 		} catch (NotificationNotFoundException $e) {
 			$this->logger->error('Error while preparing push notification', ['exception' => $e]);
 		}
+	}
+
+	public function getLastInsertedId(): ?int {
+		return $this->lastInsertedId;
 	}
 
 	/**
