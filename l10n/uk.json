@@ -36,6 +36,9 @@
     "Your settings have been updated." : "Налаштування успішно оновлено.",
     "An error occurred while updating your settings." : "Під час оновлення налаштувань сталася помилка.",
     "You need to set up your email address before you can receive notification emails." : "Для отримання повідомлень зазначте електронну адресу в особистих налаштуваннях.",
+    "Also repeat sound on a secondary speaker" : "Також повторювати звук на другорядному динаміку",
+    "Selection of the speaker device is currently not supported by Safari" : "Вибір динаміку зараз не підтримується у Safari",
+    "Select a device" : "Вибрати пристрій",
     "None" : "Нічого"
 },"pluralForm" :"nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);"
 }
