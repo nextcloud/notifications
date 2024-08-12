@@ -12,8 +12,8 @@
     "watch": "vite build --mode development --watch",
     "lint": "eslint --ext .js,.vue src",
     "lint:fix": "eslint --ext .js,.vue src --fix",
-    "stylelint": "stylelint css/*.css css/*.scss src/**/*.scss src/**/*.vue",
-    "stylelint:fix": "stylelint css/*.css css/*.scss src/**/*.scss src/**/*.vue --fix"
+    "stylelint": "stylelint src/**/*.scss src/**/*.vue",
+    "stylelint:fix": "stylelint src/**/*.scss src/**/*.vue --fix"
   },
   "dependencies": {
     "@nextcloud/auth": "^2.3.0",
