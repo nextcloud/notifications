@@ -54,6 +54,7 @@ class Personal implements ISettings {
 	 * @return TemplateResponse
 	 */
 	public function getForm(): TemplateResponse {
+		Util::addStyle('notifications', 'notifications-settings');
 		Util::addScript('notifications', 'notifications-settings');
 
 		/** @var IUser $user */
