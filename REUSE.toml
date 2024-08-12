@@ -12,7 +12,7 @@ SPDX-FileCopyrightText = "2016 Nextcloud GmbH and Nextcloud and ownCloud contrib
 SPDX-License-Identifier = "AGPL-3.0-or-later"
 
 [[annotations]]
-path = ["js/**.js", "js/**.js.map"]
+path = ["js/**.mjs", "js/**.mjs.map"]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2016 Nextcloud GmbH and Nextcloud contributors"
 SPDX-License-Identifier = "AGPL-3.0-or-later"
