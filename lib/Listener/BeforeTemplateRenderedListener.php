@@ -85,6 +85,7 @@ class BeforeTemplateRenderedListener implements IEventListener {
 			!$this->notificationManager->isFairUseOfFreePushService()
 		);
 
+		Util::addStyle('notifications', 'notifications-main');
 		Util::addScript('notifications', 'notifications-main');
 	}
 }
