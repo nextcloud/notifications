@@ -37,6 +37,7 @@ OC.L10N.register(
     "1 week" : "1 setmana",
     "Your settings have been updated." : "S'han actualitzat els paràmetres.",
     "An error occurred while updating your settings." : "S'ha produït un error en actualitzar els paràmetres.",
-    "You need to set up your email address before you can receive notification emails." : "Heu de configurar la vostra adreça electrònica per a poder rebre notificacions per correu electrònic."
+    "You need to set up your email address before you can receive notification emails." : "Heu de configurar la vostra adreça electrònica per a poder rebre notificacions per correu electrònic.",
+    "None" : "Només una vegada"
 },
 "nplurals=2; plural=(n != 1);");
