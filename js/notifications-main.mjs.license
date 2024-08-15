@@ -3,5 +3,5 @@ SPDX-FileCopyrightText: Joas Schilling <coding@schilljs.com>
 
 This file is generated from multiple sources. Included packages:
 - notifications
-	- version: 3.0.0
+	- version: 4.0.0
 	- license: AGPL-3.0-only
