@@ -17,7 +17,7 @@ version: 0.2.0
 license: BSD-2-Clause
 
 @nextcloud/auth
-version: 2.3.0
+version: 2.4.0
 license: GPL-3.0-or-later
 
 @nextcloud/axios
