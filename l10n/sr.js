@@ -38,6 +38,8 @@ OC.L10N.register(
     "Your settings have been updated." : "Ваше поставке су ажуриране.",
     "An error occurred while updating your settings." : "Јавила се грешка током ажурирања ваших подешавања.",
     "You need to set up your email address before you can receive notification emails." : "Морате поставити адресу е-поште пре почетка пријема обавештења.",
+    "Also repeat sound on a secondary speaker" : "Такође пуштај звук и на секундарном звучнику",
+    "Selection of the speaker device is currently not supported by Safari" : "Safari тренутно не подржава избор уређаја секундарног звучника",
     "Select a device" : "Изаберите уређај",
     "None" : "Ништа"
 },
