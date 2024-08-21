@@ -1227,7 +1227,7 @@
                                     },
                                     "subjectParameters": {
                                         "type": "object",
-                                        "default": [],
+                                        "default": {},
                                         "description": "Rich objects to fill the subject placeholders, {@see \\OCP\\RichObjectStrings\\Definitions}",
                                         "additionalProperties": {
                                             "$ref": "#/components/schemas/RichObjectParameter"
@@ -1235,7 +1235,7 @@
                                     },
                                     "messageParameters": {
                                         "type": "object",
-                                        "default": [],
+                                        "default": {},
                                         "description": "Rich objects to fill the message placeholders, {@see \\OCP\\RichObjectStrings\\Definitions}",
                                         "additionalProperties": {
                                             "$ref": "#/components/schemas/RichObjectParameter"
