@@ -27,7 +27,7 @@
     "Configure the default notification settings for new users" : "Yeni kullanıcılar için varsayılan bildirim ayarlarını yapılandırın",
     "Send email reminders about unhandled notifications after:" : "Şu kadar zaman sonra işlenmeyen bildirimler için e-posta anımsatıcıları gönderilsin:",
     "Play sound when a new notification arrives" : "Bildirimlerde ses çalınsın",
-    "Play sound when a call started (requires Nextcloud Talk)" : "Bir çağrı başlatıldığında ses çalınsın (Nextcloud Talk gereklidir)",
+    "Play sound when a call started (requires Nextcloud Talk)" : "Bir çağrı başlatıldığında ses çalınsın (Nextcloud Konuş gereklidir)",
     "Never" : "Asla",
     "1 hour" : "1 saat",
     "3 hours" : "3 saat",
