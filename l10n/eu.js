@@ -38,6 +38,9 @@ OC.L10N.register(
     "Your settings have been updated." : "Zure ezarpenak eguneratu dira.",
     "An error occurred while updating your settings." : "Errore bat gertatu da ezarpenak eguneratzean.",
     "You need to set up your email address before you can receive notification emails." : "Zure helbide elektronikoa konfiguratu behar duzu jakinarazpenak posta elektronikoz jasotzeko.",
+    "Also repeat sound on a secondary speaker" : "Errepikatu soinua bigarren mailako bozgorailu batean ere",
+    "Selection of the speaker device is currently not supported by Safari" : "Safari-k ez du onartzen bozgorailuaren gailua hautatzea",
+    "Select a device" : "Hautatu gailu bat",
     "None" : "Bat ere ez"
 },
 "nplurals=2; plural=(n != 1);");
