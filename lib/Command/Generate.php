@@ -99,7 +99,7 @@ class Generate extends Command {
 
 			$subjectTitle = 'cli';
 		} else {
-			$subject = (int) $subject;
+			$subject = (int)$subject;
 			$subjectTitle = 'dummy';
 		}
 
