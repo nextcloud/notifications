@@ -59,7 +59,7 @@ class Handler {
 		$this->sqlWhere($sql, $notification);
 
 		$statement = $sql->executeQuery();
-		$count = (int) $statement->fetchOne();
+		$count = (int)$statement->fetchOne();
 		$statement->closeCursor();
 
 		return $count;
@@ -87,10 +87,10 @@ class Handler {
 			}
 
 			$deleted[$row['user']][] = [
-				'id' => (int) $row['notification_id'],
+				'id' => (int)$row['notification_id'],
 				'app' => $row['app'],
 			];
-			$notifications[(int) $row['notification_id']] = $this->notificationFromRow($row);
+			$notifications[(int)$row['notification_id']] = $this->notificationFromRow($row);
 		}
 		$statement->closeCursor();
 
@@ -159,7 +159,7 @@ class Handler {
 		$sql->delete('notifications')
 			->where($sql->expr()->eq('notification_id', $sql->createNamedParameter($id)))
 			->andWhere($sql->expr()->eq('user', $sql->createNamedParameter($user)));
-		return (bool) $sql->executeStatement();
+		return (bool)$sql->executeStatement();
 	}
 
 	/**
@@ -220,7 +220,7 @@ class Handler {
 
 		$existing = [];
 		while ($row = $result->fetch()) {
-			$existing[] = (int) $row['notification_id'];
+			$existing[] = (int)$row['notification_id'];
 		}
 		$result->closeCursor();
 
@@ -366,17 +366,17 @@ class Handler {
 	 */
 	protected function notificationFromRow(array $row): INotification {
 		$dateTime = new \DateTime();
-		$dateTime->setTimestamp((int) $row['timestamp']);
+		$dateTime->setTimestamp((int)$row['timestamp']);
 
 		$notification = $this->manager->createNotification();
 		$notification->setApp($row['app'])
 			->setUser($row['user'])
 			->setDateTime($dateTime)
 			->setObject($row['object_type'], $row['object_id'])
-			->setSubject($row['subject'], (array) json_decode($row['subject_parameters'], true));
+			->setSubject($row['subject'], (array)json_decode($row['subject_parameters'], true));
 
 		if ($row['message'] !== '' && $row['message'] !== null) {
-			$notification->setMessage($row['message'], (array) json_decode($row['message_parameters'], true));
+			$notification->setMessage($row['message'], (array)json_decode($row['message_parameters'], true));
 		}
 		if ($row['link'] !== '' && $row['link'] !== null) {
 			$notification->setLink($row['link']);
@@ -385,7 +385,7 @@ class Handler {
 			$notification->setIcon($row['icon']);
 		}
 
-		$actions = (array) json_decode($row['actions'], true);
+		$actions = (array)json_decode($row['actions'], true);
 		foreach ($actions as $actionData) {
 			$action = $notification->createAction();
 			$action->setLabel($actionData['label'])

@@ -181,7 +181,7 @@ class Push {
 
 		if (!empty($this->deleteAllsToPush)) {
 			foreach ($this->deleteAllsToPush as $userId => $bool) {
-				$this->pushDeleteToDevice((string) $userId, null);
+				$this->pushDeleteToDevice((string)$userId, null);
 			}
 			$this->deleteAllsToPush = [];
 		}
@@ -190,10 +190,10 @@ class Push {
 			foreach ($this->deletesToPush as $userId => $data) {
 				foreach ($data as $client => $notificationIds) {
 					if ($client === 'talk') {
-						$this->pushDeleteToDevice((string) $userId, $notificationIds, $client);
+						$this->pushDeleteToDevice((string)$userId, $notificationIds, $client);
 					} else {
 						foreach ($notificationIds as $notificationId) {
-							$this->pushDeleteToDevice((string) $userId, [$notificationId], $client);
+							$this->pushDeleteToDevice((string)$userId, [$notificationId], $client);
 						}
 					}
 				}
@@ -318,7 +318,7 @@ class Push {
 		$maxAge = time() - 60 * 24 * 60 * 60;
 
 		foreach ($devices as $device) {
-			$device['token'] = (int) $device['token'];
+			$device['token'] = (int)$device['token'];
 			$this->printInfo('');
 			$this->printInfo('Device token:' . $device['token']);
 
@@ -411,7 +411,7 @@ class Push {
 
 		$userKey = $this->keyManager->getKey($user);
 		foreach ($devices as $device) {
-			$device['token'] = (int) $device['token'];
+			$device['token'] = (int)$device['token'];
 			if (!$this->validateToken($device['token'], $maxAge)) {
 				// Token does not exist anymore
 				continue;
@@ -488,7 +488,7 @@ class Push {
 
 				$response = $client->post($proxyServer . '/notifications', $requestData);
 				$status = $response->getStatusCode();
-				$body = (string) $response->getBody();
+				$body = (string)$response->getBody();
 				try {
 					$bodyData = json_decode($body, true);
 				} catch (\JsonException $e) {
@@ -544,7 +544,7 @@ class Push {
 				}
 			} elseif ($status !== Http::STATUS_OK) {
 				if ($status === Http::STATUS_TOO_MANY_REQUESTS) {
-					$this->config->setAppValue(Application::APP_ID, 'rate_limit_reached', (string) $this->timeFactory->getTime());
+					$this->config->setAppValue(Application::APP_ID, 'rate_limit_reached', (string)$this->timeFactory->getTime());
 				}
 				$error = $body && $bodyData === null ? $body : 'no reason given';
 				$this->printInfo('Could not send notification to push server [' . $proxyServer . ']: ' . $error);

@@ -63,7 +63,7 @@ class AdminNotifications implements INotifier {
 		switch ($notification->getSubject()) {
 			case 'dummy':
 				$subjectParams = $notification->getSubjectParameters();
-				$numActions = (int) $subjectParams[0];
+				$numActions = (int)$subjectParams[0];
 
 				$user = $this->userManager->get($notification->getUser());
 				assert($user instanceof IUser);

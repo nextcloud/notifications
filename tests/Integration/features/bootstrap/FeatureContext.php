@@ -121,11 +121,11 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	 */
 	public function checkNumNotifications(int $numNotifications) {
 		$notifications = $this->getArrayOfNotificationsResponded($this->response);
-		Assert::assertCount((int) $numNotifications, $notifications);
+		Assert::assertCount((int)$numNotifications, $notifications);
 
 		$notificationIds = [];
 		foreach ($notifications as $notification) {
-			$notificationIds[] = (int) $notification['notification_id'];
+			$notificationIds[] = (int)$notification['notification_id'];
 		}
 
 		$this->notificationIds[] = $notificationIds;
@@ -182,7 +182,7 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 			$previousNotificationIds = end($this->notificationIds);
 		}
 
-		$this->checkNumNotifications((int) $numNotifications);
+		$this->checkNumNotifications((int)$numNotifications);
 
 		if ($missingLast) {
 			$now = end($this->notificationIds);

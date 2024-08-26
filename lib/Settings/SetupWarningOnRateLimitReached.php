@@ -42,7 +42,7 @@ class SetupWarningOnRateLimitReached implements ISetupCheck {
 	 * @inheritDoc
 	 */
 	public function run(): SetupResult {
-		$lastReached = (int) $this->config->getAppValue(Application::APP_ID, 'rate_limit_reached', '0');
+		$lastReached = (int)$this->config->getAppValue(Application::APP_ID, 'rate_limit_reached', '0');
 		if ($lastReached < ($this->timeFactory->getTime() - 7 * 24 * 3600)) {
 			return SetupResult::success();
 		}

@@ -150,6 +150,6 @@ class APIController extends OCSController {
 			return new DataResponse(['error' => $e->getMessage()], Http::STATUS_BAD_REQUEST);
 		}
 
-		return new DataResponse(['id' => (int) $this->notificationApp->getLastInsertedId()]);
+		return new DataResponse(['id' => (int)$this->notificationApp->getLastInsertedId()]);
 	}
 }

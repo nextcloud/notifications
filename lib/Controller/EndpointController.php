@@ -196,7 +196,7 @@ class EndpointController extends OCSController {
 		}
 
 		$ids = array_unique(array_filter(array_map(
-			static fn ($id) => is_numeric($id) ? (int) $id : 0,
+			static fn ($id) => is_numeric($id) ? (int)$id : 0,
 			$ids
 		)));
 
@@ -333,6 +333,6 @@ class EndpointController extends OCSController {
 			$user = $user->getUID();
 		}
 
-		return (string) $user;
+		return (string)$user;
 	}
 }

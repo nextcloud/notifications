@@ -63,7 +63,7 @@ class SettingsController extends OCSController {
 	 */
 	#[OpenAPI(scope: OpenAPI::SCOPE_ADMINISTRATION)]
 	public function admin(int $batchSetting, string $soundNotification, string $soundTalk): DataResponse {
-		$this->config->setAppValue(Application::APP_ID, 'setting_batchtime', (string) $batchSetting);
+		$this->config->setAppValue(Application::APP_ID, 'setting_batchtime', (string)$batchSetting);
 		$this->config->setAppValue(Application::APP_ID, 'sound_notification', $soundNotification !== 'no' ? 'yes' : 'no');
 		$this->config->setAppValue(Application::APP_ID, 'sound_talk', $soundTalk !== 'no' ? 'yes' : 'no');
 
