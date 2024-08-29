@@ -45,6 +45,8 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	/** @var string[] */
 	protected $appPasswords;
 
+	use CommandLineTrait;
+
 	/**
 	 * FeatureContext constructor.
 	 */
