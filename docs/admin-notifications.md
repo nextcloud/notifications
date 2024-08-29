@@ -10,11 +10,22 @@ Allows admins to generate notifications for users via the console or an HTTP end
 
 ```
 $ sudo -u www-data ./occ notification:generate \
-  admin "Short message up to 255 characters" \
-  -l "Optional: longer message with more details, up to 4000 characters"
+  'admin' 'Short message up to 255 characters' \
+  -l 'Optional: longer message with more details, up to 4000 characters'
 ```
 
 ### Help
+
+> [!TIP]
+> Specify an object type and object id to delete previous notifications about
+> the same thing,e.g. when the notification is about an update for "LibX" to
+> version "12", use `--object-type='update' --object-id='libx'`, so that a later
+> notification for version "13" can automatically dismiss the notification for
+> version "12" if it was not removed in the meantime.
+
+> [!TIP]
+> Specify the `--output-id-only` option and store it to later be able to delete
+> the generated notification using the `notification:delete` command.
 
 ```
 $ sudo -u www-data ./occ notification:generate --help
@@ -22,12 +33,16 @@ Usage:
   notification:generate [options] [--] <user-id> <short-message>
 
 Arguments:
-  user-id                          User ID of the user to notify
-  short-message                    Short message to be sent to the user (max. 255 characters)
+  user-id                                  User ID of the user to notify
+  short-message                            Short message to be sent to the user (max. 255 characters)
 
 Options:
-  -l, --long-message=LONG-MESSAGE  Long mesage to be sent to the user (max. 4000 characters) [default: ""]
-
+      --short-parameters=SHORT-PARAMETERS  JSON encoded array of Rich objects to fill the short-message, see https://github.com/nextcloud/server/blob/master/lib/public/RichObjectStrings/Definitions.php for more information
+  -l, --long-message=LONG-MESSAGE          Long message to be sent to the user (max. 4000 characters) [default: ""]
+      --long-parameters=LONG-PARAMETERS    JSON encoded array of Rich objects to fill the long-message, see https://github.com/nextcloud/server/blob/master/lib/public/RichObjectStrings/Definitions.php for more information
+      --object-type=OBJECT-TYPE            If an object type and id is provided, previous notifications with the same type and id will be deleted for this user (max. 64 characters)
+      --object-id=OBJECT-ID                If an object type and id is provided, previous notifications with the same type and id will be deleted for this user (max. 64 characters)
+      --output-id-only                     When specified only the notification ID that was generated will be printed in case of success
 ```
 
 ## HTTP request
