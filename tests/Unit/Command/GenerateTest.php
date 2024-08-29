@@ -6,12 +6,15 @@
 
 namespace OCA\Notifications\Tests\Unit\Command;
 
+use OCA\Notifications\App;
 use OCA\Notifications\Command\Generate;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\Notification\IManager;
 use OCP\Notification\INotification;
+use OCP\RichObjectStrings\IValidator;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -22,12 +25,16 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @group DB
  */
 class GenerateTest extends \Test\TestCase {
-	/** @var ITimeFactory|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var ITimeFactory|MockObject */
 	protected $timeFactory;
-	/** @var IUserManager|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var IUserManager|MockObject */
 	protected $userManager;
-	/** @var IManager|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var IManager|MockObject */
 	protected $notificationManager;
+	/** @var IValidator|MockObject */
+	protected $richValidator;
+	/** @var App|MockObject */
+	protected $notificationApp;
 	/** @var Generate */
 	protected $command;
 
@@ -37,11 +44,15 @@ class GenerateTest extends \Test\TestCase {
 		$this->timeFactory = $this->createMock(ITimeFactory::class);
 		$this->userManager = $this->createMock(IUserManager::class);
 		$this->notificationManager = $this->createMock(IManager::class);
+		$this->richValidator = $this->createMock(IValidator::class);
+		$this->notificationApp = $this->createMock(App::class);
 
 		$this->command = new Generate(
 			$this->timeFactory,
 			$this->userManager,
-			$this->notificationManager
+			$this->notificationManager,
+			$this->richValidator,
+			$this->notificationApp,
 		);
 	}
 
@@ -139,14 +150,12 @@ class GenerateTest extends \Test\TestCase {
 		}
 
 		$input = $this->createMock(InputInterface::class);
-		$input->expects($this->exactly(2))
-			->method('getArgument')
+		$input->method('getArgument')
 			->willReturnMap([
 				['user-id', $userId],
 				['short-message', $short],
 			]);
-		$input->expects($this->exactly(2))
-			->method('getOption')
+		$input->method('getOption')
 			->willReturnMap([
 				['long-message', $long],
 				['dummy', false],
