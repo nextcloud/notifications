@@ -77,7 +77,10 @@ trait CommandLineTrait {
 	 */
 	public function invokingTheCommand(string $cmd, ?\Behat\Gherkin\Node\TableNode $table = null) {
 		if ($cmd !== 'table') {
-			$cmd = str_replace('{LAST_COMMAND_OUTPUT}', $this->lastStdOut, $cmd);
+			if (str_contains($cmd, '{LAST_COMMAND_OUTPUT}')) {
+				echo 'Replacing {LAST_COMMAND_OUTPUT} with "' . trim($this->lastStdOut) . '"';
+			}
+			$cmd = str_replace('{LAST_COMMAND_OUTPUT}', trim($this->lastStdOut), $cmd);
 			$args = explode(' ', $cmd);
 		} else {
 			$args = [];
