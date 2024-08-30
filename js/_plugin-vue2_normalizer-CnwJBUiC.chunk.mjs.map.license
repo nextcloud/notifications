@@ -28,10 +28,28 @@ This file is generated from multiple sources. Included packages:
 	- version: 0.1.10
 	- license: MIT
 - @nextcloud/auth
-	- version: 2.3.0
+	- version: 2.4.0
 	- license: GPL-3.0-or-later
 - @nextcloud/axios
 	- version: 2.5.0
+	- license: GPL-3.0-or-later
+- @nextcloud/browser-storage
+	- version: 0.4.0
+	- license: GPL-3.0-or-later
+- @nextcloud/browser-storage
+	- version: 0.4.0
+	- license: GPL-3.0-or-later
+- @nextcloud/browser-storage
+	- version: 0.4.0
+	- license: GPL-3.0-or-later
+- @nextcloud/browser-storage
+	- version: 0.4.0
+	- license: GPL-3.0-or-later
+- @nextcloud/browser-storage
+	- version: 0.4.0
+	- license: GPL-3.0-or-later
+- @nextcloud/browser-storage
+	- version: 0.4.0
 	- license: GPL-3.0-or-later
 - @nextcloud/dialogs
 	- version: 5.3.7
@@ -58,145 +76,163 @@ This file is generated from multiple sources. Included packages:
 	- version: 3.0.1
 	- license: GPL-3.0-or-later
 - @nextcloud/vue
-	- version: 8.16.0
+	- version: 8.17.0
 	- license: AGPL-3.0-or-later
 - @vueuse/core
-	- version: 10.9.0
+	- version: 11.0.3
 	- license: MIT
 - @vueuse/shared
-	- version: 10.9.0
+	- version: 11.0.3
 	- license: MIT
 - axios
-	- version: 1.6.8
+	- version: 1.7.5
 	- license: MIT
 - axios
-	- version: 1.6.8
+	- version: 1.7.5
 	- license: MIT
 - axios
-	- version: 1.6.8
+	- version: 1.7.5
 	- license: MIT
 - axios
-	- version: 1.6.8
+	- version: 1.7.5
 	- license: MIT
 - axios
-	- version: 1.6.8
+	- version: 1.7.5
 	- license: MIT
 - axios
-	- version: 1.6.8
+	- version: 1.7.5
 	- license: MIT
 - axios
-	- version: 1.6.8
+	- version: 1.7.5
 	- license: MIT
 - axios
-	- version: 1.6.8
+	- version: 1.7.5
 	- license: MIT
 - axios
-	- version: 1.6.8
+	- version: 1.7.5
 	- license: MIT
 - axios
-	- version: 1.6.8
+	- version: 1.7.5
 	- license: MIT
 - axios
-	- version: 1.6.8
+	- version: 1.7.5
 	- license: MIT
 - axios
-	- version: 1.6.8
+	- version: 1.7.5
 	- license: MIT
 - axios
-	- version: 1.6.8
+	- version: 1.7.5
 	- license: MIT
 - axios
-	- version: 1.6.8
+	- version: 1.7.5
 	- license: MIT
 - axios
-	- version: 1.6.8
+	- version: 1.7.5
 	- license: MIT
 - axios
-	- version: 1.6.8
+	- version: 1.7.5
 	- license: MIT
 - axios
-	- version: 1.6.8
+	- version: 1.7.5
 	- license: MIT
 - axios
-	- version: 1.6.8
+	- version: 1.7.5
 	- license: MIT
 - axios
-	- version: 1.6.8
+	- version: 1.7.5
 	- license: MIT
 - axios
-	- version: 1.6.8
+	- version: 1.7.5
 	- license: MIT
 - axios
-	- version: 1.6.8
+	- version: 1.7.5
 	- license: MIT
 - axios
-	- version: 1.6.8
+	- version: 1.7.5
 	- license: MIT
 - axios
-	- version: 1.6.8
+	- version: 1.7.5
 	- license: MIT
 - axios
-	- version: 1.6.8
+	- version: 1.7.5
 	- license: MIT
 - axios
-	- version: 1.6.8
+	- version: 1.7.5
 	- license: MIT
 - axios
-	- version: 1.6.8
+	- version: 1.7.5
 	- license: MIT
 - axios
-	- version: 1.6.8
+	- version: 1.7.5
 	- license: MIT
 - axios
-	- version: 1.6.8
+	- version: 1.7.5
 	- license: MIT
 - axios
-	- version: 1.6.8
+	- version: 1.7.5
 	- license: MIT
 - axios
-	- version: 1.6.8
+	- version: 1.7.5
 	- license: MIT
 - axios
-	- version: 1.6.8
+	- version: 1.7.5
 	- license: MIT
 - axios
-	- version: 1.6.8
+	- version: 1.7.5
 	- license: MIT
 - axios
-	- version: 1.6.8
+	- version: 1.7.5
 	- license: MIT
 - axios
-	- version: 1.6.8
+	- version: 1.7.5
 	- license: MIT
 - axios
-	- version: 1.6.8
+	- version: 1.7.5
 	- license: MIT
 - axios
-	- version: 1.6.8
+	- version: 1.7.5
 	- license: MIT
 - axios
-	- version: 1.6.8
+	- version: 1.7.5
 	- license: MIT
 - axios
-	- version: 1.6.8
+	- version: 1.7.5
 	- license: MIT
 - axios
-	- version: 1.6.8
+	- version: 1.7.5
 	- license: MIT
 - axios
-	- version: 1.6.8
+	- version: 1.7.5
 	- license: MIT
 - axios
-	- version: 1.6.8
+	- version: 1.7.5
 	- license: MIT
 - axios
-	- version: 1.6.8
+	- version: 1.7.5
 	- license: MIT
 - axios
-	- version: 1.6.8
+	- version: 1.7.5
 	- license: MIT
 - axios
-	- version: 1.6.8
+	- version: 1.7.5
+	- license: MIT
+- axios
+	- version: 1.7.5
+	- license: MIT
+- axios
+	- version: 1.7.5
+	- license: MIT
+- axios
+	- version: 1.7.5
+	- license: MIT
+- axios
+	- version: 1.7.5
+	- license: MIT
+- axios
+	- version: 1.7.5
+	- license: MIT
+- axios
+	- version: 1.7.5
 	- license: MIT
 - dompurify
 	- version: 3.1.2
@@ -265,8 +301,8 @@ This file is generated from multiple sources. Included packages:
 	- version: 0.22.0
 	- license: MIT
 - vue-demi
-	- version: 0.14.7
+	- version: 0.14.10
 	- license: MIT
 - vue-demi
-	- version: 0.14.7
+	- version: 0.14.10
 	- license: MIT
