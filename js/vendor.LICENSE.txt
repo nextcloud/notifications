@@ -17,7 +17,7 @@ version: 0.2.0
 license: BSD-2-Clause
 
 @nextcloud/auth
-version: 2.3.0
+version: 2.4.0
 license: GPL-3.0-or-later
 
 @nextcloud/axios
@@ -65,7 +65,7 @@ version: 0.2.3
 license: GPL-3.0-or-later
 
 @nextcloud/vue
-version: 8.16.0
+version: 8.17.0
 license: AGPL-3.0-or-later
 
 @nextcloud/vue-select
@@ -77,19 +77,19 @@ version: 1.2.0
 license: ISC
 
 @vueuse/components
-version: 10.9.0
+version: 11.0.3
 license: MIT
 
 @vueuse/core
-version: 10.9.0
+version: 11.0.3
 license: MIT
 
 @vueuse/shared
-version: 10.9.0
+version: 11.0.3
 license: MIT
 
 axios
-version: 1.6.8
+version: 1.7.5
 license: MIT
 
 bail
@@ -469,7 +469,7 @@ version: 2.7.16
 license: MIT
 
 vue-demi
-version: 0.14.7
+version: 0.14.10
 license: MIT
 
 vue-material-design-icons
