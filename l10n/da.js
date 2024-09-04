@@ -38,6 +38,9 @@ OC.L10N.register(
     "Your settings have been updated." : "Dine indstillinger er blevet opdateret.",
     "An error occurred while updating your settings." : "Der opstod en fejl under opdatering af dine indstillinger.",
     "You need to set up your email address before you can receive notification emails." : "Du skal konfigurere din e-mailadresse, før du kan modtage notifikations-e-mails.",
+    "Also repeat sound on a secondary speaker" : "Gentag lyd på sekundær højtaler",
+    "Selection of the speaker device is currently not supported by Safari" : "Valg af lydenhed er ikke muligt i Safari",
+    "Select a device" : "Vælg en enhed",
     "None" : "Ingen"
 },
 "nplurals=2; plural=(n != 1);");
