@@ -43,6 +43,12 @@ class App implements IDeferrableApp {
 		}
 	}
 
+  public function notifyDelete(string $user, ?int $id, ?INotification $notification): void {
+    $idAsArray = ($id !== null) ? [ $id ] : null;
+    $appName = ($notification !== null) ? $notification->getApp() : "";
+    $this->push->pushDeleteToDevice($user, $idAsArray, $appName);
+  }
+
 	public function getLastInsertedId(): ?int {
 		return $this->lastInsertedId;
 	}
