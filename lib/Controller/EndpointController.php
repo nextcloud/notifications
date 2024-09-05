@@ -229,7 +229,7 @@ class EndpointController extends OCSController {
 			$deleted = $this->handler->deleteById($id, $this->getCurrentUser(), $notification);
 
 			if ($deleted) {
-        $this->manager->notifyDelete($this->getCurrentUser(), $id, $notification);
+				$this->manager->notifyDelete($this->getCurrentUser(), $id, $notification);
 			}
 		} catch (NotificationNotFoundException $e) {
 		}
