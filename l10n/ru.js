@@ -38,6 +38,7 @@ OC.L10N.register(
     "Your settings have been updated." : "Параметры обновлены.",
     "An error occurred while updating your settings." : "Не удалось сохранить изменённые параметры.",
     "You need to set up your email address before you can receive notification emails." : "Для получения уведомлений укажите свой адрес электронной почты в настройках профиля.",
+    "Also repeat sound on a secondary speaker" : "Также повторите воспроизведение звука на дополнительном динамике",
     "Select a device" : "Выберите устройство",
     "None" : "Отсутствует"
 },
