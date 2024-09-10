@@ -39,6 +39,7 @@ OC.L10N.register(
     "An error occurred while updating your settings." : "Не удалось сохранить изменённые параметры.",
     "You need to set up your email address before you can receive notification emails." : "Для получения уведомлений укажите свой адрес электронной почты в настройках профиля.",
     "Also repeat sound on a secondary speaker" : "Также повторите воспроизведение звука на дополнительном динамике",
+    "Selection of the speaker device is currently not supported by Safari" : "Выбор устройства громкой связи в настоящее время не поддерживается Safari",
     "Select a device" : "Выберите устройство",
     "None" : "Отсутствует"
 },
