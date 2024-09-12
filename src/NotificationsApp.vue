@@ -9,9 +9,11 @@
 		:exclude-click-outside-selectors="['.popover']"
 		:open.sync="open"
 		:aria-label="t('notifications', 'Notifications')"
+		:title="t('notifications', 'Notifications')"
 		@open="onOpen">
 		<template #trigger>
-			<IconNotification :show-dot="notifications.length !== 0 || webNotificationsGranted === null"
+			<IconNotification :size="20"
+				:show-dot="notifications.length !== 0 || webNotificationsGranted === null"
 				:show-warning="hasThrottledPushNotifications" />
 		</template>
 
