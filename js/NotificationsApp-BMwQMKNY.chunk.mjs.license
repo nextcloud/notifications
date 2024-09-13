@@ -17,7 +17,6 @@ SPDX-FileCopyrightText: Mapbox
 SPDX-FileCopyrightText: Mark <mark@remarkablemark.org>
 SPDX-FileCopyrightText: Nextcloud GmbH and Nextcloud contributors
 SPDX-FileCopyrightText: Rob Cresswell <robcresswell@pm.me>
-SPDX-FileCopyrightText: Roeland Jago Douma
 SPDX-FileCopyrightText: Sindre Sorhus
 SPDX-FileCopyrightText: Stefan Thomas <justmoon@members.fsf.org> (http://www.justmoon.net)
 SPDX-FileCopyrightText: Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)
@@ -31,9 +30,6 @@ This file is generated from multiple sources. Included packages:
 	- license: BSD-2-Clause
 - @nextcloud/axios
 	- version: 2.5.0
-	- license: GPL-3.0-or-later
-- @nextcloud/capabilities
-	- version: 1.2.0
 	- license: GPL-3.0-or-later
 - @nextcloud/event-bus
 	- version: 3.3.1

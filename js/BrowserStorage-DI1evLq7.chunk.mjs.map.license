@@ -4,6 +4,7 @@ SPDX-License-Identifier: BSD-3-Clause
 SPDX-License-Identifier: GPL-3.0-or-later
 SPDX-License-Identifier: MIT
 SPDX-FileCopyrightText: Anthony Fu <anthonyfu117@hotmail.com>
+SPDX-FileCopyrightText: Christoph Wurst
 SPDX-FileCopyrightText: Eric Norris (https://github.com/ericnorris)
 SPDX-FileCopyrightText: Eugene Sharygin <eush77@gmail.com>
 SPDX-FileCopyrightText: Feross Aboukhadijeh
@@ -33,6 +34,12 @@ This file is generated from multiple sources. Included packages:
 	- license: MIT
 - @nextcloud/capabilities
 	- version: 1.2.0
+	- license: GPL-3.0-or-later
+- @nextcloud/capabilities
+	- version: 1.2.0
+	- license: GPL-3.0-or-later
+- @nextcloud/initial-state
+	- version: 2.2.0
 	- license: GPL-3.0-or-later
 - @nextcloud/vue
 	- version: 8.18.0
