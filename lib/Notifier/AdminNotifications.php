@@ -108,9 +108,9 @@ class AdminNotifications implements INotifier {
 					],
 					'item' => [
 						'type' => 'file',
-						'id' => $file1->getId(),
+						'id' => (string)$file1->getId(),
 						'name' => $file1->getName(),
-						'size' => $file1->getSize(),
+						'size' => (string)$file1->getSize(),
 						'path' => $path1,
 						'link' => $this->urlGenerator->linkToRouteAbsolute('files.viewcontroller.showFile', ['fileid' => $file1->getId()]),
 						'mimetype' => $file1->getMimetype(),
@@ -124,9 +124,9 @@ class AdminNotifications implements INotifier {
 					],
 					'file-3' => [
 						'type' => 'file',
-						'id' => $file2->getId(),
+						'id' => (string)$file2->getId(),
 						'name' => $file2->getName(),
-						'size' => $file2->getSize(),
+						'size' => (string)$file2->getSize(),
 						'path' => $path2,
 						'link' => $this->urlGenerator->linkToRouteAbsolute('files.viewcontroller.showFile', ['fileid' => $file2->getId()]),
 						'mimetype' => $file2->getMimetype(),
