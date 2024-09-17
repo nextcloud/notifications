@@ -107,7 +107,7 @@ The user needs to be identified/logged in by the server. Then you can just run a
 Status | Explanation
 ---|---
 `204 No Content` | please slow down the polling to once per hour, since there are no apps that can generate notifications
-`304 Not Modified` | The provided `If-None-Match` matches the ETag, response body is empty
+`304 Not Modified` | The provided `If-None-Match` matches the ETag, response body is empty (until Nextcloud 21, afterwards it's a `200 OK`)
 
 ### Headers
 
