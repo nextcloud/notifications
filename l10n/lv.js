@@ -13,7 +13,7 @@ OC.L10N.register(
     "Never" : "Nekad",
     "1 hour" : "1 stunda",
     "3 hours" : "3 stundas",
-    "Your settings have been updated." : "Jūsu uzstādījumi ir atjaunoti.",
+    "Your settings have been updated." : "Iestatījumi tika atjaunināti.",
     "You need to set up your email address before you can receive notification emails." : "Lai saņemtu paziņojumus e-pastā, jūsu profilā ir nepieciešams uzstādīt e-pasta adresi.",
     "None" : "Nav"
 },
