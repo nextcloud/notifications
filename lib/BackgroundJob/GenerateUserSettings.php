@@ -29,7 +29,7 @@ class GenerateUserSettings extends TimedJob {
 		ITimeFactory $time,
 		IDBConnection $connection,
 		IUserManager $userManager,
-		SettingsMapper $settingsMapper
+		SettingsMapper $settingsMapper,
 	) {
 		parent::__construct($time);
 
