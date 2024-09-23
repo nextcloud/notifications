@@ -42,13 +42,13 @@ This file is generated from multiple sources. Included packages:
 	- version: 2.2.0
 	- license: GPL-3.0-or-later
 - @nextcloud/vue
-	- version: 8.18.0
+	- version: 8.19.0
 	- license: AGPL-3.0-or-later
 - @nextcloud/vue-select
-	- version: 3.25.0
+	- version: 3.25.1
 	- license: MIT
 - @nextcloud/vue-select
-	- version: 3.25.0
+	- version: 3.25.1
 	- license: MIT
 - @vueuse/components
 	- version: 11.0.1
