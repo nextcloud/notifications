@@ -81,7 +81,7 @@ class MailNotifications {
 		IFactory $l10nFactory,
 		IDateTimeFormatter $dateTimeFormatter,
 		ITimeFactory $timeFactory,
-		SettingsMapper $settingsMapper
+		SettingsMapper $settingsMapper,
 	) {
 		$this->config = $config;
 		$this->manager = $manager;
