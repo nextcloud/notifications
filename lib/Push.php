@@ -97,14 +97,6 @@ class Push {
 	/** @var string[] */
 	protected $loadStatusForUsers = [];
 
-	/**
-	 * A very small and privileged list of apps that are allowed to push during DND.
-	 * @var bool[]
-	 */
-	protected $allowedDNDPushList = [
-		'twofactor_nextcloud_notification' => true,
-	];
-
 	public function __construct(
 		IDBConnection $connection,
 		INotificationManager $notificationManager,
@@ -267,7 +259,7 @@ class Push {
 			$userStatus = $this->userStatuses[$notification->getUser()];
 			if ($userStatus instanceof IUserStatus
 				&& $userStatus->getStatus() === IUserStatus::DND
-				&& empty($this->allowedDNDPushList[$notification->getApp()])) {
+				&& !$notification->isPriorityNotification()) {
 				$this->printInfo('<error>User status is set to DND - no push notifications will be sent</error>');
 				return;
 			}
