@@ -6,6 +6,6 @@
 		"sort-packages": true
 	},
 	"require-dev": {
-		"nextcloud/openapi-extractor": "^1.0"
+		"phpunit/phpunit": "^9.6"
 	}
 }

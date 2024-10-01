@@ -6,6 +6,6 @@
 		"sort-packages": true
 	},
 	"require-dev": {
-		"nextcloud/openapi-extractor": "^1.0"
+		"vimeo/psalm": "^5.26"
 	}
 }
