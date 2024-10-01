@@ -6,6 +6,7 @@
 		"sort-packages": true
 	},
 	"require-dev": {
-		"nextcloud/openapi-extractor": "^1.0"
+		"friendsofphp/php-cs-fixer": "^3.64",
+		"nextcloud/coding-standard": "^1.3"
 	}
 }
