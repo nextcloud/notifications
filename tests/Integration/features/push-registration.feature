@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2021 Nextcloud GmbH and Nextcloud contributors
+# SPDX-License-Identifier: CC0-1.0
 Feature: Push registration
   Background:
     Given user "test1" exists
