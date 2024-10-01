@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors
+# SPDX-FileCopyrightText: 2015-2016 ownCloud, Inc.
+# SPDX-License-Identifier: CC0-1.0
 Feature: delete-notifications
   Background:
     Given user "test1" exists
