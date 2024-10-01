@@ -31,9 +31,7 @@ class NotifierTest extends \Test\TestCase {
 		$this->l = $this->createMock(IL10N::class);
 		$this->l->expects($this->any())
 			->method('t')
-			->willReturnCallback(function ($string, $args) {
-				return vsprintf($string, $args);
-			});
+			->willReturnCallback(fn($string, $args) => vsprintf($string, $args));
 		$this->factory = $this->createMock(IFactory::class);
 		$this->factory->expects($this->any())
 			->method('get')

@@ -186,8 +186,7 @@ class HandlerTest extends TestCase {
 		// Get and count
 		$notifications = $this->handler->get($limitedNotification);
 		$this->assertCount(1, $notifications);
-		reset($notifications);
-		$notificationId = key($notifications);
+		$notificationId = array_key_first($notifications);
 
 		// Get with wrong user
 		try {

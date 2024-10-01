@@ -110,9 +110,7 @@ class MailNotifications {
 			return;
 		}
 
-		$userIds = array_map(static function (Settings $settings) {
-			return $settings->getUserId();
-		}, $userSettings);
+		$userIds = array_map(static fn(Settings $settings) => $settings->getUserId(), $userSettings);
 
 		// Batch-read settings
 		$fallbackTimeZone = date_default_timezone_get();

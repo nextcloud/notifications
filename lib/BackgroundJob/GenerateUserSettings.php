@@ -52,7 +52,7 @@ class GenerateUserSettings extends TimedJob {
 		$maxId = (int)$result->fetchOne();
 		$result->closeCursor();
 
-		$this->userManager->callForSeenUsers(function (IUser $user) use ($maxId) {
+		$this->userManager->callForSeenUsers(function (IUser $user) use ($maxId): void {
 			if ($user->isEnabled()) {
 				return;
 			}
