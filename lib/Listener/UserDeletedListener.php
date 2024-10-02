@@ -19,15 +19,10 @@ use OCP\User\Events\UserDeletedEvent;
  * @template-implements IEventListener<Event|UserDeletedEvent>
  */
 class UserDeletedListener implements IEventListener {
-	private Handler $handler;
-	private SettingsMapper $settingsMapper;
-
 	public function __construct(
-		Handler $handler,
-		SettingsMapper $settingsMapper,
+		private Handler $handler,
+		private SettingsMapper $settingsMapper,
 	) {
-		$this->handler = $handler;
-		$this->settingsMapper = $settingsMapper;
 	}
 
 	public function handle(Event $event): void {

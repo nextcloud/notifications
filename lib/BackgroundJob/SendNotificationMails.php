@@ -13,18 +13,12 @@ use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\BackgroundJob\TimedJob;
 
 class SendNotificationMails extends TimedJob {
-	/** @var MailNotifications */
-	protected $mailNotifications;
-	/** @var bool */
-	protected $isCLI;
-
-	public function __construct(ITimeFactory $timeFactory,
-		MailNotifications $mailNotifications,
-		bool $isCLI) {
+	public function __construct(
+		ITimeFactory $timeFactory,
+		private MailNotifications $mailNotifications,
+		private bool $isCLI,
+	) {
 		parent::__construct($timeFactory);
-
-		$this->mailNotifications = $mailNotifications;
-		$this->isCLI = $isCLI;
 	}
 
 	protected function run($argument): void {

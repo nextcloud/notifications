@@ -22,12 +22,10 @@ use OCP\User\Events\PostLoginEvent;
  * @template-implements IEventListener<Event|PostLoginEvent>
  */
 class PostLoginListener implements IEventListener {
-	private SettingsMapper $settingsMapper;
-	private IConfig $config;
-
-	public function __construct(SettingsMapper $settingsMapper, IConfig $config) {
-		$this->settingsMapper = $settingsMapper;
-		$this->config = $config;
+	public function __construct(
+		private SettingsMapper $settingsMapper,
+		private IConfig $config,
+	) {
 	}
 
 	public function handle(Event $event): void {

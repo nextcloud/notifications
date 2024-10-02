@@ -14,15 +14,10 @@ use OCP\IURLGenerator;
 use OCP\Settings\IIconSection;
 
 class PersonalSection implements IIconSection {
-	/** @var IL10N */
-	private $l;
-
-	/** @var IURLGenerator */
-	private $url;
-
-	public function __construct(IURLGenerator $url, IL10N $l) {
-		$this->url = $url;
-		$this->l = $l;
+	public function __construct(
+		protected IURLGenerator $url,
+		protected IL10N $l,
+	) {
 	}
 
 	/**

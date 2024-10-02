@@ -20,13 +20,10 @@ use OCP\User\Events\UserCreatedEvent;
  * @template-implements IEventListener<Event|UserCreatedEvent>
  */
 class UserCreatedListener implements IEventListener {
-	private SettingsMapper $settingsMapper;
-	private IConfig $config;
-
-
-	public function __construct(SettingsMapper $settingsMapper, IConfig $config) {
-		$this->settingsMapper = $settingsMapper;
-		$this->config = $config;
+	public function __construct(
+		private SettingsMapper $settingsMapper,
+		private IConfig $config,
+	) {
 	}
 
 	public function handle(Event $event): void {

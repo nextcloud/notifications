@@ -18,23 +18,14 @@ use OCP\Notification\IManager;
 use OCP\Notification\INotification;
 
 class Handler {
-	/** @var IDBConnection */
-	protected $connection;
-
-	/** @var IManager */
-	protected $manager;
-
-	public function __construct(IDBConnection $connection,
-		IManager $manager) {
-		$this->connection = $connection;
-		$this->manager = $manager;
+	public function __construct(
+		protected IDBConnection $connection,
+		protected IManager $manager,
+	) {
 	}
 
 	/**
 	 * Add a new notification to the database
-	 *
-	 * @param INotification $notification
-	 * @return int
 	 */
 	public function add(INotification $notification): int {
 		$sql = $this->connection->getQueryBuilder();

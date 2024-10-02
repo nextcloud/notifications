@@ -14,12 +14,10 @@ use OCP\IURLGenerator;
 use OCP\Settings\IIconSection;
 
 class AdminSection implements IIconSection {
-	private IL10N $l;
-	private IURLGenerator $url;
-
-	public function __construct(IURLGenerator $url, IL10N $l) {
-		$this->url = $url;
-		$this->l = $l;
+	public function __construct(
+		private IURLGenerator $url,
+		private IL10N $l,
+	) {
 	}
 
 	/**

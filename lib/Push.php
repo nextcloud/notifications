@@ -37,89 +37,53 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Push {
-	/** @var IDBConnection */
-	protected $db;
-	/** @var INotificationManager */
-	protected $notificationManager;
-	/** @var IConfig */
-	protected $config;
-	/** @var IProvider */
-	protected $tokenProvider;
-	/** @var Manager */
-	private $keyManager;
-	/** @var IClientService */
-	protected $clientService;
-	/** @var ICache */
-	protected $cache;
-	/** @var IUserStatusManager */
-	protected $userStatusManager;
-	/** @var IFactory */
-	protected $l10nFactory;
-	/** @var LoggerInterface */
-	protected $log;
-	/** @var OutputInterface */
-	protected $output;
+	protected ICache $cache;
+	protected ?OutputInterface $output = null;
 	/**
-	 * @var array
 	 * @psalm-var array<string, list<string>>
 	 */
-	protected $payloadsToSend = [];
-
-	/** @var bool */
-	protected $deferPreparing = false;
-	/** @var bool */
-	protected $deferPayloads = false;
+	protected array $payloadsToSend = [];
+	protected bool $deferPreparing = false;
+	protected bool $deferPayloads = false;
 	/**
 	 * @var array[] $userId => $appId => $notificationIds
 	 * @psalm-var array<string|int, array<string, list<int>>>
 	 */
-	protected $deletesToPush = [];
+	protected array $deletesToPush = [];
 	/**
-	 * @var bool[] $userId => true
 	 * @psalm-var array<string|int, bool>
 	 */
-	protected $deleteAllsToPush = [];
+	protected array $deleteAllsToPush = [];
 	/** @var INotification[] */
-	protected $notificationsToPush = [];
+	protected array $notificationsToPush = [];
 
 	/**
-	 * @var ?IUserStatus[]
 	 * @psalm-var array<string, ?IUserStatus>
 	 */
-	protected $userStatuses = [];
+	protected array $userStatuses = [];
 	/**
-	 * @var array[]
 	 * @psalm-var array<string, list<array{id: int, uid: string, token: int, deviceidentifier: string, devicepublickey: string, devicepublickeyhash: string, pushtokenhash: string, proxyserver: string, apptype: string}>>
 	 */
-	protected $userDevices = [];
+	protected array $userDevices = [];
 	/** @var string[] */
-	protected $loadDevicesForUsers = [];
+	protected array $loadDevicesForUsers = [];
 	/** @var string[] */
-	protected $loadStatusForUsers = [];
+	protected array $loadStatusForUsers = [];
 
 	public function __construct(
-		IDBConnection $connection,
-		INotificationManager $notificationManager,
-		IConfig $config,
-		IProvider $tokenProvider,
-		Manager $keyManager,
-		IClientService $clientService,
+		protected IDBConnection $db,
+		protected INotificationManager $notificationManager,
+		protected IConfig $config,
+		protected IProvider $tokenProvider,
+		protected Manager $keyManager,
+		protected IClientService $clientService,
 		ICacheFactory $cacheFactory,
-		IUserStatusManager $userStatusManager,
-		IFactory $l10nFactory,
+		protected IUserStatusManager $userStatusManager,
+		protected IFactory $l10nFactory,
 		protected ITimeFactory $timeFactory,
-		LoggerInterface $log,
+		protected LoggerInterface $log,
 	) {
-		$this->db = $connection;
-		$this->notificationManager = $notificationManager;
-		$this->config = $config;
-		$this->tokenProvider = $tokenProvider;
-		$this->keyManager = $keyManager;
-		$this->clientService = $clientService;
 		$this->cache = $cacheFactory->createDistributed('pushtokens');
-		$this->userStatusManager = $userStatusManager;
-		$this->l10nFactory = $l10nFactory;
-		$this->log = $log;
 	}
 
 	public function setOutput(OutputInterface $output): void {
