@@ -6,7 +6,7 @@
 
 namespace OCA\Notifications\Tests\Unit\AppInfo;
 
-use OCA\Notifications\Tests\Unit\TestCase;
+use Test\TestCase;
 
 /**
  * Class RoutesTest

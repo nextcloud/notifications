@@ -8,6 +8,7 @@
 namespace OCA\Notifications\Tests\Unit;
 
 use OCA\Notifications\Capabilities;
+use Test\TestCase;
 
 class CapabilitiesTest extends TestCase {
 	public function testGetCapabilities() {

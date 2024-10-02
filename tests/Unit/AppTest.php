@@ -13,6 +13,7 @@ use OCA\Notifications\Push;
 use OCP\Notification\INotification;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
+use Test\TestCase;
 
 class AppTest extends TestCase {
 	protected Handler|MockObject $handler;

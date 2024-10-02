@@ -12,7 +12,6 @@ use OC\Authentication\Token\IToken;
 use OC\Security\IdentityProof\Key;
 use OC\Security\IdentityProof\Manager;
 use OCA\Notifications\Controller\PushController;
-use OCA\Notifications\Tests\Unit\TestCase;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IDBConnection;
@@ -20,6 +19,7 @@ use OCP\IRequest;
 use OCP\ISession;
 use OCP\IUser;
 use OCP\IUserSession;
+use Test\TestCase;
 
 class PushControllerTest extends TestCase {
 	/** @var IRequest|\PHPUnit_Framework_MockObject_MockObject */

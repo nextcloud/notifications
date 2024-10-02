@@ -12,7 +12,6 @@ use OCA\Notifications\Exceptions\NotificationNotFoundException;
 use OCA\Notifications\Handler;
 use OCA\Notifications\Push;
 use OCA\Notifications\Service\ClientService;
-use OCA\Notifications\Tests\Unit\TestCase;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Utility\ITimeFactory;
@@ -25,6 +24,7 @@ use OCP\Notification\IManager;
 use OCP\Notification\INotification;
 use OCP\UserStatus\IManager as IUserStatusManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use Test\TestCase;
 
 class EndpointControllerTest extends TestCase {
 	/** @var IRequest|MockObject */

@@ -20,6 +20,7 @@ use OCP\Notification\INotification;
 use OCP\RichObjectStrings\IValidator;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
+use Test\TestCase;
 
 /**
  * Class APIControllerTest
@@ -27,7 +28,7 @@ use Psr\Log\LoggerInterface;
  * @package OCA\Notifications\Tests\Unit\Controller
  * @group DB
  */
-class APIControllerTest extends \Test\TestCase {
+class APIControllerTest extends TestCase {
 	protected ITimeFactory&MockObject $timeFactory;
 	protected IUserManager&MockObject $userManager;
 	protected IManager&MockObject $notificationManager;

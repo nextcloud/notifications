@@ -14,10 +14,10 @@ use OCA\Notifications\Controller\EndpointController;
 use OCA\Notifications\Controller\PushController;
 use OCA\Notifications\Handler;
 use OCA\Notifications\Push;
-use OCA\Notifications\Tests\Unit\TestCase;
 use OCP\AppFramework\IAppContainer;
 use OCP\AppFramework\OCSController;
 use OCP\Notification\IApp;
+use Test\TestCase;
 
 /**
  * Class ApplicationTest

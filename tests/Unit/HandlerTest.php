@@ -11,6 +11,7 @@ use OCA\Notifications\Exceptions\NotificationNotFoundException;
 use OCA\Notifications\Handler;
 use OCP\Notification\IAction;
 use OCP\Notification\INotification;
+use Test\TestCase;
 
 /**
  * Class HandlerTest

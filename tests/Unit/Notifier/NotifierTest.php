@@ -15,8 +15,9 @@ use OCP\L10N\IFactory;
 use OCP\Notification\INotification;
 use OCP\Notification\UnknownNotificationException;
 use PHPUnit\Framework\MockObject\MockObject;
+use Test\TestCase;
 
-class NotifierTest extends \Test\TestCase {
+class NotifierTest extends TestCase {
 	protected IFactory|MockObject $factory;
 	protected IURLGenerator|MockObject $urlGenerator;
 	protected IUserManager|MockObject $userManager;

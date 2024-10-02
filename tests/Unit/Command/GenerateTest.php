@@ -17,6 +17,7 @@ use OCP\RichObjectStrings\IValidator;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Test\TestCase;
 
 /**
  * Class GenerateTest
@@ -24,7 +25,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @package OCA\Notifications\Tests\Unit\Command
  * @group DB
  */
-class GenerateTest extends \Test\TestCase {
+class GenerateTest extends TestCase {
 	/** @var ITimeFactory|MockObject */
 	protected $timeFactory;
 	/** @var IUserManager|MockObject */
