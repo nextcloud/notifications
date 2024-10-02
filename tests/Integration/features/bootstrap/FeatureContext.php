@@ -418,7 +418,7 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	public function assureUserExists(string $user) {
 		try {
 			$this->userExists($user);
-		} catch (ClientException $ex) {
+		} catch (ClientException) {
 			$this->createUser($user);
 		}
 		$response = $this->userExists($user);

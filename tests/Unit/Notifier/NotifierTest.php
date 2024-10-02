@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * SPDX-FileCopyrightText: 2017 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -15,13 +17,14 @@ use OCP\L10N\IFactory;
 use OCP\Notification\INotification;
 use OCP\Notification\UnknownNotificationException;
 use PHPUnit\Framework\MockObject\MockObject;
+use Test\TestCase;
 
-class NotifierTest extends \Test\TestCase {
-	protected IFactory|MockObject $factory;
-	protected IURLGenerator|MockObject $urlGenerator;
-	protected IUserManager|MockObject $userManager;
-	protected IRootFolder|MockObject $rootFolder;
-	protected IL10N|MockObject $l;
+class NotifierTest extends TestCase {
+	protected IFactory&MockObject $factory;
+	protected IURLGenerator&MockObject $urlGenerator;
+	protected IUserManager&MockObject $userManager;
+	protected IRootFolder&MockObject $rootFolder;
+	protected IL10N&MockObject $l;
 	protected AdminNotifications $notifier;
 
 	protected function setUp(): void {
@@ -31,9 +34,7 @@ class NotifierTest extends \Test\TestCase {
 		$this->l = $this->createMock(IL10N::class);
 		$this->l->expects($this->any())
 			->method('t')
-			->willReturnCallback(function ($string, $args) {
-				return vsprintf($string, $args);
-			});
+			->willReturnCallback(fn ($string, $args) => vsprintf($string, $args));
 		$this->factory = $this->createMock(IFactory::class);
 		$this->factory->expects($this->any())
 			->method('get')
@@ -50,7 +51,7 @@ class NotifierTest extends \Test\TestCase {
 	}
 
 	public function testPrepareWrongApp(): void {
-		/** @var INotification|MockObject $notification */
+		/** @var INotification&MockObject $notification */
 		$notification = $this->createMock(INotification::class);
 
 		$notification->expects($this->exactly(2))
@@ -65,7 +66,7 @@ class NotifierTest extends \Test\TestCase {
 	}
 
 	public function testPrepareWrongSubject(): void {
-		/** @var INotification|MockObject $notification */
+		/** @var INotification&MockObject $notification */
 		$notification = $this->createMock(INotification::class);
 
 		$notification->expects($this->once())
@@ -90,7 +91,7 @@ class NotifierTest extends \Test\TestCase {
 	 * @dataProvider dataPrepare
 	 */
 	public function testPrepare(string $subject, array $subjectParams, array $messageParams, bool $setMessage): void {
-		/** @var INotification|MockObject $notification */
+		/** @var INotification&MockObject $notification */
 		$notification = $this->createMock(INotification::class);
 
 		$notification->expects($this->once())

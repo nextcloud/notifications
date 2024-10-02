@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * SPDX-FileCopyrightText: 2017-2024 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -12,7 +14,6 @@ use OC\Authentication\Token\IToken;
 use OC\Security\IdentityProof\Key;
 use OC\Security\IdentityProof\Manager;
 use OCA\Notifications\Controller\PushController;
-use OCA\Notifications\Tests\Unit\TestCase;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IDBConnection;
@@ -20,27 +21,20 @@ use OCP\IRequest;
 use OCP\ISession;
 use OCP\IUser;
 use OCP\IUserSession;
+use PHPUnit\Framework\MockObject\MockObject;
+use Test\TestCase;
 
 class PushControllerTest extends TestCase {
-	/** @var IRequest|\PHPUnit_Framework_MockObject_MockObject */
-	protected $request;
-	/** @var IDBConnection|\PHPUnit_Framework_MockObject_MockObject */
-	protected $db;
-	/** @var ISession|\PHPUnit_Framework_MockObject_MockObject */
-	protected $session;
-	/** @var IUserSession|\PHPUnit_Framework_MockObject_MockObject */
-	protected $userSession;
-	/** @var IProvider|\PHPUnit_Framework_MockObject_MockObject */
-	protected $tokenProvider;
-	/** @var Manager|\PHPUnit_Framework_MockObject_MockObject */
-	protected $identityProof;
+	protected IRequest&MockObject $request;
+	protected IDBConnection&MockObject $db;
+	protected ISession&MockObject $session;
+	protected IUserSession&MockObject $userSession;
+	protected IProvider&MockObject $tokenProvider;
+	protected Manager&MockObject $identityProof;
+	protected IUser&MockObject $user;
+	protected PushController $controller;
 
-	/** @var IUser|\PHPUnit_Framework_MockObject_MockObject */
-	protected $user;
-	/** @var PushController */
-	protected $controller;
-
-	protected $devicePublicKey = '-----BEGIN PUBLIC KEY-----
+	protected static string $devicePublicKey = '-----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2Or1KumSDfk8dT0MuCW9
 WS5wkVOpNsbz2OIJFBYrBvu6joC2iQo9StONMaXoTQj5Ucak9UBtC60PHyTkIDFb
 HOpCST5onmIAtZdqHN/3ABOBeHVU/notdRIl/menGM64jiqGWvE06F1+yZ8GGcGQ
@@ -50,7 +44,7 @@ RSO1ehjzRpTY+gdw/5gvwMZI0XmrIanZmZHwePRR4HC6FLPrL2OQG3gWikDIPyTS
 hQIDAQAB
 -----END PUBLIC KEY-----';
 
-	protected $userPrivateKey = '-----BEGIN PRIVATE KEY-----
+	protected static string $userPrivateKey = '-----BEGIN PRIVATE KEY-----
 MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDPR0uV6e1cNSoy
 vsITBvGyYpOIn9vI7zpEhk7FGGwdOTd2dxxJ2ikegRJ6Fr2Ojce15K3zfiasXPen
 TAQuFEXecGoP9WY+DS5X1LfCpj9EeAOBfVGKeQDst5z/GoXeU+YqWbayJTp6vFRj
@@ -80,7 +74,7 @@ j2ZL3j2Nwefj3HrR/AkeFA==
 -----END PRIVATE KEY-----
 ';
 
-	protected $userPublicKey = '-----BEGIN PUBLIC KEY-----
+	protected static string $userPublicKey = '-----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAz0dLlentXDUqMr7CEwbx
 smKTiJ/byO86RIZOxRhsHTk3dnccSdopHoESeha9jo3HteSt834mrFz3p0wELhRF
 3nBqD/VmPg0uV9S3wqY/RHgDgX1RinkA7Lec/xqF3lPmKlm2siU6erxUY+6OV+kA
@@ -103,7 +97,7 @@ FwIDAQAB
 		$this->identityProof = $this->createMock(Manager::class);
 	}
 
-	protected function getController(array $methods = []) {
+	protected function getController(array $methods = []): PushController|MockObject {
 		if (empty($methods)) {
 			return new PushController(
 				'notifications',
@@ -126,11 +120,11 @@ FwIDAQAB
 				$this->tokenProvider,
 				$this->identityProof,
 			])
-			->setMethods($methods)
+			->onlyMethods($methods)
 			->getMock();
 	}
 
-	public function dataRegisterDevice() {
+	public static function dataRegisterDevice(): array {
 		return [
 			'not authenticated' => [
 				'',
@@ -178,7 +172,7 @@ FwIDAQAB
 			],
 			'device key invalid start' => [
 				'bb9b52140661ee4f2c31e02ea50a8f67ba353bffc58aa981718f90bd2aa2bd8fc08cad4c0b3ed8f7eb9d79d6a577be75d084bbeb963da1ad74d9279e0014e472',
-				substr($this->devicePublicKey, 1),
+				substr(self::$devicePublicKey, 1),
 				'',
 				true,
 				0,
@@ -189,7 +183,7 @@ FwIDAQAB
 			],
 			'device key invalid end' => [
 				'bb9b52140661ee4f2c31e02ea50a8f67ba353bffc58aa981718f90bd2aa2bd8fc08cad4c0b3ed8f7eb9d79d6a577be75d084bbeb963da1ad74d9279e0014e472',
-				substr($this->devicePublicKey, 0, -1),
+				substr(self::$devicePublicKey, 0, -1),
 				'',
 				true,
 				0,
@@ -200,7 +194,7 @@ FwIDAQAB
 			],
 			'device key too much end' => [
 				'bb9b52140661ee4f2c31e02ea50a8f67ba353bffc58aa981718f90bd2aa2bd8fc08cad4c0b3ed8f7eb9d79d6a577be75d084bbeb963da1ad74d9279e0014e472',
-				$this->devicePublicKey . "\n\n",
+				self::$devicePublicKey . "\n\n",
 				'',
 				true,
 				0,
@@ -211,7 +205,7 @@ FwIDAQAB
 			],
 			'device key without trailing new line' => [
 				'bb9b52140661ee4f2c31e02ea50a8f67ba353bffc58aa981718f90bd2aa2bd8fc08cad4c0b3ed8f7eb9d79d6a577be75d084bbeb963da1ad74d9279e0014e472',
-				$this->devicePublicKey,
+				self::$devicePublicKey,
 				'',
 				true,
 				0,
@@ -222,7 +216,7 @@ FwIDAQAB
 			],
 			'device key with trailing new line' => [
 				'bb9b52140661ee4f2c31e02ea50a8f67ba353bffc58aa981718f90bd2aa2bd8fc08cad4c0b3ed8f7eb9d79d6a577be75d084bbeb963da1ad74d9279e0014e472',
-				$this->devicePublicKey . "\n",
+				self::$devicePublicKey . "\n",
 				'',
 				true,
 				0,
@@ -233,7 +227,7 @@ FwIDAQAB
 			],
 			'invalid push proxy' => [
 				'bb9b52140661ee4f2c31e02ea50a8f67ba353bffc58aa981718f90bd2aa2bd8fc08cad4c0b3ed8f7eb9d79d6a577be75d084bbeb963da1ad74d9279e0014e472',
-				$this->devicePublicKey,
+				self::$devicePublicKey,
 				'localhost',
 				true,
 				0,
@@ -244,7 +238,7 @@ FwIDAQAB
 			],
 			'using localhost' => [
 				'bb9b52140661ee4f2c31e02ea50a8f67ba353bffc58aa981718f90bd2aa2bd8fc08cad4c0b3ed8f7eb9d79d6a577be75d084bbeb963da1ad74d9279e0014e472',
-				$this->devicePublicKey,
+				self::$devicePublicKey,
 				'http://localhost/',
 				true,
 				23,
@@ -255,7 +249,7 @@ FwIDAQAB
 			],
 			'using localhost with port' => [
 				'bb9b52140661ee4f2c31e02ea50a8f67ba353bffc58aa981718f90bd2aa2bd8fc08cad4c0b3ed8f7eb9d79d6a577be75d084bbeb963da1ad74d9279e0014e472',
-				$this->devicePublicKey,
+				self::$devicePublicKey,
 				'http://localhost:8088/',
 				true,
 				23,
@@ -266,7 +260,7 @@ FwIDAQAB
 			],
 			'using production' => [
 				'bb9b52140661ee4f2c31e02ea50a8f67ba353bffc58aa981718f90bd2aa2bd8fc08cad4c0b3ed8f7eb9d79d6a577be75d084bbeb963da1ad74d9279e0014e472',
-				$this->devicePublicKey,
+				self::$devicePublicKey,
 				'https://push-notifications.nextcloud.com/',
 				true,
 				23,
@@ -277,14 +271,14 @@ FwIDAQAB
 			],
 			'created or updated' => [
 				'bb9b52140661ee4f2c31e02ea50a8f67ba353bffc58aa981718f90bd2aa2bd8fc08cad4c0b3ed8f7eb9d79d6a577be75d084bbeb963da1ad74d9279e0014e472',
-				$this->devicePublicKey,
+				self::$devicePublicKey,
 				'https://push-notifications.nextcloud.com/',
 				true,
 				23,
 				true,
 				true,
 				[
-					'publicKey' => $this->userPublicKey,
+					'publicKey' => self::$userPublicKey,
 					'deviceIdentifier' => 'XUCEZ1EHvTUcVhIvrQQQ1XcP0ZD2BFdFqw4EYbOhBfiEgXgirurR4x/ve4GSSyfivvbQOdOkZUM+g4m+tSb0Ew==',
 					'signature' => 'LRhbXO71WYX9qqDbQX7C+87YaaFfWoT/vG0DlaXdBz6+lhyOA0dw/1Ggz3fd7RerCQ0MfgnnTyxO+cSeRpUaPdA2yPjfoiPpfYA5SOJQGF3comS/HYna3fHiFDbOoM3BJOnjvqiSZdxA/ICdyl2mEEC5wO7AZ4OZKBTa5XfL7eSCXZLEv1YldqcLOStbXrI7voDQocTMJxoQZI/j8BVcf2i3D6F454aXIFDrYYzC2PQY+CKJoXZW0m0RMWaTM2B8tBmFFwrmaGLDqcjjpd33TsTtsV5DB7WimffLBPpOuGV4Z1Kiagp/mxpPLz2NImNV79mDX9gY3ZppCZTwChP5qQ==',
 				],
@@ -292,14 +286,14 @@ FwIDAQAB
 			],
 			'not updated' => [
 				'bb9b52140661ee4f2c31e02ea50a8f67ba353bffc58aa981718f90bd2aa2bd8fc08cad4c0b3ed8f7eb9d79d6a577be75d084bbeb963da1ad74d9279e0014e472',
-				$this->devicePublicKey,
+				self::$devicePublicKey,
 				'https://push-notifications.nextcloud.com/',
 				true,
 				42,
 				true,
 				false,
 				[
-					'publicKey' => $this->userPublicKey,
+					'publicKey' => self::$userPublicKey,
 					'deviceIdentifier' => 'x9vSImcGjhzR9BfZ/XbbUqqCCNC4bHKsX7vkQWNZRd1/MiY+OuF02fx8K08My0RpkNnwj/rQ/gVSU1oEdFwkww==',
 					'signature' => 'J9AcdJt5youJmMnBhS+Cc9ytArynIKtCRoNf/m0oOFO/e0hWHqs1NRdQBe81qzYIjf0+bj0Q97X9Xv1rnVJesPkQUbGaa4nAPt+viGSfvzTptjX4LKgqm8B3UkduBA262IcaWgM5P84gUqelkQIC1nIqq/MJTuC6oQ5lUwIV1a92ZurDjhwH4b3f7/ZLTTOTRD0DWN9W/yOyF1qECivgePR3eu+mkcBzXVU/TDZDJic9G7xhqcTnWV6qk+aKyzdNo1tu5W7mF+v5vF6rrGZrq55vPLWAHApTD7P+NFV01BnaCuN7/qGJNVs7m7EH03jpOw7y3jqNMmcmonYrJSMVqg==',
 				],
@@ -310,18 +304,8 @@ FwIDAQAB
 
 	/**
 	 * @dataProvider dataRegisterDevice
-	 *
-	 * @param string $pushTokenHash
-	 * @param string $devicePublicKey
-	 * @param string $proxyServer
-	 * @param bool $userIsValid
-	 * @param int $tokenId
-	 * @param bool $tokenIsValid
-	 * @param bool $deviceCreated
-	 * @param array $payload
-	 * @param int $status
 	 */
-	public function testRegisterDevice($pushTokenHash, $devicePublicKey, $proxyServer, $userIsValid, $tokenId, $tokenIsValid, $deviceCreated, $payload, $status) {
+	public function testRegisterDevice(string $pushTokenHash, string $devicePublicKey, string $proxyServer, bool $userIsValid, int $tokenId, bool $tokenIsValid, ?bool $deviceCreated, array $payload, int $status): void {
 		$controller = $this->getController([
 			'savePushToken',
 		]);
@@ -355,10 +339,10 @@ FwIDAQAB
 			$key = $this->createMock(Key::class);
 			$key->expects($this->once())
 				->method('getPrivate')
-				->willReturn($this->userPrivateKey);
+				->willReturn(self::$userPrivateKey);
 			$key->expects($this->once())
 				->method('getPublic')
-				->willReturn($this->userPublicKey);
+				->willReturn(self::$userPublicKey);
 
 			$this->identityProof->expects($this->once())
 				->method('getKey')
@@ -385,7 +369,7 @@ FwIDAQAB
 		$this->assertSame($payload, $response->getData());
 	}
 
-	public function dataRemoveDevice() {
+	public static function dataRemoveDevice(): array {
 		return [
 			'not authenticated' => [
 				false,
@@ -433,15 +417,8 @@ FwIDAQAB
 
 	/**
 	 * @dataProvider dataRemoveDevice
-	 *
-	 * @param bool $userIsValid
-	 * @param int $tokenId
-	 * @param bool $tokenIsValid
-	 * @param bool $deviceDeleted
-	 * @param array $payload
-	 * @param int $status
 	 */
-	public function testRemoveDevice($userIsValid, $tokenId, $tokenIsValid, $deviceDeleted, $payload, $status) {
+	public function testRemoveDevice(bool $userIsValid, int $tokenId, bool $tokenIsValid, ?bool $deviceDeleted, array $payload, int $status): void {
 		$controller = $this->getController([
 			'deletePushToken',
 		]);

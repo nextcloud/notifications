@@ -11,10 +11,9 @@ namespace OCA\Notifications;
 use OCP\IUser;
 
 class FakeUser implements IUser {
-	protected string $userId;
-
-	public function __construct(string $userId) {
-		$this->userId = $userId;
+	public function __construct(
+		protected string $userId,
+	) {
 	}
 
 	public function getUID(): string {

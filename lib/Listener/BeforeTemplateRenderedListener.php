@@ -25,19 +25,12 @@ use OCP\Util;
  * @template-implements IEventListener<Event|BeforeTemplateRenderedEvent>
  */
 class BeforeTemplateRenderedListener implements IEventListener {
-	protected IConfig $config;
-	protected IUserSession $userSession;
-	protected IInitialState $initialState;
-	protected IManager $notificationManager;
-
-	public function __construct(IConfig $config,
-		IUserSession $userSession,
-		IInitialState $initialState,
-		IManager $notificationManager) {
-		$this->config = $config;
-		$this->userSession = $userSession;
-		$this->initialState = $initialState;
-		$this->notificationManager = $notificationManager;
+	public function __construct(
+		protected IConfig $config,
+		protected IUserSession $userSession,
+		protected IInitialState $initialState,
+		protected IManager $notificationManager,
+	) {
 	}
 
 	public function handle(Event $event): void {

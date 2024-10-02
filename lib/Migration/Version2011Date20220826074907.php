@@ -15,11 +15,9 @@ use OCP\Migration\IOutput;
 use OCP\Migration\SimpleMigrationStep;
 
 class Version2011Date20220826074907 extends SimpleMigrationStep {
-	/** @var IDBConnection */
-	protected $connection;
-
-	public function __construct(IDBConnection $connection) {
-		$this->connection = $connection;
+	public function __construct(
+		protected IDBConnection $connection,
+	) {
 	}
 
 	public function postSchemaChange(IOutput $output, \Closure $schemaClosure, array $options) {

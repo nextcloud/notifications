@@ -145,7 +145,7 @@ class EndpointController extends OCSController {
 
 		try {
 			$notification = $this->handler->getById($id, $this->getCurrentUser());
-		} catch (NotificationNotFoundException $e) {
+		} catch (NotificationNotFoundException) {
 			return new DataResponse(null, Http::STATUS_NOT_FOUND);
 		}
 
@@ -231,7 +231,7 @@ class EndpointController extends OCSController {
 			if ($deleted) {
 				$this->push->pushDeleteToDevice($this->getCurrentUser(), [$id], $notification->getApp());
 			}
-		} catch (NotificationNotFoundException $e) {
+		} catch (NotificationNotFoundException) {
 		}
 
 		return new DataResponse();

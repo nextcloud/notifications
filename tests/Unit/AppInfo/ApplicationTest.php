@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors
  * SPDX-FileCopyrightText: 2016 ownCloud, Inc.
@@ -14,10 +16,10 @@ use OCA\Notifications\Controller\EndpointController;
 use OCA\Notifications\Controller\PushController;
 use OCA\Notifications\Handler;
 use OCA\Notifications\Push;
-use OCA\Notifications\Tests\Unit\TestCase;
 use OCP\AppFramework\IAppContainer;
 use OCP\AppFramework\OCSController;
 use OCP\Notification\IApp;
+use Test\TestCase;
 
 /**
  * Class ApplicationTest
@@ -26,11 +28,9 @@ use OCP\Notification\IApp;
  * @package OCA\Notifications\Tests\AppInfo
  */
 class ApplicationTest extends TestCase {
-	/** @var Application */
-	protected $app;
+	protected Application $app;
 
-	/** @var IAppContainer */
-	protected $container;
+	protected IAppContainer $container;
 
 	protected function setUp(): void {
 		parent::setUp();
@@ -38,12 +38,12 @@ class ApplicationTest extends TestCase {
 		$this->container = $this->app->getContainer();
 	}
 
-	public function testContainerAppName() {
+	public function testContainerAppName(): void {
 		$this->app = new Application();
 		$this->assertEquals('notifications', $this->container->getAppName());
 	}
 
-	public function dataContainerQuery() {
+	public static function dataContainerQuery(): array {
 		return [
 			// lib/
 			[App::class],
@@ -62,10 +62,8 @@ class ApplicationTest extends TestCase {
 
 	/**
 	 * @dataProvider dataContainerQuery
-	 * @param string $service
-	 * @param string $expected
 	 */
-	public function testContainerQuery($service, $expected = null) {
+	public function testContainerQuery(string $service, ?string $expected = null): void {
 		if ($expected === null) {
 			$expected = $service;
 		}

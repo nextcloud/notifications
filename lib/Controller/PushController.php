@@ -70,7 +70,7 @@ class PushController extends OCSController {
 		}
 
 		if (
-			strpos($devicePublicKey, '-----BEGIN PUBLIC KEY-----' . "\n") !== 0 ||
+			!str_starts_with($devicePublicKey, '-----BEGIN PUBLIC KEY-----' . "\n") ||
 			((\strlen($devicePublicKey) !== 450 || strpos($devicePublicKey, "\n" . '-----END PUBLIC KEY-----') !== 425) &&
 				(\strlen($devicePublicKey) !== 451 || strpos($devicePublicKey, "\n" . '-----END PUBLIC KEY-----' . "\n") !== 425))
 		) {
@@ -91,7 +91,7 @@ class PushController extends OCSController {
 		}
 		try {
 			$token = $this->tokenProvider->getTokenById($tokenId);
-		} catch (InvalidTokenException $e) {
+		} catch (InvalidTokenException) {
 			return new DataResponse(['message' => 'INVALID_SESSION_TOKEN'], Http::STATUS_BAD_REQUEST);
 		}
 
@@ -149,7 +149,7 @@ class PushController extends OCSController {
 		$tokenId = (int)$this->session->get('token-id');
 		try {
 			$token = $this->tokenProvider->getTokenById($tokenId);
-		} catch (InvalidTokenException $e) {
+		} catch (InvalidTokenException) {
 			return new DataResponse(['message' => 'INVALID_SESSION_TOKEN'], Http::STATUS_BAD_REQUEST);
 		}
 

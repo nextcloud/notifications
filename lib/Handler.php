@@ -18,23 +18,14 @@ use OCP\Notification\IManager;
 use OCP\Notification\INotification;
 
 class Handler {
-	/** @var IDBConnection */
-	protected $connection;
-
-	/** @var IManager */
-	protected $manager;
-
-	public function __construct(IDBConnection $connection,
-		IManager $manager) {
-		$this->connection = $connection;
-		$this->manager = $manager;
+	public function __construct(
+		protected IDBConnection $connection,
+		protected IManager $manager,
+	) {
 	}
 
 	/**
 	 * Add a new notification to the database
-	 *
-	 * @param INotification $notification
-	 * @return int
 	 */
 	public function add(INotification $notification): int {
 		$sql = $this->connection->getQueryBuilder();
@@ -47,9 +38,6 @@ class Handler {
 
 	/**
 	 * Count the notifications matching the given Notification
-	 *
-	 * @param INotification $notification
-	 * @return int
 	 */
 	public function count(INotification $notification): int {
 		$sql = $this->connection->getQueryBuilder();
@@ -68,7 +56,6 @@ class Handler {
 	/**
 	 * Delete the notifications matching the given Notification
 	 *
-	 * @param INotification $notification
 	 * @return array A Map with all deleted notifications [user => [notifications]]
 	 */
 	public function delete(INotification $notification): array {
@@ -125,15 +112,12 @@ class Handler {
 
 	/**
 	 * Delete the notification of a given user
-	 *
-	 * @param string $user
-	 * @return bool
 	 */
 	public function deleteByUser(string $user): bool {
 		$notification = $this->manager->createNotification();
 		try {
 			$notification->setUser($user);
-		} catch (\InvalidArgumentException $e) {
+		} catch (\InvalidArgumentException) {
 			return false;
 		}
 		return !empty($this->delete($notification));
@@ -142,10 +126,6 @@ class Handler {
 	/**
 	 * Delete the notification matching the given id
 	 *
-	 * @param int $id
-	 * @param string $user
-	 * @param INotification|null $notification
-	 * @return bool
 	 * @throws NotificationNotFoundException
 	 */
 	public function deleteById(int $id, string $user, ?INotification $notification = null): bool {
@@ -177,9 +157,6 @@ class Handler {
 	/**
 	 * Get the notification matching the given id
 	 *
-	 * @param int $id
-	 * @param string $user
-	 * @return INotification
 	 * @throws NotificationNotFoundException
 	 */
 	public function getById(int $id, string $user): INotification {
@@ -198,7 +175,7 @@ class Handler {
 
 		try {
 			return $this->notificationFromRow($row);
-		} catch (\InvalidArgumentException $e) {
+		} catch (\InvalidArgumentException) {
 			throw new NotificationNotFoundException('Could not create notification from database row');
 		}
 	}
@@ -206,7 +183,6 @@ class Handler {
 	/**
 	 * Confirm that the notification ids still exist for the user
 	 *
-	 * @param string $user
 	 * @param int[] $ids
 	 * @return int[]
 	 */
@@ -230,9 +206,6 @@ class Handler {
 	/**
 	 * Get the notifications after (and excluding) the given id
 	 *
-	 * @param int $startAfterId
-	 * @param string $userId
-	 * @param int $limit
 	 * @return array<int, INotification> [notification_id => INotification]
 	 */
 	public function getAfterId(int $startAfterId, string $userId, int $limit = 25): array {
@@ -249,7 +222,7 @@ class Handler {
 		while ($row = $statement->fetch()) {
 			try {
 				$notifications[(int)$row['notification_id']] = $this->notificationFromRow($row);
-			} catch (\InvalidArgumentException $e) {
+			} catch (\InvalidArgumentException) {
 				continue;
 			}
 		}
@@ -261,11 +234,9 @@ class Handler {
 	/**
 	 * Return the notifications matching the given Notification
 	 *
-	 * @param INotification $notification
-	 * @param int $limit
 	 * @return array [notification_id => INotification]
 	 */
-	public function get(INotification $notification, $limit = 25): array {
+	public function get(INotification $notification, int $limit = 25): array {
 		$sql = $this->connection->getQueryBuilder();
 		$sql->select('*')
 			->from('notifications')
@@ -279,7 +250,7 @@ class Handler {
 		while ($row = $statement->fetch()) {
 			try {
 				$notifications[(int)$row['notification_id']] = $this->notificationFromRow($row);
-			} catch (\InvalidArgumentException $e) {
+			} catch (\InvalidArgumentException) {
 				continue;
 			}
 		}
@@ -290,9 +261,6 @@ class Handler {
 
 	/**
 	 * Add where statements to a query builder matching the given notification
-	 *
-	 * @param IQueryBuilder $sql
-	 * @param INotification $notification
 	 */
 	protected function sqlWhere(IQueryBuilder $sql, INotification $notification) {
 		if ($notification->getApp() !== '') {
@@ -327,9 +295,6 @@ class Handler {
 
 	/**
 	 * Turn a notification into an input statement
-	 *
-	 * @param IQueryBuilder $sql
-	 * @param INotification $notification
 	 */
 	protected function sqlInsert(IQueryBuilder $sql, INotification $notification) {
 		$actions = [];
@@ -359,9 +324,6 @@ class Handler {
 
 	/**
 	 * Turn a database row into a INotification
-	 *
-	 * @param array $row
-	 * @return INotification
 	 * @throws \InvalidArgumentException
 	 */
 	protected function notificationFromRow(array $row): INotification {

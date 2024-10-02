@@ -30,71 +30,23 @@ use OCP\Util;
 use Psr\Log\LoggerInterface;
 
 class MailNotifications {
-	/** @var IConfig */
-	private $config;
-
-	/** @var IManager */
-	private $manager;
-
-	/** @var Handler */
-	protected $handler;
-
-	/** @var IUserManager */
-	private $userManager;
-
-	/** @var LoggerInterface */
-	private $logger;
-
-	/** @var IMailer */
-	private $mailer;
-
-	/** @var IURLGenerator */
-	private $urlGenerator;
-
-	/** @var Defaults */
-	private $defaults;
-
-	/** @var IFactory */
-	private $l10nFactory;
-
-	/** @var IDateTimeFormatter */
-	private $dateFormatter;
-
-	/** @var ITimeFactory */
-	protected $timeFactory;
-
-	/** @var SettingsMapper */
-	protected $settingsMapper;
-
 	public const BATCH_SIZE_CLI = 500;
 	public const BATCH_SIZE_WEB = 25;
 
 	public function __construct(
-		IConfig $config,
-		IManager $manager,
-		Handler $handler,
-		IUserManager $userManager,
-		LoggerInterface $logger,
-		IMailer $mailer,
-		IURLGenerator $urlGenerator,
-		Defaults $defaults,
-		IFactory $l10nFactory,
-		IDateTimeFormatter $dateTimeFormatter,
-		ITimeFactory $timeFactory,
-		SettingsMapper $settingsMapper,
+		protected IConfig $config,
+		protected IManager $manager,
+		protected Handler $handler,
+		protected IUserManager $userManager,
+		protected LoggerInterface $logger,
+		protected IMailer $mailer,
+		protected IURLGenerator $urlGenerator,
+		protected Defaults $defaults,
+		protected IFactory $l10nFactory,
+		protected IDateTimeFormatter $dateFormatter,
+		protected ITimeFactory $timeFactory,
+		protected SettingsMapper $settingsMapper,
 	) {
-		$this->config = $config;
-		$this->manager = $manager;
-		$this->handler = $handler;
-		$this->userManager = $userManager;
-		$this->logger = $logger;
-		$this->mailer = $mailer;
-		$this->urlGenerator = $urlGenerator;
-		$this->defaults = $defaults;
-		$this->l10nFactory = $l10nFactory;
-		$this->dateFormatter = $dateTimeFormatter;
-		$this->timeFactory = $timeFactory;
-		$this->settingsMapper = $settingsMapper;
 	}
 
 	/**
@@ -110,9 +62,7 @@ class MailNotifications {
 			return;
 		}
 
-		$userIds = array_map(static function (Settings $settings) {
-			return $settings->getUserId();
-		}, $userSettings);
+		$userIds = array_map(static fn (Settings $settings) => $settings->getUserId(), $userSettings);
 
 		// Batch-read settings
 		$fallbackTimeZone = date_default_timezone_get();
@@ -360,7 +310,7 @@ class MailNotifications {
 	/**
 	 * replace the given parameters in the input content string for display in an email
 	 *
-	 * @param array [string => string] $parameters
+	 * @param array<string, array<string, string>> $parameters
 	 * @param string $contentString
 	 * @return string $contentString with parameters processed
 	 */

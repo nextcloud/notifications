@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors
  * SPDX-FileCopyrightText: 2016 ownCloud, Inc.
@@ -13,12 +15,13 @@ use OCA\Notifications\Push;
 use OCP\Notification\INotification;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
+use Test\TestCase;
 
 class AppTest extends TestCase {
-	protected Handler|MockObject $handler;
-	protected Push|MockObject $push;
-	protected INotification|MockObject $notification;
-	protected LoggerInterface|MockObject $logger;
+	protected Handler&MockObject $handler;
+	protected Push&MockObject $push;
+	protected INotification&MockObject $notification;
+	protected LoggerInterface&MockObject $logger;
 	protected App $app;
 
 	protected function setUp(): void {
@@ -69,8 +72,6 @@ class AppTest extends TestCase {
 
 	/**
 	 * @dataProvider dataGetCount
-	 *
-	 * @param int $count
 	 */
 	public function testGetCount(int $count): void {
 		$this->handler->expects($this->once())

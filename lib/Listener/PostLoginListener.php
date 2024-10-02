@@ -22,12 +22,10 @@ use OCP\User\Events\PostLoginEvent;
  * @template-implements IEventListener<Event|PostLoginEvent>
  */
 class PostLoginListener implements IEventListener {
-	private SettingsMapper $settingsMapper;
-	private IConfig $config;
-
-	public function __construct(SettingsMapper $settingsMapper, IConfig $config) {
-		$this->settingsMapper = $settingsMapper;
-		$this->config = $config;
+	public function __construct(
+		private SettingsMapper $settingsMapper,
+		private IConfig $config,
+	) {
 	}
 
 	public function handle(Event $event): void {
@@ -40,7 +38,7 @@ class PostLoginListener implements IEventListener {
 
 		try {
 			$this->settingsMapper->getSettingsByUser($userId);
-		} catch (DoesNotExistException $e) {
+		} catch (DoesNotExistException) {
 			$defaultSoundNotification = $this->config->getAppValue(Application::APP_ID, 'sound_notification') === 'yes' ? 'yes' : 'no';
 			$defaultSoundTalk = $this->config->getAppValue(Application::APP_ID, 'sound_talk') === 'yes' ? 'yes' : 'no';
 			$defaultBatchtime = (int)$this->config->getAppValue(Application::APP_ID, 'setting_batchtime');

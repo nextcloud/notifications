@@ -186,7 +186,7 @@ class Generate extends Command {
 			}
 
 			$this->notificationManager->notify($notification);
-		} catch (\InvalidArgumentException $e) {
+		} catch (\InvalidArgumentException) {
 			$output->writeln('Error while sending the notification');
 			return 1;
 		}

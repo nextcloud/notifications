@@ -40,6 +40,8 @@
 		"psalm:update-baseline": "psalm --threads=1 --update-baseline",
 		"psalm:clear": "psalm --clear-cache && psalm --clear-global-cache",
 		"psalm:fix": "psalm --alter --issues=InvalidReturnType,InvalidNullableReturnType,MissingParamType,InvalidFalsableReturnType",
+		"rector:check": "rector --dry-run --clear-cache",
+		"rector:fix": "rector",
 		"test:unit": "phpunit --color -c tests/Unit/phpunit.xml",
 		"test:integration": "cd tests/Integration && ./run.sh"
 	}

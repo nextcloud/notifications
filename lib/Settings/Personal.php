@@ -23,31 +23,13 @@ use OCP\Settings\ISettings;
 use OCP\Util;
 
 class Personal implements ISettings {
-	/** @var \OCP\IConfig */
-	protected $config;
-
-	/** @var \OCP\IL10N */
-	protected $l10n;
-
-	/** @var SettingsMapper */
-	private $settingsMapper;
-
-	/** @var IUserSession */
-	private $session;
-
-	/** @var IInitialState */
-	private $initialState;
-
-	public function __construct(IConfig $config,
-		IL10N $l10n,
-		IUserSession $session,
-		SettingsMapper $settingsMapper,
-		IInitialState $initialState) {
-		$this->config = $config;
-		$this->l10n = $l10n;
-		$this->settingsMapper = $settingsMapper;
-		$this->session = $session;
-		$this->initialState = $initialState;
+	public function __construct(
+		protected IConfig $config,
+		protected IL10N $l10n,
+		protected IUserSession $session,
+		protected SettingsMapper $settingsMapper,
+		protected IInitialState $initialState,
+	) {
 	}
 
 	/**
@@ -73,7 +55,7 @@ class Personal implements ISettings {
 			} else {
 				$settingBatchTime = Settings::EMAIL_SEND_OFF;
 			}
-		} catch (DoesNotExistException $e) {
+		} catch (DoesNotExistException) {
 			$settings = new Settings();
 			$settings->setUserId($user->getUID());
 			$settings->setBatchTime(3600 * 3);

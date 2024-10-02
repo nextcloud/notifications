@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors
  * SPDX-FileCopyrightText: 2016 ownCloud, Inc.
@@ -9,8 +11,12 @@ namespace OCA\Notifications\Tests\Unit;
 
 use OCA\Notifications\Exceptions\NotificationNotFoundException;
 use OCA\Notifications\Handler;
+use OCP\IDBConnection;
 use OCP\Notification\IAction;
+use OCP\Notification\IManager;
 use OCP\Notification\INotification;
+use PHPUnit\Framework\MockObject\MockObject;
+use Test\TestCase;
 
 /**
  * Class HandlerTest
@@ -26,8 +32,8 @@ class HandlerTest extends TestCase {
 		parent::setUp();
 
 		$this->handler = new Handler(
-			\OC::$server->getDatabaseConnection(),
-			\OC::$server->getNotificationManager()
+			\OCP\Server::get(IDBConnection::class),
+			\OCP\Server::get(IManager::class),
 		);
 
 		$this->handler->delete($this->getNotification([
@@ -35,7 +41,7 @@ class HandlerTest extends TestCase {
 		]));
 	}
 
-	public function testFull() {
+	public function testFull(): void {
 		$notification = $this->getNotification([
 			'getApp' => 'testing_notifications',
 			'getUser' => 'test_user1',
@@ -91,7 +97,7 @@ class HandlerTest extends TestCase {
 		$this->assertSame(0, $this->handler->count($limitedNotification2), 'Wrong notification count for user2 after deleting');
 	}
 
-	public function testFullEmptyMessageForOracle() {
+	public function testFullEmptyMessageForOracle(): void {
 		$notification = $this->getNotification([
 			'getApp' => 'testing_notifications',
 			'getUser' => 'test_user1',
@@ -147,7 +153,7 @@ class HandlerTest extends TestCase {
 		$this->assertSame(0, $this->handler->count($limitedNotification2), 'Wrong notification count for user2 after deleting');
 	}
 
-	public function testDeleteById() {
+	public function testDeleteById(): void {
 		$notification = $this->getNotification([
 			'getApp' => 'testing_notifications',
 			'getUser' => 'test_user1',
@@ -186,8 +192,7 @@ class HandlerTest extends TestCase {
 		// Get and count
 		$notifications = $this->handler->get($limitedNotification);
 		$this->assertCount(1, $notifications);
-		reset($notifications);
-		$notificationId = key($notifications);
+		$notificationId = array_key_first($notifications);
 
 		// Get with wrong user
 		try {
@@ -210,11 +215,7 @@ class HandlerTest extends TestCase {
 		$this->assertSame(0, $this->handler->count($limitedNotification), 'Wrong notification count for user1 after deleting');
 	}
 
-	/**
-	 * @param array $values
-	 * @return INotification|\PHPUnit_Framework_MockObject_MockObject
-	 */
-	protected function getNotification(array $values = []) {
+	protected function getNotification(array $values = []): INotification&MockObject {
 		$notification = $this->getMockBuilder(INotification::class)
 			->getMock();
 

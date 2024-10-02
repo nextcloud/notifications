@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors
  * SPDX-FileCopyrightText: 2016 ownCloud, Inc.
@@ -8,9 +10,10 @@
 namespace OCA\Notifications\Tests\Unit;
 
 use OCA\Notifications\Capabilities;
+use Test\TestCase;
 
 class CapabilitiesTest extends TestCase {
-	public function testGetCapabilities() {
+	public function testGetCapabilities(): void {
 		$capabilities = new Capabilities();
 
 		$this->assertSame([

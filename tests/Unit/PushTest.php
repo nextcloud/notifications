@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * SPDX-FileCopyrightText: 2017-2024 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -31,6 +33,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Log\LoggerInterface;
+use Test\TestCase;
 
 /**
  * Class PushTest
@@ -39,35 +42,23 @@ use Psr\Log\LoggerInterface;
  * @group DB
  */
 class PushTest extends TestCase {
-	/** @var IDBConnection */
-	protected $db;
-	/** @var INotificationManager|MockObject */
-	protected $notificationManager;
-	/** @var IConfig|MockObject */
-	protected $config;
-	/** @var IProvider|MockObject */
-	protected $tokenProvider;
-	/** @var Manager|MockObject */
-	protected $keyManager;
-	/** @var IClientService|MockObject */
-	protected $clientService;
-	/** @var ICacheFactory|MockObject */
-	protected $cacheFactory;
-	/** @var ICache|MockObject */
-	protected $cache;
-	/** @var IUserStatusManager|MockObject */
-	protected $userStatusManager;
-	/** @var IFactory|MockObject */
-	protected $l10nFactory;
-	/** @var ITimeFactory|MockObject */
-	protected $timeFactory;
-	/** @var LoggerInterface|MockObject */
-	protected $logger;
+	protected IDBConnection $db;
+	protected INotificationManager&MockObject $notificationManager;
+	protected IConfig&MockObject $config;
+	protected IProvider&MockObject $tokenProvider;
+	protected Manager&MockObject $keyManager;
+	protected IClientService&MockObject $clientService;
+	protected ICacheFactory&MockObject $cacheFactory;
+	protected ICache&MockObject $cache;
+	protected IUserStatusManager&MockObject $userStatusManager;
+	protected IFactory&MockObject $l10nFactory;
+	protected ITimeFactory&MockObject $timeFactory;
+	protected LoggerInterface&MockObject $logger;
 
 	protected function setUp(): void {
 		parent::setUp();
 
-		$this->db = \OC::$server->getDatabaseConnection();
+		$this->db = \OCP\Server::get(IDBConnection::class);
 		$this->notificationManager = $this->createMock(INotificationManager::class);
 		$this->config = $this->createMock(IConfig::class);
 		$this->tokenProvider = $this->createMock(IProvider::class);
@@ -87,9 +78,8 @@ class PushTest extends TestCase {
 
 	/**
 	 * @param string[] $methods
-	 * @return Push|MockObject
 	 */
-	protected function getPush(array $methods = []) {
+	protected function getPush(array $methods = []): Push|MockObject {
 		if (!empty($methods)) {
 			return $this->getMockBuilder(Push::class)
 				->setConstructorArgs([
@@ -105,7 +95,7 @@ class PushTest extends TestCase {
 					$this->timeFactory,
 					$this->logger,
 				])
-				->setMethods($methods)
+				->onlyMethods($methods)
 				->getMock();
 		}
 
@@ -119,11 +109,12 @@ class PushTest extends TestCase {
 			$this->cacheFactory,
 			$this->userStatusManager,
 			$this->l10nFactory,
-			$this->logger
+			$this->timeFactory,
+			$this->logger,
 		);
 	}
 
-	public function testPushToDeviceNoInternet() {
+	public function testPushToDeviceNoInternet(): void {
 		$push = $this->getPush(['createFakeUserObject']);
 
 		$this->config->expects($this->once())
@@ -137,13 +128,13 @@ class PushTest extends TestCase {
 		$push->expects($this->never())
 			->method('createFakeUserObject');
 
-		/** @var INotification|MockObject$notification */
+		/** @var INotification&MockObject$notification */
 		$notification = $this->createMock(INotification::class);
 
 		$push->pushToDevice(23, $notification);
 	}
 
-	public function testPushToDeviceNoDevices() {
+	public function testPushToDeviceNoDevices(): void {
 		$push = $this->getPush(['createFakeUserObject', 'getDevicesForUser']);
 		$this->keyManager->expects($this->never())
 			->method('getKey');
@@ -155,13 +146,13 @@ class PushTest extends TestCase {
 			->with('has_internet_connection', true)
 			->willReturn(true);
 
-		/** @var INotification|MockObject $notification */
+		/** @var INotification&MockObject $notification */
 		$notification = $this->createMock(INotification::class);
 		$notification
 			->method('getUser')
 			->willReturn('valid');
 
-		/** @var IUser|MockObject $user */
+		/** @var IUser&MockObject $user */
 		$user = $this->createMock(IUser::class);
 
 		$push->expects($this->once())
@@ -176,7 +167,7 @@ class PushTest extends TestCase {
 		$push->pushToDevice(42, $notification);
 	}
 
-	public function testPushToDeviceNotPrepared() {
+	public function testPushToDeviceNotPrepared(): void {
 		$push = $this->getPush(['createFakeUserObject', 'getDevicesForUser']);
 		$this->keyManager->expects($this->never())
 			->method('getKey');
@@ -188,13 +179,13 @@ class PushTest extends TestCase {
 			->with('has_internet_connection', true)
 			->willReturn(true);
 
-		/** @var INotification|MockObject $notification */
+		/** @var INotification&MockObject $notification */
 		$notification = $this->createMock(INotification::class);
 		$notification
 			->method('getUser')
 			->willReturn('valid');
 
-		/** @var IUser|MockObject $user */
+		/** @var IUser&MockObject $user */
 		$user = $this->createMock(IUser::class);
 
 		$push->expects($this->once())
@@ -222,7 +213,7 @@ class PushTest extends TestCase {
 		$push->pushToDevice(1337, $notification);
 	}
 
-	public function testPushToDeviceInvalidToken() {
+	public function testPushToDeviceInvalidToken(): void {
 		$push = $this->getPush(['createFakeUserObject', 'getDevicesForUser', 'encryptAndSign', 'deletePushToken']);
 		$this->clientService->expects($this->never())
 			->method('newClient');
@@ -232,13 +223,13 @@ class PushTest extends TestCase {
 			->with('has_internet_connection', true)
 			->willReturn(true);
 
-		/** @var INotification|MockObject $notification */
+		/** @var INotification&MockObject $notification */
 		$notification = $this->createMock(INotification::class);
 		$notification
 			->method('getUser')
 			->willReturn('valid');
 
-		/** @var IUser|MockObject $user */
+		/** @var IUser&MockObject $user */
 		$user = $this->createMock(IUser::class);
 
 		$push->expects($this->once())
@@ -265,7 +256,7 @@ class PushTest extends TestCase {
 			->willReturnArgument(0);
 
 
-		/** @var Key|MockObject $key */
+		/** @var Key&MockObject $key */
 		$key = $this->createMock(Key::class);
 
 		$this->keyManager->expects($this->once())
@@ -287,7 +278,7 @@ class PushTest extends TestCase {
 		$push->pushToDevice(2018, $notification);
 	}
 
-	public function testPushToDeviceEncryptionError() {
+	public function testPushToDeviceEncryptionError(): void {
 		$push = $this->getPush(['createFakeUserObject', 'getDevicesForUser', 'encryptAndSign', 'deletePushToken', 'validateToken']);
 		$this->clientService->expects($this->never())
 			->method('newClient');
@@ -297,13 +288,13 @@ class PushTest extends TestCase {
 			->with('has_internet_connection', true)
 			->willReturn(true);
 
-		/** @var INotification|MockObject $notification */
+		/** @var INotification&MockObject $notification */
 		$notification = $this->createMock(INotification::class);
 		$notification
 			->method('getUser')
 			->willReturn('valid');
 
-		/** @var IUser|MockObject $user */
+		/** @var IUser&MockObject $user */
 		$user = $this->createMock(IUser::class);
 
 		$push->expects($this->once())
@@ -329,7 +320,7 @@ class PushTest extends TestCase {
 			->with($notification, 'ru')
 			->willReturnArgument(0);
 
-		/** @var Key|MockObject $key */
+		/** @var Key&MockObject $key */
 		$key = $this->createMock(Key::class);
 
 		$this->keyManager->expects($this->once())
@@ -351,16 +342,16 @@ class PushTest extends TestCase {
 
 		$push->pushToDevice(1970, $notification);
 	}
-	public function testPushToDeviceNoFairUse() {
+	public function testPushToDeviceNoFairUse(): void {
 		$push = $this->getPush(['createFakeUserObject', 'getDevicesForUser', 'encryptAndSign', 'deletePushToken', 'validateToken', 'deletePushTokenByDeviceIdentifier']);
 
-		/** @var INotification|MockObject $notification */
+		/** @var INotification&MockObject $notification */
 		$notification = $this->createMock(INotification::class);
 		$notification
 			->method('getUser')
 			->willReturn('valid');
 
-		/** @var IUser|MockObject $user */
+		/** @var IUser&MockObject $user */
 		$user = $this->createMock(IUser::class);
 
 		$push->expects($this->once())
@@ -393,7 +384,7 @@ class PushTest extends TestCase {
 			->with($notification, 'ru')
 			->willReturnArgument(0);
 
-		/** @var Key|MockObject $key */
+		/** @var Key&MockObject $key */
 		$key = $this->createMock(Key::class);
 
 		$this->keyManager->expects($this->once())
@@ -429,7 +420,7 @@ class PushTest extends TestCase {
 		$push->pushToDevice(207787, $notification);
 	}
 
-	public function dataPushToDeviceSending() {
+	public static function dataPushToDeviceSending(): array {
 		return [
 			[true],
 			[false],
@@ -438,18 +429,17 @@ class PushTest extends TestCase {
 
 	/**
 	 * @dataProvider dataPushToDeviceSending
-	 * @param bool $isDebug
 	 */
-	public function testPushToDeviceSending($isDebug) {
+	public function testPushToDeviceSending(bool $isDebug): void {
 		$push = $this->getPush(['createFakeUserObject', 'getDevicesForUser', 'encryptAndSign', 'deletePushToken', 'validateToken', 'deletePushTokenByDeviceIdentifier']);
 
-		/** @var INotification|MockObject $notification */
+		/** @var INotification&MockObject $notification */
 		$notification = $this->createMock(INotification::class);
 		$notification
 			->method('getUser')
 			->willReturn('valid');
 
-		/** @var IUser|MockObject $user */
+		/** @var IUser&MockObject $user */
 		$user = $this->createMock(IUser::class);
 
 		$push->expects($this->once())
@@ -507,7 +497,7 @@ class PushTest extends TestCase {
 			->with($notification, 'ru')
 			->willReturnArgument(0);
 
-		/** @var Key|MockObject $key */
+		/** @var Key&MockObject $key */
 		$key = $this->createMock(Key::class);
 
 		$this->keyManager->expects($this->once())
@@ -526,7 +516,7 @@ class PushTest extends TestCase {
 		$push->expects($this->never())
 			->method('deletePushToken');
 
-		/** @var IClient|MockObject $client */
+		/** @var IClient&MockObject $client */
 		$client = $this->createMock(IClient::class);
 
 		$this->clientService->expects($this->once())
@@ -539,12 +529,12 @@ class PushTest extends TestCase {
 			->willReturn(true);
 
 		// Call 1
-		/** @var ResponseInterface|MockObject $response1 */
+		/** @var ResponseInterface&MockObject $response1 */
 		$response1 = $this->createMock(ResponseInterface::class);
 		$response1->expects($this->once())
 			->method('getStatusCode')
 			->willReturn(Http::STATUS_BAD_REQUEST);
-		/** @var StreamInterface|MockObject $body1 */
+		/** @var StreamInterface&MockObject $body1 */
 		$body1 = $this->createMock(StreamInterface::class);
 		$body1->expects($this->once())
 			->method('getContents')
@@ -557,9 +547,9 @@ class PushTest extends TestCase {
 			->willReturn($response1);
 
 		// Call 2
-		/** @var ResponseInterface|MockObject $response1 */
+		/** @var ResponseInterface&MockObject $response1 */
 		$response2 = $this->createMock(ResponseInterface::class);
-		/** @var StreamInterface|MockObject $body2 */
+		/** @var StreamInterface&MockObject $body2 */
 		$body2 = $this->createMock(StreamInterface::class);
 		$body2->expects($this->once())
 			->method('getContents')
@@ -573,23 +563,23 @@ class PushTest extends TestCase {
 
 
 		// Call 3
-		/** @var IResponse|MockObject $response1 */
+		/** @var IResponse&MockObject $response1 */
 		$response3 = $this->createMock(IResponse::class);
 		$response3->expects($this->once())
 			->method('getStatusCode')
 			->willReturn(Http::STATUS_OK);
-		/** @var StreamInterface|MockObject $body3 */
+		/** @var StreamInterface&MockObject $body3 */
 		$body3 = $this->createMock(StreamInterface::class);
 		$response3->method('getBody')
 			->willReturn('');
 
 		// Call 4
-		/** @var ResponseInterface|MockObject $response1 */
+		/** @var ResponseInterface&MockObject $response1 */
 		$response4 = $this->createMock(ResponseInterface::class);
 		$response4->expects($this->once())
 			->method('getStatusCode')
 			->willReturn(Http::STATUS_BAD_REQUEST);
-		/** @var StreamInterface|MockObject $body4 */
+		/** @var StreamInterface&MockObject $body4 */
 		$body4 = $this->createMock(StreamInterface::class);
 		$body4->expects($this->once())
 			->method('getContents')
@@ -609,45 +599,11 @@ class PushTest extends TestCase {
 		$exception0 = new \Exception();
 		$client->expects($this->exactly(5))
 			->method('post')
-			->withConsecutive(
-				[
-					'proxyserver1/notifications',
-					[
-						'body' => [
-							'notifications' => ['["Payload"]', '["Payload"]'],
-						]
-					]
-				],
-				[
-					'badrequest/notifications',
-					[
-						'body' => [
-							'notifications' => ['["Payload"]'],
-						]
-					]
-				],
-				[
-					'unavailable/notifications',
-					[
-						'body' => [
-							'notifications' => ['["Payload"]'],
-						]
-					],
-				],
-				[
-					'ok/notifications',
-					[
-						'body' => [
-							'notifications' => ['["Payload"]'],
-						]
-					],
-				]
-			)
 			->willReturnOnConsecutiveCalls(
-				$this->throwException($exception0),
-				$this->throwException($exception1),
-				$this->throwException($exception2),
-				$response3,
+				$this->throwException($exception0), // proxyserver1/notifications
+				$this->throwException($exception1), // badrequest/notifications
+				$this->throwException($exception2), // unavailable/notifications
+				$response3, // ok/notifications
 				$this->throwException($exception4),
 			);
 
@@ -680,7 +636,7 @@ class PushTest extends TestCase {
 		$push->pushToDevice(207787, $notification);
 	}
 
-	public function dataPushToDeviceTalkNotification() {
+	public static function dataPushToDeviceTalkNotification(): array {
 		return [
 			[['nextcloud'], false, 0],
 			[['nextcloud'], true, 0],
@@ -696,13 +652,11 @@ class PushTest extends TestCase {
 	/**
 	 * @dataProvider dataPushToDeviceTalkNotification
 	 * @param string[] $deviceTypes
-	 * @param bool $isTalkNotification
-	 * @param int $pushedDevice
 	 */
-	public function testPushToDeviceTalkNotification(array $deviceTypes, $isTalkNotification, $pushedDevice) {
+	public function testPushToDeviceTalkNotification(array $deviceTypes, bool $isTalkNotification, ?int $pushedDevice): void {
 		$push = $this->getPush(['createFakeUserObject', 'getDevicesForUser', 'encryptAndSign', 'deletePushToken', 'validateToken']);
 
-		/** @var INotification|MockObject $notification */
+		/** @var INotification&MockObject $notification */
 		$notification = $this->createMock(INotification::class);
 		$notification
 			->method('getUser')
@@ -718,7 +672,7 @@ class PushTest extends TestCase {
 				->willReturn('notifications');
 		}
 
-		/** @var IUser|MockObject $user */
+		/** @var IUser&MockObject $user */
 		$user = $this->createMock(IUser::class);
 
 		$push->expects($this->once())
@@ -748,7 +702,7 @@ class PushTest extends TestCase {
 			->with($notification, 'ru')
 			->willReturnArgument(0);
 
-		/** @var Key|MockObject $key */
+		/** @var Key&MockObject $key */
 		$key = $this->createMock(Key::class);
 
 		$this->keyManager->expects($this->once())
@@ -775,14 +729,14 @@ class PushTest extends TestCase {
 				->with($this->anything(), $devices[$pushedDevice], $this->anything(), $this->anything(), $isTalkNotification)
 				->willReturn(['Payload']);
 
-			/** @var IClient|MockObject $client */
+			/** @var IClient&MockObject $client */
 			$client = $this->createMock(IClient::class);
 
 			$this->clientService->expects($this->once())
 				->method('newClient')
 				->willReturn($client);
 
-			/** @var IResponse|MockObject $response1 */
+			/** @var IResponse&MockObject $response1 */
 			$response = $this->createMock(IResponse::class);
 			$response->expects($this->once())
 				->method('getStatusCode')
