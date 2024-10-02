@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors
  * SPDX-FileCopyrightText: 2016 ownCloud, Inc.
@@ -27,33 +29,18 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
 
 class EndpointControllerTest extends TestCase {
-	/** @var IRequest|MockObject */
-	protected $request;
+	protected IRequest&MockObject $request;
+	protected Handler&MockObject $handler;
+	protected IManager&MockObject $manager;
+	protected IFactory&MockObject $l10nFactory;
+	protected IUserSession&MockObject $session;
+	protected IUserStatusManager&MockObject $userStatusManager;
+	protected IUser&MockObject $user;
+	protected ITimeFactory&MockObject $timeFactory;
+	protected ClientService&MockObject $clientService;
+	protected Push&MockObject $push;
+	protected EndpointController$controller;
 
-	/** @var Handler|MockObject */
-	protected $handler;
-
-	/** @var IManager|MockObject */
-	protected $manager;
-
-	/** @var IFactory|MockObject */
-	protected $l10nFactory;
-
-	/** @var IUserSession|MockObject */
-	protected $session;
-	/** @var IUserStatusManager|MockObject */
-	protected $userStatusManager;
-	/** @var EndpointController */
-	protected $controller;
-
-	/** @var IUser|MockObject */
-	protected $user;
-	/** @var ITimeFactory|MockObject */
-	protected $timeFactory;
-	/** @var ClientService|MockObject */
-	protected $clientService;
-	/** @var Push|MockObject */
-	protected $push;
 
 	protected function setUp(): void {
 		parent::setUp();
@@ -111,7 +98,7 @@ class EndpointControllerTest extends TestCase {
 			->getMock();
 	}
 
-	public function dataListNotifications() {
+	public function dataListNotifications(): array {
 		return [
 			[
 				'v2',
@@ -149,7 +136,7 @@ class EndpointControllerTest extends TestCase {
 	 * @param string $expectedETag
 	 * @param array $expectedData
 	 */
-	public function testListNotifications($apiVersion, array $notifications, $expectedETag, array $expectedData) {
+	public function testListNotifications(string $apiVersion, array $notifications, string $expectedETag, array $expectedData): void {
 		$controller = $this->getController([
 			'notificationToArray',
 		]);
@@ -344,7 +331,7 @@ class EndpointControllerTest extends TestCase {
 		$this->assertSame(Http::STATUS_OK, $response->getStatus());
 	}
 
-	public function dataGetNotificationNoId() {
+	public function dataGetNotificationNoId(): array {
 		$notification = $this->getMockBuilder(INotification::class)
 			->getMock();
 
@@ -358,13 +345,8 @@ class EndpointControllerTest extends TestCase {
 
 	/**
 	 * @dataProvider dataGetNotificationNoId
-	 * @param string $apiVersion
-	 * @param bool $hasNotifiers
-	 * @param mixed $id
-	 * @param bool $called
-	 * @param NotificationNotFoundException|INotification $notification
 	 */
-	public function testGetNotificationNoId($apiVersion, $hasNotifiers, $id, $called, $notification) {
+	public function testGetNotificationNoId(string $apiVersion, bool $hasNotifiers, int $id, bool $called, NotificationNotFoundException|INotification $notification): void {
 		$controller = $this->getController();
 
 		$this->manager->expects($this->once())

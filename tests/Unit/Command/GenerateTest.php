@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * SPDX-FileCopyrightText: 2017 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -26,18 +28,12 @@ use Test\TestCase;
  * @group DB
  */
 class GenerateTest extends TestCase {
-	/** @var ITimeFactory|MockObject */
-	protected $timeFactory;
-	/** @var IUserManager|MockObject */
-	protected $userManager;
-	/** @var IManager|MockObject */
-	protected $notificationManager;
-	/** @var IValidator|MockObject */
-	protected $richValidator;
-	/** @var App|MockObject */
-	protected $notificationApp;
-	/** @var Generate */
-	protected $command;
+	protected ITimeFactory&MockObject $timeFactory;
+	protected IUserManager&MockObject $userManager;
+	protected IManager&MockObject $notificationManager;
+	protected IValidator&MockObject $richValidator;
+	protected App&MockObject $notificationApp;
+	protected Generate $command;
 
 	protected function setUp(): void {
 		parent::setUp();
@@ -57,7 +53,7 @@ class GenerateTest extends TestCase {
 		);
 	}
 
-	public function dataExecute() {
+	public static function dataExecute(): array {
 		return [
 			['user', '', '', false, null, false, null, false, 1],
 			['user', '', '', false, null, false, 'user', false, 1],
@@ -71,17 +67,8 @@ class GenerateTest extends TestCase {
 
 	/**
 	 * @dataProvider dataExecute
-	 * @param string $userId
-	 * @param string $short
-	 * @param string $long
-	 * @param bool $createNotification
-	 * @param bool $notifyThrows
-	 * @param bool $validLong
-	 * @param string|null $user
-	 * @param bool $isCreated
-	 * @param int $exitCode
 	 */
-	public function testExecute($userId, $short, $long, $createNotification, $notifyThrows, $validLong, $user, $isCreated, $exitCode) {
+	public function testExecute(string $userId, string $short, string $long, bool $createNotification, ?bool $notifyThrows, bool $validLong, ?string $user, bool $isCreated, int $exitCode): void {
 		if ($user !== null) {
 			$u = $this->createMock(IUser::class);
 			$u->expects($createNotification ? $this->once() : $this->never())

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * SPDX-FileCopyrightText: 2017 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -62,7 +64,7 @@ class APIControllerTest extends TestCase {
 		);
 	}
 
-	public function dataGenerateNotification() {
+	public function dataGenerateNotification(): array {
 		return [
 			['user', '', '', false, null, false, null, 123, null, Http::STATUS_NOT_FOUND],
 			['user', '', '', false, null, false, 'user', 123, null, Http::STATUS_BAD_REQUEST],
@@ -76,18 +78,8 @@ class APIControllerTest extends TestCase {
 
 	/**
 	 * @dataProvider dataGenerateNotification
-	 * @param string $userId
-	 * @param string $short
-	 * @param string $long
-	 * @param bool $createNotification
-	 * @param bool $notifyThrows
-	 * @param bool $validLong
-	 * @param string|null $user
-	 * @param int $time
-	 * @param string|null $hexTime
-	 * @param int $statusCode
 	 */
-	public function testGenerateNotification($userId, $short, $long, $createNotification, $notifyThrows, $validLong, $user, $time, $hexTime, $statusCode) {
+	public function testGenerateNotification(string $userId, string $short, string $long, bool $createNotification, ?bool $notifyThrows, bool $validLong, ?string $user, int $time, ?string $hexTime, int $statusCode): void {
 		if ($user !== null) {
 			$u = $this->createMock(IUser::class);
 			$u->expects($createNotification ? $this->once() : $this->never())
