@@ -60,7 +60,7 @@ class SettingsMapper extends QBMapper {
 	public function setBatchSettingForUser(string $userId, int $batchSetting): void {
 		try {
 			$settings = $this->getSettingsByUser($userId);
-		} catch (DoesNotExistException $e) {
+		} catch (DoesNotExistException) {
 			$settings = new Settings();
 			$settings->setUserId($userId);
 			/** @var Settings $settings */

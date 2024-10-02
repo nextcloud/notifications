@@ -73,7 +73,7 @@ class Personal implements ISettings {
 			} else {
 				$settingBatchTime = Settings::EMAIL_SEND_OFF;
 			}
-		} catch (DoesNotExistException $e) {
+		} catch (DoesNotExistException) {
 			$settings = new Settings();
 			$settings->setUserId($user->getUID());
 			$settings->setBatchTime(3600 * 3);

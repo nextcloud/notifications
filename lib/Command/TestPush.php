@@ -96,7 +96,7 @@ class TestPush extends Command {
 
 			$this->app->setOutput($output);
 			$this->notificationManager->notify($notification);
-		} catch (\InvalidArgumentException $e) {
+		} catch (\InvalidArgumentException) {
 			$output->writeln('Error while sending the notification');
 			return 1;
 		}

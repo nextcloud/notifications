@@ -15,5 +15,5 @@ return RectorConfig::configure()
 		__DIR__ . '/tests/Integration',
 		__DIR__ . '/tests/Unit',
 	])
-	->withPhpSets(php74: true)
+	->withPhpSets(php81: true)
 	->withTypeCoverageLevel(0);

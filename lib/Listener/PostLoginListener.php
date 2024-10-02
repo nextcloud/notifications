@@ -40,7 +40,7 @@ class PostLoginListener implements IEventListener {
 
 		try {
 			$this->settingsMapper->getSettingsByUser($userId);
-		} catch (DoesNotExistException $e) {
+		} catch (DoesNotExistException) {
 			$defaultSoundNotification = $this->config->getAppValue(Application::APP_ID, 'sound_notification') === 'yes' ? 'yes' : 'no';
 			$defaultSoundTalk = $this->config->getAppValue(Application::APP_ID, 'sound_talk') === 'yes' ? 'yes' : 'no';
 			$defaultBatchtime = (int)$this->config->getAppValue(Application::APP_ID, 'setting_batchtime');

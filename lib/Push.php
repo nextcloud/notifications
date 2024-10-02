@@ -325,7 +325,7 @@ class Push {
 				$this->payloadsToSend[$proxyServer][] = $payload;
 			} catch (\JsonException $e) {
 				$this->log->error('JSON error while encoding push notification: ' . $e->getMessage(), ['exception' => $e]);
-			} catch (\InvalidArgumentException $e) {
+			} catch (\InvalidArgumentException) {
 				// Failed to encrypt message for device: public key is invalid
 				$this->deletePushToken($device['token']);
 			}
@@ -431,7 +431,7 @@ class Push {
 						}
 					}
 				}
-			} catch (\InvalidArgumentException $e) {
+			} catch (\InvalidArgumentException) {
 				// Failed to encrypt message for device: public key is invalid
 				$this->deletePushToken($device['token']);
 			}
@@ -479,7 +479,7 @@ class Push {
 				$body = (string)$response->getBody();
 				try {
 					$bodyData = json_decode($body, true);
-				} catch (\JsonException $e) {
+				} catch (\JsonException) {
 					$bodyData = null;
 				}
 			} catch (ClientException $e) {
@@ -489,7 +489,7 @@ class Push {
 				$body = $response->getBody()->getContents();
 				try {
 					$bodyData = json_decode($body, true);
-				} catch (\JsonException $e) {
+				} catch (\JsonException) {
 					$bodyData = null;
 				}
 			} catch (ServerException $e) {
@@ -512,7 +512,7 @@ class Push {
 				]);
 
 				$error = $e->getMessage() ?: 'no reason given';
-				$this->printInfo('Could not send notification to push server [' . get_class($e) . ']: ' . $error);
+				$this->printInfo('Could not send notification to push server [' . $e::class . ']: ' . $error);
 				continue;
 			}
 
@@ -569,7 +569,7 @@ class Push {
 				$this->printInfo('Device token "last checked" is older than 60 days: ' . $token->getLastCheck());
 			}
 			return $token->getLastCheck() > $maxAge;
-		} catch (InvalidTokenException $e) {
+		} catch (InvalidTokenException) {
 			// Token does not exist anymore, should drop the push device entry
 			$this->printInfo('InvalidTokenException is thrown');
 			$this->deletePushToken($tokenId);

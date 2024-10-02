@@ -59,7 +59,7 @@ class GenerateUserSettings extends TimedJob {
 
 			try {
 				$this->settingsMapper->getSettingsByUser($user->getUID());
-			} catch (DoesNotExistException $e) {
+			} catch (DoesNotExistException) {
 				$settings = new Settings();
 				$settings->setUserId($user->getUID());
 				$settings->setNextSendTime(1);
