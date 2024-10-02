@@ -42,7 +42,7 @@ trait CommandLineTrait {
 			'maintenance:mode',
 		], true);
 
-		$args = array_map(fn($arg) => escapeshellarg($arg), $args);
+		$args = array_map(fn ($arg) => escapeshellarg($arg), $args);
 		$args[] = '--no-ansi';
 		$argString = implode(' ', $args);
 

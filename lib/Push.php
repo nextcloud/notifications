@@ -171,8 +171,8 @@ class Push {
 	public function filterDeviceList(array $devices, string $app): array {
 		$isTalkNotification = \in_array($app, ['spreed', 'talk', 'admin_notification_talk'], true);
 
-		$talkDevices = array_filter($devices, static fn($device) => $device['apptype'] === 'talk');
-		$otherDevices = array_filter($devices, static fn($device) => $device['apptype'] !== 'talk');
+		$talkDevices = array_filter($devices, static fn ($device) => $device['apptype'] === 'talk');
+		$otherDevices = array_filter($devices, static fn ($device) => $device['apptype'] !== 'talk');
 
 		$this->printInfo('Identified ' . count($talkDevices) . ' Talk devices and ' . count($otherDevices) . ' others.');
 
