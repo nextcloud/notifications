@@ -120,7 +120,7 @@ FwIDAQAB
 				$this->tokenProvider,
 				$this->identityProof,
 			])
-			->setMethods($methods)
+			->onlyMethods($methods)
 			->getMock();
 	}
 

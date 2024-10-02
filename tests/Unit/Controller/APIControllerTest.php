@@ -64,7 +64,7 @@ class APIControllerTest extends TestCase {
 		);
 	}
 
-	public function dataGenerateNotification(): array {
+	public static function dataGenerateNotification(): array {
 		return [
 			['user', '', '', false, null, false, null, 123, null, Http::STATUS_NOT_FOUND],
 			['user', '', '', false, null, false, 'user', 123, null, Http::STATUS_BAD_REQUEST],

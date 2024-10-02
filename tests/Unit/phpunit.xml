@@ -1,24 +1,18 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <phpunit bootstrap="bootstrap.php"
-		 verbose="true"
-		 convertDeprecationsToExceptions="true"
 		 timeoutForSmallTests="900"
 		 timeoutForMediumTests="900"
 		 timeoutForLargeTests="900"
-		>
-	<testsuite name='Notifications App Tests'>
-		<directory suffix='Test.php'>.</directory>
+		 cacheDirectory=".phpunit.cache"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd">
+	<testsuite name="Notifications App Tests">
+		<directory>.</directory>
 	</testsuite>
-	<!-- filters for code coverage -->
-	<filter>
-		<whitelist>
-			<directory suffix=".php">../../../notifications/lib</directory>
-			<directory suffix=".php">../../../notifications/appinfo</directory>
-		</whitelist>
-	</filter>
-	<logging>
-		<!-- and this is where your report will be written -->
-		<log type="coverage-clover" target="./clover.xml"/>
-	</logging>
+	<source>
+		<include>
+			<directory>../../../notifications/lib</directory>
+			<directory>../../../notifications/appinfo</directory>
+		</include>
+	</source>
 </phpunit>
-

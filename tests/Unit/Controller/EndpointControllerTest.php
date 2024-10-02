@@ -94,11 +94,11 @@ class EndpointControllerTest extends TestCase {
 				$this->clientService,
 				$this->push,
 			])
-			->setMethods($methods)
+			->onlyMethods($methods)
 			->getMock();
 	}
 
-	public function dataListNotifications(): array {
+	public static function dataListNotifications(): array {
 		return [
 			[
 				'v2',
@@ -109,10 +109,8 @@ class EndpointControllerTest extends TestCase {
 			[
 				'v2',
 				[
-					1 => $this->getMockBuilder(INotification::class)
-						->getMock(),
-					3 => $this->getMockBuilder(INotification::class)
-						->getMock(),
+					1,
+					3,
 				],
 				'"' . md5(json_encode([1, 3])) . '"',
 				[['$notification'], ['$notification']],
@@ -120,8 +118,7 @@ class EndpointControllerTest extends TestCase {
 			[
 				'v2',
 				[
-					42 => $this->getMockBuilder(INotification::class)
-						->getMock(),
+					42,
 				],
 				'"' . md5(json_encode([42])) . '"',
 				[['$notification']],
@@ -131,12 +128,10 @@ class EndpointControllerTest extends TestCase {
 
 	/**
 	 * @dataProvider dataListNotifications
-	 * @param string $apiVersion
-	 * @param array $notifications
-	 * @param string $expectedETag
-	 * @param array $expectedData
 	 */
 	public function testListNotifications(string $apiVersion, array $notifications, string $expectedETag, array $expectedData): void {
+		$notifications = array_fill_keys($notifications, $this->createMock(INotification::class));
+
 		$controller = $this->getController([
 			'notificationToArray',
 		]);
@@ -180,15 +175,13 @@ class EndpointControllerTest extends TestCase {
 		$this->assertSame($expectedData, $response->getData());
 	}
 
-	public function dataListNotificationsThrows() {
+	public static function dataListNotificationsThrows(): array {
 		return [
 			[
 				'v2',
 				[
-					1 => $this->getMockBuilder(INotification::class)
-						->getMock(),
-					3 => $this->getMockBuilder(INotification::class)
-						->getMock(),
+					1,
+					3,
 				],
 				'"' . md5(json_encode([3])) . '"',
 				[['$notification']],
@@ -198,12 +191,10 @@ class EndpointControllerTest extends TestCase {
 
 	/**
 	 * @dataProvider dataListNotificationsThrows
-	 * @param string $apiVersion
-	 * @param array $notifications
-	 * @param string $expectedETag
-	 * @param array $expectedData
 	 */
-	public function testListNotificationsThrows($apiVersion, array $notifications, $expectedETag, array $expectedData) {
+	public function testListNotificationsThrows(string $apiVersion, array $notifications, string $expectedETag, array $expectedData): void {
+		$notifications = array_fill_keys($notifications, $this->createMock(INotification::class));
+
 		$controller = $this->getController([
 			'notificationToArray',
 		]);
@@ -260,7 +251,7 @@ class EndpointControllerTest extends TestCase {
 		$this->assertSame($expectedData, $response->getData());
 	}
 
-	public function dataListNotificationsNoNotifiers() {
+	public static function dataListNotificationsNoNotifiers(): array {
 		return [
 			['v1'],
 			['v2'],
@@ -271,7 +262,7 @@ class EndpointControllerTest extends TestCase {
 	 * @dataProvider dataListNotificationsNoNotifiers
 	 * @param string $apiVersion
 	 */
-	public function testListNotificationsNoNotifiers($apiVersion) {
+	public function testListNotificationsNoNotifiers(string $apiVersion): void {
 		$controller = $this->getController();
 		$this->manager->expects($this->once())
 			->method('hasNotifiers')
@@ -282,7 +273,7 @@ class EndpointControllerTest extends TestCase {
 		$this->assertSame(Http::STATUS_NO_CONTENT, $response->getStatus());
 	}
 
-	public function dataGetNotification() {
+	public static function dataGetNotification(): array {
 		return [
 			['v1', 42, 'username1', [['$notification']]],
 			['v2', 21, 'username2', [['$notification']]],
@@ -291,11 +282,8 @@ class EndpointControllerTest extends TestCase {
 
 	/**
 	 * @dataProvider dataGetNotification
-	 * @param string $apiVersion
-	 * @param int $id
-	 * @param string $username
 	 */
-	public function testGetNotification($apiVersion, $id, $username) {
+	public function testGetNotification(string $apiVersion, int $id, string $username): void {
 		$controller = $this->getController([
 			'notificationToArray',
 		], $username);
@@ -331,22 +319,22 @@ class EndpointControllerTest extends TestCase {
 		$this->assertSame(Http::STATUS_OK, $response->getStatus());
 	}
 
-	public function dataGetNotificationNoId(): array {
-		$notification = $this->getMockBuilder(INotification::class)
-			->getMock();
-
+	public static function dataGetNotificationNoId(): array {
 		return [
 			['v1', false, 42, false, new NotificationNotFoundException()], // No notifiers
 			['v1', true, 42, true, new NotificationNotFoundException()], // Not found in database
-			['v1', true, 42, true, $notification], // Not handled on prepare
-			['v2', true, 42, true, $notification], // Not handled on prepare
+			['v1', true, 42, true, null], // Not handled on prepare
+			['v2', true, 42, true, null], // Not handled on prepare
 		];
 	}
 
 	/**
 	 * @dataProvider dataGetNotificationNoId
 	 */
-	public function testGetNotificationNoId(string $apiVersion, bool $hasNotifiers, int $id, bool $called, NotificationNotFoundException|INotification $notification): void {
+	public function testGetNotificationNoId(string $apiVersion, bool $hasNotifiers, int $id, bool $called, ?NotificationNotFoundException $notification): void {
+		if ($notification === null) {
+			$notification = $this->createMock(INotification::class);
+		}
 		$controller = $this->getController();
 
 		$this->manager->expects($this->once())
@@ -381,7 +369,7 @@ class EndpointControllerTest extends TestCase {
 		$this->assertSame(Http::STATUS_NOT_FOUND, $response->getStatus());
 	}
 
-	public function dataDeleteNotification() {
+	public static function dataDeleteNotification(): array {
 		return [
 			[42, 'username1'],
 			[21, 'username2'],
@@ -390,10 +378,8 @@ class EndpointControllerTest extends TestCase {
 
 	/**
 	 * @dataProvider dataDeleteNotification
-	 * @param int $id
-	 * @param string $username
 	 */
-	public function testDeleteNotification($id, $username) {
+	public function testDeleteNotification(int $id, string $username): void {
 		$controller = $this->getController([], $username);
 
 		$this->handler->expects($this->once())
@@ -405,7 +391,7 @@ class EndpointControllerTest extends TestCase {
 		$this->assertSame(Http::STATUS_OK, $response->getStatus());
 	}
 
-	public function testDeleteNotificationNoId() {
+	public function testDeleteNotificationNoId(): void {
 		$controller = $this->getController();
 
 		$this->handler->expects($this->never())
@@ -418,10 +404,8 @@ class EndpointControllerTest extends TestCase {
 
 	/**
 	 * @dataProvider dataDeleteNotification
-	 * @param int $_
-	 * @param string $username
 	 */
-	public function testDeleteAllNotifications($_, $username) {
+	public function testDeleteAllNotifications(int $_, string $username): void {
 		$controller = $this->getController([], $username);
 
 		$this->handler->expects($this->once())
@@ -438,47 +422,24 @@ class EndpointControllerTest extends TestCase {
 		$this->assertSame(Http::STATUS_OK, $response->getStatus());
 	}
 
-	public function dataNotificationToArray() {
+	public static function dataNotificationToArray(): array {
 		return [
-			['v1', 42, 'app1', 'user1', 1234, 'type1', '42', 'subject1', '', [], 'message1', 'richMessage 1', ['richMessage param'], 'link1', 'icon1', [], []],
-			['v1', 1337, 'app2', 'user2', 1337, 'type2', '21', 'subject2', 'richSubject 2', ['richSubject param'], 'message2', '', [], 'link2', 'icon2', [
-				$this->getMockBuilder(IAction::class)
-					->getMock(),
-				$this->getMockBuilder(IAction::class)
-					->getMock(),
-			], [['action'], ['action']]],
-			['v2', 42, 'app1', 'user1', 1234, 'type1', '42', 'subject1', '', [], 'message1', 'richMessage 1', ['richMessage param'], 'link1', 'icon1', [], []],
-			['v2', 1337, 'app2', 'user2', 1337, 'type2', '21', 'subject2', 'richSubject 2', ['richSubject param'], 'message2', '', [], 'link2', 'icon2', [
-				$this->getMockBuilder(IAction::class)
-					->getMock(),
-				$this->getMockBuilder(IAction::class)
-					->getMock(),
-			], [['action'], ['action']]],
+			['v1', 42, 'app1', 'user1', 1234, 'type1', '42', 'subject1', '', [], 'message1', 'richMessage 1', ['richMessage param'], 'link1', 'icon1', 0, []],
+			['v1', 1337, 'app2', 'user2', 1337, 'type2', '21', 'subject2', 'richSubject 2', ['richSubject param'], 'message2', '', [], 'link2', 'icon2', 2, [['action'], ['action']]],
+			['v2', 42, 'app1', 'user1', 1234, 'type1', '42', 'subject1', '', [], 'message1', 'richMessage 1', ['richMessage param'], 'link1', 'icon1', 0, []],
+			['v2', 1337, 'app2', 'user2', 1337, 'type2', '21', 'subject2', 'richSubject 2', ['richSubject param'], 'message2', '', [], 'link2', 'icon2', 2, [['action'], ['action']]],
 		];
 	}
 
 	/**
 	 * @dataProvider dataNotificationToArray
-	 *
-	 * @param string $apiVersion
-	 * @param int $id
-	 * @param string $app
-	 * @param string $user
-	 * @param int $timestamp
-	 * @param string $objectType
-	 * @param int $objectId
-	 * @param string $subject
-	 * @param string $subjectRich
-	 * @param array $subjectRichParameters
-	 * @param string $message
-	 * @param string $messageRich
-	 * @param array $messageRichParameters
-	 * @param string $link
-	 * @param string $icon
-	 * @param array $actions
-	 * @param array $actionsExpected
 	 */
-	public function testNotificationToArray($apiVersion, $id, $app, $user, $timestamp, $objectType, $objectId, $subject, $subjectRich, $subjectRichParameters, $message, $messageRich, $messageRichParameters, $link, $icon, array $actions, array $actionsExpected) {
+	public function testNotificationToArray(string $apiVersion, int $id, string $app, string $user, int $timestamp, string $objectType, string $objectId, string $subject, string$subjectRich, array $subjectRichParameters, string $message, string $messageRich, array $messageRichParameters, string $link, string $icon, int $actionsCount, array $actionsExpected): void {
+		$actions = [];
+		for ($i = 0; $i < $actionsCount; $i++) {
+			$actions[] = $this->createMock(IAction::class);
+		}
+
 		$notification = $this->getMockBuilder(INotification::class)
 			->getMock();
 
@@ -575,7 +536,7 @@ class EndpointControllerTest extends TestCase {
 		);
 	}
 
-	public function dataActionToArray() {
+	public static function dataActionToArray(): array {
 		return [
 			['label1', 'link1', 'GET', false],
 			['label2', 'link2', 'POST', true],
@@ -584,13 +545,8 @@ class EndpointControllerTest extends TestCase {
 
 	/**
 	 * @dataProvider dataActionToArray
-	 *
-	 * @param string $label
-	 * @param string $link
-	 * @param string $requestType
-	 * @param bool $isPrimary
 	 */
-	public function testActionToArray($label, $link, $requestType, $isPrimary) {
+	public function testActionToArray(string $label, string $link, string $requestType, bool $isPrimary): void {
 		$action = $this->getMockBuilder(IAction::class)
 			->getMock();
 

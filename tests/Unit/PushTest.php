@@ -95,7 +95,7 @@ class PushTest extends TestCase {
 					$this->timeFactory,
 					$this->logger,
 				])
-				->setMethods($methods)
+				->onlyMethods($methods)
 				->getMock();
 		}
 
@@ -109,7 +109,8 @@ class PushTest extends TestCase {
 			$this->cacheFactory,
 			$this->userStatusManager,
 			$this->l10nFactory,
-			$this->logger
+			$this->timeFactory,
+			$this->logger,
 		);
 	}
 
@@ -598,45 +599,11 @@ class PushTest extends TestCase {
 		$exception0 = new \Exception();
 		$client->expects($this->exactly(5))
 			->method('post')
-			->withConsecutive(
-				[
-					'proxyserver1/notifications',
-					[
-						'body' => [
-							'notifications' => ['["Payload"]', '["Payload"]'],
-						]
-					]
-				],
-				[
-					'badrequest/notifications',
-					[
-						'body' => [
-							'notifications' => ['["Payload"]'],
-						]
-					]
-				],
-				[
-					'unavailable/notifications',
-					[
-						'body' => [
-							'notifications' => ['["Payload"]'],
-						]
-					],
-				],
-				[
-					'ok/notifications',
-					[
-						'body' => [
-							'notifications' => ['["Payload"]'],
-						]
-					],
-				]
-			)
 			->willReturnOnConsecutiveCalls(
-				$this->throwException($exception0),
-				$this->throwException($exception1),
-				$this->throwException($exception2),
-				$response3,
+				$this->throwException($exception0), // proxyserver1/notifications
+				$this->throwException($exception1), // badrequest/notifications
+				$this->throwException($exception2), // unavailable/notifications
+				$response3, // ok/notifications
 				$this->throwException($exception4),
 			);
 

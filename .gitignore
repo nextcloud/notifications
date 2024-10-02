@@ -60,6 +60,7 @@ nbproject
 /tests/Unit/coverage*
 /tests/Unit/clover.xml
 /tests/Unit/js/node_modules
+/tests/Unit/.phpunit.cache
 /tests/Unit/.phpunit.result.cache
 /.php-cs-fixer.cache
 
