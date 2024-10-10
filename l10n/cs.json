@@ -36,6 +36,7 @@
     "Your settings have been updated." : "Vaše nastavení byla aktualizována.",
     "An error occurred while updating your settings." : "Při aktualizaci vašich nastavení došlo k chybě.",
     "You need to set up your email address before you can receive notification emails." : "Pokud chcete dostávat upozornění e-mailem, je třeba nejprve nastavit svou e-mailovou adresu.",
+    "Also repeat sound on a secondary speaker" : "Zopakovat zvuk také na sekundárním reproduktoru",
     "Selection of the speaker device is currently not supported by Safari" : "Safari aktuálně nepodporuje vybrané zvukové zařízení",
     "Select a device" : "Vyberte zařízení",
     "None" : "Žádná"
