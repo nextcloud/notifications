@@ -513,6 +513,13 @@ class PushTest extends TestCase {
 			->with('debug', false)
 			->willReturn($isDebug);
 
+		$this->config
+			->method('getAppValue')
+			->willReturnMap([
+				['notifications', 'subscription_aware_server', 'https://push-notifications.nextcloud.com', 'https://push-notifications.nextcloud.com'],
+				['support', 'subscription_key', '', ''],
+			]);
+
 		$this->l10nFactory
 			->method('getUserLanguage')
 			->with($user)
@@ -820,6 +827,13 @@ class PushTest extends TestCase {
 			->method('getSystemValueBool')
 			->with('has_internet_connection', true)
 			->willReturn(true);
+
+		$this->config
+			->method('getAppValue')
+			->willReturnMap([
+				['notifications', 'subscription_aware_server', 'https://push-notifications.nextcloud.com', 'https://push-notifications.nextcloud.com'],
+				['support', 'subscription_key', '', ''],
+			]);
 
 		$this->notificationManager->method('isFairUseOfFreePushService')
 			->willReturn(true);

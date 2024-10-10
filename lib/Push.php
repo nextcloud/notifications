@@ -482,6 +482,13 @@ class Push {
 			return;
 		}
 
+		$subscriptionAwareServer = rtrim($this->config->getAppValue(Application::APP_ID, 'subscription_aware_server', 'https://push-notifications.nextcloud.com'), '/');
+		if ($subscriptionAwareServer === 'https://push-notifications.nextcloud.com') {
+			$subscriptionKey = $this->config->getAppValue('support', 'subscription_key');
+		} else {
+			$subscriptionKey = $this->config->getSystemValueString('instanceid');
+		}
+
 		$client = $this->clientService->newClient();
 		foreach ($pushNotifications as $proxyServer => $notifications) {
 			try {
@@ -491,11 +498,8 @@ class Push {
 					],
 				];
 
-				if ($proxyServer === 'https://push-notifications.nextcloud.com') {
-					$subscriptionKey = $this->config->getAppValue('support', 'subscription_key');
-					if ($subscriptionKey) {
-						$requestData['headers']['X-Nextcloud-Subscription-Key'] = $subscriptionKey;
-					}
+				if ($subscriptionKey !== '' && $proxyServer === $subscriptionAwareServer) {
+					$requestData['headers']['X-Nextcloud-Subscription-Key'] = $subscriptionKey;
 				}
 
 				$response = $client->post($proxyServer . '/notifications', $requestData);
