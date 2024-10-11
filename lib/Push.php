@@ -45,6 +45,7 @@ use OCP\IUser;
 use OCP\L10N\IFactory;
 use OCP\Notification\IManager as INotificationManager;
 use OCP\Notification\INotification;
+use OCP\Security\ISecureRandom;
 use OCP\UserStatus\IManager as IUserStatusManager;
 use OCP\UserStatus\IUserStatus;
 use OCP\Util;
@@ -486,7 +487,11 @@ class Push {
 		if ($subscriptionAwareServer === 'https://push-notifications.nextcloud.com') {
 			$subscriptionKey = $this->config->getAppValue('support', 'subscription_key');
 		} else {
-			$subscriptionKey = $this->config->getSystemValueString('instanceid');
+			$subscriptionKey = $this->config->getAppValue(Application::APP_ID, 'push_subscription_key');
+			if ($subscriptionKey === '') {
+				$subscriptionKey = $this->createPushSubscriptionKey();
+				$this->config->setAppValue(Application::APP_ID, 'push_subscription_key', $subscriptionKey);
+			}
 		}
 
 		$client = $this->clientService->newClient();
@@ -784,5 +789,10 @@ class Push {
 
 	protected function createFakeUserObject(string $userId): IUser {
 		return new FakeUser($userId);
+	}
+
+	protected function createPushSubscriptionKey(): string {
+		$key = $this->random->generate(25, ISecureRandom::CHAR_ALPHANUMERIC);
+		return implode('-', str_split($key, 5));
 	}
 }
