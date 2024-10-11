@@ -28,6 +28,7 @@ use OCP\IUser;
 use OCP\L10N\IFactory;
 use OCP\Notification\IManager as INotificationManager;
 use OCP\Notification\INotification;
+use OCP\Security\ISecureRandom;
 use OCP\UserStatus\IManager as IUserStatusManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Http\Message\ResponseInterface;
@@ -53,6 +54,7 @@ class PushTest extends TestCase {
 	protected IUserStatusManager&MockObject $userStatusManager;
 	protected IFactory&MockObject $l10nFactory;
 	protected ITimeFactory&MockObject $timeFactory;
+	protected ISecureRandom&MockObject $random;
 	protected LoggerInterface&MockObject $logger;
 
 	protected function setUp(): void {
@@ -69,6 +71,7 @@ class PushTest extends TestCase {
 		$this->userStatusManager = $this->createMock(IUserStatusManager::class);
 		$this->l10nFactory = $this->createMock(IFactory::class);
 		$this->timeFactory = $this->createMock(ITimeFactory::class);
+		$this->random = $this->createMock(ISecureRandom::class);
 		$this->logger = $this->createMock(LoggerInterface::class);
 
 		$this->cacheFactory->method('createDistributed')
@@ -93,6 +96,7 @@ class PushTest extends TestCase {
 					$this->userStatusManager,
 					$this->l10nFactory,
 					$this->timeFactory,
+					$this->random,
 					$this->logger,
 				])
 				->onlyMethods($methods)
@@ -110,6 +114,7 @@ class PushTest extends TestCase {
 			$this->userStatusManager,
 			$this->l10nFactory,
 			$this->timeFactory,
+			$this->random,
 			$this->logger,
 		);
 	}
