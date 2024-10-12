@@ -21,7 +21,7 @@
     "Requesting browser permissions to show notifications" : "طلب إذن المُستعرِض للسماح بعرض الإشعارات",
     "Push notifications might be unreliable" : "الإشعارات المحشودة يمكن أن تكون غير موثوقة",
     "No notifications" : "لا توجد هناك إخطارات",
-    "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "ترعى شركة نكست كلاود بوابة مجانية لتحشيد الإشعارات للمستخدمين الخواص. و لضمان جودة الخدمة، تضع البوابة سقفاً على الإشعارات المُحشّدة لكل خادوم. بالنسبة للمؤسسات، و للحصول على بوابة أكثر اعتمادية، يُرجى التواصل مع شركة نكست كلاود لمزيد التفاصيل.",
+    "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "ترعى شركة نكست كلاود بوابة مجانية لتحشيد الإشعارات للمستخدمين الخواص. و لضمان جودة الخدمة، تضع البوابة سقفاً على الإشعارات المجمعة لكل خادم. بالنسبة للمؤسسات، و للحصول على بوابة أكثر اعتمادية، يُرجى التواصل مع شركة نكست كلاود لمزيد التفاصيل.",
     "Failed to dismiss all notifications" : "فشل في تجاهل كل الإشعارات",
     "Notifications defaults" : "إفتراضات الإشعارات",
     "Configure the default notification settings for new users" : "تهيئة إعدادات الإشعارات الافتراضية للمستخدمين الجُدُد",
