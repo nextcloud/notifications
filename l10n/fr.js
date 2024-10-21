@@ -38,6 +38,8 @@ OC.L10N.register(
     "Your settings have been updated." : "Vos paramètres ont été mis à jour.",
     "An error occurred while updating your settings." : "Un erreur est survenue lors de la mise à jour de vos paramètres.",
     "You need to set up your email address before you can receive notification emails." : "Vous devez définir votre adresse e-mail avant de pouvoir recevoir des e-mails de notification.",
+    "Also repeat sound on a secondary speaker" : "Aussi répète le sont son sur le second haut-parleur",
+    "Selection of the speaker device is currently not supported by Safari" : "La sélection du périphérique de haut-parleur n'est actuellement pas prise en charge par Safari",
     "Select a device" : "Sélectionner un appareil",
     "None" : "Aucun"
 },
