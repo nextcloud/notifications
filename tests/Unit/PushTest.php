@@ -42,6 +42,7 @@ use OCP\IUser;
 use OCP\L10N\IFactory;
 use OCP\Notification\IManager as INotificationManager;
 use OCP\Notification\INotification;
+use OCP\Security\ISecureRandom;
 use OCP\UserStatus\IManager as IUserStatusManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Http\Message\ResponseInterface;
@@ -77,6 +78,8 @@ class PushTest extends TestCase {
 	protected $l10nFactory;
 	/** @var ITimeFactory|MockObject */
 	protected $timeFactory;
+	/** @var ISecureRandom|MockObject */
+	protected $random;
 	/** @var LoggerInterface|MockObject */
 	protected $logger;
 
@@ -94,6 +97,7 @@ class PushTest extends TestCase {
 		$this->userStatusManager = $this->createMock(IUserStatusManager::class);
 		$this->l10nFactory = $this->createMock(IFactory::class);
 		$this->timeFactory = $this->createMock(ITimeFactory::class);
+		$this->random = $this->createMock(ISecureRandom::class);
 		$this->logger = $this->createMock(LoggerInterface::class);
 
 		$this->cacheFactory->method('createDistributed')
@@ -119,6 +123,7 @@ class PushTest extends TestCase {
 					$this->userStatusManager,
 					$this->l10nFactory,
 					$this->timeFactory,
+					$this->random,
 					$this->logger,
 				])
 				->setMethods($methods)
@@ -135,7 +140,9 @@ class PushTest extends TestCase {
 			$this->cacheFactory,
 			$this->userStatusManager,
 			$this->l10nFactory,
-			$this->logger
+			$this->timeFactory,
+			$this->random,
+			$this->logger,
 		);
 	}
 
@@ -513,6 +520,13 @@ class PushTest extends TestCase {
 			->with('debug', false)
 			->willReturn($isDebug);
 
+		$this->config
+			->method('getAppValue')
+			->willReturnMap([
+				['notifications', 'subscription_aware_server', 'https://push-notifications.nextcloud.com', 'https://push-notifications.nextcloud.com'],
+				['support', 'subscription_key', '', ''],
+			]);
+
 		$this->l10nFactory
 			->method('getUserLanguage')
 			->with($user)
@@ -820,6 +834,13 @@ class PushTest extends TestCase {
 			->method('getSystemValueBool')
 			->with('has_internet_connection', true)
 			->willReturn(true);
+
+		$this->config
+			->method('getAppValue')
+			->willReturnMap([
+				['notifications', 'subscription_aware_server', 'https://push-notifications.nextcloud.com', 'https://push-notifications.nextcloud.com'],
+				['support', 'subscription_key', '', ''],
+			]);
 
 		$this->notificationManager->method('isFairUseOfFreePushService')
 			->willReturn(true);
