@@ -3,6 +3,8 @@ OC.L10N.register(
     {
     "Hello %s" : "Salude %s",
     "Hello %s," : "Salude %s,",
+    "_New notification for %s_::_%n new notifications for %s_" : ["Notìfica noa pro %s","%n notìficas noas pro %s"],
+    "_You have a new notification for %s_::_You have %n new notifications for %s_" : ["Tenes una notìfica noa pro %s","Tenes %n notìfica noa pro %s"],
     "Admin notifications" : "Notìficas amministratzione",
     "Notifications" : "Notìficas",
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "Custa aplicatzione frunit unu motore e un'interfache pro sa notìfica API a disponimentu in Nextcloud.",
@@ -16,6 +18,8 @@ OC.L10N.register(
     "Requesting browser permissions to show notifications" : "Permissos de su navigadore rechertos pro mustrare is notìficas",
     "No notifications" : "Peruna notìfica",
     "Failed to dismiss all notifications" : "No at fatu a iscartare totu is notìficas",
+    "Configure the default notification settings for new users" : "Cunfigura is paràmetros de notìfica predefinidos pro utentes noos",
+    "Play sound when a new notification arrives" : "Reprodue unu sonu comente lompet una notìfica noa",
     "Never" : "Mai",
     "1 hour" : "1 ora",
     "3 hours" : "3 oras",
