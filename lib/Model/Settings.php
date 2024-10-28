@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace OCA\Notifications\Model;
 
 use OCP\AppFramework\Db\Entity;
+use OCP\DB\Types;
 
 /**
  *
@@ -38,10 +39,10 @@ class Settings extends Entity {
 	protected $nextSendTime;
 
 	public function __construct() {
-		$this->addType('userId', 'string');
-		$this->addType('batchTime', 'int');
-		$this->addType('lastSendId', 'int');
-		$this->addType('nextSendTime', 'int');
+		$this->addType('userId', Types::STRING);
+		$this->addType('batchTime', Types::INTEGER);
+		$this->addType('lastSendId', Types::BIGINT);
+		$this->addType('nextSendTime', Types::INTEGER);
 	}
 
 	public function asArray(): array {
