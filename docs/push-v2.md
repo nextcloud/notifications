@@ -306,6 +306,22 @@ These notifications should not be shown to the user. Instead you should delete p
 | `delete`   | Delete all notifications related to `nid` | `delete` |
 
 
+#### Silent delete notifications (multiple)
+
+These notifications should not be shown to the user. Instead you should delete pending system notifications for the respective ids
+
+```json
+{
+  "delete-multiple" : true,
+  "nids" : [1337]
+}
+```
+
+| Attribute         | Meaning                                                                                                         | Capability       |
+|-------------------|-----------------------------------------------------------------------------------------------------------------|------------------|
+| `nids`            | Numeric identifiers of the notifications in order to get more information via the [OCS API](ocs-endpoint-v2.md) | `object-data`    |
+| `delete-multiple` | Delete all notifications related to `nids`                                                                      | `delete` |
+
 #### Silent delete notification (all)
 
 These notifications should not be shown to the user. Instead you should delete all pending system notifications for this account
