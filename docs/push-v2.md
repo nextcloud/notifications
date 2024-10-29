@@ -8,7 +8,7 @@
 
 > Why is push-notifications.nextcloud.com necessary?
 
-The Nextcloud mobile apps from the Google Playstore and Apple App Store are signed with Nextcloud developer keys or certificates.
+The Nextcloud mobile apps from the Google Play and Apple App Store are signed with Nextcloud developer keys or certificates.
 Push notifications sent to those devices need to be signed with a generated push key or certificate from the same developer account.
 The keys and certificates can not be shipped with the Nextcloud server as otherwise everyone would have our developer key and could manipulate releases or push to any random Nextcloud device.
 The Firebase Cloud Messaging (Google) and Apple Push Notification Service are not made for something like a federated project like Nextcloud and still assume there is a single entity behind them like with all the other services.
@@ -110,12 +110,12 @@ In order to find out if notifications support push on the server you can run a r
 
 The server replies with the following status codes:
 
-| Status code | Meaning                                  |
-| ----------- | ---------------------------------------- |
-| 200         | No further action by the device required |
-| 201         | Push token was created/updated and **needs to be sent to the `Proxy`** |
+| Status code | Meaning                                                                                                                                            |
+|-------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
+| 200         | No further action by the device required                                                                                                           |
+| 201         | Push token was created/updated and **needs to be sent to the `Proxy`**                                                                             |
 | 400         | Invalid device public key; device does not use a token to authenticate; the push token hash is invalid formatted; the proxy server URL is invalid; |
-| 401         | Device is not logged in                  |
+| 401         | Device is not logged in                                                                                                                            |
 
 
 
@@ -123,11 +123,11 @@ The server replies with the following status codes:
 
 In case of `200` and `201` the reply has more information in the body:
 
-| Key              | Type         |                                          |
-| ---------------- | ------------ | ---------------------------------------- |
+| Key              | Type         |                                                        |
+|------------------|--------------|--------------------------------------------------------|
 | publicKey        | string (512) | rsa2048 public key of the user account on the instance |
 | deviceIdentifier | string (128) | unique identifier encrypted with the users private key |
-| signature        | string (512) | base64 encoded signature of the deviceIdentifier |
+| signature        | string (512) | base64 encoded signature of the deviceIdentifier       |
 
 
 
@@ -135,16 +135,16 @@ In case of `200` and `201` the reply has more information in the body:
 
 In case of `400` the following `message` can appear in the body:
 
-| Error                    | Description                              |
-| ------------------------ | ---------------------------------------- |
-| `INVALID_PUSHTOKEN_HASH` | The hash of the push token was not a valid `sha512` hash. |
+| Error                    | Description                                                                                                  |
+|--------------------------|--------------------------------------------------------------------------------------------------------------|
+| `INVALID_PUSHTOKEN_HASH` | The hash of the push token was not a valid `sha512` hash.                                                    |
 | `INVALID_SESSION_TOKEN`  | The authentication token of the request could not be identified. Check whether a password was used to login. |
-| `INVALID_DEVICE_KEY`     | The device key does not match the one registered to the provided session token. |
-| `INVALID_PROXY_SERVER`   | The proxy server was not a valid https URL. |
+| `INVALID_DEVICE_KEY`     | The device key does not match the one registered to the provided session token.                              |
+| `INVALID_PROXY_SERVER`   | The proxy server was not a valid https URL.                                                                  |
 
 
 
-## Unsubcribing at the Nextcloud server
+## Unsubscribing at the Nextcloud server
 
 When an account is removed from a device, the device should unregister on the server. Otherwise the server sends unnecessary push notifications and might be blocked because of spam.
 
@@ -162,12 +162,12 @@ DELETE /ocs/v2.php/apps/notifications/api/v2/push
 
 The server replies with the following status codes:
 
-| Status code | Meaning                                  |
-| ----------- | ---------------------------------------- |
-| 200         | Push token was not registered on the server |
+| Status code | Meaning                                                             |
+|-------------|---------------------------------------------------------------------|
+| 200         | Push token was not registered on the server                         |
 | 202         | Push token was deleted and **needs to be deleted from the `Proxy`** |
-| 400         | Device does not use a token to authenticate |
-| 401         | Device is not logged in                  |
+| 400         | Device does not use a token to authenticate                         |
+| 401         | Device is not logged in                                             |
 
 
 
@@ -175,8 +175,8 @@ The server replies with the following status codes:
 
 In case of `400` the following `message` can appear in the body:
 
-| Error                   | Description                              |
-| ----------------------- | ---------------------------------------- |
+| Error                   | Description                                                      |
+|-------------------------|------------------------------------------------------------------|
 | `INVALID_SESSION_TOKEN` | The authentication token of the request could not be identified. |
 
 
@@ -202,11 +202,11 @@ POST /devices
 
 The server replies with the following status codes:
 
-| Status code | Meaning                                  |
-| ----------- | ---------------------------------------- |
-| 200         | Push token was written to the database    |
-| 400         | Push token, public key or device identifier is malformed, the signature does not match |
-| 403         | Device is not allowed to write the push token of the device identifier |
+| Status code | Meaning                                                                                                                                                                                                                                  |
+|-------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 200         | Push token was written to the database                                                                                                                                                                                                   |
+| 400         | Push token, public key or device identifier is malformed, the signature does not match                                                                                                                                                   |
+| 403         | Device is not allowed to write the push token of the device identifier                                                                                                                                                                   |
 | 409         | In case of a conflict the device can retry with the additional field `cloudId` with the value `{{userid}}@{{serverurl}}` which allows the proxy to verify the public key and device identifier belongs to the given user on the instance |
 
 
@@ -231,10 +231,10 @@ DELETE /devices
 
 The server replies with the following status codes:
 
-| Status code | Meaning                                  |
-| ----------- | ---------------------------------------- |
-| 200         | Push token was deleted from the database |
-| 400         | Public key or device identifier is malformed |
+| Status code | Meaning                                                                    |
+|-------------|----------------------------------------------------------------------------|
+| 200         | Push token was deleted from the database                                   |
+| 400         | Public key or device identifier is malformed                               |
 | 403         | Device identifier and device public key didn't match or could not be found |
 
 
@@ -259,9 +259,9 @@ The pushed notifications is defined by the [Firebase Cloud Messaging HTTP Protoc
 }
 ```
 
-| Attribute   | Meaning                                  |
-| ----------- | ---------------------------------------- |
-| `subject`   | The subject is encrypted with the device´s *public key*. |
+| Attribute   | Meaning                                                                                      |
+|-------------|----------------------------------------------------------------------------------------------|
+| `subject`   | The subject is encrypted with the device´s *public key*.                                     |
 | `signature` | The signature is a sha512 signature over the encrypted subject using the user´s private key. |
 
 ### Encrypted subject data
@@ -280,13 +280,13 @@ If you are missing any information necessary to parse the notification in a more
 }
 ```
 
-| Attribute   | Meaning                                  | Capability |
-| ----------- | ---------------------------------------- |------------|
-| `app`   | The nextcloud app sending the notification | -|
-| `subject`   | The subject of the actual notification | -|
-| `type`   | Type of the object this notification is about | `object-data` |
-| `id`   | Identifier of the object this notification is about | `object-data` |
-| `nid`   | Numeric identifier of the notification in order to get more information via the [OCS API](ocs-endpoint-v2.md) | `object-data` |
+| Attribute | Meaning                                                                                                       | Capability    |
+|-----------|---------------------------------------------------------------------------------------------------------------|---------------|
+| `app`     | The nextcloud app sending the notification                                                                    | -             |
+| `subject` | The subject of the actual notification                                                                        | -             |
+| `type`    | Type of the object this notification is about                                                                 | `object-data` |
+| `id`      | Identifier of the object this notification is about                                                           | `object-data` |
+| `nid`     | Numeric identifier of the notification in order to get more information via the [OCS API](ocs-endpoint-v2.md) | `object-data` |
 
 
 #### Silent delete notification (single)
@@ -300,10 +300,10 @@ These notifications should not be shown to the user. Instead you should delete p
 }
 ```
 
-| Attribute   | Meaning                                  | Capability |
-| ----------- | ---------------------------------------- |------------|
-| `nid`   | Numeric identifier of the notification in order to get more information via the [OCS API](ocs-endpoint-v2.md) | `object-data` |
-| `delete`   | Delete all notifications related to `nid` | `delete` |
+| Attribute | Meaning                                                                                                       | Capability    |
+|-----------|---------------------------------------------------------------------------------------------------------------|---------------|
+| `nid`     | Numeric identifier of the notification in order to get more information via the [OCS API](ocs-endpoint-v2.md) | `object-data` |
+| `delete`  | Delete all notifications related to `nid`                                                                     | `delete`      |
 
 
 #### Silent delete notifications (multiple)
@@ -317,10 +317,10 @@ These notifications should not be shown to the user. Instead you should delete p
 }
 ```
 
-| Attribute         | Meaning                                                                                                         | Capability       |
-|-------------------|-----------------------------------------------------------------------------------------------------------------|------------------|
-| `nids`            | Numeric identifiers of the notifications in order to get more information via the [OCS API](ocs-endpoint-v2.md) | `object-data`    |
-| `delete-multiple` | Delete all notifications related to `nids`                                                                      | `delete` |
+| Attribute         | Meaning                                                                                                         | Capability    |
+|-------------------|-----------------------------------------------------------------------------------------------------------------|---------------|
+| `nids`            | Numeric identifiers of the notifications in order to get more information via the [OCS API](ocs-endpoint-v2.md) | `object-data` |
+| `delete-multiple` | Delete all notifications related to `nids`                                                                      | `delete`      |
 
 #### Silent delete notification (all)
 
@@ -332,9 +332,9 @@ These notifications should not be shown to the user. Instead you should delete a
 }
 ```
 
-| Attribute   | Meaning                                  | Capability |
-| ----------- | ---------------------------------------- |------------|
-| `delete-all`   | Delete all notifications related to this account | `delete` |
+| Attribute    | Meaning                                          | Capability |
+|--------------|--------------------------------------------------|------------|
+| `delete-all` | Delete all notifications related to this account | `delete`   |
 
 
 ### Verification
