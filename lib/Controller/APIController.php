@@ -49,7 +49,7 @@ class APIController extends OCSController {
 	 * @param string $userId ID of the user
 	 * @param string $shortMessage Subject of the notification
 	 * @param string $longMessage Message of the notification
-	 * @return DataResponse<Http::STATUS_OK, array<empty>, array{}>|DataResponse<Http::STATUS_BAD_REQUEST|Http::STATUS_NOT_FOUND|Http::STATUS_INTERNAL_SERVER_ERROR, null, array{}>
+	 * @return DataResponse<Http::STATUS_OK, list<empty>, array{}>|DataResponse<Http::STATUS_BAD_REQUEST|Http::STATUS_NOT_FOUND|Http::STATUS_INTERNAL_SERVER_ERROR, null, array{}>
 	 * @deprecated 30.0.0
 	 *
 	 * 200: Notification generated successfully

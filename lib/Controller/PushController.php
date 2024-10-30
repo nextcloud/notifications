@@ -50,7 +50,7 @@ class PushController extends OCSController {
 	 * @param string $pushTokenHash Hash of the push token
 	 * @param string $devicePublicKey Public key of the device
 	 * @param string $proxyServer Proxy server to be used
-	 * @return DataResponse<Http::STATUS_OK|Http::STATUS_CREATED, NotificationsPushDevice, array{}>|DataResponse<Http::STATUS_BAD_REQUEST, array{message: string}, array{}>|DataResponse<Http::STATUS_UNAUTHORIZED, array<empty>, array{}>
+	 * @return DataResponse<Http::STATUS_OK|Http::STATUS_CREATED, NotificationsPushDevice, array{}>|DataResponse<Http::STATUS_BAD_REQUEST, array{message: string}, array{}>|DataResponse<Http::STATUS_UNAUTHORIZED, list<empty>, array{}>
 	 *
 	 * 200: Device was already registered
 	 * 201: Device registered successfully
@@ -131,7 +131,7 @@ class PushController extends OCSController {
 	/**
 	 * Remove a device from push notifications
 	 *
-	 * @return DataResponse<Http::STATUS_OK|Http::STATUS_ACCEPTED|Http::STATUS_UNAUTHORIZED, array<empty>, array{}>|DataResponse<Http::STATUS_BAD_REQUEST, array{message: string}, array{}>
+	 * @return DataResponse<Http::STATUS_OK|Http::STATUS_ACCEPTED|Http::STATUS_UNAUTHORIZED, list<empty>, array{}>|DataResponse<Http::STATUS_BAD_REQUEST, array{message: string}, array{}>
 	 *
 	 * 200: No device registered
 	 * 202: Device removed successfully
