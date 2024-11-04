@@ -56,7 +56,7 @@ class EndpointController extends OCSController {
 	 * Get all notifications
 	 *
 	 * @param string $apiVersion Version of the API to use
-	 * @return DataResponse<Http::STATUS_OK, NotificationsNotification[], array{'X-Nextcloud-User-Status': string}>|DataResponse<Http::STATUS_NO_CONTENT, null, array{X-Nextcloud-User-Status: string}>
+	 * @return DataResponse<Http::STATUS_OK, list<NotificationsNotification>, array{'X-Nextcloud-User-Status': string}>|DataResponse<Http::STATUS_NO_CONTENT, null, array{X-Nextcloud-User-Status: string}>
 	 *
 	 * 200: Notifications returned
 	 * 204: No app uses notifications
@@ -175,8 +175,8 @@ class EndpointController extends OCSController {
 	 * Check if notification IDs exist
 	 *
 	 * @param string $apiVersion Version of the API to use
-	 * @param int[] $ids IDs of the notifications to check
-	 * @return DataResponse<Http::STATUS_OK|Http::STATUS_BAD_REQUEST, int[], array{}>
+	 * @param list<int> $ids IDs of the notifications to check
+	 * @return DataResponse<Http::STATUS_OK|Http::STATUS_BAD_REQUEST, list<int>, array{}>
 	 *
 	 * 200: Existing notification IDs returned
 	 * 400: Too many notification IDs requested
@@ -195,10 +195,10 @@ class EndpointController extends OCSController {
 			return new DataResponse([], Http::STATUS_BAD_REQUEST);
 		}
 
-		$ids = array_unique(array_filter(array_map(
+		$ids = array_values(array_unique(array_filter(array_map(
 			static fn ($id) => is_numeric($id) ? (int)$id : 0,
 			$ids
-		)));
+		))));
 
 		$existingIds = $this->handler->confirmIdsForUser($this->getCurrentUser(), $ids);
 		return new DataResponse($existingIds, Http::STATUS_OK);
@@ -208,7 +208,7 @@ class EndpointController extends OCSController {
 	 * Delete a notification
 	 *
 	 * @param int $id ID of the notification
-	 * @return DataResponse<Http::STATUS_OK, array<empty>, array{}>|DataResponse<Http::STATUS_FORBIDDEN|Http::STATUS_NOT_FOUND, null, array{}>
+	 * @return DataResponse<Http::STATUS_OK, list<empty>, array{}>|DataResponse<Http::STATUS_FORBIDDEN|Http::STATUS_NOT_FOUND, null, array{}>
 	 *
 	 * 200: Notification deleted successfully
 	 * 403: Deleting notification for impersonated user is not allowed
@@ -240,7 +240,7 @@ class EndpointController extends OCSController {
 	/**
 	 * Delete all notifications
 	 *
-	 * @return DataResponse<Http::STATUS_OK, array<empty>, array{}>|DataResponse<Http::STATUS_FORBIDDEN, null, array{}>
+	 * @return DataResponse<Http::STATUS_OK, list<empty>, array{}>|DataResponse<Http::STATUS_FORBIDDEN, null, array{}>
 	 *
 	 * 200: All notifications deleted successfully
 	 * 403: Deleting notification for impersonated user is not allowed

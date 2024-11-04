@@ -183,8 +183,8 @@ class Handler {
 	/**
 	 * Confirm that the notification ids still exist for the user
 	 *
-	 * @param int[] $ids
-	 * @return int[]
+	 * @param list<int> $ids
+	 * @return list<int>
 	 */
 	public function confirmIdsForUser(string $user, array $ids): array {
 		$query = $this->connection->getQueryBuilder();
