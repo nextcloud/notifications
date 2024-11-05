@@ -3,7 +3,7 @@ OC.L10N.register(
     {
     "Hello %s" : "Sveiki, %s",
     "Hello %s," : "Sveiki, %s,",
-    "Admin notifications" : "Adminu paziņojumi",
+    "Admin notifications" : "Pārvaldītāju paziņojumi",
     "Notifications" : "Paziņojumi",
     "Dismiss" : "Atmest",
     "seconds ago" : "pirms mirkļa",
