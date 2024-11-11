@@ -28,6 +28,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * @psalm-import-type NotificationsRichObjectParameter from ResponseDefinitions
+ * @psalm-import-type NotificationsRichObjectParameters from ResponseDefinitions
  */
 class APIController extends OCSController {
 	public function __construct(
@@ -80,8 +81,8 @@ class APIController extends OCSController {
 	 * @param string $userId ID of the user
 	 * @param string $subject Subject of the notification
 	 * @param string $message Message of the notification
-	 * @param array<string, NotificationsRichObjectParameter> $subjectParameters Rich objects to fill the subject placeholders, {@see \OCP\RichObjectStrings\Definitions}
-	 * @param array<string, NotificationsRichObjectParameter> $messageParameters Rich objects to fill the message placeholders, {@see \OCP\RichObjectStrings\Definitions}
+	 * @param NotificationsRichObjectParameters $subjectParameters Rich objects to fill the subject placeholders, {@see \OCP\RichObjectStrings\Definitions}
+	 * @param NotificationsRichObjectParameters $messageParameters Rich objects to fill the message placeholders, {@see \OCP\RichObjectStrings\Definitions}
 	 * @return DataResponse<Http::STATUS_OK, array{id: int}, array{}>|DataResponse<Http::STATUS_BAD_REQUEST, array{error: string}, array{}>
 	 *
 	 * 200: Notification generated successfully, returned id is the notification ID for future delete requests
@@ -114,11 +115,9 @@ class APIController extends OCSController {
 
 		try {
 			if (!empty($subjectParameters)) {
-				/** @psalm-var array<non-empty-string, array<non-empty-string, string>> $subjectParameters */
 				$this->richValidator->validate($subject, $subjectParameters);
 			}
 			if ($message !== '' && !empty($messageParameters)) {
-				/** @psalm-var array<non-empty-string, array<non-empty-string, string>> $messageParameters */
 				$this->richValidator->validate($message, $messageParameters);
 			}
 			$notification->setApp('admin_notifications')
