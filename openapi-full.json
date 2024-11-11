@@ -109,19 +109,13 @@
                         "type": "string"
                     },
                     "subjectRichParameters": {
-                        "type": "object",
-                        "additionalProperties": {
-                            "$ref": "#/components/schemas/RichObjectParameter"
-                        }
+                        "$ref": "#/components/schemas/RichObjectParameters"
                     },
                     "messageRich": {
                         "type": "string"
                     },
                     "messageRichParameters": {
-                        "type": "object",
-                        "additionalProperties": {
-                            "$ref": "#/components/schemas/RichObjectParameter"
-                        }
+                        "$ref": "#/components/schemas/RichObjectParameters"
                     },
                     "icon": {
                         "type": "string"
@@ -303,6 +297,12 @@
                     "height": {
                         "type": "string"
                     }
+                }
+            },
+            "RichObjectParameters": {
+                "type": "object",
+                "additionalProperties": {
+                    "$ref": "#/components/schemas/RichObjectParameter"
                 }
             }
         }
@@ -1226,20 +1226,14 @@
                                         "description": "Message of the notification"
                                     },
                                     "subjectParameters": {
-                                        "type": "object",
-                                        "default": {},
-                                        "description": "Rich objects to fill the subject placeholders, {@see \\OCP\\RichObjectStrings\\Definitions}",
-                                        "additionalProperties": {
-                                            "$ref": "#/components/schemas/RichObjectParameter"
-                                        }
+                                        "$ref": "#/components/schemas/RichObjectParameters",
+                                        "default": [],
+                                        "description": "Rich objects to fill the subject placeholders, {@see \\OCP\\RichObjectStrings\\Definitions}"
                                     },
                                     "messageParameters": {
-                                        "type": "object",
-                                        "default": {},
-                                        "description": "Rich objects to fill the message placeholders, {@see \\OCP\\RichObjectStrings\\Definitions}",
-                                        "additionalProperties": {
-                                            "$ref": "#/components/schemas/RichObjectParameter"
-                                        }
+                                        "$ref": "#/components/schemas/RichObjectParameters",
+                                        "default": [],
+                                        "description": "Rich objects to fill the message placeholders, {@see \\OCP\\RichObjectStrings\\Definitions}"
                                     }
                                 }
                             }
