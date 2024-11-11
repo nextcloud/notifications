@@ -9,16 +9,16 @@
     "packages-dev": [
         {
             "name": "nextcloud/rector",
-            "version": "v0.2.0",
+            "version": "v0.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nextcloud-libraries/rector.git",
-                "reference": "c5cceb7faf2d4df61fe1fd8f82e19c7b106dbe00"
+                "reference": "d73ab086700564f675eda9a834b6b08410a1da7e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nextcloud-libraries/rector/zipball/c5cceb7faf2d4df61fe1fd8f82e19c7b106dbe00",
-                "reference": "c5cceb7faf2d4df61fe1fd8f82e19c7b106dbe00",
+                "url": "https://api.github.com/repos/nextcloud-libraries/rector/zipball/d73ab086700564f675eda9a834b6b08410a1da7e",
+                "reference": "d73ab086700564f675eda9a834b6b08410a1da7e",
                 "shasum": ""
             },
             "require": {
@@ -65,9 +65,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nextcloud-libraries/rector/issues",
-                "source": "https://github.com/nextcloud-libraries/rector/tree/v0.2.0"
+                "source": "https://github.com/nextcloud-libraries/rector/tree/v0.2.1"
             },
-            "time": "2024-09-19T09:54:28+00:00"
+            "time": "2024-10-01T12:24:08+00:00"
         },
         {
             "name": "phpstan/phpstan",
