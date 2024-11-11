@@ -114,9 +114,11 @@ class APIController extends OCSController {
 
 		try {
 			if (!empty($subjectParameters)) {
+				/** @psalm-var array<non-empty-string, array<non-empty-string, string>> $subjectParameters */
 				$this->richValidator->validate($subject, $subjectParameters);
 			}
 			if ($message !== '' && !empty($messageParameters)) {
+				/** @psalm-var array<non-empty-string, array<non-empty-string, string>> $messageParameters */
 				$this->richValidator->validate($message, $messageParameters);
 			}
 			$notification->setApp('admin_notifications')

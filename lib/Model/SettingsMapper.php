@@ -20,7 +20,7 @@ use OCP\IDBConnection;
  *
  * @method Settings mapRowToEntity(array $row)
  * @method Settings findEntity(IQueryBuilder $query)
- * @method Settings[] findEntities(IQueryBuilder $query)
+ * @method list<Settings> findEntities(IQueryBuilder $query)
  */
 class SettingsMapper extends QBMapper {
 	public function __construct(IDBConnection $db) {
