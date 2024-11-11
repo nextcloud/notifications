@@ -39,7 +39,7 @@ class EndpointControllerTest extends TestCase {
 	protected ITimeFactory&MockObject $timeFactory;
 	protected ClientService&MockObject $clientService;
 	protected Push&MockObject $push;
-	protected EndpointController$controller;
+	protected EndpointController $controller;
 
 
 	protected function setUp(): void {
@@ -434,7 +434,7 @@ class EndpointControllerTest extends TestCase {
 	/**
 	 * @dataProvider dataNotificationToArray
 	 */
-	public function testNotificationToArray(string $apiVersion, int $id, string $app, string $user, int $timestamp, string $objectType, string $objectId, string $subject, string$subjectRich, array $subjectRichParameters, string $message, string $messageRich, array $messageRichParameters, string $link, string $icon, int $actionsCount, array $actionsExpected): void {
+	public function testNotificationToArray(string $apiVersion, int $id, string $app, string $user, int $timestamp, string $objectType, string $objectId, string $subject, string $subjectRich, array $subjectRichParameters, string $message, string $messageRich, array $messageRichParameters, string $link, string $icon, int $actionsCount, array $actionsExpected): void {
 		$actions = [];
 		for ($i = 0; $i < $actionsCount; $i++) {
 			$actions[] = $this->createMock(IAction::class);
