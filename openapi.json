@@ -109,19 +109,13 @@
                         "type": "string"
                     },
                     "subjectRichParameters": {
-                        "type": "object",
-                        "additionalProperties": {
-                            "$ref": "#/components/schemas/RichObjectParameter"
-                        }
+                        "$ref": "#/components/schemas/RichObjectParameters"
                     },
                     "messageRich": {
                         "type": "string"
                     },
                     "messageRichParameters": {
-                        "type": "object",
-                        "additionalProperties": {
-                            "$ref": "#/components/schemas/RichObjectParameter"
-                        }
+                        "$ref": "#/components/schemas/RichObjectParameters"
                     },
                     "icon": {
                         "type": "string"
@@ -284,6 +278,12 @@
                     "height": {
                         "type": "string"
                     }
+                }
+            },
+            "RichObjectParameters": {
+                "type": "object",
+                "additionalProperties": {
+                    "$ref": "#/components/schemas/RichObjectParameter"
                 }
             }
         }

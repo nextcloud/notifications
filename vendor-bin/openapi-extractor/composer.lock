@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d03935a0d6d5307f9346ca73775692b0",
+    "content-hash": "22b76e65543ffbdb4bb2381632f99301",
     "packages": [],
     "packages-dev": [
         {
@@ -79,16 +79,16 @@
         },
         {
             "name": "nextcloud/openapi-extractor",
-            "version": "v1.1.0",
+            "version": "v1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nextcloud-releases/openapi-extractor.git",
-                "reference": "d7c135e819d2297e7e9414a3f80464d68f164c94"
+                "reference": "2587f18b1e50230cc44210863247bbb37da34401"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nextcloud-releases/openapi-extractor/zipball/d7c135e819d2297e7e9414a3f80464d68f164c94",
-                "reference": "d7c135e819d2297e7e9414a3f80464d68f164c94",
+                "url": "https://api.github.com/repos/nextcloud-releases/openapi-extractor/zipball/2587f18b1e50230cc44210863247bbb37da34401",
+                "reference": "2587f18b1e50230cc44210863247bbb37da34401",
                 "shasum": ""
             },
             "require": {
@@ -119,9 +119,9 @@
             "description": "A tool for extracting OpenAPI specifications from Nextcloud source code",
             "support": {
                 "issues": "https://github.com/nextcloud-releases/openapi-extractor/issues",
-                "source": "https://github.com/nextcloud-releases/openapi-extractor/tree/v1.1.0"
+                "source": "https://github.com/nextcloud-releases/openapi-extractor/tree/v1.2.1"
             },
-            "time": "2024-11-06T11:50:20+00:00"
+            "time": "2024-11-12T08:00:02+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -231,11 +231,11 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
-    "platform-dev": [],
+    "platform": {},
+    "platform-dev": {},
     "platform-overrides": {
         "php": "8.1"
     },

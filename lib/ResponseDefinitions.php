@@ -40,6 +40,8 @@ namespace OCA\Notifications;
  *     height?: string,
  * }
  *
+ * @psalm-type NotificationsRichObjectParameters = array<non-empty-string, NotificationsRichObjectParameter>
+ *
  * @psalm-type NotificationsNotificationAction = array{
  *     label: string,
  *     link: string,
@@ -59,9 +61,9 @@ namespace OCA\Notifications;
  *     link: string,
  *     actions: list<NotificationsNotificationAction>,
  *     subjectRich?: string,
- *     subjectRichParameters?: array<string, NotificationsRichObjectParameter>,
+ *     subjectRichParameters?: NotificationsRichObjectParameters,
  *     messageRich?: string,
- *     messageRichParameters?: array<string, NotificationsRichObjectParameter>,
+ *     messageRichParameters?: NotificationsRichObjectParameters,
  *     icon?: string,
  *     shouldNotify?: bool,
  * }
