@@ -38,6 +38,8 @@ OC.L10N.register(
     "Your settings have been updated." : "Vaše nastavenia boli aktualizované.",
     "An error occurred while updating your settings." : "Nastala chyba počas ukladania nastavení.",
     "You need to set up your email address before you can receive notification emails." : "Ak chcete dostávať oznámenia emailom, musíte najskôr vyplniť vašu emailovú adresu.",
+    "Also repeat sound on a secondary speaker" : "Zopakovať zvuk aj na sekundárnom reproduktore",
+    "Selection of the speaker device is currently not supported by Safari" : "Výber zariadenia reproduktora momentálne nie je podporovaný prehliadačom Safari",
     "Select a device" : "Vyberte zariadenie",
     "None" : "Žiadne"
 },
