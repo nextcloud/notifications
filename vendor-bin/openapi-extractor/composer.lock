@@ -9,16 +9,16 @@
     "packages-dev": [
         {
             "name": "adhocore/cli",
-            "version": "v1.7.2",
+            "version": "v1.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/adhocore/php-cli.git",
-                "reference": "57834cbaa4fb68cda849417ab86577fba2b15298"
+                "reference": "6092763ab212038de64c44545574cedb7ef86269"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/adhocore/php-cli/zipball/57834cbaa4fb68cda849417ab86577fba2b15298",
-                "reference": "57834cbaa4fb68cda849417ab86577fba2b15298",
+                "url": "https://api.github.com/repos/adhocore/php-cli/zipball/6092763ab212038de64c44545574cedb7ef86269",
+                "reference": "6092763ab212038de64c44545574cedb7ef86269",
                 "shasum": ""
             },
             "require": {
@@ -63,7 +63,7 @@
             ],
             "support": {
                 "issues": "https://github.com/adhocore/php-cli/issues",
-                "source": "https://github.com/adhocore/php-cli/tree/v1.7.2"
+                "source": "https://github.com/adhocore/php-cli/tree/v1.8.0"
             },
             "funding": [
                 {
@@ -75,20 +75,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-09-05T00:08:47+00:00"
+            "time": "2024-11-15T08:55:32+00:00"
         },
         {
             "name": "nextcloud/openapi-extractor",
-            "version": "v1.2.1",
+            "version": "v1.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nextcloud-releases/openapi-extractor.git",
-                "reference": "2587f18b1e50230cc44210863247bbb37da34401"
+                "reference": "fb177110c9d182dd9c6c5c19d20f1275f2b7f6af"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nextcloud-releases/openapi-extractor/zipball/2587f18b1e50230cc44210863247bbb37da34401",
-                "reference": "2587f18b1e50230cc44210863247bbb37da34401",
+                "url": "https://api.github.com/repos/nextcloud-releases/openapi-extractor/zipball/fb177110c9d182dd9c6c5c19d20f1275f2b7f6af",
+                "reference": "fb177110c9d182dd9c6c5c19d20f1275f2b7f6af",
                 "shasum": ""
             },
             "require": {
@@ -119,9 +119,9 @@
             "description": "A tool for extracting OpenAPI specifications from Nextcloud source code",
             "support": {
                 "issues": "https://github.com/nextcloud-releases/openapi-extractor/issues",
-                "source": "https://github.com/nextcloud-releases/openapi-extractor/tree/v1.2.1"
+                "source": "https://github.com/nextcloud-releases/openapi-extractor/tree/v1.2.2"
             },
-            "time": "2024-11-12T08:00:02+00:00"
+            "time": "2024-11-13T10:36:57+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -231,11 +231,11 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": {},
-    "platform-dev": {},
+    "platform": [],
+    "platform-dev": [],
     "platform-overrides": {
         "php": "8.1"
     },
