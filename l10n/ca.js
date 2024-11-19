@@ -38,6 +38,9 @@ OC.L10N.register(
     "Your settings have been updated." : "S'han actualitzat els paràmetres.",
     "An error occurred while updating your settings." : "S'ha produït un error en actualitzar els paràmetres.",
     "You need to set up your email address before you can receive notification emails." : "Heu de configurar la vostra adreça electrònica per a poder rebre notificacions per correu electrònic.",
+    "Also repeat sound on a secondary speaker" : "Repeteix també el so en un altaveu secundari.",
+    "Selection of the speaker device is currently not supported by Safari" : "Actualment, Safari no admet la selecció del dispositiu d'altaveu",
+    "Select a device" : "Selecciona un dispositiu.",
     "None" : "Només una vegada"
 },
 "nplurals=2; plural=(n != 1);");
