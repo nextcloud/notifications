@@ -65,7 +65,7 @@ version: 0.2.3
 license: GPL-3.0-or-later
 
 @nextcloud/vue
-version: 8.20.0
+version: 8.21.0
 license: AGPL-3.0-or-later
 
 @nextcloud/vue-select
@@ -152,9 +152,17 @@ hast-util-is-element
 version: 3.0.0
 license: MIT
 
+hast-util-to-text
+version: 4.0.2
+license: MIT
+
 hast-util-whitespace
 version: 2.0.1
 license: MIT
+
+highlight.js
+version: 11.9.0
+license: BSD-3-Clause
 
 howler
 version: 2.2.4
@@ -189,6 +197,10 @@ version: 4.4.2
 license: MIT
 
 longest-streak
+version: 3.1.0
+license: MIT
+
+lowlight
 version: 3.1.0
 license: MIT
 
@@ -368,6 +380,10 @@ rehype-external-links
 version: 3.0.0
 license: MIT
 
+rehype-highlight
+version: 7.0.1
+license: MIT
+
 rehype-react
 version: 7.2.0
 license: MIT
@@ -430,6 +446,10 @@ license: MIT
 
 unist-builder
 version: 4.0.0
+license: MIT
+
+unist-util-find-after
+version: 5.0.0
 license: MIT
 
 unist-util-is
