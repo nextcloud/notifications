@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import UAParser from 'ua-parser-js'
+import { UAParser } from 'ua-parser-js'
 import { reactive, ref } from 'vue'
 import axios from '@nextcloud/axios'
 import { generateOcsUrl } from '@nextcloud/router'
