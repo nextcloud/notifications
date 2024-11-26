@@ -3,8 +3,8 @@ OC.L10N.register(
     {
     "Hello %s" : "أهلاً %s",
     "Hello %s," : "أهلاً %s،",
-    "_New notification for %s_::_%n new notifications for %s_" : ["%nإخطارات جديدة لـ%s","إخطار جديد لـ%s","%n إخطارات جديدة لـ %s","%n إخطارات جديدة لـ %s","%n إخطارات جديدة لـ %s","%nإخطارات جديدة لـ %s"],
-    "_You have a new notification for %s_::_You have %n new notifications for %s_" : ["لديك %n إخطارات جديدة لـ %s","لديك إخطار جديد لـ %s","لديك %n إخطارات جديدة لـ %s","لديك %n إخطارات جديدة لـ  %s","لديك %n إخطارات جديدة لـ %s ","لديك %n إخطارات جديدة لـ %s"],
+    "_New notification for %s_::_%n new notifications for %s_" : ["%nإخطارات جديدة لـ%s","إخطار جديد لـ%s","%n إخطارات جديدة لـ %s","%n إخطارات جديدة لـ %s","%n إخطارات جديدة لـ %s","%n إشعارات جديدة لـ %s"],
+    "_You have a new notification for %s_::_You have %n new notifications for %s_" : ["لديك %n إخطارات جديدة لـ %s","لديك إخطار جديد لـ %s","لديك %n إخطارات جديدة لـ %s","لديك %n إخطارات جديدة لـ  %s","لديك %n إخطارات جديدة لـ %s ","لديك %n إشعارات جديدة لـ %s"],
     "You can change the frequency of these emails or disable them in the <a href=\"%s\">settings</a>." : "يٌمكنك تغيير مُعدّل تردُّد هذه الإيميلات؛ أو إيقافها من  <a href=\"%s\"> الإعدادات </a>.",
     "You can change the frequency of these emails or disable them in the settings: %s" : "يٌمكنك تغيير مُعدّل تردُّد هذه الإيميلات؛ أو إيقافها من الإعدادات: %s",
     "Admin notifications" : "إشعارات المدير",
@@ -20,8 +20,8 @@ OC.L10N.register(
     "Failed to dismiss notification" : "فشل في تجاهل إشعار",
     "in {path}" : "في {المسار}",
     "Dismiss all notifications" : "تجاهل كل الإشعارات",
-    "Requesting browser permissions to show notifications" : "طلب إذن المُستعرِض للسماح بعرض الإشعارات",
-    "Push notifications might be unreliable" : "الإشعارات المحشودة يمكن أن تكون غير موثوقة",
+    "Requesting browser permissions to show notifications" : "طلب إذن متصفح الويب للسماح بعرض الإشعارات",
+    "Push notifications might be unreliable" : "الإشعارات Push يمكن أن تكون غير موثوقة",
     "No notifications" : "لا توجد إشعارات",
     "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "ترعى شركة نكست كلاود بوابة مجانية لتحشيد الإشعارات للمستخدمين الخواص. و لضمان جودة الخدمة، تضع البوابة سقفاً على الإشعارات المجمعة لكل خادم. بالنسبة للمؤسسات، و للحصول على بوابة أكثر اعتمادية، يُرجى التواصل مع شركة نكست كلاود لمزيد التفاصيل.",
     "Failed to dismiss all notifications" : "فشل في تجاهل كل الإشعارات",
@@ -40,7 +40,7 @@ OC.L10N.register(
     "You need to set up your email address before you can receive notification emails." : "عليك إضافة بريدك الإلكتروني قبل تلقي رسائل الإشعارات.",
     "Also repeat sound on a secondary speaker" : "كرِّر الصوت كذلك على مكبر الصوت الثانوي",
     "Selection of the speaker device is currently not supported by Safari" : "إختيار جهاز مكبر الصوت غير مدعوم حاليّاً على مستعرض سافاري",
-    "Select a device" : "إختَر جهازاً",
+    "Select a device" : "إختر جهازاً",
     "None" : "لا شيء"
 },
 "nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;");
