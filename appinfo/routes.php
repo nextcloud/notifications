@@ -18,6 +18,7 @@ return [
 
 		['name' => 'API#generateNotification', 'url' => '/api/{apiVersion}/admin_notifications/{userId}', 'verb' => 'POST', 'requirements' => ['apiVersion' => '(v1|v2)']],
 		['name' => 'API#generateNotificationV3', 'url' => '/api/{apiVersion3}/admin_notifications/{userId}', 'verb' => 'POST', 'requirements' => ['apiVersion3' => '(v3)']],
+		['name' => 'API#selfTestPush', 'url' => '/api/{apiVersion3}/test/self', 'verb' => 'POST', 'requirements' => ['apiVersion3' => '(v3)']],
 
 		['name' => 'Settings#personal', 'url' => '/api/{apiVersion}/settings', 'verb' => 'POST', 'requirements' => ['apiVersion' => '(v2)']],
 		['name' => 'Settings#admin', 'url' => '/api/{apiVersion}/settings/admin', 'verb' => 'POST', 'requirements' => ['apiVersion' => '(v2)']],

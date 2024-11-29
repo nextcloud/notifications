@@ -249,8 +249,9 @@ class Push {
 			try {
 				$this->notificationManager->setPreparingPushNotification(true);
 				$notification = $this->notificationManager->prepare($notification, $language);
-			} catch (AlreadyProcessedException|IncompleteParsedNotificationException|\InvalidArgumentException) {
+			} catch (AlreadyProcessedException|IncompleteParsedNotificationException|\InvalidArgumentException $e) {
 				// FIXME remove \InvalidArgumentException in Nextcloud 39
+				$this->printInfo('Error when preparing notification for push: ' . get_class($e));
 				return;
 			} finally {
 				$this->notificationManager->setPreparingPushNotification(false);
