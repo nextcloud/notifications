@@ -175,6 +175,7 @@ class AdminNotifications implements INotifier {
 				// Deal with known subjects
 			case 'cli':
 			case 'ocs':
+			case 'self':
 				$subjectParams = $notification->getSubjectParameters();
 				if (isset($subjectParams['subject'])) {
 					// Nextcloud 30+

@@ -13,9 +13,11 @@ use OCA\Notifications\Controller\APIController;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Utility\ITimeFactory;
+use OCP\IL10N;
 use OCP\IRequest;
 use OCP\IUser;
 use OCP\IUserManager;
+use OCP\IUserSession;
 use OCP\Notification\IManager;
 use OCP\Notification\IncompleteNotificationException;
 use OCP\Notification\INotification;
@@ -33,9 +35,11 @@ use Test\TestCase;
 class APIControllerTest extends TestCase {
 	protected ITimeFactory&MockObject $timeFactory;
 	protected IUserManager&MockObject $userManager;
+	protected IUserSession&MockObject $userSession;
 	protected IManager&MockObject $notificationManager;
 	protected App&MockObject $notificationApp;
 	protected IValidator&MockObject $richValidator;
+	protected IL10N&MockObject $l;
 	protected LoggerInterface&MockObject $logger;
 
 	protected APIController $controller;
@@ -47,9 +51,11 @@ class APIControllerTest extends TestCase {
 		$request = $this->createMock(IRequest::class);
 		$this->timeFactory = $this->createMock(ITimeFactory::class);
 		$this->userManager = $this->createMock(IUserManager::class);
+		$this->userSession = $this->createMock(IUserSession::class);
 		$this->notificationManager = $this->createMock(IManager::class);
 		$this->notificationApp = $this->createMock(App::class);
 		$this->richValidator = $this->createMock(IValidator::class);
+		$this->l = $this->createMock(IL10N::class);
 		$this->logger = $this->createMock(LoggerInterface::class);
 
 		$this->controller = new APIController(
@@ -57,9 +63,11 @@ class APIControllerTest extends TestCase {
 			$request,
 			$this->timeFactory,
 			$this->userManager,
+			$this->userSession,
 			$this->notificationManager,
 			$this->notificationApp,
 			$this->richValidator,
+			$this->l,
 			$this->logger,
 		);
 	}

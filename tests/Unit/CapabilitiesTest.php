@@ -28,6 +28,7 @@ class CapabilitiesTest extends TestCase {
 					'action-web',
 					'user-status',
 					'exists',
+					'test-push',
 				],
 				'push' => [
 					'devices',

@@ -42,6 +42,7 @@ class Capabilities implements ICapability {
 					'action-web',
 					'user-status',
 					'exists',
+					'test-push',
 				],
 				'push' => [
 					'devices',
