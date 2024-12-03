@@ -1,6 +1,7 @@
 OC.L10N.register(
     "notifications",
     {
+    "User not found" : "Defnyddiwr heb ei ganfod",
     "Hello %s" : "Helo %s",
     "Hello %s," : "Helo %s,",
     "Notifications" : "Hysbysiadau",
