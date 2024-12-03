@@ -1,6 +1,7 @@
 OC.L10N.register(
     "notifications",
     {
+    "User not found" : "Netrovita uzanto",
     "Hello %s" : "Saluton %s",
     "Hello %s," : "Saluton %s,",
     "Admin notifications" : "Administraj sciigoj",

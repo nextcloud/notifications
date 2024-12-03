@@ -1,4 +1,5 @@
 { "translations": {
+    "User not found" : "Användaren hittades inte",
     "Hello %s" : "Hej %s",
     "Hello %s," : "Hej %s,",
     "_New notification for %s_::_%n new notifications for %s_" : ["Ny notifikation för %s","%n nya notifikationer för %s"],
