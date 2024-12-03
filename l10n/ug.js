@@ -1,6 +1,7 @@
 OC.L10N.register(
     "notifications",
     {
+    "User not found" : "ئىشلەتكۈچى تېپىلمىدى",
     "Hello %s" : "ياخشىمۇسىز% s",
     "Hello %s," : "ياخشىمۇسىز% s,",
     "You can change the frequency of these emails or disable them in the <a href=\"%s\">settings</a>." : "بۇ ئېلېكترونلۇق خەتلەرنىڭ چاستوتىنى ئۆزگەرتەلەيسىز ياكى <a href = \"% s\"> تەڭشەك </a> دە چەكلىيەلەيسىز.",

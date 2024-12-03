@@ -1,6 +1,7 @@
 OC.L10N.register(
     "notifications",
     {
+    "User not found" : "找不到使用者",
     "Hello %s" : "嗨 %s",
     "Hello %s," : "嗨 %s，",
     "_New notification for %s_::_%n new notifications for %s_" : ["%s 的 %n 個新通知"],
