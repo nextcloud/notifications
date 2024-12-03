@@ -1,6 +1,7 @@
 OC.L10N.register(
     "notifications",
     {
+    "User not found" : "Notandi fannst ekki",
     "Hello %s" : "Halló %s",
     "Hello %s," : "Halló %s,",
     "_New notification for %s_::_%n new notifications for %s_" : ["Ný tilkynning fyrir %s","%n nýjar tilkynningar fyrir %s"],

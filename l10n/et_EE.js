@@ -1,6 +1,7 @@
 OC.L10N.register(
     "notifications",
     {
+    "User not found" : "Kasutajat ei leitud",
     "Hello %s" : "Tere %s",
     "Hello %s," : "Tere %s,",
     "Notifications" : "Märguanded",

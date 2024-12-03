@@ -1,6 +1,7 @@
 OC.L10N.register(
     "notifications",
     {
+    "User not found" : "Lietotājs nav atrasts",
     "Hello %s" : "Sveiki, %s",
     "Hello %s," : "Sveiki, %s,",
     "Admin notifications" : "Pārvaldītāju paziņojumi",

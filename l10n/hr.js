@@ -1,6 +1,7 @@
 OC.L10N.register(
     "notifications",
     {
+    "User not found" : "Korisnik nije pronađen",
     "Hello %s" : "Pozdrav %s",
     "Hello %s," : "Pozdrav %s,",
     "_New notification for %s_::_%n new notifications for %s_" : ["Nova obavijest za %s","%n nove obavijesti za %s","%n novih obavijesti za %s"],

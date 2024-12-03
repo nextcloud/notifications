@@ -1,6 +1,7 @@
 OC.L10N.register(
     "notifications",
     {
+    "User not found" : "Käyttäjää ei löydy",
     "Hello %s" : "Hei %s",
     "Hello %s," : "Hei %s,",
     "You can change the frequency of these emails or disable them in the <a href=\"%s\">settings</a>." : "Voit muuttaa näiden sähköpostien lähetystiheyttä tai ottaa ne pois käytöstä <a href=\"%s\">asetuksissa</a>.",

@@ -1,6 +1,7 @@
 OC.L10N.register(
     "notifications",
     {
+    "User not found" : "사용자를 찾을 수 없음",
     "Hello %s" : "%s님 안녕하세요.",
     "Hello %s," : "안녕하세요 %s님,",
     "_New notification for %s_::_%n new notifications for %s_" : ["%s에 대한 %n개의 새 알림"],
