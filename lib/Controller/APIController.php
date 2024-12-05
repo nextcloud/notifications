@@ -174,7 +174,7 @@ class APIController extends OCSController {
 	#[OpenAPI(scope: 'push')]
 	public function selfTestPush(): DataResponse {
 		if (!$this->notificationManager->isFairUseOfFreePushService()) {
-			$message = $this->l->t('We want to keep offering our push notification service for free, but large users overload our infrastructure. For this reason we have to rate-limit the use of push notifications. If you need this feature, consider using Nextcloud Enterprise.');
+			$message = $this->l->t('We want to keep offering our push notification service for free, but large number of users overload our infrastructure. For this reason we have to rate-limit the use of push notifications. If you need this feature, consider using Nextcloud Enterprise.');
 			return new DataResponse(
 				['message' => $message],
 				Http::STATUS_BAD_REQUEST,
