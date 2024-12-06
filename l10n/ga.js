@@ -2,6 +2,8 @@ OC.L10N.register(
     "notifications",
     {
     "User not found" : "Úsáideoir gan aimsiú",
+    "The device does not seem to be supported" : "Is cosúil nach dtacaítear leis an bhfeiste",
+    "An unexpected error occurred, ask your administration to check the logs." : "Tharla earráid gan choinne, iarr ar do riarachán na logaí a sheiceáil.",
     "Hello %s" : "Dia duit %s",
     "Hello %s," : "Dia duit %s,",
     "_New notification for %s_::_%n new notifications for %s_" : ["fógraí nua le haghaidh %s","%n fógraí nua le haghaidh %s","%n fógraí nua le haghaidh %s","%n fógraí nua le haghaidh%s","%n fógraí nua le haghaidh%s"],

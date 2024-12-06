@@ -1,6 +1,7 @@
 OC.L10N.register(
     "notifications",
     {
+    "User not found" : "Nun s'atopó l'usuariu",
     "Hello %s" : "Hola, %s",
     "Hello %s," : "Hola, %s.",
     "_New notification for %s_::_%n new notifications for %s_" : ["%n avisu nuevu de: %s","%n avisos nuevos de: %s"],
