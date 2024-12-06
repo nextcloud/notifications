@@ -1,7 +1,6 @@
 OC.L10N.register(
     "notifications",
     {
-    "We want to keep offering our push notification service for free, but large users overload our infrastructure. For this reason we have to rate-limit the use of push notifications. If you need this feature, consider using Nextcloud Enterprise." : "We want to keep offering our push notification service for free, but large users overload our infrastructure. For this reason we have to rate-limit the use of push notifications. If you need this feature, consider using Nextcloud Enterprise.",
     "User not found" : "User not found",
     "The device does not seem to be supported" : "The device does not seem to be supported",
     "An unexpected error occurred, ask your administration to check the logs." : "An unexpected error occurred, ask your administration to check the logs.",

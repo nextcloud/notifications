@@ -2,6 +2,8 @@ OC.L10N.register(
     "notifications",
     {
     "User not found" : "Usuário não encontrado",
+    "The device does not seem to be supported" : "O dispositivo parece não ser compatível",
+    "An unexpected error occurred, ask your administration to check the logs." : "Ocorreu um erro inesperado, peça ao administrador para verificar os logs.",
     "Hello %s" : "Olá %s",
     "Hello %s," : "Olá %s,",
     "_New notification for %s_::_%n new notifications for %s_" : ["Nova notificação para %s","%n novas notificações para %s","%n novas notificações para %s"],
