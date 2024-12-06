@@ -1,5 +1,4 @@
 { "translations": {
-    "We want to keep offering our push notification service for free, but large users overload our infrastructure. For this reason we have to rate-limit the use of push notifications. If you need this feature, consider using Nextcloud Enterprise." : "我們希望繼續免費提供推送通知服務，但大量用戶使我們的基礎設施承受過重負擔。因此，我們不得不對推送通知的使用進行速率限制。如果您需要此功能，請考慮使用 Nextcloud Enterprise。",
     "User not found" : "找不到用戶",
     "The device does not seem to be supported" : "該裝置似乎不受支援。",
     "An unexpected error occurred, ask your administration to check the logs." : "發生了意外錯誤，請請您的管理員檢查記錄。",

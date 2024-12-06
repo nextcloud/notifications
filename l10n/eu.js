@@ -2,6 +2,8 @@ OC.L10N.register(
     "notifications",
     {
     "User not found" : "Ez da erabiltzailea aurkitu",
+    "The device does not seem to be supported" : "Badirudi gailua ez dela onartzen",
+    "An unexpected error occurred, ask your administration to check the logs." : "Ezusteko akats bat gertatu da. Eskatu zure administrazioari egunkariak egiaztatzeko.",
     "Hello %s" : "Kaixo %s",
     "Hello %s," : "Kaixo %s,",
     "_New notification for %s_::_%n new notifications for %s_" : ["Jakinarazpen berria %s(r)entzat","%n jakinarazpen berri %s(r)entzat"],
