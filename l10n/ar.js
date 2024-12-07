@@ -1,6 +1,7 @@
 OC.L10N.register(
     "notifications",
     {
+    "We want to keep offering our push notification service for free, but large number of users overload our infrastructure. For this reason we have to rate-limit the use of push notifications. If you need this feature, consider using Nextcloud Enterprise." : "كان بودنا الاستمرار في تقديم خدمة الإشعارات الفورية مجاناً، ولكن نظراً للأعداد الكبيرة من المستخدمين وعدم قدرة بنيتنا الأساسية على خدمتهم جميعاً. فإنّا قد اضطررنا لوضع حد أقصى لاستخدام الإشعارات الفورية. إذا كنت بحاجة إلى هذه الميزة، ربما يكون من الأفضل أن تدرس استخدام \"النسخة المؤسسية من نكست كلاود\" Nextcloud Enterprise.",
     "User not found" : "المستخدم غير موجود",
     "The device does not seem to be supported" : "لا يبدو أن هذا الجهاز مدعوم",
     "An unexpected error occurred, ask your administration to check the logs." : "حدث خطأ غير متوقع. تواصل مع مشرفك لفحص سجل الحركات.",
