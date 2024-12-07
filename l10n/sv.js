@@ -1,6 +1,7 @@
 OC.L10N.register(
     "notifications",
     {
+    "We want to keep offering our push notification service for free, but large number of users overload our infrastructure. For this reason we have to rate-limit the use of push notifications. If you need this feature, consider using Nextcloud Enterprise." : "Vi vill fortsätta erbjuda vår push-aviseringstjänst gratis, men det stora antalet användare överbelastar vår infrastruktur. Av denna anledning måste vi hastighetsbegränsa användningen av push-meddelanden. Om du behöver denna funktion, överväg att använda Nextcloud Enterprise.",
     "User not found" : "Användaren hittades inte",
     "The device does not seem to be supported" : "Enheten verkar inte stödjas",
     "An unexpected error occurred, ask your administration to check the logs." : "Ett oväntat fel inträffade, be din administratör att kontrollera loggarna.",

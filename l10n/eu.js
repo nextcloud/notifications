@@ -1,6 +1,7 @@
 OC.L10N.register(
     "notifications",
     {
+    "We want to keep offering our push notification service for free, but large number of users overload our infrastructure. For this reason we have to rate-limit the use of push notifications. If you need this feature, consider using Nextcloud Enterprise." : "Gure push jakinarazpen zerbitzua doan eskaintzen jarraitu nahi dugu, baina erabiltzaile kopuru handiek gure azpiegiturak gainkargatzen dituzte. Hori dela eta, push akinarazpenen erabilera mugatu behar dugu. Ezaugarri hau behar baduzu, Nextcloud Enterprise erabili.",
     "User not found" : "Ez da erabiltzailea aurkitu",
     "The device does not seem to be supported" : "Badirudi gailua ez dela onartzen",
     "An unexpected error occurred, ask your administration to check the logs." : "Ezusteko akats bat gertatu da. Eskatu zure administrazioari egunkariak egiaztatzeko.",
