@@ -1,4 +1,5 @@
 { "translations": {
+    "We want to keep offering our push notification service for free, but large number of users overload our infrastructure. For this reason we have to rate-limit the use of push notifications. If you need this feature, consider using Nextcloud Enterprise." : "Желимо да наставимо са бесплатним пружањем услуге брзих обавештења, али велики број корисника преоптерећује нашу инфраструктуру. Из тог разлога морамо да ограничимо учесталост употребе брзих обавештења. Ако вам је ова функционалност потребна. размислите о преласку на Nextcloud Enterprise.",
     "User not found" : "Корисник није нађен",
     "The device does not seem to be supported" : "Изгледа да се овај уређај не подржава",
     "An unexpected error occurred, ask your administration to check the logs." : "Дошло је до неочекиване грешке, затражите од администрације да  погледа дневнике.",
