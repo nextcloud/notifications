@@ -275,7 +275,7 @@ class Push {
 		foreach ($devices as $device) {
 			$device['token'] = (int)$device['token'];
 			$this->printInfo('');
-			$this->printInfo('Device token:' . $device['token']);
+			$this->printInfo('Device token: ' . $device['token']);
 
 			if (!$this->validateToken($device['token'], $maxAge)) {
 				// Token does not exist anymore
@@ -530,27 +530,29 @@ class Push {
 
 	protected function validateToken(int $tokenId, int $maxAge): bool {
 		$age = $this->cache->get('t' . $tokenId);
-		if ($age !== null) {
-			return $age > $maxAge;
+
+		if ($age === null) {
+			try {
+				// Check if the token is still valid...
+				$token = $this->tokenProvider->getTokenById($tokenId);
+				$this->cache->set('t' . $tokenId, $token->getLastCheck(), 600);
+				$age = $token->getLastCheck();
+			} catch (InvalidTokenException) {
+				// Token does not exist anymore, should drop the push device entry
+				$this->printInfo('InvalidTokenException is thrown');
+				$this->deletePushToken($tokenId);
+				$this->cache->set('t' . $tokenId, 0, 600);
+				return false;
+			}
 		}
 
-		try {
-			// Check if the token is still valid...
-			$token = $this->tokenProvider->getTokenById($tokenId);
-			$this->cache->set('t' . $tokenId, $token->getLastCheck(), 600);
-			if ($token->getLastCheck() > $maxAge) {
-				$this->printInfo('Device token is valid');
-			} else {
-				$this->printInfo('Device token "last checked" is older than 60 days: ' . $token->getLastCheck());
-			}
-			return $token->getLastCheck() > $maxAge;
-		} catch (InvalidTokenException) {
-			// Token does not exist anymore, should drop the push device entry
-			$this->printInfo('InvalidTokenException is thrown');
-			$this->deletePushToken($tokenId);
-			$this->cache->set('t' . $tokenId, 0, 600);
-			return false;
+		if ($age > $maxAge) {
+			$this->printInfo('Device token is valid');
+			return true;
 		}
+
+		$this->printInfo('Device token "last checked" is older than 60 days: ' . $age);
+		return false;
 	}
 
 	/**
