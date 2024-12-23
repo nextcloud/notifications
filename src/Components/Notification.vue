@@ -20,7 +20,7 @@
 				:aria-label="t('notifications', 'Dismiss')"
 				@click="onDismissNotification">
 				<template #icon>
-					<Close :size="20" />
+					<IconDelete :size="20" />
 				</template>
 			</NcButton>
 		</div>
@@ -84,7 +84,7 @@
 import axios from '@nextcloud/axios'
 import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
 import NcRichText from '@nextcloud/vue/dist/Components/NcRichText.js'
-import Close from 'vue-material-design-icons/Close.vue'
+import IconDelete from 'vue-material-design-icons/Delete.vue'
 import Message from 'vue-material-design-icons/Message.vue'
 import { showError } from '@nextcloud/dialogs'
 import Action from './Action.vue'
@@ -100,7 +100,7 @@ export default {
 	components: {
 		Action,
 		NcButton,
-		Close,
+		IconDelete,
 		Message,
 		NcRichText,
 	},

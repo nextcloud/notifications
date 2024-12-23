@@ -44,7 +44,7 @@
 							wide
 							@click="onDismissAll">
 							<template #icon>
-								<IconClose :size="20" />
+								<IconDelete :size="20" />
 							</template>
 							{{ t('notifications', 'Dismiss all notifications') }}
 						</NcButton>
@@ -79,7 +79,7 @@
 
 <script>
 import IconBell from 'vue-material-design-icons/Bell.vue'
-import IconClose from 'vue-material-design-icons/Close.vue'
+import IconDelete from 'vue-material-design-icons/Delete.vue'
 import IconMessage from 'vue-material-design-icons/Message.vue'
 import IconNotification from './Components/IconNotification.vue'
 import Notification from './Components/Notification.vue'
@@ -105,7 +105,7 @@ export default {
 
 	components: {
 		IconBell,
-		IconClose,
+		IconDelete,
 		IconMessage,
 		IconNotification,
 		NcButton,
