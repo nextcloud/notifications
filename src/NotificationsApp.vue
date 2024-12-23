@@ -20,39 +20,36 @@
 		<!-- Notifications list content -->
 		<div ref="container" class="notification-container">
 			<transition name="fade" mode="out-in">
-				<div v-if="notifications.length > 0">
-					<transition-group class="notification-wrapper"
-						name="list"
-						tag="ul">
-						<Notification v-if="hasThrottledPushNotifications"
-							:key="-2016"
-							datetime="warning"
-							app="core"
-							:icon="warningIcon"
-							external-link="https://nextcloud.com/fairusepolicy"
-							:message="emptyContentDescription"
-							:subject="emptyContentMessage"
-							:index="2016" />
-						<Notification v-for="(n, index) in notifications"
-							:key="n.notificationId"
-							v-bind="n"
-							:index="index"
-							@remove="onRemove" />
-					</transition-group>
-
+				<transition-group v-if="notifications.length > 0"
+					class="notification-wrapper"
+					name="list"
+					tag="ul">
+					<Notification v-if="hasThrottledPushNotifications"
+						:key="-2016"
+						datetime="warning"
+						app="core"
+						:icon="warningIcon"
+						external-link="https://nextcloud.com/fairusepolicy"
+						:message="emptyContentDescription"
+						:subject="emptyContentMessage"
+						:index="2016" />
+					<Notification v-for="(n, index) in notifications"
+						:key="n.notificationId"
+						v-bind="n"
+						:index="index"
+						@remove="onRemove" />
 					<!-- Dismiss all -->
-					<span v-if="notifications.length > 0"
-						class="dismiss-all"
-						@click="onDismissAll">
+					<li key="dismiss-button" class="dismiss-all">
 						<NcButton type="tertiary"
+							wide
 							@click="onDismissAll">
 							<template #icon>
 								<IconClose :size="20" />
 							</template>
 							{{ t('notifications', 'Dismiss all notifications') }}
 						</NcButton>
-					</span>
-				</div>
+					</li>
+				</transition-group>
 
 				<!-- No notifications -->
 				<NcEmptyContent v-else
@@ -497,12 +494,7 @@ export default {
 	}
 
 	.dismiss-all {
-		display: flex;
-		justify-content: center;
-		color: var(--color-text-maxcontrast);
-		border-top: 1px solid var(--color-border);
-		padding: 10px;
-		background-color: var(--color-main-background);
+		padding: calc(2 * var(--default-grid-baseline));
 	}
 }
 
