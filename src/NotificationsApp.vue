@@ -481,18 +481,28 @@ export default {
 .notification-container {
 	/* Prevent slide animation to go out of the div */
 	overflow: hidden;
-}
 
-.notification-wrapper {
-	max-height: calc(100vh - 50px * 4);
-	overflow: auto;
-}
+	&,
+	& :deep(*),
+	& :deep(*::before),
+	& :deep(*::after) {
+		box-sizing: border-box;
+	}
 
-::v-deep .empty-content {
-	margin: 12vh 10px;
+	.notification-wrapper {
+		display: flex;
+		flex-direction: column;
+		max-height: calc(100vh - 50px * 4);
+		overflow: auto;
+	}
 
-	p {
+	.dismiss-all {
+		display: flex;
+		justify-content: center;
 		color: var(--color-text-maxcontrast);
+		border-top: 1px solid var(--color-border);
+		padding: 10px;
+		background-color: var(--color-main-background);
 	}
 }
 
