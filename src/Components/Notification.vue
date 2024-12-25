@@ -301,8 +301,6 @@ export default {
 
 <style lang="scss" scoped>
 .notification {
-	background-color: var(--color-main-background);
-
 	:deep(img.notification-icon) {
 		display: flex;
 		width: 32px;

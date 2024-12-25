@@ -20,39 +20,36 @@
 		<!-- Notifications list content -->
 		<div ref="container" class="notification-container">
 			<transition name="fade" mode="out-in">
-				<div v-if="notifications.length > 0">
-					<transition-group class="notification-wrapper"
-						name="list"
-						tag="ul">
-						<Notification v-if="hasThrottledPushNotifications"
-							:key="-2016"
-							datetime="warning"
-							app="core"
-							:icon="warningIcon"
-							external-link="https://nextcloud.com/fairusepolicy"
-							:message="emptyContentDescription"
-							:subject="emptyContentMessage"
-							:index="2016" />
-						<Notification v-for="(n, index) in notifications"
-							:key="n.notificationId"
-							v-bind="n"
-							:index="index"
-							@remove="onRemove" />
-					</transition-group>
-
+				<transition-group v-if="notifications.length > 0"
+					class="notification-wrapper"
+					name="list"
+					tag="ul">
+					<Notification v-if="hasThrottledPushNotifications"
+						:key="-2016"
+						datetime="warning"
+						app="core"
+						:icon="warningIcon"
+						external-link="https://nextcloud.com/fairusepolicy"
+						:message="emptyContentDescription"
+						:subject="emptyContentMessage"
+						:index="2016" />
+					<Notification v-for="(n, index) in notifications"
+						:key="n.notificationId"
+						v-bind="n"
+						:index="index"
+						@remove="onRemove" />
 					<!-- Dismiss all -->
-					<span v-if="notifications.length > 0"
-						class="dismiss-all"
-						@click="onDismissAll">
+					<li key="dismiss-button" class="dismiss-all">
 						<NcButton type="tertiary"
+							wide
 							@click="onDismissAll">
 							<template #icon>
 								<IconClose :size="20" />
 							</template>
 							{{ t('notifications', 'Dismiss all notifications') }}
 						</NcButton>
-					</span>
-				</div>
+					</li>
+				</transition-group>
 
 				<!-- No notifications -->
 				<NcEmptyContent v-else
@@ -481,18 +478,23 @@ export default {
 .notification-container {
 	/* Prevent slide animation to go out of the div */
 	overflow: hidden;
-}
 
-.notification-wrapper {
-	max-height: calc(100vh - 50px * 4);
-	overflow: auto;
-}
+	&,
+	& :deep(*),
+	& :deep(*::before),
+	& :deep(*::after) {
+		box-sizing: border-box;
+	}
 
-::v-deep .empty-content {
-	margin: 12vh 10px;
+	.notification-wrapper {
+		display: flex;
+		flex-direction: column;
+		max-height: calc(100vh - 50px * 4);
+		overflow: auto;
+	}
 
-	p {
-		color: var(--color-text-maxcontrast);
+	.dismiss-all {
+		padding: calc(2 * var(--default-grid-baseline));
 	}
 }
 
