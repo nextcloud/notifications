@@ -421,7 +421,7 @@ version: 2.1.0
 license: MIT
 
 ua-parser-js
-version: 1.0.39
+version: 1.0.40
 license: MIT
 
 unified
