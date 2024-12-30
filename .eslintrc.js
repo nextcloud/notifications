@@ -4,12 +4,11 @@
  */
 module.exports = {
 	extends: [
-		'@nextcloud'
+		'@nextcloud',
 	],
 	globals: {
-		'$': true
 	},
 	rules: {
-		'no-control-regex': 1
-	}
+		'no-control-regex': 'warn',
+	},
 }
