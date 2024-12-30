@@ -193,8 +193,6 @@ export default {
 		}
 	},
 
-	_$el: null,
-
 	computed: {
 		timestamp() {
 			if (this.datetime === 'warning') {
@@ -244,10 +242,6 @@ export default {
 		isCollapsedMessage() {
 			return this.message.length > 200 && !this.showFullMessage
 		},
-	},
-
-	mounted() {
-		this._$el = $(this.$el)
 	},
 
 	methods: {

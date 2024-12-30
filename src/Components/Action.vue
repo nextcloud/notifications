@@ -125,24 +125,9 @@ export default {
 				})
 
 				// emit event to current app
-				this.$parent._$el.fadeOut(OC.menuSpeed)
 				this.$parent.$emit('remove', this.notificationIndex)
 
 				emit('notifications:action:executed', event)
-
-				try {
-					$('body').trigger(new $.Event('OCA.Notification.Action', {
-						notification: this.$parent,
-						action: {
-							url: this.link,
-							type: this.typeWithDefault,
-						},
-					}))
-				// do not do anything but log, the action went fine
-				// only the event bus listener failed, this is not our problem
-				} catch (error) {
-					console.error(error)
-				}
 			} catch (error) {
 				console.error('Failed to perform action', error)
 				showError(t('notifications', 'Failed to perform action'))

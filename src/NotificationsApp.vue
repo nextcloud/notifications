@@ -157,8 +157,6 @@ export default {
 		}
 	},
 
-	_$icon: null,
-
 	computed: {
 		showBrowserNotifications() {
 			return this.backgroundFetching
@@ -194,12 +192,7 @@ export default {
 
 	mounted() {
 		this.tabId = OC.requestToken || ('' + Math.random())
-		this._$icon = $(this.$refs.icon)
 		this._oldcount = 0
-
-		// Bind the button click event
-		console.debug('Registering notifications container as a menu')
-		OC.registerMenu($(this.$refs.button), $(this.$refs.container), undefined, true)
 
 		this.checkWebNotificationPermissions()
 
