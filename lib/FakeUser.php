@@ -40,11 +40,15 @@ class FakeUser implements IUser {
 		throw new \RuntimeException('Not implemented');
 	}
 
-	public function getLastLogin() {
+	public function getLastLogin(): int {
 		throw new \RuntimeException('Not implemented');
 	}
 
-	public function updateLastLoginTimestamp() {
+	public function getFirstLogin(): int {
+		throw new \RuntimeException('Not implemented');
+	}
+
+	public function updateLastLoginTimestamp(): bool {
 		throw new \RuntimeException('Not implemented');
 	}
 
