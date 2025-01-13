@@ -2,6 +2,8 @@ OC.L10N.register(
     "notifications",
     {
     "User not found" : "Користувача не знайдено",
+    "The device does not seem to be supported" : "Цей пристрій не підтримується",
+    "An unexpected error occurred, ask your administration to check the logs." : "Неочікувана помилка. Зверніться до адміністратора для отримання більшої інформації в журналі.",
     "Hello %s" : "Вітаємо %s",
     "Hello %s," : "Вітаємо %s,",
     "_New notification for %s_::_%n new notifications for %s_" : ["Нове сповіщення для %s","%n нових сповіщення для %s","%n нових сповіщень для %s","%n нових сповіщень для %s"],
