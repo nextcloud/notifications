@@ -18,7 +18,7 @@
     "seconds ago" : "несколько секунд назад",
     "Failed to dismiss notification" : "Не удалось скрыть уведомление",
     "in {path}" : "в {path}",
-    "Dismiss all notifications" : "Отклонить все уведомления",
+    "Dismiss all notifications" : "Скрыть все уведомления",
     "Requesting browser permissions to show notifications" : "Запрос разрешений для показа уведомлений в браузере",
     "Push notifications might be unreliable" : "Пуш-уведомления могут быть ненадёжны",
     "No notifications" : "Уведомлений нет",
