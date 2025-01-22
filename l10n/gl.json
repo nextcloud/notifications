@@ -31,7 +31,7 @@
     "Configure the default notification settings for new users" : "Configure os axustes de notificación predeterminados para os novos usuarios",
     "Send email reminders about unhandled notifications after:" : "Enviar lembretes por correo sobre notificacións non xestionadas após:",
     "Play sound when a new notification arrives" : "Reproducir son cando chegue unha nova notificación",
-    "Play sound when a call started (requires Nextcloud Talk)" : "Reproducir son cando se inicia unha chamada (precisa Nextcloud Talk)",
+    "Play sound when a call started (requires Nextcloud Talk)" : "Reproducir son cando se inicia unha chamada (precisa de Parlar de Nextcloud)",
     "Never" : "Nunca",
     "1 hour" : "1 hora",
     "3 hours" : "3 horas",
