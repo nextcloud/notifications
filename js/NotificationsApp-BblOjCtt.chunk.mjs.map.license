@@ -788,7 +788,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 2.30.1
 	- license: MIT
 - notifications
-	- version: 4.0.0
+	- version: 5.0.0-dev.0
 	- license: AGPL-3.0-only
 - property-information
 	- version: 6.3.0
