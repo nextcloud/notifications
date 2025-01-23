@@ -81,7 +81,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 2.3.0
 	- license: BSD-3-Clause
 - notifications
-	- version: 4.0.0
+	- version: 5.0.0-dev.0
 	- license: AGPL-3.0-only
 - striptags
 	- version: 3.2.0
