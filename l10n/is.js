@@ -2,6 +2,8 @@ OC.L10N.register(
     "notifications",
     {
     "User not found" : "Notandi fannst ekki",
+    "The device does not seem to be supported" : "Ekki virðist vera stuðningur við þetta tæki",
+    "An unexpected error occurred, ask your administration to check the logs." : "Óvænt villa átti sér stað, biddu kerfisstjórann þinn um að skoða atvikaskrárnar.",
     "Hello %s" : "Halló %s",
     "Hello %s," : "Halló %s,",
     "_New notification for %s_::_%n new notifications for %s_" : ["Ný tilkynning fyrir %s","%n nýjar tilkynningar fyrir %s"],
@@ -39,6 +41,8 @@ OC.L10N.register(
     "Your settings have been updated." : "Stillingar þínar eru breyttar.",
     "An error occurred while updating your settings." : "Villa kom upp við að uppfæra stillingarnar þínar.",
     "You need to set up your email address before you can receive notification emails." : "Þú verður að gefa upp tölvupóstfangið þitt svo að þú farir að fá tilkynningapósta.",
+    "Also repeat sound on a secondary speaker" : "Einnig endurtaka hljóð á aukahátalara",
+    "Select a device" : "Veldu tæki",
     "None" : "Ekkert"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");
