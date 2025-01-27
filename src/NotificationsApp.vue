@@ -38,17 +38,6 @@
 						v-bind="n"
 						:index="index"
 						@remove="onRemove" />
-					<!-- Dismiss all -->
-					<li key="dismiss-button" class="dismiss-all">
-						<NcButton type="tertiary"
-							wide
-							@click="onDismissAll">
-							<template #icon>
-								<IconClose :size="20" />
-							</template>
-							{{ t('notifications', 'Dismiss all notifications') }}
-						</NcButton>
-					</li>
 				</transition-group>
 
 				<!-- No notifications -->
@@ -73,6 +62,18 @@
 					</template>
 				</NcEmptyContent>
 			</transition>
+
+			<!-- Dismiss all -->
+			<div v-if="notifications.length > 0" class="dismiss-all">
+				<NcButton type="tertiary"
+					wide
+					@click="onDismissAll">
+					<template #icon>
+						<IconClose :size="20" />
+					</template>
+					{{ t('notifications', 'Dismiss all notifications') }}
+				</NcButton>
+			</div>
 		</div>
 	</NcHeaderMenu>
 </template>
@@ -489,12 +490,13 @@ export default {
 	.notification-wrapper {
 		display: flex;
 		flex-direction: column;
-		max-height: calc(100vh - 50px * 4);
+		max-height: calc(100vh - 50px * 5);
 		overflow: auto;
 	}
 
 	.dismiss-all {
 		padding: calc(2 * var(--default-grid-baseline));
+		border-top: 1px solid var(--color-border);
 	}
 }
 
