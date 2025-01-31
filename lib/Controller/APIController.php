@@ -189,18 +189,6 @@ class APIController extends OCSController {
 			);
 		}
 
-		if (!$this->request->isUserAgent([
-			IRequest::USER_AGENT_TALK_ANDROID,
-			IRequest::USER_AGENT_TALK_IOS,
-			IRequest::USER_AGENT_CLIENT_ANDROID,
-			IRequest::USER_AGENT_CLIENT_IOS,
-		])) {
-			return new DataResponse(
-				['message' => $this->l->t('The device does not seem to be supported')],
-				Http::STATUS_BAD_REQUEST,
-			);
-		}
-
 		$notification = $this->notificationManager->createNotification();
 		$datetime = $this->timeFactory->getDateTime();
 		$isTalkApp = $this->request->isUserAgent([
