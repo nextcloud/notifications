@@ -1,6 +1,5 @@
 { "translations": {
     "User not found" : "Користувача не знайдено",
-    "The device does not seem to be supported" : "Цей пристрій не підтримується",
     "An unexpected error occurred, ask your administration to check the logs." : "Неочікувана помилка. Зверніться до адміністратора для отримання більшої інформації в журналі.",
     "Hello %s" : "Вітаємо %s",
     "Hello %s," : "Вітаємо %s,",
