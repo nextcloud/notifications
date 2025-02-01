@@ -3,11 +3,10 @@ OC.L10N.register(
     {
     "We want to keep offering our push notification service for free, but large number of users overload our infrastructure. For this reason we have to rate-limit the use of push notifications. If you need this feature, consider using Nextcloud Enterprise." : "Wir möchten unseren Push-Benachrichtigungsdienst weiterhin kostenlos anbieten, jedoch überlasten zu viele Benutzer unsere Infrastruktur. Aus diesem Grund müssen wir die Nutzung von Push-Benachrichtigungen einschränken. Wenn Du diese Funktion benötigst, solltest Du Nextcloud Enterprise verwenden.",
     "User not found" : "Benutzer nicht gefunden",
-    "The device does not seem to be supported" : "Das Gerät scheint nicht unterstützt zu werden",
     "An unexpected error occurred, ask your administration to check the logs." : "Es ist ein unerwarteter Fehler aufgetreten. Bitte Deine Administration, die Protokolle zu überprüfen.",
     "Hello %s" : "Hallo %s",
     "Hello %s," : "Hallo, %s,",
-    "_New notification for %s_::_%n new notifications for %s_" : ["%n neue Benachrichtigung für %s","%n neue Benachrichtigungen für %s"],
+    "_New notification for %s_::_%n new notifications for %s_" : ["Neue Benachrichtigung für %s","%n neue Benachrichtigungen für %s"],
     "_You have a new notification for %s_::_You have %n new notifications for %s_" : ["Du hast eine neue Benachrichtigungen für %s","Du hast %n neue Benachrichtigungen für %s"],
     "You can change the frequency of these emails or disable them in the <a href=\"%s\">settings</a>." : "Du kannst in den <a href=\"%s\">Einstellungen</a> die Häufigkeit dieser E-Mails ändern oder sie deaktivieren.",
     "You can change the frequency of these emails or disable them in the settings: %s" : "Du kannst in den Einstellungen die Häufigkeit dieser E-Mails ändern oder sie deaktivieren: %s",
