@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "We want to keep offering our push notification service for free, but large number of users overload our infrastructure. For this reason we have to rate-limit the use of push notifications. If you need this feature, consider using Nextcloud Enterprise." : "Ba mhaith linn leanúint ar aghaidh ag tairiscint ár seirbhís fógra brú a chur ar fáil saor in aisce, ach tá líon mór úsáideoirí ró-ualach ár mbonneagar. Ar an ábhar sin ní mór dúinn teorainn ráta a úsáid le húsáid fógraí brú. Má theastaíonn an ghné seo uait, smaoinigh ar Nextcloud Enterprise a úsáid.",
     "User not found" : "Úsáideoir gan aimsiú",
-    "The device does not seem to be supported" : "Is cosúil nach dtacaítear leis an bhfeiste",
     "An unexpected error occurred, ask your administration to check the logs." : "Tharla earráid gan choinne, iarr ar do riarachán na logaí a sheiceáil.",
     "Hello %s" : "Dia duit %s",
     "Hello %s," : "Dia duit %s,",
