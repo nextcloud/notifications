@@ -1,7 +1,6 @@
 { "translations": {
     "We want to keep offering our push notification service for free, but large number of users overload our infrastructure. For this reason we have to rate-limit the use of push notifications. If you need this feature, consider using Nextcloud Enterprise." : "Vogliamo continuare a offrire il nostro servizio di notifiche push gratuitamente, ma un gran numero di utenti sovraccarica la nostra infrastruttura. Per questo motivo dobbiamo limitare la frequenza di utilizzo delle notifiche push. Se hai bisogno di questa funzionalità, prendi in considerazione l'utilizzo di Nextcloud Enterprise.",
     "User not found" : "Utente non trovato",
-    "The device does not seem to be supported" : "Il dispositivo non sembra essere supportato",
     "An unexpected error occurred, ask your administration to check the logs." : "Si è verificato un errore imprevisto, chiedi all'amministratore di sistema di controllare i log.",
     "Hello %s" : "Ciao %s",
     "Hello %s," : "Ciao %s,",

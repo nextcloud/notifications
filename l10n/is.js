@@ -2,7 +2,6 @@ OC.L10N.register(
     "notifications",
     {
     "User not found" : "Notandi fannst ekki",
-    "The device does not seem to be supported" : "Ekki virðist vera stuðningur við þetta tæki",
     "An unexpected error occurred, ask your administration to check the logs." : "Óvænt villa átti sér stað, biddu kerfisstjórann þinn um að skoða atvikaskrárnar.",
     "Hello %s" : "Halló %s",
     "Hello %s," : "Halló %s,",

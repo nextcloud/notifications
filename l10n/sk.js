@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "We want to keep offering our push notification service for free, but large number of users overload our infrastructure. For this reason we have to rate-limit the use of push notifications. If you need this feature, consider using Nextcloud Enterprise." : "Našu službu upozornení push chceme aj naďalej ponúkať bezplatne, no veľký počet používateľov preťažuje našu infraštruktúru. Z tohto dôvodu musíme obmedziť používanie upozornení push. Ak potrebujete túto funkciu, zvážte použitie Nextcloud Enterprise.",
     "User not found" : "Užívateľ nebol nájdený",
-    "The device does not seem to be supported" : "Vyzerá že zariadenie nie je podporované",
     "An unexpected error occurred, ask your administration to check the logs." : "Vyskytla sa neočakávaná chyba, požiadajte svoju administratívu o kontrolu logov.",
     "Hello %s" : "Ahoj %s",
     "Hello %s," : "Ahoj %s,",
