@@ -1,7 +1,9 @@
 OC.L10N.register(
     "notifications",
     {
+    "We want to keep offering our push notification service for free, but large number of users overload our infrastructure. For this reason we have to rate-limit the use of push notifications. If you need this feature, consider using Nextcloud Enterprise." : "我们希望继续免费提供推送通知服务，但大量用户使我们的基础设施不堪重负。因此，我们必须限制推送通知的使用。如果您需要此功能，请考虑使用 Nextcloud Enterprise。",
     "User not found" : "未找到用户",
+    "An unexpected error occurred, ask your administration to check the logs." : "发生意外错误，请让您的管理员检查日志。",
     "Hello %s" : "你好 %s",
     "Hello %s," : "你好，%s",
     "_New notification for %s_::_%n new notifications for %s_" : ["%s 的 %n 条新通知"],
@@ -39,6 +41,9 @@ OC.L10N.register(
     "Your settings have been updated." : "已更新设置",
     "An error occurred while updating your settings." : "更新设置时出错",
     "You need to set up your email address before you can receive notification emails." : "您需要设置您的电子邮件地址，然后才能收到通知电子邮件。",
+    "Also repeat sound on a secondary speaker" : "还要在辅助扬声器上重复声音",
+    "Selection of the speaker device is currently not supported by Safari" : "Safari 当前不支持选择扬声器设备",
+    "Select a device" : "选择设备",
     "None" : "无"
 },
 "nplurals=1; plural=0;");
