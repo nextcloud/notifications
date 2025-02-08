@@ -6,7 +6,7 @@
 		"sort-packages": true
 	},
 	"require-dev": {
-		"nextcloud/rector": "^0.2",
+		"nextcloud/rector": "^0.3",
 		"rector/rector": "^2.0"
 	}
 }
