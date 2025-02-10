@@ -19,6 +19,8 @@ OC.L10N.register(
     "Requesting browser permissions to show notifications" : "Užklausiama naršyklės leidimo rodyti pranešimus",
     "No notifications" : "Pranešimų nėra",
     "Failed to dismiss all notifications" : "Nepavyko atmesti visų pranešimų",
+    "Notifications defaults" : "Numatytosios pranešimų reikšmės",
+    "Configure the default notification settings for new users" : "Konfigūruoti numatytuosius naujų naudotojų pranešimų nustatymus",
     "Send email reminders about unhandled notifications after:" : "Siųsti el. paštu priminimus apie neapdorotus pranešimus po:",
     "Never" : "Niekada",
     "1 hour" : "1 valandos",
