@@ -81,7 +81,8 @@ class MailNotifications {
 		}
 
 		foreach ($userSettings as $settings) {
-			if (isset($userEnabled[$settings->getUserId()]) && $userEnabled[$settings->getUserId()] === 'false') {
+			$userId = $settings->getUserId();
+			if (isset($userEnabled[$userId]) && $userEnabled[$userId] === 'false') {
 				// User is disabled, skip sending the email for them
 				if ($settings->getNextSendTime() <= $sendTime) {
 					$settings->setNextSendTime(
@@ -93,11 +94,11 @@ class MailNotifications {
 			}
 
 			// Get the settings for this particular user, then check if we have notifications to email them
-			$languageCode = $userLanguages[$settings->getUserId()] ?? $fallbackLang;
-			$timezone = $userTimezones[$settings->getUserId()] ?? $fallbackTimeZone;
+			$languageCode = $userLanguages[$userId] ?? $fallbackLang;
+			$timezone = $userTimezones[$userId] ?? $fallbackTimeZone;
 
 			/** @var array<int, INotification> $notifications */
-			$notifications = $this->handler->getAfterId($settings->getLastSendId(), $settings->getUserId());
+			$notifications = $this->handler->getAfterId($settings->getLastSendId(), $userId);
 			if (!empty($notifications)) {
 				$oldestNotification = end($notifications);
 				$shouldSendAfter = $oldestNotification->getDateTime()->getTimestamp() + $settings->getBatchTime();
@@ -185,7 +186,6 @@ class MailNotifications {
 		}
 
 		$userEmailAddress = $user->getEMailAddress();
-
 		if (empty($userEmailAddress)) {
 			return null;
 		}
@@ -193,22 +193,26 @@ class MailNotifications {
 		// Prepare our email template
 		$l10n = $this->l10nFactory->get('notifications', $language);
 
+		$userDisplayName = $user->getDisplayName();
+		$absoluteUrl = $this->urlGenerator->getAbsoluteURL('/');
+		$instanceName = $this->defaults->getName();
+
 		$template = $this->mailer->createEMailTemplate('notifications.EmailNotification', [
-			'displayname' => $user->getDisplayName(),
-			'url' => $this->urlGenerator->getAbsoluteURL('/')
+			'displayname' => $userDisplayName,
+			'url' => $absoluteUrl
 		]);
 
 		// Prepare email header
 		$template->addHeader();
-		$template->addHeading($l10n->t('Hello %s', [$user->getDisplayName()]), $l10n->t('Hello %s,', [$user->getDisplayName()]));
+		$template->addHeading($l10n->t('Hello %s', [$userDisplayName]), $l10n->t('Hello %s,', [$userDisplayName]));
 
 		// Prepare email subject and body mentioning amount of notifications
-		$homeLink = '<a href="' . $this->urlGenerator->getAbsoluteURL('/') . '">' . htmlspecialchars($this->defaults->getName()) . '</a>';
+		$homeLink = '<a href="' . $absoluteUrl . '">' . htmlspecialchars($instanceName) . '</a>';
 		$notificationsCount = count($notifications);
-		$template->setSubject($l10n->n('New notification for %s', '%n new notifications for %s', $notificationsCount, [$this->defaults->getName()]));
+		$template->setSubject($l10n->n('New notification for %s', '%n new notifications for %s', $notificationsCount, [$instanceName]));
 		$template->addBodyText(
 			$l10n->n('You have a new notification for %s', 'You have %n new notifications for %s', $notificationsCount, [$homeLink]),
-			$l10n->n('You have a new notification for %s', 'You have %n new notifications for %s', $notificationsCount, [$this->urlGenerator->getAbsoluteURL('/')])
+			$l10n->n('You have a new notification for %s', 'You have %n new notifications for %s', $notificationsCount, [$absoluteUrl])
 		);
 
 		// Prepare email body with the content of missed notifications
@@ -246,17 +250,18 @@ class MailNotifications {
 		}
 
 		// Prepare email footer
+		$linkToPersonalSettings = $this->urlGenerator->linkToRouteAbsolute('settings.PersonalSettings.index', ['section' => 'notifications']);
 		$template->addBodyText(
-			$l10n->t('You can change the frequency of these emails or disable them in the <a href="%s">settings</a>.', $this->urlGenerator->linkToRouteAbsolute('settings.PersonalSettings.index', ['section' => 'notifications'])),
-			$l10n->t('You can change the frequency of these emails or disable them in the settings: %s', $this->urlGenerator->linkToRouteAbsolute('settings.PersonalSettings.index', ['section' => 'notifications']))
+			$l10n->t('You can change the frequency of these emails or disable them in the <a href="%s">settings</a>.', $linkToPersonalSettings),
+			$l10n->t('You can change the frequency of these emails or disable them in the settings: %s', $linkToPersonalSettings)
 		);
 
 		$template->addFooter();
 
 		$message = $this->mailer->createMessage();
 		$message->useTemplate($template);
-		$message->setTo([$userEmailAddress => $user->getDisplayName()]);
-		$message->setFrom([Util::getDefaultEmailAddress('no-reply') => $this->defaults->getName()]);
+		$message->setTo([$userEmailAddress => $userDisplayName]);
+		$message->setFrom([Util::getDefaultEmailAddress('no-reply') => $instanceName]);
 
 		return $message;
 	}
