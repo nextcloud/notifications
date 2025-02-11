@@ -6,7 +6,7 @@ OC.L10N.register(
     "Hello %s," : "Olá %s,",
     "Admin notifications" : "Notificações de administrador",
     "Notifications" : "Notificações",
-    "Failed to perform action" : "Falhou a executar acção",
+    "Failed to perform action" : "Falhou a executar ação",
     "Dismiss" : "Dispensar",
     "seconds ago" : "segundos atrás",
     "Failed to dismiss notification" : "Falhou a dispensar notificação",
