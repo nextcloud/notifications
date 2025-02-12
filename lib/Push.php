@@ -587,6 +587,25 @@ class Push {
 	}
 
 	/**
+	 * The functions are not part of public API so we are a bit more careful
+	 * @param IToken $token
+	 * @param 'getLastActivity'|'getType' $method
+	 * @return int|null
+	 */
+	protected function callSafelyForToken(IToken $token, string $method): ?int {
+		if (method_exists($token, $method) || method_exists($token, '__call')) {
+			try {
+				$result = $token->$method();
+				if (is_int($result)) {
+					return $result;
+				}
+			} catch (\BadFunctionCallException) {
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * @param Key $userKey
 	 * @param array $device
 	 * @param int $id

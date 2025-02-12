@@ -26,6 +26,7 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 use OC\Authentication\Exceptions\InvalidTokenException;
 use OC\Authentication\Token\IProvider;
+use OC\Authentication\Token\PublicKeyToken;
 use OC\Security\IdentityProof\Key;
 use OC\Security\IdentityProof\Manager;
 use OCA\Notifications\Push;
@@ -820,5 +821,32 @@ class PushTest extends TestCase {
 			->willReturn(true);
 
 		$push->pushToDevice(200718, $notification);
+	}
+
+	public static function dataValidateToken(): array {
+		return [
+			[1239999999, 1230000000, OCPIToken::WIPE_TOKEN, false],
+			[1230000000, 1239999999, OCPIToken::WIPE_TOKEN, false],
+			[1230000000, 1239999999, OCPIToken::PERMANENT_TOKEN, true],
+			[1239999999, 1230000000, OCPIToken::PERMANENT_TOKEN, true],
+			[1230000000, 1230000000, OCPIToken::PERMANENT_TOKEN, false],
+		];
+	}
+
+	/**
+	 * @dataProvider dataValidateToken
+	 */
+	public function testValidateToken(int $lastCheck, int $lastActivity, int $type, bool $expected): void {
+		$token = PublicKeyToken::fromParams([
+			'lastCheck' => $lastCheck,
+			'lastActivity' => $lastActivity,
+			'type' => $type,
+		]);
+
+		$this->tokenProvider->method('getTokenById')
+			->willReturn($token);
+
+		$push = $this->getPush();
+		$this->assertSame($expected, self::invokePrivate($push, 'validateToken', [42, 1234567890]));
 	}
 }
