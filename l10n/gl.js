@@ -3,7 +3,7 @@ OC.L10N.register(
     {
     "We want to keep offering our push notification service for free, but large number of users overload our infrastructure. For this reason we have to rate-limit the use of push notifications. If you need this feature, consider using Nextcloud Enterprise." : "Queremos seguir ofrecendo o noso servizo de notificacións emerxentes de xeito gratuíto, mais un gran número de usuarios sobrecarga a nosa infraestrutura. Por este motivo, temos que limitar o uso das notificacións emerxentes. Se necesita esta función, considere usar Nextcloud Enterprise.",
     "User not found" : "Non se atopou o usuario",
-    "An unexpected error occurred, ask your administration to check the logs." : "Produciuse un erro non agardado, solicite á administración do sitio que comprobe os rexistros.",
+    "An unexpected error occurred, ask your administration to check the logs." : "Produciuse un erro non agardado, solicite á administración do sitio que consulte os ficheiros de rexistro.",
     "Hello %s" : "Ola %s",
     "Hello %s," : "Ola %s,",
     "_New notification for %s_::_%n new notifications for %s_" : ["Nova notificación para %s","%nnotificacións  novas para %s"],
