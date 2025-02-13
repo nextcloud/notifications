@@ -197,6 +197,8 @@ class Push {
 
 	public function pushToDevice(int $id, INotification $notification, ?OutputInterface $output = null): void {
 		if (!$this->config->getSystemValueBool('has_internet_connection', true)) {
+			$this->printInfo('<error>Internet connectivity is disabled in configuration file - no push notifications will be sent</error>');
+
 			return;
 		}
 
