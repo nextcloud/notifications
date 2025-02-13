@@ -193,6 +193,7 @@ class APIController extends OCSController {
 		$datetime = $this->timeFactory->getDateTime();
 		$isTalkApp = $this->request->isUserAgent([
 			IRequest::USER_AGENT_TALK_ANDROID,
+			IRequest::USER_AGENT_TALK_DESKTOP,
 			IRequest::USER_AGENT_TALK_IOS,
 		]);
 		$app = $isTalkApp ? 'admin_notification_talk' : 'admin_notifications';
