@@ -441,7 +441,7 @@ version: 2.1.0
 license: MIT
 
 ua-parser-js
-version: 2.0.1
+version: 2.0.2
 license: AGPL-3.0-or-later
 
 unified
