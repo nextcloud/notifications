@@ -1,5 +1,7 @@
 { "translations": {
+    "We want to keep offering our push notification service for free, but large number of users overload our infrastructure. For this reason we have to rate-limit the use of push notifications. If you need this feature, consider using Nextcloud Enterprise." : "Volem seguir oferint el nostre servei de notificació push de forma gratuïta, però un gran nombre d'usuaris sobrecarreguen la nostra infraestructura. Per aquest motiu, hem de limitar l'ús de les notificacions push. Si necessiteu aquesta funció, considereu utilitzar Nextcloud Enterprise.",
     "User not found" : "No s'ha trobat l'usuari",
+    "An unexpected error occurred, ask your administration to check the logs." : "S'ha produït un error inesperat, demaneu a la vostra administració que comproveu els registres.",
     "Hello %s" : "Hola, %s",
     "Hello %s," : "Hola, %s,",
     "_New notification for %s_::_%n new notifications for %s_" : ["Notificació nova del %s","%n notificacions noves del %s"],
@@ -37,9 +39,9 @@
     "Your settings have been updated." : "S'han actualitzat els paràmetres.",
     "An error occurred while updating your settings." : "S'ha produït un error en actualitzar els paràmetres.",
     "You need to set up your email address before you can receive notification emails." : "Heu de configurar la vostra adreça electrònica per a poder rebre notificacions per correu electrònic.",
-    "Also repeat sound on a secondary speaker" : "Repeteix també el so en un altaveu secundari.",
+    "Also repeat sound on a secondary speaker" : "Repeteix també el so en un altaveu secundari",
     "Selection of the speaker device is currently not supported by Safari" : "Actualment, Safari no admet la selecció del dispositiu d'altaveu",
-    "Select a device" : "Selecciona un dispositiu.",
+    "Select a device" : "Seleccioneu un dispositiu",
     "None" : "Només una vegada"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
