@@ -90,10 +90,10 @@ import Message from 'vue-material-design-icons/Message.vue'
 import { showError } from '@nextcloud/dialogs'
 import Action from './Action.vue'
 import { generateOcsUrl } from '@nextcloud/router'
-import moment from '@nextcloud/moment'
 import DefaultParameter from './Parameters/DefaultParameter.vue'
 import File from './Parameters/File.vue'
 import User from './Parameters/User.vue'
+import { formatRelativeTimeFromNow, formatDateTime } from '../utils/datetime.js'
 
 export default {
 	name: 'Notification',
@@ -205,18 +205,18 @@ export default {
 			if (this.datetime === 'warning') {
 				return ''
 			}
-			return moment(this.timestamp).format('LLL')
+			return formatDateTime(this.timestamp)
 		},
 		relativeDate() {
 			if (this.datetime === 'warning') {
 				return ''
 			}
 
-			const diff = moment().diff(moment(this.timestamp))
+			const diff = Date.now() - this.timestamp
 			if (diff >= 0 && diff < 45000) {
 				return t('core', 'seconds ago')
 			}
-			return moment(this.timestamp).fromNow()
+			return formatRelativeTimeFromNow(this.timestamp)
 		},
 		useLink() {
 			if (!this.link) {
