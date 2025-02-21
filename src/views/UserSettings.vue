@@ -60,6 +60,7 @@
 import { UAParser } from 'ua-parser-js'
 import { reactive, ref } from 'vue'
 import axios from '@nextcloud/axios'
+import { t } from '@nextcloud/l10n'
 import { generateOcsUrl } from '@nextcloud/router'
 import { loadState } from '@nextcloud/initial-state'
 import { showSuccess, showError } from '@nextcloud/dialogs'
@@ -113,6 +114,8 @@ export default {
 	},
 
 	methods: {
+		t,
+
 		async updateSettings() {
 			try {
 				const form = new FormData()

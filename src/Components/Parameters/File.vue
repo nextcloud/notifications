@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'File',
