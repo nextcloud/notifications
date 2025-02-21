@@ -90,6 +90,7 @@ import { getCurrentUser } from '@nextcloud/auth'
 import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { showError } from '@nextcloud/dialogs'
 import { loadState } from '@nextcloud/initial-state'
+import { t } from '@nextcloud/l10n'
 import {
 	generateOcsUrl,
 	imagePath,
@@ -225,6 +226,8 @@ export default {
 	},
 
 	methods: {
+		t,
+
 		userStatusUpdated(state) {
 			if (getCurrentUser().uid === state.userId) {
 				this.userStatus = state.status

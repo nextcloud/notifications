@@ -82,6 +82,7 @@
 
 <script>
 import axios from '@nextcloud/axios'
+import { t } from '@nextcloud/l10n'
 import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
 import NcRichText from '@nextcloud/vue/dist/Components/NcRichText.js'
 import Close from 'vue-material-design-icons/Close.vue'
@@ -245,6 +246,8 @@ export default {
 	},
 
 	methods: {
+		t,
+
 		prepareParameters(parameters) {
 			const richParameters = {}
 			Object.keys(parameters).forEach(p => {
