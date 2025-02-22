@@ -1,7 +1,9 @@
 OC.L10N.register(
     "notifications",
     {
+    "We want to keep offering our push notification service for free, but large number of users overload our infrastructure. For this reason we have to rate-limit the use of push notifications. If you need this feature, consider using Nextcloud Enterprise." : "Vi ønsker at blive ved med at tilbyde vores push notifikationstjeneste gratis, men et stort antal brugere overbelaster vores infrastruktur. Af denne grund er vi nødt til at ratebegrænse brugen af ​​push-meddelelser. Hvis du har brug for denne funktion, kan du overveje at bruge Nextcloud Enterprise.",
     "User not found" : "Bruger ikke fundet",
+    "An unexpected error occurred, ask your administration to check the logs." : "Der opstod en uventet fejl. Bed din administration om at tjekke loggene.",
     "Hello %s" : "Hej %s",
     "Hello %s," : "Hej %s,",
     "_New notification for %s_::_%n new notifications for %s_" : ["Ny meddelelse vedr %s","%n nye meddelelser vedr %s"],
