@@ -30,7 +30,7 @@ SPDX-FileCopyrightText = "2023 Nextcloud GmbH and Nextcloud contributors"
 SPDX-License-Identifier = "AGPL-3.0-or-later"
 
 [[annotations]]
-path = [".github/CODEOWNERS", ".github/dependabot.yml", "tests/Integration/base-query-count.txt"]
+path = [".github/CODEOWNERS", ".github/dependabot.yml", "tests/Integration/base-query-count.txt", "tests/Integration/base-query-list.txt"]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "none"
 SPDX-License-Identifier = "CC0-1.0"
