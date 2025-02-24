@@ -1,7 +1,9 @@
 OC.L10N.register(
     "notifications",
     {
+    "We want to keep offering our push notification service for free, but large number of users overload our infrastructure. For this reason we have to rate-limit the use of push notifications. If you need this feature, consider using Nextcloud Enterprise." : "Chcemy nadal oferować naszą usługę powiadomień Push za darmo, ale duża liczba użytkowników przeciąża naszą infrastrukturę. Z tego powodu musimy ograniczyć szybkość korzystania z powiadomień Push. Jeśli potrzebujesz tej funkcji, rozważ użycie Nextcloud Enterprise.",
     "User not found" : "Nie znaleziono użytkownika",
+    "An unexpected error occurred, ask your administration to check the logs." : "Wystąpił nieoczekiwany błąd. Poproś administrację o sprawdzenie dzienników.",
     "Hello %s" : "Witaj %s",
     "Hello %s," : "Witaj %s,",
     "_New notification for %s_::_%n new notifications for %s_" : ["Nowe powiadomienie z %s","%n nowe powiadomienia z %s","%n nowych powiadomień z %s","%n nowych powiadomień z %s"],
@@ -39,6 +41,8 @@ OC.L10N.register(
     "Your settings have been updated." : "Twoje ustawienia zostały zaktualizowane.",
     "An error occurred while updating your settings." : "Wystąpił błąd podczas aktualizowania ustawień.",
     "You need to set up your email address before you can receive notification emails." : "Aby otrzymywać powiadomienia e-mail, musisz skonfigurować swój adres e-mail.",
+    "Also repeat sound on a secondary speaker" : "Powtarzaj dźwięk także na drugim głośniku",
+    "Selection of the speaker device is currently not supported by Safari" : "Wybór urządzenia głośnikowego nie jest obecnie obsługiwany przez przeglądarkę Safari",
     "Select a device" : "Wybierz urządzenie",
     "None" : "Brak"
 },
