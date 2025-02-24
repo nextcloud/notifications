@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import moment from '@nextcloud/moment'
 import axios from '@nextcloud/axios'
 import { generateOcsUrl } from '@nextcloud/router'
 import BrowserStorage from './BrowserStorage.js'
@@ -11,7 +10,7 @@ import BrowserStorage from './BrowserStorage.js'
 const getNotificationsData = async (tabId, lastETag, forceRefresh, hasNotifyPush) => {
 	const lastUpdated = parseInt(BrowserStorage.getItem('lastUpdated'), 10)
 	const lastTab = BrowserStorage.getItem('tabId')
-	const now = moment().format('X')
+	const now = Math.floor(Date.now() / 1000)
 
 	if (forceRefresh
 		// Allow the same tab to refresh with less than the timeout,
@@ -21,7 +20,7 @@ const getNotificationsData = async (tabId, lastETag, forceRefresh, hasNotifyPush
 		// and at the same time give it some more time against other tabs.
 		|| lastUpdated + 35 < now) {
 		BrowserStorage.setItem('tabId', tabId)
-		BrowserStorage.setItem('lastUpdated', now)
+		BrowserStorage.setItem('lastUpdated', now.toString())
 		// console.debug('Refetching data in ' + tabId + ' (prev: ' + lastTab + ' age: ' + (now - lastUpdated) + ')')
 		await refreshData(lastETag)
 	// } else {
