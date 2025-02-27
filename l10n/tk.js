@@ -3,8 +3,8 @@ OC.L10N.register(
     {
     "Hello %s" : "Salam%s",
     "Notifications" : "Duýduryşlar",
-    "Dismiss" : "Ýapmak.",
     "seconds ago" : "Sekunt öň",
+    "Dismiss" : "Ýapmak.",
     "No notifications" : "Duýduryş ýok",
     "1 hour" : "1 sagat",
     "None" : "Hiç"

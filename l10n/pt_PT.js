@@ -7,13 +7,13 @@ OC.L10N.register(
     "Admin notifications" : "Notificações de administrador",
     "Notifications" : "Notificações",
     "Failed to perform action" : "Falhou a executar ação",
-    "Dismiss" : "Dispensar",
     "seconds ago" : "segundos atrás",
     "Failed to dismiss notification" : "Falhou a dispensar notificação",
+    "Dismiss" : "Dispensar",
     "in {path}" : "em {path}",
-    "Dismiss all notifications" : "Dispensar todas as notificações",
     "No notifications" : "Sem notificações",
     "Failed to dismiss all notifications" : "Falhou a dispensar todas as notificações",
+    "Dismiss all notifications" : "Dispensar todas as notificações",
     "Never" : "Nunca",
     "1 hour" : "1 hora",
     "3 hours" : "3 horas",
@@ -21,7 +21,7 @@ OC.L10N.register(
     "1 week" : "1 semana",
     "Your settings have been updated." : "As suas definições foram atualizadas.",
     "An error occurred while updating your settings." : "Ocorreu um erro ao atualizar as suas definições.",
-    "You need to set up your email address before you can receive notification emails." : "Precisa de configurar o seu endereço de e-mail antes de poder receber mensagens de notificação.",
-    "None" : "Nenhum"
+    "None" : "Nenhum",
+    "You need to set up your email address before you can receive notification emails." : "Precisa de configurar o seu endereço de e-mail antes de poder receber mensagens de notificação."
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
