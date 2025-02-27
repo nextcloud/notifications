@@ -2,8 +2,8 @@ OC.L10N.register(
     "notifications",
     {
     "Notifications" : "Brathan",
-    "Dismiss" : "Leig seachad",
     "seconds ago" : "diog air ais",
+    "Dismiss" : "Leig seachad",
     "No notifications" : "Gun bhrath",
     "1 hour" : "Uair a thìde",
     "None" : "Chan eil gin"

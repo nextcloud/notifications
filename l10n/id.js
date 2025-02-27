@@ -4,18 +4,18 @@ OC.L10N.register(
     "Hello %s" : "Halo %s",
     "Hello %s," : "Halo %s,",
     "Notifications" : "Pemberitahuan",
-    "Dismiss" : "Abaikan",
     "seconds ago" : "beberapa detik yang lalu",
+    "Dismiss" : "Abaikan",
     "in {path}" : "di {path}",
     "No notifications" : "Tidak ada pemberitahuan",
-    "Send email reminders about unhandled notifications after:" : "Kirim surel pengingat tentang pemberitahuan yang tidak tertangani setelah:",
     "Never" : "Tidak pernah",
     "1 hour" : "1 jam",
     "3 hours" : "3 jam",
     "1 day" : "1 hari",
     "1 week" : "1 minggu",
     "Your settings have been updated." : "Pengaturan Anda telah diperbarui.",
-    "You need to set up your email address before you can receive notification emails." : "Anda perlu menyetel alamat surel sebelum Anda dapat menerima surel pemberitahuan.",
-    "None" : "Tidak ada"
+    "Send email reminders about unhandled notifications after:" : "Kirim surel pengingat tentang pemberitahuan yang tidak tertangani setelah:",
+    "None" : "Tidak ada",
+    "You need to set up your email address before you can receive notification emails." : "Anda perlu menyetel alamat surel sebelum Anda dapat menerima surel pemberitahuan."
 },
 "nplurals=1; plural=0;");
