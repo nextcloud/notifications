@@ -37,7 +37,7 @@ version: 6.1.1
 license: AGPL-3.0-or-later
 
 @nextcloud/event-bus
-version: 3.3.1
+version: 3.3.2
 license: GPL-3.0-or-later
 
 @nextcloud/initial-state
@@ -385,7 +385,7 @@ version: 11.0.0
 license: MIT
 
 semver
-version: 7.6.2
+version: 7.7.1
 license: ISC
 
 space-separated-tokens

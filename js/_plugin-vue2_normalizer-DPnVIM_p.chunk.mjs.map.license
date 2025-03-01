@@ -40,7 +40,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 6.1.1
 	- license: AGPL-3.0-or-later
 - @nextcloud/event-bus
-	- version: 3.3.1
+	- version: 3.3.2
 	- license: GPL-3.0-or-later
 - @nextcloud/initial-state
 	- version: 2.2.0
@@ -79,7 +79,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 1.0.1
 	- license: MIT
 - semver
-	- version: 7.6.2
+	- version: 7.7.1
 	- license: ISC
 - tabbable
 	- version: 6.2.0
