@@ -35,6 +35,7 @@ use OCA\Notifications\AppInfo\Application;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Authentication\Exceptions\InvalidTokenException;
+use OCP\Authentication\Token\IToken;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Http\Client\IClientService;
 use OCP\ICache;
@@ -581,27 +582,61 @@ class Push {
 
 	protected function validateToken(int $tokenId, int $maxAge): bool {
 		$age = $this->cache->get('t' . $tokenId);
-		if ($age !== null) {
-			return $age > $maxAge;
+
+		if ($age === null) {
+			try {
+				// Check if the token is still valid...
+				$token = $this->tokenProvider->getTokenById($tokenId);
+				$type = $this->callSafelyForToken($token, 'getType');
+				if ($type === IToken::WIPE_TOKEN) {
+					// Token does not exist any more, should drop the push device entry
+					$this->printInfo('Device token is marked for remote wipe');
+					$this->deletePushToken($tokenId);
+					$this->cache->set('t' . $tokenId, 0, 600);
+					return false;
+				}
+
+				$age = $token->getLastCheck();
+				$lastActivity = $this->callSafelyForToken($token, 'getLastActivity');
+				if ($lastActivity) {
+					$age = max($age, $lastActivity);
+				}
+				$this->cache->set('t' . $tokenId, $age, 600);
+			} catch (InvalidTokenException) {
+				// Token does not exist any more, should drop the push device entry
+				$this->printInfo('InvalidTokenException is thrown');
+				$this->deletePushToken($tokenId);
+				$this->cache->set('t' . $tokenId, 0, 600);
+				return false;
+			}
 		}
 
-		try {
-			// Check if the token is still valid...
-			$token = $this->tokenProvider->getTokenById($tokenId);
-			$this->cache->set('t' . $tokenId, $token->getLastCheck(), 600);
-			if ($token->getLastCheck() > $maxAge) {
-				$this->printInfo('Device token is valid');
-			} else {
-				$this->printInfo('Device token "last checked" is older than 60 days: ' . $token->getLastCheck());
-			}
-			return $token->getLastCheck() > $maxAge;
-		} catch (InvalidTokenException $e) {
-			// Token does not exist anymore, should drop the push device entry
-			$this->printInfo('InvalidTokenException is thrown');
-			$this->deletePushToken($tokenId);
-			$this->cache->set('t' . $tokenId, 0, 600);
-			return false;
+		if ($age > $maxAge) {
+			$this->printInfo('Device token is valid');
+			return true;
 		}
+
+		$this->printInfo('Device token "last checked" is older than 60 days: ' . $age);
+		return false;
+	}
+
+	/**
+	 * The functions are not part of public API so we are a bit more careful
+	 * @param IToken $token
+	 * @param 'getLastActivity'|'getType' $method
+	 * @return int|null
+	 */
+	protected function callSafelyForToken(IToken $token, string $method): ?int {
+		if (method_exists($token, $method) || method_exists($token, '__call')) {
+			try {
+				$result = $token->$method();
+				if (is_int($result)) {
+					return $result;
+				}
+			} catch (\BadFunctionCallException) {
+			}
+		}
+		return null;
 	}
 
 	/**
