@@ -56,7 +56,13 @@ class TestPush extends Command {
 				'talk',
 				null,
 				InputOption::VALUE_NONE,
-				'Test talk devices'
+				'Test Talk devices'
+			)
+			->addOption(
+				'files',
+				null,
+				InputOption::VALUE_NONE,
+				'Test other devices (Files, Notes, …)'
 			)
 		;
 	}
@@ -75,32 +81,53 @@ class TestPush extends Command {
 		}
 
 		$userId = $input->getArgument('user-id');
-		$subject = 'Testing push notifications';
-
 		$user = $this->userManager->get($userId);
 		if (!$user instanceof IUser) {
-			$output->writeln('Unknown user');
+			$output->writeln('<error>Unknown user</error>');
 			return 1;
 		}
 
+		if ($input->getOption('talk')) {
+			$failed = $this->sendNotification($output, $user, 'talk');
+		} else {
+			$failed = false;
+		}
+		if ($input->getOption('files')) {
+			$failed = $this->sendNotification($output, $user, 'files') || $failed;
+		}
+		if (!$input->getOption('talk') && !$input->getOption('files')) {
+			$failed = $this->sendNotification($output, $user, 'talk') || $failed;
+			$failed = $this->sendNotification($output, $user, 'files') || $failed;
+		}
+
+		return $failed ? 1 : 0;
+	}
+
+	protected function sendNotification(OutputInterface $output, IUser $user, string $clients): bool {
+		$app = $clients === 'talk' ? 'admin_notification_talk' : 'admin_notifications';
 		$notification = $this->notificationManager->createNotification();
 		$datetime = $this->timeFactory->getDateTime();
-		$app = $input->getOption('talk') ? 'admin_notification_talk' : 'admin_notifications';
+
+		$output->writeln('');
+		if ($clients === 'talk') {
+			$output->writeln('Testing Talk clients:');
+		} else {
+			$output->writeln('Testing other clients: Files, Notes, …');
+		}
 
 		try {
 			$notification->setApp($app)
 				->setUser($user->getUID())
 				->setDateTime($datetime)
 				->setObject('admin_notifications', dechex($datetime->getTimestamp()))
-				->setSubject('cli', [$subject]);
+				->setSubject('cli', ['Testing push notifications']);
 
 			$this->app->setOutput($output);
 			$this->notificationManager->notify($notification);
 		} catch (\InvalidArgumentException $e) {
 			$output->writeln('Error while sending the notification');
-			return 1;
+			return true;
 		}
-
-		return 0;
+		return false;
 	}
 }
