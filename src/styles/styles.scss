@@ -1,4 +1,8 @@
 .notifications-button {
+	.notifications-button__icon {
+		height: 20px;
+	}
+
 	.notification__dot {
 		fill: #ff4402;
 		&--warning {
