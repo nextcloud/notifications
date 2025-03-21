@@ -45,7 +45,7 @@ version: 2.2.0
 license: GPL-3.0-or-later
 
 @nextcloud/l10n
-version: 3.1.0
+version: 3.2.0
 license: GPL-3.0-or-later
 
 @nextcloud/logger
@@ -69,7 +69,7 @@ version: 0.2.3
 license: GPL-3.0-or-later
 
 @nextcloud/vue
-version: 8.22.0
+version: 8.23.1
 license: AGPL-3.0-or-later
 
 @nextcloud/vue-select
@@ -93,7 +93,7 @@ version: 11.0.3
 license: MIT
 
 axios
-version: 1.7.5
+version: 1.8.3
 license: MIT
 
 bail
@@ -121,7 +121,7 @@ version: 0.0.2
 license: BSD-3-Clause
 
 decode-named-character-reference
-version: 1.0.2
+version: 1.1.0
 license: MIT
 
 devlop
@@ -129,8 +129,12 @@ version: 1.1.0
 license: MIT
 
 dompurify
-version: 3.2.3
+version: 3.2.4
 license: (MPL-2.0 OR Apache-2.0)
+
+escape-html
+version: 1.0.3
+license: MIT
 
 escape-string-regexp
 version: 5.0.0
@@ -188,14 +192,6 @@ is-plain-obj
 version: 4.1.0
 license: MIT
 
-linkify-string
-version: 4.1.1
-license: MIT
-
-linkifyjs
-version: 4.1.1
-license: MIT
-
 lodash.get
 version: 4.4.2
 license: MIT
@@ -209,7 +205,7 @@ version: 3.3.0
 license: MIT
 
 markdown-table
-version: 3.0.3
+version: 3.0.4
 license: MIT
 
 md5
@@ -221,19 +217,19 @@ version: 3.0.1
 license: MIT
 
 mdast-util-from-markdown
-version: 2.0.0
+version: 2.0.2
 license: MIT
 
 mdast-util-gfm
-version: 3.0.0
+version: 3.1.0
 license: MIT
 
 mdast-util-gfm-autolink-literal
-version: 2.0.0
+version: 2.0.1
 license: MIT
 
 mdast-util-gfm-footnote
-version: 2.0.0
+version: 2.1.0
 license: MIT
 
 mdast-util-gfm-strikethrough
@@ -253,7 +249,7 @@ version: 2.0.0
 license: MIT
 
 mdast-util-phrasing
-version: 4.0.0
+version: 4.1.0
 license: MIT
 
 mdast-util-to-hast
@@ -261,7 +257,7 @@ version: 13.0.2
 license: MIT
 
 mdast-util-to-markdown
-version: 2.1.0
+version: 2.1.2
 license: MIT
 
 mdast-util-to-string
@@ -269,11 +265,11 @@ version: 4.0.0
 license: MIT
 
 micromark
-version: 4.0.0
+version: 4.0.2
 license: MIT
 
 micromark-core-commonmark
-version: 2.0.0
+version: 2.0.3
 license: MIT
 
 micromark-extension-gfm
@@ -281,43 +277,43 @@ version: 3.0.0
 license: MIT
 
 micromark-extension-gfm-autolink-literal
-version: 2.0.0
+version: 2.1.0
 license: MIT
 
 micromark-extension-gfm-footnote
-version: 2.0.0
+version: 2.1.0
 license: MIT
 
 micromark-extension-gfm-strikethrough
-version: 2.0.0
+version: 2.1.0
 license: MIT
 
 micromark-extension-gfm-table
-version: 2.0.0
+version: 2.1.1
 license: MIT
 
 micromark-extension-gfm-task-list-item
-version: 2.0.1
+version: 2.1.0
 license: MIT
 
 micromark-factory-destination
-version: 2.0.0
+version: 2.0.1
 license: MIT
 
 micromark-factory-label
-version: 2.0.0
+version: 2.0.1
 license: MIT
 
 micromark-factory-space
-version: 2.0.0
+version: 2.0.1
 license: MIT
 
 micromark-factory-title
-version: 2.0.0
+version: 2.0.1
 license: MIT
 
 micromark-factory-whitespace
-version: 2.0.0
+version: 2.0.1
 license: MIT
 
 micromark-util-character
@@ -325,35 +321,35 @@ version: 2.0.1
 license: MIT
 
 micromark-util-chunked
-version: 2.0.0
+version: 2.0.1
 license: MIT
 
 micromark-util-classify-character
-version: 2.0.0
+version: 2.0.1
 license: MIT
 
 micromark-util-combine-extensions
-version: 2.0.0
+version: 2.0.1
 license: MIT
 
 micromark-util-decode-numeric-character-reference
-version: 2.0.0
+version: 2.0.2
 license: MIT
 
 micromark-util-decode-string
-version: 2.0.0
+version: 2.0.1
 license: MIT
 
 micromark-util-html-tag-name
-version: 2.0.0
+version: 2.0.1
 license: MIT
 
 micromark-util-normalize-identifier
-version: 2.0.0
+version: 2.0.1
 license: MIT
 
 micromark-util-resolve-all
-version: 2.0.0
+version: 2.0.1
 license: MIT
 
 micromark-util-sanitize-uri
@@ -361,7 +357,7 @@ version: 2.0.0
 license: MIT
 
 micromark-util-subtokenize
-version: 2.0.0
+version: 2.1.0
 license: MIT
 
 moment
@@ -385,7 +381,7 @@ version: 3.0.0
 license: MIT
 
 rehype-highlight
-version: 7.0.1
+version: 7.0.2
 license: MIT
 
 rehype-react
@@ -397,7 +393,7 @@ version: 4.0.0
 license: MIT
 
 remark-gfm
-version: 4.0.0
+version: 4.0.1
 license: MIT
 
 remark-parse
