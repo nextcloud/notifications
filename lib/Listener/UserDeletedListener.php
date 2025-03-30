@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace OCA\Notifications\Listener;
 
-use OCA\Notifications\Handler;
+use OCP\Notification\IManager as INotificationManager;
 use OCA\Notifications\Model\SettingsMapper;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
@@ -20,7 +20,7 @@ use OCP\User\Events\UserDeletedEvent;
  */
 class UserDeletedListener implements IEventListener {
 	public function __construct(
-		private Handler $handler,
+		private INotificationManager $notificationManager,
 		private SettingsMapper $settingsMapper,
 	) {
 	}
@@ -32,7 +32,11 @@ class UserDeletedListener implements IEventListener {
 		}
 
 		$user = $event->getUser();
-		$this->handler->deleteByUser($user->getUID());
+
+		$notification = $this->notificationManager->createNotification();
+		$notification->setUser($user->getUID());
+		$this->notificationManager->markProcessed($notification);
+
 		$this->settingsMapper->deleteSettingsByUser($user->getUID());
 	}
 }
