@@ -84,6 +84,10 @@ class FakeUser implements IUser {
 		throw new \RuntimeException('Not implemented');
 	}
 
+	public function canChangeEmail(): bool {
+		throw new \RuntimeException('Not implemented');
+	}
+
 	public function isEnabled() {
 		throw new \RuntimeException('Not implemented');
 	}
