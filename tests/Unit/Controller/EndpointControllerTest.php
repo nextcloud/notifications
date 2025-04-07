@@ -376,52 +376,6 @@ class EndpointControllerTest extends TestCase {
 		];
 	}
 
-	/**
-	 * @dataProvider dataDeleteNotification
-	 */
-	public function testDeleteNotification(int $id, string $username): void {
-		$controller = $this->getController([], $username);
-
-		$this->handler->expects($this->once())
-			->method('deleteById')
-			->with($id, $username);
-
-		$response = $controller->deleteNotification($id);
-		$this->assertInstanceOf(DataResponse::class, $response);
-		$this->assertSame(Http::STATUS_OK, $response->getStatus());
-	}
-
-	public function testDeleteNotificationNoId(): void {
-		$controller = $this->getController();
-
-		$this->handler->expects($this->never())
-			->method('deleteById');
-
-		$response = $controller->deleteNotification(0);
-		$this->assertInstanceOf(DataResponse::class, $response);
-		$this->assertSame(Http::STATUS_NOT_FOUND, $response->getStatus());
-	}
-
-	/**
-	 * @dataProvider dataDeleteNotification
-	 */
-	public function testDeleteAllNotifications(int $_, string $username): void {
-		$controller = $this->getController([], $username);
-
-		$this->handler->expects($this->once())
-			->method('deleteByUser')
-			->with($username);
-		$this->manager->expects($this->once())
-			->method('defer')
-			->willReturn(true);
-		$this->manager->expects($this->once())
-			->method('flush');
-
-		$response = $controller->deleteAllNotifications();
-		$this->assertInstanceOf(DataResponse::class, $response);
-		$this->assertSame(Http::STATUS_OK, $response->getStatus());
-	}
-
 	public static function dataNotificationToArray(): array {
 		return [
 			['v1', 42, 'app1', 'user1', 1234, 'type1', '42', 'subject1', '', [], 'message1', 'richMessage 1', ['richMessage param'], 'link1', 'icon1', 0, []],

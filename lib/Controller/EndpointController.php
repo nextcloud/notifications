@@ -226,11 +226,9 @@ class EndpointController extends OCSController {
 
 		try {
 			$notification = $this->handler->getById($id, $this->getCurrentUser());
-			$deleted = $this->handler->deleteById($id, $this->getCurrentUser(), $notification);
 
-			if ($deleted) {
-				$this->push->pushDeleteToDevice($this->getCurrentUser(), [$id], $notification->getApp());
-			}
+			// markProcessed() does the actual deletion
+			$this->manager->markProcessed($notification);
 		} catch (NotificationNotFoundException) {
 		}
 
@@ -251,15 +249,13 @@ class EndpointController extends OCSController {
 			return new DataResponse(null, Http::STATUS_FORBIDDEN);
 		}
 
-		$shouldFlush = $this->manager->defer();
+		try {
+			$notification = $this->manager->createNotification();
+			$notification->setUser($this->getCurrentUser());
 
-		$deletedSomething = $this->handler->deleteByUser($this->getCurrentUser());
-		if ($deletedSomething) {
-			$this->push->pushDeleteToDevice($this->getCurrentUser(), null);
-		}
-
-		if ($shouldFlush) {
-			$this->manager->flush();
+			// markProcessed() does the actual deletion
+			$this->manager->markProcessed($notification);
+		} catch (NotificationNotFoundException) {
 		}
 
 		return new DataResponse();

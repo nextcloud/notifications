@@ -59,28 +59,7 @@ class Handler {
 	 * @return array A Map with all deleted notifications [user => [notifications]]
 	 */
 	public function delete(INotification $notification): array {
-		$sql = $this->connection->getQueryBuilder();
-		$sql->select('*')
-			->from('notifications');
-
-		$this->sqlWhere($sql, $notification);
-		$statement = $sql->executeQuery();
-
-		$deleted = [];
-		$notifications = [];
-		while ($row = $statement->fetch()) {
-			if (!isset($deleted[$row['user']])) {
-				$deleted[$row['user']] = [];
-			}
-
-			$deleted[$row['user']][] = [
-				'id' => (int)$row['notification_id'],
-				'app' => $row['app'],
-			];
-			$notifications[(int)$row['notification_id']] = $this->notificationFromRow($row);
-		}
-		$statement->closeCursor();
-
+		$notifications = $this->get($notification, PHP_INT_MAX);
 		if (count($notifications) === 0) {
 			return [];
 		}
@@ -93,9 +72,17 @@ class Handler {
 				$this->manager->dismissNotification($n);
 			}
 
+			// delete notifications from db in chunks
 			$notificationIds = array_keys($notifications);
-			foreach (array_chunk($notificationIds, 1000) as $chunk) {
-				$this->deleteIds($chunk);
+			foreach (array_chunk($notificationIds, 1000) as $ids) {
+				$sql = $this->connection->getQueryBuilder();
+				$sql->delete('notifications')
+					->where($sql->expr()->in(
+						'notification_id', 
+						$sql->createNamedParameter($ids, IQueryBuilder::PARAM_INT_ARRAY)
+					)
+				);
+				$sql->executeStatement();
 			}
 
 			if ($shouldFlush) {
@@ -107,51 +94,7 @@ class Handler {
 		}
 		$this->connection->commit();
 
-		return $deleted;
-	}
-
-	/**
-	 * Delete the notification of a given user
-	 */
-	public function deleteByUser(string $user): bool {
-		$notification = $this->manager->createNotification();
-		try {
-			$notification->setUser($user);
-		} catch (\InvalidArgumentException) {
-			return false;
-		}
-		return !empty($this->delete($notification));
-	}
-
-	/**
-	 * Delete the notification matching the given id
-	 *
-	 * @throws NotificationNotFoundException
-	 */
-	public function deleteById(int $id, string $user, ?INotification $notification = null): bool {
-		if (!$notification instanceof INotification) {
-			$notification = $this->getById($id, $user);
-		}
-
-		$this->manager->dismissNotification($notification);
-
-		$sql = $this->connection->getQueryBuilder();
-		$sql->delete('notifications')
-			->where($sql->expr()->eq('notification_id', $sql->createNamedParameter($id)))
-			->andWhere($sql->expr()->eq('user', $sql->createNamedParameter($user)));
-		return (bool)$sql->executeStatement();
-	}
-
-	/**
-	 * Delete the notification matching the given ids
-	 *
-	 * @param int[] $ids
-	 */
-	public function deleteIds(array $ids): void {
-		$sql = $this->connection->getQueryBuilder();
-		$sql->delete('notifications')
-			->where($sql->expr()->in('notification_id', $sql->createNamedParameter($ids, IQueryBuilder::PARAM_INT_ARRAY)));
-		$sql->executeStatement();
+		return $notifications;
 	}
 
 	/**
