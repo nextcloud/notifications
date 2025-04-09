@@ -4,7 +4,7 @@ OC.L10N.register(
     "Hello %s" : "Demat deoc'h %s",
     "Hello %s," : "Demat deoc'h %s, ",
     "Admin notifications" : "Kemennadennoù merañ",
-    "Notifications" : "Kemenadenoù",
+    "Notifications" : "Kemennadennoù",
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "Ar meziant a ro ur vackend ha frontend evit ar gemenadennoù API a zo posupl kaout e Nextcloud",
     "This app provides a backend and frontend for the notification API available in Nextcloud.\n\t\tThe API is used by other apps to notify users in the web UI and sync clients about various things. Some examples are:\n\n📬 Federated file sharing: You received a new remote share\n\n📑 Comments: Another user mentioned you in a comment on a file\n\n🚢 Update notification: Available update for an app or nextcloud itself\n\n📣 Announcement center: An announcement was posted by an admin" : "Ar meziant a ro ur vackend ha frontend evit ar gemenadennoù API a zo posupl kaout e Nextcloud.\n\t\tAn API a zo implijet gant meziantoù all evit kemennañ an implijer en UI web hag evit kemprenn ar c'hliant diwar meur a dra. Skouerioù zo :\n\n📬 Rannañ restroù kevredet : Resevet a vez ganeoc'h ul liamm pell nevez\n\n📑  Displegdurioù : Meneget oc'h bet gant un impijer all en ur restr\n\n🚢 Kemenadenn adnevesadur :  An adnevesadurioù a zo posupl kaout evit ur meziant pe evit Nextcloud\n\n📣 Kreizenn kemenn : Ur gemenadenn a zo bet graet gant ar merour",
     "Failed to perform action" : "N'eus ket bet gallet kas an oberiadenn da benn",
