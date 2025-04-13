@@ -69,7 +69,7 @@ version: 0.2.3
 license: GPL-3.0-or-later
 
 @nextcloud/vue
-version: 8.23.1
+version: 8.24.0
 license: AGPL-3.0-or-later
 
 @nextcloud/vue-select
@@ -100,10 +100,6 @@ bail
 version: 2.0.2
 license: MIT
 
-ccount
-version: 2.0.1
-license: MIT
-
 charenc
 version: 0.0.2
 license: BSD-3-Clause
@@ -121,10 +117,6 @@ version: 0.0.2
 license: BSD-3-Clause
 
 decode-named-character-reference
-version: 1.1.0
-license: MIT
-
-devlop
 version: 1.1.0
 license: MIT
 
@@ -196,16 +188,8 @@ lodash.get
 version: 4.4.2
 license: MIT
 
-longest-streak
-version: 3.1.0
-license: MIT
-
 lowlight
 version: 3.3.0
-license: MIT
-
-markdown-table
-version: 3.0.4
 license: MIT
 
 md5
@@ -220,44 +204,12 @@ mdast-util-from-markdown
 version: 2.0.2
 license: MIT
 
-mdast-util-gfm
-version: 3.1.0
-license: MIT
-
-mdast-util-gfm-autolink-literal
-version: 2.0.1
-license: MIT
-
-mdast-util-gfm-footnote
-version: 2.1.0
-license: MIT
-
-mdast-util-gfm-strikethrough
-version: 2.0.0
-license: MIT
-
-mdast-util-gfm-table
-version: 2.0.0
-license: MIT
-
-mdast-util-gfm-task-list-item
-version: 2.0.0
-license: MIT
-
 mdast-util-newline-to-break
 version: 2.0.0
 license: MIT
 
-mdast-util-phrasing
-version: 4.1.0
-license: MIT
-
 mdast-util-to-hast
 version: 13.0.2
-license: MIT
-
-mdast-util-to-markdown
-version: 2.1.2
 license: MIT
 
 mdast-util-to-string
@@ -270,30 +222,6 @@ license: MIT
 
 micromark-core-commonmark
 version: 2.0.3
-license: MIT
-
-micromark-extension-gfm
-version: 3.0.0
-license: MIT
-
-micromark-extension-gfm-autolink-literal
-version: 2.1.0
-license: MIT
-
-micromark-extension-gfm-footnote
-version: 2.1.0
-license: MIT
-
-micromark-extension-gfm-strikethrough
-version: 2.1.0
-license: MIT
-
-micromark-extension-gfm-table
-version: 2.1.1
-license: MIT
-
-micromark-extension-gfm-task-list-item
-version: 2.1.0
 license: MIT
 
 micromark-factory-destination
@@ -390,10 +318,6 @@ license: MIT
 
 remark-breaks
 version: 4.0.0
-license: MIT
-
-remark-gfm
-version: 4.0.1
 license: MIT
 
 remark-parse
