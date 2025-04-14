@@ -9,7 +9,7 @@
     "seconds ago" : "eilenn zo",
     "Failed to dismiss notification" : "N'eus ket bet gallet disteurel ar gemennadenn",
     "Dismiss" : "Arrest",
-    "in {path}" : "e {treug}",
+    "in {path}" : "e {path}",
     "Requesting browser permissions to show notifications" : "Goulenn an aotre d'ar furcher da diskouel ar gemennadennoù",
     "No notifications" : "Kemennadenn ebet",
     "Failed to dismiss all notifications" : "N'eus ket bet gallet disteurel an holl gemennadennoù",
