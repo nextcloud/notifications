@@ -6,8 +6,8 @@
     "Hello %s," : "Olá %s,",
     "_New notification for %s_::_%n new notifications for %s_" : ["Nova notificação para %s","%n novas notificações para %s","%n novas notificações para %s"],
     "_You have a new notification for %s_::_You have %n new notifications for %s_" : ["Você tem uma nova notificação para %s","Você tem %n nova notificação para %s","Você tem %n nova notificação para %s"],
-    "You can change the frequency of these emails or disable them in the <a href=\"%s\">settings</a>." : "Você pode alterar a frequência desses e-mails ou desabilitá-los nas <a href=\"%s\">configurações</a>.",
-    "You can change the frequency of these emails or disable them in the settings: %s" : "Você pode alterar a frequência desses e-mails ou desabilitá-los nas configurações: %s",
+    "You can change the frequency of these emails or disable them in the <a href=\"%s\">settings</a>." : "Você pode alterar a frequência destes e-mails ou desativá-los nas <a href=\"%s\">configurações</a>.",
+    "You can change the frequency of these emails or disable them in the settings: %s" : "Você pode alterar a frequência destes e-mails ou desativá-los nas configurações: %s",
     "Admin notifications" : "Notificações administrativas",
     "Notifications" : "Notificações",
     "Push notifications - Fair use policy" : "Notificações push – Política de uso justo",
@@ -35,13 +35,13 @@
     "An error occurred while updating your settings." : "Ocorreu um erro ao atualizar suas configurações.",
     "Notifications defaults" : "Padrões de notificações ",
     "Configure the default notification settings for new users" : "Configurar as configurações padrão de notificação para novos usuários",
-    "Send email reminders about unhandled notifications after:" : "Envie lembretes de e-mail sobre notificações não foram vistas após:",
+    "Send email reminders about unhandled notifications after:" : "Enviar lembretes por e-mail sobre notificações não tratadas após:",
     "Play sound when a new notification arrives" : "Reproduzir som quando uma nova notificação chegar",
     "Play sound when a call started (requires Nextcloud Talk)" : "Reproduzir som quando uma chamada é iniciada (requer Nextcloud Talk)",
     "None" : "Nenhum",
     "You need to set up your email address before you can receive notification emails." : "Você precisa configurar seu endereço de e-mail antes de receber e-mails de notificação.",
-    "Also repeat sound on a secondary speaker" : "Repita também o som em um alto-falante secundário",
-    "Selection of the speaker device is currently not supported by Safari" : "A seleção do dispositivo de alto-falante não é atualmente suportada pelo Safari",
+    "Also repeat sound on a secondary speaker" : "Repitir também o som em um alto-falante secundário",
+    "Selection of the speaker device is currently not supported by Safari" : "No momento, a seleção do dispositivo de alto-falante não é suportada pelo Safari",
     "Select a device" : "Selecione um dispositivo"
 },"pluralForm" :"nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }
