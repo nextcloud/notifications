@@ -42,7 +42,7 @@ OC.L10N.register(
     "Play sound when a call started (requires Nextcloud Talk)" : "Jouer un son quand un appel est lancé (l'application Nextcloud Talk est requise)",
     "None" : "Aucun",
     "You need to set up your email address before you can receive notification emails." : "Vous devez définir votre adresse e-mail avant de pouvoir recevoir des e-mails de notification.",
-    "Also repeat sound on a secondary speaker" : "Aussi répète le sont son sur le second haut-parleur",
+    "Also repeat sound on a secondary speaker" : "Répéter aussi le son sur le haut-parleur secondaire",
     "Selection of the speaker device is currently not supported by Safari" : "La sélection du périphérique de haut-parleur n'est actuellement pas prise en charge par Safari",
     "Select a device" : "Sélectionner un appareil"
 },
