@@ -22,4 +22,26 @@ export default createAppConfig({
 		},
 		includeSourceMaps: true,
 	},
+	config: {
+		build: {
+			rollupOptions: {
+				output: {
+					manualChunks: (id) => {
+						// By default, Vite stores __vitePreload in the entrypoint
+						// Then chunks import entrypoint to get the _vitePreload function
+						// Which results not only in cyclic import but also duplicated module in production
+						// Because in production entrypoints must be imported with ?v=hash cache busting
+						// See: https://github.com/nextcloud/notifications/issues/2164
+						//
+						// To avoid it - explicitly exclude the preload helper to a separate chunk
+						//
+						// TODO: add to @nextcloud/vite-config
+						if (id.startsWith('\0vite/preload-helper')) {
+							return 'vite-preload-helper'
+						}
+					},
+				},
+			},
+		},
+	},
 })
