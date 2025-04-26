@@ -1,7 +1,7 @@
 OC.L10N.register(
     "notifications",
     {
-    "We want to keep offering our push notification service for free, but large number of users overload our infrastructure. For this reason we have to rate-limit the use of push notifications. If you need this feature, consider using Nextcloud Enterprise." : "Queremos continuar oferecendo nosso serviço de notificação por push gratuitamente, mas um grande número de usuários sobrecarrega nossa infraestrutura. Por esse motivo, temos que limitar a taxa de uso das notificações por push. Se você precisar desse recurso, considere usar o Nextcloud Empresarial.",
+    "We want to keep offering our push notification service for free, but large number of users overload our infrastructure. For this reason we have to rate-limit the use of push notifications. If you need this feature, consider using Nextcloud Enterprise." : "Queremos continuar oferecendo nosso serviço de notificação por push gratuitamente, mas um grande número de usuários sobrecarrega nossa infraestrutura. Por esse motivo, temos que limitar o uso das notificações por push. Se você precisar desse recurso, considere usar o Nextcloud Empresarial.",
     "User not found" : "Usuário não encontrado",
     "An unexpected error occurred, ask your administration to check the logs." : "Ocorreu um erro inesperado, peça ao administrador para verificar os logs.",
     "Hello %s" : "Olá %s",
@@ -25,7 +25,7 @@ OC.L10N.register(
     "Requesting browser permissions to show notifications" : "Solicitando permissões do navegador para mostrar notificações",
     "Push notifications might be unreliable" : "As notificações push podem não ser confiáveis",
     "No notifications" : "Sem notificações",
-    "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "A Nextcloud GmbH patrocina um gateway de notificação por push gratuito para usuários privados. Para garantir um bom serviço, o gateway limita o número de notificações push por servidor. Para usuários corporativos, um gateway mais escalável está disponível. Entre em contato com a Nextcloud GmbH para obter mais informações.",
+    "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "A Nextcloud GmbH patrocina um gateway de notificação por push gratuito para usuários privados. Para garantir um bom serviço, o gateway limita o número de notificações por push por servidor. Para usuários corporativos, um gateway mais escalável está disponível. Entre em contato com a Nextcloud GmbH para obter mais informações.",
     "Failed to dismiss all notifications" : "Falha ao ignorar todas as notificações",
     "Dismiss all notifications" : "Ignorar todas as notificações",
     "Never" : "Nunca",
