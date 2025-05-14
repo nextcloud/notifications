@@ -10,7 +10,7 @@ OC.L10N.register(
     "_You have a new notification for %s_::_You have %n new notifications for %s_" : ["Sie haben eine neue Benachrichtigung für %s","Sie haben %n neue Benachrichtigungen für %s"],
     "You can change the frequency of these emails or disable them in the <a href=\"%s\">settings</a>." : "Sie können in den <a href=\"%s\">Einstellungen</a> die Häufigkeit dieser E-Mails ändern oder sie deaktivieren",
     "You can change the frequency of these emails or disable them in the settings: %s" : "Sie können in den Einstellungen die Häufigkeit dieser E-Mails ändern oder sie deaktivieren: %s",
-    "Admin notifications" : "Administrator-Benachrichtigungen",
+    "Admin notifications" : "Administrations-Benachrichtigungen",
     "Notifications" : "Benachrichtigungen",
     "Push notifications - Fair use policy" : "Push-Benachrichtigungen – Fair-Use-Richtlinie",
     "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server and the limit was reached for this server. For enterprise users, a more scalable gateway is available." : "Die Nextcloud GmbH sponsert ein kostenloses Push-Benachrichtigungs-Gateway für Privatanwender. Um einen guten Service zu gewährleisten, begrenzt das Gateway die Anzahl der Push-Benachrichtigungen pro Server und das Limit wurde für diesen Server erreicht. Für Unternehmensbenutzer steht ein besser skalierbares Gateway zur Verfügung.",
