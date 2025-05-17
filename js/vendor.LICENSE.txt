@@ -17,7 +17,7 @@ version: 0.2.0
 license: BSD-2-Clause
 
 @nextcloud/auth
-version: 2.4.0
+version: 2.5.1
 license: GPL-3.0-or-later
 
 @nextcloud/axios
@@ -33,7 +33,7 @@ version: 1.2.0
 license: GPL-3.0-or-later
 
 @nextcloud/dialogs
-version: 6.2.0
+version: 6.3.0
 license: AGPL-3.0-or-later
 
 @nextcloud/event-bus
