@@ -17,7 +17,7 @@ version: 0.2.0
 license: BSD-2-Clause
 
 @nextcloud/auth
-version: 2.4.0
+version: 2.5.1
 license: GPL-3.0-or-later
 
 @nextcloud/axios
@@ -33,7 +33,7 @@ version: 1.2.0
 license: GPL-3.0-or-later
 
 @nextcloud/dialogs
-version: 6.2.0
+version: 6.3.0
 license: AGPL-3.0-or-later
 
 @nextcloud/event-bus
@@ -53,7 +53,7 @@ version: 3.0.2
 license: GPL-3.0-or-later
 
 @nextcloud/moment
-version: 1.3.2
+version: 1.3.4
 license: GPL-3.0-or-later
 
 @nextcloud/notify_push
@@ -69,7 +69,7 @@ version: 0.2.4
 license: GPL-3.0-or-later
 
 @nextcloud/vue
-version: 8.26.0
+version: 8.26.1
 license: AGPL-3.0-or-later
 
 @nextcloud/vue-select
@@ -106,10 +106,6 @@ license: BSD-3-Clause
 
 comma-separated-tokens
 version: 2.0.3
-license: MIT
-
-core-js
-version: 3.37.0
 license: MIT
 
 crypt
@@ -182,10 +178,6 @@ license: MIT
 
 is-plain-obj
 version: 4.1.0
-license: MIT
-
-lodash.get
-version: 4.4.2
 license: MIT
 
 lowlight
@@ -291,10 +283,6 @@ license: MIT
 moment
 version: 2.30.1
 license: MIT
-
-node-gettext
-version: 3.0.0
-license: (MIT)
 
 path-browserify
 version: 1.0.1
