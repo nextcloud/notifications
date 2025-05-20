@@ -6,7 +6,7 @@
 <template>
 	<NcSettingsSection
 		:name="t('notifications', 'Notifications defaults')"
-		:description="t('notifications', 'Configure the default notification settings for new users')">
+		:description="t('notifications', 'Configure the default notification settings')">
 		<p>
 			<label for="notify_setting_batchtime" class="notification-frequency__label">
 				{{ t('notifications', 'Send email reminders about unhandled notifications after:') }}

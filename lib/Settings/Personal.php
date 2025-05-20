@@ -14,6 +14,7 @@ use OCA\Notifications\Model\Settings;
 use OCA\Notifications\Model\SettingsMapper;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Http\TemplateResponse;
+use OCP\AppFramework\Services\IAppConfig;
 use OCP\AppFramework\Services\IInitialState;
 use OCP\IConfig;
 use OCP\IL10N;
@@ -25,6 +26,7 @@ use OCP\Util;
 class Personal implements ISettings {
 	public function __construct(
 		protected IConfig $config,
+		protected IAppConfig $appConfig,
 		protected IL10N $l10n,
 		protected IUserSession $session,
 		protected SettingsMapper $settingsMapper,
@@ -63,12 +65,17 @@ class Personal implements ISettings {
 			$settingBatchTime = Settings::EMAIL_SEND_3HOURLY;
 		}
 
+		$defaultSoundNotification = $this->appConfig->getAppValueString(Application::APP_ID, 'sound_notification') === 'yes' ? 'yes' : 'no';
+		$userSoundNotification = $this->config->getUserValue($user->getUID(), Application::APP_ID, 'sound_notification', $defaultSoundNotification) === 'yes';
+		$defaultSoundTalk = $this->appConfig->getAppValueString(Application::APP_ID, 'sound_talk') === 'yes' ? 'yes' : 'no';
+		$userSoundTalk = $this->config->getUserValue($user->getUID(), Application::APP_ID, 'sound_talk', $defaultSoundTalk) === 'yes';
+
 		$this->initialState->provideInitialState('config', [
 			'setting' => 'personal',
 			'is_email_set' => (bool)$user->getEMailAddress(),
 			'setting_batchtime' => $settingBatchTime,
-			'sound_notification' => $this->config->getUserValue($user->getUID(), Application::APP_ID, 'sound_notification', 'yes') === 'yes',
-			'sound_talk' => $this->config->getUserValue($user->getUID(), Application::APP_ID, 'sound_talk', 'yes') === 'yes',
+			'sound_notification' => $userSoundNotification,
+			'sound_talk' => $userSoundTalk,
 		]);
 
 		return new TemplateResponse('notifications', 'settings/personal');

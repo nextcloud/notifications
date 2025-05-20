@@ -10,7 +10,6 @@ namespace OCA\Notifications\BackgroundJob;
 
 use OCA\Notifications\Model\Settings;
 use OCA\Notifications\Model\SettingsMapper;
-use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\BackgroundJob\TimedJob;
 use OCP\IDBConnection;
@@ -47,15 +46,11 @@ class GenerateUserSettings extends TimedJob {
 				return;
 			}
 
-			try {
-				$this->settingsMapper->getSettingsByUser($user->getUID());
-			} catch (DoesNotExistException) {
-				$settings = new Settings();
-				$settings->setUserId($user->getUID());
-				$settings->setNextSendTime(1);
-				$settings->setBatchTime(Settings::EMAIL_SEND_3HOURLY);
+			// Initializes the default settings
+			$settings = $this->settingsMapper->getSettingsByUser($user->getUID());
+			if ($settings->getLastSendId() === 0) {
 				$settings->setLastSendId($maxId);
-				$this->settingsMapper->insert($settings);
+				$this->settingsMapper->update($settings);
 			}
 		});
 	}
