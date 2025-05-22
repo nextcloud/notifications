@@ -131,7 +131,7 @@ jobs:
 
       - name: Set up npm ${{ steps.package-engines-versions.outputs.npmVersion }}
         run: npm i -g 'npm@${{ steps.package-engines-versions.outputs.npmVersion }}'
-      
+
       - name: Rebase to ${{ needs.init.outputs.base_ref }}
         if: ${{ contains(needs.init.outputs.arg1, 'rebase') }}
         run: |
@@ -151,7 +151,7 @@ jobs:
         run: |
           git add '${{ github.workspace }}${{ needs.init.outputs.git_path }}'
           git commit --signoff -m 'chore(assets): Recompile assets'
- 
+
       - name: Commit fixup
         if: ${{ contains(needs.init.outputs.arg1, 'fixup') }}
         run: |
