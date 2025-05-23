@@ -112,6 +112,10 @@ class FakeUser implements IUser {
 		throw new \RuntimeException('Not implemented');
 	}
 
+	public function getQuotaBytes(): int|float {
+		throw new \RuntimeException('Not implemented');
+	}
+
 	public function setQuota($quota) {
 		throw new \RuntimeException('Not implemented');
 	}
