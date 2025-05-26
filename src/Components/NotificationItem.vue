@@ -338,7 +338,7 @@ export default {
 	}
 	:deep(.rich-text--wrapper) {
 		white-space: pre-wrap;
-		word-break: break-word;
+		overflow-wrap: break-word;
 	}
 
 	.notification-subject {
