@@ -7,6 +7,7 @@ SPDX-License-Identifier: MIT
 SPDX-FileCopyrightText: 
 SPDX-FileCopyrightText: Andrea Giammarchi
 SPDX-FileCopyrightText: Christoph Wurst
+SPDX-FileCopyrightText: Eugene Sharygin <eush77@gmail.com>
 SPDX-FileCopyrightText: Evan You
 SPDX-FileCopyrightText: Iskren Ivov Chernev <iskren.chernev@gmail.com> (https://github.com/ichernev)
 SPDX-FileCopyrightText: James Simpson <james@goldfirestudios.com> (http://goldfirestudios.com)
@@ -15,6 +16,7 @@ SPDX-FileCopyrightText: John Molakvoæ (skjnldsv) <skjnldsv@protonmail.com>
 SPDX-FileCopyrightText: Mapbox
 SPDX-FileCopyrightText: Mark <mark@remarkablemark.org>
 SPDX-FileCopyrightText: Matt Zabriskie
+SPDX-FileCopyrightText: Max <max@nextcloud.com>
 SPDX-FileCopyrightText: Nextcloud GmbH and Nextcloud contributors
 SPDX-FileCopyrightText: Rob Cresswell <robcresswell@pm.me>
 SPDX-FileCopyrightText: Roeland Jago Douma
@@ -56,7 +58,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 0.2.4
 	- license: GPL-3.0-or-later
 - @nextcloud/vue
-	- version: 8.26.1
+	- version: 8.27.0
 	- license: AGPL-3.0-or-later
 - @ungap/structured-clone
 	- version: 1.2.0
@@ -99,6 +101,9 @@ This file is generated from multiple sources. Included packages:
 	- license: MIT
 - is-plain-obj
 	- version: 4.1.0
+	- license: MIT
+- mdast-squeeze-paragraphs
+	- version: 6.0.0
 	- license: MIT
 - mdast-util-find-and-replace
 	- version: 3.0.1
@@ -192,6 +197,9 @@ This file is generated from multiple sources. Included packages:
 	- license: MIT
 - remark-rehype
 	- version: 11.0.0
+	- license: MIT
+- remark-unlink-protocols
+	- version: 1.0.0
 	- license: MIT
 - space-separated-tokens
 	- version: 2.0.2
