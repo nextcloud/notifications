@@ -69,7 +69,7 @@ version: 0.2.3
 license: GPL-3.0-or-later
 
 @nextcloud/vue
-version: 8.26.1
+version: 8.27.0
 license: AGPL-3.0-or-later
 
 @nextcloud/vue-select
@@ -187,6 +187,10 @@ license: MIT
 md5
 version: 2.3.0
 license: BSD-3-Clause
+
+mdast-squeeze-paragraphs
+version: 6.0.0
+license: MIT
 
 mdast-util-find-and-replace
 version: 3.0.1
@@ -314,6 +318,10 @@ license: MIT
 
 remark-rehype
 version: 11.0.0
+license: MIT
+
+remark-unlink-protocols
+version: 1.0.0
 license: MIT
 
 semver
