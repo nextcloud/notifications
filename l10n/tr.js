@@ -39,7 +39,7 @@ OC.L10N.register(
     "Configure the default notification settings for new users" : "Yeni kullanıcılar için varsayılan bildirim ayarlarını yapılandırın",
     "Send email reminders about unhandled notifications after:" : "Şu kadar zaman sonra işlenmeyen bildirimler için e-posta anımsatıcıları gönderilsin:",
     "Play sound when a new notification arrives" : "Bildirimlerde ses çalınsın",
-    "Play sound when a call started (requires Nextcloud Talk)" : "Bir çağrı başlatıldığında ses çalınsın (Nextcloud Konuş gereklidir)",
+    "Play sound when a call started (requires Nextcloud Talk)" : "Bir çağrı başlatıldığında ses çalınsın (Nextcloud Talk gereklidir)",
     "None" : "Yok",
     "You need to set up your email address before you can receive notification emails." : "Bildirim e-postalarını alabilmek için e-posta adresinizi belirtmelisiniz.",
     "Also repeat sound on a secondary speaker" : "Ses ikinci bir hoparlörde yinelensin",
