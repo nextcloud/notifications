@@ -165,7 +165,7 @@ class APIController extends OCSController {
 	 *
 	 * Required capability: `ocs-endpoints > test-push`
 	 *
-	 * @return DataResponse<Http::STATUS_OK|Http::STATUS_BAD_REQUEST, array{message: string}, array{}>
+	 * @return DataResponse<Http::STATUS_OK, array{message: string, nid: int}, array{}>|DataResponse<Http::STATUS_BAD_REQUEST, array{message: string}, array{}>
 	 *
 	 * 200: Test notification generated successfully, but the device should still show the message to the user
 	 * 400: Test notification could not be generated, show the message to the user
@@ -208,6 +208,10 @@ class APIController extends OCSController {
 
 			$this->notificationApp->setOutput($output);
 			$this->notificationManager->notify($notification);
+
+			/** @var int $nid */
+			$nid = $this->notificationApp->getLastInsertedId();
+			return new DataResponse(['message' => $output->fetch(), 'nid' => $nid]);
 		} catch (\InvalidArgumentException $e) {
 			$this->logger->error('Self testing push notification failed: ' . $e->getMessage(), ['exception' => $e]);
 			return new DataResponse(
@@ -215,7 +219,5 @@ class APIController extends OCSController {
 				Http::STATUS_BAD_REQUEST,
 			);
 		}
-
-		return new DataResponse(['message' => $output->fetch()]);
 	}
 }

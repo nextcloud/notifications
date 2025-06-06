@@ -1514,11 +1514,16 @@
                                                 "data": {
                                                     "type": "object",
                                                     "required": [
-                                                        "message"
+                                                        "message",
+                                                        "nid"
                                                     ],
                                                     "properties": {
                                                         "message": {
                                                             "type": "string"
+                                                        },
+                                                        "nid": {
+                                                            "type": "integer",
+                                                            "format": "int64"
                                                         }
                                                     }
                                                 }
