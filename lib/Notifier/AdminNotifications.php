@@ -29,22 +29,12 @@ class AdminNotifications implements INotifier {
 	) {
 	}
 
-	/**
-	 * Identifier of the notifier, only use [a-z0-9_]
-	 *
-	 * @return string
-	 * @since 17.0.0
-	 */
+	#[\Override]
 	public function getID(): string {
 		return 'admin_notifications';
 	}
 
-	/**
-	 * Human-readable name describing the notifier
-	 *
-	 * @return string
-	 * @since 17.0.0
-	 */
+	#[\Override]
 	public function getName(): string {
 		return $this->l10nFactory->get('notifications')->t('Admin notifications');
 	}
@@ -55,6 +45,7 @@ class AdminNotifications implements INotifier {
 	 * @return INotification
 	 * @throws UnknownNotificationException When the notification was not prepared by a notifier
 	 */
+	#[\Override]
 	public function prepare(INotification $notification, string $languageCode): INotification {
 		if ($notification->getApp() !== 'admin_notifications' && $notification->getApp() !== 'admin_notification_talk') {
 			throw new UnknownNotificationException('app');

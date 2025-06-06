@@ -25,11 +25,6 @@
 		<LessSpecificReturnType errorLevel="error"/>
 		<LessSpecificImplementedReturnType errorLevel="error"/>
 		<MoreSpecificReturnType errorLevel="error"/>
-		<UndefinedClass>
-			<errorLevel type="suppress">
-				<referencedClass name="OC" />
-			</errorLevel>
-		</UndefinedClass>
 		<UndefinedDocblockClass>
 			<errorLevel type="suppress">
 				<referencedClass name="Doctrine\DBAL\Schema\Schema" />

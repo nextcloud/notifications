@@ -271,7 +271,7 @@ class EndpointController extends OCSController {
 	 * @return string
 	 */
 	protected function generateETag(array $notifications): string {
-		return md5(json_encode($notifications));
+		return md5(json_encode($notifications, JSON_THROW_ON_ERROR));
 	}
 
 	/**

@@ -30,6 +30,7 @@ class TestPush extends Command {
 		parent::__construct();
 	}
 
+	#[\Override]
 	protected function configure(): void {
 		$this
 			->setName('notification:test-push')
@@ -54,11 +55,7 @@ class TestPush extends Command {
 		;
 	}
 
-	/**
-	 * @param InputInterface $input
-	 * @param OutputInterface $output
-	 * @return int
-	 */
+	#[\Override]
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		if (!$this->notificationManager->isFairUseOfFreePushService()) {
 			$output->writeln('<error>We want to keep offering our push notification service for free, but large</error>');

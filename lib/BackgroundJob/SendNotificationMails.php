@@ -21,6 +21,7 @@ class SendNotificationMails extends TimedJob {
 		parent::__construct($timeFactory);
 	}
 
+	#[\Override]
 	protected function run($argument): void {
 		$time = $this->time->getTime();
 		$batchSize = $this->isCLI ? MailNotifications::BATCH_SIZE_CLI : MailNotifications::BATCH_SIZE_WEB;
