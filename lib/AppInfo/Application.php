@@ -35,6 +35,7 @@ class Application extends \OCP\AppFramework\App implements IBootstrap {
 		parent::__construct(self::APP_ID);
 	}
 
+	#[\Override]
 	public function register(IRegistrationContext $context): void {
 		$context->registerCapability(Capabilities::class);
 
@@ -49,11 +50,12 @@ class Application extends \OCP\AppFramework\App implements IBootstrap {
 		$context->registerEventListener(PostLoginEvent::class, PostLoginListener::class);
 	}
 
+	#[\Override]
 	public function boot(IBootContext $context): void {
-		$context->injectFn(\Closure::fromCallable([$this, 'registerAppAndNotifier']));
+		$context->injectFn(\Closure::fromCallable([$this, 'registerApp']));
 	}
 
-	public function registerAppAndNotifier(IManager $notificationManager): void {
+	public function registerApp(IManager $notificationManager): void {
 		// notification app
 		$notificationManager->registerApp(App::class);
 	}

@@ -30,6 +30,7 @@ class GenerateUserSettings extends TimedJob {
 		$this->setInterval(24 * 60 * 60);
 	}
 
+	#[\Override]
 	protected function run($argument): void {
 		$query = $this->connection->getQueryBuilder();
 		$query->select('notification_id')

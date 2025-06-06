@@ -20,6 +20,7 @@ class Version2011Date20220826074907 extends SimpleMigrationStep {
 	) {
 	}
 
+	#[\Override]
 	public function postSchemaChange(IOutput $output, \Closure $schemaClosure, array $options) {
 		$query = $this->connection->getQueryBuilder();
 

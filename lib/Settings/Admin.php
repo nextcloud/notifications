@@ -24,6 +24,7 @@ class Admin implements ISettings {
 	) {
 	}
 
+	#[\Override]
 	public function getForm(): TemplateResponse {
 		Util::addStyle('notifications', 'notifications-admin-settings');
 		Util::addScript('notifications', 'notifications-admin-settings');
@@ -50,20 +51,12 @@ class Admin implements ISettings {
 		return new TemplateResponse('notifications', 'settings/admin');
 	}
 
-	/**
-	 * @return string the section ID, e.g. 'sharing'
-	 */
+	#[\Override]
 	public function getSection(): string {
 		return 'notifications';
 	}
 
-	/**
-	 * @return int whether the form should be rather on the top or bottom of
-	 *             the admin section. The forms are arranged in ascending order of the
-	 *             priority values. It is required to return a value between 0 and 100.
-	 *
-	 * E.g.: 70
-	 */
+	#[\Override]
 	public function getPriority(): int {
 		return 20;
 	}

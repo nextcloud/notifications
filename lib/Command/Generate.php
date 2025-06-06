@@ -32,6 +32,7 @@ class Generate extends Command {
 		parent::__construct();
 	}
 
+	#[\Override]
 	protected function configure(): void {
 		$this
 			->setName('notification:generate')
@@ -92,11 +93,7 @@ class Generate extends Command {
 		;
 	}
 
-	/**
-	 * @param InputInterface $input
-	 * @param OutputInterface $output
-	 * @return int
-	 */
+	#[\Override]
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 
 		$userId = (string)$input->getArgument('user-id');
@@ -194,7 +191,7 @@ class Generate extends Command {
 		if ($idOnly) {
 			$output->writeln((string)$this->notificationApp->getLastInsertedId());
 		} else {
-			$output->writeln('<info>Notification with ID ' . $this->notificationApp->getLastInsertedId() . '</info>');
+			$output->writeln('<info>Notification with ID ' . (string)($this->notificationApp->getLastInsertedId() ?? 0) . '</info>');
 		}
 		return 0;
 	}

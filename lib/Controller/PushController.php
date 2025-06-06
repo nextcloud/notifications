@@ -97,7 +97,11 @@ class PushController extends OCSController {
 
 		$key = $this->identityProof->getKey($user);
 
-		$deviceIdentifier = json_encode([$user->getCloudId(), $token->getId()]);
+		try {
+			$deviceIdentifier = json_encode([$user->getCloudId(), $token->getId()], JSON_THROW_ON_ERROR);
+		} catch (\JsonException) {
+			return new DataResponse(['message' => 'INVALID_SESSION_TOKEN'], Http::STATUS_BAD_REQUEST);
+		}
 		openssl_sign($deviceIdentifier, $signature, $key->getPrivate(), OPENSSL_ALGO_SHA512);
 		/**
 		 * For some reason the push proxy's golang code needs the signature

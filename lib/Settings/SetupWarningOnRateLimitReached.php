@@ -24,23 +24,17 @@ class SetupWarningOnRateLimitReached implements ISetupCheck {
 	) {
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	#[\Override]
 	public function getCategory(): string {
 		return 'notifications';
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	#[\Override]
 	public function getName(): string {
 		return $this->l->t('Push notifications - Fair use policy');
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	#[\Override]
 	public function run(): SetupResult {
 		$lastReached = (int)$this->config->getAppValue(Application::APP_ID, 'rate_limit_reached', '0');
 		if ($lastReached < ($this->timeFactory->getTime() - 7 * 24 * 3600)) {
