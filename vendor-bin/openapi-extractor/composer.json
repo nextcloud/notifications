@@ -6,6 +6,6 @@
 		"sort-packages": true
 	},
 	"require-dev": {
-		"nextcloud/openapi-extractor": "^1.7.0"
+		"nextcloud/openapi-extractor": "^1.8.0"
 	}
 }
