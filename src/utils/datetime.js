@@ -22,6 +22,7 @@ const relativeTimeFormat = new Intl.RelativeTimeFormat(locale, {
 /**
  * Format given timestamp in human-readable format (01 January 2025 12:00)
  * If the unit is not provided, the largest unit is used for rounded duration in milliseconds.
+ *
  * @param {number} timestamp - Timestamp in ms
  */
 export function formatDateTime(timestamp) {
@@ -30,6 +31,7 @@ export function formatDateTime(timestamp) {
 
 /**
  * Format relative time duration in human-readable format from now
+ *
  * @param {number} timestamp - Timestamp in ms
  */
 export function formatRelativeTimeFromNow(timestamp) {
@@ -38,6 +40,7 @@ export function formatRelativeTimeFromNow(timestamp) {
 
 /**
  * Format relative time duration in human-readable format
+ *
  * @param {number} ms - Duration in milliseconds
  */
 function formatRelativeTime(ms) {
@@ -48,6 +51,7 @@ function formatRelativeTime(ms) {
 
 /**
  * Convert milliseconds to the largest unit rounded from 0.75 point.
+ *
  * @example 123 -> { value: 0, unit: 'second' }
  * @example 1000 -> { value: 1, unit: 'second' }
  * @example 25 * 60 * 60 * 1000 -> { value: 25, unit: 'minute' }

@@ -57,16 +57,16 @@
 </template>
 
 <script>
-import { UAParser } from 'ua-parser-js'
-import { reactive, ref } from 'vue'
 import axios from '@nextcloud/axios'
+import { showError, showSuccess } from '@nextcloud/dialogs'
+import { loadState } from '@nextcloud/initial-state'
 import { t } from '@nextcloud/l10n'
 import { generateOcsUrl } from '@nextcloud/router'
-import { loadState } from '@nextcloud/initial-state'
-import { showSuccess, showError } from '@nextcloud/dialogs'
-import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
-import NcSelect from '@nextcloud/vue/dist/Components/NcSelect.js'
-import NcSettingsSection from '@nextcloud/vue/dist/Components/NcSettingsSection.js'
+import { UAParser } from 'ua-parser-js'
+import { reactive, ref } from 'vue'
+import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
+import NcSelect from '@nextcloud/vue/components/NcSelect'
+import NcSettingsSection from '@nextcloud/vue/components/NcSettingsSection'
 import BrowserStorage from '../services/BrowserStorage.js'
 
 const EmailFrequency = {
@@ -157,8 +157,8 @@ export default {
 				stream = await navigator.mediaDevices.getUserMedia({ audio: true })
 				// Enumerate devices and populate NcSelect options
 				this.devices = (await navigator.mediaDevices.enumerateDevices() ?? [])
-					.filter(device => device.kind === 'audiooutput')
-					.map(device => ({
+					.filter((device) => device.kind === 'audiooutput')
+					.map((device) => ({
 						id: device.deviceId,
 						label: device.label ? device.label : device.fallbackLabel,
 					}))
@@ -168,7 +168,7 @@ export default {
 				console.error('Error while requesting or initializing audio devices: ', error)
 			} finally {
 				if (stream) {
-					stream.getTracks().forEach(track => track.stop())
+					stream.getTracks().forEach((track) => track.stop())
 				}
 			}
 		},

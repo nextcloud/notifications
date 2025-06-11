@@ -41,7 +41,7 @@
   ],
   "devDependencies": {
     "@nextcloud/browserslist-config": "^3.0.1",
-    "@nextcloud/eslint-config": "^8.4.2",
+    "@nextcloud/eslint-config": "^9.0.0-rc.2",
     "@nextcloud/stylelint-config": "^3.0.1",
     "@nextcloud/vite-config": "^1.5.6",
     "babel-loader-exclude-node-modules-except": "^1.2.1",

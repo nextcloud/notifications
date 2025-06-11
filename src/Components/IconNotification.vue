@@ -25,12 +25,9 @@
 </template>
 
 <script setup>
-import IconBell from 'vue-material-design-icons/Bell.vue'
-
-import { computed } from 'vue'
 import { getCapabilities } from '@nextcloud/capabilities'
-
-const theming = getCapabilities()?.theming
+import { computed } from 'vue'
+import IconBell from 'vue-material-design-icons/Bell.vue'
 
 defineProps({
 	showDot: {
@@ -47,8 +44,14 @@ defineProps({
 	},
 })
 
+const theming = getCapabilities()?.theming
+
 const hexRegex = /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/
-const hexToHSL = (hexColor) => {
+
+/**
+ * @param {string} hexColor color in HEX format, like #00679e
+ */
+function hexToHSL(hexColor) {
 	const r = parseInt(hexColor.substring(1, 3), 16) / 255
 	const g = parseInt(hexColor.substring(3, 5), 16) / 255
 	const b = parseInt(hexColor.substring(5, 7), 16) / 255
@@ -63,9 +66,18 @@ const hexToHSL = (hexColor) => {
 		const d = max - min
 		sat = lum > 0.5 ? d / (2 - max - min) : d / (max + min)
 		switch (max) {
-		case r: hue = (g - b) / d + (g < b ? 6 : 0); break
-		case g: hue = (b - r) / d + 2; break
-		case b: hue = (r - g) / d + 4; break
+			case r: {
+				hue = (g - b) / d + (g < b ? 6 : 0)
+				break
+			}
+			case g: {
+				hue = (b - r) / d + 2
+				break
+			}
+			case b: {
+				hue = (r - g) / d + 4
+				break
+			}
 		}
 		hue *= 60
 	}

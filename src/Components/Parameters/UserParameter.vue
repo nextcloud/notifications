@@ -17,10 +17,10 @@
 
 <script>
 
-import NcUserBubble from '@nextcloud/vue/dist/Components/NcUserBubble.js'
+import NcUserBubble from '@nextcloud/vue/components/NcUserBubble'
 
 export default {
-	name: 'User',
+	name: 'UserParameter',
 
 	components: {
 		NcUserBubble,
@@ -31,14 +31,17 @@ export default {
 			type: String,
 			required: true,
 		},
+
 		id: {
 			type: String,
 			required: true,
 		},
+
 		name: {
 			type: String,
 			required: true,
 		},
+
 		server: {
 			type: String,
 			default: '',

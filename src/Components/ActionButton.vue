@@ -4,14 +4,14 @@
 -->
 <template>
 	<NcButton v-if="isWebLink"
-		type="primary"
+		variant="primary"
 		class="action-button pull-right"
 		:href="link"
 		@click="onClickActionButtonWeb">
 		{{ label }}
 	</NcButton>
-	<NcButton v-else-if="!isWebLink"
-		:type="buttonType"
+	<NcButton v-else
+		:variant="primary ? 'primary' : 'secondary'"
 		class="action-button pull-right"
 		@click="onClickActionButton">
 		{{ label }}
@@ -21,12 +21,12 @@
 <script>
 import axios from '@nextcloud/axios'
 import { showError } from '@nextcloud/dialogs'
-import { t } from '@nextcloud/l10n'
-import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
 import { emit } from '@nextcloud/event-bus'
+import { t } from '@nextcloud/l10n'
+import NcButton from '@nextcloud/vue/components/NcButton'
 
 export default {
-	name: 'Action',
+	name: 'ActionButton',
 
 	components: {
 		NcButton,
@@ -38,21 +38,25 @@ export default {
 			default: '',
 			required: true,
 		},
+
 		link: {
 			type: String,
 			default: '',
 			required: true,
 		},
+
 		type: {
 			type: String,
 			default: '',
 			required: true,
 		},
+
 		primary: {
 			type: Boolean,
 			default: false,
 			required: true,
 		},
+
 		notificationIndex: {
 			type: Number,
 			required: true,
@@ -72,10 +76,6 @@ export default {
 
 		typeWithDefault() {
 			return this.type || 'GET'
-		},
-
-		buttonType() {
-			return this.primary ? 'primary' : 'secondary'
 		},
 	},
 

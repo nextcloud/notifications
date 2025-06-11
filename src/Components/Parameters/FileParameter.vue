@@ -13,25 +13,29 @@
 import { t } from '@nextcloud/l10n'
 
 export default {
-	name: 'File',
+	name: 'FileParameter',
 
 	props: {
 		type: {
 			type: String,
 			required: true,
 		},
+
 		id: {
 			type: [Number, String],
 			required: true,
 		},
+
 		name: {
 			type: String,
 			required: true,
 		},
+
 		path: {
 			type: String,
 			default: '',
 		},
+
 		link: {
 			type: String,
 			default: '',
