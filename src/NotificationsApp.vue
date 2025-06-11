@@ -50,7 +50,7 @@
 					</template>
 
 					<template v-if="hasThrottledPushNotifications" #action>
-						<NcButton type="primary"
+						<NcButton variant="primary"
 							href="https://nextcloud.com/fairusepolicy"
 							target="_blank"
 							rel="noreferrer noopener">
@@ -65,7 +65,7 @@
 
 			<!-- Dismiss all -->
 			<div v-if="notifications.length > 0" class="dismiss-all">
-				<NcButton type="tertiary"
+				<NcButton variant="tertiary"
 					wide
 					@click="onDismissAll">
 					<template #icon>
@@ -87,9 +87,9 @@ import { loadState } from '@nextcloud/initial-state'
 import { t } from '@nextcloud/l10n'
 import { listen } from '@nextcloud/notify_push'
 import { generateOcsUrl, imagePath } from '@nextcloud/router'
-import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
-import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
-import NcHeaderMenu from '@nextcloud/vue/dist/Components/NcHeaderMenu.js'
+import NcButton from '@nextcloud/vue/components/NcButton'
+import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
+import NcHeaderMenu from '@nextcloud/vue/components/NcHeaderMenu'
 import IconBell from 'vue-material-design-icons/Bell.vue'
 import IconClose from 'vue-material-design-icons/Close.vue'
 import IconMessage from 'vue-material-design-icons/Message.vue'

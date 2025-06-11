@@ -37,8 +37,8 @@ import { showError, showSuccess } from '@nextcloud/dialogs'
 import { loadState } from '@nextcloud/initial-state'
 import { t } from '@nextcloud/l10n'
 import { generateOcsUrl } from '@nextcloud/router'
-import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
-import NcSettingsSection from '@nextcloud/vue/dist/Components/NcSettingsSection.js'
+import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
+import NcSettingsSection from '@nextcloud/vue/components/NcSettingsSection'
 
 const EmailFrequency = {
 	EMAIL_SEND_OFF: 0,

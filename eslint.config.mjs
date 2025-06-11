@@ -10,8 +10,6 @@ export default [
 	// Disabled rules from recommendedVue2Javascript pack
 	{
 		rules: {
-			'@nextcloud/vue/no-deprecated-exports': 'off',
-			'@nextcloud/vue/no-deprecated-props': 'off',
 			'@stylistic/arrow-parens': 'off',
 			'antfu/top-level-function': 'off',
 			'jsdoc/tag-lines': 'off',

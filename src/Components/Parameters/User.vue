@@ -17,7 +17,7 @@
 
 <script>
 
-import NcUserBubble from '@nextcloud/vue/dist/Components/NcUserBubble.js'
+import NcUserBubble from '@nextcloud/vue/components/NcUserBubble'
 
 export default {
 	name: 'User',
