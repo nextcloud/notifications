@@ -16,7 +16,6 @@ Vue.prototype.OCA = OCA
 
 export default new Vue({
 	el: '#notifications',
-	// eslint-disable-next-line vue/match-component-file-name
 	name: 'NotificationsApp',
 	components: {
 		NotificationsApp: () => import(/* webpackPreload: true */'./NotificationsApp.vue'),
