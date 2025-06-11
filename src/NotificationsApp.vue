@@ -79,27 +79,23 @@
 </template>
 
 <script>
+import { getCurrentUser } from '@nextcloud/auth'
+import axios from '@nextcloud/axios'
+import { showError } from '@nextcloud/dialogs'
+import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { loadState } from '@nextcloud/initial-state'
+import { t } from '@nextcloud/l10n'
+import { listen } from '@nextcloud/notify_push'
+import { generateOcsUrl, imagePath } from '@nextcloud/router'
+import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
+import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
+import NcHeaderMenu from '@nextcloud/vue/dist/Components/NcHeaderMenu.js'
 import IconBell from 'vue-material-design-icons/Bell.vue'
 import IconClose from 'vue-material-design-icons/Close.vue'
 import IconMessage from 'vue-material-design-icons/Message.vue'
 import IconNotification from './Components/IconNotification.vue'
 import Notification from './Components/Notification.vue'
-import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
-import axios from '@nextcloud/axios'
-import { getCurrentUser } from '@nextcloud/auth'
-import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
-import { showError } from '@nextcloud/dialogs'
-import { loadState } from '@nextcloud/initial-state'
-import { t } from '@nextcloud/l10n'
-import {
-	generateOcsUrl,
-	imagePath,
-} from '@nextcloud/router'
 import { getNotificationsData } from './services/notificationsService.js'
-import { listen } from '@nextcloud/notify_push'
-
-import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
-import NcHeaderMenu from '@nextcloud/vue/dist/Components/NcHeaderMenu.js'
 import { createWebNotification } from './services/webNotificationsService.js'
 
 export default {

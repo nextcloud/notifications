@@ -82,18 +82,18 @@
 
 <script>
 import axios from '@nextcloud/axios'
+import { showError } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
+import { generateOcsUrl } from '@nextcloud/router'
 import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
 import NcRichText from '@nextcloud/vue/dist/Components/NcRichText.js'
 import Close from 'vue-material-design-icons/Close.vue'
 import Message from 'vue-material-design-icons/Message.vue'
-import { showError } from '@nextcloud/dialogs'
 import Action from './Action.vue'
-import { generateOcsUrl } from '@nextcloud/router'
 import DefaultParameter from './Parameters/DefaultParameter.vue'
 import File from './Parameters/File.vue'
 import User from './Parameters/User.vue'
-import { formatRelativeTimeFromNow, formatDateTime } from '../utils/datetime.js'
+import { formatDateTime, formatRelativeTimeFromNow } from '../utils/datetime.js'
 
 export default {
 	name: 'Notification',

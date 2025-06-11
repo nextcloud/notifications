@@ -25,10 +25,9 @@
 </template>
 
 <script setup>
-import IconBell from 'vue-material-design-icons/Bell.vue'
-
-import { computed } from 'vue'
 import { getCapabilities } from '@nextcloud/capabilities'
+import { computed } from 'vue'
+import IconBell from 'vue-material-design-icons/Bell.vue'
 
 const theming = getCapabilities()?.theming
 

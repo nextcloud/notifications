@@ -18,8 +18,6 @@ export default [
 			'no-console': 'off',
 			'no-unused-vars': 'off',
 			'no-use-before-define': 'off',
-			'perfectionist/sort-imports': 'off',
-			'perfectionist/sort-named-imports': 'off',
 			'vue/define-macros-order': 'off',
 			'vue/first-attribute-linebreak': 'off',
 			'vue/multi-word-component-names': 'off',
