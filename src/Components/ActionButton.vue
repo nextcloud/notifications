@@ -10,7 +10,7 @@
 		@click="onClickActionButtonWeb">
 		{{ label }}
 	</NcButton>
-	<NcButton v-else-if="!isWebLink"
+	<NcButton v-else
 		:variant="primary ? 'primary' : 'secondary'"
 		class="action-button pull-right"
 		@click="onClickActionButton">
@@ -26,7 +26,7 @@ import { t } from '@nextcloud/l10n'
 import NcButton from '@nextcloud/vue/components/NcButton'
 
 export default {
-	name: 'Action',
+	name: 'ActionButton',
 
 	components: {
 		NcButton,

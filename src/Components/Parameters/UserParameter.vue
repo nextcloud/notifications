@@ -20,7 +20,7 @@
 import NcUserBubble from '@nextcloud/vue/components/NcUserBubble'
 
 export default {
-	name: 'User',
+	name: 'UserParameter',
 
 	components: {
 		NcUserBubble,

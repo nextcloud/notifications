@@ -60,7 +60,7 @@
 		</div>
 
 		<div v-if="actions.length" class="notification-actions">
-			<Action v-for="(a, i) in actions"
+			<ActionButton v-for="(a, i) in actions"
 				:key="i"
 				v-bind="a"
 				:notification-index="index" />
@@ -89,17 +89,17 @@ import NcButton from '@nextcloud/vue/components/NcButton'
 import NcRichText from '@nextcloud/vue/components/NcRichText'
 import Close from 'vue-material-design-icons/Close.vue'
 import Message from 'vue-material-design-icons/Message.vue'
-import Action from './Action.vue'
+import ActionButton from './ActionButton.vue'
 import DefaultParameter from './Parameters/DefaultParameter.vue'
-import File from './Parameters/File.vue'
-import User from './Parameters/User.vue'
+import FileParameter from './Parameters/FileParameter.vue'
+import UserParameter from './Parameters/UserParameter.vue'
 import { formatDateTime, formatRelativeTimeFromNow } from '../utils/datetime.js'
 
 export default {
-	name: 'Notification',
+	name: 'NotificationItem',
 
 	components: {
-		Action,
+		ActionButton,
 		NcButton,
 		Close,
 		Message,
@@ -273,12 +273,12 @@ export default {
 				const type = parameters[p].type
 				if (type === 'user') {
 					richParameters[p] = {
-						component: User,
+						component: UserParameter,
 						props: parameters[p],
 					}
 				} else if (type === 'file') {
 					richParameters[p] = {
-						component: File,
+						component: FileParameter,
 						props: parameters[p],
 					}
 				} else {

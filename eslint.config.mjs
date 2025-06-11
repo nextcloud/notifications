@@ -11,13 +11,10 @@ export default [
 	{
 		rules: {
 			'no-console': 'off',
-			'vue/define-macros-order': 'off',
 			'vue/first-attribute-linebreak': 'off',
-			'vue/multi-word-component-names': 'off',
 			'vue/no-boolean-default': 'off',
 			'vue/no-required-prop-with-default': 'off',
 			'vue/no-unused-properties': 'off',
-			'vue/no-unused-refs': 'off',
 		},
 	},
 ]
