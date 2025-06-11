@@ -57,16 +57,16 @@
 </template>
 
 <script>
-import { UAParser } from 'ua-parser-js'
-import { reactive, ref } from 'vue'
 import axios from '@nextcloud/axios'
+import { showError, showSuccess } from '@nextcloud/dialogs'
+import { loadState } from '@nextcloud/initial-state'
 import { t } from '@nextcloud/l10n'
 import { generateOcsUrl } from '@nextcloud/router'
-import { loadState } from '@nextcloud/initial-state'
-import { showSuccess, showError } from '@nextcloud/dialogs'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
 import NcSelect from '@nextcloud/vue/dist/Components/NcSelect.js'
 import NcSettingsSection from '@nextcloud/vue/dist/Components/NcSettingsSection.js'
+import { UAParser } from 'ua-parser-js'
+import { reactive, ref } from 'vue'
 import BrowserStorage from '../services/BrowserStorage.js'
 
 const EmailFrequency = {

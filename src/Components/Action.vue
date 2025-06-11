@@ -21,9 +21,9 @@
 <script>
 import axios from '@nextcloud/axios'
 import { showError } from '@nextcloud/dialogs'
+import { emit } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
 import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
-import { emit } from '@nextcloud/event-bus'
 
 export default {
 	name: 'Action',
