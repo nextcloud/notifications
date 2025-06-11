@@ -13,7 +13,7 @@
 import { t } from '@nextcloud/l10n'
 
 export default {
-	name: 'File',
+	name: 'FileParameter',
 
 	props: {
 		type: {

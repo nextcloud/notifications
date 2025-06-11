@@ -29,8 +29,6 @@ import { getCapabilities } from '@nextcloud/capabilities'
 import { computed } from 'vue'
 import IconBell from 'vue-material-design-icons/Bell.vue'
 
-const theming = getCapabilities()?.theming
-
 defineProps({
 	showDot: {
 		type: Boolean,
@@ -45,6 +43,8 @@ defineProps({
 		default: 20,
 	},
 })
+
+const theming = getCapabilities()?.theming
 
 const hexRegex = /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/
 

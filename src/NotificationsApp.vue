@@ -18,13 +18,13 @@
 		</template>
 
 		<!-- Notifications list content -->
-		<div ref="container" class="notification-container">
+		<div class="notification-container">
 			<transition name="fade" mode="out-in">
 				<transition-group v-if="notifications.length > 0"
 					class="notification-wrapper"
 					name="list"
 					tag="ul">
-					<Notification v-if="hasThrottledPushNotifications"
+					<NotificationItem v-if="hasThrottledPushNotifications"
 						:key="-2016"
 						datetime="warning"
 						app="core"
@@ -33,7 +33,7 @@
 						:message="emptyContentDescription"
 						:subject="emptyContentMessage"
 						:index="2016" />
-					<Notification v-for="(n, index) in notifications"
+					<NotificationItem v-for="(n, index) in notifications"
 						:key="n.notificationId"
 						v-bind="n"
 						:index="index"
@@ -94,7 +94,7 @@ import IconBell from 'vue-material-design-icons/Bell.vue'
 import IconClose from 'vue-material-design-icons/Close.vue'
 import IconMessage from 'vue-material-design-icons/Message.vue'
 import IconNotification from './Components/IconNotification.vue'
-import Notification from './Components/Notification.vue'
+import NotificationItem from './Components/NotificationItem.vue'
 import { getNotificationsData } from './services/notificationsService.js'
 import { createWebNotification } from './services/webNotificationsService.js'
 
@@ -109,7 +109,7 @@ export default {
 		NcButton,
 		NcEmptyContent,
 		NcHeaderMenu,
-		Notification,
+		NotificationItem,
 	},
 
 	data() {
