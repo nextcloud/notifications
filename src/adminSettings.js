@@ -14,5 +14,5 @@ Vue.prototype.n = n
 
 export default new Vue({
 	el: '#notifications-admin-settings',
-	render: h => h(AdminSettings),
+	render: (h) => h(AdminSettings),
 })

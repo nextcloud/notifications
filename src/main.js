@@ -20,5 +20,5 @@ export default new Vue({
 	components: {
 		NotificationsApp: () => import(/* webpackPreload: true */'./NotificationsApp.vue'),
 	},
-	render: h => h('NotificationsApp'),
+	render: (h) => h('NotificationsApp'),
 })

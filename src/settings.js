@@ -14,5 +14,5 @@ Vue.prototype.n = n
 
 export default new Vue({
 	el: '#notifications-user-settings',
-	render: h => h(UserSettings),
+	render: (h) => h(UserSettings),
 })

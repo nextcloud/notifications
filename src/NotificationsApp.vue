@@ -451,7 +451,7 @@ export default {
 		},
 
 		processWebNotifications(notifications) {
-			notifications.forEach(notification => {
+			notifications.forEach((notification) => {
 				if (this.backgroundFetching) {
 					// Can not rely on showBrowserNotifications because each tab should
 					// be able to utilize the data from the notification in events.

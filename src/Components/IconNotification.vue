@@ -47,7 +47,11 @@ defineProps({
 })
 
 const hexRegex = /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/
-const hexToHSL = (hexColor) => {
+
+/**
+ * @param {string} hexColor color in HEX format, like #00679e
+ */
+function hexToHSL(hexColor) {
 	const r = parseInt(hexColor.substring(1, 3), 16) / 255
 	const g = parseInt(hexColor.substring(3, 5), 16) / 255
 	const b = parseInt(hexColor.substring(5, 7), 16) / 255
