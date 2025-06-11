@@ -20,18 +20,22 @@ export default {
 			type: String,
 			required: true,
 		},
+
 		id: {
 			type: [Number, String],
 			required: true,
 		},
+
 		name: {
 			type: String,
 			required: true,
 		},
+
 		path: {
 			type: String,
 			default: '',
 		},
+
 		link: {
 			type: String,
 			default: '',

@@ -268,6 +268,7 @@ export default {
 					showError(t('notifications', 'Failed to dismiss all notifications'))
 				})
 		},
+
 		onRemove(index) {
 			this.notifications.splice(index, 1)
 		},

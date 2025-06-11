@@ -111,70 +111,86 @@ export default {
 			type: Number,
 			default: -1,
 		},
+
 		datetime: {
 			type: String,
 			default: '',
 		},
+
 		app: {
 			type: String,
 			default: '',
 		},
+
 		icon: {
 			type: String,
 			default: '',
 		},
+
 		link: {
 			type: String,
 			default: '',
 		},
+
 		externalLink: {
 			type: String,
 			default: '',
 		},
+
 		user: {
 			type: String,
 			default: '',
 		},
+
 		message: {
 			type: String,
 			default: '',
 		},
+
 		messageRich: {
 			type: String,
 			default: '',
 		},
+
 		messageRichParameters: {
 			type: [Object, Array],
 			default() {
 				return {}
 			},
 		},
+
 		subject: {
 			type: String,
 			default: '',
 		},
+
 		subjectRich: {
 			type: String,
 			default: '',
 		},
+
 		subjectRichParameters: {
 			type: [Object, Array],
 			default() {
 				return {}
 			},
 		},
+
 		objectType: {
 			type: String,
 			default: '',
 		},
+
 		objectId: {
 			type: String,
 			default: '',
 		},
+
 		shouldNotify: {
 			type: Boolean,
 			default: true,
 		},
+
 		actions: {
 			type: Array,
 			default() {
@@ -201,12 +217,14 @@ export default {
 			}
 			return (new Date(this.datetime)).valueOf()
 		},
+
 		absoluteDate() {
 			if (this.datetime === 'warning') {
 				return ''
 			}
 			return formatDateTime(this.timestamp)
 		},
+
 		relativeDate() {
 			if (this.datetime === 'warning') {
 				return ''
@@ -218,6 +236,7 @@ export default {
 			}
 			return formatRelativeTimeFromNow(this.timestamp)
 		},
+
 		useLink() {
 			if (!this.link) {
 				return false

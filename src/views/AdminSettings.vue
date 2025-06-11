@@ -64,6 +64,7 @@ export default {
 				{ text: t('notifications', '1 day'), value: EmailFrequency.EMAIL_SEND_DAILY },
 				{ text: t('notifications', '1 week'), value: EmailFrequency.EMAIL_SEND_WEEKLY },
 			],
+
 			config: loadState('notifications', 'config'),
 		}
 	},

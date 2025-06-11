@@ -12,10 +12,7 @@ export default [
 		rules: {
 			'@nextcloud/vue/no-deprecated-exports': 'off',
 			'@nextcloud/vue/no-deprecated-props': 'off',
-			'@stylistic/array-bracket-newline': 'off',
 			'@stylistic/arrow-parens': 'off',
-			'@stylistic/indent': 'off',
-			'@stylistic/max-statements-per-line': 'off',
 			'antfu/top-level-function': 'off',
 			'jsdoc/tag-lines': 'off',
 			'no-console': 'off',
@@ -26,7 +23,6 @@ export default [
 			'vue/define-macros-order': 'off',
 			'vue/first-attribute-linebreak': 'off',
 			'vue/multi-word-component-names': 'off',
-			'vue/new-line-between-multi-line-property': 'off',
 			'vue/no-boolean-default': 'off',
 			'vue/no-required-prop-with-default': 'off',
 			'vue/no-unused-properties': 'off',
