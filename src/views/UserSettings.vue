@@ -157,8 +157,8 @@ export default {
 				stream = await navigator.mediaDevices.getUserMedia({ audio: true })
 				// Enumerate devices and populate NcSelect options
 				this.devices = (await navigator.mediaDevices.enumerateDevices() ?? [])
-					.filter(device => device.kind === 'audiooutput')
-					.map(device => ({
+					.filter((device) => device.kind === 'audiooutput')
+					.map((device) => ({
 						id: device.deviceId,
 						label: device.label ? device.label : device.fallbackLabel,
 					}))
@@ -168,7 +168,7 @@ export default {
 				console.error('Error while requesting or initializing audio devices: ', error)
 			} finally {
 				if (stream) {
-					stream.getTracks().forEach(track => track.stop())
+					stream.getTracks().forEach((track) => track.stop())
 				}
 			}
 		},

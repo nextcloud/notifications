@@ -243,7 +243,7 @@ export default {
 			}
 
 			let parametersHaveLink = false
-			Object.keys(this.subjectRichParameters).forEach(p => {
+			Object.keys(this.subjectRichParameters).forEach((p) => {
 				if (this.subjectRichParameters[p].link) {
 					parametersHaveLink = true
 				}
@@ -269,7 +269,7 @@ export default {
 
 		prepareParameters(parameters) {
 			const richParameters = {}
-			Object.keys(parameters).forEach(p => {
+			Object.keys(parameters).forEach((p) => {
 				const type = parameters[p].type
 				if (type === 'user') {
 					richParameters[p] = {

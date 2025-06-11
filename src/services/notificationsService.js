@@ -7,7 +7,13 @@ import axios from '@nextcloud/axios'
 import { generateOcsUrl } from '@nextcloud/router'
 import BrowserStorage from './BrowserStorage.js'
 
-const getNotificationsData = async (tabId, lastETag, forceRefresh, hasNotifyPush) => {
+/**
+ * @param {string|null} tabId unique id for browser tab
+ * @param {string} lastETag last ETag
+ * @param {boolean} forceRefresh whether to refresh data forcefully
+ * @param {boolean} hasNotifyPush whether has notify_push enabled
+ */
+async function getNotificationsData(tabId, lastETag, forceRefresh, hasNotifyPush) {
 	const lastUpdated = parseInt(BrowserStorage.getItem('lastUpdated'), 10)
 	const lastTab = BrowserStorage.getItem('tabId')
 	const now = Math.floor(Date.now() / 1000)
@@ -36,7 +42,10 @@ const getNotificationsData = async (tabId, lastETag, forceRefresh, hasNotifyPush
 	}
 }
 
-const remapAttributes = (notification) => {
+/**
+ * @param {object} notification notification object
+ */
+function remapAttributes(notification) {
 	notification.notificationId = notification.notification_id
 	notification.objectId = notification.object_id
 	notification.objectType = notification.object_type
@@ -48,7 +57,10 @@ const remapAttributes = (notification) => {
 	return notification
 }
 
-const refreshData = async (lastETag) => {
+/**
+ * @param {string} lastETag last ETag
+ */
+async function refreshData(lastETag) {
 	let requestConfig = {}
 	if (lastETag) {
 		requestConfig = {

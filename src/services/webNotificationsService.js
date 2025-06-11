@@ -15,7 +15,7 @@ import BrowserStorage from './BrowserStorage.js'
  * @param {object} notification notification object
  * @see https://developer.mozilla.org/en/docs/Web/API/notification
  */
-const createWebNotification = (notification) => {
+function createWebNotification(notification) {
 	if (!notification.shouldNotify) {
 		return
 	}
@@ -29,7 +29,7 @@ const createWebNotification = (notification) => {
 	})
 
 	if (notification.link) {
-		n.onclick = async function(e) {
+		n.onclick = async function() {
 			const event = {
 				cancelAction: false,
 				notification,
@@ -55,9 +55,10 @@ const createWebNotification = (notification) => {
 
 /**
  * Play a notification sound (if enabled on instance)
+ *
  * @param {object} notification notification object
  */
-const playNotificationSound = (notification) => {
+function playNotificationSound(notification) {
 	if (notification.app === 'spreed' && notification.objectType === 'call') {
 		if (loadState('notifications', 'sound_talk')) {
 			const howlPayload = {

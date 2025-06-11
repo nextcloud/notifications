@@ -10,12 +10,7 @@ export default [
 	// Disabled rules from recommendedVue2Javascript pack
 	{
 		rules: {
-			'@stylistic/arrow-parens': 'off',
-			'antfu/top-level-function': 'off',
-			'jsdoc/tag-lines': 'off',
 			'no-console': 'off',
-			'no-unused-vars': 'off',
-			'no-use-before-define': 'off',
 			'vue/define-macros-order': 'off',
 			'vue/first-attribute-linebreak': 'off',
 			'vue/multi-word-component-names': 'off',
