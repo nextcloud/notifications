@@ -16,7 +16,7 @@
 				:data-timestamp="timestamp">{{ relativeDate }}</span>
 			<NcButton v-if="timestamp"
 				class="notification-dismiss-button"
-				type="tertiary"
+				variant="tertiary"
 				:aria-label="t('notifications', 'Dismiss')"
 				@click="onDismissNotification">
 				<template #icon>
@@ -66,7 +66,7 @@
 				:notification-index="index" />
 		</div>
 		<div v-else-if="externalLink" class="notification-actions">
-			<NcButton type="primary"
+			<NcButton variant="primary"
 				href="https://nextcloud.com/fairusepolicy"
 				class="action-button pull-right"
 				target="_blank"
@@ -85,8 +85,8 @@ import axios from '@nextcloud/axios'
 import { showError } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 import { generateOcsUrl } from '@nextcloud/router'
-import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
-import NcRichText from '@nextcloud/vue/dist/Components/NcRichText.js'
+import NcButton from '@nextcloud/vue/components/NcButton'
+import NcRichText from '@nextcloud/vue/components/NcRichText'
 import Close from 'vue-material-design-icons/Close.vue'
 import Message from 'vue-material-design-icons/Message.vue'
 import Action from './Action.vue'
