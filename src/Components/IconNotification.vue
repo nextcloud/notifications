@@ -63,9 +63,15 @@ const hexToHSL = (hexColor) => {
 		const d = max - min
 		sat = lum > 0.5 ? d / (2 - max - min) : d / (max + min)
 		switch (max) {
-		case r: hue = (g - b) / d + (g < b ? 6 : 0); break
-		case g: hue = (b - r) / d + 2; break
-		case b: hue = (r - g) / d + 4; break
+			case r:
+				hue = (g - b) / d + (g < b ? 6 : 0)
+				break
+			case g:
+				hue = (b - r) / d + 2
+				break
+			case b:
+				hue = (r - g) / d + 4
+				break
 		}
 		hue *= 60
 	}

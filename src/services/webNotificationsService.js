@@ -83,9 +83,7 @@ const playNotificationSound = (notification) => {
 		}
 	} else if (loadState('notifications', 'sound_notification')) {
 		const sound = new Howl({
-			src: [
-				generateFilePath('notifications', 'img', 'notification.ogg'),
-			],
+			src: [generateFilePath('notifications', 'img', 'notification.ogg')],
 			volume: 0.5,
 		})
 

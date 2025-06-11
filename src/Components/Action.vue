@@ -38,21 +38,25 @@ export default {
 			default: '',
 			required: true,
 		},
+
 		link: {
 			type: String,
 			default: '',
 			required: true,
 		},
+
 		type: {
 			type: String,
 			default: '',
 			required: true,
 		},
+
 		primary: {
 			type: Boolean,
 			default: false,
 			required: true,
 		},
+
 		notificationIndex: {
 			type: Number,
 			required: true,
