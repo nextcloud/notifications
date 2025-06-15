@@ -1,0 +1,6 @@
+{ "translations": {
+    "seconds ago" : "sukunde zilizopita",
+    "in {path}" : "Katika {path}",
+    "No notifications" : "Hakuna taarifa"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}
