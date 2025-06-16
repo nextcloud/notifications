@@ -4,13 +4,15 @@
 -->
 
 <template>
-	<NcSettingsSection :name="t('notifications', 'Notifications defaults')"
+	<NcSettingsSection
+		:name="t('notifications', 'Notifications defaults')"
 		:description="t('notifications', 'Configure the default notification settings for new users')">
 		<p>
 			<label for="notify_setting_batchtime" class="notification-frequency__label">
 				{{ t('notifications', 'Send email reminders about unhandled notifications after:') }}
 			</label>
-			<select id="notify_setting_batchtime"
+			<select
+				id="notify_setting_batchtime"
 				v-model="config.setting_batchtime"
 				class="notification-frequency__select"
 				@change="updateSettings()">
@@ -20,11 +22,13 @@
 			</select>
 		</p>
 
-		<NcCheckboxRadioSwitch :checked.sync="config.sound_notification"
+		<NcCheckboxRadioSwitch
+			:checked.sync="config.sound_notification"
 			@update:checked="updateSettings">
 			{{ t('notifications', 'Play sound when a new notification arrives') }}
 		</NcCheckboxRadioSwitch>
-		<NcCheckboxRadioSwitch :checked.sync="config.sound_talk"
+		<NcCheckboxRadioSwitch
+			:checked.sync="config.sound_talk"
 			@update:checked="updateSettings">
 			{{ t('notifications', 'Play sound when a call started (requires Nextcloud Talk)') }}
 		</NcCheckboxRadioSwitch>
@@ -33,12 +37,12 @@
 
 <script>
 import axios from '@nextcloud/axios'
+import { showError, showSuccess } from '@nextcloud/dialogs'
+import { loadState } from '@nextcloud/initial-state'
 import { t } from '@nextcloud/l10n'
 import { generateOcsUrl } from '@nextcloud/router'
-import { loadState } from '@nextcloud/initial-state'
-import { showSuccess, showError } from '@nextcloud/dialogs'
-import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
-import NcSettingsSection from '@nextcloud/vue/dist/Components/NcSettingsSection.js'
+import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
+import NcSettingsSection from '@nextcloud/vue/components/NcSettingsSection'
 
 const EmailFrequency = {
 	EMAIL_SEND_OFF: 0,
@@ -64,6 +68,7 @@ export default {
 				{ text: t('notifications', '1 day'), value: EmailFrequency.EMAIL_SEND_DAILY },
 				{ text: t('notifications', '1 week'), value: EmailFrequency.EMAIL_SEND_WEEKLY },
 			],
+
 			config: loadState('notifications', 'config'),
 		}
 	},

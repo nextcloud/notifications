@@ -12,7 +12,8 @@
 			<label for="notification_reminder_batchtime" class="notification-frequency__label">
 				{{ t('notifications', 'Send email reminders about unhandled notifications after:') }}
 			</label>
-			<select id="notification_reminder_batchtime"
+			<select
+				id="notification_reminder_batchtime"
 				v-model="config.setting_batchtime"
 				name="notification_reminder_batchtime"
 				class="notification-frequency__select"
@@ -23,17 +24,20 @@
 			</select>
 		</p>
 
-		<NcCheckboxRadioSwitch :checked.sync="config.sound_notification"
+		<NcCheckboxRadioSwitch
+			:checked.sync="config.sound_notification"
 			@update:checked="updateSettings">
 			{{ t('notifications', 'Play sound when a new notification arrives') }}
 		</NcCheckboxRadioSwitch>
-		<NcCheckboxRadioSwitch :checked.sync="config.sound_talk"
+		<NcCheckboxRadioSwitch
+			:checked.sync="config.sound_talk"
 			@update:checked="updateSettings">
 			{{ t('notifications', 'Play sound when a call started (requires Nextcloud Talk)') }}
 		</NcCheckboxRadioSwitch>
 
 		<template v-if="config.sound_talk">
-			<NcCheckboxRadioSwitch class="additional-margin-top"
+			<NcCheckboxRadioSwitch
+				class="additional-margin-top"
 				:checked.sync="storage.secondary_speaker"
 				:disabled="isSafari"
 				@update:checked="updateLocalSettings">
@@ -42,7 +46,8 @@
 			<div v-if="isSafari" class="notification-frequency__warning">
 				<strong>{{ t('notifications', 'Selection of the speaker device is currently not supported by Safari') }}</strong>
 			</div>
-			<NcSelect v-if="!isSafari && storage.secondary_speaker"
+			<NcSelect
+				v-if="!isSafari && storage.secondary_speaker"
 				v-model="storage.secondary_speaker_device"
 				input-id="device-selector-audio-output"
 				:options="devices"
@@ -57,16 +62,16 @@
 </template>
 
 <script>
-import { UAParser } from 'ua-parser-js'
-import { reactive, ref } from 'vue'
 import axios from '@nextcloud/axios'
+import { showError, showSuccess } from '@nextcloud/dialogs'
+import { loadState } from '@nextcloud/initial-state'
 import { t } from '@nextcloud/l10n'
 import { generateOcsUrl } from '@nextcloud/router'
-import { loadState } from '@nextcloud/initial-state'
-import { showSuccess, showError } from '@nextcloud/dialogs'
-import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
-import NcSelect from '@nextcloud/vue/dist/Components/NcSelect.js'
-import NcSettingsSection from '@nextcloud/vue/dist/Components/NcSettingsSection.js'
+import { UAParser } from 'ua-parser-js'
+import { reactive, ref } from 'vue'
+import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
+import NcSelect from '@nextcloud/vue/components/NcSelect'
+import NcSettingsSection from '@nextcloud/vue/components/NcSettingsSection'
 import BrowserStorage from '../services/BrowserStorage.js'
 
 const EmailFrequency = {
@@ -157,8 +162,8 @@ export default {
 				stream = await navigator.mediaDevices.getUserMedia({ audio: true })
 				// Enumerate devices and populate NcSelect options
 				this.devices = (await navigator.mediaDevices.enumerateDevices() ?? [])
-					.filter(device => device.kind === 'audiooutput')
-					.map(device => ({
+					.filter((device) => device.kind === 'audiooutput')
+					.map((device) => ({
 						id: device.deviceId,
 						label: device.label ? device.label : device.fallbackLabel,
 					}))
@@ -168,7 +173,7 @@ export default {
 				console.error('Error while requesting or initializing audio devices: ', error)
 			} finally {
 				if (stream) {
-					stream.getTracks().forEach(track => track.stop())
+					stream.getTracks().forEach((track) => track.stop())
 				}
 			}
 		},

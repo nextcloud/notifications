@@ -4,7 +4,8 @@
 -->
 
 <template>
-	<a :title="title"
+	<a
+		:title="title"
 		class="filename"
 		:href="link">{{ name }}</a>
 </template>
@@ -13,25 +14,31 @@
 import { t } from '@nextcloud/l10n'
 
 export default {
-	name: 'File',
+	name: 'FileParameter',
 
 	props: {
+		// eslint-disable-next-line vue/no-unused-properties
 		type: {
 			type: String,
 			required: true,
 		},
+
+		// eslint-disable-next-line vue/no-unused-properties
 		id: {
 			type: [Number, String],
 			required: true,
 		},
+
 		name: {
 			type: String,
 			required: true,
 		},
+
 		path: {
 			type: String,
 			default: '',
 		},
+
 		link: {
 			type: String,
 			default: '',

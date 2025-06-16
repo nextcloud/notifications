@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { join, resolve } from 'node:path'
 import { createAppConfig } from '@nextcloud/vite-config'
+import { join, resolve } from 'node:path'
 
 export default createAppConfig({
 	main: resolve(join('src', 'main.js')),
@@ -12,9 +12,7 @@ export default createAppConfig({
 	'admin-settings': resolve(join('src', 'adminSettings.js')),
 }, {
 	emptyOutputDirectory: {
-		additionalDirectories: [
-			'css',
-		],
+		additionalDirectories: ['css'],
 	},
 	extractLicenseInformation: {
 		overwriteLicenses: {

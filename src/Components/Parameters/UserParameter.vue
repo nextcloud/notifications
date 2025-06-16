@@ -5,10 +5,12 @@
 
 <template>
 	<div class="mention">
-		<NcUserBubble v-if="!cloudId"
+		<NcUserBubble
+			v-if="!cloudId"
 			:display-name="name"
 			:user="id" />
-		<strong v-else
+		<strong
+			v-else
 			:title="cloudId">
 			{{ name }}
 		</strong>
@@ -17,28 +19,32 @@
 
 <script>
 
-import NcUserBubble from '@nextcloud/vue/dist/Components/NcUserBubble.js'
+import NcUserBubble from '@nextcloud/vue/components/NcUserBubble'
 
 export default {
-	name: 'User',
+	name: 'UserParameter',
 
 	components: {
 		NcUserBubble,
 	},
 
 	props: {
+		// eslint-disable-next-line vue/no-unused-properties
 		type: {
 			type: String,
 			required: true,
 		},
+
 		id: {
 			type: String,
 			required: true,
 		},
+
 		name: {
 			type: String,
 			required: true,
 		},
+
 		server: {
 			type: String,
 			default: '',

@@ -3,20 +3,23 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <template>
-	<li class="notification"
+	<li
+		class="notification"
 		:data-id="notificationId"
 		:data-timestamp="timestamp"
 		:data-object-type="objectType"
 		:data-app="app">
 		<div class="notification-heading">
 			<span class="hidden-visually">{{ absoluteDate }}</span>
-			<span v-if="timestamp"
+			<span
+				v-if="timestamp"
 				:title="absoluteDate"
 				class="notification-time live-relative-timestamp"
 				:data-timestamp="timestamp">{{ relativeDate }}</span>
-			<NcButton v-if="timestamp"
+			<NcButton
+				v-if="timestamp"
 				class="notification-dismiss-button"
-				type="tertiary"
+				variant="tertiary"
 				:aria-label="t('notifications', 'Dismiss')"
 				@click="onDismissNotification">
 				<template #icon>
@@ -25,7 +28,8 @@
 			</NcButton>
 		</div>
 
-		<a v-if="externalLink"
+		<a
+			v-if="externalLink"
 			:href="externalLink"
 			class="notification-subject full-subject-link external"
 			target="_blank"
@@ -35,14 +39,16 @@
 		</a>
 		<a v-else-if="useLink" :href="link" class="notification-subject full-subject-link">
 			<span v-if="icon" class="image"><img :src="icon" class="notification-icon" alt=""></span>
-			<NcRichText v-if="subjectRich"
+			<NcRichText
+				v-if="subjectRich"
 				:text="subjectRich"
 				:arguments="preparedSubjectParameters" />
 			<span v-else class="subject">{{ subject }}</span>
 		</a>
 		<div v-else class="notification-subject">
 			<span v-if="icon" class="image"><img :src="icon" class="notification-icon" alt=""></span>
-			<NcRichText v-if="subjectRich"
+			<NcRichText
+				v-if="subjectRich"
 				:text="subjectRich"
 				:arguments="preparedSubjectParameters" />
 			<span v-else class="subject">{{ subject }}</span>
@@ -50,7 +56,8 @@
 
 		<div v-if="message" class="notification-message" @click="onClickMessage">
 			<div class="message-container" :class="{ collapsed: isCollapsedMessage }">
-				<NcRichText v-if="messageRich"
+				<NcRichText
+					v-if="messageRich"
 					:text="messageRich"
 					:arguments="preparedMessageParameters"
 					:autolink="true" />
@@ -60,13 +67,15 @@
 		</div>
 
 		<div v-if="actions.length" class="notification-actions">
-			<Action v-for="(a, i) in actions"
+			<ActionButton
+				v-for="(action, i) in actions"
 				:key="i"
-				v-bind="a"
+				:action="action"
 				:notification-index="index" />
 		</div>
 		<div v-else-if="externalLink" class="notification-actions">
-			<NcButton type="primary"
+			<NcButton
+				variant="primary"
 				href="https://nextcloud.com/fairusepolicy"
 				class="action-button pull-right"
 				target="_blank"
@@ -82,24 +91,24 @@
 
 <script>
 import axios from '@nextcloud/axios'
+import { showError } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
-import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
-import NcRichText from '@nextcloud/vue/dist/Components/NcRichText.js'
+import { generateOcsUrl } from '@nextcloud/router'
+import NcButton from '@nextcloud/vue/components/NcButton'
+import NcRichText from '@nextcloud/vue/components/NcRichText'
 import Close from 'vue-material-design-icons/Close.vue'
 import Message from 'vue-material-design-icons/Message.vue'
-import { showError } from '@nextcloud/dialogs'
-import Action from './Action.vue'
-import { generateOcsUrl } from '@nextcloud/router'
+import ActionButton from './ActionButton.vue'
 import DefaultParameter from './Parameters/DefaultParameter.vue'
-import File from './Parameters/File.vue'
-import User from './Parameters/User.vue'
-import { formatRelativeTimeFromNow, formatDateTime } from '../utils/datetime.js'
+import FileParameter from './Parameters/FileParameter.vue'
+import UserParameter from './Parameters/UserParameter.vue'
+import { formatDateTime, formatRelativeTimeFromNow } from '../utils/datetime.js'
 
 export default {
-	name: 'Notification',
+	name: 'NotificationItem',
 
 	components: {
-		Action,
+		ActionButton,
 		NcButton,
 		Close,
 		Message,
@@ -111,70 +120,90 @@ export default {
 			type: Number,
 			default: -1,
 		},
+
 		datetime: {
 			type: String,
 			default: '',
 		},
+
 		app: {
 			type: String,
 			default: '',
 		},
+
 		icon: {
 			type: String,
 			default: '',
 		},
+
 		link: {
 			type: String,
 			default: '',
 		},
+
 		externalLink: {
 			type: String,
 			default: '',
 		},
+
+		// eslint-disable-next-line vue/no-unused-properties
 		user: {
 			type: String,
 			default: '',
 		},
+
 		message: {
 			type: String,
 			default: '',
 		},
+
 		messageRich: {
 			type: String,
 			default: '',
 		},
+
 		messageRichParameters: {
 			type: [Object, Array],
 			default() {
 				return {}
 			},
 		},
+
 		subject: {
 			type: String,
 			default: '',
 		},
+
 		subjectRich: {
 			type: String,
 			default: '',
 		},
+
 		subjectRichParameters: {
 			type: [Object, Array],
 			default() {
 				return {}
 			},
 		},
+
 		objectType: {
 			type: String,
 			default: '',
 		},
+
+		// eslint-disable-next-line vue/no-unused-properties
 		objectId: {
 			type: String,
 			default: '',
 		},
+
+		// eslint-disable-next-line vue/no-unused-properties
 		shouldNotify: {
 			type: Boolean,
+			// eslint-disable-next-line vue/no-boolean-default
 			default: true,
 		},
+
 		actions: {
 			type: Array,
 			default() {
@@ -201,12 +230,14 @@ export default {
 			}
 			return (new Date(this.datetime)).valueOf()
 		},
+
 		absoluteDate() {
 			if (this.datetime === 'warning') {
 				return ''
 			}
 			return formatDateTime(this.timestamp)
 		},
+
 		relativeDate() {
 			if (this.datetime === 'warning') {
 				return ''
@@ -218,13 +249,14 @@ export default {
 			}
 			return formatRelativeTimeFromNow(this.timestamp)
 		},
+
 		useLink() {
 			if (!this.link) {
 				return false
 			}
 
 			let parametersHaveLink = false
-			Object.keys(this.subjectRichParameters).forEach(p => {
+			Object.keys(this.subjectRichParameters).forEach((p) => {
 				if (this.subjectRichParameters[p].link) {
 					parametersHaveLink = true
 				}
@@ -250,16 +282,16 @@ export default {
 
 		prepareParameters(parameters) {
 			const richParameters = {}
-			Object.keys(parameters).forEach(p => {
+			Object.keys(parameters).forEach((p) => {
 				const type = parameters[p].type
 				if (type === 'user') {
 					richParameters[p] = {
-						component: User,
+						component: UserParameter,
 						props: parameters[p],
 					}
 				} else if (type === 'file') {
 					richParameters[p] = {
-						component: File,
+						component: FileParameter,
 						props: parameters[p],
 					}
 				} else {

@@ -3,56 +3,52 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <template>
-	<NcButton v-if="isWebLink"
-		type="primary"
+	<NcButton
+		v-if="isWebLink"
+		variant="primary"
 		class="action-button pull-right"
-		:href="link"
+		:href="action.link"
 		@click="onClickActionButtonWeb">
-		{{ label }}
+		{{ action.label }}
 	</NcButton>
-	<NcButton v-else-if="!isWebLink"
-		:type="buttonType"
+	<NcButton
+		v-else
+		:variant="action.primary ? 'primary' : 'secondary'"
 		class="action-button pull-right"
 		@click="onClickActionButton">
-		{{ label }}
+		{{ action.label }}
 	</NcButton>
 </template>
 
 <script>
 import axios from '@nextcloud/axios'
 import { showError } from '@nextcloud/dialogs'
-import { t } from '@nextcloud/l10n'
-import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
 import { emit } from '@nextcloud/event-bus'
+import { t } from '@nextcloud/l10n'
+import NcButton from '@nextcloud/vue/components/NcButton'
+
+/**
+ * @typedef {object} NotificationAction
+ * @property {string} label action label (required)
+ * @property {string} link action link (required)
+ * @property {string} type action type (required)
+ * @property {boolean} primary action primary (required)
+ */
 
 export default {
-	name: 'Action',
+	name: 'ActionButton',
 
 	components: {
 		NcButton,
 	},
 
 	props: {
-		label: {
-			type: String,
-			default: '',
+		action: {
+			/** @type {ObjectConstructor<NotificationAction>} */
+			type: Object,
 			required: true,
 		},
-		link: {
-			type: String,
-			default: '',
-			required: true,
-		},
-		type: {
-			type: String,
-			default: '',
-			required: true,
-		},
-		primary: {
-			type: Boolean,
-			default: false,
-			required: true,
-		},
+
 		notificationIndex: {
 			type: Number,
 			required: true,
@@ -71,11 +67,7 @@ export default {
 		},
 
 		typeWithDefault() {
-			return this.type || 'GET'
-		},
-
-		buttonType() {
-			return this.primary ? 'primary' : 'secondary'
+			return this.action.type || 'GET'
 		},
 	},
 
@@ -86,7 +78,7 @@ export default {
 					cancelAction: false,
 					notification: this.$parent.$props,
 					action: {
-						url: this.link,
+						url: this.action.link,
 						type: this.typeWithDefault,
 					},
 				}
@@ -108,7 +100,7 @@ export default {
 					cancelAction: false,
 					notification: this.$parent.$props,
 					action: {
-						url: this.link,
+						url: this.action.link,
 						type: this.typeWithDefault,
 					},
 				}
@@ -122,7 +114,7 @@ export default {
 				// execute action
 				await axios({
 					method: this.typeWithDefault,
-					url: this.link,
+					url: this.action.link,
 				})
 
 				// emit event to current app
