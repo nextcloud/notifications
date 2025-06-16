@@ -29,6 +29,7 @@ export default {
 	},
 
 	props: {
+		// eslint-disable-next-line vue/no-unused-properties
 		type: {
 			type: String,
 			required: true,

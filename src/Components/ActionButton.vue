@@ -7,16 +7,16 @@
 		v-if="isWebLink"
 		variant="primary"
 		class="action-button pull-right"
-		:href="link"
+		:href="action.link"
 		@click="onClickActionButtonWeb">
-		{{ label }}
+		{{ action.label }}
 	</NcButton>
 	<NcButton
 		v-else
-		:variant="primary ? 'primary' : 'secondary'"
+		:variant="action.primary ? 'primary' : 'secondary'"
 		class="action-button pull-right"
 		@click="onClickActionButton">
-		{{ label }}
+		{{ action.label }}
 	</NcButton>
 </template>
 
@@ -27,6 +27,14 @@ import { emit } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
 import NcButton from '@nextcloud/vue/components/NcButton'
 
+/**
+ * @typedef {object} NotificationAction
+ * @property {string} label action label (required)
+ * @property {string} link action link (required)
+ * @property {string} type action type (required)
+ * @property {boolean} primary action primary (required)
+ */
+
 export default {
 	name: 'ActionButton',
 
@@ -35,27 +43,9 @@ export default {
 	},
 
 	props: {
-		label: {
-			type: String,
-			default: '',
-			required: true,
-		},
-
-		link: {
-			type: String,
-			default: '',
-			required: true,
-		},
-
-		type: {
-			type: String,
-			default: '',
-			required: true,
-		},
-
-		primary: {
-			type: Boolean,
-			default: false,
+		action: {
+			/** @type {ObjectConstructor<NotificationAction>} */
+			type: Object,
 			required: true,
 		},
 
@@ -77,7 +67,7 @@ export default {
 		},
 
 		typeWithDefault() {
-			return this.type || 'GET'
+			return this.action.type || 'GET'
 		},
 	},
 
@@ -88,7 +78,7 @@ export default {
 					cancelAction: false,
 					notification: this.$parent.$props,
 					action: {
-						url: this.link,
+						url: this.action.link,
 						type: this.typeWithDefault,
 					},
 				}
@@ -110,7 +100,7 @@ export default {
 					cancelAction: false,
 					notification: this.$parent.$props,
 					action: {
-						url: this.link,
+						url: this.action.link,
 						type: this.typeWithDefault,
 					},
 				}
@@ -124,7 +114,7 @@ export default {
 				// execute action
 				await axios({
 					method: this.typeWithDefault,
-					url: this.link,
+					url: this.action.link,
 				})
 
 				// emit event to current app

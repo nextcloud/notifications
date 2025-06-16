@@ -68,9 +68,9 @@
 
 		<div v-if="actions.length" class="notification-actions">
 			<ActionButton
-				v-for="(a, i) in actions"
+				v-for="(action, i) in actions"
 				:key="i"
-				v-bind="a"
+				:action="action"
 				:notification-index="index" />
 		</div>
 		<div v-else-if="externalLink" class="notification-actions">
@@ -146,6 +146,7 @@ export default {
 			default: '',
 		},
 
+		// eslint-disable-next-line vue/no-unused-properties
 		user: {
 			type: String,
 			default: '',
@@ -190,13 +191,16 @@ export default {
 			default: '',
 		},
 
+		// eslint-disable-next-line vue/no-unused-properties
 		objectId: {
 			type: String,
 			default: '',
 		},
 
+		// eslint-disable-next-line vue/no-unused-properties
 		shouldNotify: {
 			type: Boolean,
+			// eslint-disable-next-line vue/no-boolean-default
 			default: true,
 		},
 

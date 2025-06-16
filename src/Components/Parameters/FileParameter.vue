@@ -17,11 +17,13 @@ export default {
 	name: 'FileParameter',
 
 	props: {
+		// eslint-disable-next-line vue/no-unused-properties
 		type: {
 			type: String,
 			required: true,
 		},
 
+		// eslint-disable-next-line vue/no-unused-properties
 		id: {
 			type: [Number, String],
 			required: true,

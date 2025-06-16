@@ -29,6 +29,7 @@ export default {
 			required: true,
 		},
 
+		// eslint-disable-next-line vue/no-unused-properties
 		id: {
 			type: [Number, String],
 			required: true,

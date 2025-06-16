@@ -11,9 +11,6 @@ export default [
 	{
 		rules: {
 			'no-console': 'off',
-			'vue/no-boolean-default': 'off',
-			'vue/no-required-prop-with-default': 'off',
-			'vue/no-unused-properties': 'off',
 		},
 	},
 ]
