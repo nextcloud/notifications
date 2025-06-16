@@ -12,7 +12,8 @@
 			<label for="notification_reminder_batchtime" class="notification-frequency__label">
 				{{ t('notifications', 'Send email reminders about unhandled notifications after:') }}
 			</label>
-			<select id="notification_reminder_batchtime"
+			<select
+				id="notification_reminder_batchtime"
 				v-model="config.setting_batchtime"
 				name="notification_reminder_batchtime"
 				class="notification-frequency__select"
@@ -23,17 +24,20 @@
 			</select>
 		</p>
 
-		<NcCheckboxRadioSwitch :checked.sync="config.sound_notification"
+		<NcCheckboxRadioSwitch
+			:checked.sync="config.sound_notification"
 			@update:checked="updateSettings">
 			{{ t('notifications', 'Play sound when a new notification arrives') }}
 		</NcCheckboxRadioSwitch>
-		<NcCheckboxRadioSwitch :checked.sync="config.sound_talk"
+		<NcCheckboxRadioSwitch
+			:checked.sync="config.sound_talk"
 			@update:checked="updateSettings">
 			{{ t('notifications', 'Play sound when a call started (requires Nextcloud Talk)') }}
 		</NcCheckboxRadioSwitch>
 
 		<template v-if="config.sound_talk">
-			<NcCheckboxRadioSwitch class="additional-margin-top"
+			<NcCheckboxRadioSwitch
+				class="additional-margin-top"
 				:checked.sync="storage.secondary_speaker"
 				:disabled="isSafari"
 				@update:checked="updateLocalSettings">
@@ -42,7 +46,8 @@
 			<div v-if="isSafari" class="notification-frequency__warning">
 				<strong>{{ t('notifications', 'Selection of the speaker device is currently not supported by Safari') }}</strong>
 			</div>
-			<NcSelect v-if="!isSafari && storage.secondary_speaker"
+			<NcSelect
+				v-if="!isSafari && storage.secondary_speaker"
 				v-model="storage.secondary_speaker_device"
 				input-id="device-selector-audio-output"
 				:options="devices"

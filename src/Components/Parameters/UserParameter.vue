@@ -5,10 +5,12 @@
 
 <template>
 	<div class="mention">
-		<NcUserBubble v-if="!cloudId"
+		<NcUserBubble
+			v-if="!cloudId"
 			:display-name="name"
 			:user="id" />
-		<strong v-else
+		<strong
+			v-else
 			:title="cloudId">
 			{{ name }}
 		</strong>

@@ -3,18 +3,21 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <template>
-	<li class="notification"
+	<li
+		class="notification"
 		:data-id="notificationId"
 		:data-timestamp="timestamp"
 		:data-object-type="objectType"
 		:data-app="app">
 		<div class="notification-heading">
 			<span class="hidden-visually">{{ absoluteDate }}</span>
-			<span v-if="timestamp"
+			<span
+				v-if="timestamp"
 				:title="absoluteDate"
 				class="notification-time live-relative-timestamp"
 				:data-timestamp="timestamp">{{ relativeDate }}</span>
-			<NcButton v-if="timestamp"
+			<NcButton
+				v-if="timestamp"
 				class="notification-dismiss-button"
 				variant="tertiary"
 				:aria-label="t('notifications', 'Dismiss')"
@@ -25,7 +28,8 @@
 			</NcButton>
 		</div>
 
-		<a v-if="externalLink"
+		<a
+			v-if="externalLink"
 			:href="externalLink"
 			class="notification-subject full-subject-link external"
 			target="_blank"
@@ -35,14 +39,16 @@
 		</a>
 		<a v-else-if="useLink" :href="link" class="notification-subject full-subject-link">
 			<span v-if="icon" class="image"><img :src="icon" class="notification-icon" alt=""></span>
-			<NcRichText v-if="subjectRich"
+			<NcRichText
+				v-if="subjectRich"
 				:text="subjectRich"
 				:arguments="preparedSubjectParameters" />
 			<span v-else class="subject">{{ subject }}</span>
 		</a>
 		<div v-else class="notification-subject">
 			<span v-if="icon" class="image"><img :src="icon" class="notification-icon" alt=""></span>
-			<NcRichText v-if="subjectRich"
+			<NcRichText
+				v-if="subjectRich"
 				:text="subjectRich"
 				:arguments="preparedSubjectParameters" />
 			<span v-else class="subject">{{ subject }}</span>
@@ -50,7 +56,8 @@
 
 		<div v-if="message" class="notification-message" @click="onClickMessage">
 			<div class="message-container" :class="{ collapsed: isCollapsedMessage }">
-				<NcRichText v-if="messageRich"
+				<NcRichText
+					v-if="messageRich"
 					:text="messageRich"
 					:arguments="preparedMessageParameters"
 					:autolink="true" />
@@ -60,13 +67,15 @@
 		</div>
 
 		<div v-if="actions.length" class="notification-actions">
-			<ActionButton v-for="(a, i) in actions"
+			<ActionButton
+				v-for="(a, i) in actions"
 				:key="i"
 				v-bind="a"
 				:notification-index="index" />
 		</div>
 		<div v-else-if="externalLink" class="notification-actions">
-			<NcButton variant="primary"
+			<NcButton
+				variant="primary"
 				href="https://nextcloud.com/fairusepolicy"
 				class="action-button pull-right"
 				target="_blank"

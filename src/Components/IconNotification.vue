@@ -5,7 +5,8 @@
 <template>
 	<span v-if="showDot || showWarning" class="notifications-button__icon">
 		<!-- Modified IconBell from material design icons -->
-		<svg xmlns="http://www.w3.org/2000/svg"
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
 			xmlns:xlink="http://www.w3.org/1999/xlink"
 			version="1.1"
 			:width="size"
@@ -13,7 +14,8 @@
 			viewBox="0 0 24 24"
 			fill="currentColor">
 			<path d="M 19,11.79 C 18.5,11.92 18,12 17.5,12 14.47,12 12,9.53 12,6.5 12,5.03 12.58,3.7 13.5,2.71 13.15,2.28 12.61,2 12,2 10.9,2 10,2.9 10,4 V 4.29 C 7.03,5.17 5,7.9 5,11 v 6 l -2,2 v 1 H 21 V 19 L 19,17 V 11.79 M 12,23 c 1.11,0 2,-0.89 2,-2 h -4 c 0,1.11 0.9,2 2,2 z" />
-			<path class="notification__dot"
+			<path
+				class="notification__dot"
 				:class="{
 					'notification__dot--warning': showWarning && !isOrangeThemed,
 					'notification__dot--white': isRedThemed || (showWarning && isOrangeThemed),

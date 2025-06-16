@@ -3,7 +3,8 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <template>
-	<NcHeaderMenu v-if="!shutdown"
+	<NcHeaderMenu
+		v-if="!shutdown"
 		id="notifications"
 		class="notifications-button"
 		:exclude-click-outside-selectors="['.popover']"
@@ -12,7 +13,8 @@
 		:title="t('notifications', 'Notifications')"
 		@open="onOpen">
 		<template #trigger>
-			<IconNotification :size="20"
+			<IconNotification
+				:size="20"
 				:show-dot="notifications.length !== 0 || webNotificationsGranted === null"
 				:show-warning="hasThrottledPushNotifications" />
 		</template>
@@ -20,11 +22,13 @@
 		<!-- Notifications list content -->
 		<div class="notification-container">
 			<transition name="fade" mode="out-in">
-				<transition-group v-if="notifications.length > 0"
+				<transition-group
+					v-if="notifications.length > 0"
 					class="notification-wrapper"
 					name="list"
 					tag="ul">
-					<NotificationItem v-if="hasThrottledPushNotifications"
+					<NotificationItem
+						v-if="hasThrottledPushNotifications"
 						:key="-2016"
 						datetime="warning"
 						app="core"
@@ -33,7 +37,8 @@
 						:message="emptyContentDescription"
 						:subject="emptyContentMessage"
 						:index="2016" />
-					<NotificationItem v-for="(n, index) in notifications"
+					<NotificationItem
+						v-for="(n, index) in notifications"
 						:key="n.notificationId"
 						v-bind="n"
 						:index="index"
@@ -41,7 +46,8 @@
 				</transition-group>
 
 				<!-- No notifications -->
-				<NcEmptyContent v-else
+				<NcEmptyContent
+					v-else
 					:name="emptyContentMessage"
 					:description="emptyContentDescription">
 					<template #icon>
@@ -50,7 +56,8 @@
 					</template>
 
 					<template v-if="hasThrottledPushNotifications" #action>
-						<NcButton variant="primary"
+						<NcButton
+							variant="primary"
 							href="https://nextcloud.com/fairusepolicy"
 							target="_blank"
 							rel="noreferrer noopener">
@@ -65,7 +72,8 @@
 
 			<!-- Dismiss all -->
 			<div v-if="notifications.length > 0" class="dismiss-all">
-				<NcButton variant="tertiary"
+				<NcButton
+					variant="tertiary"
 					wide
 					@click="onDismissAll">
 					<template #icon>

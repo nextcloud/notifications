@@ -3,14 +3,16 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <template>
-	<NcButton v-if="isWebLink"
+	<NcButton
+		v-if="isWebLink"
 		variant="primary"
 		class="action-button pull-right"
 		:href="link"
 		@click="onClickActionButtonWeb">
 		{{ label }}
 	</NcButton>
-	<NcButton v-else
+	<NcButton
+		v-else
 		:variant="primary ? 'primary' : 'secondary'"
 		class="action-button pull-right"
 		@click="onClickActionButton">

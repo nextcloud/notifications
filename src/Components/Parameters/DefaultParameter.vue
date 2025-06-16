@@ -4,11 +4,13 @@
 -->
 
 <template>
-	<a v-if="hasInternalLink"
+	<a
+		v-if="hasInternalLink"
 		:href="link">
 		<strong>{{ name }}</strong>
 	</a>
-	<a v-else-if="link"
+	<a
+		v-else-if="link"
 		:href="link"
 		class="external"
 		target="_blank"

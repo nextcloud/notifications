@@ -11,7 +11,6 @@ export default [
 	{
 		rules: {
 			'no-console': 'off',
-			'vue/first-attribute-linebreak': 'off',
 			'vue/no-boolean-default': 'off',
 			'vue/no-required-prop-with-default': 'off',
 			'vue/no-unused-properties': 'off',

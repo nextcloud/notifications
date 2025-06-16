@@ -4,13 +4,15 @@
 -->
 
 <template>
-	<NcSettingsSection :name="t('notifications', 'Notifications defaults')"
+	<NcSettingsSection
+		:name="t('notifications', 'Notifications defaults')"
 		:description="t('notifications', 'Configure the default notification settings for new users')">
 		<p>
 			<label for="notify_setting_batchtime" class="notification-frequency__label">
 				{{ t('notifications', 'Send email reminders about unhandled notifications after:') }}
 			</label>
-			<select id="notify_setting_batchtime"
+			<select
+				id="notify_setting_batchtime"
 				v-model="config.setting_batchtime"
 				class="notification-frequency__select"
 				@change="updateSettings()">
@@ -20,11 +22,13 @@
 			</select>
 		</p>
 
-		<NcCheckboxRadioSwitch :checked.sync="config.sound_notification"
+		<NcCheckboxRadioSwitch
+			:checked.sync="config.sound_notification"
 			@update:checked="updateSettings">
 			{{ t('notifications', 'Play sound when a new notification arrives') }}
 		</NcCheckboxRadioSwitch>
-		<NcCheckboxRadioSwitch :checked.sync="config.sound_talk"
+		<NcCheckboxRadioSwitch
+			:checked.sync="config.sound_talk"
 			@update:checked="updateSettings">
 			{{ t('notifications', 'Play sound when a call started (requires Nextcloud Talk)') }}
 		</NcCheckboxRadioSwitch>

@@ -4,7 +4,8 @@
 -->
 
 <template>
-	<a :title="title"
+	<a
+		:title="title"
 		class="filename"
 		:href="link">{{ name }}</a>
 </template>
