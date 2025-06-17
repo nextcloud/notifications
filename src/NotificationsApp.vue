@@ -6,9 +6,9 @@
 	<NcHeaderMenu
 		v-if="!shutdown"
 		id="notifications"
+		v-model:open="open"
 		class="notifications-button"
 		:exclude-click-outside-selectors="['.popover']"
-		:open.sync="open"
 		:aria-label="t('notifications', 'Notifications')"
 		:title="t('notifications', 'Notifications')"
 		@open="onOpen">
@@ -238,7 +238,7 @@ export default {
 		subscribe('user_status:status.updated', this.userStatusUpdated)
 	},
 
-	beforeDestroy() {
+	beforeUnmount() {
 		unsubscribe('user_status:status.updated', this.userStatusUpdated)
 		unsubscribe('networkOffline', this.handleNetworkOffline)
 		unsubscribe('networkOnline', this.handleNetworkOnline)
