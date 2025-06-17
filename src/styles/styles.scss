@@ -59,7 +59,8 @@ svg {
 
 		.notification-time {
 			color: var(--color-text-maxcontrast);
-			margin: 13px 0 13px auto;
+			margin-block: 13px;
+			margin-inline-start: auto;
 		}
 
 		.notification-dismiss-button {
@@ -71,7 +72,8 @@ svg {
 	.notification-message,
 	.notification-full-message,
 	.notification-actions {
-		margin: 0 12px 12px;
+		margin-block: 0 12px;
+		margin-inline: 12px;
 	}
 
 	.notification-subject {
@@ -86,14 +88,14 @@ svg {
 		& > a > span.subject,
 		& > .rich-text--wrapper,
 		& > a > .rich-text--wrapper {
-			padding-left: 10px;
+			padding-inline-start: 10px;
 			word-wrap: anywhere;
 		}
 	}
 
 	.notification-message,
 	.notification-full-message {
-		padding-left: 42px; // 32px icon + 10px title padding
+		padding-inline-start: 42px; // 32px icon + 10px title padding
 		color: var(--color-text-maxcontrast);
 
 		& > .collapsed {
@@ -118,10 +120,6 @@ svg {
 		.button-vue {
 			line-height: normal;
 			margin: 2px 8px;
-		}
-
-		&:first-child {
-			margin-left: auto;
 		}
 	}
 }
