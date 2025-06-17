@@ -3,16 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Vue from 'vue'
+import { createApp } from 'vue'
 import UserSettings from './views/UserSettings.vue'
 
 // Styles
 import '@nextcloud/dialogs/style.css'
 
-Vue.prototype.t = t
-Vue.prototype.n = n
-
-export default new Vue({
-	el: '#notifications-user-settings',
-	render: (h) => h(UserSettings),
-})
+export default createApp(UserSettings).mount('#notifications-user-settings')
