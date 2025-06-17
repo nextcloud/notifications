@@ -38,7 +38,7 @@
   "devDependencies": {
     "@nextcloud/browserslist-config": "^3.0.1",
     "@nextcloud/eslint-config": "^9.0.0-rc.2",
-    "@nextcloud/stylelint-config": "^3.0.1",
+    "@nextcloud/stylelint-config": "^3.1.0",
     "@nextcloud/vite-config": "^1.5.6",
     "babel-loader-exclude-node-modules-except": "^1.2.1",
     "vue-template-compiler": "^2.7.16"
