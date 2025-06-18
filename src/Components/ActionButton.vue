@@ -44,16 +44,13 @@ export default {
 
 	props: {
 		action: {
-			/** @type {ObjectConstructor<NotificationAction>} */
+			/** @type {import('vue').PropType<NotificationAction>} */
 			type: Object,
 			required: true,
 		},
-
-		notificationIndex: {
-			type: Number,
-			required: true,
-		},
 	},
+
+	emits: ['remove'],
 
 	data() {
 		return {
@@ -76,7 +73,7 @@ export default {
 			try {
 				const event = {
 					cancelAction: false,
-					notification: this.$parent.$props,
+					notification: this.$parent.$props.notification,
 					action: {
 						url: this.action.link,
 						type: this.typeWithDefault,
@@ -98,7 +95,7 @@ export default {
 			try {
 				const event = {
 					cancelAction: false,
-					notification: this.$parent.$props,
+					notification: this.$parent.$props.notification,
 					action: {
 						url: this.action.link,
 						type: this.typeWithDefault,
@@ -118,7 +115,7 @@ export default {
 				})
 
 				// emit event to current app
-				this.$parent.$emit('remove', this.notificationIndex)
+				this.$emit('remove')
 
 				emit('notifications:action:executed', event)
 			} catch (error) {

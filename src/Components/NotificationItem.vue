@@ -5,10 +5,10 @@
 <template>
 	<li
 		class="notification"
-		:data-id="notificationId"
+		:data-id="notification.notificationId"
 		:data-timestamp="timestamp"
-		:data-object-type="objectType"
-		:data-app="app">
+		:data-object-type="notification.objectType"
+		:data-app="notification.app">
 		<div class="notification-heading">
 			<NcDateTime
 				v-if="timestamp"
@@ -29,51 +29,51 @@
 		</div>
 
 		<a
-			v-if="externalLink"
-			:href="externalLink"
+			v-if="notification.externalLink"
+			:href="notification.externalLink"
 			class="notification-subject full-subject-link external"
 			target="_blank"
 			rel="noreferrer noopener">
-			<span class="image"><img :src="icon" class="notification-icon" alt=""></span>
-			<span class="subject">{{ subject }} ↗</span>
+			<span v-if="notification.icon" class="image"><img :src="notification.icon" class="notification-icon" alt=""></span>
+			<span class="subject">{{ notification.subject }} ↗</span>
 		</a>
-		<a v-else-if="useLink" :href="link" class="notification-subject full-subject-link">
-			<span v-if="icon" class="image"><img :src="icon" class="notification-icon" alt=""></span>
+		<a v-else-if="useLink" :href="notification.link" class="notification-subject full-subject-link">
+			<span v-if="notification.icon" class="image"><img :src="notification.icon" class="notification-icon" alt=""></span>
 			<NcRichText
-				v-if="subjectRich"
-				:text="subjectRich"
+				v-if="notification.subjectRich"
+				:text="notification.subjectRich"
 				:arguments="preparedSubjectParameters" />
-			<span v-else class="subject">{{ subject }}</span>
+			<span v-else class="subject">{{ notification.subject }}</span>
 		</a>
 		<div v-else class="notification-subject">
-			<span v-if="icon" class="image"><img :src="icon" class="notification-icon" alt=""></span>
+			<span v-if="notification.icon" class="image"><img :src="notification.icon" class="notification-icon" alt=""></span>
 			<NcRichText
-				v-if="subjectRich"
-				:text="subjectRich"
+				v-if="notification.subjectRich"
+				:text="notification.subjectRich"
 				:arguments="preparedSubjectParameters" />
-			<span v-else class="subject">{{ subject }}</span>
+			<span v-else class="subject">{{ notification.subject }}</span>
 		</div>
 
-		<div v-if="message" class="notification-message" @click="onClickMessage">
+		<div v-if="notification.message" class="notification-message" @click="onClickMessage">
 			<div class="message-container" :class="{ collapsed: isCollapsedMessage }">
 				<NcRichText
-					v-if="messageRich"
-					:text="messageRich"
+					v-if="notification.messageRich"
+					:text="notification.messageRich"
 					:arguments="preparedMessageParameters"
 					:autolink="true" />
-				<span v-else>{{ message }}</span>
+				<span v-else>{{ notification.message }}</span>
 			</div>
 			<div v-if="isCollapsedMessage" class="notification-overflow" />
 		</div>
 
-		<div v-if="actions.length" class="notification-actions">
+		<div v-if="notification.actions.length" class="notification-actions">
 			<ActionButton
-				v-for="(action, i) in actions"
+				v-for="(action, i) in notification.actions"
 				:key="i"
 				:action="action"
-				:notification-index="index" />
+				@remove="$emit('remove')"/>
 		</div>
-		<div v-else-if="externalLink" class="notification-actions">
+		<div v-else-if="notification.externalLink" class="notification-actions">
 			<NcButton
 				variant="primary"
 				href="https://nextcloud.com/fairusepolicy"
@@ -104,6 +104,34 @@ import DefaultParameter from './Parameters/DefaultParameter.vue'
 import FileParameter from './Parameters/FileParameter.vue'
 import UserParameter from './Parameters/UserParameter.vue'
 
+/**
+ * @typedef {object} NotificationItem
+ * @property {number} notification_id notification id (required)
+ * @property {string} app app id (required)
+ * @property {string} user user id (required)
+ * @property {string} datetime timestamp of notification (required)
+ * @property {string} object_type object type, e.g. 'room' (required)
+ * @property {string} object_id object id, e.g. room token (required)
+ * @property {string} subject notification subject (required)
+ * @property {string} message notification message (required)
+ * @property {string} link notification link (required)
+ * @property {NotificationAction[]} actions notification list of actions (required)
+ * @property {string} [subjectRich] notification subject with rich parameters
+ * @property {object} [subjectRichParameters] rich parameters for notification subject
+ * @property {string} [messageRich] notification message with rich parameters
+ * @property {object} [messageRichParameters] rich parameters for notification message
+ * @property {string} [icon] icon to render
+ * @property {boolean} [shouldNotify] whether a browser notification should be rendered
+ */
+
+/**
+ * @typedef {object} NotificationAction
+ * @property {string} label action label (required)
+ * @property {string} link action link (required)
+ * @property {string} type action type (required)
+ * @property {boolean} primary action primary (required)
+ */
+
 export default {
 	name: 'NotificationItem',
 
@@ -117,106 +145,14 @@ export default {
 	},
 
 	props: {
-		notificationId: {
-			type: Number,
-			default: -1,
-		},
-
-		datetime: {
-			type: String,
-			default: '',
-		},
-
-		app: {
-			type: String,
-			default: '',
-		},
-
-		icon: {
-			type: String,
-			default: '',
-		},
-
-		link: {
-			type: String,
-			default: '',
-		},
-
-		externalLink: {
-			type: String,
-			default: '',
-		},
-
-		// eslint-disable-next-line vue/no-unused-properties
-		user: {
-			type: String,
-			default: '',
-		},
-
-		message: {
-			type: String,
-			default: '',
-		},
-
-		messageRich: {
-			type: String,
-			default: '',
-		},
-
-		messageRichParameters: {
-			type: [Object, Array],
-			default() {
-				return {}
-			},
-		},
-
-		subject: {
-			type: String,
-			default: '',
-		},
-
-		subjectRich: {
-			type: String,
-			default: '',
-		},
-
-		subjectRichParameters: {
-			type: [Object, Array],
-			default() {
-				return {}
-			},
-		},
-
-		objectType: {
-			type: String,
-			default: '',
-		},
-
-		// eslint-disable-next-line vue/no-unused-properties
-		objectId: {
-			type: String,
-			default: '',
-		},
-
-		// eslint-disable-next-line vue/no-unused-properties
-		shouldNotify: {
-			type: Boolean,
-			// eslint-disable-next-line vue/no-boolean-default
-			default: true,
-		},
-
-		actions: {
-			type: Array,
-			default() {
-				return []
-			},
-		},
-
-		index: {
-			type: Number,
-			default: -1,
+		notification: {
+			/** @type {import('vue').PropType<NotificationItem>} */
+			type: Object,
+			required: true,
 		},
 	},
+
+	emits: ['remove'],
 
 	data() {
 		return {
@@ -226,20 +162,20 @@ export default {
 
 	computed: {
 		timestamp() {
-			if (this.datetime === 'warning') {
+			if (this.notification.datetime === 'warning') {
 				return 0
 			}
-			return (new Date(this.datetime)).valueOf()
+			return (new Date(this.notification.datetime)).valueOf()
 		},
 
 		useLink() {
-			if (!this.link) {
+			if (!this.notification.link) {
 				return false
 			}
 
 			let parametersHaveLink = false
-			Object.keys(this.subjectRichParameters).forEach((p) => {
-				if (this.subjectRichParameters[p].link) {
+			Object.keys(Object(this.notification.subjectRichParameters)).forEach((p) => {
+				if (Object(this.notification.subjectRichParameters)[p].link) {
 					parametersHaveLink = true
 				}
 			})
@@ -247,22 +183,22 @@ export default {
 		},
 
 		preparedSubjectParameters() {
-			return this.prepareParameters(this.subjectRichParameters)
+			return this.prepareParameters(this.notification.subjectRichParameters)
 		},
 
 		preparedMessageParameters() {
-			return this.prepareParameters(this.messageRichParameters)
+			return this.prepareParameters(this.notification.messageRichParameters)
 		},
 
 		isCollapsedMessage() {
-			return this.message.length > 200 && !this.showFullMessage
+			return this.notification.message.length > 200 && !this.showFullMessage
 		},
 	},
 
 	methods: {
 		t,
 
-		prepareParameters(parameters) {
+		prepareParameters(parameters = {}) {
 			const richParameters = {}
 			Object.keys(parameters).forEach((p) => {
 				const type = parameters[p].type
@@ -290,7 +226,7 @@ export default {
 			if (e.target.closest('.rich-text--wrapper')) {
 				// Vue RichText
 				this.showFullMessage = !this.showFullMessage
-			} else if (!this.messageRich && !!this.message) {
+			} else if (!this.notification.messageRich && !!this.notification.message) {
 				// Plain text
 				this.showFullMessage = !this.showFullMessage
 			}
@@ -298,9 +234,9 @@ export default {
 
 		onDismissNotification() {
 			axios
-				.delete(generateOcsUrl('apps/notifications/api/v2/notifications/{id}', { id: this.notificationId }))
+				.delete(generateOcsUrl('apps/notifications/api/v2/notifications/{id}', { id: this.notification.notificationId }))
 				.then(() => {
-					this.$emit('remove', this.index)
+					this.$emit('remove')
 				})
 				.catch(() => {
 					showError(t('notifications', 'Failed to dismiss notification'))

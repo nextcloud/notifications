@@ -30,19 +30,12 @@
 					<NotificationItem
 						v-if="hasThrottledPushNotifications"
 						:key="-2016"
-						datetime="warning"
-						app="core"
-						:icon="warningIcon"
-						external-link="https://nextcloud.com/fairusepolicy"
-						:message="emptyContentDescription"
-						:subject="emptyContentMessage"
-						:index="2016" />
+						:notification="fairUsePolicyNotification" />
 					<NotificationItem
-						v-for="(n, index) in notifications"
-						:key="n.notificationId"
-						v-bind="n"
-						:index="index"
-						@remove="onRemove" />
+						v-for="(notification, index) in notifications"
+						:key="notification.notificationId"
+						:notification="notification"
+						@remove="onRemove(index)" />
 				</transition-group>
 
 				<!-- No notifications -->
@@ -106,6 +99,23 @@ import NotificationItem from './Components/NotificationItem.vue'
 import { getNotificationsData } from './services/notificationsService.js'
 import { createWebNotification } from './services/webNotificationsService.js'
 
+const fairUsePolicyNotification = {
+	// Required properties
+	notificationId: -1,
+	app: 'core',
+	user: '',
+	datetime: 'warning',
+	objectId: '',
+	objectType: '',
+	subject: t('notifications', 'Push notifications might be unreliable'),
+	message: t('notifications', 'Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information.'),
+	link: 'https://nextcloud.com/fairusepolicy',
+	actions: [],
+	// Optional properties
+	externalLink: 'https://nextcloud.com/fairusepolicy',
+	icon: imagePath('core', 'actions/alert-outline.svg'),
+}
+
 export default {
 	name: 'NotificationsApp',
 
@@ -118,6 +128,12 @@ export default {
 		NcEmptyContent,
 		NcHeaderMenu,
 		NotificationItem,
+	},
+
+	setup() {
+		return {
+			fairUsePolicyNotification,
+		}
 	},
 
 	data() {
@@ -177,7 +193,7 @@ export default {
 			}
 
 			if (this.hasThrottledPushNotifications) {
-				return t('notifications', 'Push notifications might be unreliable')
+				return this.fairUsePolicyNotification.subject
 			}
 
 			return t('notifications', 'No notifications')
@@ -185,14 +201,10 @@ export default {
 
 		emptyContentDescription() {
 			if (this.hasThrottledPushNotifications) {
-				return t('notifications', 'Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information.')
+				return this.fairUsePolicyNotification.message
 			}
 
 			return ''
-		},
-
-		warningIcon() {
-			return imagePath('core', 'actions/alert-outline.svg')
 		},
 	},
 
