@@ -11,6 +11,8 @@ OC.L10N.register(
     "Dismiss" : "Atmest",
     "in {path}" : "{path}",
     "No notifications" : "Nav paziņojumu",
+    "Failed to dismiss all notifications" : "Neizdevās atmest visus paziņojumus",
+    "Dismiss all notifications" : "Atmest visus paziņojumus",
     "Never" : "Nekad",
     "1 hour" : "1 stunda",
     "3 hours" : "3 stundas",

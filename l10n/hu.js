@@ -37,6 +37,7 @@ OC.L10N.register(
     "Play sound when a new notification arrives" : "Hang lejátszása, ha új értesítés érkezik",
     "Play sound when a call started (requires Nextcloud Talk)" : "Hang lejátszása, ha hívás indul (Nextcloud Beszélgetés szükséges)",
     "None" : "Egyik sem",
-    "You need to set up your email address before you can receive notification emails." : "Be kell állítania az e-mail-címét, mielőtt értesítési leveleket kaphatna."
+    "You need to set up your email address before you can receive notification emails." : "Be kell állítania az e-mail-címét, mielőtt értesítési leveleket kaphatna.",
+    "Select a device" : "Eszköz kiválasztása"
 },
 "nplurals=2; plural=(n != 1);");
