@@ -1,6 +1,7 @@
 OC.L10N.register(
     "notifications",
     {
+    "User not found" : "Mtumiaji hapatikani",
     "seconds ago" : "sukunde zilizopita",
     "in {path}" : "Katika {path}",
     "No notifications" : "Hakuna taarifa"
