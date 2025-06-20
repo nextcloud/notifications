@@ -2,18 +2,11 @@
   - SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
+
 <template>
 	<NcButton
-		v-if="isWebLink"
-		variant="primary"
-		class="action-button pull-right"
-		:href="action.link"
-		@click="onClickActionButtonWeb">
-		{{ action.label }}
-	</NcButton>
-	<NcButton
-		v-else
-		:variant="action.primary ? 'primary' : 'secondary'"
+		:variant="(isWebLink || action.primary) ? 'primary' : 'secondary'"
+		:href="isWebLink ? action.link : undefined"
 		class="action-button pull-right"
 		@click="onClickActionButton">
 		{{ action.label }}
@@ -21,10 +14,6 @@
 </template>
 
 <script>
-import axios from '@nextcloud/axios'
-import { showError } from '@nextcloud/dialogs'
-import { emit } from '@nextcloud/event-bus'
-import { t } from '@nextcloud/l10n'
 import NcButton from '@nextcloud/vue/components/NcButton'
 
 /**
@@ -52,76 +41,19 @@ export default {
 
 	emits: ['remove'],
 
-	data() {
-		return {
-			tabbed: false,
-		}
-	},
-
 	computed: {
 		isWebLink() {
-			return this.typeWithDefault === 'WEB'
-		},
-
-		typeWithDefault() {
-			return this.action.type || 'GET'
+			return this.action.type === 'WEB'
 		},
 	},
 
 	methods: {
-		async onClickActionButtonWeb(e) {
-			try {
-				const event = {
-					cancelAction: false,
-					notification: this.$parent.$props.notification,
-					action: {
-						url: this.action.link,
-						type: this.typeWithDefault,
-					},
-				}
-				await emit('notifications:action:execute', event)
-
-				if (event.cancelAction) {
-					// Action cancelled by event
-					e.preventDefault()
-				}
-			} catch (error) {
-				console.error('Failed to perform action', error)
-				showError(t('notifications', 'Failed to perform action'))
+		onClickActionButton(event) {
+			const action = {
+				url: this.action.link,
+				type: this.action.type || 'GET',
 			}
-		},
-
-		async onClickActionButton() {
-			try {
-				const event = {
-					cancelAction: false,
-					notification: this.$parent.$props.notification,
-					action: {
-						url: this.action.link,
-						type: this.typeWithDefault,
-					},
-				}
-				await emit('notifications:action:execute', event)
-
-				if (event.cancelAction) {
-					// Action cancelled by event
-					return
-				}
-
-				// execute action
-				await axios({
-					method: this.typeWithDefault,
-					url: this.action.link,
-				})
-
-				// emit event to current app
-				this.$emit('remove')
-
-				emit('notifications:action:executed', event)
-			} catch (error) {
-				console.error('Failed to perform action', error)
-				showError(t('notifications', 'Failed to perform action'))
-			}
+			this.$emit('click', { event, action })
 		},
 	},
 }

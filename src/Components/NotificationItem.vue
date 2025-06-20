@@ -71,7 +71,8 @@
 				v-for="(action, i) in notification.actions"
 				:key="i"
 				:action="action"
-				@remove="$emit('remove')"/>
+				@click="onClickAction"
+				@remove="$emit('remove')" />
 		</div>
 		<div v-else-if="notification.externalLink" class="notification-actions">
 			<NcButton
@@ -92,6 +93,7 @@
 <script>
 import axios from '@nextcloud/axios'
 import { showError } from '@nextcloud/dialogs'
+import { emit } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
 import { generateOcsUrl } from '@nextcloud/router'
 import NcButton from '@nextcloud/vue/components/NcButton'
@@ -229,6 +231,42 @@ export default {
 			} else if (!this.notification.messageRich && !!this.notification.message) {
 				// Plain text
 				this.showFullMessage = !this.showFullMessage
+			}
+		},
+
+		async onClickAction({ event, action }) {
+			try {
+				const executeEvent = {
+					cancelAction: false,
+					notification: this.notification,
+					action,
+				}
+				await emit('notifications:action:execute', executeEvent)
+
+				if (action.type === 'WEB') {
+					if (executeEvent.cancelAction) {
+						event.preventDefault()
+					}
+					return
+				}
+
+				if (executeEvent.cancelAction) {
+					return
+				}
+
+				// execute action
+				await axios({
+					method: action.type,
+					url: action.url,
+				})
+
+				// emit event to current app
+				this.$emit('remove')
+
+				emit('notifications:action:executed', event)
+			} catch (error) {
+				console.error('Failed to perform action', error)
+				showError(t('notifications', 'Failed to perform action'))
 			}
 		},
 
