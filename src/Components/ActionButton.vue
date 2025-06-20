@@ -2,29 +2,9 @@
   - SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
-<template>
-	<NcButton
-		v-if="isWebLink"
-		variant="primary"
-		class="action-button pull-right"
-		:href="action.link"
-		@click="onClickActionButtonWeb">
-		{{ action.label }}
-	</NcButton>
-	<NcButton
-		v-else
-		:variant="action.primary ? 'primary' : 'secondary'"
-		class="action-button pull-right"
-		@click="onClickActionButton">
-		{{ action.label }}
-	</NcButton>
-</template>
 
-<script>
-import axios from '@nextcloud/axios'
-import { showError } from '@nextcloud/dialogs'
-import { emit } from '@nextcloud/event-bus'
-import { t } from '@nextcloud/l10n'
+<script setup>
+import { computed } from 'vue'
 import NcButton from '@nextcloud/vue/components/NcButton'
 
 /**
@@ -35,97 +15,38 @@ import NcButton from '@nextcloud/vue/components/NcButton'
  * @property {boolean} primary action primary (required)
  */
 
-export default {
-	name: 'ActionButton',
-
-	components: {
-		NcButton,
+const props = defineProps({
+	action: {
+		/** @type {import('vue').PropType<NotificationAction>} */
+		type: Object,
+		required: true,
 	},
+})
 
-	props: {
-		action: {
-			/** @type {ObjectConstructor<NotificationAction>} */
-			type: Object,
-			required: true,
-		},
+const emit = defineEmits(['click'])
 
-		notificationIndex: {
-			type: Number,
-			required: true,
-		},
-	},
+const isWebLink = computed(() => props.action.type === 'WEB')
 
-	data() {
-		return {
-			tabbed: false,
-		}
-	},
-
-	computed: {
-		isWebLink() {
-			return this.typeWithDefault === 'WEB'
-		},
-
-		typeWithDefault() {
-			return this.action.type || 'GET'
-		},
-	},
-
-	methods: {
-		async onClickActionButtonWeb(e) {
-			try {
-				const event = {
-					cancelAction: false,
-					notification: this.$parent.$props,
-					action: {
-						url: this.action.link,
-						type: this.typeWithDefault,
-					},
-				}
-				await emit('notifications:action:execute', event)
-
-				if (event.cancelAction) {
-					// Action cancelled by event
-					e.preventDefault()
-				}
-			} catch (error) {
-				console.error('Failed to perform action', error)
-				showError(t('notifications', 'Failed to perform action'))
-			}
-		},
-
-		async onClickActionButton() {
-			try {
-				const event = {
-					cancelAction: false,
-					notification: this.$parent.$props,
-					action: {
-						url: this.action.link,
-						type: this.typeWithDefault,
-					},
-				}
-				await emit('notifications:action:execute', event)
-
-				if (event.cancelAction) {
-					// Action cancelled by event
-					return
-				}
-
-				// execute action
-				await axios({
-					method: this.typeWithDefault,
-					url: this.action.link,
-				})
-
-				// emit event to current app
-				this.$parent.$emit('remove', this.notificationIndex)
-
-				emit('notifications:action:executed', event)
-			} catch (error) {
-				console.error('Failed to perform action', error)
-				showError(t('notifications', 'Failed to perform action'))
-			}
-		},
-	},
+/**
+ * Emits a click event with the action details
+ *
+ * @param {MouseEvent} event Mouse click event
+ */
+function onClickActionButton(event) {
+	const action = {
+		url: props.action.link,
+		type: props.action.type || 'GET',
+	}
+	emit('click', { event, action })
 }
 </script>
+
+<template>
+	<NcButton
+		:variant="(isWebLink || action.primary) ? 'primary' : 'secondary'"
+		:href="isWebLink ? action.link : undefined"
+		class="action-button pull-right"
+		@click="onClickActionButton">
+		{{ action.label }}
+	</NcButton>
+</template>
