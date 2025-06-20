@@ -10,7 +10,8 @@
 		:data-object-type="objectType"
 		:data-app="app">
 		<div class="notification-heading">
-			<NcDateTime v-if="timestamp"
+			<NcDateTime
+				v-if="timestamp"
 				class="notification-time"
 				ignore-seconds
 				:timestamp="timestamp" />
