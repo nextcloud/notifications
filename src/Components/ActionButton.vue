@@ -3,17 +3,8 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
-<template>
-	<NcButton
-		:variant="(isWebLink || action.primary) ? 'primary' : 'secondary'"
-		:href="isWebLink ? action.link : undefined"
-		class="action-button pull-right"
-		@click="onClickActionButton">
-		{{ action.label }}
-	</NcButton>
-</template>
-
-<script>
+<script setup>
+import { computed } from 'vue'
 import NcButton from '@nextcloud/vue/components/NcButton'
 
 /**
@@ -24,37 +15,38 @@ import NcButton from '@nextcloud/vue/components/NcButton'
  * @property {boolean} primary action primary (required)
  */
 
-export default {
-	name: 'ActionButton',
-
-	components: {
-		NcButton,
+const props = defineProps({
+	action: {
+		/** @type {import('vue').PropType<NotificationAction>} */
+		type: Object,
+		required: true,
 	},
+})
 
-	props: {
-		action: {
-			/** @type {import('vue').PropType<NotificationAction>} */
-			type: Object,
-			required: true,
-		},
-	},
+const emit = defineEmits(['click'])
 
-	emits: ['remove'],
+const isWebLink = computed(() => props.action.type === 'WEB')
 
-	computed: {
-		isWebLink() {
-			return this.action.type === 'WEB'
-		},
-	},
-
-	methods: {
-		onClickActionButton(event) {
-			const action = {
-				url: this.action.link,
-				type: this.action.type || 'GET',
-			}
-			this.$emit('click', { event, action })
-		},
-	},
+/**
+ * Emits a click event with the action details
+ *
+ * @param {MouseEvent} event Mouse click event
+ */
+function onClickActionButton(event) {
+	const action = {
+		url: props.action.link,
+		type: props.action.type || 'GET',
+	}
+	emit('click', { event, action })
 }
 </script>
+
+<template>
+	<NcButton
+		:variant="(isWebLink || action.primary) ? 'primary' : 'secondary'"
+		:href="isWebLink ? action.link : undefined"
+		class="action-button pull-right"
+		@click="onClickActionButton">
+		{{ action.label }}
+	</NcButton>
+</template>
