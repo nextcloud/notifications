@@ -14,6 +14,7 @@
 				v-if="timestamp"
 				class="notification-time"
 				ignore-seconds
+				:format="{ timeStyle: 'short', dateStyle: 'long' }"
 				:timestamp="timestamp" />
 			<NcButton
 				v-if="timestamp"
