@@ -10,12 +10,11 @@
 		:data-object-type="objectType"
 		:data-app="app">
 		<div class="notification-heading">
-			<span class="hidden-visually">{{ absoluteDate }}</span>
-			<span
+			<NcDateTime
 				v-if="timestamp"
-				:title="absoluteDate"
-				class="notification-time live-relative-timestamp"
-				:data-timestamp="timestamp">{{ relativeDate }}</span>
+				class="notification-time"
+				ignore-seconds
+				:timestamp="timestamp" />
 			<NcButton
 				v-if="timestamp"
 				class="notification-dismiss-button"
@@ -95,6 +94,7 @@ import { showError } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 import { generateOcsUrl } from '@nextcloud/router'
 import NcButton from '@nextcloud/vue/components/NcButton'
+import NcDateTime from '@nextcloud/vue/components/NcDateTime'
 import NcRichText from '@nextcloud/vue/components/NcRichText'
 import Close from 'vue-material-design-icons/Close.vue'
 import Message from 'vue-material-design-icons/Message.vue'
@@ -102,7 +102,6 @@ import ActionButton from './ActionButton.vue'
 import DefaultParameter from './Parameters/DefaultParameter.vue'
 import FileParameter from './Parameters/FileParameter.vue'
 import UserParameter from './Parameters/UserParameter.vue'
-import { formatDateTime, formatRelativeTimeFromNow } from '../utils/datetime.js'
 
 export default {
 	name: 'NotificationItem',
@@ -110,6 +109,7 @@ export default {
 	components: {
 		ActionButton,
 		NcButton,
+		NcDateTime,
 		Close,
 		Message,
 		NcRichText,
@@ -229,25 +229,6 @@ export default {
 				return 0
 			}
 			return (new Date(this.datetime)).valueOf()
-		},
-
-		absoluteDate() {
-			if (this.datetime === 'warning') {
-				return ''
-			}
-			return formatDateTime(this.timestamp)
-		},
-
-		relativeDate() {
-			if (this.datetime === 'warning') {
-				return ''
-			}
-
-			const diff = Date.now() - this.timestamp
-			if (diff >= 0 && diff < 45000) {
-				return t('core', 'seconds ago')
-			}
-			return formatRelativeTimeFromNow(this.timestamp)
 		},
 
 		useLink() {
