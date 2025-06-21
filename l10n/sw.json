@@ -1,7 +1,8 @@
 { "translations": {
     "User not found" : "Mtumiaji hapatikani",
-    "seconds ago" : "sukunde zilizopita",
+    "Hello %s" : "Halo %s",
     "in {path}" : "Katika {path}",
-    "No notifications" : "Hakuna taarifa"
+    "No notifications" : "Hakuna taarifa",
+    "seconds ago" : "sukunde zilizopita"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

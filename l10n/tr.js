@@ -17,15 +17,14 @@ OC.L10N.register(
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "Bu uygulama Nextcloud bildirim API uygulaması için ön yüz ve yönetim bölümünde kullanılabilecek bir arayüz sağlar.",
     "This app provides a backend and frontend for the notification API available in Nextcloud.\n\t\tThe API is used by other apps to notify users in the web UI and sync clients about various things. Some examples are:\n\n📬 Federated file sharing: You received a new remote share\n\n📑 Comments: Another user mentioned you in a comment on a file\n\n🚢 Update notification: Available update for an app or nextcloud itself\n\n📣 Announcement center: An announcement was posted by an admin" : "Bu uygulama Nextcloud bildirim API uygulaması için ön yüz ve yönetim bölümünde kullanılabilecek bir arayüz sağlar.\n\t\tAPI uygulaması diğer uygulamalar tarafından kullanılır ve kullanıcılara site arayüzünde bildirimler görüntüleyerek istemcilerdeki çeşitli bilgileri eşitler. Bazı örnekler şunlardır:\n\n📬 Birleşik dosya paylaşımı: Yeni bir uzak paylaşım aldınız\n\n📑 Yorumlar: Bir kullanıcı bir dosya yorumunda sizi andı\n\n🚢 Güncelleme bildirimi: Yeni bir uygulama ya da Nextcloud sürümü yayınlanmış\n\n📣 Duyuru merkezi: Yönetici tarafından bir duyuru yapıldı",
     "Failed to perform action" : "İşlem yürütülemedi",
-    "seconds ago" : "saniye önce",
     "Failed to dismiss notification" : "Bildirim yok sayılamadı",
     "Dismiss" : "Yok say",
     "Contact Nextcloud GmbH" : "Nextcloud GmbH ile görüşün",
     "in {path}" : "{path} içinde",
-    "Requesting browser permissions to show notifications" : "Bildirimlerin görüntülenmesi için tarayıcı izinleri isteniyor",
     "Push notifications might be unreliable" : "Anında bildirimler iyi çalışmayabilir",
-    "No notifications" : "Bildirimler kapalı",
     "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "Nextcloud GmbH, bireysel kullanıcılar için ücretsiz bir anında bildirim ağ geçidini karşılıyor. İyi bir hizmet sunabilmek için ağ geçidi, sunucu başına anında bildirim sayısını sınırlıyor. Enterprise sürüm kullanıcıları için daha ölçeklenebilir bir ağ geçidi kullanılıyor. Ayrıntılı bilgi almak için Nextcloud GmbH ile görüşebilirsiniz.",
+    "Requesting browser permissions to show notifications" : "Bildirimlerin görüntülenmesi için tarayıcı izinleri isteniyor",
+    "No notifications" : "Bildirimler kapalı",
     "Failed to dismiss all notifications" : "Tüm bildirimler yok sayılamadı",
     "Dismiss all notifications" : "Tüm bildirimleri yok say",
     "Never" : "Asla",
@@ -44,6 +43,7 @@ OC.L10N.register(
     "You need to set up your email address before you can receive notification emails." : "Bildirim e-postalarını alabilmek için e-posta adresinizi belirtmelisiniz.",
     "Also repeat sound on a secondary speaker" : "Ses ikinci bir hoparlörde yinelensin",
     "Selection of the speaker device is currently not supported by Safari" : "Safari şu anda hoparlör seçilmesini desteklemiyor",
-    "Select a device" : "Bir aygıt seçin"
+    "Select a device" : "Bir aygıt seçin",
+    "seconds ago" : "saniye önce"
 },
 "nplurals=2; plural=(n > 1);");

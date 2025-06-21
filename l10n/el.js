@@ -13,15 +13,14 @@ OC.L10N.register(
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "Εφαρμογή ειδοποιήσεων API για  backend και frontend διαθέσιμο στο Nextcloud.",
     "This app provides a backend and frontend for the notification API available in Nextcloud.\n\t\tThe API is used by other apps to notify users in the web UI and sync clients about various things. Some examples are:\n\n📬 Federated file sharing: You received a new remote share\n\n📑 Comments: Another user mentioned you in a comment on a file\n\n🚢 Update notification: Available update for an app or nextcloud itself\n\n📣 Announcement center: An announcement was posted by an admin" : "Εφαρμογή ειδοποιήσεων API για backend και frontend διαθέσιμο στο Nextcloud.\n\t\tΤο API χρησιμοποιείται από άλλες εφαρμογές για παροχή ειδοποιήσεων στον χρήστη σχετικά με διάφορα θέματα. Κάποια παραδείγματα είναι:\n\n📬 Federated κοινόχρηστα: Με τη λήψη νέου κοινόχρηστου\n\n📑 Σχόλια: Όταν κάποιος χρήστης αναφέρει το όνομά σας σε κάποιο αρχείο\n\n🚢  Ειδοποίηση αναβάθμισης: Όταν είναι διαθέσιμη αναβάθμιση εφαρμογής ή του nextcloud\n\n📣  Ανακοινώσεις: Δημοσίευση ανακοίνωσης από τον διαχειριστή",
     "Failed to perform action" : "Αποτυχία εκτέλεσης ενέργειας",
-    "seconds ago" : " δευτερόλεπτα πριν ",
     "Failed to dismiss notification" : "Αποτυχία αποδέσμευσης της ειδοποίησης",
     "Dismiss" : "Αποδέσμευση",
     "Contact Nextcloud GmbH" : "Επικοινωνία με Nextcloud GmbH",
     "in {path}" : "στο {path}",
-    "Requesting browser permissions to show notifications" : "Αίτηση άδειας φυλλομετρητή για εμφάνιση ειδοποιήσεων",
     "Push notifications might be unreliable" : "Οι ειδοποιήσεις push μπορεί να είναι αναξιόπιστες",
-    "No notifications" : "Καμία ειδοποίηση",
     "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "Η Nextcloud GmbH χορηγεί μια δωρεάν πύλη ειδοποιήσεων push για ιδιώτες χρήστες. Για να διασφαλιστεί η καλή εξυπηρέτηση, η πύλη περιορίζει τον αριθμό των ειδοποιήσεων push ανά διακομιστή. Για εταιρικούς χρήστες, είναι διαθέσιμη μια πιο επεκτάσιμη πύλη. Επικοινωνήστε με την Nextcloud GmbH για περισσότερες πληροφορίες.",
+    "Requesting browser permissions to show notifications" : "Αίτηση άδειας φυλλομετρητή για εμφάνιση ειδοποιήσεων",
+    "No notifications" : "Καμία ειδοποίηση",
     "Failed to dismiss all notifications" : "Αποτυχία αποδέσμευσης όλων των ειδοποιήσεων",
     "Dismiss all notifications" : "Εκκαθάριση όλων των ειδοποιήσεων",
     "Never" : "Ποτέ",
@@ -37,6 +36,7 @@ OC.L10N.register(
     "Play sound when a new notification arrives" : "Αναπαραγωγή ήχου όταν φτάσει μια νέα ειδοποίηση",
     "Play sound when a call started (requires Nextcloud Talk)" : "Αναπαραγωγή ήχου κατά την έναρξη μιας κλήσης (απαιτείται το Nextcloud Talk)",
     "None" : "Καμμία",
-    "You need to set up your email address before you can receive notification emails." : "Πρέπει να ρυθμίσετε τη διεύθυνση email σας για να μπορείτε να λαμβάνετε μηνύματα ηλεκτρονικού ταχυδρομείου ειδοποίησης."
+    "You need to set up your email address before you can receive notification emails." : "Πρέπει να ρυθμίσετε τη διεύθυνση email σας για να μπορείτε να λαμβάνετε μηνύματα ηλεκτρονικού ταχυδρομείου ειδοποίησης.",
+    "seconds ago" : " δευτερόλεπτα πριν "
 },
 "nplurals=2; plural=(n != 1);");

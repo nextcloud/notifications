@@ -8,7 +8,6 @@ OC.L10N.register(
     "_You have a new notification for %s_::_You have %n new notifications for %s_" : ["Avètz una notificacion novèla per %s","Avètz %n notificacions novèlas per %s"],
     "Admin notifications" : "Notificacions admin",
     "Notifications" : "Notificacions",
-    "seconds ago" : "fa qualques segondas",
     "Dismiss" : "Ignorar",
     "in {path}" : "dins {path}",
     "No notifications" : "Cap de notificacion",
@@ -20,6 +19,7 @@ OC.L10N.register(
     "1 week" : "1 setmana",
     "Your settings have been updated." : "Paramètres actualizats.",
     "An error occurred while updating your settings." : "Una error s’es producha pendent l’actualizacion dels paramètres.",
-    "None" : "Cap"
+    "None" : "Cap",
+    "seconds ago" : "fa qualques segondas"
 },
 "nplurals=2; plural=(n > 1);");

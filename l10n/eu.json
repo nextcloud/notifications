@@ -15,15 +15,14 @@
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "Aplikazio honek Nextclouden dagoen jakinarazpen APIaren backend eta frontend zerbitzua eskaintzen du.",
     "This app provides a backend and frontend for the notification API available in Nextcloud.\n\t\tThe API is used by other apps to notify users in the web UI and sync clients about various things. Some examples are:\n\n📬 Federated file sharing: You received a new remote share\n\n📑 Comments: Another user mentioned you in a comment on a file\n\n🚢 Update notification: Available update for an app or nextcloud itself\n\n📣 Announcement center: An announcement was posted by an admin" : "Aplikazio honek Nextclouden jakinarazpenen APIaren backend eta frontend zerbitzua eskaintzen du.\n\t\tAPIa beste aplikazio batzuk erabiltzen dute erabiltzaileei webgunean edo sinkronizazio bezeroetan hainbat gauzaren inguruko jakinarazpenak bidaltzeko. Adibidez:\n\n📬 Federatutako partekatzea: urruneko partekatze bat jaso duzu\n\n📑 Iruzkinak: beste erabiltzaile batek fitxategi baten egin duen iruzkin baten aipatu egin zaitu\n\n🚢 Eguneraketen jakinarazpena: aplikazio baten edo Nextcloud beraren eguneraketa bat dago\n\n📣 Iragarpenen zentroa: kudeatzaile batek iragarpen bat argitaratu du",
     "Failed to perform action" : "Huts egin du ekintza burutzean",
-    "seconds ago" : "segundo lehenago",
     "Failed to dismiss notification" : "Huts egin du jakinarazpena baztertzean",
     "Dismiss" : "Baztertu",
     "Contact Nextcloud GmbH" : "Jarri harremanetan Nextcloud GmbH-rekin",
     "in {path}" : "{path} -en",
-    "Requesting browser permissions to show notifications" : "Jakinarazpenak erakusteko nabigatzaileari baimena eskatzen",
     "Push notifications might be unreliable" : "Push jakinarazpenek fidagarritasun gutxi izan dezakete",
-    "No notifications" : "Ez dago jakinarazpenik",
     "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "Nextcloud GmbH-k erabiltzaile pribatuentzako doako push jakinarazpen-sarbide bat babesten du. Zerbitzu ona bermatzeko, sarbide horrek zerbitzari bakoitzeko push jakinarazpen kopurua mugatzen du. Enpresa erabiltzaileentzat, badago sarbide eskalagarriago bat. Jarri harremanetan Nextcloud GmbH-rekin informazio gehiago lortzeko.",
+    "Requesting browser permissions to show notifications" : "Jakinarazpenak erakusteko nabigatzaileari baimena eskatzen",
+    "No notifications" : "Ez dago jakinarazpenik",
     "Failed to dismiss all notifications" : "Huts egin du jakinarazpen guztiak baztertzean",
     "Dismiss all notifications" : "Baztertu jakinarazpen guztiak",
     "Never" : "Inoiz ez",
@@ -42,6 +41,7 @@
     "You need to set up your email address before you can receive notification emails." : "Zure helbide elektronikoa konfiguratu behar duzu jakinarazpenak posta elektronikoz jasotzeko.",
     "Also repeat sound on a secondary speaker" : "Errepikatu soinua bigarren mailako bozgorailu batean ere",
     "Selection of the speaker device is currently not supported by Safari" : "Safari-k ez du onartzen bozgorailuaren gailua hautatzea",
-    "Select a device" : "Hautatu gailu bat"
+    "Select a device" : "Hautatu gailu bat",
+    "seconds ago" : "segundo lehenago"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

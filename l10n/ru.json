@@ -15,15 +15,14 @@
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "Это приложение для создания и показа уведомлений в Nextcloud.",
     "This app provides a backend and frontend for the notification API available in Nextcloud.\n\t\tThe API is used by other apps to notify users in the web UI and sync clients about various things. Some examples are:\n\n📬 Federated file sharing: You received a new remote share\n\n📑 Comments: Another user mentioned you in a comment on a file\n\n🚢 Update notification: Available update for an app or nextcloud itself\n\n📣 Announcement center: An announcement was posted by an admin" : "Это приложение создавать и выводить уведомления в Nextcloud.\nТакже приложение предоставляет API, позволяющее другим приложениями выводить уведомления для пользователей в веб-интерфейсе и клиентах синнхронизацтт. Вот некоторые примеры:\n\n📬 Совместное использование файлов: вы получили доступ к новому общему ресурсу;\n\n📑 Комментарии: Другой пользователь упомянул вас в комментарии к файлу;\n\n🚢 Уведомление об обновлении: Доступно обновление приложений или самого Nextcloud;\n\n📣 Центр объявлений: объявление было опубликовано администратором.",
     "Failed to perform action" : "Не удалось выполнить задание",
-    "seconds ago" : "несколько секунд назад",
     "Failed to dismiss notification" : "Не удалось скрыть уведомление",
     "Dismiss" : "Закрыть",
     "Contact Nextcloud GmbH" : "Связаться с Nextcloud GmbH",
     "in {path}" : "в {path}",
-    "Requesting browser permissions to show notifications" : "Запрос разрешений для показа уведомлений в браузере",
     "Push notifications might be unreliable" : "Пуш-уведомления могут быть ненадёжны",
-    "No notifications" : "Уведомлений нет",
     "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "Компания Nextcloud GmbH является спонсором бесплатного шлюза пуш-уведомлений для частных пользователей. Количество пуш-уведомлений, отправляемых через этот шлюз серверами, ограничено. Корпоративным пользователям предлагается использовать более производительный шлюз. Для получения  дополнительной информации, обратитесь в компанию Nextcloud GmbH.",
+    "Requesting browser permissions to show notifications" : "Запрос разрешений для показа уведомлений в браузере",
+    "No notifications" : "Уведомлений нет",
     "Failed to dismiss all notifications" : "Не удалось скрыть все уведомления",
     "Dismiss all notifications" : "Скрыть все уведомления",
     "Never" : "Никогда",
@@ -42,6 +41,7 @@
     "You need to set up your email address before you can receive notification emails." : "Для получения уведомлений укажите свой адрес электронной почты в настройках профиля.",
     "Also repeat sound on a secondary speaker" : "Также повторите воспроизведение звука на дополнительном динамике",
     "Selection of the speaker device is currently not supported by Safari" : "Выбор устройства громкой связи в настоящее время не поддерживается Safari",
-    "Select a device" : "Выберите устройство"
+    "Select a device" : "Выберите устройство",
+    "seconds ago" : "несколько секунд назад"
 },"pluralForm" :"nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);"
 }

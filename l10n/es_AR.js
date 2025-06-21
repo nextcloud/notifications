@@ -4,7 +4,6 @@ OC.L10N.register(
     "Hello %s" : "Hola %s",
     "Hello %s," : "Hola %s:",
     "Notifications" : "Notificaciones",
-    "seconds ago" : "segundos",
     "Dismiss" : "Descartar",
     "in {path}" : "en {path}",
     "No notifications" : "No hay notificaciones",
@@ -13,6 +12,7 @@ OC.L10N.register(
     "3 hours" : "3 horas",
     "Your settings have been updated." : "Su configuración ha sido actualizada",
     "None" : "Ninguno",
-    "You need to set up your email address before you can receive notification emails." : "Necesitas configurar tu dirección de correo electrónico antes de poder recibir las notificaciones en tu correo electrónico."
+    "You need to set up your email address before you can receive notification emails." : "Necesitas configurar tu dirección de correo electrónico antes de poder recibir las notificaciones en tu correo electrónico.",
+    "seconds ago" : "segundos"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

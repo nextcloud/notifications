@@ -15,15 +15,14 @@
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "Ta aplikacja zapewnia backend i frontend dla interfejsu API powiadomień dostępnego w Nextcloud.",
     "This app provides a backend and frontend for the notification API available in Nextcloud.\n\t\tThe API is used by other apps to notify users in the web UI and sync clients about various things. Some examples are:\n\n📬 Federated file sharing: You received a new remote share\n\n📑 Comments: Another user mentioned you in a comment on a file\n\n🚢 Update notification: Available update for an app or nextcloud itself\n\n📣 Announcement center: An announcement was posted by an admin" : "Ta aplikacja zapewnia backend i frontend dla interfejsu API powiadomień dostępnego w Nextcloud.\nInterfejs API jest używany przez inne aplikacje do powiadamiania użytkowników w interfejsie internetowym i synchronizowania klientów z różnymi rzeczami. Oto kilka przykładów:\n\n📬 Udostępnianie plików we Federacji: Otrzymano nowe udostępnianie zdalne\n\n📑 Komentarze: inny użytkownik wspomniał o Tobie w komentarzu do pliku\n\n🚢 Powiadomienie o aktualizacji: dostępna aktualizacja dla samej aplikacji lub następnej\n\n📣 Centrum ogłoszeń: ogłoszenie zostało wysłane przez administratora",
     "Failed to perform action" : "Nie udało się wykonać działania",
-    "seconds ago" : "przed chwilą",
     "Failed to dismiss notification" : "Nie udało się usunąć powiadomienia",
     "Dismiss" : "Odrzuć",
     "Contact Nextcloud GmbH" : "Kontakt z Nextcloud GmbH",
     "in {path}" : "w {path}",
-    "Requesting browser permissions to show notifications" : "Żądanie uprawnień przeglądarki do wyświetlania powiadomień",
     "Push notifications might be unreliable" : "Powiadomienia Push mogą być zawodne",
-    "No notifications" : "Brak powiadomień",
     "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "Nextcloud GmbH sponsoruje bezpłatną bramkę powiadomień Push dla użytkowników prywatnych. Aby zapewnić dobrą obsługę, brama ogranicza liczbę powiadomień Push na serwer. Dla użytkowników korporacyjnych dostępna jest bardziej skalowalna brama. Skontaktuj się z Nextcloud GmbH, aby uzyskać więcej informacji.",
+    "Requesting browser permissions to show notifications" : "Żądanie uprawnień przeglądarki do wyświetlania powiadomień",
+    "No notifications" : "Brak powiadomień",
     "Failed to dismiss all notifications" : "Nie udało się usunąć wszystkich powiadomień",
     "Dismiss all notifications" : "Usuń wszystkie powiadomienia",
     "Never" : "Nigdy",
@@ -42,6 +41,7 @@
     "You need to set up your email address before you can receive notification emails." : "Aby otrzymywać powiadomienia e-mail, musisz skonfigurować swój adres e-mail.",
     "Also repeat sound on a secondary speaker" : "Powtarzaj dźwięk także na drugim głośniku",
     "Selection of the speaker device is currently not supported by Safari" : "Wybór urządzenia głośnikowego nie jest obecnie obsługiwany przez przeglądarkę Safari",
-    "Select a device" : "Wybierz urządzenie"
+    "Select a device" : "Wybierz urządzenie",
+    "seconds ago" : "przed chwilą"
 },"pluralForm" :"nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);"
 }
