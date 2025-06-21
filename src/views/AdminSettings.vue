@@ -23,13 +23,13 @@
 		</p>
 
 		<NcCheckboxRadioSwitch
-			:checked.sync="config.sound_notification"
-			@update:checked="updateSettings">
+			v-model="config.sound_notification"
+			@update:model-value="updateSettings">
 			{{ t('notifications', 'Play sound when a new notification arrives') }}
 		</NcCheckboxRadioSwitch>
 		<NcCheckboxRadioSwitch
-			:checked.sync="config.sound_talk"
-			@update:checked="updateSettings">
+			v-model="config.sound_talk"
+			@update:model-value="updateSettings">
 			{{ t('notifications', 'Play sound when a call started (requires Nextcloud Talk)') }}
 		</NcCheckboxRadioSwitch>
 	</NcSettingsSection>
