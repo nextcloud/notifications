@@ -17,15 +17,14 @@ OC.L10N.register(
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "Soláthraíonn an aip seo inneall agus tosaigh don API fógra atá ar fáil in Nextcloud.",
     "This app provides a backend and frontend for the notification API available in Nextcloud.\n\t\tThe API is used by other apps to notify users in the web UI and sync clients about various things. Some examples are:\n\n📬 Federated file sharing: You received a new remote share\n\n📑 Comments: Another user mentioned you in a comment on a file\n\n🚢 Update notification: Available update for an app or nextcloud itself\n\n📣 Announcement center: An announcement was posted by an admin" : "Soláthraíonn an aip seo inneall agus tosaigh don API fógra atá ar fáil in Nextcloud.\n\t\t Úsáideann aipeanna eile an API chun úsáideoirí san Chomhéadain Gréasáin a chur ar an eolas agus chun cliaint a shioncronú faoi rudaí éagsúla. Seo a leanas roinnt samplaí:\n\n📬 Comhroinnt chónaidhme: Fuair tú cianroinnt nua\n\n📑 Nótaí tráchta: Luaigh úsáideoir eile tú i dtrácht ar chomhad\n\n🚢 Fógra nuashonraithe: Nuashonrú ar fáil d'aip nó nextcloud féin\n\n📣 Ionad fógartha: Chuir riarthóir fógra suas",
     "Failed to perform action" : "Theip ar an ngníomh a dhéanamh",
-    "seconds ago" : "soicind ó shin",
     "Failed to dismiss notification" : "Theip ar an bhfógra a dhíbhe",
     "Dismiss" : "Díbhe",
     "Contact Nextcloud GmbH" : "Déan teagmháil le Nextcloud GmbH",
     "in {path}" : "in {path}",
-    "Requesting browser permissions to show notifications" : "Ag iarraidh ceadanna brabhsálaí chun fógraí a thaispeáint",
     "Push notifications might be unreliable" : "Seans go mbeidh fógraí brúigh neamhiontaofa",
-    "No notifications" : "Gan fógraí",
     "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "Déanann Nextcloud GmbH urraíocht ar gheata fógra brú saor in aisce d’úsáideoirí príobháideacha. Chun seirbhís mhaith a chinntiú, cuireann an tairseach teorainn le líon na bhfógraí brú in aghaidh an fhreastalaí. I gcás úsáideoirí fiontair, tá geata níos Inscálaithe ar fáil. Déan teagmháil le Nextcloud GmbH le haghaidh tuilleadh eolais.",
+    "Requesting browser permissions to show notifications" : "Ag iarraidh ceadanna brabhsálaí chun fógraí a thaispeáint",
+    "No notifications" : "Gan fógraí",
     "Failed to dismiss all notifications" : "Theip ar dhíbhe gach fógra",
     "Dismiss all notifications" : "Ruaig gach fógra",
     "Never" : "Riamh",
@@ -44,6 +43,7 @@ OC.L10N.register(
     "You need to set up your email address before you can receive notification emails." : "Ní mór duit do sheoladh ríomhphoist a shocrú sula mbeidh tú in ann ríomhphoist fógra a fháil.",
     "Also repeat sound on a secondary speaker" : "Déan fuaim arís ar chainteoir tánaisteach freisin",
     "Selection of the speaker device is currently not supported by Safari" : "Ní thacaíonn Safari le roghnú gléas an chainteora faoi láthair",
-    "Select a device" : "Roghnaigh gléas"
+    "Select a device" : "Roghnaigh gléas",
+    "seconds ago" : "soicind ó shin"
 },
 "nplurals=5; plural=(n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n<11 ? 3 : 4);");

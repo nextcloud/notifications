@@ -10,13 +10,12 @@
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "Taustasovellus ja käyttöliittymä Nextcloudin ilmoitusten ohjelmointirajapinnalle.",
     "This app provides a backend and frontend for the notification API available in Nextcloud.\n\t\tThe API is used by other apps to notify users in the web UI and sync clients about various things. Some examples are:\n\n📬 Federated file sharing: You received a new remote share\n\n📑 Comments: Another user mentioned you in a comment on a file\n\n🚢 Update notification: Available update for an app or nextcloud itself\n\n📣 Announcement center: An announcement was posted by an admin" : "Taustasovellus ja käyttöliittymä Nextcloudin ilmoitusten ohjelmointirajapinnalle.\n\t\tSovellukset voivat käyttää ohjelmointirajapintaa lähettämään käyttäjille ilmoituksia selainkäyttöliittymässä sekä synkronoimaan asiakasohjelmia. Esimerkkejä:\n\n📬 Federoidut tiedostojaot: Vastaanotit uuden jaon\n\n📑 Kommentit: Toinen käyttäjä mainitsi sinut tiedostossa olevassa kommentissa\n\n🚢 Päivitysilmoitus: On saatavilla päivitys sovellukseen tai itse Nextcloudiin\n\n📣 Ilmoituskeskus: Ylläpitäjä lähetti tiedotteen",
     "Failed to perform action" : "Toimenpiteen suorittaminen epäonnistui",
-    "seconds ago" : "sekuntia sitten",
     "Failed to dismiss notification" : "Ilmoituksen hylkääminen epäonnistui",
     "Dismiss" : "Hylkää",
     "Contact Nextcloud GmbH" : "Ota yhteys Nextcloud GmbH:iin",
     "in {path}" : "polussa {path}",
-    "Requesting browser permissions to show notifications" : "Pyydetään selaimelta oikeuksia ilmoitusten näyttämiseen",
     "Push notifications might be unreliable" : "Push-ilmoitukset eivät välttämättä ole luotettavia",
+    "Requesting browser permissions to show notifications" : "Pyydetään selaimelta oikeuksia ilmoitusten näyttämiseen",
     "No notifications" : "Ei ilmoituksia",
     "Failed to dismiss all notifications" : "Kaikki ilmoitusten hylkääminen epäonnistui",
     "Dismiss all notifications" : "Hylkää kaikki ilmoitukset",
@@ -34,6 +33,7 @@
     "Play sound when a call started (requires Nextcloud Talk)" : "Toista ääni kun puhelu on aloitettu (vaatii Nextcloud Talkin)",
     "None" : "Ei mitään",
     "You need to set up your email address before you can receive notification emails." : "Aseta sähköpostiosoite, jotta voit vastaanottaa sähköposti-ilmoituksia.",
-    "Select a device" : "Valitse laite"
+    "Select a device" : "Valitse laite",
+    "seconds ago" : "sekuntia sitten"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

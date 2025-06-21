@@ -12,15 +12,14 @@
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "Această aplicație furnizează un backend și un frontend pentru API-ul de notificări disponibilă în Nextcloud.",
     "This app provides a backend and frontend for the notification API available in Nextcloud.\n\t\tThe API is used by other apps to notify users in the web UI and sync clients about various things. Some examples are:\n\n📬 Federated file sharing: You received a new remote share\n\n📑 Comments: Another user mentioned you in a comment on a file\n\n🚢 Update notification: Available update for an app or nextcloud itself\n\n📣 Announcement center: An announcement was posted by an admin" : "Această aplicație furnizează un backend și un frontend pentru API de notificări disponibilă în Nextcloud.\n\t\tAceastă API este utilizată de alte aplicații pentru a notifica utilizatorii în interfața web și a sincroniza clienții despre diverse lucruri. Câteva exemple sunt:\n\n📬 Federated file sharing: Ați primit o nouă partajare la distanță\n\n📑 Comentarii: Alt utilizator v-a menționat într-un comentariu la un fișier\n\n🚢 Notificări despre actualizări: Actualizare disponibilă pentru o aplicație sau pentru Nextcloud\n\n📣 Centrul de anunțuri: A fost postat un anunț de către un administrator",
     "Failed to perform action" : "Eroare la executarea acțiunii",
-    "seconds ago" : "secunde în urmă",
     "Failed to dismiss notification" : "Eroare la anularea notificărilor",
     "Dismiss" : "Elimină",
     "Contact Nextcloud GmbH" : "Contactați Nextcloud GmbH",
     "in {path}" : "în {path}",
-    "Requesting browser permissions to show notifications" : "Se cere permisiunea browserului pentru prezentarea notificărilor",
     "Push notifications might be unreliable" : "Notificările push pot fi nefiabile",
-    "No notifications" : "Nu sunt notificări",
     "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "Nextcloud GmbH sponsorizează un gateway gratuit pentru notificări push \npentru utilizatorii privați. Pentru asigurarea unui serviciu de \ncalitate, gateway-ul limitează numărul notificărilor push per server. Pentru utilizatorii \nenterprise este disponibil un gateway mai scalabil. Contactați Nextcloud GmbH pentru mai multe informații.",
+    "Requesting browser permissions to show notifications" : "Se cere permisiunea browserului pentru prezentarea notificărilor",
+    "No notifications" : "Nu sunt notificări",
     "Failed to dismiss all notifications" : "Eroare la anularea tuturor notificărilor",
     "Dismiss all notifications" : "Anulează toate notificările",
     "Never" : "Niciodată",
@@ -36,6 +35,7 @@
     "Play sound when a new notification arrives" : "Avertizează sonor când sosește o notificare",
     "Play sound when a call started (requires Nextcloud Talk)" : "Avertizează sonor când începe o videoconferință (necesită Nextcloud Talk)",
     "None" : "Niciuna",
-    "You need to set up your email address before you can receive notification emails." : "Trebuie să-ți configurezi adresa de email înainte de a putea primi emailurile de notificare."
+    "You need to set up your email address before you can receive notification emails." : "Trebuie să-ți configurezi adresa de email înainte de a putea primi emailurile de notificare.",
+    "seconds ago" : "secunde în urmă"
 },"pluralForm" :"nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));"
 }

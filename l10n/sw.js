@@ -2,8 +2,9 @@ OC.L10N.register(
     "notifications",
     {
     "User not found" : "Mtumiaji hapatikani",
-    "seconds ago" : "sukunde zilizopita",
+    "Hello %s" : "Halo %s",
     "in {path}" : "Katika {path}",
-    "No notifications" : "Hakuna taarifa"
+    "No notifications" : "Hakuna taarifa",
+    "seconds ago" : "sukunde zilizopita"
 },
 "nplurals=2; plural=(n != 1);");

@@ -15,15 +15,14 @@ OC.L10N.register(
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "Esta aplicación proporciona un backend y front end para la API de notificación disponible en Nextcloud.",
     "This app provides a backend and frontend for the notification API available in Nextcloud.\n\t\tThe API is used by other apps to notify users in the web UI and sync clients about various things. Some examples are:\n\n📬 Federated file sharing: You received a new remote share\n\n📑 Comments: Another user mentioned you in a comment on a file\n\n🚢 Update notification: Available update for an app or nextcloud itself\n\n📣 Announcement center: An announcement was posted by an admin" : "Esta aplicación proporciona un backend y frontend para el API de notificación disponible en Nextcloud. \t\tEl API se usa por otras aplicaciones para notificarle a los usuarios en la interfaz web y sincronizar clientes acerca de diferentes cosas. Algunos ejemplos son:\n\n📬 Compartir archivos federados: Recibiste un nuevo elemento compartido remoto\n\n📑 Comentarios: Otro usuario te mencionó en un comentario de un archivo\n\n🚢 Notificación de actualización: Actualizacion disponible para una aplicación o nextcloud mismo\n\n📣 Centro de anuncios: Un anuncio fue publicado por un administrador",
     "Failed to perform action" : "Se presentó una falla al ejeuctar la acción",
-    "seconds ago" : "hace segundos",
     "Failed to dismiss notification" : "Se presentó una falla al descartar la notificación",
     "Dismiss" : "Descartar",
     "Contact Nextcloud GmbH" : "Contactar a Nextcloud GmbH",
     "in {path}" : "en {path}",
-    "Requesting browser permissions to show notifications" : "Solicitando permisos al navegador para mostrar notificaciones",
     "Push notifications might be unreliable" : "Las notificaciones push pueden ser poco confiables",
-    "No notifications" : "No hay notificaciones",
     "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "Nextcloud GmbH patrocina un servicio de envío de notificaciones push gratuito para usuarios particulares. Para garantizar un buen servicio, se limita el número de notificaciones push por servidor. Para usuarios empresariales, hay disponible un servicio más escalable. Contacte a Nextcloud GmbH para más información.",
+    "Requesting browser permissions to show notifications" : "Solicitando permisos al navegador para mostrar notificaciones",
+    "No notifications" : "No hay notificaciones",
     "Failed to dismiss all notifications" : "Se presentó una falla al descartar todas las notificaciones",
     "Dismiss all notifications" : "Descartar todas las notificaciones",
     "Never" : "Nunca",
@@ -42,6 +41,7 @@ OC.L10N.register(
     "You need to set up your email address before you can receive notification emails." : "Necesitas configurar tu dirección de correo electrónico antes de que puedas recibir correos de notificación",
     "Also repeat sound on a secondary speaker" : "Repetir el sonido también en un altavoz secundario",
     "Selection of the speaker device is currently not supported by Safari" : "La selección del dispositivo altavoz no está actualmente soportada por Safari",
-    "Select a device" : "Seleccionar un dispositivo"
+    "Select a device" : "Seleccionar un dispositivo",
+    "seconds ago" : "hace segundos"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

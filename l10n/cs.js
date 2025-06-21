@@ -17,15 +17,14 @@ OC.L10N.register(
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "Tato aplikace poskytuje podpůrnou vrstvu a nadstavbu nad aplikačním program. rozhraním (API) pro upozorňování, které je v Nextcloud k dispozici.",
     "This app provides a backend and frontend for the notification API available in Nextcloud.\n\t\tThe API is used by other apps to notify users in the web UI and sync clients about various things. Some examples are:\n\n📬 Federated file sharing: You received a new remote share\n\n📑 Comments: Another user mentioned you in a comment on a file\n\n🚢 Update notification: Available update for an app or nextcloud itself\n\n📣 Announcement center: An announcement was posted by an admin" : "Tato aplikace poskytuje podpůrnou vrstvu a nadstavbu nad aplikačním program. rozhraním (API) pro upozorňování, které je v Nextcloud k dispozici.\n\t\tToto API je ostatními aplikacemi využíváno pro upozorňování uživatelů ve webovém rozhraní a synchronizačních klientech ohledně různých věcí. Některé z příkladů jsou:\n\n📬 Federované sdílení souborů: Obdrželi jste nové vzdálené sdílení\n\n📑 Komentáře: Jiný uživatel vás zmínil v komentáři k souboru\n\n🚢 Upozornění na aktualizaci: Je k dispozici aktualizace aplikace nebo Nextcloud samotného\n\n📣 Centrum oznámení: Správce vydal oznámení",
     "Failed to perform action" : "Akci se nepodařilo provést",
-    "seconds ago" : "před několika sekundami",
     "Failed to dismiss notification" : "Upozornění se nepodařilo zahodit",
     "Dismiss" : "Zavřít",
     "Contact Nextcloud GmbH" : "Kontaktujte Nextcloud GmbH",
     "in {path}" : "v {path}",
-    "Requesting browser permissions to show notifications" : "Žádá se o oprávnění v prohlížeči pro zobrazování upozornění",
     "Push notifications might be unreliable" : "Push upozorňování mohou být nedostupná",
-    "No notifications" : "Žádná upozornění",
     "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "Nextcloud GmbH sponzoruje bránu pro push upozorňování zdarma pro domácí uživatele. Kvůli zajištění dobré služby brána omezuje počet push upozornění z jednotlivých serverů. Pro podnikové uživatele je k dispozici kapacitnější brána. Ohledně dalších informací se obraťte na Nextcloud GmbH.",
+    "Requesting browser permissions to show notifications" : "Žádá se o oprávnění v prohlížeči pro zobrazování upozornění",
+    "No notifications" : "Žádná upozornění",
     "Failed to dismiss all notifications" : "Zahození všech upozornění se nezdařilo",
     "Dismiss all notifications" : "Zahodit všechna upozornění",
     "Never" : "Nikdy",
@@ -44,6 +43,7 @@ OC.L10N.register(
     "You need to set up your email address before you can receive notification emails." : "Pokud chcete dostávat upozornění e-mailem, je třeba nejprve nastavit svou e-mailovou adresu.",
     "Also repeat sound on a secondary speaker" : "Zopakovat zvuk také na sekundárním reproduktoru",
     "Selection of the speaker device is currently not supported by Safari" : "Safari aktuálně nepodporuje výběr zvukového zařízení",
-    "Select a device" : "Vyberte zařízení"
+    "Select a device" : "Vyberte zařízení",
+    "seconds ago" : "před několika sekundami"
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;");

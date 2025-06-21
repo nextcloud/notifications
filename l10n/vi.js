@@ -12,15 +12,14 @@ OC.L10N.register(
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "Ứng dụng này cung cấp kết nối giữa dữ liệu nền / backend / và lớp tương tác / frontend /  với API hiển thị thông báo trên Nextcloud",
     "This app provides a backend and frontend for the notification API available in Nextcloud.\n\t\tThe API is used by other apps to notify users in the web UI and sync clients about various things. Some examples are:\n\n📬 Federated file sharing: You received a new remote share\n\n📑 Comments: Another user mentioned you in a comment on a file\n\n🚢 Update notification: Available update for an app or nextcloud itself\n\n📣 Announcement center: An announcement was posted by an admin" : "Ứng dụng này cung cấp kết nối giữa dữ liệu nền / backend / và lớp tương tác / frontend / với API hiển thị thông báo trên Nextcloud. \n\t\t API được sử dụng bởi các ứng dụng khác để hiển thị thông báo tới người dùng trong giao diện web và ở các điểm đồng bộ. Một vài ví dụ như : \n\n📬Chia sẻ tệp tin liên bang: bạn nhận được một chia sẻ từ xa \n\n📑Bình luận: Một người dùng đã nhắc tới bạn trong một bình luận về một tệp tin chia sẻ\n\n🚢Thông báo cập nhập: Có một cập nhập khả dụng cho Nextcloud hoặc cho một ứng dụng\n\n📣Trung tâm thông báo: Một thông báo đã được đăng lên bởi một quản trị viên",
     "Failed to perform action" : "Thực thi hành động thất bại",
-    "seconds ago" : "vài giây trước",
     "Failed to dismiss notification" : "Lỗi bỏ qua thông báo",
     "Dismiss" : "Bỏ qua",
     "Contact Nextcloud GmbH" : "Liên hệ với GmbH",
     "in {path}" : "trong {path}",
-    "Requesting browser permissions to show notifications" : "Đang gửi yêu cầu tới trình duyệt để cấp phép hiển thị thông báo ",
     "Push notifications might be unreliable" : "Thông báo đẩy có thể không đáng tin cậy",
-    "No notifications" : "Không thông báo ",
     "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "NC GmbH tài trợ một cổng thông báo đẩy miễn phí cho người dùng cá nhân. Để đảm bảo dịch vụ tốt, cổng giới hạn số lượng thông báo đẩy trên mỗi máy chủ. Đối với người dùng doanh nghiệp, có sẵn một cổng có khả năng mở rộng hơn. Liên hệ NC GmbH để biết thêm thông tin.",
+    "Requesting browser permissions to show notifications" : "Đang gửi yêu cầu tới trình duyệt để cấp phép hiển thị thông báo ",
+    "No notifications" : "Không thông báo ",
     "Failed to dismiss all notifications" : "Bỏ qua thông báo thất bại",
     "Dismiss all notifications" : "Bỏ qua tất cả thông báo",
     "Never" : "Không bao giờ",
@@ -36,6 +35,7 @@ OC.L10N.register(
     "Play sound when a new notification arrives" : "Phát âm thanh khi có thông báo mới",
     "Play sound when a call started (requires Nextcloud Talk)" : "Phát âm thanh khi cuộc gọi bắt đầu (yêu cầu Talk)",
     "None" : "Không có",
-    "You need to set up your email address before you can receive notification emails." : "Bạn cần phải thiết lập địa chỉ email trước khi nhận được email thông báo."
+    "You need to set up your email address before you can receive notification emails." : "Bạn cần phải thiết lập địa chỉ email trước khi nhận được email thông báo.",
+    "seconds ago" : "vài giây trước"
 },
 "nplurals=1; plural=0;");

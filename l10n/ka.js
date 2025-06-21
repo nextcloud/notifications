@@ -15,15 +15,14 @@ OC.L10N.register(
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "This app provides a backend and frontend for the notification API available in Nextcloud.",
     "This app provides a backend and frontend for the notification API available in Nextcloud.\n\t\tThe API is used by other apps to notify users in the web UI and sync clients about various things. Some examples are:\n\n📬 Federated file sharing: You received a new remote share\n\n📑 Comments: Another user mentioned you in a comment on a file\n\n🚢 Update notification: Available update for an app or nextcloud itself\n\n📣 Announcement center: An announcement was posted by an admin" : "This app provides a backend and frontend for the notification API available in Nextcloud.\n\t\tThe API is used by other apps to notify users in the web UI and sync clients about various things. Some examples are:\n\n📬 Federated file sharing: You received a new remote share\n\n📑 Comments: Another user mentioned you in a comment on a file\n\n🚢 Update notification: Available update for an app or nextcloud itself\n\n📣 Announcement center: An announcement was posted by an admin",
     "Failed to perform action" : "Failed to perform action",
-    "seconds ago" : "seconds ago",
     "Failed to dismiss notification" : "Failed to dismiss notification",
     "Dismiss" : "Dismiss",
     "Contact Nextcloud GmbH" : "Contact Nextcloud GmbH",
     "in {path}" : "in {path}",
-    "Requesting browser permissions to show notifications" : "Requesting browser permissions to show notifications",
     "Push notifications might be unreliable" : "Push notifications might be unreliable",
-    "No notifications" : "No notifications",
     "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information.",
+    "Requesting browser permissions to show notifications" : "Requesting browser permissions to show notifications",
+    "No notifications" : "No notifications",
     "Failed to dismiss all notifications" : "Failed to dismiss all notifications",
     "Dismiss all notifications" : "Dismiss all notifications",
     "Never" : "Never",
@@ -39,6 +38,7 @@ OC.L10N.register(
     "Play sound when a new notification arrives" : "Play sound when a new notification arrives",
     "Play sound when a call started (requires Nextcloud Talk)" : "Play sound when a call started (requires Nextcloud Talk)",
     "None" : "None",
-    "You need to set up your email address before you can receive notification emails." : "You need to set up your email address before you can receive notification emails."
+    "You need to set up your email address before you can receive notification emails." : "You need to set up your email address before you can receive notification emails.",
+    "seconds ago" : "seconds ago"
 },
 "nplurals=2; plural=(n!=1);");
