@@ -4,7 +4,6 @@ OC.L10N.register(
     "Hello %s" : "Halo %s",
     "Hello %s," : "Halo %s,",
     "Notifications" : "Pemberitahuan",
-    "seconds ago" : "beberapa detik yang lalu",
     "Dismiss" : "Abaikan",
     "in {path}" : "di {path}",
     "No notifications" : "Tidak ada pemberitahuan",
@@ -16,6 +15,7 @@ OC.L10N.register(
     "Your settings have been updated." : "Pengaturan Anda telah diperbarui.",
     "Send email reminders about unhandled notifications after:" : "Kirim surel pengingat tentang pemberitahuan yang tidak tertangani setelah:",
     "None" : "Tidak ada",
-    "You need to set up your email address before you can receive notification emails." : "Anda perlu menyetel alamat surel sebelum Anda dapat menerima surel pemberitahuan."
+    "You need to set up your email address before you can receive notification emails." : "Anda perlu menyetel alamat surel sebelum Anda dapat menerima surel pemberitahuan.",
+    "seconds ago" : "beberapa detik yang lalu"
 },
 "nplurals=1; plural=0;");

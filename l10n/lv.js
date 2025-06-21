@@ -6,7 +6,6 @@ OC.L10N.register(
     "Hello %s," : "Sveiciens, %s!",
     "Admin notifications" : "Pārvaldītāju paziņojumi",
     "Notifications" : "Paziņojumi",
-    "seconds ago" : "pirms vairākām sekundēm",
     "Failed to dismiss notification" : "Neizdevās atmest paziņojumu",
     "Dismiss" : "Atmest",
     "in {path}" : "{path}",
@@ -20,6 +19,7 @@ OC.L10N.register(
     "1 week" : "1 nedēļa",
     "Your settings have been updated." : "Iestatījumi tika atjaunināti.",
     "None" : "Nav",
-    "You need to set up your email address before you can receive notification emails." : "Lai saņemtu paziņojumus e-pastā, jūsu profilā ir nepieciešams uzstādīt e-pasta adresi."
+    "You need to set up your email address before you can receive notification emails." : "Lai saņemtu paziņojumus e-pastā, jūsu profilā ir nepieciešams uzstādīt e-pasta adresi.",
+    "seconds ago" : "pirms vairākām sekundēm"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);");

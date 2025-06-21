@@ -16,15 +16,14 @@ OC.L10N.register(
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "Þetta forrit sér um bakenda og viðmót fyrir API-forritaviðmót tilkynninga í Nextcloud.",
     "This app provides a backend and frontend for the notification API available in Nextcloud.\n\t\tThe API is used by other apps to notify users in the web UI and sync clients about various things. Some examples are:\n\n📬 Federated file sharing: You received a new remote share\n\n📑 Comments: Another user mentioned you in a comment on a file\n\n🚢 Update notification: Available update for an app or nextcloud itself\n\n📣 Announcement center: An announcement was posted by an admin" : "Þetta forrit sér um bakenda og viðmót fyrir API-forritaviðmót tilkynninga í Nextcloud.\n\t\tAPI-viðmótið er notað af öðrum forritum til að koma á framfæri tilkynningum um ýmislegt til notenda í vefviðmótinu og samstillingarbiðlurum. Nokkur dæmi eru:\n\n📬 Skráadeiling í skýjasambandi: Þú hefur fengið nýja fjartengda sameign\n\n📑 Athugasemdir: Annar notandi minntist á þig í athugasemd við skrá\n\n🚢 Uppfærslutilkynning: Uppfærsla er tiltæk fyrir forrit eða sjálft Nextcloud-kerfið\n\n📣 Tilkynningamiðstöð: Kerfisstjóri hefur gefið út tilkynningu",
     "Failed to perform action" : "Mistókst að framkvæma aðgerð",
-    "seconds ago" : "sekúndum síðan",
     "Failed to dismiss notification" : "Mistókst að afgreiða tilkynningu",
     "Dismiss" : "Hafna",
     "Contact Nextcloud GmbH" : "Hafa samband við Nextcloud GmbH",
     "in {path}" : "í {path}",
-    "Requesting browser permissions to show notifications" : "Biður um heimild vafra til að birta tilkynningar",
     "Push notifications might be unreliable" : "Ýti-tilkynningar gætu verið óáreiðanlegar",
-    "No notifications" : "Engar tilkynningar",
     "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "Nextcloud GmbH styrkir ókeypis ýtitilkynningagátt fyrir einkanotendur. Til að tryggja góða þjónustu, takmarkar gáttin fjöld ýtitilkynninga á hvern netþjón; og takmörkunum hefur verið náð fyrir þennan netþjón. Fyrir fyrirtækjanotendur er í boði að nota skalanlegri ýtitilkynningagátt. Hafið samband við Nextcloud GmbH til að fá nánari upplýsingar.",
+    "Requesting browser permissions to show notifications" : "Biður um heimild vafra til að birta tilkynningar",
+    "No notifications" : "Engar tilkynningar",
     "Failed to dismiss all notifications" : "Mistókst að afgreiða allar tilkynningar",
     "Dismiss all notifications" : "Afgreiða allar tilkynningar",
     "Never" : "Aldrei",
@@ -42,6 +41,7 @@ OC.L10N.register(
     "None" : "Ekkert",
     "You need to set up your email address before you can receive notification emails." : "Þú verður að gefa upp tölvupóstfangið þitt svo að þú farir að fá tilkynningapósta.",
     "Also repeat sound on a secondary speaker" : "Einnig endurtaka hljóð á aukahátalara",
-    "Select a device" : "Veldu tæki"
+    "Select a device" : "Veldu tæki",
+    "seconds ago" : "sekúndum síðan"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");

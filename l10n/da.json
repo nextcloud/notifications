@@ -15,15 +15,14 @@
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "Denne app giver en backend og frontend til notifikations-API'en, der er tilgængelig i Nextcloud.",
     "This app provides a backend and frontend for the notification API available in Nextcloud.\n\t\tThe API is used by other apps to notify users in the web UI and sync clients about various things. Some examples are:\n\n📬 Federated file sharing: You received a new remote share\n\n📑 Comments: Another user mentioned you in a comment on a file\n\n🚢 Update notification: Available update for an app or nextcloud itself\n\n📣 Announcement center: An announcement was posted by an admin" : "Denne app giver en backend og frontend til notifikations-API'en, der er tilgængelig i Nextcloud.\nAPI'en bruges af andre apps til at underrette brugere i web-UI og synkronisere klienter om forskellige ting. Nogle eksempler er:\n\n📬 Sammenkoblet fildeling: Du har modtaget en ny fjerndeling\n\n📑 Kommentarer: En anden bruger nævnte dig i en kommentar til en fil\n\n🚢 Opdateringsmeddelelse: Tilgængelig opdatering til en app eller selve nextcloud\n\n📣 Meddelelsescenter: En meddelelse blev sendt af en administrator",
     "Failed to perform action" : "Mislykkedes at udføre handling",
-    "seconds ago" : "få sekunder siden",
     "Failed to dismiss notification" : "Kunne ikke fjerne notifikation",
     "Dismiss" : "Afvis",
     "Contact Nextcloud GmbH" : "Kontakt Nextcloud GmbH",
     "in {path}" : "i {path}",
-    "Requesting browser permissions to show notifications" : "Anmoder om browsertilladelser til at vise meddelelser",
     "Push notifications might be unreliable" : "Push-meddelelser kan være upålidelige",
-    "No notifications" : "Ingen notifikationer",
     "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "Nextcloud GmbH sponsorerer en gratis push-notifikationsgateway til private brugere. For at sikre god service begrænser gatewayen antallet af push-beskeder pr. server. For virksomhedsbrugere er en mere skalerbar gateway tilgængelig. Kontakt Nextcloud GmbH for mere information.",
+    "Requesting browser permissions to show notifications" : "Anmoder om browsertilladelser til at vise meddelelser",
+    "No notifications" : "Ingen notifikationer",
     "Failed to dismiss all notifications" : "Kunne ikke afvise alle underretninger",
     "Dismiss all notifications" : "Afvis alle underretninger",
     "Never" : "Aldrig",
@@ -42,6 +41,7 @@
     "You need to set up your email address before you can receive notification emails." : "Du skal konfigurere din e-mailadresse, før du kan modtage notifikations-e-mails.",
     "Also repeat sound on a secondary speaker" : "Gentag lyd på sekundær højtaler",
     "Selection of the speaker device is currently not supported by Safari" : "Valg af lydenhed er ikke muligt i Safari",
-    "Select a device" : "Vælg en enhed"
+    "Select a device" : "Vælg en enhed",
+    "seconds ago" : "få sekunder siden"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

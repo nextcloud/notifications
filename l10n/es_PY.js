@@ -5,7 +5,6 @@ OC.L10N.register(
     "Hello %s," : "Hola %s,",
     "Admin notifications" : "Notificaciones del administrador",
     "Notifications" : "Notificaciones",
-    "seconds ago" : "hace segundos",
     "Dismiss" : "Descartar",
     "in {path}" : "en {path}",
     "Requesting browser permissions to show notifications" : "Solicitando permisos del navegador para mostrar notificaciones",
@@ -16,6 +15,7 @@ OC.L10N.register(
     "3 hours" : "3 horas",
     "Your settings have been updated." : "Tus configuraciones se han actualizado.",
     "None" : "Ninguno",
-    "You need to set up your email address before you can receive notification emails." : "Necesitas configurar tu dirección de correo electrónico antes de que puedas recibir correos de notificación"
+    "You need to set up your email address before you can receive notification emails." : "Necesitas configurar tu dirección de correo electrónico antes de que puedas recibir correos de notificación",
+    "seconds ago" : "hace segundos"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

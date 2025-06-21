@@ -17,15 +17,14 @@ OC.L10N.register(
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "Оваа апликација обезбедува backend и frontend за известувачкиот API достапен во Nextcloud.",
     "This app provides a backend and frontend for the notification API available in Nextcloud.\n\t\tThe API is used by other apps to notify users in the web UI and sync clients about various things. Some examples are:\n\n📬 Federated file sharing: You received a new remote share\n\n📑 Comments: Another user mentioned you in a comment on a file\n\n🚢 Update notification: Available update for an app or nextcloud itself\n\n📣 Announcement center: An announcement was posted by an admin" : "Оваа апликација обезбедува известувања и позадински известувањА И API за известување достапен во Nextcloud.\n\t\tAPI се користи од други апликации за да ги извести корисниците во веб-интерфејсот и да ги синхронизира клиентите за разни работи. Некои примери се:\n\n📬 Федерално споделување датотеки: Добивте ново далечинско споделување\n\n📑 Коментари: Друг корисник ве спомна во коментар на датотека\n\n🚢 Известување за ажурирање: Достапно ажурирање за апликација или за nextcloud\n\n📣 Центар за објава: Објава од администратор",
     "Failed to perform action" : "Неуспешно извршување на акцијата",
-    "seconds ago" : "пред неколку секунди",
     "Failed to dismiss notification" : "Неуспешно отфрлање на известувањето",
     "Dismiss" : "Отфрли",
     "Contact Nextcloud GmbH" : "Контрактирајте со Nextcloud GmbH",
     "in {path}" : "во {path}",
-    "Requesting browser permissions to show notifications" : "Барање на дозвола од прелистувачот за прикажување на известувања.",
     "Push notifications might be unreliable" : "Push известувањата може да не се несигрни",
-    "No notifications" : "Нема известувања",
     "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "Nextcloud GmbH спонзорира бесплатен портал за push известувања за приватни корисници. За да обезбеди добра услуга, портата го ограничува бројот на push известувања по сервер. За корисниците на претпријатијата, достапен е поскалабилен портал. Контактирајте со Nextcloud GmbH за повеќе информации.",
+    "Requesting browser permissions to show notifications" : "Барање на дозвола од прелистувачот за прикажување на известувања.",
+    "No notifications" : "Нема известувања",
     "Failed to dismiss all notifications" : "Неуспешно отфрлање на сите известувања",
     "Dismiss all notifications" : "Отфрли ги сите известувања",
     "Never" : "Никогаш",
@@ -44,6 +43,7 @@ OC.L10N.register(
     "You need to set up your email address before you can receive notification emails." : "Треба да ја внесете Вашата адреса на е-пошта за да можете да примате известувања по електронска пошта.",
     "Also repeat sound on a secondary speaker" : "Повтори го звукот на секундарен звучник",
     "Selection of the speaker device is currently not supported by Safari" : "Изборот на уредот со звучници моментално не е поддржан од Safari",
-    "Select a device" : "Избери уред"
+    "Select a device" : "Избери уред",
+    "seconds ago" : "пред неколку секунди"
 },
 "nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;");

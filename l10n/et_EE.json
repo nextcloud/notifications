@@ -15,15 +15,14 @@
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "See rakendus pakub Nextcloudis saadaolevale teavitus-API-le tausta- ja esiprogrammi.",
     "This app provides a backend and frontend for the notification API available in Nextcloud.\n\t\tThe API is used by other apps to notify users in the web UI and sync clients about various things. Some examples are:\n\n📬 Federated file sharing: You received a new remote share\n\n📑 Comments: Another user mentioned you in a comment on a file\n\n🚢 Update notification: Available update for an app or nextcloud itself\n\n📣 Announcement center: An announcement was posted by an admin" : "See rakendus pakub Nextcloudis saadaolevale teavitus-API-le tausta- ja esiprogrammi.\nTeised rakendused kasutavad API-d kasutajate teavitamiseks veebi kasutajaliideses ja klientide sünkroonimiseks mitmesugustest asjadest. Mõned näited on järgmised:\n\n📬 Ühendatud failijagamine: saite uue kaugjagamise\n\n📑 Kommentaarid: teine ​​kasutaja mainis teid faili kommentaaris\n\n🚢 Värskendamise teatis: saadaval värskendus rakenduse või nextcloudi enda jaoks\n\n📣 Teadetekeskus: Administraator postitas teadaande",
     "Failed to perform action" : "Tegevuse läbiviimine ebaõnnestus",
-    "seconds ago" : "sekundit tagasi",
     "Failed to dismiss notification" : "Teavituse eiramine ebaõnnestus",
     "Dismiss" : "Jäta vahele",
     "Contact Nextcloud GmbH" : "Võta ühendust Nextcloud GmbH-ga",
     "in {path}" : "rajal {path}",
-    "Requesting browser permissions to show notifications" : "Küsime brauserilt luba teavituste näitamiseks",
     "Push notifications might be unreliable" : "Tõuketeavitused võivad olla ebakindlad",
-    "No notifications" : "Märguandeid pole",
     "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "Nextcloud GmbH rahastab tasuta tõuketeavituste lüüsi erakasutuseks. Hea teeninduse tagamiseks piirab lüüs tõuketevituste arvu serveri kohta. Ettevõtluskasutajatele on saadaval skaleeritavam lüüs. Lisateabe saamiseks võta ühendust Nextcloud GmbH-ga.",
+    "Requesting browser permissions to show notifications" : "Küsime brauserilt luba teavituste näitamiseks",
+    "No notifications" : "Märguandeid pole",
     "Failed to dismiss all notifications" : "Kõikide teavituste eiramine ebaõnnestus",
     "Dismiss all notifications" : "Eira kõiki teavitusi",
     "Never" : "Mitte kunagi",
@@ -42,6 +41,7 @@
     "You need to set up your email address before you can receive notification emails." : "Enne teavituskirjade saamist pead sa lisama oma e-posti aadressi.",
     "Also repeat sound on a secondary speaker" : "Lisaks korda heli tagavara kõlaril",
     "Selection of the speaker device is currently not supported by Safari" : "Kõlariseadme valimine ei ole hetkel Safaril toetatud",
-    "Select a device" : "Vali seade"
+    "Select a device" : "Vali seade",
+    "seconds ago" : "sekundit tagasi"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

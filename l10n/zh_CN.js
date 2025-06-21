@@ -17,15 +17,14 @@ OC.L10N.register(
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "此应用为 Nextcloud 中已有的通知 API 提供后端和前端。",
     "This app provides a backend and frontend for the notification API available in Nextcloud.\n\t\tThe API is used by other apps to notify users in the web UI and sync clients about various things. Some examples are:\n\n📬 Federated file sharing: You received a new remote share\n\n📑 Comments: Another user mentioned you in a comment on a file\n\n🚢 Update notification: Available update for an app or nextcloud itself\n\n📣 Announcement center: An announcement was posted by an admin" : "此应用为 Nextcloud 中已有的通知 API 提供后端和前端。\n\t\t这个 API 被其他应用使用来给 Web 界面及同步客户端中的用户发送通知和提醒。举一些例子：\n\n📬 联合云文件共享： 您收到一个新的远程共享\n\n📑 评论： 另一个用户在文件评论中提到了您\n\n🚢 更新通知： 应用或 Nextcloud 自身有可用更新\n\n📣 通知中心： 管理员发布了一个通知",
     "Failed to perform action" : "操作失败",
-    "seconds ago" : "几秒前",
     "Failed to dismiss notification" : "清除通知失败",
     "Dismiss" : "忽略",
     "Contact Nextcloud GmbH" : "联系 Nextcloud GmbH",
     "in {path}" : "在 {path}",
-    "Requesting browser permissions to show notifications" : "请求浏览器权限以显示通知",
     "Push notifications might be unreliable" : "推送通知可能不可靠",
-    "No notifications" : "没有通知",
     "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "Nextcloud GmbH 提供了一个免费的推送网关供个人用户使用。为保证良好的服务，网关对每个服务器发送的推送通知数量进行了限制。企业用户若需要更具扩展性的网关，请与 Nextcloud GmbH 联系以了解详情。",
+    "Requesting browser permissions to show notifications" : "请求浏览器权限以显示通知",
+    "No notifications" : "没有通知",
     "Failed to dismiss all notifications" : "清除所有通知失败",
     "Dismiss all notifications" : "忽略所有通知",
     "Never" : "永不",
@@ -44,6 +43,7 @@ OC.L10N.register(
     "You need to set up your email address before you can receive notification emails." : "您需要设置您的电子邮件地址，然后才能收到通知电子邮件。",
     "Also repeat sound on a secondary speaker" : "还要在辅助扬声器上重复声音",
     "Selection of the speaker device is currently not supported by Safari" : "Safari 当前不支持选择扬声器设备",
-    "Select a device" : "选择设备"
+    "Select a device" : "选择设备",
+    "seconds ago" : "几秒前"
 },
 "nplurals=1; plural=0;");

@@ -15,15 +15,14 @@
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "Ова апликација обезбеђује прочеље и позадину за обавештајни АПИ доступан у Некстклауду.",
     "This app provides a backend and frontend for the notification API available in Nextcloud.\n\t\tThe API is used by other apps to notify users in the web UI and sync clients about various things. Some examples are:\n\n📬 Federated file sharing: You received a new remote share\n\n📑 Comments: Another user mentioned you in a comment on a file\n\n🚢 Update notification: Available update for an app or nextcloud itself\n\n📣 Announcement center: An announcement was posted by an admin" : "Ова апликација обезбеђује прочеље и позадину за обавештајни АПИ доступан у Некстклауду.\n\t\tАПИ користе друге апликације да обавесте корисника у веб окружењу и клијентима синхронизације о разним стварима. На пример:\n\n📬 Здружено дељење фајлова: неко је поделио нешто са вама\n\n📑 Коментари: неко вас је споменуо у коментару фајла\n\n🚢 Обавештења о ажурирању: доступна су ажурирања за неку апликацију или за сам Некстклауд\n\n📣 Центар за објаве: администратор је поставио објаву",
     "Failed to perform action" : "Не могу да извршим радњу",
-    "seconds ago" : "пре неколико секунди",
     "Failed to dismiss notification" : "Не могу да уклоним обавештење",
     "Dismiss" : "Уклони",
     "Contact Nextcloud GmbH" : "Контактирајте Nextcloud GmbH",
     "in {path}" : "у {path}",
-    "Requesting browser permissions to show notifications" : "Захтевам дозволе од веб читача за приказивање обавештења",
     "Push notifications might be unreliable" : "Брза обавештења могу бити непоуздана",
-    "No notifications" : "Нема обавештења",
     "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "Nextcloud GmbH приватним корисницима спонзорише бесплатни портал брзих обавештења. Да би се обезбедио добар сервис, портал ограничава број брзих обавештења по серверу. За корпоративне кориснике је доступан скалабилнији портал. За више информација контактирајте Nextcloud GmbH.",
+    "Requesting browser permissions to show notifications" : "Захтевам дозволе од веб читача за приказивање обавештења",
+    "No notifications" : "Нема обавештења",
     "Failed to dismiss all notifications" : "Не могу да уклоним сва обавештења",
     "Dismiss all notifications" : "Уклони сва обавештења",
     "Never" : "Никад",
@@ -42,6 +41,7 @@
     "You need to set up your email address before you can receive notification emails." : "Морате поставити адресу е-поште пре почетка пријема обавештења.",
     "Also repeat sound on a secondary speaker" : "Такође пуштај звук и на секундарном звучнику",
     "Selection of the speaker device is currently not supported by Safari" : "Safari тренутно не подржава избор уређаја секундарног звучника",
-    "Select a device" : "Изаберите уређај"
+    "Select a device" : "Изаберите уређај",
+    "seconds ago" : "пре неколико секунди"
 },"pluralForm" :"nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"
 }
