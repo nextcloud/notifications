@@ -25,22 +25,22 @@
 		</p>
 
 		<NcCheckboxRadioSwitch
-			:checked.sync="config.sound_notification"
-			@update:checked="updateSettings">
+			v-model="config.sound_notification"
+			@update:model-value="updateSettings">
 			{{ t('notifications', 'Play sound when a new notification arrives') }}
 		</NcCheckboxRadioSwitch>
 		<NcCheckboxRadioSwitch
-			:checked.sync="config.sound_talk"
-			@update:checked="updateSettings">
+			v-model="config.sound_talk"
+			@update:model-value="updateSettings">
 			{{ t('notifications', 'Play sound when a call started (requires Nextcloud Talk)') }}
 		</NcCheckboxRadioSwitch>
 
 		<template v-if="config.sound_talk">
 			<NcCheckboxRadioSwitch
+				v-model="storage.secondary_speaker"
 				class="additional-margin-top"
-				:checked.sync="storage.secondary_speaker"
 				:disabled="isSafari"
-				@update:checked="updateLocalSettings">
+				@update:model-value="updateLocalSettings">
 				{{ t('notifications', 'Also repeat sound on a secondary speaker') }}
 			</NcCheckboxRadioSwitch>
 			<div v-if="isSafari" class="notification-frequency__warning">
@@ -56,7 +56,7 @@
 				:clearable="false"
 				:placeholder="t('notifications', 'Select a device')"
 				@open="initializeDevices"
-				@input="updateLocalSettings" />
+				@update:model-value="updateLocalSettings" />
 		</template>
 	</NcSettingsSection>
 </template>

@@ -5,6 +5,7 @@
 
 import { emit } from '@nextcloud/event-bus'
 import { loadState } from '@nextcloud/initial-state'
+import { getLanguage } from '@nextcloud/l10n'
 import { generateFilePath } from '@nextcloud/router'
 import { Howl } from 'howler'
 import BrowserStorage from './BrowserStorage.js'
@@ -22,7 +23,7 @@ function createWebNotification(notification) {
 
 	const n = new Notification(notification.subject, {
 		title: notification.subject,
-		lang: OC.getLocale(),
+		lang: getLanguage(),
 		body: notification.message,
 		icon: notification.icon,
 		tag: notification.notificationId,

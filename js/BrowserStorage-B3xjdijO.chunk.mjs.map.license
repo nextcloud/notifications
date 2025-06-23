@@ -1,0 +1,24 @@
+SPDX-License-Identifier: AGPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-or-later
+SPDX-License-Identifier: MIT
+SPDX-FileCopyrightText: Jeff Sagal <sagalbot@gmail.com>
+SPDX-FileCopyrightText: Joas Schilling <coding@schilljs.com>
+SPDX-FileCopyrightText: Nextcloud GmbH and Nextcloud contributors
+SPDX-FileCopyrightText: atomiks
+
+This file is generated from multiple sources. Included packages:
+- @floating-ui/dom
+	- version: 1.7.1
+	- license: MIT
+- @floating-ui/utils
+	- version: 0.2.9
+	- license: MIT
+- @nextcloud/vue
+	- version: 9.0.0-rc.2
+	- license: AGPL-3.0-or-later
+- notifications
+	- version: 5.0.0-dev.0
+	- license: AGPL-3.0-only
+- vue-select
+	- version: 4.0.0-beta.6
+	- license: MIT

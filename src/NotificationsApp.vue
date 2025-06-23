@@ -6,9 +6,9 @@
 	<NcHeaderMenu
 		v-if="!shutdown"
 		id="notifications"
+		v-model:open="open"
 		class="notifications-button"
 		:exclude-click-outside-selectors="['.popover']"
-		:open.sync="open"
 		:aria-label="t('notifications', 'Notifications')"
 		:title="t('notifications', 'Notifications')"
 		@open="onOpen">
@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import { getCurrentUser } from '@nextcloud/auth'
+import { getCurrentUser, getRequestToken } from '@nextcloud/auth'
 import axios from '@nextcloud/axios'
 import { showError } from '@nextcloud/dialogs'
 import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
@@ -98,6 +98,9 @@ import IconNotification from './Components/IconNotification.vue'
 import NotificationItem from './Components/NotificationItem.vue'
 import { getNotificationsData } from './services/notificationsService.js'
 import { createWebNotification } from './services/webNotificationsService.js'
+
+const sessionKeepAlive = loadState('core', 'config', { session_keepalive: true }).session_keepalive
+const hasThrottledPushNotifications = loadState('notifications', 'throttled_push_notifications')
 
 const fairUsePolicyNotification = {
 	// Required properties
@@ -133,6 +136,7 @@ export default {
 	setup() {
 		return {
 			fairUsePolicyNotification,
+			hasThrottledPushNotifications,
 		}
 	},
 
@@ -142,7 +146,6 @@ export default {
 			backgroundFetching: false,
 			hasNotifyPush: false,
 			shutdown: false,
-			hasThrottledPushNotifications: loadState('notifications', 'throttled_push_notifications'),
 			notifications: [],
 			lastETag: null,
 			lastTabId: null,
@@ -209,7 +212,7 @@ export default {
 	},
 
 	mounted() {
-		this.tabId = OC.requestToken || ('' + Math.random())
+		this.tabId = getRequestToken() || ('' + Math.random())
 		this._oldcount = 0
 
 		this.checkWebNotificationPermissions()
@@ -235,7 +238,7 @@ export default {
 		subscribe('user_status:status.updated', this.userStatusUpdated)
 	},
 
-	beforeDestroy() {
+	beforeUnmount() {
 		unsubscribe('user_status:status.updated', this.userStatusUpdated)
 		unsubscribe('networkOffline', this.handleNetworkOffline)
 		unsubscribe('networkOnline', this.handleNetworkOnline)
@@ -266,7 +269,7 @@ export default {
 		},
 
 		setupBackgroundFetcher() {
-			if (OC.config.session_keepalive) {
+			if (sessionKeepAlive) {
 				console.debug('Started background fetcher as session_keepalive is enabled')
 				this.interval = window.setInterval(this._backgroundFetch.bind(this), this.pollIntervalCurrent)
 			} else {
