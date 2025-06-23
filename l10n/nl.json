@@ -1,5 +1,7 @@
 { "translations": {
+    "We want to keep offering our push notification service for free, but large number of users overload our infrastructure. For this reason we have to rate-limit the use of push notifications. If you need this feature, consider using Nextcloud Enterprise." : "We willen onze pushmeldingsservice gratis blijven aanbieden, maar een groot aantal gebruikers overbelast onze infrastructuur. Om deze reden moeten we het gebruik van pushmeldingen beoordelen en beperken. Als je deze functie nodig hebt, overweeg dan om Nextcloud Enterprise te gebruiken.",
     "User not found" : "Gebruiker niet gevonden",
+    "An unexpected error occurred, ask your administration to check the logs." : "Er is een onverwachte fout opgetreden. Vraag je beheerder om de logboeken te controleren.",
     "Hello %s" : "Hallo %s",
     "Hello %s," : "Hallo %s,",
     "_New notification for %s_::_%n new notifications for %s_" : ["Nieuwe melding voor %s","%n nieuwe meldingen voor %s"],
@@ -8,6 +10,8 @@
     "You can change the frequency of these emails or disable them in the settings: %s" : "Je kunt deze e-mails uitschakelen of de frequentie aanpassen in de instellingen: %s",
     "Admin notifications" : "Beheermeldingen",
     "Notifications" : "Meldingen",
+    "Push notifications - Fair use policy" : "Pushmeldingen - Beleid voor redelijk gebruik",
+    "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server and the limit was reached for this server. For enterprise users, a more scalable gateway is available." : "Nextcloud GmbH sponsort een gratis pushmeldingsgateway voor particuliere gebruikers. Om een goede service te garanderen, beperkt de gateway het aantal pushmeldingen per server en voor deze server werd de limiet bereikt. Voor zakelijke gebruikers is een meer schaalbare gateway beschikbaar.",
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "Deze app levert de back-end en front-end voor de meldingen-API in Nextcloud.",
     "This app provides a backend and frontend for the notification API available in Nextcloud.\n\t\tThe API is used by other apps to notify users in the web UI and sync clients about various things. Some examples are:\n\n📬 Federated file sharing: You received a new remote share\n\n📑 Comments: Another user mentioned you in a comment on a file\n\n🚢 Update notification: Available update for an app or nextcloud itself\n\n📣 Announcement center: An announcement was posted by an admin" : "Deze app biedt een backend en frontend voor de meldingen-API die beschikbaar is in Nextcloud.\n\t\tDe API wordt gebruikt door andere apps om meldingen aan de gebruikers te geven en aan clients over diverse zaken. Enkele voorbeelden zijn: \n\n📬 Federatief delen van bestanden: je hebt een nieuwe externe share ontvangen\n\n📑 Reacties: een andere gebruiker heeft je genoemd in een opmerking bij een bestand\n\n🚢 Update-melding: beschikbare update voor een app of nextcloud zelf\n\n📣 Aankondigingscentrum: er is een aankondiging door een beheerder",
     "Failed to perform action" : "Actie uitvoeren mislukt",
@@ -16,6 +20,7 @@
     "Contact Nextcloud GmbH" : "Contact Nextcloud GmbH",
     "in {path}" : "in {path}",
     "Push notifications might be unreliable" : "Push notificaties kunnen onbetrouwbaar zijn",
+    "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "Nextcloud GmbH sponsort een gratis pushmeldingsgateway voor particuliere gebruikers. Om een goede service te garanderen, beperkt de gateway het aantal pushmeldingen per server. Voor zakelijke gebruikers is een meer schaalbare gateway beschikbaar. Neem contact op met Nextcloud GmbH voor meer informatie.",
     "Requesting browser permissions to show notifications" : "Browsermachtigingen aanvragen om meldingen weer te geven",
     "No notifications" : "Geen meldingen",
     "Failed to dismiss all notifications" : "Alle meldingen wissen mislukt",
@@ -34,6 +39,8 @@
     "Play sound when a call started (requires Nextcloud Talk)" : "Geluid afspelen wanneer een gesprek is gestart (vereist Nextcloud Talk)",
     "None" : "Geen",
     "You need to set up your email address before you can receive notification emails." : "Je moet je e-mailadres instellen voor je meldingse-mails kunt ontvangen.",
+    "Also repeat sound on a secondary speaker" : "Geluid ook herhalen op een secundaire luidspreker",
+    "Selection of the speaker device is currently not supported by Safari" : "Selectie van het luidsprekerapparaat wordt momenteel niet ondersteund door Safari",
     "Select a device" : "Selecteer een apparaat",
     "seconds ago" : "seconden geleden"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
