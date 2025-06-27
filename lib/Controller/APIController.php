@@ -12,6 +12,7 @@ namespace OCA\Notifications\Controller;
 use OCA\Notifications\App;
 use OCA\Notifications\ResponseDefinitions;
 use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\Attribute\ApiRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\OpenAPI;
 use OCP\AppFramework\Http\DataResponse;
@@ -64,6 +65,7 @@ class APIController extends OCSController {
 	 * 404: User not found
 	 */
 	#[OpenAPI(scope: OpenAPI::SCOPE_ADMINISTRATION)]
+	#[ApiRoute(verb: 'POST', url: '/api/{apiVersion}/admin_notifications/{userId}', requirements: ['apiVersion' => '(v1|v2)'])]
 	public function generateNotification(string $userId, string $shortMessage, string $longMessage = ''): DataResponse {
 		$response = $this->generateNotificationV3($userId, $shortMessage, $longMessage);
 		if ($response->getStatus() === Http::STATUS_OK) {
@@ -95,6 +97,7 @@ class APIController extends OCSController {
 	 * 400: Provided data was invalid, check error field of the response of log file for details
 	 */
 	#[OpenAPI(scope: OpenAPI::SCOPE_ADMINISTRATION)]
+	#[ApiRoute(verb: 'POST', url: '/api/{apiVersion3}/admin_notifications/{userId}', requirements: ['apiVersion3' => '(v3)'])]
 	public function generateNotificationV3(
 		string $userId,
 		string $subject = '',
@@ -172,6 +175,7 @@ class APIController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	#[OpenAPI(scope: 'push')]
+	#[ApiRoute(verb: 'POST', url: '/api/{apiVersion3}/test/self', requirements: ['apiVersion3' => '(v3)'])]
 	public function selfTestPush(): DataResponse {
 		if (!$this->notificationManager->isFairUseOfFreePushService()) {
 			$message = $this->l->t('We want to keep offering our push notification service for free, but large number of users overload our infrastructure. For this reason we have to rate-limit the use of push notifications. If you need this feature, consider using Nextcloud Enterprise.');

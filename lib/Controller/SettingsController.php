@@ -12,6 +12,7 @@ namespace OCA\Notifications\Controller;
 use OCA\Notifications\AppInfo\Application;
 use OCA\Notifications\Model\SettingsMapper;
 use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\Attribute\ApiRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\OpenAPI;
 use OCP\AppFramework\Http\DataResponse;
@@ -42,6 +43,7 @@ class SettingsController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	#[OpenAPI]
+	#[ApiRoute(verb: 'POST', url: '/api/{apiVersion}/settings', requirements: ['apiVersion' => '(v2)'])]
 	public function personal(int $batchSetting, string $soundNotification, string $soundTalk): DataResponse {
 		$this->settingsMapper->setBatchSettingForUser($this->userId, $batchSetting);
 
@@ -62,6 +64,7 @@ class SettingsController extends OCSController {
 	 * 200: Admin settings updated
 	 */
 	#[OpenAPI(scope: OpenAPI::SCOPE_ADMINISTRATION)]
+	#[ApiRoute(verb: 'POST', url: '/api/{apiVersion}/settings/admin', requirements: ['apiVersion' => '(v2)'])]
 	public function admin(int $batchSetting, string $soundNotification, string $soundTalk): DataResponse {
 		$this->config->setAppValue(Application::APP_ID, 'setting_batchtime', (string)$batchSetting);
 		$this->config->setAppValue(Application::APP_ID, 'sound_notification', $soundNotification !== 'no' ? 'yes' : 'no');

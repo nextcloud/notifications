@@ -16,6 +16,7 @@ use OCA\Notifications\Push;
 use OCA\Notifications\ResponseDefinitions;
 use OCA\Notifications\Service\ClientService;
 use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\Attribute\ApiRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
@@ -62,6 +63,7 @@ class EndpointController extends OCSController {
 	 * 204: No app uses notifications
 	 */
 	#[NoAdminRequired]
+	#[ApiRoute(verb: 'GET', url: '/api/{apiVersion}/notifications', requirements: ['apiVersion' => '(v1|v2)'])]
 	public function listNotifications(string $apiVersion): DataResponse {
 		$userStatus = $this->userStatusManager->getUserStatuses([
 			$this->getCurrentUser(),
@@ -134,6 +136,7 @@ class EndpointController extends OCSController {
 	 * 404: Notification not found
 	 */
 	#[NoAdminRequired]
+	#[ApiRoute(verb: 'GET', url: '/api/{apiVersion}/notifications/{id}', requirements: ['apiVersion' => '(v1|v2)', 'id' => '\d+'])]
 	public function getNotification(string $apiVersion, int $id): DataResponse {
 		if (!$this->manager->hasNotifiers()) {
 			return new DataResponse(null, Http::STATUS_NOT_FOUND);
@@ -182,6 +185,7 @@ class EndpointController extends OCSController {
 	 * 400: Too many notification IDs requested
 	 */
 	#[NoAdminRequired]
+	#[ApiRoute(verb: 'POST', url: '/api/{apiVersion}/notifications/exists', requirements: ['apiVersion' => '(v1|v2)'])]
 	public function confirmIdsForUser(string $apiVersion, array $ids): DataResponse {
 		if (!$this->manager->hasNotifiers()) {
 			return new DataResponse([], Http::STATUS_OK);
@@ -215,6 +219,7 @@ class EndpointController extends OCSController {
 	 * 404: Notification not found
 	 */
 	#[NoAdminRequired]
+	#[ApiRoute(verb: 'DELETE', url: '/api/{apiVersion}/notifications/{id}', requirements: ['apiVersion' => '(v1|v2)', 'id' => '\d+'])]
 	public function deleteNotification(int $id): DataResponse {
 		if ($id === 0) {
 			return new DataResponse(null, Http::STATUS_NOT_FOUND);
@@ -246,6 +251,7 @@ class EndpointController extends OCSController {
 	 * 403: Deleting notification for impersonated user is not allowed
 	 */
 	#[NoAdminRequired]
+	#[ApiRoute(verb: 'DELETE', url: '/api/{apiVersion}/notifications', requirements: ['apiVersion' => '(v1|v2)'])]
 	public function deleteAllNotifications(): DataResponse {
 		if ($this->session->getImpersonatingUserID() !== null) {
 			return new DataResponse(null, Http::STATUS_FORBIDDEN);
