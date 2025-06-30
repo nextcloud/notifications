@@ -16,9 +16,10 @@ use OCA\Notifications\Controller\EndpointController;
 use OCA\Notifications\Controller\PushController;
 use OCA\Notifications\Handler;
 use OCA\Notifications\Push;
-use OCP\AppFramework\IAppContainer;
 use OCP\AppFramework\OCSController;
+use OCP\Capabilities\ICapability;
 use OCP\Notification\IApp;
+use OCP\Server;
 use Test\TestCase;
 
 /**
@@ -30,32 +31,21 @@ use Test\TestCase;
 class ApplicationTest extends TestCase {
 	protected Application $app;
 
-	protected IAppContainer $container;
-
 	protected function setUp(): void {
 		parent::setUp();
 		$this->app = new Application();
-		$this->container = $this->app->getContainer();
-	}
-
-	public function testContainerAppName(): void {
-		$this->app = new Application();
-		$this->assertEquals('notifications', $this->container->getAppName());
 	}
 
 	public static function dataContainerQuery(): array {
 		return [
 			// lib/
-			[App::class],
 			[App::class, IApp::class],
-			[Capabilities::class],
+			[Capabilities::class, ICapability::class],
 			[Handler::class],
 			[Push::class],
 
 			// Controller/
-			[EndpointController::class],
 			[EndpointController::class, OCSController::class],
-			[PushController::class],
 			[PushController::class, OCSController::class],
 		];
 	}
@@ -67,6 +57,6 @@ class ApplicationTest extends TestCase {
 		if ($expected === null) {
 			$expected = $service;
 		}
-		$this->assertTrue($this->container->query($service) instanceof $expected);
+		$this->assertInstanceOf($expected, Server::get($service));
 	}
 }
