@@ -7,6 +7,9 @@ OC.L10N.register(
     "in {path}" : "Katika {path}",
     "No notifications" : "Hakuna taarifa",
     "Never" : "Kamwe",
+    "1 hour" : "Saa 1",
+    "1 day" : "Siku moja",
+    "1 week" : "Wiki 1",
     "None" : "Hakuna",
     "seconds ago" : "sukunde zilizopita"
 },
