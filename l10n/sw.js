@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "User not found" : "Mtumiaji hapatikani",
     "Hello %s" : "Halo %s",
+    "Hello %s," : "Hello %s,",
     "Notifications" : "Arifa",
     "Dismiss" : "Ondoa",
     "in {path}" : "Katika {path}",
