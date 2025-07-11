@@ -13,9 +13,9 @@ OC.L10N.register(
     "1 day" : "1 hari",
     "1 week" : "1 minggu",
     "Your settings have been updated." : "Pengaturan Anda telah diperbarui.",
-    "Send email reminders about unhandled notifications after:" : "Kirim surel pengingat tentang pemberitahuan yang tidak tertangani setelah:",
+    "Send email reminders about unhandled notifications after:" : "Kirim email pengingat tentang pemberitahuan yang tidak tertangani setelah:",
     "None" : "Tidak ada",
-    "You need to set up your email address before you can receive notification emails." : "Anda perlu menyetel alamat surel sebelum Anda dapat menerima surel pemberitahuan.",
+    "You need to set up your email address before you can receive notification emails." : "Anda perlu menyetel alamat email sebelum Anda dapat menerima email pemberitahuan.",
     "seconds ago" : "beberapa detik yang lalu"
 },
 "nplurals=1; plural=0;");
