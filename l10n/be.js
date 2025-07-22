@@ -6,6 +6,7 @@ OC.L10N.register(
     "Notifications" : "Апавяшчэнні",
     "in {path}" : "у {path}",
     "Your settings have been updated." : "Вашы налады былі абноўлены. ",
-    "You need to set up your email address before you can receive notification emails." : "Вам трэба задаць адрас электроннай пошты, каб атрымліваць апавяшчэнні па пошце"
+    "You need to set up your email address before you can receive notification emails." : "Вам трэба задаць адрас электроннай пошты, каб атрымліваць апавяшчэнні па пошце",
+    "seconds ago" : "с таму"
 },
 "nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);");
