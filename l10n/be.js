@@ -5,6 +5,7 @@ OC.L10N.register(
     "Hello %s," : "Вітаем, %s,",
     "Notifications" : "Апавяшчэнні",
     "in {path}" : "у {path}",
+    "Never" : "Ніколі",
     "Your settings have been updated." : "Вашы налады былі абноўлены. ",
     "You need to set up your email address before you can receive notification emails." : "Вам трэба задаць адрас электроннай пошты, каб атрымліваць апавяшчэнні па пошце",
     "seconds ago" : "с таму"
