@@ -72,7 +72,7 @@
 					<template #icon>
 						<IconClose :size="20" />
 					</template>
-					{{ t('notifications', 'Dismiss all notifications') }}
+					{{ t('notifications', 'Dismiss all notifications!!!!!!!!!') }}
 				</NcButton>
 			</div>
 		</div>
