@@ -41,7 +41,7 @@ version: 2.2.0
 license: GPL-3.0-or-later
 
 @nextcloud/l10n
-version: 3.3.0
+version: 3.4.0
 license: GPL-3.0-or-later
 
 @nextcloud/logger
@@ -61,7 +61,7 @@ version: 0.2.4
 license: GPL-3.0-or-later
 
 @nextcloud/vue
-version: 9.0.0-rc.2
+version: 9.0.0-rc.4
 license: AGPL-3.0-or-later
 
 @ungap/structured-clone
