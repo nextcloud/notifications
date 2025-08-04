@@ -151,6 +151,9 @@ class EndpointControllerTest extends TestCase {
 		$this->manager->expects($this->once())
 			->method('createNotification')
 			->willReturn($filter);
+		$this->manager->expects(self::once())
+			->method('preloadMany')
+			->with($notifications, 'en');
 		$this->manager->expects($this->exactly(\count($notifications)))
 			->method('prepare')
 			->willReturnArgument(0);
@@ -219,6 +222,10 @@ class EndpointControllerTest extends TestCase {
 			->willReturn(true);
 		$this->manager->expects($this->once())
 			->method('flush');
+
+		$this->manager->expects(self::once())
+			->method('preloadMany')
+			->with($notifications, 'en');
 
 		$throw = true;
 		$this->manager->expects($this->exactly(2))
@@ -294,6 +301,9 @@ class EndpointControllerTest extends TestCase {
 		$this->manager->expects($this->once())
 			->method('hasNotifiers')
 			->willReturn(true);
+		$this->manager->expects(self::once())
+			->method('preloadMany')
+			->with([$notification], 'en');
 		$this->manager->expects($this->once())
 			->method('prepare')
 			->with($notification)
@@ -340,6 +350,10 @@ class EndpointControllerTest extends TestCase {
 		$this->manager->expects($this->once())
 			->method('hasNotifiers')
 			->willReturn($hasNotifiers);
+
+		$this->manager->expects(self::once())
+			->method('preloadMany')
+			->with([$notification], 'en');
 
 		if ($notification instanceof NotificationNotFoundException) {
 			$this->handler->expects($called ? $this->once() : $this->never())
