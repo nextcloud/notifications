@@ -30,6 +30,7 @@ use OCP\Notification\IAction;
 use OCP\Notification\IManager;
 use OCP\Notification\IncompleteParsedNotificationException;
 use OCP\Notification\INotification;
+use OCP\Notification\NotificationPreloadReason;
 use OCP\UserStatus\IManager as IUserStatusManager;
 use OCP\UserStatus\IUserStatus;
 
@@ -97,6 +98,8 @@ class EndpointController extends OCSController {
 			);
 		}
 
+		$this->manager->preloadDataForParsing($notifications, $language, NotificationPreloadReason::EndpointController);
+
 		$data = [];
 		$notificationIds = [];
 		foreach ($notifications as $notificationId => $notification) {
@@ -154,6 +157,8 @@ class EndpointController extends OCSController {
 
 		$user = $this->session->getUser();
 		$language = $this->l10nFactory->getUserLanguage($user);
+
+		$this->manager->preloadDataForParsing([$notification], $language, NotificationPreloadReason::EndpointController);
 
 		try {
 			$notification = $this->manager->prepare($notification, $language);
