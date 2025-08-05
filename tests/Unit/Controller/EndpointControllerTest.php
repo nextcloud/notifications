@@ -152,7 +152,7 @@ class EndpointControllerTest extends TestCase {
 			->method('createNotification')
 			->willReturn($filter);
 		$this->manager->expects(self::once())
-			->method('preloadMany')
+			->method('preloadDataForParsing')
 			->with($notifications, 'en');
 		$this->manager->expects($this->exactly(\count($notifications)))
 			->method('prepare')
@@ -224,7 +224,7 @@ class EndpointControllerTest extends TestCase {
 			->method('flush');
 
 		$this->manager->expects(self::once())
-			->method('preloadMany')
+			->method('preloadDataForParsing')
 			->with($notifications, 'en');
 
 		$throw = true;
@@ -302,7 +302,7 @@ class EndpointControllerTest extends TestCase {
 			->method('hasNotifiers')
 			->willReturn(true);
 		$this->manager->expects(self::once())
-			->method('preloadMany')
+			->method('preloadDataForParsing')
 			->with([$notification], 'en');
 		$this->manager->expects($this->once())
 			->method('prepare')
@@ -352,7 +352,7 @@ class EndpointControllerTest extends TestCase {
 			->willReturn($hasNotifiers);
 
 		$this->manager->expects(self::once())
-			->method('preloadMany')
+			->method('preloadDataForParsing')
 			->with([$notification], 'en');
 
 		if ($notification instanceof NotificationNotFoundException) {

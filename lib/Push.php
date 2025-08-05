@@ -246,7 +246,7 @@ class Push {
 			$language = $this->l10nFactory->getUserLanguage($user);
 			$this->printInfo('Language is set to ' . $language);
 
-			$this->notificationManager->preloadMany([$notification], $language);
+			$this->notificationManager->preloadDataForParsing([$notification], $language);
 
 			try {
 				$this->notificationManager->setPreparingPushNotification(true);

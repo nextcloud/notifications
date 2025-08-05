@@ -131,7 +131,7 @@ class MailNotifications {
 		$lastSendId = array_key_first($notifications);
 		$lastSendTime = $this->timeFactory->getTime();
 
-		$this->manager->preloadMany($notifications, $language);
+		$this->manager->preloadDataForParsing($notifications, $language);
 
 		$preparedNotifications = [];
 		foreach ($notifications as $notification) {

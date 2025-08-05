@@ -97,7 +97,7 @@ class EndpointController extends OCSController {
 			);
 		}
 
-		$this->manager->preloadMany($notifications, $language);
+		$this->manager->preloadDataForParsing($notifications, $language);
 
 		$data = [];
 		$notificationIds = [];
@@ -157,7 +157,7 @@ class EndpointController extends OCSController {
 		$user = $this->session->getUser();
 		$language = $this->l10nFactory->getUserLanguage($user);
 
-		$this->manager->preloadMany([$notification], $language);
+		$this->manager->preloadDataForParsing([$notification], $language);
 
 		try {
 			$notification = $this->manager->prepare($notification, $language);
