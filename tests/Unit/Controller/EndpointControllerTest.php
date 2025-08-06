@@ -351,14 +351,15 @@ class EndpointControllerTest extends TestCase {
 			->method('hasNotifiers')
 			->willReturn($hasNotifiers);
 
-		$this->manager->expects(self::once())
-			->method('preloadDataForParsing')
-			->with([$notification], 'en');
 
 		if ($notification instanceof NotificationNotFoundException) {
 			$this->handler->expects($called ? $this->once() : $this->never())
 				->method('getById')
 				->willThrowException($notification);
+
+			$this->manager->expects(self::never())
+				->method('preloadDataForParsing')
+				->with([$notification], 'en');
 
 			$this->manager->expects($called && !$notification instanceof NotificationNotFoundException ? $this->once() : $this->never())
 				->method('prepare')
@@ -372,6 +373,10 @@ class EndpointControllerTest extends TestCase {
 				->method('getUserLanguage')
 				->with($this->user)
 				->willReturn('en');
+
+			$this->manager->expects(self::once())
+				->method('preloadDataForParsing')
+				->with([$notification], 'en');
 
 			$this->manager->expects($this->once())
 				->method('prepare')
