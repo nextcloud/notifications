@@ -246,10 +246,10 @@ class Push {
 			$language = $this->l10nFactory->getUserLanguage($user);
 			$this->printInfo('Language is set to ' . $language);
 
+			$this->notificationManager->setPreparingPushNotification(true);
 			$this->notificationManager->preloadDataForParsing([$notification], $language);
 
 			try {
-				$this->notificationManager->setPreparingPushNotification(true);
 				$notification = $this->notificationManager->prepare($notification, $language);
 			} catch (AlreadyProcessedException|IncompleteParsedNotificationException|\InvalidArgumentException $e) {
 				// FIXME remove \InvalidArgumentException in Nextcloud 39
