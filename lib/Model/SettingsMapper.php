@@ -8,11 +8,13 @@ declare(strict_types=1);
 
 namespace OCA\Notifications\Model;
 
+use OCA\Notifications\AppInfo\Application;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\Exception as DBException;
 use OCP\DB\QueryBuilder\IQueryBuilder;
+use OCP\IAppConfig;
 use OCP\IDBConnection;
 
 /**
@@ -23,7 +25,10 @@ use OCP\IDBConnection;
  * @method list<Settings> findEntities(IQueryBuilder $query)
  */
 class SettingsMapper extends QBMapper {
-	public function __construct(IDBConnection $db) {
+	public function __construct(
+		IDBConnection $db,
+		private IAppConfig $appConfig,
+	) {
 		parent::__construct($db, 'notifications_settings', Settings::class);
 	}
 
@@ -32,16 +37,29 @@ class SettingsMapper extends QBMapper {
 	 * @return Settings
 	 * @throws DBException
 	 * @throws MultipleObjectsReturnedException
-	 * @throws DoesNotExistException
 	 */
 	public function getSettingsByUser(string $userId): Settings {
-		$query = $this->db->getQueryBuilder();
+		try {
+			$query = $this->db->getQueryBuilder();
 
-		$query->select('*')
-			->from($this->getTableName())
-			->where($query->expr()->eq('user_id', $query->createNamedParameter($userId)));
+			$query->select('*')
+				->from($this->getTableName())
+				->where($query->expr()->eq('user_id', $query->createNamedParameter($userId)));
 
-		return $this->findEntity($query);
+			return $this->findEntity($query);
+		} catch (DoesNotExistException) {
+			$defaultBatchtime = (int)$this->appConfig->getValueString(Application::APP_ID, 'setting_batchtime');
+
+			if ($defaultBatchtime !== Settings::EMAIL_SEND_WEEKLY
+				&& $defaultBatchtime !== Settings::EMAIL_SEND_DAILY
+				&& $defaultBatchtime !== Settings::EMAIL_SEND_3HOURLY
+				&& $defaultBatchtime !== Settings::EMAIL_SEND_HOURLY
+				&& $defaultBatchtime !== Settings::EMAIL_SEND_OFF) {
+				$defaultBatchtime = Settings::EMAIL_SEND_3HOURLY;
+			}
+
+			return $this->setBatchSettingForUser($userId, $defaultBatchtime);
+		}
 	}
 
 	/**
@@ -57,9 +75,16 @@ class SettingsMapper extends QBMapper {
 		$query->executeStatement();
 	}
 
-	public function setBatchSettingForUser(string $userId, int $batchSetting): void {
+	public function setBatchSettingForUser(string $userId, int $batchSetting): Settings {
 		try {
-			$settings = $this->getSettingsByUser($userId);
+			// Do not call getSettingsByUser here, it will cause an infinite loop
+			$query = $this->db->getQueryBuilder();
+
+			$query->select('*')
+				->from($this->getTableName())
+				->where($query->expr()->eq('user_id', $query->createNamedParameter($userId)));
+
+			$settings = $this->findEntity($query);
 		} catch (DoesNotExistException) {
 			$settings = new Settings();
 			$settings->setUserId($userId);
@@ -91,6 +116,7 @@ class SettingsMapper extends QBMapper {
 			$settings->setNextSendTime(1);
 		}
 		$this->update($settings);
+		return $settings;
 	}
 
 	/**
