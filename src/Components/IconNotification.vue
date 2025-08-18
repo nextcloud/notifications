@@ -2,6 +2,7 @@
   - SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
+
 <template>
 	<span v-if="showDot || showWarning" class="notifications-button__icon">
 		<!-- Modified IconBell from material design icons -->
@@ -29,7 +30,7 @@
 <script setup>
 import { getCapabilities } from '@nextcloud/capabilities'
 import { computed } from 'vue'
-import IconBell from 'vue-material-design-icons/Bell.vue'
+import IconBell from 'vue-material-design-icons/Bell.vue' // Filled icon as it represents app itself
 
 defineProps({
 	showDot: {

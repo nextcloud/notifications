@@ -44,7 +44,7 @@
 					:name="emptyContentMessage"
 					:description="emptyContentDescription">
 					<template #icon>
-						<IconBell v-if="!hasThrottledPushNotifications" />
+						<IconBellOutline v-if="!hasThrottledPushNotifications" />
 						<span v-else class="icon icon-alert-outline" />
 					</template>
 
@@ -55,7 +55,7 @@
 							target="_blank"
 							rel="noreferrer noopener">
 							<template #icon>
-								<IconMessage :size="20" />
+								<IconMessageOutline :size="20" />
 							</template>
 							{{ t('notifications', 'Contact Nextcloud GmbH') }} ↗
 						</NcButton>
@@ -91,9 +91,9 @@ import { generateOcsUrl, imagePath } from '@nextcloud/router'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcHeaderMenu from '@nextcloud/vue/components/NcHeaderMenu'
-import IconBell from 'vue-material-design-icons/Bell.vue'
+import IconBellOutline from 'vue-material-design-icons/BellOutline.vue'
 import IconClose from 'vue-material-design-icons/Close.vue'
-import IconMessage from 'vue-material-design-icons/Message.vue'
+import IconMessageOutline from 'vue-material-design-icons/MessageOutline.vue'
 import IconNotification from './Components/IconNotification.vue'
 import NotificationItem from './Components/NotificationItem.vue'
 import { getNotificationsData } from './services/notificationsService.js'
@@ -123,9 +123,9 @@ export default {
 	name: 'NotificationsApp',
 
 	components: {
-		IconBell,
+		IconBellOutline,
 		IconClose,
-		IconMessage,
+		IconMessageOutline,
 		IconNotification,
 		NcButton,
 		NcEmptyContent,

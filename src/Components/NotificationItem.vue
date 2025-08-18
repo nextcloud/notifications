@@ -23,7 +23,7 @@
 				:aria-label="t('notifications', 'Dismiss')"
 				@click="onDismissNotification">
 				<template #icon>
-					<Close :size="20" />
+					<IconClose :size="20" />
 				</template>
 			</NcButton>
 		</div>
@@ -82,7 +82,7 @@
 				target="_blank"
 				rel="noreferrer noopener">
 				<template #icon>
-					<Message :size="20" />
+					<IconMessageOutline :size="20" />
 				</template>
 				{{ t('notifications', 'Contact Nextcloud GmbH') }} ↗
 			</NcButton>
@@ -99,8 +99,8 @@ import { generateOcsUrl } from '@nextcloud/router'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcDateTime from '@nextcloud/vue/components/NcDateTime'
 import NcRichText from '@nextcloud/vue/components/NcRichText'
-import Close from 'vue-material-design-icons/Close.vue'
-import Message from 'vue-material-design-icons/Message.vue'
+import IconClose from 'vue-material-design-icons/Close.vue'
+import IconMessageOutline from 'vue-material-design-icons/MessageOutline.vue'
 import ActionButton from './ActionButton.vue'
 import DefaultParameter from './Parameters/DefaultParameter.vue'
 import FileParameter from './Parameters/FileParameter.vue'
@@ -141,8 +141,8 @@ export default {
 		ActionButton,
 		NcButton,
 		NcDateTime,
-		Close,
-		Message,
+		IconClose,
+		IconMessageOutline,
 		NcRichText,
 	},
 
