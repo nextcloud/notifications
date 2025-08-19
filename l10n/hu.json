@@ -1,5 +1,7 @@
 { "translations": {
+    "We want to keep offering our push notification service for free, but large number of users overload our infrastructure. For this reason we have to rate-limit the use of push notifications. If you need this feature, consider using Nextcloud Enterprise." : "Szeretnénk továbbra is ingyenesen tartani a leküldéses értesítéseinket, de a nagy számú felhasználó túlterheli az infrastruktúránkat. Ezért forgalomkorlátozásnak vetjük alá a leküldéses értesítéseket. Ha szüksége van erre a funkcióra, akkor fontolja meg a Nextcloud Enterprise használatát.",
     "User not found" : "A felhasználó nem található",
+    "An unexpected error occurred, ask your administration to check the logs." : "Váratlan hiba történt, kérje meg a rendszergazdát, hogy ellenőrizze a naplókat.",
     "Hello %s" : "Üdv %s",
     "Hello %s," : "Üdv %s!",
     "_New notification for %s_::_%n new notifications for %s_" : ["Új értesítések ennél: %s","%n új értesítés ennél: %s"],
@@ -8,6 +10,8 @@
     "You can change the frequency of these emails or disable them in the settings: %s" : "Módosíthatja ezen levelek gyakoriságát, vagy le is tilthatja őket a beállításokban: %s",
     "Admin notifications" : "Rendszergazdai értesítések",
     "Notifications" : "Értesítések",
+    "Push notifications - Fair use policy" : "Leküldéses értesítések – Méltányos használati házirend",
+    "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server and the limit was reached for this server. For enterprise users, a more scalable gateway is available." : "A Nextcloud GmbH szponzorálja a magánfelhasználók ingyenes leküldéses értesítéseit nyújtó átjárót. A jó szolgáltatás biztosítása érdekében az átjáró korlátozza a leküldéses értesítések számát kiszolgálónként. A vállalati felhasználók számára egy skálázhatóbb átjáró érhető el. További információkért vegye fel a kapcsolatot a Nextcloud GmbH-val.",
     "This app provides a backend and frontend for the notification API available in Nextcloud." : "Ez az alkalmazás háttérszolgáltatást és előtétprogramot biztosít a Nextcloudban elérhető értesítési API-hoz.",
     "This app provides a backend and frontend for the notification API available in Nextcloud.\n\t\tThe API is used by other apps to notify users in the web UI and sync clients about various things. Some examples are:\n\n📬 Federated file sharing: You received a new remote share\n\n📑 Comments: Another user mentioned you in a comment on a file\n\n🚢 Update notification: Available update for an app or nextcloud itself\n\n📣 Announcement center: An announcement was posted by an admin" : "Ez az alkalmazás háttérszolgáltatást és előtétprogramot biztosít a Nextcloudban elérhető értesítési API-hoz.\n\t\tAz API arra való, hogy más alkalmazások értesíthessék a felhasználókat a webes felületen, és szinkronizálhassák a klienseket bizonyos dolgokkal kapcsolatban. Néhány példa:\n\n📬 Egyesített fájlmegosztás: Új távoli megosztást kapott\n\n📑 Hozzászólások: Egy másik felhasználó megemlített egy megjegyzésben egy fájlon\n\n🚢 Frissítési értesítés: Frissítés érhető el egy alkalmazáshoz vagy magához a Nextcloudhoz\n\n📣 Bejelentési központ: Egy rendszergazda bejelentést tett közzé",
     "Failed to perform action" : "A művelet végrehajtása sikertelen",
@@ -16,7 +20,7 @@
     "Contact Nextcloud GmbH" : "Kapcsolatfelvétel a Nextcloud GmbH-val",
     "in {path}" : "itt: {path}",
     "Push notifications might be unreliable" : "A leküldéses értesítések lehet, hogy nem megbízhatók",
-    "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "A magánfelhasználók ingyenes leküldéses értesítéseit nyújtó átjárót a Nextcloud GmbH szponzorálja. A jó szolgáltató biztosítása érdekében az átjáró korlátozza a leküldéses értesítések számát kiszolgálónként. A vállalati felhasználók számára egy skálázhatóbb átjáró érhető el. További információkért vegye fel a kapcsolatot a Nextcloud GmbH-val.",
+    "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "A magánfelhasználók ingyenes leküldéses értesítéseit nyújtó átjárót a Nextcloud GmbH szponzorálja. A jó szolgáltatás biztosítása érdekében az átjáró korlátozza a leküldéses értesítések számát kiszolgálónként. A vállalati felhasználók számára egy skálázhatóbb átjáró érhető el. További információkért vegye fel a kapcsolatot a Nextcloud GmbH-val.",
     "Requesting browser permissions to show notifications" : "Böngészőengedélyek kérése az értesítések megjelenítéséhez",
     "No notifications" : "Nincsenek értesítések",
     "Failed to dismiss all notifications" : "Az összes értesítés mellőzése sikertelen",
@@ -35,6 +39,8 @@
     "Play sound when a call started (requires Nextcloud Talk)" : "Hang lejátszása, ha hívás indul (Nextcloud Beszélgetés szükséges)",
     "None" : "Egyik sem",
     "You need to set up your email address before you can receive notification emails." : "Be kell állítania az e-mail-címét, mielőtt értesítési leveleket kaphatna.",
+    "Also repeat sound on a secondary speaker" : "Hang megismétlése egy másodlagos hangszórón is",
+    "Selection of the speaker device is currently not supported by Safari" : "A Safari jelenleg nem támogatja a hangszóró eszköz kiválasztását.",
     "Select a device" : "Eszköz kiválasztása",
     "seconds ago" : "másodperce"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
