@@ -4,16 +4,16 @@ SPDX-FileCopyrightText: Evan You
 
 This file is generated from multiple sources. Included packages:
 - @vue/reactivity
-	- version: 3.5.16
+	- version: 3.5.19
 	- license: MIT
 - @vue/runtime-core
-	- version: 3.5.16
+	- version: 3.5.19
 	- license: MIT
 - @vue/runtime-dom
-	- version: 3.5.16
+	- version: 3.5.19
 	- license: MIT
 - @vue/shared
-	- version: 3.5.16
+	- version: 3.5.19
 	- license: MIT
 - vite-plugin-node-polyfills
 	- version: 0.23.0

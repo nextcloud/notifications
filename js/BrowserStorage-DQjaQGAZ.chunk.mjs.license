@@ -8,13 +8,13 @@ SPDX-FileCopyrightText: atomiks
 
 This file is generated from multiple sources. Included packages:
 - @floating-ui/dom
-	- version: 1.7.1
+	- version: 1.7.4
 	- license: MIT
 - @floating-ui/utils
-	- version: 0.2.9
+	- version: 0.2.10
 	- license: MIT
 - @nextcloud/vue
-	- version: 9.0.0-rc.4
+	- version: 9.0.0-rc.6
 	- license: AGPL-3.0-or-later
 - notifications
 	- version: 5.0.0-dev.0
