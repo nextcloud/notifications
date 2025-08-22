@@ -12,6 +12,7 @@
     "Notifications" : "Апавяшчэнні",
     "Push notifications - Fair use policy" : "Push-апавяшчэнні - Палітыка добрасумленнага выкарыстання",
     "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server and the limit was reached for this server. For enterprise users, a more scalable gateway is available." : "Nextcloud GmbH прапануе бясплатны шлюз push-апавяшчэнняў для прыватных карыстальнікаў. Каб забяспечыць якаснае абслугоўванне, шлюз абмяжоўвае колькасць push-апавяшчэнняў на сервер, і для гэтага сервера ліміт быў дасягнуты. Карпаратыўным карыстальнікам даступны больш маштабуемы шлюз. ",
+    "This app provides a backend and frontend for the notification API available in Nextcloud." : "Гэта праграма забяспечвае бэкэнд і фронтэнд для API апавяшчэнняў, даступнага ў Nextcloud.",
     "Failed to perform action" : "Не ўдалося выканаць дзеянне",
     "Failed to dismiss notification" : "Не ўдалося адхіліць апавяшчэнне",
     "Dismiss" : "Адхіліць",
