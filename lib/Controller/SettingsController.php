@@ -45,7 +45,7 @@ class SettingsController extends OCSController {
 	#[OpenAPI]
 	#[ApiRoute(verb: 'POST', url: '/api/{apiVersion}/settings', requirements: ['apiVersion' => '(v2)'])]
 	public function personal(int $batchSetting, string $soundNotification, string $soundTalk): DataResponse {
-		$this->settingsMapper->setBatchSettingForUser($this->userId, $batchSetting);
+		$this->settingsMapper->setBatchSettingForUser($this->settingsMapper->getSettingsByUser($this->userId), $batchSetting);
 
 		$this->config->setUserValue($this->userId, Application::APP_ID, 'sound_notification', $soundNotification !== 'no' ? 'yes' : 'no');
 		$this->config->setUserValue($this->userId, Application::APP_ID, 'sound_talk', $soundTalk !== 'no' ? 'yes' : 'no');

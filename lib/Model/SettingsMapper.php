@@ -9,7 +9,6 @@ declare(strict_types=1);
 namespace OCA\Notifications\Model;
 
 use OCP\AppFramework\Db\DoesNotExistException;
-use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\Exception as DBException;
 use OCP\DB\QueryBuilder\IQueryBuilder;
@@ -30,18 +29,25 @@ class SettingsMapper extends QBMapper {
 	/**
 	 * @param string $userId
 	 * @return Settings
-	 * @throws DBException
-	 * @throws MultipleObjectsReturnedException
-	 * @throws DoesNotExistException
 	 */
 	public function getSettingsByUser(string $userId): Settings {
-		$query = $this->db->getQueryBuilder();
+		try {
+			$query = $this->db->getQueryBuilder();
 
-		$query->select('*')
-			->from($this->getTableName())
-			->where($query->expr()->eq('user_id', $query->createNamedParameter($userId)));
+			$query->select('*')
+				->from($this->getTableName())
+				->where($query->expr()->eq('user_id', $query->createNamedParameter($userId)));
 
-		return $this->findEntity($query);
+			return $this->findEntity($query);
+		} catch (DoesNotExistException) {
+			$settings = new Settings();
+			$settings->setUserId($userId);
+			$settings->setBatchTime(Settings::EMAIL_SEND_DEFAULT);
+			/** @var Settings $settings */
+			$settings = $this->insert($settings);
+
+			return $settings;
+		}
 	}
 
 	/**
@@ -57,28 +63,8 @@ class SettingsMapper extends QBMapper {
 		$query->executeStatement();
 	}
 
-	public function setBatchSettingForUser(string $userId, int $batchSetting): void {
-		try {
-			$settings = $this->getSettingsByUser($userId);
-		} catch (DoesNotExistException) {
-			$settings = new Settings();
-			$settings->setUserId($userId);
-			/** @var Settings $settings */
-			$settings = $this->insert($settings);
-		}
-
-		if ($batchSetting === Settings::EMAIL_SEND_WEEKLY) {
-			$batchTime = 3600 * 24 * 7;
-		} elseif ($batchSetting === Settings::EMAIL_SEND_DAILY) {
-			$batchTime = 3600 * 24;
-		} elseif ($batchSetting === Settings::EMAIL_SEND_3HOURLY) {
-			$batchTime = 3600 * 3;
-		} elseif ($batchSetting === Settings::EMAIL_SEND_HOURLY) {
-			$batchTime = 3600;
-		} else {
-			$batchTime = 0; // Off
-		}
-
+	public function setBatchSettingForUser(Settings $settings, int $batchSetting): Settings {
+		$batchTime = self::batchSettingToTime($batchSetting);
 		$settings->setBatchTime($batchTime);
 		if ($batchTime === 0) {
 			// When mails are Off, we don't set a "next send time" so it can be
@@ -91,6 +77,7 @@ class SettingsMapper extends QBMapper {
 			$settings->setNextSendTime(1);
 		}
 		$this->update($settings);
+		return $settings;
 	}
 
 	/**
@@ -118,5 +105,27 @@ class SettingsMapper extends QBMapper {
 			'last_send_id' => (int)$row['last_send_id'],
 			'next_send_time' => (int)$row['next_send_time'],
 		]);
+	}
+
+	public static function batchSettingToTime(int $batchSetting): int {
+		return match ($batchSetting) {
+			Settings::EMAIL_SEND_WEEKLY => 3600 * 24 * 7,
+			Settings::EMAIL_SEND_DAILY => 3600 * 24,
+			Settings::EMAIL_SEND_3HOURLY => 3600 * 3,
+			Settings::EMAIL_SEND_HOURLY => 3600,
+			Settings::EMAIL_SEND_DEFAULT => Settings::EMAIL_SEND_DEFAULT,
+			default => 0,
+		};
+	}
+
+	public static function batchTimeToSetting(int $batchTime): int {
+		return match ($batchTime) {
+			3600 * 24 * 7 => Settings::EMAIL_SEND_WEEKLY,
+			3600 * 24 => Settings::EMAIL_SEND_DAILY,
+			3600 * 3 => Settings::EMAIL_SEND_3HOURLY,
+			3600 => Settings::EMAIL_SEND_HOURLY,
+			Settings::EMAIL_SEND_DEFAULT => Settings::EMAIL_SEND_DEFAULT,
+			default => Settings::EMAIL_SEND_OFF,
+		};
 	}
 }

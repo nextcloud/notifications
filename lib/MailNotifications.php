@@ -11,6 +11,7 @@ namespace OCA\Notifications;
 
 use OCA\Notifications\Model\Settings;
 use OCA\Notifications\Model\SettingsMapper;
+use OCP\AppFramework\Services\IAppConfig;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Defaults;
 use OCP\IConfig;
@@ -35,6 +36,7 @@ class MailNotifications {
 
 	public function __construct(
 		protected IConfig $config,
+		protected IAppConfig $appConfig,
 		protected IManager $manager,
 		protected Handler $handler,
 		protected IUserManager $userManager,
@@ -69,6 +71,7 @@ class MailNotifications {
 		/** @psalm-var array<string, string> $userTimezones */
 		$userTimezones = $this->config->getUserValueForUsers('core', 'timezone', $userIds);
 		$userEnabled = $this->config->getUserValueForUsers('core', 'enabled', $userIds);
+		$defaultBatchTime = SettingsMapper::batchSettingToTime($this->appConfig->getAppValueInt('setting_batchtime'));
 
 		$fallbackLang = $this->config->getSystemValue('force_language', null);
 		if (is_string($fallbackLang)) {
@@ -81,12 +84,17 @@ class MailNotifications {
 		}
 
 		foreach ($userSettings as $settings) {
+			$batchTime = $settings->getBatchTime();
+			if ($batchTime === Settings::EMAIL_SEND_DEFAULT) {
+				$batchTime = $defaultBatchTime;
+			}
+
 			$userId = $settings->getUserId();
 			if (isset($userEnabled[$userId]) && $userEnabled[$userId] === 'false') {
 				// User is disabled, skip sending the email for them
 				if ($settings->getNextSendTime() <= $sendTime) {
 					$settings->setNextSendTime(
-						$sendTime + $settings->getBatchTime()
+						$sendTime + $batchTime
 					);
 					$this->settingsMapper->update($settings);
 				}
@@ -101,11 +109,11 @@ class MailNotifications {
 			$notifications = $this->handler->getAfterId($settings->getLastSendId(), $userId);
 			if (!empty($notifications)) {
 				$oldestNotification = end($notifications);
-				$shouldSendAfter = $oldestNotification->getDateTime()->getTimestamp() + $settings->getBatchTime();
+				$shouldSendAfter = $oldestNotification->getDateTime()->getTimestamp() + $batchTime;
 
 				if ($shouldSendAfter <= $sendTime) {
 					// User has notifications that should send
-					$this->sendEmailToUser($settings, $notifications, $languageCode, $timezone);
+					$this->sendEmailToUser($settings, $notifications, $languageCode, $timezone, $batchTime);
 				} else {
 					// User has notifications but we didn't reach the timeout yet,
 					// So delay sending to the time of the notification + batch setting
@@ -113,7 +121,7 @@ class MailNotifications {
 					$this->settingsMapper->update($settings);
 				}
 			} else {
-				$settings->setNextSendTime($sendTime + $settings->getBatchTime());
+				$settings->setNextSendTime($sendTime + $batchTime);
 				$this->settingsMapper->update($settings);
 			}
 		}
@@ -127,7 +135,7 @@ class MailNotifications {
 	 * @param string $language
 	 * @param string $timezone
 	 */
-	protected function sendEmailToUser(Settings $settings, array $notifications, string $language, string $timezone): void {
+	protected function sendEmailToUser(Settings $settings, array $notifications, string $language, string $timezone, int $batchTime): void {
 		$lastSendId = array_key_first($notifications);
 		$lastSendTime = $this->timeFactory->getTime();
 
@@ -164,7 +172,7 @@ class MailNotifications {
 				}
 
 				$settings->setLastSendId($lastSendId);
-				$settings->setNextSendTime($lastSendTime + $settings->getBatchTime());
+				$settings->setNextSendTime($lastSendTime + $batchTime);
 				$this->settingsMapper->update($settings);
 			}
 		}

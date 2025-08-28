@@ -12,6 +12,7 @@ namespace OCA\Notifications\Listener;
 use OCA\Notifications\AppInfo\Application;
 use OCP\AppFramework\Http\Events\BeforeTemplateRenderedEvent;
 use OCP\AppFramework\Http\TemplateResponse;
+use OCP\AppFramework\Services\IAppConfig;
 use OCP\AppFramework\Services\IInitialState;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
@@ -30,6 +31,7 @@ class BeforeTemplateRenderedListener implements IEventListener {
 		protected IUserSession $userSession,
 		protected IInitialState $initialState,
 		protected IManager $notificationManager,
+		protected IAppConfig $appConfig,
 	) {
 	}
 
@@ -49,25 +51,14 @@ class BeforeTemplateRenderedListener implements IEventListener {
 			return;
 		}
 
-		$this->initialState->provideInitialState(
-			'sound_notification',
-			$this->config->getUserValue(
-				$user->getUID(),
-				Application::APP_ID,
-				'sound_notification',
-				'yes'
-			) === 'yes'
-		);
+		$defaultSoundNotification = $this->appConfig->getAppValueString(Application::APP_ID, 'sound_notification') === 'yes' ? 'yes' : 'no';
+		$userSoundNotification = $this->config->getUserValue($user->getUID(), Application::APP_ID, 'sound_notification', $defaultSoundNotification) === 'yes';
+		$defaultSoundTalk = $this->appConfig->getAppValueString(Application::APP_ID, 'sound_talk') === 'yes' ? 'yes' : 'no';
+		$userSoundTalk = $this->config->getUserValue($user->getUID(), Application::APP_ID, 'sound_talk', $defaultSoundTalk) === 'yes';
 
-		$this->initialState->provideInitialState(
-			'sound_talk',
-			$this->config->getUserValue(
-				$user->getUID(),
-				Application::APP_ID,
-				'sound_talk',
-				'yes'
-			) === 'yes'
-		);
+		$this->initialState->provideInitialState('sound_notification', $userSoundNotification);
+
+		$this->initialState->provideInitialState('sound_talk', $userSoundTalk);
 
 		/**
 		 * We want to keep offering our push notification service for free, but large
