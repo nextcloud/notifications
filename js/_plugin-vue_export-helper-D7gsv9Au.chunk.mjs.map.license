@@ -57,16 +57,16 @@ This file is generated from multiple sources. Included packages:
 	- version: 3.0.1
 	- license: GPL-3.0-or-later
 - @nextcloud/vue
-	- version: 9.0.0-rc.6
+	- version: 9.0.0-rc.7
 	- license: AGPL-3.0-or-later
 - @vitejs/plugin-vue
 	- version: 5.2.4
 	- license: MIT
 - @vueuse/core
-	- version: 13.7.0
+	- version: 13.8.0
 	- license: MIT
 - @vueuse/shared
-	- version: 13.7.0
+	- version: 13.8.0
 	- license: MIT
 - axios
 	- version: 1.8.2
