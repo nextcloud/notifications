@@ -8,13 +8,10 @@ declare(strict_types=1);
 
 namespace OCA\Notifications\Model;
 
-use OCA\Notifications\AppInfo\Application;
 use OCP\AppFramework\Db\DoesNotExistException;
-use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\Exception as DBException;
 use OCP\DB\QueryBuilder\IQueryBuilder;
-use OCP\IAppConfig;
 use OCP\IDBConnection;
 
 /**
@@ -25,10 +22,7 @@ use OCP\IDBConnection;
  * @method list<Settings> findEntities(IQueryBuilder $query)
  */
 class SettingsMapper extends QBMapper {
-	public function __construct(
-		IDBConnection $db,
-		private IAppConfig $appConfig,
-	) {
+	public function __construct(IDBConnection $db) {
 		parent::__construct($db, 'notifications_settings', Settings::class);
 	}
 
