@@ -23,6 +23,7 @@ use OCP\DB\Types;
  * @method int getNextSendTime()
  */
 class Settings extends Entity {
+	public const EMAIL_SEND_DEFAULT = 5;
 	public const EMAIL_SEND_WEEKLY = 4;
 	public const EMAIL_SEND_DAILY = 3;
 	public const EMAIL_SEND_3HOURLY = 2;

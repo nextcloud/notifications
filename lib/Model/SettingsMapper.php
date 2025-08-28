@@ -35,8 +35,6 @@ class SettingsMapper extends QBMapper {
 	/**
 	 * @param string $userId
 	 * @return Settings
-	 * @throws DBException
-	 * @throws MultipleObjectsReturnedException
 	 */
 	public function getSettingsByUser(string $userId): Settings {
 		try {
@@ -48,22 +46,13 @@ class SettingsMapper extends QBMapper {
 
 			return $this->findEntity($query);
 		} catch (DoesNotExistException) {
-			$defaultBatchtime = (int)$this->appConfig->getValueString(Application::APP_ID, 'setting_batchtime');
-
-			if ($defaultBatchtime !== Settings::EMAIL_SEND_WEEKLY
-				&& $defaultBatchtime !== Settings::EMAIL_SEND_DAILY
-				&& $defaultBatchtime !== Settings::EMAIL_SEND_3HOURLY
-				&& $defaultBatchtime !== Settings::EMAIL_SEND_HOURLY
-				&& $defaultBatchtime !== Settings::EMAIL_SEND_OFF) {
-				$defaultBatchtime = Settings::EMAIL_SEND_3HOURLY;
-			}
-
 			$settings = new Settings();
 			$settings->setUserId($userId);
+			$settings->setBatchTime(Settings::EMAIL_SEND_DEFAULT);
 			/** @var Settings $settings */
 			$settings = $this->insert($settings);
 
-			return $this->setBatchSettingForUser($settings, $defaultBatchtime);
+			return $settings;
 		}
 	}
 
@@ -81,18 +70,7 @@ class SettingsMapper extends QBMapper {
 	}
 
 	public function setBatchSettingForUser(Settings $settings, int $batchSetting): Settings {
-		if ($batchSetting === Settings::EMAIL_SEND_WEEKLY) {
-			$batchTime = 3600 * 24 * 7;
-		} elseif ($batchSetting === Settings::EMAIL_SEND_DAILY) {
-			$batchTime = 3600 * 24;
-		} elseif ($batchSetting === Settings::EMAIL_SEND_3HOURLY) {
-			$batchTime = 3600 * 3;
-		} elseif ($batchSetting === Settings::EMAIL_SEND_HOURLY) {
-			$batchTime = 3600;
-		} else {
-			$batchTime = 0; // Off
-		}
-
+		$batchTime = self::batchSettingToTime($batchSetting);
 		$settings->setBatchTime($batchTime);
 		if ($batchTime === 0) {
 			// When mails are Off, we don't set a "next send time" so it can be
@@ -133,5 +111,27 @@ class SettingsMapper extends QBMapper {
 			'last_send_id' => (int)$row['last_send_id'],
 			'next_send_time' => (int)$row['next_send_time'],
 		]);
+	}
+
+	public static function batchSettingToTime(int $batchSetting): int {
+		return match ($batchSetting) {
+			Settings::EMAIL_SEND_WEEKLY => 3600 * 24 * 7,
+			Settings::EMAIL_SEND_DAILY => 3600 * 24,
+			Settings::EMAIL_SEND_3HOURLY => 3600 * 3,
+			Settings::EMAIL_SEND_HOURLY => 3600,
+			Settings::EMAIL_SEND_DEFAULT => Settings::EMAIL_SEND_DEFAULT,
+			default => 0,
+		};
+	}
+
+	public static function batchTimeToSetting(int $batchTime): int {
+		return match ($batchTime) {
+			3600 * 24 * 7 => Settings::EMAIL_SEND_WEEKLY,
+			3600 * 24 => Settings::EMAIL_SEND_DAILY,
+			3600 * 3 => Settings::EMAIL_SEND_3HOURLY,
+			3600 => Settings::EMAIL_SEND_HOURLY,
+			Settings::EMAIL_SEND_DEFAULT => Settings::EMAIL_SEND_DEFAULT,
+			default => Settings::EMAIL_SEND_OFF,
+		};
 	}
 }

@@ -43,31 +43,23 @@ class Personal implements ISettings {
 		$user = $this->session->getUser();
 		try {
 			$settings = $this->settingsMapper->getSettingsByUser($user->getUID());
-
-			if ($settings->getBatchTime() === 3600 * 24 * 7) {
-				$settingBatchTime = Settings::EMAIL_SEND_WEEKLY;
-			} elseif ($settings->getBatchTime() === 3600 * 24) {
-				$settingBatchTime = Settings::EMAIL_SEND_DAILY;
-			} elseif ($settings->getBatchTime() === 3600 * 3) {
-				$settingBatchTime = Settings::EMAIL_SEND_3HOURLY;
-			} elseif ($settings->getBatchTime() === 3600) {
-				$settingBatchTime = Settings::EMAIL_SEND_HOURLY;
-			} else {
-				$settingBatchTime = Settings::EMAIL_SEND_OFF;
+			$settingBatchTime = SettingsMapper::batchTimeToSetting($settings->getBatchTime());
+			if ($settings->getBatchTime() === Settings::EMAIL_SEND_DEFAULT) {
+				$settingBatchTime = $this->appConfig->getAppValueInt('setting_batchtime');
 			}
 		} catch (DoesNotExistException) {
 			$settings = new Settings();
 			$settings->setUserId($user->getUID());
-			$settings->setBatchTime(3600 * 3);
+			$settings->setBatchTime(Settings::EMAIL_SEND_DEFAULT);
 			$settings->setNextSendTime(1);
 			$this->settingsMapper->insert($settings);
 
-			$settingBatchTime = Settings::EMAIL_SEND_3HOURLY;
+			$settingBatchTime = $this->appConfig->getAppValueInt('setting_batchtime');
 		}
 
-		$defaultSoundNotification = $this->appConfig->getAppValueString(Application::APP_ID, 'sound_notification') === 'yes' ? 'yes' : 'no';
+		$defaultSoundNotification = $this->appConfig->getAppValueBool('sound_notification') ? 'yes' : 'no';
 		$userSoundNotification = $this->config->getUserValue($user->getUID(), Application::APP_ID, 'sound_notification', $defaultSoundNotification) === 'yes';
-		$defaultSoundTalk = $this->appConfig->getAppValueString(Application::APP_ID, 'sound_talk') === 'yes' ? 'yes' : 'no';
+		$defaultSoundTalk = $this->appConfig->getAppValueBool('sound_talk') ? 'yes' : 'no';
 		$userSoundTalk = $this->config->getUserValue($user->getUID(), Application::APP_ID, 'sound_talk', $defaultSoundTalk) === 'yes';
 
 		$this->initialState->provideInitialState('config', [
