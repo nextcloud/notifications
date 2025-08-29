@@ -35,7 +35,6 @@ OC.L10N.register(
     "Your settings have been updated." : "تم تحديث إعداداتك.",
     "An error occurred while updating your settings." : "حدث خطأ أثناء تحديث إعداداتك.",
     "Notifications defaults" : "إفتراضات الإشعارات",
-    "Configure the default notification settings for new users" : "تهيئة إعدادات الإشعارات الافتراضية للمستخدمين الجدد",
     "Send email reminders about unhandled notifications after:" : "أرسل إيميل تذكيري حول الإشعارات التي لم يتم تناولها بعدَ: ",
     "Play sound when a new notification arrives" : "أصدر تنبيه صوتي كلما وصل إشعار جديد",
     "Play sound when a call started (requires Nextcloud Talk)" : "أصدر تنبيه صوتي كلما بدأت مكالمة جديدة (يستلزم تطبيق نكست كلاود للمحادثة Talk)",
@@ -44,6 +43,7 @@ OC.L10N.register(
     "Also repeat sound on a secondary speaker" : "كرِّر الصوت كذلك على مكبر الصوت الثانوي",
     "Selection of the speaker device is currently not supported by Safari" : "إختيار جهاز مكبر الصوت غير مدعوم حاليّاً على مستعرض سافاري",
     "Select a device" : "إختر جهازاً",
-    "seconds ago" : "ثوانٍ مضت"
+    "seconds ago" : "ثوانٍ مضت",
+    "Configure the default notification settings for new users" : "تهيئة إعدادات الإشعارات الافتراضية للمستخدمين الجدد"
 },
 "nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;");

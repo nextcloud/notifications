@@ -35,7 +35,6 @@ OC.L10N.register(
     "Your settings have been updated." : "Zure ezarpenak eguneratu dira.",
     "An error occurred while updating your settings." : "Errore bat gertatu da ezarpenak eguneratzean.",
     "Notifications defaults" : "Jakinarazpen lehenetsiak",
-    "Configure the default notification settings for new users" : "Konfiguratu erabiltzaile berrientzako jakinarazpen-ezarpen lehenetsiak",
     "Send email reminders about unhandled notifications after:" : "Bidali e-posta abisuak kudeatu gabeko jakinarazpenei buruz honen ondoren:",
     "Play sound when a new notification arrives" : "Erreproduzitu soinua jakinarazpen berri bat iristen denean",
     "Play sound when a call started (requires Nextcloud Talk)" : "Erreproduzitu soinua deia hasten denean (Nextcloud Talk behar da)",
@@ -44,6 +43,7 @@ OC.L10N.register(
     "Also repeat sound on a secondary speaker" : "Errepikatu soinua bigarren mailako bozgorailu batean ere",
     "Selection of the speaker device is currently not supported by Safari" : "Safari-k ez du onartzen bozgorailuaren gailua hautatzea",
     "Select a device" : "Hautatu gailu bat",
-    "seconds ago" : "segundo lehenago"
+    "seconds ago" : "segundo lehenago",
+    "Configure the default notification settings for new users" : "Konfiguratu erabiltzaile berrientzako jakinarazpen-ezarpen lehenetsiak"
 },
 "nplurals=2; plural=(n != 1);");

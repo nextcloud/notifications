@@ -29,12 +29,12 @@
     "Your settings have been updated." : "Οι ρυθμίσεις σας έχουν ενημερωθεί.",
     "An error occurred while updating your settings." : "Παρουσιάστηκε σφάλμα κατά την ενημέρωση των ρυθμίσεών σας.",
     "Notifications defaults" : "Προεπιλογές ειδοποιήσεων",
-    "Configure the default notification settings for new users" : "Καθορίστε τις προεπιλεγμένες ρυθμίσεις ειδοποιήσεων για νέους χρήστες.",
     "Send email reminders about unhandled notifications after:" : "Αποστολή υπενθυμίσεων μέσω email για μη χειριζόμενες ειδοποιήσεις μετά από:",
     "Play sound when a new notification arrives" : "Αναπαραγωγή ήχου όταν φτάσει μια νέα ειδοποίηση",
     "Play sound when a call started (requires Nextcloud Talk)" : "Αναπαραγωγή ήχου κατά την έναρξη μιας κλήσης (απαιτείται το Nextcloud Talk)",
     "None" : "Καμμία",
     "You need to set up your email address before you can receive notification emails." : "Πρέπει να ρυθμίσετε τη διεύθυνση email σας για να μπορείτε να λαμβάνετε μηνύματα ηλεκτρονικού ταχυδρομείου ειδοποίησης.",
-    "seconds ago" : " δευτερόλεπτα πριν "
+    "seconds ago" : " δευτερόλεπτα πριν ",
+    "Configure the default notification settings for new users" : "Καθορίστε τις προεπιλεγμένες ρυθμίσεις ειδοποιήσεων για νέους χρήστες."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

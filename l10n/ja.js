@@ -35,7 +35,6 @@ OC.L10N.register(
     "Your settings have been updated." : "設定を更新しました。",
     "An error occurred while updating your settings." : "設定の更新中にエラーが発生しました。",
     "Notifications defaults" : "通知の初期設定",
-    "Configure the default notification settings for new users" : "新規ユーザーの通知設定の既定値を設定する",
     "Send email reminders about unhandled notifications after:" : "未処理の通知に関するリマインダーメールを設定時間後に送る：",
     "Play sound when a new notification arrives" : "新着通知時に音を鳴らす",
     "Play sound when a call started (requires Nextcloud Talk)" : "通話開始時に音を鳴らす（要 Nextcloud Talk）",
@@ -44,6 +43,7 @@ OC.L10N.register(
     "Also repeat sound on a secondary speaker" : "セカンダリスピーカーでも音をリピートする",
     "Selection of the speaker device is currently not supported by Safari" : "スピーカーデバイスの選択は現在Safariではサポートされていません",
     "Select a device" : "デバイスを選択する",
-    "seconds ago" : "数秒前"
+    "seconds ago" : "数秒前",
+    "Configure the default notification settings for new users" : "新規ユーザーの通知設定の既定値を設定する"
 },
 "nplurals=1; plural=0;");

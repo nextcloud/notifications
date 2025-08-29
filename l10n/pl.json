@@ -33,7 +33,6 @@
     "Your settings have been updated." : "Twoje ustawienia zostały zaktualizowane.",
     "An error occurred while updating your settings." : "Wystąpił błąd podczas aktualizowania ustawień.",
     "Notifications defaults" : "Domyślne ustawienia powiadomień",
-    "Configure the default notification settings for new users" : "Skonfiguruj domyślne ustawienia powiadomień dla nowych użytkowników",
     "Send email reminders about unhandled notifications after:" : "Wysyłaj przypomnienia e-mail o nieobsłużonych powiadomieniach po:",
     "Play sound when a new notification arrives" : "Odtwórz dźwięk, gdy nadejdzie nowe powiadomienie",
     "Play sound when a call started (requires Nextcloud Talk)" : "Odtwórz dźwięk po rozpoczęciu połączenia (wymaga Nextcloud Talk)",
@@ -42,6 +41,7 @@
     "Also repeat sound on a secondary speaker" : "Powtarzaj dźwięk także na drugim głośniku",
     "Selection of the speaker device is currently not supported by Safari" : "Wybór urządzenia głośnikowego nie jest obecnie obsługiwany przez przeglądarkę Safari",
     "Select a device" : "Wybierz urządzenie",
-    "seconds ago" : "przed chwilą"
+    "seconds ago" : "przed chwilą",
+    "Configure the default notification settings for new users" : "Skonfiguruj domyślne ustawienia powiadomień dla nowych użytkowników"
 },"pluralForm" :"nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);"
 }

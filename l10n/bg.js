@@ -31,12 +31,12 @@ OC.L10N.register(
     "Your settings have been updated." : "Вашите настройки са актуализирани.",
     "An error occurred while updating your settings." : "Възникна грешка при актуализиране на настройките ви.",
     "Notifications defaults" : "Известия по подразбиране",
-    "Configure the default notification settings for new users" : "Конфигуриране по подразбиране на известията за нови потребители",
     "Send email reminders about unhandled notifications after:" : "Изпращайте напомняния по имейл за необработени известия след: ",
     "Play sound when a new notification arrives" : "Възпроизвеждане на звук при получаване на ново известие",
     "Play sound when a call started (requires Nextcloud Talk)" : "Възпроизвеждане на звук при стартиране на разговор (изисква Nextcloud Talk)",
     "None" : "Няма",
     "You need to set up your email address before you can receive notification emails." : "Първо трябва да въведете вашия имейл адрес, за да получавате имейли с известия.",
-    "seconds ago" : "преди секунди"
+    "seconds ago" : "преди секунди",
+    "Configure the default notification settings for new users" : "Конфигуриране по подразбиране на известията за нови потребители"
 },
 "nplurals=2; plural=(n != 1);");

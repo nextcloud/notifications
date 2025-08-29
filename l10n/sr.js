@@ -35,7 +35,6 @@ OC.L10N.register(
     "Your settings have been updated." : "Ваше поставке су ажуриране.",
     "An error occurred while updating your settings." : "Јавила се грешка током ажурирања ваших подешавања.",
     "Notifications defaults" : "Подразумевана подешавања обавештења",
-    "Configure the default notification settings for new users" : "Конфигурисање подразумеваних подешавања обавештења за нове кориснике",
     "Send email reminders about unhandled notifications after:" : "Пошаљи и-мејл подсетнике у вези са необрађеним обавештењима након:",
     "Play sound when a new notification arrives" : "Пусти звук када стигне ново обавештење",
     "Play sound when a call started (requires Nextcloud Talk)" : "Пусти звук када започне позив (потребан је Некстклауд Разговор)",
@@ -44,6 +43,7 @@ OC.L10N.register(
     "Also repeat sound on a secondary speaker" : "Такође пуштај звук и на секундарном звучнику",
     "Selection of the speaker device is currently not supported by Safari" : "Safari тренутно не подржава избор уређаја секундарног звучника",
     "Select a device" : "Изаберите уређај",
-    "seconds ago" : "пре неколико секунди"
+    "seconds ago" : "пре неколико секунди",
+    "Configure the default notification settings for new users" : "Конфигурисање подразумеваних подешавања обавештења за нове кориснике"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);");

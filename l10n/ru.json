@@ -33,7 +33,6 @@
     "Your settings have been updated." : "Ваши параметры были обновлены.",
     "An error occurred while updating your settings." : "Ошибка при обновлении параметров.",
     "Notifications defaults" : "Параметры уведомлений по умолчанию",
-    "Configure the default notification settings for new users" : "Настройте параметры уведомлений по умолчанию для новых пользователей",
     "Send email reminders about unhandled notifications after:" : "Отправлять эл. письма с напоминанием о непрочитанных уведомлениях после:",
     "Play sound when a new notification arrives" : "Воспроизводить звук при новом уведомлении",
     "Play sound when a call started (requires Nextcloud Talk)" : "Воспроизводить звук при начале вызова (требуется Nextcloud Talk)",
@@ -42,6 +41,7 @@
     "Also repeat sound on a secondary speaker" : "Также повторять звук на дополнительном динамике",
     "Selection of the speaker device is currently not supported by Safari" : "Выбор динамика в настоящее время не поддерживается браузером Safari",
     "Select a device" : "Выберите устройство",
-    "seconds ago" : "несколько секунд назад"
+    "seconds ago" : "несколько секунд назад",
+    "Configure the default notification settings for new users" : "Настройте параметры уведомлений по умолчанию для новых пользователей"
 },"pluralForm" :"nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);"
 }

@@ -29,13 +29,13 @@ OC.L10N.register(
     "Your settings have been updated." : "Asetukset on päivitetty.",
     "An error occurred while updating your settings." : "Asetuksia tallentaessa tapahtui virhe.",
     "Notifications defaults" : "Ilmoitusten oletukset",
-    "Configure the default notification settings for new users" : "Määritä uusien käyttäjien oletusarvoiset ilmoitusasetukset",
     "Send email reminders about unhandled notifications after:" : "Lähetä sähköpostimuistutuksia käsittelemättömistä ilmoituksista, kun on kulunut:",
     "Play sound when a new notification arrives" : "Toista ääni kun uusi ilmoitus vastaanotetaan",
     "Play sound when a call started (requires Nextcloud Talk)" : "Toista ääni kun puhelu on aloitettu (vaatii Nextcloud Talkin)",
     "None" : "Ei mitään",
     "You need to set up your email address before you can receive notification emails." : "Aseta sähköpostiosoite, jotta voit vastaanottaa sähköposti-ilmoituksia.",
     "Select a device" : "Valitse laite",
-    "seconds ago" : "sekuntia sitten"
+    "seconds ago" : "sekuntia sitten",
+    "Configure the default notification settings for new users" : "Määritä uusien käyttäjien oletusarvoiset ilmoitusasetukset"
 },
 "nplurals=2; plural=(n != 1);");

@@ -31,13 +31,13 @@
     "Your settings have been updated." : "Nastavitve so posodobljene.",
     "An error occurred while updating your settings." : "Prišlo je do napake med posodabljanjem nastavitev.",
     "Notifications defaults" : "Privzete nastavitve obveščanja",
-    "Configure the default notification settings for new users" : "Prilagodi privzete nastavitve obveščanja za nove uporabnike.",
     "Send email reminders about unhandled notifications after:" : "Pošiljanje opomnikov po elektronski pošti:",
     "Play sound when a new notification arrives" : "Predvajaj zvok ob prejemu novega obvestila",
     "Play sound when a call started (requires Nextcloud Talk)" : "Predvajaj zvok ob prejetem klicu (zahteva nameščen program Nextcloud Talk)",
     "None" : "Brez",
     "You need to set up your email address before you can receive notification emails." : "Za prejemanje obvestil po elektronski pošti je treba najprej nastaviti elektronski poštni naslov.",
     "Select a device" : "Izbor naprave",
-    "seconds ago" : "pred nekaj sekundami"
+    "seconds ago" : "pred nekaj sekundami",
+    "Configure the default notification settings for new users" : "Prilagodi privzete nastavitve obveščanja za nove uporabnike."
 },"pluralForm" :"nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);"
 }

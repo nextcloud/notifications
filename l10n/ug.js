@@ -31,7 +31,6 @@ OC.L10N.register(
     "Your settings have been updated." : "تەڭشەكلىرىڭىز يېڭىلاندى.",
     "An error occurred while updating your settings." : "تەڭشەكلىرىڭىزنى يېڭىلىغاندا خاتالىق كۆرۈلدى.",
     "Notifications defaults" : "ئۇقتۇرۇش سۈكۈتتىكى ھالەتتە",
-    "Configure the default notification settings for new users" : "يېڭى ئىشلەتكۈچىلەرنىڭ سۈكۈتتىكى ئۇقتۇرۇش تەڭشىكىنى سەپلەڭ",
     "Send email reminders about unhandled notifications after:" : "بىر تەرەپ قىلىنمىغان ئۇقتۇرۇشلار ھەققىدە ئېلېكترونلۇق ئەسكەرتىش ئەۋەتىڭ:",
     "Play sound when a new notification arrives" : "يېڭى ئۇقتۇرۇش كەلگەندە ئاۋاز ئويناڭ",
     "Play sound when a call started (requires Nextcloud Talk)" : "چاقىرىش باشلانغاندا ئاۋاز قويۇڭ (Nextcloud Talk تەلەپ قىلىدۇ)",
@@ -40,6 +39,7 @@ OC.L10N.register(
     "Also repeat sound on a secondary speaker" : "ئىككىلەمچى ياڭراتقۇدا ئاۋازنى تەكرارلاڭ",
     "Selection of the speaker device is currently not supported by Safari" : "ياڭراتقۇ ئۈسكۈنىسىنى تاللاش ھازىر Safari نى قوللىمايدۇ",
     "Select a device" : "ئۈسكۈنىنى تاللاڭ",
-    "seconds ago" : "سېكۇنت بۇرۇن"
+    "seconds ago" : "سېكۇنت بۇرۇن",
+    "Configure the default notification settings for new users" : "يېڭى ئىشلەتكۈچىلەرنىڭ سۈكۈتتىكى ئۇقتۇرۇش تەڭشىكىنى سەپلەڭ"
 },
 "nplurals=2; plural=(n != 1);");

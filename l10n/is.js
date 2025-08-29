@@ -34,7 +34,6 @@ OC.L10N.register(
     "Your settings have been updated." : "Stillingar þínar eru breyttar.",
     "An error occurred while updating your settings." : "Villa kom upp við að uppfæra stillingarnar þínar.",
     "Notifications defaults" : "Sjálfgefnar stillingar tilkynninga",
-    "Configure the default notification settings for new users" : "Ákvarðaðu sjálfgefnar stillingar tilkynninga fyrir nýja notendur",
     "Send email reminders about unhandled notifications after:" : "Senda áminningar í tölvupósti varðandi ómeðhöndlaðar tilkynningar eftir:",
     "Play sound when a new notification arrives" : "Spila hljóðáminningu þegar ný tilkynning berst",
     "Play sound when a call started (requires Nextcloud Talk)" : "Spila hljóð þegar samtal fer í gang (krefst Nextcloud Talk)",
@@ -42,6 +41,7 @@ OC.L10N.register(
     "You need to set up your email address before you can receive notification emails." : "Þú verður að gefa upp tölvupóstfangið þitt svo að þú farir að fá tilkynningapósta.",
     "Also repeat sound on a secondary speaker" : "Einnig endurtaka hljóð á aukahátalara",
     "Select a device" : "Veldu tæki",
-    "seconds ago" : "sekúndum síðan"
+    "seconds ago" : "sekúndum síðan",
+    "Configure the default notification settings for new users" : "Ákvarðaðu sjálfgefnar stillingar tilkynninga fyrir nýja notendur"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");
