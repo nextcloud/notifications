@@ -34,7 +34,6 @@ OC.L10N.register(
     "Your settings have been updated." : "Вашы налады былі абноўлены. ",
     "An error occurred while updating your settings." : "Падчас абнаўлення налад узнікла памылка.",
     "Notifications defaults" : "Прадвызначаныя апавяшчэнні",
-    "Configure the default notification settings for new users" : "Наладзьце прадвызначаныя параметры апавяшчэнняў для новых карыстальнікаў",
     "Send email reminders about unhandled notifications after:" : "Адпраўляць напаміны па электроннай пошце аб неапрацаваных апавяшчэннях пасля:",
     "Play sound when a new notification arrives" : "Прайграваць гук пры атрыманні новага апавяшчэння",
     "Play sound when a call started (requires Nextcloud Talk)" : "Прайграваць гук пры выкліку (патрабуецца Nextcloud Talk)",
@@ -43,6 +42,7 @@ OC.L10N.register(
     "Also repeat sound on a secondary speaker" : "Таксама паўтараць гук на дадатковым дынаміку",
     "Selection of the speaker device is currently not supported by Safari" : "Выбар дынаміка пакуль не падтрымліваецца Safari",
     "Select a device" : "Выберыце прыладу",
-    "seconds ago" : "с таму"
+    "seconds ago" : "с таму",
+    "Configure the default notification settings for new users" : "Наладзьце прадвызначаныя параметры апавяшчэнняў для новых карыстальнікаў"
 },
 "nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);");

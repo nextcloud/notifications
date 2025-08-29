@@ -35,7 +35,6 @@ OC.L10N.register(
     "Your settings have been updated." : "Vaše nastavenia boli aktualizované.",
     "An error occurred while updating your settings." : "Nastala chyba počas ukladania nastavení.",
     "Notifications defaults" : "Predvolené nastavenia notifikácií",
-    "Configure the default notification settings for new users" : "Predvolené nastavenia upozornení pre nových používateľov",
     "Send email reminders about unhandled notifications after:" : "Odoslať e-mailové pripomenutia nezachytených upozornení po:",
     "Play sound when a new notification arrives" : "Prehrať zvuk, keď príde nová notifikácia",
     "Play sound when a call started (requires Nextcloud Talk)" : "Prehrať zvuk, keď začne hovor (vyžaduje Nextcloud Talk /Rozhovor/)",
@@ -44,6 +43,7 @@ OC.L10N.register(
     "Also repeat sound on a secondary speaker" : "Zopakovať zvuk aj na sekundárnom reproduktore",
     "Selection of the speaker device is currently not supported by Safari" : "Výber zariadenia reproduktora momentálne nie je podporovaný prehliadačom Safari",
     "Select a device" : "Vyberte zariadenie",
-    "seconds ago" : "pred niekoľkými sekundami"
+    "seconds ago" : "pred niekoľkými sekundami",
+    "Configure the default notification settings for new users" : "Predvolené nastavenia upozornení pre nových používateľov"
 },
 "nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);");

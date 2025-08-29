@@ -35,7 +35,6 @@ OC.L10N.register(
     "Your settings have been updated." : "A beállításai frissítve lettek.",
     "An error occurred while updating your settings." : "Hiba történt a beállítások frissítése során.",
     "Notifications defaults" : "Értesítések alapértelmezései",
-    "Configure the default notification settings for new users" : "Az új felhasználók alapértelmezett értesítési beállításainak megadása",
     "Send email reminders about unhandled notifications after:" : "Értesítések küldése levélben a nem kezelt értesítésekről ennyi idő után:",
     "Play sound when a new notification arrives" : "Hang lejátszása, ha új értesítés érkezik",
     "Play sound when a call started (requires Nextcloud Talk)" : "Hang lejátszása, ha hívás indul (Nextcloud Beszélgetés szükséges)",
@@ -44,6 +43,7 @@ OC.L10N.register(
     "Also repeat sound on a secondary speaker" : "Hang megismétlése egy másodlagos hangszórón is",
     "Selection of the speaker device is currently not supported by Safari" : "A Safari jelenleg nem támogatja a hangszóró eszköz kiválasztását.",
     "Select a device" : "Eszköz kiválasztása",
-    "seconds ago" : "másodperce"
+    "seconds ago" : "másodperce",
+    "Configure the default notification settings for new users" : "Az új felhasználók alapértelmezett értesítési beállításainak megadása"
 },
 "nplurals=2; plural=(n != 1);");

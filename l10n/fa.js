@@ -31,12 +31,12 @@ OC.L10N.register(
     "Your settings have been updated." : "تنظیمات شما به روز رسانی شد",
     "An error occurred while updating your settings." : "An error occurred while updating your settings.",
     "Notifications defaults" : "Notifications defaults",
-    "Configure the default notification settings for new users" : "Configure the default notification settings for new users",
     "Send email reminders about unhandled notifications after:" : "ارسال ایمیل یادآوری راجع به سایر اعلان ها پس از :",
     "Play sound when a new notification arrives" : "پخش صدا هنگام دریافت اعلان جدید",
     "Play sound when a call started (requires Nextcloud Talk)" : "پخش صدا به محض برقراری تماس (درصورت استفاده از Nextcloud Talk)",
     "None" : "هیچ‌کدام",
     "You need to set up your email address before you can receive notification emails." : "قبل از دریافت ایمیل های هشدار می بایست ادرس ایمیل خود را تنظیم کنید",
-    "seconds ago" : "ثانیه‌هایی پیش"
+    "seconds ago" : "ثانیه‌هایی پیش",
+    "Configure the default notification settings for new users" : "Configure the default notification settings for new users"
 },
 "nplurals=2; plural=(n > 1);");

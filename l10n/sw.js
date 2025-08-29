@@ -35,7 +35,6 @@ OC.L10N.register(
     "Your settings have been updated." : "Mipangilio yako imesasishwa",
     "An error occurred while updating your settings." : "Hitilafu ilitokea wakati wa kusasisha mipangilio yako.",
     "Notifications defaults" : "Chaguo-msingi za arifa",
-    "Configure the default notification settings for new users" : "Sanidi mipangilio ya arifa chaguo-msingi kwa watumiaji wapya",
     "Send email reminders about unhandled notifications after:" : "Tuma vikumbusho vya barua pepe kuhusu arifa ambazo hazijashughulikiwa baada ya:",
     "Play sound when a new notification arrives" : "Cheza sauti arifa mpya inapofika",
     "Play sound when a call started (requires Nextcloud Talk)" : "Cheza sauti simu ilipoanza (inahitaji Nextcloud Talk)",
@@ -44,6 +43,7 @@ OC.L10N.register(
     "Also repeat sound on a secondary speaker" : "Pia rudia sauti kwenye kipaza sauti cha pili",
     "Selection of the speaker device is currently not supported by Safari" : "Uteuzi wa kifaa cha spika hautumiki kwa sasa na Safari",
     "Select a device" : "Chagua kifaa",
-    "seconds ago" : "sukunde zilizopita"
+    "seconds ago" : "sukunde zilizopita",
+    "Configure the default notification settings for new users" : "Sanidi mipangilio ya arifa chaguo-msingi kwa watumiaji wapya"
 },
 "nplurals=2; plural=(n != 1);");

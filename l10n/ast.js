@@ -33,12 +33,12 @@ OC.L10N.register(
     "Your settings have been updated." : "Anovóse la configuración.",
     "An error occurred while updating your settings." : "Prodúxose un error mentanto s'anovaba la configuración.",
     "Notifications defaults" : "Opciones predeterminaes de los avisos",
-    "Configure the default notification settings for new users" : "Configura la configuración predeterminada de los avisos pa usuarios nuevos",
     "Send email reminders about unhandled notifications after:" : "Unviar recordatorios per corréu electrónicu sobre los avisos ensin lleer dempués de:",
     "Play sound when a new notification arrives" : "Reproducir un soníu cuando llegue un avisu",
     "Play sound when a call started (requires Nextcloud Talk)" : "Reproducir un soníu cuando comience una llamada (rique Nextcloud Talk)",
     "None" : "Nada",
     "You need to set up your email address before you can receive notification emails." : "Tienes de configurar una direición de corréu electrónicu enantes de poder recibir mensaxes d'avisu.",
-    "seconds ago" : "hai segundos"
+    "seconds ago" : "hai segundos",
+    "Configure the default notification settings for new users" : "Configura la configuración predeterminada de los avisos pa usuarios nuevos"
 },
 "nplurals=2; plural=(n != 1);");

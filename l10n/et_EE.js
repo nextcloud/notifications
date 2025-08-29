@@ -35,7 +35,6 @@ OC.L10N.register(
     "Your settings have been updated." : "Seaded on uuendatud.",
     "An error occurred while updating your settings." : "Sättete uuendamisel esines tõrge.",
     "Notifications defaults" : "Teavituse vaikesätted",
-    "Configure the default notification settings for new users" : "Sea üles uutele kasutajatele teavituste vaikesätted",
     "Send email reminders about unhandled notifications after:" : "Saada emaili meeldetuletus reageerimata teavituste kohta peale:",
     "Play sound when a new notification arrives" : "Mängi heli kui uus saabub uus teavitus",
     "Play sound when a call started (requires Nextcloud Talk)" : "Mängi heli kõne alguses (vajab Nextcloud Talki)",
@@ -44,6 +43,7 @@ OC.L10N.register(
     "Also repeat sound on a secondary speaker" : "Lisaks korda heli tagavara kõlaril",
     "Selection of the speaker device is currently not supported by Safari" : "Kõlariseadme valimine ei ole hetkel Safaril toetatud",
     "Select a device" : "Vali seade",
-    "seconds ago" : "sekundit tagasi"
+    "seconds ago" : "sekundit tagasi",
+    "Configure the default notification settings for new users" : "Sea üles uutele kasutajatele teavituste vaikesätted"
 },
 "nplurals=2; plural=(n != 1);");

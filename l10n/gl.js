@@ -35,7 +35,6 @@ OC.L10N.register(
     "Your settings have been updated." : "Actualizaronse os axustes.",
     "An error occurred while updating your settings." : "Produciuse un erro ao actualizar os seus axustes.",
     "Notifications defaults" : "Notificacións predeterminadas",
-    "Configure the default notification settings for new users" : "Configure os axustes de notificación predeterminados para os novos usuarios",
     "Send email reminders about unhandled notifications after:" : "Enviar lembretes por correo sobre notificacións non xestionadas após:",
     "Play sound when a new notification arrives" : "Reproducir son cando chegue unha nova notificación",
     "Play sound when a call started (requires Nextcloud Talk)" : "Reproducir son cando se inicia unha chamada (precisa de Parladoiro de Nextcloud)",
@@ -44,6 +43,7 @@ OC.L10N.register(
     "Also repeat sound on a secondary speaker" : "Repetir tamén o son nun altofalante secundario",
     "Selection of the speaker device is currently not supported by Safari" : "Safari non admite actualmente a selección do dispositivo de altofalante",
     "Select a device" : "Seleccione un dispositivo",
-    "seconds ago" : "segundos atrás"
+    "seconds ago" : "segundos atrás",
+    "Configure the default notification settings for new users" : "Configure os axustes de notificación predeterminados para os novos usuarios"
 },
 "nplurals=2; plural=(n != 1);");

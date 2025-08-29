@@ -35,7 +35,6 @@ OC.L10N.register(
     "Your settings have been updated." : "S'han actualitzat els paràmetres.",
     "An error occurred while updating your settings." : "S'ha produït un error en actualitzar els paràmetres.",
     "Notifications defaults" : "Paràmetres per defecte de les notificacions",
-    "Configure the default notification settings for new users" : "Configureu els paràmetres per defecte de les notificacions per als usuaris nous",
     "Send email reminders about unhandled notifications after:" : "Envia recordatoris per correu electrònic sobre notificacions sense resposta després de:",
     "Play sound when a new notification arrives" : "Reprodueix un so quan arribi una notificació nova",
     "Play sound when a call started (requires Nextcloud Talk)" : "Reprodueix un so quan s'iniciï una trucada (requereix Converses del Nextcloud)",
@@ -44,6 +43,7 @@ OC.L10N.register(
     "Also repeat sound on a secondary speaker" : "Repeteix també el so en un altaveu secundari",
     "Selection of the speaker device is currently not supported by Safari" : "Actualment, Safari no admet la selecció del dispositiu d'altaveu",
     "Select a device" : "Seleccioneu un dispositiu",
-    "seconds ago" : "fa uns segons"
+    "seconds ago" : "fa uns segons",
+    "Configure the default notification settings for new users" : "Configureu els paràmetres per defecte de les notificacions per als usuaris nous"
 },
 "nplurals=2; plural=(n != 1);");
