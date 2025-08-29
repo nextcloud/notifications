@@ -28,12 +28,12 @@
     "Your settings have been updated." : "Các thiết lập của bạn vừa được cập nhật",
     "An error occurred while updating your settings." : "Đã xảy ra lỗi khi cập nhật cài đặt của bạn.",
     "Notifications defaults" : "Thông báo mặc định",
-    "Configure the default notification settings for new users" : "Định cấu hình cài đặt thông báo mặc định cho người dùng mới",
     "Send email reminders about unhandled notifications after:" : "Gửi lời nhắc qua email về các thông báo chưa được xử lý sau:",
     "Play sound when a new notification arrives" : "Phát âm thanh khi có thông báo mới",
     "Play sound when a call started (requires Nextcloud Talk)" : "Phát âm thanh khi cuộc gọi bắt đầu (yêu cầu Talk)",
     "None" : "Không có",
     "You need to set up your email address before you can receive notification emails." : "Bạn cần phải thiết lập địa chỉ email trước khi nhận được email thông báo.",
-    "seconds ago" : "vài giây trước"
+    "seconds ago" : "vài giây trước",
+    "Configure the default notification settings for new users" : "Định cấu hình cài đặt thông báo mặc định cho người dùng mới"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

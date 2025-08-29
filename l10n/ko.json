@@ -28,13 +28,13 @@
     "Your settings have been updated." : "설정이 업데이트되었습니다.",
     "An error occurred while updating your settings." : "설정을 갱신하는 중 오류 발생",
     "Notifications defaults" : "알림 기본 설정",
-    "Configure the default notification settings for new users" : "새 사용자의 기본 알림 설정값을 변경합니다",
     "Send email reminders about unhandled notifications after:" : "다음 기간동안 확인하지 않은 알림을 이메일로 보내기:",
     "Play sound when a new notification arrives" : "새로운 알림이 도착할 때 소리 재생하기",
     "Play sound when a call started (requires Nextcloud Talk)" : "새 통화가 시작될 때 소리 재생하기 (Nextcloud 토크 필요}",
     "None" : "없음",
     "You need to set up your email address before you can receive notification emails." : "알림 이메일을 받으려면 이메일 주소를 설정해야 합니다.",
     "Select a device" : "장치 선택",
-    "seconds ago" : "초 전"
+    "seconds ago" : "초 전",
+    "Configure the default notification settings for new users" : "새 사용자의 기본 알림 설정값을 변경합니다"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

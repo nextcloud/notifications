@@ -35,7 +35,6 @@ OC.L10N.register(
     "Your settings have been updated." : "Your settings have been updated.",
     "An error occurred while updating your settings." : "An error occurred while updating your settings.",
     "Notifications defaults" : "Notifications defaults",
-    "Configure the default notification settings for new users" : "Configure the default notification settings for new users",
     "Send email reminders about unhandled notifications after:" : "Send email reminders about unhandled notifications after:",
     "Play sound when a new notification arrives" : "Play sound when a new notification arrives",
     "Play sound when a call started (requires Nextcloud Talk)" : "Play sound when a call started (requires Nextcloud Talk)",
@@ -44,6 +43,7 @@ OC.L10N.register(
     "Also repeat sound on a secondary speaker" : "Also repeat sound on a secondary speaker",
     "Selection of the speaker device is currently not supported by Safari" : "Selection of the speaker device is currently not supported by Safari",
     "Select a device" : "Select a device",
-    "seconds ago" : "seconds ago"
+    "seconds ago" : "seconds ago",
+    "Configure the default notification settings for new users" : "Configure the default notification settings for new users"
 },
 "nplurals=2; plural=(n != 1);");

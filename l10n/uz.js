@@ -35,7 +35,6 @@ OC.L10N.register(
     "Your settings have been updated." : "Sozlamalaringiz yangilandi.",
     "An error occurred while updating your settings." : "Sozlamalaringizni yangilashda xatolik yuz berdi.",
     "Notifications defaults" : "Bildirishnomalarning standart sozlamalari",
-    "Configure the default notification settings for new users" : "Yangi foydalanuvchilar uchun standart bildirishnoma sozlamalarini sozlang",
     "Send email reminders about unhandled notifications after:" : "Ishlov berilmagan bildirishnomalar haqida e-pochta eslatmalarini quyidagidan keyin yuboring:",
     "Play sound when a new notification arrives" : "Yangi bildirishnoma kelganda ovozni ijro eting",
     "Play sound when a call started (requires Nextcloud Talk)" : "Qo'ng'iroq boshlanganda ovozni ijro etish (Nextcloud Talk talab qilinadi)",
@@ -44,6 +43,7 @@ OC.L10N.register(
     "Also repeat sound on a secondary speaker" : "Shuningdek, ovozni ikkinchi darajali karnayda takrorlang",
     "Selection of the speaker device is currently not supported by Safari" : "Dinamik qurilmani tanlash hozirda Safari tomonidan qo'llab-quvvatlanmaydi",
     "Select a device" : "Qurilmani tanlang",
-    "seconds ago" : "soniya avval"
+    "seconds ago" : "soniya avval",
+    "Configure the default notification settings for new users" : "Yangi foydalanuvchilar uchun standart bildirishnoma sozlamalarini sozlang"
 },
 "nplurals=1; plural=0;");

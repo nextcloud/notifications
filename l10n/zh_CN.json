@@ -33,7 +33,6 @@
     "Your settings have been updated." : "已更新设置",
     "An error occurred while updating your settings." : "更新设置时出错",
     "Notifications defaults" : "默认通知设置",
-    "Configure the default notification settings for new users" : "配置新用户的默认通知设置",
     "Send email reminders about unhandled notifications after:" : "多久之后发送电子邮件提醒未处理的通知：",
     "Play sound when a new notification arrives" : "收到新通知时播放提示音",
     "Play sound when a call started (requires Nextcloud Talk)" : "通话开始时播放提示音（需要Nextcloud通话应用）",
@@ -42,6 +41,7 @@
     "Also repeat sound on a secondary speaker" : "还要在辅助扬声器上重复声音",
     "Selection of the speaker device is currently not supported by Safari" : "Safari 当前不支持选择扬声器设备",
     "Select a device" : "选择设备",
-    "seconds ago" : "几秒前"
+    "seconds ago" : "几秒前",
+    "Configure the default notification settings for new users" : "配置新用户的默认通知设置"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

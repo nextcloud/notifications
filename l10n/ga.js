@@ -35,7 +35,6 @@ OC.L10N.register(
     "Your settings have been updated." : "Nuashonraíodh do shocruithe.",
     "An error occurred while updating your settings." : "Tharla earráid agus do shocruithe á nuashonrú.",
     "Notifications defaults" : "Réamhshocruithe fógraí",
-    "Configure the default notification settings for new users" : "Cumraigh na socruithe fógra réamhshocraithe d'úsáideoirí nua",
     "Send email reminders about unhandled notifications after:" : "Seol meabhrúcháin ríomhphoist maidir le fógraí nár láimhseáiltear tar éis:",
     "Play sound when a new notification arrives" : "Seinn an fhuaim nuair a thagann fógra nua",
     "Play sound when a call started (requires Nextcloud Talk)" : "Seinn an fhuaim nuair a thosaigh an glao (tá Nextcloud Talk ag teastáil)",
@@ -44,6 +43,7 @@ OC.L10N.register(
     "Also repeat sound on a secondary speaker" : "Déan fuaim arís ar chainteoir tánaisteach freisin",
     "Selection of the speaker device is currently not supported by Safari" : "Ní thacaíonn Safari le roghnú gléas an chainteora faoi láthair",
     "Select a device" : "Roghnaigh gléas",
-    "seconds ago" : "soicind ó shin"
+    "seconds ago" : "soicind ó shin",
+    "Configure the default notification settings for new users" : "Cumraigh na socruithe fógra réamhshocraithe d'úsáideoirí nua"
 },
 "nplurals=5; plural=(n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n<11 ? 3 : 4);");
