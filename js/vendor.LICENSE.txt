@@ -29,7 +29,7 @@ version: 1.2.0
 license: GPL-3.0-or-later
 
 @nextcloud/dialogs
-version: 7.0.0-rc.1
+version: 7.0.0-rc.2
 license: AGPL-3.0-or-later
 
 @nextcloud/event-bus
@@ -69,19 +69,19 @@ version: 1.3.0
 license: ISC
 
 @vue/reactivity
-version: 3.5.19
+version: 3.5.20
 license: MIT
 
 @vue/runtime-core
-version: 3.5.19
+version: 3.5.20
 license: MIT
 
 @vue/runtime-dom
-version: 3.5.19
+version: 3.5.20
 license: MIT
 
 @vue/shared
-version: 3.5.19
+version: 3.5.20
 license: MIT
 
 @vueuse/components
