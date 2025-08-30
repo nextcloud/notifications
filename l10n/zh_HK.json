@@ -33,6 +33,7 @@
     "Your settings have been updated." : "您的設定已更新。",
     "An error occurred while updating your settings." : "更新設置時發生錯誤",
     "Notifications defaults" : "默認通知設定",
+    "Configure the default notification settings" : "設定預設通知設定",
     "Send email reminders about unhandled notifications after:" : "發送有關未處理通知的電郵提醒：",
     "Play sound when a new notification arrives" : "收到新通知時播放聲音",
     "Play sound when a call started (requires Nextcloud Talk)" : "通話開始時播放聲音（需要 Nextcloud Talk）",

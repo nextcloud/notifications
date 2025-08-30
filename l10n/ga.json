@@ -33,6 +33,7 @@
     "Your settings have been updated." : "Nuashonraíodh do shocruithe.",
     "An error occurred while updating your settings." : "Tharla earráid agus do shocruithe á nuashonrú.",
     "Notifications defaults" : "Réamhshocruithe fógraí",
+    "Configure the default notification settings" : "Cumraigh na socruithe fógra réamhshocraithe",
     "Send email reminders about unhandled notifications after:" : "Seol meabhrúcháin ríomhphoist maidir le fógraí nár láimhseáiltear tar éis:",
     "Play sound when a new notification arrives" : "Seinn an fhuaim nuair a thagann fógra nua",
     "Play sound when a call started (requires Nextcloud Talk)" : "Seinn an fhuaim nuair a thosaigh an glao (tá Nextcloud Talk ag teastáil)",

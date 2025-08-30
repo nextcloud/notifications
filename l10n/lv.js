@@ -2,6 +2,7 @@ OC.L10N.register(
     "notifications",
     {
     "User not found" : "Lietotājs nav atrasts",
+    "An unexpected error occurred, ask your administration to check the logs." : "Atgadījās neparedzēta kļūda, jāvaicā pārvaldītājam pārbaudīt žurnālus.",
     "Hello %s" : "Sveiciens, %s!",
     "Hello %s," : "Sveiciens, %s!",
     "Admin notifications" : "Pārvaldītāju paziņojumi",

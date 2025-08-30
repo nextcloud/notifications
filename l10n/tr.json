@@ -33,6 +33,7 @@
     "Your settings have been updated." : "Ayarlarınız güncellendi.",
     "An error occurred while updating your settings." : "Ayarlarınız güncellenirken bir sorun çıktı.",
     "Notifications defaults" : "Bildirim varsayılanları",
+    "Configure the default notification settings" : "Varsayılan bildirim ayarlarını yapılandırın",
     "Send email reminders about unhandled notifications after:" : "Şu kadar zaman sonra işlenmeyen bildirimler için e-posta anımsatıcıları gönderilsin:",
     "Play sound when a new notification arrives" : "Bildirimlerde ses çalınsın",
     "Play sound when a call started (requires Nextcloud Talk)" : "Bir çağrı başlatıldığında ses çalınsın (Nextcloud Konuş gereklidir)",
