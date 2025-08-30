@@ -35,6 +35,7 @@ OC.L10N.register(
     "Your settings have been updated." : "您的設定已更新。",
     "An error occurred while updating your settings." : "更新您的設定時發生錯誤。",
     "Notifications defaults" : "通知預設值",
+    "Configure the default notification settings" : "設定預設通知設定",
     "Send email reminders about unhandled notifications after:" : "在多久之後傳送關於未處理通知的電子郵件提醒：",
     "Play sound when a new notification arrives" : "收到新通知時播放音效",
     "Play sound when a call started (requires Nextcloud Talk)" : "通話開始時播放音效（需要 Nextcloud Talk）",

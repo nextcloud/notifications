@@ -35,6 +35,7 @@ OC.L10N.register(
     "Your settings have been updated." : "設定を更新しました。",
     "An error occurred while updating your settings." : "設定の更新中にエラーが発生しました。",
     "Notifications defaults" : "通知の初期設定",
+    "Configure the default notification settings" : "デフォルトの通知設定をする",
     "Send email reminders about unhandled notifications after:" : "未処理の通知に関するリマインダーメールを設定時間後に送る：",
     "Play sound when a new notification arrives" : "新着通知時に音を鳴らす",
     "Play sound when a call started (requires Nextcloud Talk)" : "通話開始時に音を鳴らす（要 Nextcloud Talk）",

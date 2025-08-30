@@ -33,6 +33,7 @@
     "Your settings have been updated." : "Ваше поставке су ажуриране.",
     "An error occurred while updating your settings." : "Јавила се грешка током ажурирања ваших подешавања.",
     "Notifications defaults" : "Подразумевана подешавања обавештења",
+    "Configure the default notification settings" : "Конфигурисање подразумеваних подешавања обавештења",
     "Send email reminders about unhandled notifications after:" : "Пошаљи и-мејл подсетнике у вези са необрађеним обавештењима након:",
     "Play sound when a new notification arrives" : "Пусти звук када стигне ново обавештење",
     "Play sound when a call started (requires Nextcloud Talk)" : "Пусти звук када започне позив (потребан је Некстклауд Разговор)",
