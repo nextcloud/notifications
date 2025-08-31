@@ -69,7 +69,7 @@ version: 0.2.3
 license: GPL-3.0-or-later
 
 @nextcloud/vue
-version: 8.29.1
+version: 8.29.2
 license: AGPL-3.0-or-later
 
 @nextcloud/vue-select
