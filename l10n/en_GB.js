@@ -35,6 +35,7 @@ OC.L10N.register(
     "Your settings have been updated." : "Your settings have been updated.",
     "An error occurred while updating your settings." : "An error occurred while updating your settings.",
     "Notifications defaults" : "Notifications defaults",
+    "Configure the default notification settings" : "Configure the default notification settings",
     "Send email reminders about unhandled notifications after:" : "Send email reminders about unhandled notifications after:",
     "Play sound when a new notification arrives" : "Play sound when a new notification arrives",
     "Play sound when a call started (requires Nextcloud Talk)" : "Play sound when a call started (requires Nextcloud Talk)",
