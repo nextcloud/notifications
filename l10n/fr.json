@@ -33,6 +33,7 @@
     "Your settings have been updated." : "Vos paramètres ont été mis à jour.",
     "An error occurred while updating your settings." : "Un erreur est survenue lors de la mise à jour de vos paramètres.",
     "Notifications defaults" : "Paramètres de notification par défaut",
+    "Configure the default notification settings" : "Configurer les paramètres de notification par défaut",
     "Send email reminders about unhandled notifications after:" : "Envoyer par e-mail des rappels des notifications non gérées après :",
     "Play sound when a new notification arrives" : "Jouer un son quand une notification arrive",
     "Play sound when a call started (requires Nextcloud Talk)" : "Jouer un son quand un appel est lancé (l'application Nextcloud Talk est requise)",
