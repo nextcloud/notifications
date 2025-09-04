@@ -34,6 +34,7 @@ OC.L10N.register(
     "Your settings have been updated." : "Вашы налады былі абноўлены. ",
     "An error occurred while updating your settings." : "Падчас абнаўлення налад узнікла памылка.",
     "Notifications defaults" : "Прадвызначаныя апавяшчэнні",
+    "Configure the default notification settings" : "Задайце прадвызначаныя налады апавяшчэнняў",
     "Send email reminders about unhandled notifications after:" : "Адпраўляць напаміны па электроннай пошце аб неапрацаваных апавяшчэннях пасля:",
     "Play sound when a new notification arrives" : "Прайграваць гук пры атрыманні новага апавяшчэння",
     "Play sound when a call started (requires Nextcloud Talk)" : "Прайграваць гук пры выкліку (патрабуецца Nextcloud Talk)",
