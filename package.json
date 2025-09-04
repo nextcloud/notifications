@@ -1,6 +1,6 @@
 {
   "name": "notifications",
-  "version": "5.0.0-dev.0",
+  "version": "6.0.0-dev.0",
   "private": true,
   "description": "This app provides a backend and frontend for the notification API available in Nextcloud.",
   "license": "AGPL-3.0-only",
