@@ -178,7 +178,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 2.1.0
 	- license: MIT
 - notifications
-	- version: 5.0.0-dev.0
+	- version: 6.0.0-dev.0
 	- license: AGPL-3.0-only
 - property-information
 	- version: 7.1.0

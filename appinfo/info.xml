@@ -20,7 +20,7 @@
 
 📣 Announcement center: An announcement was posted by an admin]]></description>
 
-	<version>5.0.0-dev.0</version>
+	<version>6.0.0-dev.0</version>
 	<licence>agpl</licence>
 	<author>Joas Schilling</author>
 
@@ -35,7 +35,7 @@
 	<repository>https://github.com/nextcloud/notifications.git</repository>
 
 	<dependencies>
-		<nextcloud min-version="32" max-version="32" />
+		<nextcloud min-version="33" max-version="33" />
 	</dependencies>
 
 	<background-jobs>
