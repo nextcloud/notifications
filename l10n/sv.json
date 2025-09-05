@@ -33,6 +33,7 @@
     "Your settings have been updated." : "Dina inställningar har uppdaterats.",
     "An error occurred while updating your settings." : "Ett fel inträffade vid uppdatering av dina inställningar.",
     "Notifications defaults" : "Standardinställningar för aviseringar",
+    "Configure the default notification settings" : "Konfigurera standardinställningar för aviseringar",
     "Send email reminders about unhandled notifications after:" : "Skicka påminnelser via e-post för ej hanterade aviseringar efter:",
     "Play sound when a new notification arrives" : "Spela upp ljud när en ny avisering kommer",
     "Play sound when a call started (requires Nextcloud Talk)" : "Spela upp ljud när ett samtal startade (kräver Nextcloud Talk)",
