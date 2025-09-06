@@ -35,6 +35,7 @@ OC.L10N.register(
     "Your settings have been updated." : "Mipangilio yako imesasishwa",
     "An error occurred while updating your settings." : "Hitilafu ilitokea wakati wa kusasisha mipangilio yako.",
     "Notifications defaults" : "Chaguo-msingi za arifa",
+    "Configure the default notification settings" : "Sanidi mipangilio ya arifa chaguomsingi",
     "Send email reminders about unhandled notifications after:" : "Tuma vikumbusho vya barua pepe kuhusu arifa ambazo hazijashughulikiwa baada ya:",
     "Play sound when a new notification arrives" : "Cheza sauti arifa mpya inapofika",
     "Play sound when a call started (requires Nextcloud Talk)" : "Cheza sauti simu ilipoanza (inahitaji Nextcloud Talk)",
