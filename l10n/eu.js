@@ -35,6 +35,7 @@ OC.L10N.register(
     "Your settings have been updated." : "Zure ezarpenak eguneratu dira.",
     "An error occurred while updating your settings." : "Errore bat gertatu da ezarpenak eguneratzean.",
     "Notifications defaults" : "Jakinarazpen lehenetsiak",
+    "Configure the default notification settings" : "Konfiguratu aurrez zehaztutako jakinarazpenen ezarpenak",
     "Send email reminders about unhandled notifications after:" : "Bidali e-posta abisuak kudeatu gabeko jakinarazpenei buruz honen ondoren:",
     "Play sound when a new notification arrives" : "Erreproduzitu soinua jakinarazpen berri bat iristen denean",
     "Play sound when a call started (requires Nextcloud Talk)" : "Erreproduzitu soinua deia hasten denean (Nextcloud Talk behar da)",
