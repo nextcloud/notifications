@@ -14,7 +14,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 0.2.10
 	- license: MIT
 - @nextcloud/vue
-	- version: 9.0.0-rc.7
+	- version: 9.0.0-rc.9
 	- license: AGPL-3.0-or-later
 - notifications
 	- version: 6.0.0-dev.0
