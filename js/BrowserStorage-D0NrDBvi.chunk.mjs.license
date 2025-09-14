@@ -4,7 +4,6 @@ SPDX-License-Identifier: BSD-3-Clause
 SPDX-License-Identifier: GPL-3.0-or-later
 SPDX-License-Identifier: MIT
 SPDX-FileCopyrightText: Anthony Fu <anthonyfu117@hotmail.com>
-SPDX-FileCopyrightText: Christoph Wurst
 SPDX-FileCopyrightText: Eric Norris (https://github.com/ericnorris)
 SPDX-FileCopyrightText: Eugene Sharygin <eush77@gmail.com>
 SPDX-FileCopyrightText: Feross Aboukhadijeh
@@ -20,25 +19,22 @@ SPDX-FileCopyrightText: atomiks
 
 This file is generated from multiple sources. Included packages:
 - @floating-ui/core
-	- version: 1.5.0
+	- version: 1.7.3
 	- license: MIT
 - @floating-ui/dom
-	- version: 1.5.3
+	- version: 1.7.4
 	- license: MIT
 - @floating-ui/utils
-	- version: 0.1.4
+	- version: 0.2.10
 	- license: MIT
 - @nextcloud/capabilities
 	- version: 1.2.0
 	- license: GPL-3.0-or-later
-- @nextcloud/logger
-	- version: 3.0.2
-	- license: GPL-3.0-or-later
 - @nextcloud/vue
-	- version: 8.29.2
+	- version: 8.31.0
 	- license: AGPL-3.0-or-later
 - @nextcloud/vue-select
-	- version: 3.25.1
+	- version: 3.26.0
 	- license: MIT
 - @vueuse/components
 	- version: 11.0.1

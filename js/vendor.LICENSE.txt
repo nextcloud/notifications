@@ -1,15 +1,15 @@
 Included dependencies:
 
 @floating-ui/core
-version: 1.5.0
+version: 1.7.3
 license: MIT
 
 @floating-ui/dom
-version: 1.5.3
+version: 1.7.4
 license: MIT
 
 @floating-ui/utils
-version: 0.1.4
+version: 0.2.10
 license: MIT
 
 @mapbox/hast-util-table-cell-style
@@ -17,7 +17,7 @@ version: 0.2.0
 license: BSD-2-Clause
 
 @nextcloud/auth
-version: 2.5.1
+version: 2.5.2
 license: GPL-3.0-or-later
 
 @nextcloud/axios
@@ -33,7 +33,7 @@ version: 1.2.0
 license: GPL-3.0-or-later
 
 @nextcloud/dialogs
-version: 6.3.1
+version: 6.3.2
 license: AGPL-3.0-or-later
 
 @nextcloud/event-bus
@@ -65,15 +65,15 @@ version: 3.0.1
 license: GPL-3.0-or-later
 
 @nextcloud/sharing
-version: 0.2.4
+version: 0.3.0
 license: GPL-3.0-or-later
 
 @nextcloud/vue
-version: 8.29.2
+version: 8.31.0
 license: AGPL-3.0-or-later
 
 @nextcloud/vue-select
-version: 3.25.1
+version: 3.26.0
 license: MIT
 
 @ungap/structured-clone
@@ -93,7 +93,7 @@ version: 11.0.1
 license: MIT
 
 axios
-version: 1.8.3
+version: 1.12.1
 license: MIT
 
 bail
