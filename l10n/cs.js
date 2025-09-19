@@ -35,6 +35,7 @@ OC.L10N.register(
     "Your settings have been updated." : "Vaše nastavení byla aktualizována.",
     "An error occurred while updating your settings." : "Při aktualizaci vašich nastavení došlo k chybě.",
     "Notifications defaults" : "Výchozí pro upozornění",
+    "Configure the default notification settings" : "Nastavit výchozí nastavení upozorňování",
     "Send email reminders about unhandled notifications after:" : "Posílat upozornění e-mailem ohledně nezpracovaných upozornění po uplynutí:",
     "Play sound when a new notification arrives" : "Při příchodu nového upozornění přehrát zvuk",
     "Play sound when a call started (requires Nextcloud Talk)" : "Při zahájení hovoru přehrát zvuk (vyžaduje Nextcloud Talk)",
