@@ -11,7 +11,7 @@
 		:exclude-click-outside-selectors="['.popover']"
 		:aria-label="t('notifications', 'Notifications')"
 		:title="t('notifications', 'Notifications')"
-		@open="onOpen">
+		@opened="onOpen">
 		<template #trigger>
 			<IconNotification
 				:size="20"
