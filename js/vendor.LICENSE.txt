@@ -17,7 +17,7 @@ version: 2.5.2
 license: GPL-3.0-or-later
 
 @nextcloud/axios
-version: 2.5.1
+version: 2.5.2
 license: GPL-3.0-or-later
 
 @nextcloud/browser-storage
@@ -61,7 +61,7 @@ version: 0.3.0
 license: GPL-3.0-or-later
 
 @nextcloud/vue
-version: 9.0.0-rc.9
+version: 9.0.0
 license: AGPL-3.0-or-later
 
 @ungap/structured-clone
@@ -105,7 +105,7 @@ version: 1.0.7
 license: MIT
 
 axios
-version: 1.12.1
+version: 1.12.2
 license: MIT
 
 bail
@@ -205,7 +205,7 @@ version: 5.0.3
 license: MIT
 
 dompurify
-version: 3.2.6
+version: 3.2.7
 license: (MPL-2.0 OR Apache-2.0)
 
 dunder-proto
