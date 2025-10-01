@@ -8,21 +8,19 @@
 		<div class="notification-frequency__warning">
 			<strong v-if="!config.is_email_set">{{ t('notifications', 'You need to set up your email address before you can receive notification emails.') }}</strong>
 		</div>
-		<p>
+		<div class="notification-frequency__wrapper">
 			<label for="notification_reminder_batchtime" class="notification-frequency__label">
 				{{ t('notifications', 'Send email reminders about unhandled notifications after:') }}
 			</label>
-			<select
+			<NcSelect
 				id="notification_reminder_batchtime"
-				v-model="config.setting_batchtime"
-				name="notification_reminder_batchtime"
+				v-model="currentBatchTime"
 				class="notification-frequency__select"
-				@change="updateSettings()">
-				<option v-for="option in BATCHTIME_OPTIONS" :key="option.value" :value="option.value">
-					{{ option.text }}
-				</option>
-			</select>
-		</p>
+				:clearable="false"
+				label-outside
+				:options="BATCHTIME_OPTIONS"
+				@update:model-value="updateSettings" />
+		</div>
 
 		<NcCheckboxRadioSwitch
 			v-model="config.sound_notification"
@@ -68,7 +66,7 @@ import { loadState } from '@nextcloud/initial-state'
 import { t } from '@nextcloud/l10n'
 import { generateOcsUrl } from '@nextcloud/router'
 import { UAParser } from 'ua-parser-js'
-import { reactive, ref } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 import NcSelect from '@nextcloud/vue/components/NcSelect'
 import NcSettingsSection from '@nextcloud/vue/components/NcSettingsSection'
@@ -82,11 +80,11 @@ const EmailFrequency = {
 	EMAIL_SEND_WEEKLY: 4,
 }
 const BATCHTIME_OPTIONS = [
-	{ text: t('notifications', 'Never'), value: EmailFrequency.EMAIL_SEND_OFF },
-	{ text: t('notifications', '1 hour'), value: EmailFrequency.EMAIL_SEND_HOURLY },
-	{ text: t('notifications', '3 hours'), value: EmailFrequency.EMAIL_SEND_3HOURLY },
-	{ text: t('notifications', '1 day'), value: EmailFrequency.EMAIL_SEND_DAILY },
-	{ text: t('notifications', '1 week'), value: EmailFrequency.EMAIL_SEND_WEEKLY },
+	{ label: t('notifications', 'Never'), value: EmailFrequency.EMAIL_SEND_OFF },
+	{ label: t('notifications', '1 hour'), value: EmailFrequency.EMAIL_SEND_HOURLY },
+	{ label: t('notifications', '3 hours'), value: EmailFrequency.EMAIL_SEND_3HOURLY },
+	{ label: t('notifications', '1 day'), value: EmailFrequency.EMAIL_SEND_DAILY },
+	{ label: t('notifications', '1 week'), value: EmailFrequency.EMAIL_SEND_WEEKLY },
 ]
 const EMPTY_DEVICE_OPTION = { id: null, label: t('notifications', 'None') }
 const parser = new UAParser()
@@ -109,12 +107,23 @@ export default {
 		})
 		const devices = ref([])
 
+		const currentBatchTime = computed({
+			get() {
+				return BATCHTIME_OPTIONS.find(({ value }) => value === config.setting_batchtime)
+			},
+			set({ value }) {
+				config.setting_batchtime = value
+			},
+		})
+
 		return {
 			BATCHTIME_OPTIONS,
+
 			isSafari,
 			config,
-			storage,
+			currentBatchTime,
 			devices,
+			storage,
 		}
 	},
 
@@ -185,5 +194,16 @@ export default {
 <style lang="scss" scoped>
 .additional-margin-top {
 	margin-top: 12px;
+}
+
+.notification-frequency__wrapper {
+	display: flex;
+	flex-direction: column;
+	gap: var(--default-grid-baseline);
+
+	.notification-frequency__select {
+		margin-inline-start: calc(2 * var(--default-grid-baseline));
+		width: fit-content;
+	}
 }
 </style>
