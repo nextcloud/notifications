@@ -7,20 +7,19 @@
 	<NcSettingsSection
 		:name="t('notifications', 'Notifications defaults')"
 		:description="t('notifications', 'Configure the default notification settings')">
-		<p>
-			<label for="notify_setting_batchtime" class="notification-frequency__label">
+		<div class="notification-frequency__wrapper">
+			<label for="notification_reminder_batchtime" class="notification-frequency__label">
 				{{ t('notifications', 'Send email reminders about unhandled notifications after:') }}
 			</label>
-			<select
-				id="notify_setting_batchtime"
-				v-model="config.setting_batchtime"
+			<NcSelect
+				id="notification_reminder_batchtime"
+				v-model="currentBatchTime"
 				class="notification-frequency__select"
-				@change="updateSettings()">
-				<option v-for="option in batchtime_options" :key="option.value" :value="option.value">
-					{{ option.text }}
-				</option>
-			</select>
-		</p>
+				:clearable="false"
+				label-outside
+				:options="BATCHTIME_OPTIONS"
+				@update:model-value="updateSettings" />
+		</div>
 
 		<NcCheckboxRadioSwitch
 			v-model="config.sound_notification"
@@ -41,7 +40,9 @@ import { showError, showSuccess } from '@nextcloud/dialogs'
 import { loadState } from '@nextcloud/initial-state'
 import { t } from '@nextcloud/l10n'
 import { generateOcsUrl } from '@nextcloud/router'
+import { computed, reactive } from 'vue'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
+import NcSelect from '@nextcloud/vue/components/NcSelect'
 import NcSettingsSection from '@nextcloud/vue/components/NcSettingsSection'
 
 const EmailFrequency = {
@@ -52,24 +53,38 @@ const EmailFrequency = {
 	EMAIL_SEND_WEEKLY: 4,
 }
 
+const BATCHTIME_OPTIONS = [
+	{ label: t('notifications', 'Never'), value: EmailFrequency.EMAIL_SEND_OFF },
+	{ label: t('notifications', '1 hour'), value: EmailFrequency.EMAIL_SEND_HOURLY },
+	{ label: t('notifications', '3 hours'), value: EmailFrequency.EMAIL_SEND_3HOURLY },
+	{ label: t('notifications', '1 day'), value: EmailFrequency.EMAIL_SEND_DAILY },
+	{ label: t('notifications', '1 week'), value: EmailFrequency.EMAIL_SEND_WEEKLY },
+]
+
 export default {
 	name: 'AdminSettings',
 	components: {
+		NcSelect,
 		NcCheckboxRadioSwitch,
 		NcSettingsSection,
 	},
 
-	data() {
-		return {
-			batchtime_options: [
-				{ text: t('notifications', 'Never'), value: EmailFrequency.EMAIL_SEND_OFF },
-				{ text: t('notifications', '1 hour'), value: EmailFrequency.EMAIL_SEND_HOURLY },
-				{ text: t('notifications', '3 hours'), value: EmailFrequency.EMAIL_SEND_3HOURLY },
-				{ text: t('notifications', '1 day'), value: EmailFrequency.EMAIL_SEND_DAILY },
-				{ text: t('notifications', '1 week'), value: EmailFrequency.EMAIL_SEND_WEEKLY },
-			],
+	setup() {
+		const config = reactive(loadState('notifications', 'config', {}))
 
-			config: loadState('notifications', 'config'),
+		const currentBatchTime = computed({
+			get() {
+				return BATCHTIME_OPTIONS.find(({ value }) => value === config.setting_batchtime)
+			},
+			set({ value }) {
+				config.setting_batchtime = value
+			},
+		})
+
+		return {
+			BATCHTIME_OPTIONS,
+			config,
+			currentBatchTime,
 		}
 	},
 
@@ -93,3 +108,16 @@ export default {
 }
 
 </script>
+
+<style lang="scss" scoped>
+.notification-frequency__wrapper {
+	display: flex;
+	flex-direction: column;
+	gap: var(--default-grid-baseline);
+
+	.notification-frequency__select {
+		margin-inline-start: calc(2 * var(--default-grid-baseline));
+		width: fit-content;
+	}
+}
+</style>
