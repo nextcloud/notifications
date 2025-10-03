@@ -35,6 +35,7 @@ OC.L10N.register(
     "Your settings have been updated." : "A beállításai frissítve lettek.",
     "An error occurred while updating your settings." : "Hiba történt a beállítások frissítése során.",
     "Notifications defaults" : "Értesítések alapértelmezései",
+    "Configure the default notification settings" : "Állítsa be az alapértelmezett értesítési beállításokat",
     "Send email reminders about unhandled notifications after:" : "Értesítések küldése levélben a nem kezelt értesítésekről ennyi idő után:",
     "Play sound when a new notification arrives" : "Hang lejátszása, ha új értesítés érkezik",
     "Play sound when a call started (requires Nextcloud Talk)" : "Hang lejátszása, ha hívás indul (Nextcloud Beszélgetés szükséges)",
