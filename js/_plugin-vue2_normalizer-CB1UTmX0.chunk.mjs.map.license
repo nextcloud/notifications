@@ -58,7 +58,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 8.31.0
 	- license: AGPL-3.0-or-later
 - @vitejs/plugin-vue2
-	- version: 2.3.3
+	- version: 2.3.4
 	- license: MIT
 - @vueuse/core
 	- version: 11.0.1
