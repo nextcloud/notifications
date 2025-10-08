@@ -13,6 +13,7 @@ SPDX-FileCopyrightText: Eduardo San Martin Morote
 SPDX-FileCopyrightText: Evan You
 SPDX-FileCopyrightText: GitHub Inc.
 SPDX-FileCopyrightText: Guillaume Chau <guillaume.b.chau@gmail.com>
+SPDX-FileCopyrightText: Jeff Sagal <sagalbot@gmail.com>
 SPDX-FileCopyrightText: Matt Zabriskie
 SPDX-FileCopyrightText: Nextcloud GmbH and Nextcloud contributors
 SPDX-FileCopyrightText: Varun A P
@@ -25,6 +26,9 @@ This file is generated from multiple sources. Included packages:
 	- license: MIT
 - @floating-ui/dom
 	- version: 1.1.1
+	- license: MIT
+- @floating-ui/dom
+	- version: 1.7.4
 	- license: MIT
 - @floating-ui/utils
 	- version: 0.2.10
@@ -100,4 +104,7 @@ This file is generated from multiple sources. Included packages:
 	- license: MIT
 - vue-router
 	- version: 4.5.1
+	- license: MIT
+- vue-select
+	- version: 4.0.0-beta.6
 	- license: MIT
