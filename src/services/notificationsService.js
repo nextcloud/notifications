@@ -43,6 +43,19 @@ async function getNotificationsData(tabId, lastETag, forceRefresh, hasNotifyPush
 }
 
 /**
+ * @param {string|null} tabId unique id for browser tab
+ */
+async function setCurrentTabAsActive(tabId) {
+	const lastTab = BrowserStorage.getItem('tabId')
+	if (lastTab !== tabId) {
+		// Refresh the data when changing the tab
+		await getNotificationsData(tabId, '', true, false)
+		// Enforce this tab one the raise-condition if there was one
+		BrowserStorage.setItem('tabId', tabId)
+	}
+}
+
+/**
  * @param {object} notification notification object
  */
 function remapAttributes(notification) {
@@ -90,4 +103,5 @@ async function refreshData(lastETag) {
 
 export {
 	getNotificationsData,
+	setCurrentTabAsActive,
 }
