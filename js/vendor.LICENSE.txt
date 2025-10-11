@@ -13,7 +13,7 @@ version: 0.2.10
 license: MIT
 
 @nextcloud/auth
-version: 2.5.2
+version: 2.5.3
 license: GPL-3.0-or-later
 
 @nextcloud/axios
@@ -21,7 +21,7 @@ version: 2.5.2
 license: GPL-3.0-or-later
 
 @nextcloud/browser-storage
-version: 0.4.0
+version: 0.5.0
 license: GPL-3.0-or-later
 
 @nextcloud/capabilities
