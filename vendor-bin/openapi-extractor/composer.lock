@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0e8dacaaca177f5f26345f038d4b4e66",
+    "content-hash": "7c707ecc8dae3495372bb436dcf8d4f7",
     "packages": [],
     "packages-dev": [
         {
@@ -82,16 +82,16 @@
         },
         {
             "name": "nextcloud/openapi-extractor",
-            "version": "v1.8.5",
+            "version": "v1.8.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nextcloud-releases/openapi-extractor.git",
-                "reference": "edecd1d3e1404e30817889341af89f927bd25f4b"
+                "reference": "3874ffb6817ab5b616a5e909c48c7cd13889cafa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nextcloud-releases/openapi-extractor/zipball/edecd1d3e1404e30817889341af89f927bd25f4b",
-                "reference": "edecd1d3e1404e30817889341af89f927bd25f4b",
+                "url": "https://api.github.com/repos/nextcloud-releases/openapi-extractor/zipball/3874ffb6817ab5b616a5e909c48c7cd13889cafa",
+                "reference": "3874ffb6817ab5b616a5e909c48c7cd13889cafa",
                 "shasum": ""
             },
             "require": {
@@ -123,9 +123,9 @@
             "description": "A tool for extracting OpenAPI specifications from Nextcloud source code",
             "support": {
                 "issues": "https://github.com/nextcloud-releases/openapi-extractor/issues",
-                "source": "https://github.com/nextcloud-releases/openapi-extractor/tree/v1.8.5"
+                "source": "https://github.com/nextcloud-releases/openapi-extractor/tree/v1.8.6"
             },
-            "time": "2025-09-30T11:53:31+00:00"
+            "time": "2025-10-01T13:53:28+00:00"
         },
         {
             "name": "nikic/php-parser",
