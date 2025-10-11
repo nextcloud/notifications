@@ -29,7 +29,7 @@ version: 1.2.0
 license: GPL-3.0-or-later
 
 @nextcloud/dialogs
-version: 7.0.0-rc.3
+version: 7.0.0
 license: AGPL-3.0-or-later
 
 @nextcloud/event-bus
@@ -37,7 +37,7 @@ version: 3.3.2
 license: GPL-3.0-or-later
 
 @nextcloud/initial-state
-version: 3.0.0
+version: 2.2.0
 license: GPL-3.0-or-later
 
 @nextcloud/l10n
@@ -82,6 +82,10 @@ license: MIT
 
 @vue/shared
 version: 3.5.22
+license: MIT
+
+@vuepic/vue-datepicker
+version: 11.0.2
 license: MIT
 
 @vueuse/components
@@ -184,6 +188,14 @@ crypto-browserify
 version: 3.12.1
 license: MIT
 
+date-fns
+version: 4.1.0
+license: MIT
+
+debounce
+version: 2.2.0
+license: MIT
+
 decode-named-character-reference
 version: 1.2.0
 license: MIT
@@ -216,6 +228,10 @@ elliptic
 version: 6.6.1
 license: MIT
 
+emoji-mart-vue-fast
+version: 15.0.5
+license: BSD-3-Clause
+
 es-define-property
 version: 1.0.1
 license: MIT
@@ -238,6 +254,10 @@ license: MIT
 
 estree-util-is-identifier-name
 version: 3.0.0
+license: MIT
+
+eventemitter3
+version: 5.0.1
 license: MIT
 
 events
@@ -372,6 +392,10 @@ isarray
 version: 2.0.5
 license: MIT
 
+linkifyjs
+version: 4.3.2
+license: MIT
+
 lowlight
 version: 3.3.0
 license: MIT
@@ -490,6 +514,14 @@ license: ISC
 
 minimalistic-crypto-utils
 version: 1.0.1
+license: MIT
+
+p-queue
+version: 9.0.0
+license: MIT
+
+p-timeout
+version: 7.0.1
 license: MIT
 
 parse-asn1
@@ -614,6 +646,10 @@ license: MIT
 
 toastify-js
 version: 1.12.0
+license: MIT
+
+tributejs
+version: 5.1.3
 license: MIT
 
 trim-lines
