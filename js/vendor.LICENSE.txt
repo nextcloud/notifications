@@ -61,7 +61,7 @@ version: 0.3.0
 license: GPL-3.0-or-later
 
 @nextcloud/vue
-version: 9.0.0
+version: 9.0.1
 license: AGPL-3.0-or-later
 
 @ungap/structured-clone
