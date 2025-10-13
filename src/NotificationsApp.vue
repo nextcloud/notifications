@@ -96,7 +96,10 @@ import IconClose from 'vue-material-design-icons/Close.vue'
 import IconMessageOutline from 'vue-material-design-icons/MessageOutline.vue'
 import IconNotification from './Components/IconNotification.vue'
 import NotificationItem from './Components/NotificationItem.vue'
-import { getNotificationsData } from './services/notificationsService.js'
+import {
+	getNotificationsData,
+	setCurrentTabAsActive,
+} from './services/notificationsService.js'
 import { createWebNotification } from './services/webNotificationsService.js'
 
 const sessionKeepAlive = loadState('core', 'config', { session_keepalive: true }).session_keepalive
@@ -253,8 +256,11 @@ export default {
 			}
 		},
 
-		onOpen() {
+		async onOpen() {
 			this.requestWebNotificationPermissions()
+
+			await setCurrentTabAsActive(this.tabId)
+			await this._fetch()
 		},
 
 		handleNetworkOffline() {
@@ -282,6 +288,8 @@ export default {
 				.delete(generateOcsUrl('apps/notifications/api/v2/notifications'))
 				.then(() => {
 					this.notifications = []
+					this.open = false
+					setCurrentTabAsActive(this.tabId)
 				})
 				.catch(() => {
 					showError(t('notifications', 'Failed to dismiss all notifications'))
@@ -290,6 +298,7 @@ export default {
 
 		onRemove(index) {
 			this.notifications.splice(index, 1)
+			setCurrentTabAsActive(this.tabId)
 		},
 
 		/**
