@@ -33,7 +33,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 2.5.2
 	- license: GPL-3.0-or-later
 - @nextcloud/axios
-	- version: 2.5.1
+	- version: 2.5.2
 	- license: GPL-3.0-or-later
 - @nextcloud/capabilities
 	- version: 1.2.0
@@ -60,13 +60,13 @@ This file is generated from multiple sources. Included packages:
 	- version: 0.3.0
 	- license: GPL-3.0-or-later
 - @nextcloud/vue
-	- version: 8.31.0
+	- version: 8.32.0
 	- license: AGPL-3.0-or-later
 - @ungap/structured-clone
 	- version: 1.2.0
 	- license: ISC
 - axios
-	- version: 1.12.1
+	- version: 1.12.2
 	- license: MIT
 - bail
 	- version: 2.0.2
@@ -240,7 +240,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 4.0.2
 	- license: MIT
 - vite
-	- version: 6.3.6
+	- version: 7.1.9
 	- license: MIT
 - vue-material-design-icons
 	- version: 5.3.1
