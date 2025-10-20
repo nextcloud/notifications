@@ -33,7 +33,7 @@ OC.L10N.register(
     "1 day" : "1 Tag",
     "1 week" : "1 Woche",
     "Your settings have been updated." : "Die Einstellungen wurden aktualisiert.",
-    "An error occurred while updating your settings." : "Fehler beim Aktualisieren der Einstellungen aufgetreten",
+    "An error occurred while updating your settings." : "Es ist ein Fehler beim Aktualisieren Ihrer Einstellungen aufgetreten.",
     "Notifications defaults" : "Standardeinstellungen für Benachrichtigungen",
     "Configure the default notification settings" : "Standard-Benachrichtigungseinstellungen konfigurieren",
     "Send email reminders about unhandled notifications after:" : "E-Mail-Erinnerungen für unbearbeitete Benachrichtigungen senden nach:",
