@@ -4,6 +4,7 @@ SPDX-License-Identifier: BSD-3-Clause
 SPDX-License-Identifier: GPL-3.0-or-later
 SPDX-License-Identifier: MIT
 SPDX-FileCopyrightText: Anthony Fu <anthonyfu117@hotmail.com>
+SPDX-FileCopyrightText: Christoph Wurst
 SPDX-FileCopyrightText: Eric Norris (https://github.com/ericnorris)
 SPDX-FileCopyrightText: Eugene Sharygin <eush77@gmail.com>
 SPDX-FileCopyrightText: Feross Aboukhadijeh
@@ -27,11 +28,17 @@ This file is generated from multiple sources. Included packages:
 - @floating-ui/utils
 	- version: 0.2.10
 	- license: MIT
+- @nextcloud/browser-storage
+	- version: 0.4.0
+	- license: GPL-3.0-or-later
+- @nextcloud/browser-storage
+	- version: 0.5.0
+	- license: GPL-3.0-or-later
 - @nextcloud/capabilities
 	- version: 1.2.0
 	- license: GPL-3.0-or-later
 - @nextcloud/vue
-	- version: 8.31.0
+	- version: 8.33.0
 	- license: AGPL-3.0-or-later
 - @nextcloud/vue-select
 	- version: 3.26.0
