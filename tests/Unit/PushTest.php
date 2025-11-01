@@ -786,6 +786,172 @@ class PushTest extends TestCase {
 		$push->pushToDevice(200718, $notification);
 	}
 
+	public function testPushToDeviceSigningError(): void {
+        $push = $this->getPush(['createFakeUserObject', 'getDevicesForUser', 'encryptAndSign', 'deletePushToken', 'validateToken']);
+        $this->clientService->expects($this->never())
+            ->method('newClient');
+
+        $this->config->expects($this->once())
+            ->method('getSystemValueBool')
+            ->with('has_internet_connection', true)
+            ->willReturn(true);
+
+        /** @var INotification&MockObject $notification */
+        $notification = $this->createMock(INotification::class);
+        $notification
+            ->method('getUser')
+            ->willReturn('valid');
+        $user = $this->createMock(IUser::class);
+
+        $push->expects($this->once())
+            ->method('createFakeUserObject')
+            ->with('valid')
+            ->willReturn($user);
+
+        $push->expects($this->once())
+            ->method('getDevicesForUser')
+            ->willReturn([[
+                'proxyserver' => 'proxyserver1',
+                'token' => 23,
+                'apptype' => 'other',
+            ]]);
+
+        $this->l10nFactory
+            ->method('getUserLanguage')
+            ->with($user)
+            ->willReturn('ru');
+
+        $this->notificationManager->expects($this->once())
+            ->method('prepare')
+            ->with($notification, 'ru')
+            ->willReturnArgument(0);
+
+        $key = $this->createMock(Key::class);
+        $this->keyManager->expects($this->once())
+            ->method('getKey')
+            ->with($user)
+            ->willReturn($key);
+
+        $push->expects($this->once())
+            ->method('validateToken')
+            ->willReturn(true);
+
+        $push->expects($this->once())
+            ->method('encryptAndSign')
+            ->willThrowException(new \OCA\Notifications\Exceptions\PushSigningException());
+
+        $push->expects($this->never())
+            ->method('deletePushToken');
+
+        $push->pushToDevice(1971, $notification);
+    }
+
+    public function testPushDeleteToDeviceSigningError(): void {
+        $push = $this->getPush(['createFakeUserObject', 'getDevicesForUser', 'encryptAndSignDelete', 'deletePushToken', 'validateToken']);
+        $this->clientService->expects($this->never())
+            ->method('newClient');
+
+        $this->config->expects($this->once())
+            ->method('getSystemValueBool')
+            ->with('has_internet_connection', true)
+            ->willReturn(true);
+
+        $userId = 'valid';
+        $user = $this->createMock(IUser::class);
+        $push->expects($this->once())
+            ->method('createFakeUserObject')
+            ->with($userId)
+            ->willReturn($user);
+
+        $push->expects($this->once())
+            ->method('getDevicesForUser')
+            ->willReturn([[
+                'proxyserver' => 'proxyserver1',
+                'token' => 23,
+                'apptype' => 'other',
+            ]]);
+
+        $push->expects($this->once())
+            ->method('validateToken')
+            ->willReturn(true);
+
+        $key = $this->createMock(Key::class);
+        $this->keyManager->expects($this->once())
+            ->method('getKey')
+            ->with($user)
+            ->willReturn($key);
+
+        $push->expects($this->once())
+            ->method('encryptAndSignDelete')
+            ->willThrowException(new \OCA\Notifications\Exceptions\PushSigningException());
+
+        $push->expects($this->never())
+            ->method('deletePushToken');
+
+        $push->pushDeleteToDevice($userId, [42], 'other');
+    }
+
+	public function testPushDeleteToDeviceSigningErrorHaltsQueue(): void {
+        $push = $this->getPush([
+            'createFakeUserObject',
+            'getDevicesForUser',
+            'encryptAndSignDelete',
+            'deletePushToken',
+            'validateToken'
+        ]);
+        $this->clientService->expects($this->never())
+            ->method('newClient');
+
+        $this->config->expects($this->once())
+            ->method('getSystemValueBool')
+            ->with('has_internet_connection', true)
+            ->willReturn(true);
+
+        $userId = 'valid';
+        $user = $this->createMock(\OCP\IUser::class);
+
+        $push->expects($this->once())
+            ->method('createFakeUserObject')
+            ->with($userId)
+            ->willReturn($user);
+
+        $push->expects($this->once())
+            ->method('getDevicesForUser')
+            ->willReturn([[
+                'proxyserver' => 'proxyserver1',
+                'token' => 23,
+                'apptype' => 'other',
+            ]]);
+
+        $push->expects($this->once())
+            ->method('validateToken')
+            ->willReturn(true);
+
+        $key = $this->createMock(\OC\Security\IdentityProof\Key::class);
+        $this->keyManager->expects($this->once())
+            ->method('getKey')
+            ->with($user)
+            ->willReturn($key);
+
+        // Simulate queue of 3 notification IDs, but always throw signing error
+        $push->expects($this->once())
+            ->method('encryptAndSignDelete')
+            ->with($key, [
+                'proxyserver' => 'proxyserver1',
+                'token' => 23,
+                'apptype' => 'other',
+            ], [101, 102, 103])
+            ->willThrowException(new \OCA\Notifications\Exceptions\PushSigningException());
+
+        // Should NOT delete the token, nor call encryptAndSignDelete a second time
+        $push->expects($this->never())
+            ->method('deletePushToken');
+
+        // Call function: expects no exception, but also expects no further queue processing
+        $push->pushDeleteToDevice($userId, [101, 102, 103], 'other');
+        // Consider adding assertions about $push->payloadsToSend
+    }
+
 	public static function dataValidateToken(): array {
 		return [
 			[1239999999, 1230000000, OCPIToken::WIPE_TOKEN, false],
