@@ -288,11 +288,17 @@ class Push {
 				continue;
 			}
 
+			$proxyServer = rtrim($device['proxyserver'], '/');
+			if (!isset($this->payloadsToSend[$proxyServer])) {
+				$this->payloadsToSend[$proxyServer] = [];
+			}
+
 			// Encrypt and sign payload
 			try {
 				$payload = json_encode($this->encryptAndSign($userKey, $device, $id, $notification, $isTalkNotification), JSON_THROW_ON_ERROR);
 			} catch (\JsonException $e) {
 				$this->log->error('JSON error while encoding push notification: ' . $e->getMessage(), ['exception' => $e]);
+				// TODO: throw? continue?
 			} catch (\InvalidArgumentException) {
 				// Failed to encrypt message for device: public key is invalid
 				$this->deletePushToken($device['token']);
@@ -301,10 +307,7 @@ class Push {
 				continue;
 			}
 
-			$proxyServer = rtrim($device['proxyserver'], '/');
-			if (!isset($this->payloadsToSend[$proxyServer])) {
-				$this->payloadsToSend[$proxyServer] = [];
-			}
+			// All good!
 			$this->payloadsToSend[$proxyServer][] = $payload;
 		}
 
@@ -322,6 +325,7 @@ class Push {
 	 */
 	public function pushDeleteToDevice(string $userId, ?array $notificationIds, string $app = ''): void {
 		if (!$this->config->getSystemValueBool('has_internet_connection', true)) {
+			$this->printInfo('<error>Internet connectivity is disabled in configuration file - no push delete notifications will be sent</error>');
 			return;
 		}
 
@@ -370,6 +374,7 @@ class Push {
 			$devices = $this->filterDeviceList($devices, $app);
 		}
 		if (empty($devices)) {
+			$this->printInfo('<comment>No devices found / left for user</comment>');
 			return;
 		}
 
@@ -377,42 +382,53 @@ class Push {
 		$maxAge = time() - 60 * 24 * 60 * 60;
 
 		$userKey = $this->keyManager->getKey($user);
+
+		$this->printInfo('Private user key size: ' . strlen($userKey->getPrivate()));
+		$this->printInfo('Public user key size: ' . strlen($userKey->getPublic()));
+
+		$this->printInfo('');
+		$this->printInfo('Found ' . count($devices) . ' devices registered for push delete notifications');
+
 		foreach ($devices as $device) {
 			$device['token'] = (int)$device['token'];
+			$this->printInfo('');
+			$this->printInfo('Device token: ' . $device['token']);
+
 			if (!$this->validateToken($device['token'], $maxAge)) {
 				// Token does not exist anymore
 				continue;
 			}
+			
+			$proxyServer = rtrim($device['proxyserver'], '/');
+			if (!isset($this->payloadsToSend[$proxyServer])) {
+				$this->payloadsToSend[$proxyServer] = [];
+			}
 
 			try {
-				$proxyServer = rtrim($device['proxyserver'], '/');
-				if (!isset($this->payloadsToSend[$proxyServer])) {
-					$this->payloadsToSend[$proxyServer] = [];
-				}
-
 				if ($deleteAll) {
 					$data = $this->encryptAndSignDelete($userKey, $device, null);
-					try {
-						$this->payloadsToSend[$proxyServer][] = json_encode($data['payload'], JSON_THROW_ON_ERROR);
-					} catch (\JsonException $e) {
-						$this->log->error('JSON error while encoding push notification: ' . $e->getMessage(), ['exception' => $e]);
-					}
+					$payload = json_encode($data['payload'], JSON_THROW_ON_ERROR);
+					// All good!
+					$this->payloadsToSend[$proxyServer][] = $payload;
 				} else {
-					$temp = $notificationIds;
-
-					while (!empty($temp)) {
-						$data = $this->encryptAndSignDelete($userKey, $device, $temp);
-						$temp = $data['remaining'];
-						try {
-							$this->payloadsToSend[$proxyServer][] = json_encode($data['payload'], JSON_THROW_ON_ERROR);
-						} catch (\JsonException $e) {
-							$this->log->error('JSON error while encoding push notification: ' . $e->getMessage(), ['exception' => $e]);
-						}
+					$queue = $notificationIds;
+					while (!empty($queue)) {
+						$data = $this->encryptAndSignDelete($userKey, $device, $queue);
+						$payload = json_encode($data['payload'], JSON_THROW_ON_ERROR);
+						// All good!
+						$this->payloadsToSend[$proxyServer][] = $payload;
+						$queue = $data['remaining'];
 					}
 				}
+			} catch (\JsonException $e) {
+				$this->log->error('JSON error while encoding push notification: ' . $e->getMessage(), ['exception' => $e]);
+				// TODO: throw? continue?
 			} catch (\InvalidArgumentException) {
 				// Failed to encrypt message for device: public key is invalid
 				$this->deletePushToken($device['token']);
+			} catch (PushSigningException $e) {
+				// Server-side key problem: log already done; skip this device.
+				continue;
 			}
 		}
 
