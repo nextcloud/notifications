@@ -428,6 +428,7 @@ class Push {
 				$this->deletePushToken($device['token']);
 			} catch (PushSigningException $e) {
 				// Server-side key problem: log already done; skip this device.
+				// TODO: Confirm remaining/queue is handled properly here (not a factor in pushToDevice())
 				continue;
 			}
 		}
@@ -649,7 +650,7 @@ class Push {
 		// Calculate encoded base data length and maximum subject length
 		$encodedBaseData = json_encode($data, JSON_THROW_ON_ERROR);
 		$encodedBaseDataBytes = strlen($encodedBaseData);					// length of encoded data before populating subject
-		$maxSubjectBytes = max(0, $maxPlain - $encodedBaseDataBytes - 2;	// subtract two for quotes
+		$maxSubjectBytes = max(0, $maxPlain - $encodedBaseDataBytes - 2);	// subtract two for quotes
 
 		// Use proposed subject as-is if it's length is compliant otherwise truncate
 		$subject = $notification->getParsedSubject();
@@ -690,7 +691,7 @@ class Push {
 		} else {
 			$error = openssl_error_string();
 			$this->log->error('Error while encrypting push message: ' . $error, [
-				'app' => 'notifications'
+				'app' => 'notifications',
 				'deviceIdentifier' => $device['deviceidentifier'] ?? null,
         		'uid' => $device['uid'] ?? null,
 			]);
@@ -734,6 +735,11 @@ class Push {
 	 * @throws PushSigningException
 	 */
 	protected function encryptAndSignDelete(Key $userKey, array $device, ?array $ids): array {
+
+		if (empty($device['devicepublickey']) || empty($userKey->getPrivate())) {
+			throw new \InvalidArgumentException('Missing device public key or user private key');
+		}
+
 		$remainingIds = [];
 		if ($ids === null) {
 			$data = [
@@ -763,7 +769,7 @@ class Push {
 		} else {
 			$error = openssl_error_string();
 			$this->log->error('Error while encrypting push delete message: ' . $error, [
-				'app' => 'notifications'
+				'app' => 'notifications',
 				'deviceIdentifier' => $device['deviceidentifier'] ?? null,
         		'uid' => $device['uid'] ?? null,
 			]);
