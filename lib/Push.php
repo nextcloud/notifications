@@ -288,21 +288,26 @@ class Push {
 				continue;
 			}
 
+			// Encrypt and sign payload
 			try {
 				$payload = json_encode($this->encryptAndSign($userKey, $device, $id, $notification, $isTalkNotification), JSON_THROW_ON_ERROR);
-
-				$proxyServer = rtrim($device['proxyserver'], '/');
-				if (!isset($this->payloadsToSend[$proxyServer])) {
-					$this->payloadsToSend[$proxyServer] = [];
-				}
-				$this->payloadsToSend[$proxyServer][] = $payload;
 			} catch (\JsonException $e) {
 				$this->log->error('JSON error while encoding push notification: ' . $e->getMessage(), ['exception' => $e]);
 			} catch (\InvalidArgumentException) {
 				// Failed to encrypt message for device: public key is invalid
 				$this->deletePushToken($device['token']);
+			} catch (PushSigningException $e) {
+				// Server-side key problem: log already done; skip this device.
+				continue;
 			}
+
+			$proxyServer = rtrim($device['proxyserver'], '/');
+			if (!isset($this->payloadsToSend[$proxyServer])) {
+				$this->payloadsToSend[$proxyServer] = [];
+			}
+			$this->payloadsToSend[$proxyServer][] = $payload;
 		}
+
 		$this->printInfo('');
 
 		if (!$this->deferPayloads) {
