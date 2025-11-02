@@ -17,7 +17,7 @@ version: 0.2.0
 license: BSD-2-Clause
 
 @nextcloud/auth
-version: 2.5.2
+version: 2.5.3
 license: GPL-3.0-or-later
 
 @nextcloud/axios
@@ -25,7 +25,7 @@ version: 2.5.2
 license: GPL-3.0-or-later
 
 @nextcloud/browser-storage
-version: 0.4.0
+version: 0.5.0
 license: GPL-3.0-or-later
 
 @nextcloud/capabilities
@@ -33,7 +33,7 @@ version: 1.2.0
 license: GPL-3.0-or-later
 
 @nextcloud/dialogs
-version: 6.3.2
+version: 6.4.1
 license: AGPL-3.0-or-later
 
 @nextcloud/event-bus
@@ -69,7 +69,7 @@ version: 0.3.0
 license: GPL-3.0-or-later
 
 @nextcloud/vue
-version: 8.32.0
+version: 8.33.0
 license: AGPL-3.0-or-later
 
 @nextcloud/vue-select
@@ -117,7 +117,7 @@ version: 1.1.0
 license: MIT
 
 dompurify
-version: 3.2.7
+version: 3.3.0
 license: (MPL-2.0 OR Apache-2.0)
 
 escape-html
