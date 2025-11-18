@@ -1,0 +1,306 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * SPDX-FileCopyrightText: 2017 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+namespace OCA\Notifications\Controller;
+
+use OC\Authentication\Token\IProvider;
+use OC\Security\IdentityProof\Manager;
+use OCA\Notifications\ResponseDefinitions;
+use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\Attribute\ApiRoute;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
+use OCP\AppFramework\Http\Attribute\OpenAPI;
+use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\OCSController;
+use OCP\Authentication\Exceptions\InvalidTokenException;
+use OCP\Authentication\Token\IToken;
+use OCP\DB\QueryBuilder\IQueryBuilder;
+use OCP\IDBConnection;
+use OCP\IRequest;
+use OCP\ISession;
+use OCP\IUser;
+use OCP\IUserSession;
+use Symfony\Component\Uid\Uuid;
+
+enum NewSubStatus: int {
+	case CREATED = 0;
+	case UPDATED = 1;
+	case ERROR = 2;
+}
+
+enum ActivationSubStatus: int {
+	case CREATED = 0;
+	case OK = 1;
+	case NO_TOKEN = 2;
+	case NO_SUB = 3;
+}
+
+#[OpenAPI(scope: 'push')]
+class WebPushController extends OCSController {
+	public function __construct(
+		string $appName,
+		IRequest $request,
+		protected IDBConnection $db,
+		protected ISession $session,
+		protected IUserSession $userSession,
+		protected IProvider $tokenProvider,
+		protected Manager $identityProof,
+	) {
+		parent::__construct($appName, $request);
+	}
+
+	/**
+	 * Register a subscription for push notifications
+	 *
+     * @param string $endpoint Push Server URL (RFC8030)
+     * @param string $uaPublicKey Public key of the device, uncompress base64url encoded (RFC8291)
+     * @param string $auth Authentication tag, base64url encoded (RFC8291)
+	 * @param list<string> $appTypes used to filter incoming notifications - appTypes are alphanum - use "all" to get all notifications, prefix with `-` to exclude (eg. ['all', '-talk'])
+	 * @return DataResponse<Http::STATUS_OK|Http::STATUS_CREATED|Http::STATUS_UNAUTHORIZED, list<empty>, array{}>|DataResponse<Http::STATUS_BAD_REQUEST, array{message: string}, array{}>
+	 *
+	 * 200: A subscription was already registered and activated
+	 * 201: New subscription registered successfully
+	 * 400: Registering is not possible
+	 * 401: Missing permissions to register
+	 */
+	#[NoAdminRequired]
+	#[ApiRoute(verb: 'POST', url: '/api/{apiVersion}/webpush', requirements: ['apiVersion' => '(v2)'])]
+	public function registerWP(string $endpoint, string $uaPublicKey, string $auth, array $appTypes): DataResponse {
+		$user = $this->userSession->getUser();
+		if (!$user instanceof IUser) {
+			return new DataResponse([], Http::STATUS_UNAUTHORIZED);
+		}
+
+		if (!preg_match('/^[A-Za-z0-9_-]{87}=*$/', $uaPublicKey)) {
+			return new DataResponse(['message' => 'INVALID_P256DH'], Http::STATUS_BAD_REQUEST);
+		}
+
+		if (!preg_match('/^[A-Za-z0-9_-]{22}=*$/', $auth)) {
+			return new DataResponse(['message' => 'INVALID_AUTH'], Http::STATUS_BAD_REQUEST);
+		}
+
+		if (
+			!filter_var($endpoint, FILTER_VALIDATE_URL)
+			|| \strlen($endpoint) > 1000
+			|| !preg_match('/^https\:\/\//', $endpoint)
+		) {
+			return new DataResponse(['message' => 'INVALID_ENDPOINT'], Http::STATUS_BAD_REQUEST);
+		}
+
+		$tokenId = $this->session->get('token-id');
+		if (!\is_int($tokenId)) {
+			return new DataResponse(['message' => 'INVALID_SESSION_TOKEN'], Http::STATUS_BAD_REQUEST);
+		}
+		try {
+			$token = $this->tokenProvider->getTokenById($tokenId);
+		} catch (InvalidTokenException) {
+			return new DataResponse(['message' => 'INVALID_SESSION_TOKEN'], Http::STATUS_BAD_REQUEST);
+		}
+
+		$status = $this->saveSubscription($user, $token, $endpoint, $uaPublicKey, $auth, $appTypes);
+
+		//TODO: send activation token to test if the pubkey, auth and the endpoints are valid
+
+		return match($status) {
+			NewSubStatus::UPDATED => new DataResponse([], Http::STATUS_OK),
+			NewSubStatus::CREATED => new DataResponse([], Http::STATUS_CREATED),
+			// This should not happen
+			NewSubStatus::ERROR => new DataResponse(['message' => 'DB_ERROR'], Http::STATUS_BAD_REQUEST),
+		};
+	}
+
+	/**
+	 * Activate subscription for push notifications
+	 *
+     * @param string $activation_token Random token sent via a push notification during registration to enable the subscription
+	 * @return DataResponse<Http::STATUS_OK|Http::STATUS_ACCEPTED|Http::STATUS_UNAUTHORIZED, list<empty>, array{}>|DataResponse<Http::STATUS_BAD_REQUEST, array{message: string}, array{}>
+	 *
+	 * 200: Subscription was already activated
+	 * 202: Subscription activated successfully
+	 * 400: Activating subscription is not possible, may be because of a wrong activation token
+	 * 401: Missing permissions to activate subscription
+	 * 404: No subscription found for the device
+	 */
+	#[NoAdminRequired]
+	#[ApiRoute(verb: 'POST', url: '/api/{apiVersion}/webpush/activate', requirements: ['apiVersion' => '(v2)'])]
+	public function activateWP(string $activation_token): DataResponse {
+		$user = $this->userSession->getUser();
+		if (!$user instanceof IUser) {
+			return new DataResponse([], Http::STATUS_UNAUTHORIZED);
+		}
+
+		$tokenId = (int)$this->session->get('token-id');
+		try {
+			$token = $this->tokenProvider->getTokenById($tokenId);
+		} catch (InvalidTokenException) {
+			return new DataResponse(['message' => 'INVALID_SESSION_TOKEN'], Http::STATUS_BAD_REQUEST);
+		}
+
+		$status = $this->activateSubscription($user, $token, $activation_token);
+
+		return match($status) {
+			ActivationSubStatus::OK => new DataResponse([], Http::STATUS_OK),
+			ActivationSubStatus::CREATED => new DataResponse([], Http::STATUS_ACCEPTED),
+			ActivationSubStatus::NO_TOKEN => new DataResponse(['message' => 'INVALID_ACTIVATION_TOKEN'], Http::STATUS_BAD_REQUEST),
+			ActivationSubStatus::NO_SUB => new DataResponse(['message' => 'NO_PUSH_SUBSCRIPTION'], Http::STATUS_NOT_FOUND),
+		};
+	}
+
+	/**
+	 * Remove a subscription from push notifications
+	 *
+	 * @return DataResponse<Http::STATUS_OK|Http::STATUS_ACCEPTED|Http::STATUS_UNAUTHORIZED, list<empty>, array{}>|DataResponse<Http::STATUS_BAD_REQUEST, array{message: string}, array{}>
+	 *
+	 * 200: No subscription for the device
+	 * 202: Subscription removed successfully
+	 * 400: Removing subscription is not possible
+	 * 401: Missing permissions to remove subscription
+	 */
+	#[NoAdminRequired]
+	#[ApiRoute(verb: 'DELETE', url: '/api/{apiVersion}/webpush', requirements: ['apiVersion' => '(v2)'])]
+	public function removeWP(): DataResponse {
+		$user = $this->userSession->getUser();
+		if (!$user instanceof IUser) {
+			return new DataResponse([], Http::STATUS_UNAUTHORIZED);
+		}
+
+		$tokenId = (int)$this->session->get('token-id');
+		try {
+			$token = $this->tokenProvider->getTokenById($tokenId);
+		} catch (InvalidTokenException) {
+			return new DataResponse(['message' => 'INVALID_SESSION_TOKEN'], Http::STATUS_BAD_REQUEST);
+		}
+
+		if ($this->deleteSubscription($user, $token)) {
+			return new DataResponse([], Http::STATUS_ACCEPTED);
+		}
+
+		return new DataResponse([], Http::STATUS_OK);
+	}
+
+	/**
+	 * @param list<string> $appTypes
+	 * @return NewSubStatus:
+	 *     - CREATED if the user didn't have an activated subscription
+	 *     - UPDATED if the subscription has been updated
+	 */
+	protected function saveSubscription(IUser $user, IToken $token, string $endpoint, string $uaPublicKey, string $auth, array $appTypes): NewSubStatus {
+		$query = $this->db->getQueryBuilder();
+		$query->select('*')
+			->from('notifications_webpush')
+			->where($query->expr()->eq('uid', $query->createNamedParameter($user->getUID())))
+			->andWhere($query->expr()->eq('token', $query->createNamedParameter($token->getId())))
+			->andWhere($query->expr()->eq('activated', $query->createNamedParameter(true)));
+		$result = $query->executeQuery();
+		$row = $result->fetch();
+		$result->closeCursor();
+
+		if (!$row) {
+			// In case the user has already an inactive subscription
+			$this->deleteSubscription($user, $token);
+			if ($this->insertSubscription($user, $token, $endpoint, $uaPublicKey, $auth, $appTypes)) {
+				return NewSubStatus::CREATED;
+			} else {
+				return NewSubStatus::ERROR;
+			}
+		}
+
+		if ($this->updateSubscription($user, $token, $endpoint, $uaPublicKey, $auth, $appTypes)) {
+			return NewSubStatus::UPDATED;
+		} else {
+			return NewSubStatus::ERROR;
+		}
+	}
+
+	/**
+	 * @return ActivationSubStatus:
+	 *     - OK if it was already activated
+	 *     - CREATED If the entry was updated
+	 *     - NO_TOKEN if we don't have this token
+	 *     - NO_SUB if we don't have this subscription
+	 */
+	protected function activateSubscription(IUser $user, IToken $token, string $activation_token): ActivationSubStatus {
+		$query = $this->db->getQueryBuilder();
+		$query->select('*')
+			->from('notifications_webpush')
+			->where($query->expr()->eq('uid', $query->createNamedParameter($user->getUID())))
+			->andWhere($query->expr()->eq('token', $query->createNamedParameter($token->getId())));
+		$result = $query->executeQuery();
+		$row = $result->fetch();
+		$result->closeCursor();
+
+		if (!$row) {
+			return ActivationSubStatus::NO_SUB;
+		}
+		if ($row['activated']) {
+			return ActivationSubStatus::OK;
+		}
+		$query->update('notifications_webpush')
+			->set('activated', $query->createNamedParameter(true))
+			->where($query->expr()->eq('uid', $query->createNamedParameter($user->getUID())))
+			->andWhere($query->expr()->eq('token', $query->createNamedParameter($token->getId(), IQueryBuilder::PARAM_INT)))
+			->andWhere($query->expr()->eq('activation_token', $query->createNamedParameter($activation_token)));
+
+		if ($query->executeStatement() !== 0) {
+			return ActivationSubStatus::CREATED;
+		} else {
+			return ActivationSubStatus::NO_TOKEN;
+		}
+	}
+
+	/**
+	 * @param list<string> $appTypes
+	 * @return bool If the entry was created
+	 */
+	protected function insertSubscription(IUser $user, IToken $token, string $endpoint, string $uaPublicKey, string $auth, array $appTypes): bool {
+		$activation_token = Uuid::v4()->toRfc4122();
+
+		$query = $this->db->getQueryBuilder();
+		$query->insert('notifications_webpush')
+			->values([
+				'uid' => $query->createNamedParameter($user->getUID()),
+				'token' => $query->createNamedParameter($token->getId(), IQueryBuilder::PARAM_INT),
+				'endpoint' => $query->createNamedParameter($endpoint),
+				'p256dh' => $query->createNamedParameter($uaPublicKey),
+				'auth' => $query->createNamedParameter($auth),
+				'apptypes' => $query->createNamedParameter(join(',', $appTypes)),
+				'activation_token' => $query->createNamedParameter($activation_token),
+			]);
+		return $query->executeStatement() > 0;
+	}
+
+	/**
+	 * @param list<string> $appTypes
+	 * @return bool If the entry was updated
+	 */
+	protected function updateSubscription(IUser $user, IToken $token, string $endpoint, string $uaPublicKey, string $auth, array $appTypes): bool {
+		$query = $this->db->getQueryBuilder();
+		$query->update('notifications_webpush')
+			->set('endpoint', $query->createNamedParameter($endpoint))
+			->set('p256dh', $query->createNamedParameter($uaPublicKey))
+			->set('auth', $query->createNamedParameter($auth))
+			->set('apptypes', $query->createNamedParameter(join(',', $appTypes)))
+			->where($query->expr()->eq('uid', $query->createNamedParameter($user->getUID())))
+			->andWhere($query->expr()->eq('token', $query->createNamedParameter($token->getId(), IQueryBuilder::PARAM_INT)));
+
+		return $query->executeStatement() !== 0;
+	}
+
+	/**
+	 * @return bool If the entry was deleted
+	 */
+	protected function deleteSubscription(IUser $user, IToken $token): bool {
+		$query = $this->db->getQueryBuilder();
+		$query->delete('notifications_webpush')
+			->where($query->expr()->eq('uid', $query->createNamedParameter($user->getUID())))
+			->andWhere($query->expr()->eq('token', $query->createNamedParameter($token->getId(), IQueryBuilder::PARAM_INT)));
+
+		return $query->executeStatement() !== 0;
+	}
+}
