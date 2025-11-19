@@ -187,8 +187,8 @@ class WebPushController extends OCSController {
 	/**
 	 * @param list<string> $appTypes
 	 * @return NewSubStatus:
-	 *     - CREATED if the user didn't have an activated subscription
-	 *     - UPDATED if the subscription has been updated
+	 *     - CREATED if the user didn't have an activated subscription with this endpoint, pubkey and auth
+	 *     - UPDATED if the subscription has been updated (use to change appTypes)
 	 */
 	protected function saveSubscription(IUser $user, IToken $token, string $endpoint, string $uaPublicKey, string $auth, array $appTypes): NewSubStatus {
 		$query = $this->db->getQueryBuilder();
@@ -196,13 +196,16 @@ class WebPushController extends OCSController {
 			->from('notifications_webpush')
 			->where($query->expr()->eq('uid', $query->createNamedParameter($user->getUID())))
 			->andWhere($query->expr()->eq('token', $query->createNamedParameter($token->getId())))
+			->andWhere($query->expr()->eq('endpoint', $query->createNamedParameter($endpoint)))
+			->andWhere($query->expr()->eq('p256dh', $query->createNamedParameter($uaPublicKey)))
+			->andWhere($query->expr()->eq('auth', $query->createNamedParameter($auth)))
 			->andWhere($query->expr()->eq('activated', $query->createNamedParameter(true)));
 		$result = $query->executeQuery();
 		$row = $result->fetch();
 		$result->closeCursor();
 
 		if (!$row) {
-			// In case the user has already an inactive subscription
+			// In case the user has already a subscription, but inactive or with a different enpoint, pubkey or auth secret
 			$this->deleteSubscription($user, $token);
 			if ($this->insertSubscription($user, $token, $endpoint, $uaPublicKey, $auth, $appTypes)) {
 				return NewSubStatus::CREATED;
