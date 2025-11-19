@@ -83,6 +83,7 @@ class WebPushControllerTest extends TestCase {
 				'https://localhost/',
 				'',
 				'',
+				['all'],
 				false,
 				0,
 				false,
@@ -94,6 +95,7 @@ class WebPushControllerTest extends TestCase {
 				'https://localhost/',
 				'BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV',
 				self::$auth,
+				['all'],
 				true,
 				0,
 				false,
@@ -105,6 +107,7 @@ class WebPushControllerTest extends TestCase {
 				'https://localhost/',
 				'BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcxaOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4bb',
 				self::$auth,
+				['all'],
 				true,
 				0,
 				false,
@@ -116,6 +119,7 @@ class WebPushControllerTest extends TestCase {
 				'https://localhost/',
 				'BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV- JvLexhqUzORcxaOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw',
 				self::$auth,
+				['all'],
 				true,
 				0,
 				false,
@@ -127,6 +131,7 @@ class WebPushControllerTest extends TestCase {
 				'https://localhost/',
 				self::$uaPublicKey,
 				'BTBZMqHH6r4Tts7J_aSI',
+				['all'],
 				true,
 				0,
 				false,
@@ -138,6 +143,7 @@ class WebPushControllerTest extends TestCase {
 				'https://localhost/',
 				self::$uaPublicKey,
 				'BTBZMqHH6r4Tts7J_aSIggxx',
+				['all'],
 				true,
 				0,
 				false,
@@ -149,6 +155,7 @@ class WebPushControllerTest extends TestCase {
 				'https://localhost/',
 				self::$uaPublicKey,
 				'BTBZM HH6r4Tts7J_aSIgg',
+				['all'],
 				true,
 				0,
 				false,
@@ -160,6 +167,7 @@ class WebPushControllerTest extends TestCase {
 				'http://localhost/',
 				self::$uaPublicKey,
 				self::$auth,
+				['all'],
 				true,
 				0,
 				false,
@@ -167,10 +175,26 @@ class WebPushControllerTest extends TestCase {
 				['message' => 'INVALID_ENDPOINT'],
 				Http::STATUS_BAD_REQUEST,
 			],
+			'too many appTypes' => [
+				'https://localhost/',
+				self::$uaPublicKey,
+				self::$auth,
+				[
+					'all',
+					'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+				],
+				true,
+				0,
+				false,
+				0,
+				['message' => 'TOO_MANY_APP_TYPES'],
+				Http::STATUS_BAD_REQUEST,
+			],
 			'invalid session' => [
 				'https://localhost/',
 				self::$uaPublicKey,
 				self::$auth,
+				['all'],
 				true,
 				23,
 				false,
@@ -182,6 +206,7 @@ class WebPushControllerTest extends TestCase {
 				'https://localhost/',
 				self::$uaPublicKey,
 				self::$auth,
+				['all'],
 				true,
 				23,
 				true,
@@ -193,6 +218,7 @@ class WebPushControllerTest extends TestCase {
 				'https://localhost/',
 				self::$uaPublicKey,
 				self::$auth,
+				['all'],
 				true,
 				23,
 				true,
@@ -206,7 +232,7 @@ class WebPushControllerTest extends TestCase {
 	/**
 	 * @dataProvider dataRegisterWP
 	 */
-	public function testRegisterWP(string $endpoint, string $uaPublicKey, string $auth, bool $userIsValid, int $tokenId, bool $tokenIsValid, int $subStatus, array $payload, int $status): void {
+	public function testRegisterWP(string $endpoint, string $uaPublicKey, string $auth, array $appTypes, bool $userIsValid, int $tokenId, bool $tokenIsValid, int $subStatus, array $payload, int $status): void {
 		$controller = $this->getController([
 			'saveSubscription',
 		]);
@@ -248,7 +274,7 @@ class WebPushControllerTest extends TestCase {
 				->willThrowException(new InvalidTokenException());
 		}
 
-		$response = $controller->registerWP($endpoint, $uaPublicKey, $auth, ["all"]);
+		$response = $controller->registerWP($endpoint, $uaPublicKey, $auth, $appTypes);
 		$this->assertInstanceOf(DataResponse::class, $response);
 		$this->assertSame($status, $response->getStatus());
 		$this->assertSame($payload, $response->getData());
