@@ -93,6 +93,11 @@ class WebPushController extends OCSController {
 			return new DataResponse(['message' => 'INVALID_ENDPOINT'], Http::STATUS_BAD_REQUEST);
 		}
 
+		$appTypesStr = join(',', $appTypes);
+		if (strlen($appTypesStr) > 256) {
+			return new DataResponse(['message' => 'TOO_MANY_APP_TYPES'], Http::STATUS_BAD_REQUEST);
+		}
+
 		$tokenId = $this->session->get('token-id');
 		if (!\is_int($tokenId)) {
 			return new DataResponse(['message' => 'INVALID_SESSION_TOKEN'], Http::STATUS_BAD_REQUEST);
