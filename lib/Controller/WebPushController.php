@@ -9,9 +9,9 @@ declare(strict_types=1);
 
 namespace OCA\Notifications\Controller;
 
+use OCA\Notifications\WebPushClient;
 use OC\Authentication\Token\IProvider;
 use OC\Security\IdentityProof\Manager;
-use OCA\Notifications\ResponseDefinitions;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\ApiRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
@@ -77,11 +77,11 @@ class WebPushController extends OCSController {
 			return new DataResponse([], Http::STATUS_UNAUTHORIZED);
 		}
 
-		if (!preg_match('/^[A-Za-z0-9_-]{87}=*$/', $uaPublicKey)) {
+		if (!WebPushClient::isValidP256dh($uaPublicKey)) {
 			return new DataResponse(['message' => 'INVALID_P256DH'], Http::STATUS_BAD_REQUEST);
 		}
 
-		if (!preg_match('/^[A-Za-z0-9_-]{22}=*$/', $auth)) {
+		if (!WebPushClient::isValidAuth($auth)) {
 			return new DataResponse(['message' => 'INVALID_AUTH'], Http::STATUS_BAD_REQUEST);
 		}
 
@@ -108,9 +108,12 @@ class WebPushController extends OCSController {
 			return new DataResponse(['message' => 'INVALID_SESSION_TOKEN'], Http::STATUS_BAD_REQUEST);
 		}
 
-		$status = $this->saveSubscription($user, $token, $endpoint, $uaPublicKey, $auth, $appTypes);
+		[$status, $activationToken] = $this->saveSubscription($user, $token, $endpoint, $uaPublicKey, $auth, $appTypes);
 
-		//TODO: send activation token to test if the pubkey, auth and the endpoints are valid
+		if ($status === NewSubStatus::CREATED) {
+			$wp = $this->getWPClient();
+			$wp->notify($endpoint, $uaPublicKey, $auth, json_encode(['activationToken' => $activationToken]));
+		}
 
 		return match($status) {
 			NewSubStatus::UPDATED => new DataResponse([], Http::STATUS_OK),
@@ -123,7 +126,7 @@ class WebPushController extends OCSController {
 	/**
 	 * Activate subscription for push notifications
 	 *
-     * @param string $activation_token Random token sent via a push notification during registration to enable the subscription
+     * @param string $activationToken Random token sent via a push notification during registration to enable the subscription
 	 * @return DataResponse<Http::STATUS_OK|Http::STATUS_ACCEPTED|Http::STATUS_UNAUTHORIZED, list<empty>, array{}>|DataResponse<Http::STATUS_BAD_REQUEST, array{message: string}, array{}>
 	 *
 	 * 200: Subscription was already activated
@@ -134,7 +137,7 @@ class WebPushController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'POST', url: '/api/{apiVersion}/webpush/activate', requirements: ['apiVersion' => '(v2)'])]
-	public function activateWP(string $activation_token): DataResponse {
+	public function activateWP(string $activationToken): DataResponse {
 		$user = $this->userSession->getUser();
 		if (!$user instanceof IUser) {
 			return new DataResponse([], Http::STATUS_UNAUTHORIZED);
@@ -147,7 +150,7 @@ class WebPushController extends OCSController {
 			return new DataResponse(['message' => 'INVALID_SESSION_TOKEN'], Http::STATUS_BAD_REQUEST);
 		}
 
-		$status = $this->activateSubscription($user, $token, $activation_token);
+		$status = $this->activateSubscription($user, $token, $activationToken);
 
 		return match($status) {
 			ActivationSubStatus::OK => new DataResponse([], Http::STATUS_OK),
@@ -189,13 +192,17 @@ class WebPushController extends OCSController {
 		return new DataResponse([], Http::STATUS_OK);
 	}
 
+	protected function getWPClient(): WebPushClient {
+		return new WebPushClient();
+	}
+
 	/**
 	 * @param list<string> $appTypes
-	 * @return NewSubStatus:
+	 * @return array{0: NewSubStatus, 1: ?string}:
 	 *     - CREATED if the user didn't have an activated subscription with this endpoint, pubkey and auth
 	 *     - UPDATED if the subscription has been updated (use to change appTypes)
 	 */
-	protected function saveSubscription(IUser $user, IToken $token, string $endpoint, string $uaPublicKey, string $auth, array $appTypes): NewSubStatus {
+	protected function saveSubscription(IUser $user, IToken $token, string $endpoint, string $uaPublicKey, string $auth, array $appTypes): array {
 		$query = $this->db->getQueryBuilder();
 		$query->select('*')
 			->from('notifications_webpush')
@@ -212,17 +219,18 @@ class WebPushController extends OCSController {
 		if (!$row) {
 			// In case the user has already a subscription, but inactive or with a different enpoint, pubkey or auth secret
 			$this->deleteSubscription($user, $token);
-			if ($this->insertSubscription($user, $token, $endpoint, $uaPublicKey, $auth, $appTypes)) {
-				return NewSubStatus::CREATED;
+			$activationToken = Uuid::v4()->toRfc4122();
+			if ($this->insertSubscription($user, $token, $endpoint, $uaPublicKey, $auth, $activationToken, $appTypes)) {
+				return [NewSubStatus::CREATED, $activationToken];
 			} else {
-				return NewSubStatus::ERROR;
+				return [NewSubStatus::ERROR, null];
 			}
 		}
 
 		if ($this->updateSubscription($user, $token, $endpoint, $uaPublicKey, $auth, $appTypes)) {
-			return NewSubStatus::UPDATED;
+			return [NewSubStatus::UPDATED, null];
 		} else {
-			return NewSubStatus::ERROR;
+			return [NewSubStatus::ERROR, null];
 		}
 	}
 
@@ -233,7 +241,7 @@ class WebPushController extends OCSController {
 	 *     - NO_TOKEN if we don't have this token
 	 *     - NO_SUB if we don't have this subscription
 	 */
-	protected function activateSubscription(IUser $user, IToken $token, string $activation_token): ActivationSubStatus {
+	protected function activateSubscription(IUser $user, IToken $token, string $activationToken): ActivationSubStatus {
 		$query = $this->db->getQueryBuilder();
 		$query->select('*')
 			->from('notifications_webpush')
@@ -253,7 +261,7 @@ class WebPushController extends OCSController {
 			->set('activated', $query->createNamedParameter(true))
 			->where($query->expr()->eq('uid', $query->createNamedParameter($user->getUID())))
 			->andWhere($query->expr()->eq('token', $query->createNamedParameter($token->getId(), IQueryBuilder::PARAM_INT)))
-			->andWhere($query->expr()->eq('activation_token', $query->createNamedParameter($activation_token)));
+			->andWhere($query->expr()->eq('activation_token', $query->createNamedParameter($activationToken)));
 
 		if ($query->executeStatement() !== 0) {
 			return ActivationSubStatus::CREATED;
@@ -266,9 +274,7 @@ class WebPushController extends OCSController {
 	 * @param list<string> $appTypes
 	 * @return bool If the entry was created
 	 */
-	protected function insertSubscription(IUser $user, IToken $token, string $endpoint, string $uaPublicKey, string $auth, array $appTypes): bool {
-		$activation_token = Uuid::v4()->toRfc4122();
-
+	protected function insertSubscription(IUser $user, IToken $token, string $endpoint, string $uaPublicKey, string $auth, string $activationToken, array $appTypes): bool {
 		$query = $this->db->getQueryBuilder();
 		$query->insert('notifications_webpush')
 			->values([
@@ -278,7 +284,7 @@ class WebPushController extends OCSController {
 				'p256dh' => $query->createNamedParameter($uaPublicKey),
 				'auth' => $query->createNamedParameter($auth),
 				'apptypes' => $query->createNamedParameter(join(',', $appTypes)),
-				'activation_token' => $query->createNamedParameter($activation_token),
+				'activation_token' => $query->createNamedParameter($activationToken),
 			]);
 		return $query->executeStatement() > 0;
 	}

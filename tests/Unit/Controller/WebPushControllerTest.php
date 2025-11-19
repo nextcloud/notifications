@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace OCA\Notifications\Tests\Unit\Controller;
 
+use OCA\Notifications\WebPushClient;
 use OC\Authentication\Exceptions\InvalidTokenException;
 use OC\Authentication\Token\IProvider;
 use OC\Authentication\Token\IToken;
@@ -235,6 +236,7 @@ class WebPushControllerTest extends TestCase {
 	public function testRegisterWP(string $endpoint, string $uaPublicKey, string $auth, array $appTypes, bool $userIsValid, int $tokenId, bool $tokenIsValid, int $subStatus, array $payload, int $status): void {
 		$controller = $this->getController([
 			'saveSubscription',
+			'getWPClient'
 		]);
 
 		$user = $this->createMock(IUser::class);
@@ -263,7 +265,14 @@ class WebPushControllerTest extends TestCase {
 			$controller->expects($this->once())
 				->method('saveSubscription')
 				->with($user, $token, $endpoint, $uaPublicKey, $auth, $this->anything())
-				->willReturn(NewSubStatus::from($subStatus));
+				->willReturn([NewSubStatus::from($subStatus), 'tok']);
+
+			if ($subStatus === 0) {
+				$wpClient = $this->createMock(WebPushClient::class);
+				$controller->expects($this->once())
+				->method('getWPClient')
+				->willReturn($wpClient);
+			}
 		} else {
 			$controller->expects($this->never())
 				->method('saveSubscription');
