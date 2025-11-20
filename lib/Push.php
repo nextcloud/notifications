@@ -75,6 +75,8 @@ class Push {
 	protected array $loadDevicesForUsers = [];
 	/** @var string[] */
 	protected array $loadStatusForUsers = [];
+	/** @var WebPushClient */
+	protected WebPushClient $wpClient;
 
 	public function __construct(
 		protected IDBConnection $db,
@@ -92,6 +94,7 @@ class Push {
 		protected LoggerInterface $log,
 	) {
 		$this->cache = $cacheFactory->createDistributed('pushtokens');
+		$this->wpClient = new WebPushClient($log);
 	}
 
 	public function setOutput(OutputInterface $output): void {
@@ -173,8 +176,30 @@ class Push {
 		}
 
 		$this->deferPayloads = false;
+		$this->wpClient->flush();
 		$this->sendNotificationsToProxies();
 	}
+
+	/**
+	 * @param array $devices
+	 * @psalm-param $devices list<array{id: int, uid: string, token: int, endpoint: string, p256dh: string, auth: string, appTypes: string, activated: bool, activation_token: string}>
+	 * @param string $app
+	 * @return array
+	 * @psalm-return list<array{id: int, uid: string, token: int, endpoint: string, p256dh: string, auth: string, appTypes: string, activated: bool, activation_token: string}>
+	 */
+	public function filterWebPushDeviceList(array $devices, string $app): array {
+		// Consider all 3 options as 'talk'
+		if (\in_array($app, ['spreed', 'talk', 'admin_notification_talk'], true)) {
+			$app = "talk";
+		}
+
+		return array_filter($devices, function($device) {
+			$appTypes = explode(',', $device['apptypes']);
+			return $device['activated'] && (\in_array($app, $appTypes) ||
+				(\in_array("all", $appTypes) && !\in_array('-'.$app, $appTypes)));
+		});
+	}
+
 
 	/**
 	 * @param array $devices
@@ -183,7 +208,7 @@ class Push {
 	 * @return array
 	 * @psalm-return list<array{id: int, uid: string, token: int, deviceidentifier: string, devicepublickey: string, devicepublickeyhash: string, pushtokenhash: string, proxyserver: string, apptype: string}>
 	 */
-	public function filterDeviceList(array $devices, string $app): array {
+	public function filterProxyDeviceList(array $devices, string $app): array {
 		$isTalkNotification = \in_array($app, ['spreed', 'talk', 'admin_notification_talk'], true);
 
 		$talkDevices = array_filter($devices, static fn ($device) => $device['apptype'] === 'talk');
@@ -285,6 +310,44 @@ class Push {
 			$this->printInfo('<comment>No web push devices found for user</comment>');
 			return;
 		}
+
+		$this->printInfo('');
+		$this->printInfo('Found ' . count($devices) . ' devices registered for push notifications');
+		$devices = $this->filterWebPushDeviceList($devices, $notification->getApp());
+		if (empty($devices)) {
+			$this->printInfo('<comment>No devices left after filtering</comment>');
+			return;
+		}
+		$this->printInfo('Trying to push to ' . count($devices) . ' devices');
+
+		// We don't push to devices that are older than 60 days
+		$maxAge = time() - 60 * 24 * 60 * 60;
+
+		foreach ($devices as $device) {
+			$device['token'] = (int)$device['token'];
+			$this->printInfo('');
+			$this->printInfo('Device token: ' . $device['token']);
+
+			if (!$this->validateToken($device['token'], $maxAge)) {
+				// Token does not exist anymore
+				continue;
+			}
+
+			try {
+				$payload = json_encode($this->encodeNotif($id, $notification, 3000), JSON_THROW_ON_ERROR);
+				$this->wpClient->enqueue($device['endpoint'], $device['p256dh'], $device['auth'], $payload);
+			} catch (\JsonException $e) {
+				$this->log->error('JSON error while encoding push notification: ' . $e->getMessage(), ['exception' => $e]);
+			} catch (\InvalidArgumentException) {
+				// Failed to encrypt message for device: public key is invalid
+				//TODO $this->deletePushToken($device['token']);
+			}
+		}
+		$this->printInfo('');
+
+		if (!$this->deferPayloads) {
+			$this->wpClient->flush();
+		}
 	}
 
 	public function proxyPushToDevice(int $id, IUser $user, array $devices, INotification $notification, ?OutputInterface $output = null): void {
@@ -302,7 +365,7 @@ class Push {
 		$this->printInfo('');
 		$this->printInfo('Found ' . count($devices) . ' devices registered for push notifications');
 		$isTalkNotification = \in_array($notification->getApp(), ['spreed', 'talk', 'admin_notification_talk'], true);
-		$devices = $this->filterDeviceList($devices, $notification->getApp());
+		$devices = $this->filterProxyDeviceList($devices, $notification->getApp());
 		if (empty($devices)) {
 			$this->printInfo('<comment>No devices left after filtering</comment>');
 			return;
@@ -402,7 +465,7 @@ class Push {
 
 		if (!$deleteAll) {
 			// Only filter when it's not delete-all
-			$proxyDevices = $this->filterDeviceList($proxyDevices, $app);
+			$proxyDevices = $this->filterProxyDeviceList($proxyDevices, $app);
 			//TODO filter webpush devices
 		}
 
@@ -658,6 +721,32 @@ class Push {
 	}
 
 	/**
+	 * @param int $id
+	 * @param INotification $notification
+	 * @param int $maxLength max length of the push notification (shorter than 240 for proxy push, 3993 for webpush)
+	 * @return array
+	 * @psalm-return array{nid: int, app: string, subject: string, type: string, id: string}
+	 */
+	protected function encodeNotif(int $id, INotification $notification, int $maxLength): array {
+		$data = [
+			'nid' => $id,
+			'app' => $notification->getApp(),
+			'subject' => '',
+			'type' => $notification->getObjectType(),
+			'id' => $notification->getObjectId(),
+		];
+
+		// Max length of encryption is ~240, so we need to make sure the subject is shorter.
+		// Also, subtract two for encapsulating quotes will be added.
+		$maxDataLength = $maxLength - strlen(json_encode($data)) - 2;
+		$data['subject'] = Util::shortenMultibyteString($notification->getParsedSubject(), $maxDataLength);
+		if ($notification->getParsedSubject() !== $data['subject']) {
+			$data['subject'] .= '…';
+		}
+		return $data;
+ 	}
+
+	/**
 	 * @param Key $userKey
 	 * @param array $device
 	 * @param int $id
@@ -669,21 +758,7 @@ class Push {
 	 * @throws \InvalidArgumentException
 	 */
 	protected function encryptAndSign(Key $userKey, array $device, int $id, INotification $notification, bool $isTalkNotification): array {
-		$data = [
-			'nid' => $id,
-			'app' => $notification->getApp(),
-			'subject' => '',
-			'type' => $notification->getObjectType(),
-			'id' => $notification->getObjectId(),
-		];
-
-		// Max length of encryption is ~240, so we need to make sure the subject is shorter.
-		// Also, subtract two for encapsulating quotes will be added.
-		$maxDataLength = 200 - strlen(json_encode($data)) - 2;
-		$data['subject'] = Util::shortenMultibyteString($notification->getParsedSubject(), $maxDataLength);
-		if ($notification->getParsedSubject() !== $data['subject']) {
-			$data['subject'] .= '…';
-		}
+		$data = $this->encodeNotif($id, $notification, 200);
 
 		if ($isTalkNotification) {
 			$priority = 'high';

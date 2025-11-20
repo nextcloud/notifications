@@ -13,9 +13,14 @@ use OCA\Notifications\Vendor\Base64Url\Base64Url;
 use OCA\Notifications\Vendor\Minishlink\WebPush\Utils;
 use OCA\Notifications\Vendor\Minishlink\WebPush\WebPush;
 use OCA\Notifications\Vendor\Minishlink\WebPush\Subscription;
+use Psr\Log\LoggerInterface;
 
 class WebPushClient {
-    static private WebPush $client;
+    private WebPush $client;
+
+    public function __construct(
+        protected LoggerInterface $log,
+    ) {}
 
     static public function isValidP256dh(string $key): bool {
 		if (!preg_match('/^[A-Za-z0-9_-]{87}=*$/', $key)) {
@@ -42,13 +47,11 @@ class WebPushClient {
     }
 
     private function getClient(): WebPush {
-        $c = $this->client;
-        if (isset($c)) {
-            return $c;
+        if (isset($this->client)) {
+            return $this->client;
         }
-        $c = new WebPush();
-        $this->client = $c;
-        return $c;
+        $this->client = new WebPush();
+        return $this->client;
     }
 
     /**
@@ -60,6 +63,27 @@ class WebPushClient {
             new Subscription($endpoint, $uaPublicKey, $auth, "aes128gcm"),
             $body
         );
+        // the callback could be defined by the caller
+        // For the moment, it is used during registration only - no need to catch 404 &co
+        // as the registration isn't activated
+        $callback = function($r) {};
+        $c->flushPooled($callback);
+    }
+
+    /**
+     * Send one notification - blocking (should be avoided most of the time)
+     */
+    public function enqueue(string $endpoint, string $uaPublicKey, string $auth, string $body): void {
+        $c = $this->getClient();
+        $c->queueNotification(
+            new Subscription($endpoint, $uaPublicKey, $auth, "aes128gcm"),
+            $body
+        );
+    }
+
+    // TODO remove 404 and others
+    public function flush(): void {
+        $c = $this->getClient();
         $callback = function($r) {};
         $c->flushPooled($callback);
     }
