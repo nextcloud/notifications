@@ -64,9 +64,13 @@ class Push {
 	 */
 	protected array $userStatuses = [];
 	/**
+	 * @psalm-var array<string, list<array{id: int, uid: string, token: int, endpoint: string, p256dh: string, auth: string, appTypes: string, activated: bool, activation_token: string}>>
+	 */
+	protected array $userWebPushDevices = [];
+	/**
 	 * @psalm-var array<string, list<array{id: int, uid: string, token: int, deviceidentifier: string, devicepublickey: string, devicepublickeyhash: string, pushtokenhash: string, proxyserver: string, apptype: string}>>
 	 */
-	protected array $userDevices = [];
+	protected array $userProxyDevices = [];
 	/** @var string[] */
 	protected array $loadDevicesForUsers = [];
 	/** @var string[] */
@@ -113,10 +117,17 @@ class Push {
 
 		if (!empty($this->loadDevicesForUsers)) {
 			$this->loadDevicesForUsers = array_unique($this->loadDevicesForUsers);
-			$missingDevicesFor = array_diff($this->loadDevicesForUsers, array_keys($this->userDevices));
-			$newUserDevices = $this->getDevicesForUsers($missingDevicesFor);
-			foreach ($missingDevicesFor as $userId) {
-				$this->userDevices[$userId] = $newUserDevices[$userId] ?? [];
+			// Add missing web push devices
+			$missingWebPushDevicesFor = array_diff($this->loadDevicesForUsers, array_keys($this->userWebPushDevices));
+			$newUserWebPushDevices = $this->getWebPushDevicesForUsers($missingWebPushDevicesFor);
+			foreach ($missingWebPushDevicesFor as $userId) {
+				$this->userWebPushDevices[$userId] = $newUserWebPushDevices[$userId] ?? [];
+			}
+			// Add missing proxy devices
+			$missingProxyDevicesFor = array_diff($this->loadDevicesForUsers, array_keys($this->userProxyDevices));
+			$newUserProxyDevices = $this->getProxyDevicesForUsers($missingProxyDevicesFor);
+			foreach ($missingProxyDevicesFor as $userId) {
+				$this->userProxyDevices[$userId] = $newUserProxyDevices[$userId] ?? [];
 			}
 			$this->loadDevicesForUsers = [];
 		}
@@ -230,14 +241,20 @@ class Push {
 			}
 		}
 
-		if (!array_key_exists($notification->getUser(), $this->userDevices)) {
-			$devices = $this->getDevicesForUser($notification->getUser());
-			$this->userDevices[$notification->getUser()] = $devices;
+		if (!array_key_exists($notification->getUser(), $this->userWebPushDevices)) {
+			$webPushDevices = $this->getWebPushDevicesForUser($notification->getUser());
+			$this->userWebPushDevices[$notification->getUser()] = $webPushDevices;
 		} else {
-			$devices = $this->userDevices[$notification->getUser()];
+			$webPushDevices = $this->userWebPushDevices[$notification->getUser()];
+		}
+		if (!array_key_exists($notification->getUser(), $this->userProxyDevices)) {
+			$proxyDevices = $this->getProxyDevicesForUser($notification->getUser());
+			$this->userProxyDevices[$notification->getUser()] = $proxyDevices;
+		} else {
+			$proxyDevices = $this->userProxyDevices[$notification->getUser()];
 		}
 
-		if (empty($devices)) {
+		if (empty($proxyDevices) && empty($webPushDevices)) {
 			$this->printInfo('<comment>No devices found for user</comment>');
 			return;
 		}
@@ -256,6 +273,23 @@ class Push {
 			} finally {
 				$this->notificationManager->setPreparingPushNotification(false);
 			}
+		}
+
+		$this->webPushToDevice($id, $user, $webPushDevices, $notification, $output);
+		$this->proxyPushToDevice($id, $user, $proxyDevices, $notification, $output);
+	}
+
+	public function webPushToDevice(int $id, IUser $user, array $devices, INotification $notification, ?OutputInterface $output = null): void {
+		if (empty($devices)) {
+			$this->printInfo('<comment>No web push devices found for user</comment>');
+			return;
+		}
+	}
+
+	public function proxyPushToDevice(int $id, IUser $user, array $devices, INotification $notification, ?OutputInterface $output = null): void {
+		if (empty($devices)) {
+			$this->printInfo('<comment>No proxy devices found for user</comment>');
+			return;
 		}
 
 		$userKey = $this->keyManager->getKey($user);
@@ -352,17 +386,46 @@ class Push {
 
 		$user = $this->createFakeUserObject($userId);
 
-		if (!array_key_exists($userId, $this->userDevices)) {
-			$devices = $this->getDevicesForUser($userId);
-			$this->userDevices[$userId] = $devices;
+		if (!array_key_exists($userId, $this->userWebPushDevices)) {
+			$webPushDevices = $this->getWebPushDevicesForUser($userId);
+			$this->userWebPushDevices[$userId] = $webPushDevices;
 		} else {
-			$devices = $this->userDevices[$userId];
+			$webPushDevices = $this->userWebPushDevices[$userId];
+		}
+		if (!array_key_exists($userId, $this->userProxyDevices)) {
+			$proxyDevices = $this->getProxyDevicesForUser($userId);
+			$this->userProxyDevices[$userId] = $proxyDevices;
+		} else {
+			$proxyDevices = $this->userProxyDevices[$userId];
 		}
 
 		if (!$deleteAll) {
 			// Only filter when it's not delete-all
-			$devices = $this->filterDeviceList($devices, $app);
+			$proxyDevices = $this->filterDeviceList($proxyDevices, $app);
+			//TODO filter webpush devices
 		}
+
+		$this->webPushDeleteToDevice($userId, $user, $webPushDevices, $notificationIds, $app);
+		$this->proxyPushDeleteToDevice($userId, $user, $proxyDevices, $notificationIds, $app);
+	}
+
+	/**
+	 * @param string $userId
+	 * @param ?int[] $notificationIds
+	 * @param string $app
+	 */
+	public function webPushDeleteToDevice(string $userId, IUser $user, array $devices, ?array $notificationIds, string $app = ''): void {
+		if (empty($devices)) {
+			return;
+		}
+	}
+
+	/**
+	 * @param string $userId
+	 * @param ?int[] $notificationIds
+	 * @param string $app
+	 */
+	public function proxyPushDeleteToDevice(string $userId, IUser $user, array $devices, ?array $notificationIds, string $app = ''): void {
 		if (empty($devices)) {
 			return;
 		}
@@ -715,7 +778,7 @@ class Push {
 	 * @return array[]
 	 * @psalm-return list<array{id: int, uid: string, token: int, deviceidentifier: string, devicepublickey: string, devicepublickeyhash: string, pushtokenhash: string, proxyserver: string, apptype: string}>
 	 */
-	protected function getDevicesForUser(string $uid): array {
+	protected function getProxyDevicesForUser(string $uid): array {
 		$query = $this->db->getQueryBuilder();
 		$query->select('*')
 			->from('notifications_pushhash')
@@ -733,10 +796,54 @@ class Push {
 	 * @return array[]
 	 * @psalm-return array<string, list<array{id: int, uid: string, token: int, deviceidentifier: string, devicepublickey: string, devicepublickeyhash: string, pushtokenhash: string, proxyserver: string, apptype: string}>>
 	 */
-	protected function getDevicesForUsers(array $userIds): array {
+	protected function getProxyDevicesForUsers(array $userIds): array {
 		$query = $this->db->getQueryBuilder();
 		$query->select('*')
 			->from('notifications_pushhash')
+			->where($query->expr()->in('uid', $query->createNamedParameter($userIds, IQueryBuilder::PARAM_STR_ARRAY)));
+
+		$devices = [];
+		$result = $query->executeQuery();
+		while ($row = $result->fetch()) {
+			if (!isset($devices[$row['uid']])) {
+				$devices[$row['uid']] = [];
+			}
+			$devices[$row['uid']][] = $row;
+		}
+
+		$result->closeCursor();
+
+		return $devices;
+	}
+
+
+	/**
+	 * @param string $uid
+	 * @return array[]
+	 * @psalm-return list<array{id: int, uid: string, token: int, endpoint: string, p256dh: string, auth: string, appTypes: string, activated: bool, activation_token: string}>
+	 */
+	protected function getWebPushDevicesForUser(string $uid): array {
+		$query = $this->db->getQueryBuilder();
+		$query->select('*')
+			->from('notifications_webpush')
+			->where($query->expr()->eq('uid', $query->createNamedParameter($uid)));
+
+		$result = $query->executeQuery();
+		$devices = $result->fetchAll();
+		$result->closeCursor();
+
+		return $devices;
+	}
+
+	/**
+	 * @param string[] $userIds
+	 * @return array[]
+	 * @psalm-return array<string, list<array{id: int, uid: string, token: int, endpoint: string, p256dh: string, auth: string, appTypes: string, activated: bool, activation_token: string}>>
+	 */
+	protected function getWebPushDevicesForUsers(array $userIds): array {
+		$query = $this->db->getQueryBuilder();
+		$query->select('*')
+			->from('notifications_webpush')
 			->where($query->expr()->in('uid', $query->createNamedParameter($userIds, IQueryBuilder::PARAM_STR_ARRAY)));
 
 		$devices = [];
