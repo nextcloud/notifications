@@ -33,6 +33,7 @@ use OCP\Notification\IManager as INotificationManager;
 use OCP\Notification\INotification;
 use OCP\Security\ISecureRandom;
 use OCP\UserStatus\IManager as IUserStatusManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
@@ -147,7 +148,7 @@ class PushTest extends TestCase {
 	}
 
 	public function testPushToDeviceNoDevices(): void {
-		$push = $this->getPush(['getDevicesForUser']);
+		$push = $this->getPush(['getProxyDevicesForUser']);
 		$this->keyManager->expects($this->never())
 			->method('getKey');
 		$this->clientService->expects($this->never())
@@ -173,14 +174,14 @@ class PushTest extends TestCase {
 			->willReturn($user);
 
 		$push->expects($this->once())
-			->method('getDevicesForUser')
+			->method('getProxyDevicesForUser')
 			->willReturn([]);
 
 		$push->pushToDevice(42, $notification);
 	}
 
 	public function testPushToDeviceNotPrepared(): void {
-		$push = $this->getPush(['getDevicesForUser']);
+		$push = $this->getPush(['getProxyDevicesForUser']);
 		$this->keyManager->expects($this->never())
 			->method('getKey');
 		$this->clientService->expects($this->never())
@@ -206,7 +207,7 @@ class PushTest extends TestCase {
 			->willReturn($user);
 
 		$push->expects($this->once())
-			->method('getDevicesForUser')
+			->method('getProxyDevicesForUser')
 			->willReturn([[
 				'proxyserver' => 'proxyserver1',
 				'token' => 'token1',
@@ -225,8 +226,8 @@ class PushTest extends TestCase {
 		$push->pushToDevice(1337, $notification);
 	}
 
-	public function testPushToDeviceInvalidToken(): void {
-		$push = $this->getPush(['getDevicesForUser', 'encryptAndSign', 'deletePushToken']);
+	public function testProxyPushToDeviceInvalidToken(): void {
+		$push = $this->getPush(['getProxyDevicesForUser', 'encryptAndSign', 'deletePushToken']);
 		$this->clientService->expects($this->never())
 			->method('newClient');
 
@@ -250,7 +251,7 @@ class PushTest extends TestCase {
 			->willReturn($user);
 
 		$push->expects($this->once())
-			->method('getDevicesForUser')
+			->method('getProxyDevicesForUser')
 			->willReturn([[
 				'proxyserver' => 'proxyserver1',
 				'token' => 23,
@@ -290,8 +291,8 @@ class PushTest extends TestCase {
 		$push->pushToDevice(2018, $notification);
 	}
 
-	public function testPushToDeviceEncryptionError(): void {
-		$push = $this->getPush(['getDevicesForUser', 'encryptAndSign', 'deletePushToken', 'validateToken']);
+	public function testProxyPushToDeviceEncryptionError(): void {
+		$push = $this->getPush(['getProxyDevicesForUser', 'encryptAndSign', 'deletePushToken', 'validateToken']);
 		$this->clientService->expects($this->never())
 			->method('newClient');
 
@@ -315,7 +316,7 @@ class PushTest extends TestCase {
 			->willReturn($user);
 
 		$push->expects($this->once())
-			->method('getDevicesForUser')
+			->method('getProxyDevicesForUser')
 			->willReturn([[
 				'proxyserver' => 'proxyserver1',
 				'token' => 23,
@@ -354,8 +355,9 @@ class PushTest extends TestCase {
 
 		$push->pushToDevice(1970, $notification);
 	}
-	public function testPushToDeviceNoFairUse(): void {
-		$push = $this->getPush(['getDevicesForUser', 'encryptAndSign', 'deletePushToken', 'validateToken', 'deletePushTokenByDeviceIdentifier']);
+
+	public function testProxyPushToDeviceNoFairUse(): void {
+		$push = $this->getPush(['getProxyDevicesForUser', 'encryptAndSign', 'deletePushToken', 'validateToken', 'deletePushTokenByDeviceIdentifier']);
 
 		/** @var INotification&MockObject $notification */
 		$notification = $this->createMock(INotification::class);
@@ -372,7 +374,7 @@ class PushTest extends TestCase {
 			->willReturn($user);
 
 		$push->expects($this->once())
-			->method('getDevicesForUser')
+			->method('getProxyDevicesForUser')
 			->willReturn([
 				[
 					'proxyserver' => 'proxyserver',
@@ -432,18 +434,16 @@ class PushTest extends TestCase {
 		$push->pushToDevice(207787, $notification);
 	}
 
-	public static function dataPushToDeviceSending(): array {
+	public static function dataProxyPushToDeviceSending(): array {
 		return [
 			[true],
 			[false],
 		];
 	}
 
-	/**
-	 * @dataProvider dataPushToDeviceSending
-	 */
+	#[DataProvider(methodName: 'dataProxyPushToDeviceSending')]
 	public function testPushToDeviceSending(bool $isDebug): void {
-		$push = $this->getPush(['getDevicesForUser', 'encryptAndSign', 'deletePushToken', 'validateToken', 'deletePushTokenByDeviceIdentifier']);
+		$push = $this->getPush(['getProxyDevicesForUser', 'encryptAndSign', 'deletePushToken', 'validateToken', 'deletePushTokenByDeviceIdentifier']);
 
 		/** @var INotification&MockObject $notification */
 		$notification = $this->createMock(INotification::class);
@@ -460,7 +460,7 @@ class PushTest extends TestCase {
 			->willReturn($user);
 
 		$push->expects($this->once())
-			->method('getDevicesForUser')
+			->method('getProxyDevicesForUser')
 			->willReturn([
 				[
 					'proxyserver' => 'proxyserver1',
@@ -655,7 +655,7 @@ class PushTest extends TestCase {
 		$push->pushToDevice(207787, $notification);
 	}
 
-	public static function dataPushToDeviceTalkNotification(): array {
+	public static function dataProxyPushToDeviceTalkNotification(): array {
 		return [
 			[['nextcloud'], false, 0],
 			[['nextcloud'], true, 0],
@@ -669,11 +669,11 @@ class PushTest extends TestCase {
 	}
 
 	/**
-	 * @dataProvider dataPushToDeviceTalkNotification
 	 * @param string[] $deviceTypes
 	 */
-	public function testPushToDeviceTalkNotification(array $deviceTypes, bool $isTalkNotification, ?int $pushedDevice): void {
-		$push = $this->getPush(['getDevicesForUser', 'encryptAndSign', 'deletePushToken', 'validateToken']);
+	#[DataProvider(methodName: 'dataProxyPushToDeviceTalkNotification')]
+	public function testProxyPushToDeviceTalkNotification(array $deviceTypes, bool $isTalkNotification, ?int $pushedDevice): void {
+		$push = $this->getPush(['getProxyDevicesForUser', 'encryptAndSign', 'deletePushToken', 'validateToken']);
 
 		/** @var INotification&MockObject $notification */
 		$notification = $this->createMock(INotification::class);
@@ -708,7 +708,7 @@ class PushTest extends TestCase {
 			];
 		}
 		$push->expects($this->once())
-			->method('getDevicesForUser')
+			->method('getProxyDevicesForUser')
 			->willReturn($devices);
 
 		$this->l10nFactory
