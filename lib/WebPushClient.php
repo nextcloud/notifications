@@ -10,9 +10,10 @@ declare(strict_types=1);
 namespace OCA\Notifications;
 
 use OCA\Notifications\Vendor\Base64Url\Base64Url;
+use OCA\Notifications\Vendor\Minishlink\WebPush\MessageSentReport;
+use OCA\Notifications\Vendor\Minishlink\WebPush\Subscription;
 use OCA\Notifications\Vendor\Minishlink\WebPush\Utils;
 use OCA\Notifications\Vendor\Minishlink\WebPush\WebPush;
-use OCA\Notifications\Vendor\Minishlink\WebPush\Subscription;
 use Psr\Log\LoggerInterface;
 
 class WebPushClient {
@@ -81,10 +82,12 @@ class WebPushClient {
         );
     }
 
-    // TODO remove 404 and others
-    public function flush(): void {
+    /**
+     * @param callable $callback
+     * @psalm-param $callback callable(MessageSentReport): void
+     */
+    public function flush(callable $callback): void {
         $c = $this->getClient();
-        $callback = function($r) {};
         $c->flushPooled($callback);
     }
 }
