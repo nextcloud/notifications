@@ -74,11 +74,14 @@ class WebPushClient {
     /**
      * Send one notification - blocking (should be avoided most of the time)
      */
-    public function enqueue(string $endpoint, string $uaPublicKey, string $auth, string $body): void {
+    public function enqueue(string $endpoint, string $uaPublicKey, string $auth, string $body, string $urgency = 'normal'): void {
         $c = $this->getClient();
         $c->queueNotification(
             new Subscription($endpoint, $uaPublicKey, $auth, "aes128gcm"),
-            $body
+            $body,
+            options: [
+                'urgency' => $urgency
+            ]
         );
     }
 
