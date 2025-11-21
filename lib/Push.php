@@ -336,8 +336,15 @@ class Push {
 			}
 
 			try {
-				$payload = json_encode($this->encodeNotif($id, $notification, 3000), JSON_THROW_ON_ERROR);
-				$this->wpClient->enqueue($device['endpoint'], $device['p256dh'], $device['auth'], $payload);
+				$data = $this->encodeNotif($id, $notification, 3000);
+				$urgency = $this->getNotifTopicAndUrgency($data['app'], $data['type'])['priority'];
+				$this->wpClient->enqueue(
+					$device['endpoint'],
+					$device['p256dh'],
+					$device['auth'],
+					json_encode($data, JSON_THROW_ON_ERROR),
+					urgency: $urgency
+				);
 			} catch (\JsonException $e) {
 				$this->log->error('JSON error while encoding push notification: ' . $e->getMessage(), ['exception' => $e]);
 			} catch (\InvalidArgumentException) {
@@ -832,6 +839,31 @@ class Push {
 	}
 
 	/**
+	 * Get notification urgency (priority) and topic, the urgency is compatible with
+	 * [RFC8030's Urgency](https://www.rfc-editor.org/rfc/rfc8030#section-5.3)
+	 *
+	 *
+	 * @param string app
+	 * @param string type
+	 * @return array
+	 * @psalm-return array{urgency: string, type: string}
+	 */
+	protected function getNotifTopicAndUrgency(string $app, string $type): array {
+		$res = [];
+		if (\in_array($app, ['spreed', 'talk', 'admin_notification_talk'], true)) {
+			$res['urgency'] = 'high';
+			$res['type'] = $type === 'call' ? 'voip' : 'alert';
+		} elseif ($app === 'twofactor_nextcloud_notification' || $app === 'phonetrack') {
+			$res['urgency'] = 'high';
+			$res['type'] = 'alert';
+		} else {
+			$res['urgency'] = 'normal';
+			$res['type'] = 'alert';
+		}
+		return $res;
+	}
+
+	/**
 	 * @param Key $userKey
 	 * @param array $device
 	 * @param int $id
@@ -844,17 +876,9 @@ class Push {
 	 */
 	protected function encryptAndSign(Key $userKey, array $device, int $id, INotification $notification, bool $isTalkNotification): array {
 		$data = $this->encodeNotif($id, $notification, 200);
-
-		if ($isTalkNotification) {
-			$priority = 'high';
-			$type = $data['type'] === 'call' ? 'voip' : 'alert';
-		} elseif ($data['app'] === 'twofactor_nextcloud_notification' || $data['app'] === 'phonetrack') {
-			$priority = 'high';
-			$type = 'alert';
-		} else {
-			$priority = 'normal';
-			$type = 'alert';
-		}
+		$ret = $this->getNotifTopicAndUrgency($data['app'], $data['type']);
+		$priority = $ret['urgency'];
+		$type = $ret['type'];
 
 		$this->printInfo('Device public key size: ' . strlen($device['devicepublickey']));
 		$this->printInfo('Data to encrypt is: ' . json_encode($data));
