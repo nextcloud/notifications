@@ -15,6 +15,7 @@ use OC\Authentication\Token\IProvider;
 use OC\Security\IdentityProof\Key;
 use OC\Security\IdentityProof\Manager;
 use OCA\Notifications\AppInfo\Application;
+use OCA\Notifications\Vendor\Minishlink\WebPush\MessageSentReport;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Authentication\Exceptions\InvalidTokenException;
@@ -176,7 +177,7 @@ class Push {
 		}
 
 		$this->deferPayloads = false;
-		$this->wpClient->flush();
+		$this->wpClient->flush(fn ($r) => $this->webPushCallback($r));
 		$this->sendNotificationsToProxies();
 	}
 
@@ -330,6 +331,7 @@ class Push {
 
 			if (!$this->validateToken($device['token'], $maxAge)) {
 				// Token does not exist anymore
+				$this->deleteWebPushToken($device['token']);
 				continue;
 			}
 
@@ -340,13 +342,13 @@ class Push {
 				$this->log->error('JSON error while encoding push notification: ' . $e->getMessage(), ['exception' => $e]);
 			} catch (\InvalidArgumentException) {
 				// Failed to encrypt message for device: public key is invalid
-				//TODO $this->deletePushToken($device['token']);
+				$this->deleteWebPushToken($device['token']);
 			}
 		}
 		$this->printInfo('');
 
 		if (!$this->deferPayloads) {
-			$this->wpClient->flush();
+			$this->wpClient->flush(fn ($r) => $this->webPushCallback($r));
 		}
 	}
 
@@ -382,6 +384,7 @@ class Push {
 
 			if (!$this->validateToken($device['token'], $maxAge)) {
 				// Token does not exist anymore
+				$this->deleteProxyPushToken($device['token']);
 				continue;
 			}
 
@@ -397,7 +400,7 @@ class Push {
 				$this->log->error('JSON error while encoding push notification: ' . $e->getMessage(), ['exception' => $e]);
 			} catch (\InvalidArgumentException) {
 				// Failed to encrypt message for device: public key is invalid
-				$this->deletePushToken($device['token']);
+				$this->deleteProxyPushToken($device['token']);
 			}
 		}
 		$this->printInfo('');
@@ -502,6 +505,7 @@ class Push {
 			$device['token'] = (int)$device['token'];
 			if (!$this->validateToken($device['token'], $maxAge)) {
 				// Token does not exist anymore
+				$this->deleteProxyPushToken($device['token']);
 				continue;
 			}
 
@@ -533,12 +537,21 @@ class Push {
 				}
 			} catch (\InvalidArgumentException) {
 				// Failed to encrypt message for device: public key is invalid
-				$this->deletePushToken($device['token']);
+				$this->deleteProxyPushToken($device['token']);
 			}
 		}
 
 		if (!$this->deferPayloads) {
 			$this->sendNotificationsToProxies();
+		}
+	}
+
+	/**
+	 * Delete expired web push subscriptions
+	 */
+	protected function webPushCallback (MessageSentReport $report): void {
+		if ($report->isSubscriptionExpired()) {
+			$this->deleteWebPushTokenByEndpoint($report->getEndpoint());
 		}
 	}
 
@@ -629,7 +642,7 @@ class Push {
 					// Proxy returns null when the array is empty
 					foreach ($bodyData['unknown'] as $unknownDevice) {
 						$this->printInfo('<comment>Deleting device because it is unknown by the push server: ' . $unknownDevice . '</comment>');
-						$this->deletePushTokenByDeviceIdentifier($unknownDevice);
+						$this->deleteProxyPushTokenByDeviceIdentifier($unknownDevice);
 					}
 				}
 
@@ -672,7 +685,6 @@ class Push {
 				if ($type === IToken::WIPE_TOKEN) {
 					// Token does not exist any more, should drop the push device entry
 					$this->printInfo('Device token is marked for remote wipe');
-					$this->deletePushToken($tokenId);
 					$this->cache->set('t' . $tokenId, 0, 600);
 					return false;
 				}
@@ -686,7 +698,6 @@ class Push {
 			} catch (InvalidTokenException) {
 				// Token does not exist any more, should drop the push device entry
 				$this->printInfo('<error>InvalidTokenException is thrown</error>');
-				$this->deletePushToken($tokenId);
 				$this->cache->set('t' . $tokenId, 0, 600);
 				return false;
 			}
@@ -940,7 +951,31 @@ class Push {
 	 * @param int $tokenId
 	 * @return bool
 	 */
-	protected function deletePushToken(int $tokenId): bool {
+	protected function deleteWebPushToken(int $tokenId): bool {
+		$query = $this->db->getQueryBuilder();
+		$query->delete('notifications_webpush')
+			->where($query->expr()->eq('token', $query->createNamedParameter($tokenId, IQueryBuilder::PARAM_INT)));
+
+		return $query->executeStatement() !== 0;
+	}
+
+	/**
+	 * @param string $endpoint
+	 * @return bool
+	 */
+	protected function deleteWebPushTokenByEndpoint(string $endpoint): bool {
+		$query = $this->db->getQueryBuilder();
+		$query->delete('notifications_webpush')
+			->where($query->expr()->eq('endpoint', $query->createNamedParameter($endpoint)));
+
+		return $query->executeStatement() !== 0;
+	}
+
+	/**
+	 * @param int $tokenId
+	 * @return bool
+	 */
+	protected function deleteProxyPushToken(int $tokenId): bool {
 		$query = $this->db->getQueryBuilder();
 		$query->delete('notifications_pushhash')
 			->where($query->expr()->eq('token', $query->createNamedParameter($tokenId, IQueryBuilder::PARAM_INT)));
@@ -952,7 +987,7 @@ class Push {
 	 * @param string $deviceIdentifier
 	 * @return bool
 	 */
-	protected function deletePushTokenByDeviceIdentifier(string $deviceIdentifier): bool {
+	protected function deleteProxyPushTokenByDeviceIdentifier(string $deviceIdentifier): bool {
 		$query = $this->db->getQueryBuilder();
 		$query->delete('notifications_pushhash')
 			->where($query->expr()->eq('deviceidentifier', $query->createNamedParameter($deviceIdentifier)));
