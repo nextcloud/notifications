@@ -38,5 +38,19 @@
 		"rector:fix": "rector",
 		"test:unit": "phpunit --color -c tests/Unit/phpunit.xml",
 		"test:integration": "cd tests/Integration && ./run.sh"
+	},
+	"require": {
+		"minishlink/web-push": "^9.0"
+	},
+  "extra": {
+    "mozart": {
+        "dep_namespace": "OCA\\Notifications\\Vendor\\",
+        "dep_directory": "/lib/Vendor/",
+        "classmap_directory": "/lib/autoload/",
+        "classmap_prefix": "Notifications_",
+        "packages": [
+            "minishlink/web-push"
+        ]
+    }
 	}
 }
