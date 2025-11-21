@@ -227,7 +227,7 @@ class PushTest extends TestCase {
 	}
 
 	public function testProxyPushToDeviceInvalidToken(): void {
-		$push = $this->getPush(['getProxyDevicesForUser', 'encryptAndSign', 'deletePushToken']);
+		$push = $this->getPush(['getProxyDevicesForUser', 'encryptAndSign', 'deleteProxyPushToken']);
 		$this->clientService->expects($this->never())
 			->method('newClient');
 
@@ -285,14 +285,14 @@ class PushTest extends TestCase {
 			->method('encryptAndSign');
 
 		$push->expects($this->once())
-			->method('deletePushToken')
+			->method('deleteProxyPushToken')
 			->with(23);
 
 		$push->pushToDevice(2018, $notification);
 	}
 
 	public function testProxyPushToDeviceEncryptionError(): void {
-		$push = $this->getPush(['getProxyDevicesForUser', 'encryptAndSign', 'deletePushToken', 'validateToken']);
+		$push = $this->getPush(['getProxyDevicesForUser', 'encryptAndSign', 'deleteProxyPushToken', 'validateToken']);
 		$this->clientService->expects($this->never())
 			->method('newClient');
 
@@ -350,14 +350,14 @@ class PushTest extends TestCase {
 			->willThrowException(new \InvalidArgumentException());
 
 		$push->expects($this->once())
-			->method('deletePushToken')
+			->method('deleteProxyPushToken')
 			->with(23);
 
 		$push->pushToDevice(1970, $notification);
 	}
 
 	public function testProxyPushToDeviceNoFairUse(): void {
-		$push = $this->getPush(['getProxyDevicesForUser', 'encryptAndSign', 'deletePushToken', 'validateToken', 'deletePushTokenByDeviceIdentifier']);
+		$push = $this->getPush(['getProxyDevicesForUser', 'encryptAndSign', 'deleteProxyPushToken', 'validateToken', 'deleteProxyPushTokenByDeviceIdentifier']);
 
 		/** @var INotification&MockObject $notification */
 		$notification = $this->createMock(INotification::class);
@@ -415,7 +415,7 @@ class PushTest extends TestCase {
 			->willReturn(['Payload']);
 
 		$push->expects($this->never())
-			->method('deletePushToken');
+			->method('deleteProxyPushToken');
 
 		$this->clientService->expects($this->never())
 			->method('newClient');
@@ -428,7 +428,7 @@ class PushTest extends TestCase {
 		$this->notificationManager->method('isFairUseOfFreePushService')
 			->willReturn(false);
 
-		$push->method('deletePushTokenByDeviceIdentifier')
+		$push->method('deleteProxyPushTokenByDeviceIdentifier')
 			->with('123456');
 
 		$push->pushToDevice(207787, $notification);
@@ -443,7 +443,7 @@ class PushTest extends TestCase {
 
 	#[DataProvider(methodName: 'dataProxyPushToDeviceSending')]
 	public function testPushToDeviceSending(bool $isDebug): void {
-		$push = $this->getPush(['getProxyDevicesForUser', 'encryptAndSign', 'deletePushToken', 'validateToken', 'deletePushTokenByDeviceIdentifier']);
+		$push = $this->getPush(['getProxyDevicesForUser', 'encryptAndSign', 'deleteProxyPushToken', 'validateToken', 'deleteProxyPushTokenByDeviceIdentifier']);
 
 		/** @var INotification&MockObject $notification */
 		$notification = $this->createMock(INotification::class);
@@ -533,7 +533,7 @@ class PushTest extends TestCase {
 			->willReturn(['Payload']);
 
 		$push->expects($this->never())
-			->method('deletePushToken');
+			->method('deleteProxyPushToken');
 
 		/** @var IClient&MockObject $client */
 		$client = $this->createMock(IClient::class);
@@ -649,7 +649,7 @@ class PushTest extends TestCase {
 		$this->notificationManager->method('isFairUseOfFreePushService')
 			->willReturn(true);
 
-		$push->method('deletePushTokenByDeviceIdentifier')
+		$push->method('deleteProxyPushTokenByDeviceIdentifier')
 			->with('123456');
 
 		$push->pushToDevice(207787, $notification);
@@ -673,7 +673,7 @@ class PushTest extends TestCase {
 	 */
 	#[DataProvider(methodName: 'dataProxyPushToDeviceTalkNotification')]
 	public function testProxyPushToDeviceTalkNotification(array $deviceTypes, bool $isTalkNotification, ?int $pushedDevice): void {
-		$push = $this->getPush(['getProxyDevicesForUser', 'encryptAndSign', 'deletePushToken', 'validateToken']);
+		$push = $this->getPush(['getProxyDevicesForUser', 'encryptAndSign', 'deleteProxyPushToken', 'validateToken']);
 
 		/** @var INotification&MockObject $notification */
 		$notification = $this->createMock(INotification::class);
