@@ -485,6 +485,51 @@ class Push {
 		if (empty($devices)) {
 			return;
 		}
+
+		// We don't push to devices that are older than 60 days
+		$maxAge = time() - 60 * 24 * 60 * 60;
+
+		$userKey = $this->keyManager->getKey($user);
+		foreach ($devices as $device) {
+			$device['token'] = (int)$device['token'];
+			if (!$this->validateToken($device['token'], $maxAge)) {
+				// Token does not exist anymore
+				$this->deleteWebPushToken($device['token']);
+				continue;
+			}
+
+			try {
+				if ($deleteAll) {
+					$data = $this->encodeDeleteNotifs(null);
+					try {
+						$payload = json_encode($data['data'], JSON_THROW_ON_ERROR);
+						$this->wpClient->enqueue($device['endpoint'], $device['p256dh'], $device['auth'], $payload);
+					} catch (\JsonException $e) {
+						$this->log->error('JSON error while encoding push notification: ' . $e->getMessage(), ['exception' => $e]);
+					}
+				} else {
+					$temp = $notificationIds;
+
+					while (!empty($temp)) {
+						$data = $this->encodeDeleteNotifs($temp);
+						$temp = $data['remaining'];
+						try {
+							$payload = json_encode($data['data'], JSON_THROW_ON_ERROR);
+							$this->wpClient->enqueue($device['endpoint'], $device['p256dh'], $device['auth'], $payload);
+						} catch (\JsonException $e) {
+							$this->log->error('JSON error while encoding push notification: ' . $e->getMessage(), ['exception' => $e]);
+						}
+					}
+				}
+			} catch (\InvalidArgumentException) {
+				// Failed to encrypt message for device: public key is invalid
+				$this->deleteWebPushToken($device['token']);
+			}
+		}
+
+		if (!$this->deferPayloads) {
+			$this->sendNotificationsToProxies();
+		}
 	}
 
 	/**
@@ -758,6 +803,35 @@ class Push {
  	}
 
 	/**
+	 * @param ?int[] $ids
+	 * @return array
+	 * @psalm-return array{remaining: list<int>, data: array{delete-all: bool, nid: int, delete: bool, nids: int[], delete-multiple: int}}
+	 */
+	protected function encodeDeleteNotifs(?array $ids): array {
+		$remainingIds = [];
+		if ($ids === null) {
+			$data = [
+				'delete-all' => true,
+			];
+		} elseif (count($ids) === 1) {
+			$data = [
+				'nid' => array_pop($ids),
+				'delete' => true,
+			];
+		} else {
+			$remainingIds = array_splice($ids, 10);
+			$data = [
+				'nids' => $ids,
+				'delete-multiple' => true,
+			];
+		}
+		return [
+			'remaining' => $remainingIds,
+			'data' => $data
+		];
+	}
+
+	/**
 	 * @param Key $userKey
 	 * @param array $device
 	 * @param int $id
@@ -820,23 +894,9 @@ class Push {
 	 * @throws \InvalidArgumentException
 	 */
 	protected function encryptAndSignDelete(Key $userKey, array $device, ?array $ids): array {
-		$remainingIds = [];
-		if ($ids === null) {
-			$data = [
-				'delete-all' => true,
-			];
-		} elseif (count($ids) === 1) {
-			$data = [
-				'nid' => array_pop($ids),
-				'delete' => true,
-			];
-		} else {
-			$remainingIds = array_splice($ids, 10);
-			$data = [
-				'nids' => $ids,
-				'delete-multiple' => true,
-			];
-		}
+		$ret = $this->encodeDeleteNotifs($ids);
+		$remainingIds = $ret['remaining'];
+		$data = $ret['data'];
 
 		if (!openssl_public_encrypt(json_encode($data), $encryptedSubject, $device['devicepublickey'], OPENSSL_PKCS1_PADDING)) {
 			$this->log->error(openssl_error_string(), ['app' => 'notifications']);
