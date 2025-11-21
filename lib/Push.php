@@ -37,6 +37,7 @@ use OCP\UserStatus\IManager as IUserStatusManager;
 use OCP\UserStatus\IUserStatus;
 use OCP\Util;
 use Psr\Log\LoggerInterface;
+use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Push {
@@ -334,6 +335,16 @@ class Push {
 				continue;
 			}
 
+			// If the endpoint got a 429 TOO_MANY_REQUESTS,
+			// we wait for the time sent by the server
+			if ($this->cache->get('wp.' . $device['endpoint'])) {
+				// It would be better to cache the notification to send it later
+				// in this case, but
+				// 429 is rare, and ~ an emergency response: dropping the notification
+				// is a solution good enough to not overload the push server
+				continue;
+			}
+
 			try {
 				$data = $this->encodeNotif($id, $notification, 3000);
 				$urgency = $this->getNotifTopicAndUrgency($data['app'], $data['type'])['priority'];
@@ -504,6 +515,16 @@ class Push {
 				continue;
 			}
 
+			// If the endpoint got a 429 TOO_MANY_REQUESTS,
+			// we wait for the time sent by the server
+			if ($this->cache->get('wp.' . $device['endpoint'])) {
+				// It would be better to cache the notification to send it later
+				// in this case, but
+				// 429 is rare, and ~ an emergency response: dropping the notification
+				// is a solution good enough to not overload the push server
+				continue;
+			}
+
 			try {
 				if ($deleteAll) {
 					$data = $this->encodeDeleteNotifs(null);
@@ -603,6 +624,9 @@ class Push {
 	protected function webPushCallback (MessageSentReport $report): void {
 		if ($report->isSubscriptionExpired()) {
 			$this->deleteWebPushTokenByEndpoint($report->getEndpoint());
+		} else if ($report->getResponse()?->getStatusCode() === 429) {
+			$retryAfter = $report->getResponse()?->getHeader('Retry-After');
+			$this->cache->set('wp.' . $report->getEndpoint(), true, $retryAfter ?? 60);
 		}
 	}
 
