@@ -22,6 +22,7 @@ use OCP\Authentication\Exceptions\InvalidTokenException;
 use OCP\Authentication\Token\IToken;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Http\Client\IClientService;
+use OCP\IAppConfig;
 use OCP\ICache;
 use OCP\ICacheFactory;
 use OCP\IConfig;
@@ -85,6 +86,7 @@ class Push {
 		protected IUserManager $userManager,
 		protected INotificationManager $notificationManager,
 		protected IConfig $config,
+		protected IAppConfig $appConfig,
 		protected IProvider $tokenProvider,
 		protected Manager $keyManager,
 		protected IClientService $clientService,
@@ -96,7 +98,7 @@ class Push {
 		protected LoggerInterface $log,
 	) {
 		$this->cache = $cacheFactory->createDistributed('pushtokens');
-		$this->wpClient = new WebPushClient($log);
+		$this->wpClient = new WebPushClient($appConfig);
 	}
 
 	public function setOutput(OutputInterface $output): void {

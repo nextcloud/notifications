@@ -24,6 +24,7 @@ use OCP\Http\Client\IClientService;
 use OCP\Http\Client\IResponse;
 use OCP\ICache;
 use OCP\ICacheFactory;
+use OCP\IAppConfig;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IUser;
@@ -50,6 +51,7 @@ class PushTest extends TestCase {
 	protected IDBConnection $db;
 	protected INotificationManager&MockObject $notificationManager;
 	protected IConfig&MockObject $config;
+	protected IAppConfig&MockObject $appConfig;
 	protected IProvider&MockObject $tokenProvider;
 	protected Manager&MockObject $keyManager;
 	protected IClientService&MockObject $clientService;
@@ -68,6 +70,7 @@ class PushTest extends TestCase {
 		$this->db = \OCP\Server::get(IDBConnection::class);
 		$this->notificationManager = $this->createMock(INotificationManager::class);
 		$this->config = $this->createMock(IConfig::class);
+		$this->appConfig = $this->createMock(IAppConfig::class);
 		$this->tokenProvider = $this->createMock(IProvider::class);
 		$this->keyManager = $this->createMock(Manager::class);
 		$this->clientService = $this->createMock(IClientService::class);
@@ -96,6 +99,7 @@ class PushTest extends TestCase {
 					$this->userManager,
 					$this->notificationManager,
 					$this->config,
+					$this->appConfig,
 					$this->tokenProvider,
 					$this->keyManager,
 					$this->clientService,
@@ -115,6 +119,7 @@ class PushTest extends TestCase {
 			$this->userManager,
 			$this->notificationManager,
 			$this->config,
+			$this->appConfig,
 			$this->tokenProvider,
 			$this->keyManager,
 			$this->clientService,
