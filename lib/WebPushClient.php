@@ -9,18 +9,22 @@ declare(strict_types=1);
 
 namespace OCA\Notifications;
 
+use OCA\Notifications\AppInfo\Application;
 use OCA\Notifications\Vendor\Base64Url\Base64Url;
 use OCA\Notifications\Vendor\Minishlink\WebPush\MessageSentReport;
 use OCA\Notifications\Vendor\Minishlink\WebPush\Subscription;
 use OCA\Notifications\Vendor\Minishlink\WebPush\Utils;
+use OCA\Notifications\Vendor\Minishlink\WebPush\VAPID;
 use OCA\Notifications\Vendor\Minishlink\WebPush\WebPush;
-use Psr\Log\LoggerInterface;
+use OCP\IAppConfig;
 
 class WebPushClient {
     private WebPush $client;
+    /** @psalm-var array{publicKey: string, privateKey: string} */
+    private array $vapid;
 
     public function __construct(
-        protected LoggerInterface $log,
+        protected IAppConfig $appConfig,
     ) {}
 
     static public function isValidP256dh(string $key): bool {
@@ -51,8 +55,60 @@ class WebPushClient {
         if (isset($this->client)) {
             return $this->client;
         }
-        $this->client = new WebPush();
+        $this->client = new WebPush(auth: $this->getVapid());
+        $this->client->setReuseVAPIDHeaders(true);
         return $this->client;
+    }
+
+    /**
+     * @return array
+     * @psalm-return array{publicKey: string, privateKey: string}
+     */
+    private function getVapid(): array {
+        if (isset($this->vapid)) {
+            return $this->vapid;
+        }
+        $publicKey = $this->appConfig->getValueString(
+            Application::APP_ID,
+            'webpush_vapid_pubkey',
+            lazy: true
+        );
+        $privateKey = $this->appConfig->getValueString(
+            Application::APP_ID,
+            'webpush_vapid_privkey',
+            lazy: true
+        );
+        if ($publicKey === '' || $privateKey === '') {
+            $vapid = VAPID::createVapidKeys();
+            $this->vapid = $vapid;
+            $this->appConfig->setValueString(
+                Application::APP_ID,
+                'webpush_vapid_pubkey',
+                $vapid['publicKey'],
+                lazy: true,
+                sensitive: true
+            );
+            $this->appConfig->setValueString(
+                Application::APP_ID,
+                'webpush_vapid_privkey',
+                $vapid['privateKey'],
+                lazy: true,
+                sensitive: true
+            );
+        } else {
+            $this->vapid = [
+                'publicKey' => $publicKey,
+                'privateKey' => $privateKey,
+            ];
+        }
+        return $this->vapid;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVapidPublicKey(): string {
+        $this->getVapid()['publicKey'];
     }
 
     /**

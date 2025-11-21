@@ -21,6 +21,7 @@ use OCP\AppFramework\OCSController;
 use OCP\Authentication\Exceptions\InvalidTokenException;
 use OCP\Authentication\Token\IToken;
 use OCP\DB\QueryBuilder\IQueryBuilder;
+use OCP\IAppConfig;
 use OCP\IDBConnection;
 use OCP\IRequest;
 use OCP\ISession;
@@ -46,6 +47,7 @@ class WebPushController extends OCSController {
 	public function __construct(
 		string $appName,
 		IRequest $request,
+		protected IAppConfig $appConfig,
 		protected IDBConnection $db,
 		protected ISession $session,
 		protected IUserSession $userSession,
@@ -193,7 +195,7 @@ class WebPushController extends OCSController {
 	}
 
 	protected function getWPClient(): WebPushClient {
-		return new WebPushClient();
+		return new WebPushClient($this->appConfig);
 	}
 
 	/**
