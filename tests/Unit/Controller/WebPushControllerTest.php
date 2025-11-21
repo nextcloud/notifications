@@ -19,6 +19,7 @@ use OCA\Notifications\Controller\ActivationSubStatus;
 use OCA\Notifications\Controller\NewSubStatus;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
+use OCP\IAppConfig;
 use OCP\IDBConnection;
 use OCP\IRequest;
 use OCP\ISession;
@@ -29,13 +30,14 @@ use Test\TestCase;
 
 class WebPushControllerTest extends TestCase {
 	protected IRequest&MockObject $request;
+	protected IAppConfig&MockObject $appConfig;
 	protected IDBConnection&MockObject $db;
 	protected ISession&MockObject $session;
 	protected IUserSession&MockObject $userSession;
 	protected IProvider&MockObject $tokenProvider;
 	protected Manager&MockObject $identityProof;
 	protected IUser&MockObject $user;
-	protected PushController $controller;
+	protected WebPushController $controller;
 
 	protected static string $uaPublicKey = 'BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcxaOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4';
 	protected static string $auth = 'BTBZMqHH6r4Tts7J_aSIgg';
@@ -44,6 +46,7 @@ class WebPushControllerTest extends TestCase {
 		parent::setUp();
 
 		$this->request = $this->createMock(IRequest::class);
+		$this->appConfig = $this->createMock(IAppConfig::class);
 		$this->db = $this->createMock(IDBConnection::class);
 		$this->session = $this->createMock(ISession::class);
 		$this->userSession = $this->createMock(IUserSession::class);
@@ -56,6 +59,7 @@ class WebPushControllerTest extends TestCase {
 			return new WebPushController(
 				'notifications',
 				$this->request,
+				$this->appConfig,
 				$this->db,
 				$this->session,
 				$this->userSession,
@@ -68,6 +72,7 @@ class WebPushControllerTest extends TestCase {
 			->setConstructorArgs([
 				'notifications',
 				$this->request,
+				$this->appConfig,
 				$this->db,
 				$this->session,
 				$this->userSession,
