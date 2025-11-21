@@ -348,7 +348,7 @@ class Push {
 
 			try {
 				$data = $this->encodeNotif($id, $notification, 3000);
-				$urgency = $this->getNotifTopicAndUrgency($data['app'], $data['type'])['priority'];
+				$urgency = $this->getNotifTopicAndUrgency($data['app'], $data['type'])['urgency'];
 				$this->wpClient->enqueue(
 					$device['endpoint'],
 					$device['p256dh'],
