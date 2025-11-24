@@ -491,16 +491,18 @@ class Push {
 			//TODO filter webpush devices
 		}
 
-		$this->webPushDeleteToDevice($userId, $user, $webPushDevices, $notificationIds, $app);
-		$this->proxyPushDeleteToDevice($userId, $user, $proxyDevices, $notificationIds, $app);
+		$this->webPushDeleteToDevice($userId, $user, $webPushDevices, $deleteAll, $notificationIds, $app);
+		$this->proxyPushDeleteToDevice($userId, $user, $proxyDevices, $deleteAll, $notificationIds, $app);
 	}
 
 	/**
 	 * @param string $userId
+	 * @param IUser $user
+	 * @param bool $deleteAll
 	 * @param ?int[] $notificationIds
 	 * @param string $app
 	 */
-	public function webPushDeleteToDevice(string $userId, IUser $user, array $devices, ?array $notificationIds, string $app = ''): void {
+	public function webPushDeleteToDevice(string $userId, IUser $user, array $devices, bool $deleteAll, ?array $notificationIds, string $app = ''): void {
 		if (empty($devices)) {
 			return;
 		}
@@ -563,10 +565,12 @@ class Push {
 
 	/**
 	 * @param string $userId
+	 * @param IUser $user
+	 * @param bool $deleteAll
 	 * @param ?int[] $notificationIds
 	 * @param string $app
 	 */
-	public function proxyPushDeleteToDevice(string $userId, IUser $user, array $devices, ?array $notificationIds, string $app = ''): void {
+	public function proxyPushDeleteToDevice(string $userId, IUser $user, array $devices, bool $deleteAll, ?array $notificationIds, string $app = ''): void {
 		if (empty($devices)) {
 			return;
 		}
