@@ -11,7 +11,6 @@ namespace OCA\Notifications;
 
 use OCA\Notifications\AppInfo\Application;
 use OCA\Notifications\Vendor\Base64Url\Base64Url;
-use OCA\Notifications\Vendor\Minishlink\WebPush\MessageSentReport;
 use OCA\Notifications\Vendor\Minishlink\WebPush\Subscription;
 use OCA\Notifications\Vendor\Minishlink\WebPush\Utils;
 use OCA\Notifications\Vendor\Minishlink\WebPush\VAPID;
@@ -65,7 +64,7 @@ class WebPushClient {
      * @psalm-return array{publicKey: string, privateKey: string}
      */
     private function getVapid(): array {
-        if (isset($this->vapid)) {
+        if (isset($this->vapid) && array_key_exists('publicKey', $this->vapid) && array_key_exists('privateKey', $this->vapid)) {
             return $this->vapid;
         }
         $publicKey = $this->appConfig->getValueString(
@@ -79,19 +78,18 @@ class WebPushClient {
             lazy: true
         );
         if ($publicKey === '' || $privateKey === '') {
-            $vapid = VAPID::createVapidKeys();
-            $this->vapid = $vapid;
+            $this->vapid = VAPID::createVapidKeys();
             $this->appConfig->setValueString(
                 Application::APP_ID,
                 'webpush_vapid_pubkey',
-                $vapid['publicKey'],
+                $this->vapid['publicKey'],
                 lazy: true,
                 sensitive: true
             );
             $this->appConfig->setValueString(
                 Application::APP_ID,
                 'webpush_vapid_privkey',
-                $vapid['privateKey'],
+                $this->vapid['privateKey'],
                 lazy: true,
                 sensitive: true
             );
@@ -108,7 +106,7 @@ class WebPushClient {
      * @return string
      */
     public function getVapidPublicKey(): string {
-        $this->getVapid()['publicKey'];
+        return $this->getVapid()['publicKey'];
     }
 
     /**
