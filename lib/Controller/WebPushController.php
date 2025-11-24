@@ -57,6 +57,20 @@ class WebPushController extends OCSController {
 		parent::__construct($appName, $request);
 	}
 
+
+	/**
+	 * Return the server VAPID public key
+	 *
+	 * @return DataResponse<Http::STATUS_OK, array{vapid: string}, array{}>
+	 *
+	 * 200: The VAPID key
+	 */
+	#[NoAdminRequired]
+	#[ApiRoute(verb: 'GET', url: '/api/{apiVersion}/webpush/vapid', requirements: ['apiVersion' => '(v2)'])]
+	public function getVapid(string $apiVersion): DataResponse {
+		return new DataResponse(['vapid' => $this->getWPClient()->getVapidPublicKey()], Http::STATUS_OK);
+	}
+
 	/**
 	 * Register a subscription for push notifications
 	 *
