@@ -127,6 +127,7 @@ class WebPushClient {
 
     /**
      * Send one notification - blocking (should be avoided most of the time)
+     * @throws ErrorException
      */
     public function enqueue(string $endpoint, string $uaPublicKey, string $auth, string $body, string $urgency = 'normal'): void {
         $c = $this->getClient();
