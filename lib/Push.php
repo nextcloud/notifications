@@ -101,6 +101,10 @@ class Push {
 		$this->wpClient = new WebPushClient($appConfig);
 	}
 
+	protected function getWpClient(): WebPushClient {
+		return $this->wpClient;
+	}
+
 	public function setOutput(OutputInterface $output): void {
 		$this->output = $output;
 	}
@@ -180,7 +184,7 @@ class Push {
 		}
 
 		$this->deferPayloads = false;
-		$this->wpClient->flush(fn ($r) => $this->webPushCallback($r));
+		$this->getWpClient()->flush(fn ($r) => $this->webPushCallback($r));
 		$this->sendNotificationsToProxies();
 	}
 
@@ -197,7 +201,7 @@ class Push {
 			$app = "talk";
 		}
 
-		return array_filter($devices, function($device) {
+		return array_filter($devices, function($device) use ($app) {
 			$apptypes = explode(',', $device['apptypes']);
 			return $device['activated'] && (\in_array($app, $apptypes) ||
 				(\in_array("all", $apptypes) && !\in_array('-'.$app, $apptypes)));
@@ -351,7 +355,7 @@ class Push {
 			try {
 				$data = $this->encodeNotif($id, $notification, 3000);
 				$urgency = $this->getNotifTopicAndUrgency($data['app'], $data['type'])['urgency'];
-				$this->wpClient->enqueue(
+				$this->getWpClient()->enqueue(
 					$device['endpoint'],
 					$device['p256dh'],
 					$device['auth'],
@@ -360,6 +364,8 @@ class Push {
 				);
 			} catch (\JsonException $e) {
 				$this->log->error('JSON error while encoding push notification: ' . $e->getMessage(), ['exception' => $e]);
+			} catch (\ErrorException $e) {
+				$this->log->error('Error while sending push notification: ' . $e->getMessage(), ['exception' => $e]);
 			} catch (\InvalidArgumentException) {
 				// Failed to encrypt message for device: public key is invalid
 				$this->deleteWebPushToken($device['token']);
@@ -368,7 +374,7 @@ class Push {
 		$this->printInfo('');
 
 		if (!$this->deferPayloads) {
-			$this->wpClient->flush(fn ($r) => $this->webPushCallback($r));
+			$this->getWpClient()->flush(fn ($r) => $this->webPushCallback($r));
 		}
 	}
 
@@ -511,7 +517,6 @@ class Push {
 		// We don't push to devices that are older than 60 days
 		$maxAge = time() - 60 * 24 * 60 * 60;
 
-		$userKey = $this->keyManager->getKey($user);
 		foreach ($devices as $device) {
 			$device['token'] = (int)$device['token'];
 			if (!$this->validateToken($device['token'], $maxAge)) {
@@ -535,7 +540,7 @@ class Push {
 					$data = $this->encodeDeleteNotifs(null);
 					try {
 						$payload = json_encode($data['data'], JSON_THROW_ON_ERROR);
-						$this->wpClient->enqueue($device['endpoint'], $device['p256dh'], $device['auth'], $payload);
+						$this->getWpClient()->enqueue($device['endpoint'], $device['p256dh'], $device['auth'], $payload);
 					} catch (\JsonException $e) {
 						$this->log->error('JSON error while encoding push notification: ' . $e->getMessage(), ['exception' => $e]);
 					}
@@ -547,7 +552,7 @@ class Push {
 						$temp = $data['remaining'];
 						try {
 							$payload = json_encode($data['data'], JSON_THROW_ON_ERROR);
-							$this->wpClient->enqueue($device['endpoint'], $device['p256dh'], $device['auth'], $payload);
+							$this->getWpClient()->enqueue($device['endpoint'], $device['p256dh'], $device['auth'], $payload);
 						} catch (\JsonException $e) {
 							$this->log->error('JSON error while encoding push notification: ' . $e->getMessage(), ['exception' => $e]);
 						}

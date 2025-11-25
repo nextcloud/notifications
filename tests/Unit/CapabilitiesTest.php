@@ -31,6 +31,7 @@ class CapabilitiesTest extends TestCase {
 					'test-push',
 				],
 				'push' => [
+					'webpush',
 					'devices',
 					'object-data',
 					'delete',
