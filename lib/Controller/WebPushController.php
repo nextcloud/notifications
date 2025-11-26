@@ -77,7 +77,7 @@ class WebPushController extends OCSController {
      * @param string $endpoint Push Server URL (RFC8030)
      * @param string $uaPublicKey Public key of the device, uncompress base64url encoded (RFC8291)
      * @param string $auth Authentication tag, base64url encoded (RFC8291)
-	 * @param list<string> $appTypes used to filter incoming notifications - appTypes are alphanum - use "all" to get all notifications, prefix with `-` to exclude (eg. ['all', '-talk'])
+	 * @param string $apptypes comma seperated list of types used to filter incoming notifications - apptypes are alphanum - use "all" to get all notifications, prefix with `-` to exclude (eg. 'all,-talk')
 	 * @return DataResponse<Http::STATUS_OK|Http::STATUS_CREATED|Http::STATUS_UNAUTHORIZED, list<empty>, array{}>|DataResponse<Http::STATUS_BAD_REQUEST, array{message: string}, array{}>
 	 *
 	 * 200: A subscription was already registered and activated
@@ -87,7 +87,7 @@ class WebPushController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'POST', url: '/api/{apiVersion}/webpush', requirements: ['apiVersion' => '(v2)'])]
-	public function registerWP(string $endpoint, string $uaPublicKey, string $auth, array $appTypes): DataResponse {
+	public function registerWP(string $endpoint, string $uaPublicKey, string $auth, string $apptypes): DataResponse {
 		$user = $this->userSession->getUser();
 		if (!$user instanceof IUser) {
 			return new DataResponse([], Http::STATUS_UNAUTHORIZED);
@@ -109,8 +109,7 @@ class WebPushController extends OCSController {
 			return new DataResponse(['message' => 'INVALID_ENDPOINT'], Http::STATUS_BAD_REQUEST);
 		}
 
-		$appTypesStr = join(',', $appTypes);
-		if (strlen($appTypesStr) > 256) {
+		if (strlen($apptypes) > 256) {
 			return new DataResponse(['message' => 'TOO_MANY_APP_TYPES'], Http::STATUS_BAD_REQUEST);
 		}
 
@@ -124,7 +123,7 @@ class WebPushController extends OCSController {
 			return new DataResponse(['message' => 'INVALID_SESSION_TOKEN'], Http::STATUS_BAD_REQUEST);
 		}
 
-		[$status, $activationToken] = $this->saveSubscription($user, $token, $endpoint, $uaPublicKey, $auth, $appTypes);
+		[$status, $activationToken] = $this->saveSubscription($user, $token, $endpoint, $uaPublicKey, $auth, $apptypes);
 
 		if ($status === NewSubStatus::CREATED) {
 			$wp = $this->getWPClient();
@@ -213,12 +212,12 @@ class WebPushController extends OCSController {
 	}
 
 	/**
-	 * @param list<string> $appTypes
+	 * @param string $apptypes comma separated list of types
 	 * @return array{0: NewSubStatus, 1: ?string}:
 	 *     - CREATED if the user didn't have an activated subscription with this endpoint, pubkey and auth
-	 *     - UPDATED if the subscription has been updated (use to change appTypes)
+	 *     - UPDATED if the subscription has been updated (use to change apptypes)
 	 */
-	protected function saveSubscription(IUser $user, IToken $token, string $endpoint, string $uaPublicKey, string $auth, array $appTypes): array {
+	protected function saveSubscription(IUser $user, IToken $token, string $endpoint, string $uaPublicKey, string $auth, string $apptypes): array {
 		$query = $this->db->getQueryBuilder();
 		$query->select('*')
 			->from('notifications_webpush')
@@ -236,14 +235,14 @@ class WebPushController extends OCSController {
 			// In case the user has already a subscription, but inactive or with a different enpoint, pubkey or auth secret
 			$this->deleteSubscription($user, $token);
 			$activationToken = Uuid::v4()->toRfc4122();
-			if ($this->insertSubscription($user, $token, $endpoint, $uaPublicKey, $auth, $activationToken, $appTypes)) {
+			if ($this->insertSubscription($user, $token, $endpoint, $uaPublicKey, $auth, $activationToken, $apptypes)) {
 				return [NewSubStatus::CREATED, $activationToken];
 			} else {
 				return [NewSubStatus::ERROR, null];
 			}
 		}
 
-		if ($this->updateSubscription($user, $token, $endpoint, $uaPublicKey, $auth, $appTypes)) {
+		if ($this->updateSubscription($user, $token, $endpoint, $uaPublicKey, $auth, $apptypes)) {
 			return [NewSubStatus::UPDATED, null];
 		} else {
 			return [NewSubStatus::ERROR, null];
@@ -287,10 +286,10 @@ class WebPushController extends OCSController {
 	}
 
 	/**
-	 * @param list<string> $appTypes
+	 * @param string $apptypes comma separated list of types
 	 * @return bool If the entry was created
 	 */
-	protected function insertSubscription(IUser $user, IToken $token, string $endpoint, string $uaPublicKey, string $auth, string $activationToken, array $appTypes): bool {
+	protected function insertSubscription(IUser $user, IToken $token, string $endpoint, string $uaPublicKey, string $auth, string $activationToken, string $apptypes): bool {
 		$query = $this->db->getQueryBuilder();
 		$query->insert('notifications_webpush')
 			->values([
@@ -299,23 +298,23 @@ class WebPushController extends OCSController {
 				'endpoint' => $query->createNamedParameter($endpoint),
 				'p256dh' => $query->createNamedParameter($uaPublicKey),
 				'auth' => $query->createNamedParameter($auth),
-				'apptypes' => $query->createNamedParameter(join(',', $appTypes)),
+				'apptypes' => $query->createNamedParameter($apptypes),
 				'activation_token' => $query->createNamedParameter($activationToken),
 			]);
 		return $query->executeStatement() > 0;
 	}
 
 	/**
-	 * @param list<string> $appTypes
+	 * @param string $apptypes comma separated list of types
 	 * @return bool If the entry was updated
 	 */
-	protected function updateSubscription(IUser $user, IToken $token, string $endpoint, string $uaPublicKey, string $auth, array $appTypes): bool {
+	protected function updateSubscription(IUser $user, IToken $token, string $endpoint, string $uaPublicKey, string $auth, string $apptypes): bool {
 		$query = $this->db->getQueryBuilder();
 		$query->update('notifications_webpush')
 			->set('endpoint', $query->createNamedParameter($endpoint))
 			->set('p256dh', $query->createNamedParameter($uaPublicKey))
 			->set('auth', $query->createNamedParameter($auth))
-			->set('apptypes', $query->createNamedParameter(join(',', $appTypes)))
+			->set('apptypes', $query->createNamedParameter($apptypes))
 			->where($query->expr()->eq('uid', $query->createNamedParameter($user->getUID())))
 			->andWhere($query->expr()->eq('token', $query->createNamedParameter($token->getId(), IQueryBuilder::PARAM_INT)));
 
