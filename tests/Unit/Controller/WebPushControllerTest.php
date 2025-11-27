@@ -89,7 +89,7 @@ class WebPushControllerTest extends TestCase {
 				'https://localhost/',
 				'',
 				'',
-				['all'],
+				'all',
 				false,
 				0,
 				false,
@@ -101,7 +101,7 @@ class WebPushControllerTest extends TestCase {
 				'https://localhost/',
 				'BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV',
 				self::$auth,
-				['all'],
+				'all',
 				true,
 				0,
 				false,
@@ -113,7 +113,7 @@ class WebPushControllerTest extends TestCase {
 				'https://localhost/',
 				'BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcxaOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4bb',
 				self::$auth,
-				['all'],
+				'all',
 				true,
 				0,
 				false,
@@ -125,7 +125,7 @@ class WebPushControllerTest extends TestCase {
 				'https://localhost/',
 				'BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV- JvLexhqUzORcxaOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw',
 				self::$auth,
-				['all'],
+				'all',
 				true,
 				0,
 				false,
@@ -137,7 +137,7 @@ class WebPushControllerTest extends TestCase {
 				'https://localhost/',
 				self::$uaPublicKey,
 				'BTBZMqHH6r4Tts7J_aSI',
-				['all'],
+				'all',
 				true,
 				0,
 				false,
@@ -149,7 +149,7 @@ class WebPushControllerTest extends TestCase {
 				'https://localhost/',
 				self::$uaPublicKey,
 				'BTBZMqHH6r4Tts7J_aSIggxx',
-				['all'],
+				'all',
 				true,
 				0,
 				false,
@@ -161,7 +161,7 @@ class WebPushControllerTest extends TestCase {
 				'https://localhost/',
 				self::$uaPublicKey,
 				'BTBZM HH6r4Tts7J_aSIgg',
-				['all'],
+				'all',
 				true,
 				0,
 				false,
@@ -173,7 +173,7 @@ class WebPushControllerTest extends TestCase {
 				'http://localhost/',
 				self::$uaPublicKey,
 				self::$auth,
-				['all'],
+				'all',
 				true,
 				0,
 				false,
@@ -181,14 +181,11 @@ class WebPushControllerTest extends TestCase {
 				['message' => 'INVALID_ENDPOINT'],
 				Http::STATUS_BAD_REQUEST,
 			],
-			'too many appTypes' => [
+			'too many apptypes' => [
 				'https://localhost/',
 				self::$uaPublicKey,
 				self::$auth,
-				[
-					'all',
-					'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
-				],
+				'all,aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
 				true,
 				0,
 				false,
@@ -200,7 +197,7 @@ class WebPushControllerTest extends TestCase {
 				'https://localhost/',
 				self::$uaPublicKey,
 				self::$auth,
-				['all'],
+				'all',
 				true,
 				23,
 				false,
@@ -212,7 +209,7 @@ class WebPushControllerTest extends TestCase {
 				'https://localhost/',
 				self::$uaPublicKey,
 				self::$auth,
-				['all'],
+				'all',
 				true,
 				23,
 				true,
@@ -224,7 +221,7 @@ class WebPushControllerTest extends TestCase {
 				'https://localhost/',
 				self::$uaPublicKey,
 				self::$auth,
-				['all'],
+				'all',
 				true,
 				23,
 				true,
@@ -238,7 +235,7 @@ class WebPushControllerTest extends TestCase {
 	/**
 	 * @dataProvider dataRegisterWP
 	 */
-	public function testRegisterWP(string $endpoint, string $uaPublicKey, string $auth, array $appTypes, bool $userIsValid, int $tokenId, bool $tokenIsValid, int $subStatus, array $payload, int $status): void {
+	public function testRegisterWP(string $endpoint, string $uaPublicKey, string $auth, string $apptypes, bool $userIsValid, int $tokenId, bool $tokenIsValid, int $subStatus, array $payload, int $status): void {
 		$controller = $this->getController([
 			'saveSubscription',
 			'getWPClient'
@@ -288,7 +285,7 @@ class WebPushControllerTest extends TestCase {
 				->willThrowException(new InvalidTokenException());
 		}
 
-		$response = $controller->registerWP($endpoint, $uaPublicKey, $auth, $appTypes);
+		$response = $controller->registerWP($endpoint, $uaPublicKey, $auth, $apptypes);
 		$this->assertInstanceOf(DataResponse::class, $response);
 		$this->assertSame($status, $response->getStatus());
 		$this->assertSame($payload, $response->getData());
