@@ -87,7 +87,7 @@ import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { loadState } from '@nextcloud/initial-state'
 import { t } from '@nextcloud/l10n'
 import { listen } from '@nextcloud/notify_push'
-import { generateOcsUrl, imagePath } from '@nextcloud/router'
+import { generateOcsUrl, imagePath, generateUrl } from '@nextcloud/router'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcHeaderMenu from '@nextcloud/vue/components/NcHeaderMenu'
@@ -232,8 +232,20 @@ export default {
 			this.hasNotifyPush = true
 		}
 
-		// Set up the background checker
-		this._setPollingInterval(this.pollIntervalBase)
+		if (this.webNotificationsGranted === true) {
+		  // set the polling interface after checking web push status
+			this.setWebPush((hasWebPush) => {
+				if (hasWebPush) {
+					console.debug('Has web push, slowing polling to 15 minutes')
+					this.pollIntervalBase = 15 * 60 * 1000
+					this.hasNotifyPush = true
+				}
+				this._setPollingInterval(this.pollIntervalBase)
+			})
+		} else {
+			// Set up the background checker
+			this._setPollingInterval(this.pollIntervalBase)
+		}
 
 		this._watchTabVisibility()
 		subscribe('networkOffline', this.handleNetworkOffline)
@@ -250,14 +262,104 @@ export default {
 	methods: {
 		t,
 
+    loadServiceWorker() {
+			return navigator.serviceWorker.register(
+				generateUrl('/apps/notifications/service-worker.js', {}, { noRewrite: true }),
+				{scope: "/"}
+			).then((registration) => {
+				console.info('ServiceWorker registered')
+				return registration
+			})
+		},
+    listenForPush(registration) {
+			navigator.serviceWorker.addEventListener('message', (event) => {
+			  console.debug("Received from serviceWorker: ", JSON.stringify(event.data))
+			  if (event.data.type == 'push') {
+				  const activationToken = event.data.content.activationToken
+				  if (activationToken) {
+						const form = new FormData()
+						form.append('activationToken', activationToken)
+						axios.post(generateOcsUrl('apps/notifications/api/v2/webpush/activate'), form)
+							.then((r) => {
+							  if (r.status === 200 || r.status === 202) {
+									console.debug("Push notifications activated, slowing polling to 15 minutes")
+									this.pollIntervalBase = 15 * 60 * 1000
+									this.hasNotifyPush = true
+									this._setPollingInterval(this.pollIntervalBase)
+								} else {
+									console.warn("An error occured while activating push registration", r)
+								}
+							})
+					} else {
+						// force=true: we don't have to check if we're the last tab,
+						// the serviceworker send the event to a single tab
+						this._fetchAfterNotifyPush(true)
+					}
+				} else if (event.data.type == 'pushEndoint') {
+					registerPush(registration)
+						.catch(er => console.error(er))
+				}
+			})
+		},
+    registerPush(registration) {
+			return registration.pushManager.subscribe().then((sub) => {
+				const form = new FormData()
+				form.append('endpoint', sub.endpoint)
+				form.append('uaPublicKey', this.b64UrlEncode(sub.getKey('p256dh')))
+				form.append('auth', this.b64UrlEncode(sub.getKey('auth')))
+				form.append('apptypes', ['all'])
+				return axios.post(generateOcsUrl('apps/notifications/api/v2/webpush'), form)
+			})
+		},
+		/**
+		 * callback(boolean) if the push notifications has been subscribed (statusCode == 200)
+		 */
+    setWebPush(callback) {
+			if ('serviceWorker' in navigator) {
+			  window.addEventListener('load', () => {
+				  this.loadServiceWorker()
+				    .then((r) => {
+							this.listenForPush(r)
+							return this.registerPush(r)
+						})
+						.then((r) => callback(r.status == 200))
+						.catch(er => {
+							console.error(er)
+							callback(false)
+						})
+				})
+			}
+		},
+
 		userStatusUpdated(state) {
 			if (getCurrentUser().uid === state.userId) {
 				this.userStatus = state.status
 			}
 		},
+		b64UrlEncode(inArr) {
+			return new Uint8Array(inArr)
+			  .toBase64()
+				.replaceAll('+', '-')
+				.replaceAll('/', '_')
+				.replaceAll('=', '')
+		},
 
 		async onOpen() {
-			this.requestWebNotificationPermissions()
+			if (this.webNotificationsGranted === null) {
+				this.requestWebNotificationPermissions()
+					.then((granted) => {
+						if (granted) {
+							this.setWebPush((hasWebPush) => {
+								if (hasWebPush) {
+									console.debug('Has web push, slowing polling to 15 minutes')
+									this.pollIntervalBase = 15 * 60 * 1000
+									this.hasNotifyPush = true
+								}
+								this._setPollingInterval(this.pollIntervalBase)
+							})
+						}
+					})
+			}
 
 			await setCurrentTabAsActive(this.tabId)
 			await this._fetch()
@@ -332,9 +434,9 @@ export default {
 		/**
 		 * Performs the AJAX request to retrieve the notifications
 		 */
-		_fetchAfterNotifyPush() {
+		_fetchAfterNotifyPush(force = false) {
 			this.backgroundFetching = true
-			if (this.hasNotifyPush && this.tabId !== this.lastTabId) {
+			if (force || (this.hasNotifyPush && this.tabId !== this.lastTabId)) {
 				console.debug('Deferring notification refresh from browser storage are notify_push event to give the last tab the chance to do it')
 				setTimeout(() => {
 					this._fetch()
@@ -457,7 +559,7 @@ export default {
 				return
 			}
 
-			if (window.location.protocol === 'http:') {
+			if (window.location.protocol === 'http:' && window.location.hostname !== 'localhost') {
 				console.debug('Notifications require HTTPS')
 				this.webNotificationsGranted = false
 				return
@@ -470,15 +572,15 @@ export default {
 		/**
 		 * Check if we can do web notifications
 		 */
-		async requestWebNotificationPermissions() {
+		requestWebNotificationPermissions() {
 			if (this.webNotificationsGranted !== null) {
-				return
+				return new Promise((resolve, reject) => resolve(this.webNotificationsGranted))
 			}
 
 			console.info('Requesting notifications permissions')
-			window.Notification.requestPermission()
+			return window.Notification.requestPermission()
 				.then((permissions) => {
-					this.webNotificationsGranted = permissions === 'granted'
+					return this.webNotificationsGranted = permissions === 'granted'
 				})
 		},
 
