@@ -14,6 +14,7 @@ use OCA\Notifications\AppInfo\Application;
 use OCA\Notifications\Capabilities;
 use OCA\Notifications\Controller\EndpointController;
 use OCA\Notifications\Controller\PushController;
+use OCA\Notifications\Controller\WebPushController;
 use OCA\Notifications\Handler;
 use OCA\Notifications\Push;
 use OCP\AppFramework\OCSController;
@@ -47,6 +48,7 @@ class ApplicationTest extends TestCase {
 			// Controller/
 			[EndpointController::class, OCSController::class],
 			[PushController::class, OCSController::class],
+			[WebPushController::class, OCSController::class],
 		];
 	}
 
