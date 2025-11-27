@@ -4,6 +4,8 @@ OC.L10N.register(
     "User not found" : "Utilizador não encontrado",
     "Hello %s" : "Olá %s",
     "Hello %s," : "Olá %s,",
+    "You can change the frequency of these emails or disable them in the <a href=\"%s\">settings</a>." : "Pode alterar a frequência desses e-mails ou desativá-los nas  <a href=\"%s\">definições</a>.",
+    "You can change the frequency of these emails or disable them in the settings: %s" : "Pode alterar a frequência desses e-mails ou desativá-los nas definições: %s",
     "Admin notifications" : "Notificações de administrador",
     "Notifications" : "Notificações",
     "Failed to perform action" : "Falhou a executar ação",
