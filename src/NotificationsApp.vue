@@ -238,13 +238,15 @@ export default {
 			// We dont fetch on push if notify_push is enabled, to avoid concurrency fetch.
 			// We could do the other way: fallback to notify_push only if we don't have
 			// web push
-			this.setWebPush(!hasPush, (hasWebPush) => {
-				if (hasWebPush) {
-					console.debug('Has web push, slowing polling to 15 minutes')
-					this.pollIntervalBase = 15 * 60 * 1000
-					this.hasNotifyPush = true
-				}
-				this._setPollingInterval(this.pollIntervalBase)
+			window.addEventListener('load', () => {
+				this.setWebPush(!hasPush, (hasWebPush) => {
+					if (hasWebPush) {
+						console.debug('Has web push, slowing polling to 15 minutes')
+						this.pollIntervalBase = 15 * 60 * 1000
+						this.hasNotifyPush = true
+					}
+					this._setPollingInterval(this.pollIntervalBase)
+				})
 			})
 		} else {
 			// Set up the background checker
@@ -324,18 +326,16 @@ export default {
 		 */
     setWebPush(syncOnPush, callback) {
 			if ('serviceWorker' in navigator) {
-			  window.addEventListener('load', () => {
-				  this.loadServiceWorker()
-				    .then((r) => {
-							this.listenForPush(r, syncOnPush)
-							return this.registerPush(r)
-						})
-						.then((r) => callback(r.status == 200))
-						.catch(er => {
-							console.error(er)
-							callback(false)
-						})
-				})
+				this.loadServiceWorker()
+					.then((r) => {
+						this.listenForPush(r, syncOnPush)
+						return this.registerPush(r)
+					})
+					.then((r) => callback(r.status == 200))
+					.catch(er => {
+						console.error(er)
+						callback(false)
+					})
 			}
 		},
 
