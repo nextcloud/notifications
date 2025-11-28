@@ -169,14 +169,8 @@ class Push {
 
 		if (!empty($this->deletesToPush)) {
 			foreach ($this->deletesToPush as $userId => $data) {
-				foreach ($data as $client => $notificationIds) {
-					if ($client === 'talk') {
-						$this->pushDeleteToDevice((string)$userId, $notificationIds, $client);
-					} else {
-						foreach ($notificationIds as $notificationId) {
-							$this->pushDeleteToDevice((string)$userId, [$notificationId], $client);
-						}
-					}
+				foreach ($data as $app => $notificationIds) {
+					$this->pushDeleteToDevice((string)$userId, $notificationIds, $app);
 				}
 			}
 			$this->deletesToPush = [];
@@ -457,7 +451,7 @@ class Push {
 				}
 
 				$isTalkNotification = \in_array($app, ['spreed', 'talk', 'admin_notification_talk'], true);
-				$clientGroup = $isTalkNotification ? 'talk' : 'files';
+				$clientGroup = $isTalkNotification ? 'talk' : $app;
 
 				if (!isset($this->deletesToPush[$userId])) {
 					$this->deletesToPush[$userId] = [];
@@ -606,15 +600,27 @@ class Push {
 						$this->log->error('JSON error while encoding push notification: ' . $e->getMessage(), ['exception' => $e]);
 					}
 				} else {
-					$temp = $notificationIds;
-
-					while (!empty($temp)) {
-						$data = $this->encryptAndSignDelete($userKey, $device, $temp);
-						$temp = $data['remaining'];
-						try {
-							$this->payloadsToSend[$proxyServer][] = json_encode($data['payload'], JSON_THROW_ON_ERROR);
-						} catch (\JsonException $e) {
-							$this->log->error('JSON error while encoding push notification: ' . $e->getMessage(), ['exception' => $e]);
+					// The nextcloud application, requested with the proxy push,
+					// use to not support `delete-multiple`
+					if (!\in_array($app, ['spreed', 'talk', 'admin_notification_talk'], true)) {
+						foreach ($notificationIds as $notificationId) {
+							$data = $this->encryptAndSignDelete($userKey, $device, [$notificationId]);
+							try {
+								$this->payloadsToSend[$proxyServer][] = json_encode($data['payload'], JSON_THROW_ON_ERROR);
+							} catch (\JsonException $e) {
+								$this->log->error('JSON error while encoding push notification: ' . $e->getMessage(), ['exception' => $e]);
+							}
+						}
+					} else {
+						$temp = $notificationIds;
+						while (!empty($temp)) {
+							$data = $this->encryptAndSignDelete($userKey, $device, $temp);
+							$temp = $data['remaining'];
+							try {
+								$this->payloadsToSend[$proxyServer][] = json_encode($data['payload'], JSON_THROW_ON_ERROR);
+							} catch (\JsonException $e) {
+								$this->log->error('JSON error while encoding push notification: ' . $e->getMessage(), ['exception' => $e]);
+							}
 						}
 					}
 				}
