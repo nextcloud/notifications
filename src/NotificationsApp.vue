@@ -232,9 +232,13 @@ export default {
 			this.hasNotifyPush = true
 		}
 
+	  // set the polling interval after checking web push status
+		// if web push may be configured
 		if (this.webNotificationsGranted === true) {
-		  // set the polling interface after checking web push status
-			this.setWebPush((hasWebPush) => {
+			// We dont fetch on push if notify_push is enabled, to avoid concurrency fetch.
+			// We could do the other way: fallback to notify_push only if we don't have
+			// web push
+			this.setWebPush(!hasPush, (hasWebPush) => {
 				if (hasWebPush) {
 					console.debug('Has web push, slowing polling to 15 minutes')
 					this.pollIntervalBase = 15 * 60 * 1000
@@ -271,7 +275,7 @@ export default {
 				return registration
 			})
 		},
-    listenForPush(registration) {
+    listenForPush(registration, syncOnPush) {
 			navigator.serviceWorker.addEventListener('message', (event) => {
 			  console.debug("Received from serviceWorker: ", JSON.stringify(event.data))
 			  if (event.data.type == 'push') {
@@ -291,9 +295,11 @@ export default {
 								}
 							})
 					} else {
-						// force=true: we don't have to check if we're the last tab,
-						// the serviceworker send the event to a single tab
-						this._fetchAfterNotifyPush(true)
+					  if (syncOnPush) {
+							// force=true: we don't have to check if we're the last tab,
+							// the serviceworker send the event to a single tab
+							this._fetchAfterNotifyPush(true)
+						}
 					}
 				} else if (event.data.type == 'pushEndoint') {
 					registerPush(registration)
@@ -312,14 +318,16 @@ export default {
 			})
 		},
 		/**
+		 * syncOnPush: boolean, if we fetch for notifications on push. Param used to avoid concurrency
+		 *    fetch if another mechanism is in place
 		 * callback(boolean) if the push notifications has been subscribed (statusCode == 200)
 		 */
-    setWebPush(callback) {
+    setWebPush(syncOnPush, callback) {
 			if ('serviceWorker' in navigator) {
 			  window.addEventListener('load', () => {
 				  this.loadServiceWorker()
 				    .then((r) => {
-							this.listenForPush(r)
+							this.listenForPush(r, syncOnPush)
 							return this.registerPush(r)
 						})
 						.then((r) => callback(r.status == 200))
@@ -349,7 +357,7 @@ export default {
 				this.requestWebNotificationPermissions()
 					.then((granted) => {
 						if (granted) {
-							this.setWebPush((hasWebPush) => {
+							this.setWebPush(!this.hasNotifyPush, (hasWebPush) => {
 								if (hasWebPush) {
 									console.debug('Has web push, slowing polling to 15 minutes')
 									this.pollIntervalBase = 15 * 60 * 1000
