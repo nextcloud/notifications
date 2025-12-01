@@ -20,7 +20,7 @@ OC.L10N.register(
     "Failed to dismiss notification" : "ئۇقتۇرۇشنى رەت قىلدى",
     "Dismiss" : "خىزمەتتىن ھەيدەش",
     "Contact Nextcloud GmbH" : "Nextcloud GmbH بىلەن ئالاقىلىشىڭ",
-    "in {path}" : "in {path}",
+    "in {path}" : "{path} دا",
     "Push notifications might be unreliable" : "ئىتتىرىش ئۇقتۇرۇشى ئىشەنچسىز بولۇشى مۇمكىن",
     "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "Nextcloud GmbH شەخسىي ئىشلەتكۈچىلەر ئۈچۈن ھەقسىز ئىتتىرىش ئۇقتۇرۇشى دەرۋازىسىنى قوللايدۇ. ياخشى مۇلازىمەتكە كاپالەتلىك قىلىش ئۈچۈن ، دەرۋازا ھەر بىر مۇلازىمېتىرغا ئىتتىرىش ئۇقتۇرۇشىنىڭ سانىنى چەكلەيدۇ. كارخانا ئىشلەتكۈچىلىرىگە نىسبەتەن تېخىمۇ چوڭايتىش ئېغىزى بار. تېخىمۇ كۆپ ئۇچۇرغا ئېرىشىش ئۈچۈن Nextcloud GmbH بىلەن ئالاقىلىشىڭ.",
     "Requesting browser permissions to show notifications" : "ئۇقتۇرۇشنى كۆرسىتىش ئۈچۈن توركۆرگۈ ئىجازىتىنى تەلەپ قىلىش",
