@@ -38,7 +38,6 @@ use OCP\UserStatus\IManager as IUserStatusManager;
 use OCP\UserStatus\IUserStatus;
 use OCP\Util;
 use Psr\Log\LoggerInterface;
-use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Push {
@@ -192,13 +191,13 @@ class Push {
 	public function filterWebPushDeviceList(array $devices, string $app): array {
 		// Consider all 3 options as 'talk'
 		if (\in_array($app, ['spreed', 'talk', 'admin_notification_talk'], true)) {
-			$app = "talk";
+			$app = 'talk';
 		}
 
-		return array_filter($devices, function($device) use ($app) {
+		return array_filter($devices, function ($device) use ($app) {
 			$apptypes = explode(',', $device['apptypes']);
-			return $device['activated'] && (\in_array($app, $apptypes) ||
-				(\in_array("all", $apptypes) && !\in_array('-'.$app, $apptypes)));
+			return $device['activated'] && (\in_array($app, $apptypes)
+				|| (\in_array('all', $apptypes) && !\in_array('-' . $app, $apptypes)));
 		});
 	}
 
@@ -639,10 +638,10 @@ class Push {
 	/**
 	 * Delete expired web push subscriptions
 	 */
-	protected function webPushCallback (MessageSentReport $report): void {
+	protected function webPushCallback(MessageSentReport $report): void {
 		if ($report->isSubscriptionExpired()) {
 			$this->deleteWebPushTokenByEndpoint($report->getEndpoint());
-		} else if ($report->getResponse()?->getStatusCode() === 429) {
+		} elseif ($report->getResponse()?->getStatusCode() === 429) {
 			$retryAfter = $report->getResponse()?->getHeader('Retry-After');
 			$this->cache->set('wp.' . $report->getEndpoint(), true, $retryAfter ?? 60);
 		}
@@ -848,7 +847,7 @@ class Push {
 			$data['subject'] .= '…';
 		}
 		return $data;
- 	}
+	}
 
 	/**
 	 * @param ?int[] $ids
