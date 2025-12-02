@@ -10,6 +10,7 @@ namespace OCA\Notifications\Tests\Unit;
 
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
+use OCA\Notifications\WebPushClient;
 use OC\Authentication\Exceptions\InvalidTokenException;
 use OC\Authentication\Token\IProvider;
 use OC\Authentication\Token\PublicKeyToken;
@@ -24,6 +25,7 @@ use OCP\Http\Client\IClientService;
 use OCP\Http\Client\IResponse;
 use OCP\ICache;
 use OCP\ICacheFactory;
+use OCP\IAppConfig;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IUser;
@@ -48,6 +50,7 @@ class PushTest extends TestCase {
 	protected IDBConnection $db;
 	protected INotificationManager&MockObject $notificationManager;
 	protected IConfig&MockObject $config;
+	protected IAppConfig&MockObject $appConfig;
 	protected IProvider&MockObject $tokenProvider;
 	protected Manager&MockObject $keyManager;
 	protected IClientService&MockObject $clientService;
@@ -65,6 +68,7 @@ class PushTest extends TestCase {
 		$this->db = \OCP\Server::get(IDBConnection::class);
 		$this->notificationManager = $this->createMock(INotificationManager::class);
 		$this->config = $this->createMock(IConfig::class);
+		$this->appConfig = $this->createMock(IAppConfig::class);
 		$this->tokenProvider = $this->createMock(IProvider::class);
 		$this->keyManager = $this->createMock(Manager::class);
 		$this->clientService = $this->createMock(IClientService::class);
@@ -91,6 +95,7 @@ class PushTest extends TestCase {
 					$this->db,
 					$this->notificationManager,
 					$this->config,
+					$this->appConfig,
 					$this->tokenProvider,
 					$this->keyManager,
 					$this->clientService,
@@ -109,6 +114,7 @@ class PushTest extends TestCase {
 			$this->db,
 			$this->notificationManager,
 			$this->config,
+			$this->appConfig,
 			$this->tokenProvider,
 			$this->keyManager,
 			$this->clientService,
@@ -141,8 +147,8 @@ class PushTest extends TestCase {
 		$push->pushToDevice(23, $notification);
 	}
 
-	public function testPushToDeviceNoDevices(): void {
-		$push = $this->getPush(['createFakeUserObject', 'getDevicesForUser']);
+	public function testProxyPushToDeviceNoDevices(): void {
+		$push = $this->getPush(['createFakeUserObject', 'getProxyDevicesForUser']);
 		$this->keyManager->expects($this->never())
 			->method('getKey');
 		$this->clientService->expects($this->never())
@@ -168,14 +174,14 @@ class PushTest extends TestCase {
 			->willReturn($user);
 
 		$push->expects($this->once())
-			->method('getDevicesForUser')
+			->method('getProxyDevicesForUser')
 			->willReturn([]);
 
 		$push->pushToDevice(42, $notification);
 	}
 
-	public function testPushToDeviceNotPrepared(): void {
-		$push = $this->getPush(['createFakeUserObject', 'getDevicesForUser']);
+	public function testProxyPushToDeviceNotPrepared(): void {
+		$push = $this->getPush(['createFakeUserObject', 'getProxyDevicesForUser']);
 		$this->keyManager->expects($this->never())
 			->method('getKey');
 		$this->clientService->expects($this->never())
@@ -201,7 +207,7 @@ class PushTest extends TestCase {
 			->willReturn($user);
 
 		$push->expects($this->once())
-			->method('getDevicesForUser')
+			->method('getProxyDevicesForUser')
 			->willReturn([[
 				'proxyserver' => 'proxyserver1',
 				'token' => 'token1',
@@ -220,8 +226,8 @@ class PushTest extends TestCase {
 		$push->pushToDevice(1337, $notification);
 	}
 
-	public function testPushToDeviceInvalidToken(): void {
-		$push = $this->getPush(['createFakeUserObject', 'getDevicesForUser', 'encryptAndSign', 'deletePushToken']);
+	public function testProxyPushToDeviceInvalidToken(): void {
+		$push = $this->getPush(['createFakeUserObject', 'getProxyDevicesForUser', 'encryptAndSign', 'deleteProxyPushToken']);
 		$this->clientService->expects($this->never())
 			->method('newClient');
 
@@ -245,7 +251,7 @@ class PushTest extends TestCase {
 			->willReturn($user);
 
 		$push->expects($this->once())
-			->method('getDevicesForUser')
+			->method('getProxyDevicesForUser')
 			->willReturn([[
 				'proxyserver' => 'proxyserver1',
 				'token' => 23,
@@ -279,14 +285,14 @@ class PushTest extends TestCase {
 			->method('encryptAndSign');
 
 		$push->expects($this->once())
-			->method('deletePushToken')
+			->method('deleteProxyPushToken')
 			->with(23);
 
 		$push->pushToDevice(2018, $notification);
 	}
 
-	public function testPushToDeviceEncryptionError(): void {
-		$push = $this->getPush(['createFakeUserObject', 'getDevicesForUser', 'encryptAndSign', 'deletePushToken', 'validateToken']);
+	public function testProxyPushToDeviceEncryptionError(): void {
+		$push = $this->getPush(['createFakeUserObject', 'getProxyDevicesForUser', 'encryptAndSign', 'deleteProxyPushToken', 'validateToken']);
 		$this->clientService->expects($this->never())
 			->method('newClient');
 
@@ -310,7 +316,7 @@ class PushTest extends TestCase {
 			->willReturn($user);
 
 		$push->expects($this->once())
-			->method('getDevicesForUser')
+			->method('getProxyDevicesForUser')
 			->willReturn([[
 				'proxyserver' => 'proxyserver1',
 				'token' => 23,
@@ -344,13 +350,13 @@ class PushTest extends TestCase {
 			->willThrowException(new \InvalidArgumentException());
 
 		$push->expects($this->once())
-			->method('deletePushToken')
+			->method('deleteProxyPushToken')
 			->with(23);
 
 		$push->pushToDevice(1970, $notification);
 	}
-	public function testPushToDeviceNoFairUse(): void {
-		$push = $this->getPush(['createFakeUserObject', 'getDevicesForUser', 'encryptAndSign', 'deletePushToken', 'validateToken', 'deletePushTokenByDeviceIdentifier']);
+	public function testProxyPushToDeviceNoFairUse(): void {
+		$push = $this->getPush(['createFakeUserObject', 'getProxyDevicesForUser', 'encryptAndSign', 'deleteProxyPushToken', 'validateToken', 'deleteProxyPushTokenByDeviceIdentifier']);
 
 		/** @var INotification&MockObject $notification */
 		$notification = $this->createMock(INotification::class);
@@ -367,7 +373,7 @@ class PushTest extends TestCase {
 			->willReturn($user);
 
 		$push->expects($this->once())
-			->method('getDevicesForUser')
+			->method('getProxyDevicesForUser')
 			->willReturn([
 				[
 					'proxyserver' => 'proxyserver',
@@ -408,7 +414,7 @@ class PushTest extends TestCase {
 			->willReturn(['Payload']);
 
 		$push->expects($this->never())
-			->method('deletePushToken');
+			->method('deleteProxyPushToken');
 
 		$this->clientService->expects($this->never())
 			->method('newClient');
@@ -421,13 +427,13 @@ class PushTest extends TestCase {
 		$this->notificationManager->method('isFairUseOfFreePushService')
 			->willReturn(false);
 
-		$push->method('deletePushTokenByDeviceIdentifier')
+		$push->method('deleteProxyPushTokenByDeviceIdentifier')
 			->with('123456');
 
 		$push->pushToDevice(207787, $notification);
 	}
 
-	public static function dataPushToDeviceSending(): array {
+	public static function dataProxyPushToDeviceSending(): array {
 		return [
 			[true],
 			[false],
@@ -435,10 +441,10 @@ class PushTest extends TestCase {
 	}
 
 	/**
-	 * @dataProvider dataPushToDeviceSending
+	 * @dataProvider dataProxyPushToDeviceSending
 	 */
-	public function testPushToDeviceSending(bool $isDebug): void {
-		$push = $this->getPush(['createFakeUserObject', 'getDevicesForUser', 'encryptAndSign', 'deletePushToken', 'validateToken', 'deletePushTokenByDeviceIdentifier']);
+	public function testProxyPushToDeviceSending(bool $isDebug): void {
+		$push = $this->getPush(['createFakeUserObject', 'getProxyDevicesForUser', 'encryptAndSign', 'deleteProxyPushToken', 'validateToken', 'deleteProxyPushTokenByDeviceIdentifier']);
 
 		/** @var INotification&MockObject $notification */
 		$notification = $this->createMock(INotification::class);
@@ -455,7 +461,7 @@ class PushTest extends TestCase {
 			->willReturn($user);
 
 		$push->expects($this->once())
-			->method('getDevicesForUser')
+			->method('getProxyDevicesForUser')
 			->willReturn([
 				[
 					'proxyserver' => 'proxyserver1',
@@ -528,7 +534,7 @@ class PushTest extends TestCase {
 			->willReturn(['Payload']);
 
 		$push->expects($this->never())
-			->method('deletePushToken');
+			->method('deleteProxyPushToken');
 
 		/** @var IClient&MockObject $client */
 		$client = $this->createMock(IClient::class);
@@ -644,13 +650,13 @@ class PushTest extends TestCase {
 		$this->notificationManager->method('isFairUseOfFreePushService')
 			->willReturn(true);
 
-		$push->method('deletePushTokenByDeviceIdentifier')
+		$push->method('deleteProxyPushTokenByDeviceIdentifier')
 			->with('123456');
 
 		$push->pushToDevice(207787, $notification);
 	}
 
-	public static function dataPushToDeviceTalkNotification(): array {
+	public static function dataProxyPushToDeviceTalkNotification(): array {
 		return [
 			[['nextcloud'], false, 0],
 			[['nextcloud'], true, 0],
@@ -664,11 +670,11 @@ class PushTest extends TestCase {
 	}
 
 	/**
-	 * @dataProvider dataPushToDeviceTalkNotification
+	 * @dataProvider dataProxyPushToDeviceTalkNotification
 	 * @param string[] $deviceTypes
 	 */
-	public function testPushToDeviceTalkNotification(array $deviceTypes, bool $isTalkNotification, ?int $pushedDevice): void {
-		$push = $this->getPush(['createFakeUserObject', 'getDevicesForUser', 'encryptAndSign', 'deletePushToken', 'validateToken']);
+	public function testProxyPushToDeviceTalkNotification(array $deviceTypes, bool $isTalkNotification, ?int $pushedDevice): void {
+		$push = $this->getPush(['createFakeUserObject', 'getProxyDevicesForUser', 'encryptAndSign', 'deleteProxyPushToken', 'validateToken']);
 
 		/** @var INotification&MockObject $notification */
 		$notification = $this->createMock(INotification::class);
@@ -703,7 +709,7 @@ class PushTest extends TestCase {
 			];
 		}
 		$push->expects($this->once())
-			->method('getDevicesForUser')
+			->method('getProxyDevicesForUser')
 			->willReturn($devices);
 
 		$this->l10nFactory
@@ -781,6 +787,491 @@ class PushTest extends TestCase {
 			]);
 
 		$this->notificationManager->method('isFairUseOfFreePushService')
+			->willReturn(true);
+
+		$push->pushToDevice(200718, $notification);
+	}
+
+	public function testWebPushToDeviceNoDevices(): void {
+		$push = $this->getPush(['createFakeUserObject', 'getWpClient', 'getWebPushDevicesForUser']);
+		$push->expects($this->never())
+			->method('getWpClient');
+
+		$this->config->expects($this->once())
+			->method('getSystemValueBool')
+			->with('has_internet_connection', true)
+			->willReturn(true);
+
+		/** @var INotification&MockObject $notification */
+		$notification = $this->createMock(INotification::class);
+		$notification
+			->method('getUser')
+			->willReturn('valid');
+		$notification
+			->expects($this->any())
+			->method('getApp')
+			->willReturn('someApp');
+
+		/** @var IUser&MockObject $user */
+		$user = $this->createMock(IUser::class);
+
+		$push->expects($this->once())
+			->method('createFakeUserObject')
+			->with('valid')
+			->willReturn($user);
+
+		$push->expects($this->once())
+			->method('getWebPushDevicesForUser')
+			->willReturn([]);
+
+		$push->pushToDevice(42, $notification);
+	}
+
+	public function testWebPushToDeviceNotPrepared(): void {
+		$push = $this->getPush(['createFakeUserObject', 'getWpClient', 'getWebPushDevicesForUser']);
+		$push->expects($this->never())
+			->method('getWpClient');
+
+		$this->config->expects($this->once())
+			->method('getSystemValueBool')
+			->with('has_internet_connection', true)
+			->willReturn(true);
+
+		/** @var INotification&MockObject $notification */
+		$notification = $this->createMock(INotification::class);
+		$notification
+			->method('getUser')
+			->willReturn('valid');
+		$notification
+			->expects($this->any())
+			->method('getApp')
+			->willReturn('someApp');
+
+		/** @var IUser&MockObject $user */
+		$user = $this->createMock(IUser::class);
+
+		$push->expects($this->once())
+			->method('createFakeUserObject')
+			->with('valid')
+			->willReturn($user);
+
+		$push->expects($this->once())
+			->method('getWebPushDevicesForUser')
+			->willReturn([[
+				'activated' => true,
+				'endpoint' => 'endpoint1',
+				'p256dh' => 'BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcx aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4',
+				'auth' => 'BTBZMqHH6r4Tts7J_aSIgg',
+				'token' => 'token1',
+			]]);
+
+		$this->l10nFactory
+			->method('getUserLanguage')
+			->with($user)
+			->willReturn('de');
+
+		$this->notificationManager->expects($this->once())
+			->method('prepare')
+			->with($notification, 'de')
+			->willThrowException(new \InvalidArgumentException());
+
+		$push->pushToDevice(1337, $notification);
+	}
+
+	public function testWebPushToDeviceInvalidToken(): void {
+		$push = $this->getPush(['createFakeUserObject', 'getWpClient', 'getWebPushDevicesForUser', 'encodeNotif', 'deleteWebPushToken']);
+		// Called once to flush
+		$push->expects($this->once())
+			->method('getWpClient');
+
+		$this->config->expects($this->once())
+			->method('getSystemValueBool')
+			->with('has_internet_connection', true)
+			->willReturn(true);
+
+		/** @var INotification&MockObject $notification */
+		$notification = $this->createMock(INotification::class);
+		$notification
+			->method('getUser')
+			->willReturn('valid');
+		$notification
+			->expects($this->any())
+			->method('getApp')
+			->willReturn('someApp');
+
+		/** @var IUser&MockObject $user */
+		$user = $this->createMock(IUser::class);
+
+		$push->expects($this->once())
+			->method('createFakeUserObject')
+			->with('valid')
+			->willReturn($user);
+
+		$push->expects($this->once())
+			->method('getWebPushDevicesForUser')
+			->willReturn([[
+				'activated' => true,
+				'endpoint' => 'endpoint1',
+				'p256dh' => 'BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcx aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4',
+				'auth' => 'BTBZMqHH6r4Tts7J_aSIgg',
+				'token' => 23,
+				'apptypes' => 'all',
+			]]);
+
+		$this->l10nFactory
+			->method('getUserLanguage')
+			->with($user)
+			->willReturn('ru');
+
+		$this->notificationManager->expects($this->once())
+			->method('prepare')
+			->with($notification, 'ru')
+			->willReturnArgument(0);
+
+		$this->tokenProvider->expects($this->once())
+			->method('getTokenById')
+			->willThrowException(new InvalidTokenException());
+
+		$push->expects($this->never())
+			->method('encodeNotif');
+
+		$push->expects($this->once())
+			->method('deleteWebPushToken')
+			->with(23);
+
+		$push->pushToDevice(2018, $notification);
+	}
+
+	public function testWebPushToDeviceEncryptionError(): void {
+		$push = $this->getPush(['createFakeUserObject', 'getWpClient', 'getWebPushDevicesForUser', 'deleteWebPushToken', 'validateToken']);
+
+		$this->config->expects($this->once())
+			->method('getSystemValueBool')
+			->with('has_internet_connection', true)
+			->willReturn(true);
+
+		/** @var INotification&MockObject $notification */
+		$notification = $this->createMock(INotification::class);
+		$notification
+			->method('getUser')
+			->willReturn('valid');
+		$notification
+			->expects($this->any())
+			->method('getApp')
+			->willReturn('someApp');
+
+		/** @var IUser&MockObject $user */
+		$user = $this->createMock(IUser::class);
+
+		$push->expects($this->once())
+			->method('createFakeUserObject')
+			->with('valid')
+			->willReturn($user);
+
+		$push->expects($this->once())
+			->method('getWebPushDevicesForUser')
+			->willReturn([[
+				'activated' => true,
+				'endpoint' => 'endpoint1',
+				'p256dh' => 'BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcx aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4',
+				'auth' => 'BTBZMqHH6r4Tts7J_aSIgg',
+				'token' => 23,
+				'apptypes' => 'all',
+			]]);
+
+		$this->l10nFactory
+			->method('getUserLanguage')
+			->with($user)
+			->willReturn('ru');
+
+		$this->notificationManager->expects($this->once())
+			->method('prepare')
+			->with($notification, 'ru')
+			->willReturnArgument(0);
+
+		$push->expects($this->once())
+			->method('validateToken')
+			->willReturn(true);
+
+		$wpClient = $this->createMock(WebPushClient::class);
+		$wpClient->method('enqueue')
+			->willThrowException(new \InvalidArgumentException());
+
+		$push->expects($this->exactly(2))
+			->method('getWpClient')
+			->willReturn($wpClient);
+
+		$push->expects($this->once())
+			->method('deleteWebPushToken')
+			->with(23);
+
+		$push->pushToDevice(1970, $notification);
+	}
+
+	public static function dataWebPushToDeviceSending(): array {
+		return [
+			[true],
+			[false],
+		];
+	}
+
+	/**
+	 * @dataProvider dataWebPushToDeviceSending
+	 */
+	public function testWebPushToDeviceSending(bool $isRateLimited): void {
+		$push = $this->getPush(['createFakeUserObject', 'getWpClient', 'getWebPushDevicesForUser', 'encodeNotif', 'deleteWebPushToken', 'validateToken']);
+
+		/** @var INotification&MockObject $notification */
+		$notification = $this->createMock(INotification::class);
+		$notification
+			->method('getUser')
+			->willReturn('valid');
+		$notification
+			->expects($this->any())
+			->method('getApp')
+			->willReturn('someApp');
+
+		/** @var IUser&MockObject $user */
+		$user = $this->createMock(IUser::class);
+
+		$push->expects($this->once())
+			->method('createFakeUserObject')
+			->with('valid')
+			->willReturn($user);
+
+		$push->expects($this->once())
+			->method('getWebPushDevicesForUser')
+			->willReturn([
+				[
+					'activated' => true,
+					'endpoint' => 'endpoint1',
+					'p256dh' => 'BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcx aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4',
+					'auth' => 'BTBZMqHH6r4Tts7J_aSIgg',
+					'token' => 16,
+					'apptypes' => 'all',
+				],
+				[
+					'activated' => true,
+					'endpoint' => 'endpoint2',
+					'p256dh' => 'BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcx aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4',
+					'auth' => 'BTBZMqHH6r4Tts7J_aSIgg',
+					'token' => 23,
+					'apptypes' => 'all',
+				]
+			]);
+
+		$this->l10nFactory
+			->expects($this->once())
+			->method('getUserLanguage')
+			->with($user)
+			->willReturn('ru');
+
+		$this->notificationManager->expects($this->once())
+			->method('prepare')
+			->with($notification, 'ru')
+			->willReturnArgument(0);
+
+		$push->expects($this->exactly(2))
+			->method('validateToken')
+			->willReturn(true);
+
+		$push->expects($this->exactly($isRateLimited ? 1 : 2))
+			->method('encodeNotif')
+			->willReturn([
+				'nid' => 1,
+				'app' => 'someApp',
+				'subject' => 'test',
+				'type' => 'someType',
+				'id' => 'someId'
+			]);
+
+		$push->expects($this->never())
+			->method('deleteWebPushToken');
+
+		/** @var WebPushClient&MockObject $client */
+		$wpClient = $this->createMock(WebPushClient::class);
+
+		$push->expects($this->exactly($isRateLimited ? 2 : 3))
+			->method('getWpClient')
+			->willReturn($wpClient);
+
+		$wpClient->expects($this->exactly($isRateLimited ? 1 : 2))
+			->method('enqueue');
+
+		if ($isRateLimited) {
+			$this->cache
+				->expects($this->exactly(2))
+				->method('get')
+				->willReturn(true, false);
+		}
+
+		$wpClient->expects($this->once())
+			->method('flush');
+
+		$this->config->expects($this->once())
+			->method('getSystemValueBool')
+			->with('has_internet_connection', true)
+			->willReturn(true);
+
+		$push->pushToDevice(207787, $notification);
+	}
+
+	public static function dataFilterWebPushDeviceList(): array {
+		return [
+			[false, 'all', 'myApp', false],
+			[true, 'all', 'myApp', true],
+			[true, 'all,-myApp', 'myApp', false],
+			[true, '-myApp,all', 'myApp', false],
+			[true, 'all,-other', 'myApp', true],
+			[true, 'all,-talk', 'spreed', false],
+			[true, 'all,-talk', 'talk', false],
+			[true, 'talk', 'spreed', true],
+			[true, 'talk', 'admin_notification_talk', true],
+		];
+	}
+
+	/**
+	 * @dataProvider dataFilterWebPushDeviceList
+	 * @param string[] $deviceTypes
+	 */
+	public function testFilterWebPushDeviceList(bool $activated, string $deviceApptypes, string $app, bool $pass): void {
+		$push = $this->getPush([]);
+		$devices = [[
+			'activated' => $activated,
+			'apptypes' => $deviceApptypes,
+		]];
+		if ($pass) {
+			$result = $devices;
+		} else {
+			$result = [];
+		}
+		$this->assertEquals($result, $push->filterWebPushDeviceList($devices, $app));
+	}
+	/**
+	 * @return array
+	 * @psalm-return list<array<array, string, ?int>>
+	 * list<deviceTypes, notificationApp, pushedDevice
+	 */
+	public static function dataWebPushToDeviceFilterApp(): array {
+		return [
+			[['all'], 'notifications', 0],
+			[['all'], 'spreed', 0],
+			[['notifications'], 'notifications', 0],
+			[['notifications'], 'talk', null],
+			[['notifications'], 'spreed', null],
+			[['talk'], 'notifications', null],
+			[['talk'], 'talk', 0],
+			[['talk'], 'spreed', 0],
+			[['all,-talk'], 'notifications', 0],
+			[['all,-talk'], 'talk', null],
+			[['all,-talk'], 'spreed', null],
+			[['all,-notifications'], 'notifications', null],
+			[['all,-notifications'], 'talk', 0],
+			[['all,-notifications'], 'spreed', 0],
+			[['all,-talk', 'talk'], 'notifications', 0],
+			[['all,-talk', 'talk'], 'spreed', 1],
+			[['talk', 'all'], 'notifications', 1],
+			[['talk', 'all,-talk'], 'notifications', 1],
+			[['talk', 'all,-talk'], 'spreed', 0],
+			[['talk'], 'notifications', null],
+			[['talk'], 'spreed', 0],
+		];
+	}
+
+	/**
+	 * @dataProvider dataWebPushToDeviceFilterApp
+	 * @param string[] $deviceTypes
+	 */
+	public function testWebPushToDeviceFilterApp(array $deviceTypes, string $notificationApp, ?int $pushedDevice): void {
+		$push = $this->getPush(['createFakeUserObject', 'getWpClient', 'getWebPushDevicesForUser', 'encodeNotif', 'deleteWebPushToken', 'validateToken']);
+
+		/** @var INotification&MockObject $notification */
+		$notification = $this->createMock(INotification::class);
+		$notification
+			->method('getUser')
+			->willReturn('valid');
+		$notification
+			->method('getApp')
+			->willReturn($notificationApp);
+
+		/** @var IUser&MockObject $user */
+		$user = $this->createMock(IUser::class);
+
+		$push->expects($this->once())
+			->method('createFakeUserObject')
+			->with('valid')
+			->willReturn($user);
+
+		$devices = [];
+		foreach ($deviceTypes as $deviceType) {
+			$devices[] = [
+				'activated' => true,
+				'endpoint' => 'endpoint',
+				'p256dh' => 'BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcx aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4',
+				'auth' => 'BTBZMqHH6r4Tts7J_aSIgg',
+				'token' => strlen($deviceType),
+				'apptypes' => $deviceType,
+			];
+		}
+		$push->expects($this->once())
+			->method('getWebPushDevicesForUser')
+			->willReturn($devices);
+
+		$this->l10nFactory
+			->method('getUserLanguage')
+			->with($user)
+			->willReturn('ru');
+
+		$this->notificationManager->expects($this->once())
+			->method('prepare')
+			->with($notification, 'ru')
+			->willReturnArgument(0);
+
+		if ($pushedDevice === null) {
+			$push->expects($this->never())
+				->method('validateToken');
+
+			$push->expects($this->never())
+				->method('encodeNotif');
+
+			$push->expects($this->never())
+				->method('getWpClient');
+		} else {
+			$push->expects($this->exactly(1))
+				->method('validateToken')
+				->willReturn(true);
+
+			$push->expects($this->exactly(1))
+				->method('encodeNotif')
+				->willReturn([
+					'nid' => 1,
+					'app' => $notificationApp,
+					'subject' => 'test',
+					'type' => 'someType',
+					'id' => 'someId'
+				]);
+
+			/** @var WebPushClient&MockObject $client */
+			$wpClient = $this->createMock(WebPushClient::class);
+
+			$push->expects($this->exactly(2))
+				->method('getWpClient')
+				->willReturn($wpClient);
+
+			$wpClient->expects($this->once())
+				->method('enqueue')
+				->with(
+					'endpoint',
+					'BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcx aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4',
+					'BTBZMqHH6r4Tts7J_aSIgg',
+					$this->anything(),
+					$this->anything()
+				);
+		}
+
+		$this->config->expects($this->once())
+			->method('getSystemValueBool')
+			->with('has_internet_connection', true)
 			->willReturn(true);
 
 		$push->pushToDevice(200718, $notification);
