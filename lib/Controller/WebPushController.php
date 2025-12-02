@@ -9,9 +9,9 @@ declare(strict_types=1);
 
 namespace OCA\Notifications\Controller;
 
-use OCA\Notifications\WebPushClient;
 use OC\Authentication\Token\IProvider;
 use OC\Security\IdentityProof\Manager;
+use OCA\Notifications\WebPushClient;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\ApiRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
@@ -74,9 +74,9 @@ class WebPushController extends OCSController {
 	/**
 	 * Register a subscription for push notifications
 	 *
-     * @param string $endpoint Push Server URL (RFC8030)
-     * @param string $uaPublicKey Public key of the device, uncompress base64url encoded (RFC8291)
-     * @param string $auth Authentication tag, base64url encoded (RFC8291)
+	 * @param string $endpoint Push Server URL (RFC8030)
+	 * @param string $uaPublicKey Public key of the device, uncompress base64url encoded (RFC8291)
+	 * @param string $auth Authentication tag, base64url encoded (RFC8291)
 	 * @param string $apptypes comma seperated list of types used to filter incoming notifications - apptypes are alphanum - use "all" to get all notifications, prefix with `-` to exclude (eg. 'all,-talk')
 	 * @return DataResponse<Http::STATUS_OK|Http::STATUS_CREATED|Http::STATUS_UNAUTHORIZED, list<empty>, array{}>|DataResponse<Http::STATUS_BAD_REQUEST, array{message: string}, array{}>
 	 *
@@ -141,7 +141,7 @@ class WebPushController extends OCSController {
 	/**
 	 * Activate subscription for push notifications
 	 *
-     * @param string $activationToken Random token sent via a push notification during registration to enable the subscription
+	 * @param string $activationToken Random token sent via a push notification during registration to enable the subscription
 	 * @return DataResponse<Http::STATUS_OK|Http::STATUS_ACCEPTED|Http::STATUS_UNAUTHORIZED, list<empty>, array{}>|DataResponse<Http::STATUS_BAD_REQUEST, array{message: string}, array{}>
 	 *
 	 * 200: Subscription was already activated

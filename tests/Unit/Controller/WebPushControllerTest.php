@@ -8,15 +8,14 @@ declare(strict_types=1);
 
 namespace OCA\Notifications\Tests\Unit\Controller;
 
-use OCA\Notifications\WebPushClient;
 use OC\Authentication\Exceptions\InvalidTokenException;
 use OC\Authentication\Token\IProvider;
 use OC\Authentication\Token\IToken;
-use OC\Security\IdentityProof\Key;
 use OC\Security\IdentityProof\Manager;
-use OCA\Notifications\Controller\WebPushController;
 use OCA\Notifications\Controller\ActivationSubStatus;
 use OCA\Notifications\Controller\NewSubStatus;
+use OCA\Notifications\Controller\WebPushController;
+use OCA\Notifications\WebPushClient;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IAppConfig;
@@ -272,8 +271,8 @@ class WebPushControllerTest extends TestCase {
 			if ($subStatus === 0) {
 				$wpClient = $this->createMock(WebPushClient::class);
 				$controller->expects($this->once())
-				->method('getWPClient')
-				->willReturn($wpClient);
+					->method('getWPClient')
+					->willReturn($wpClient);
 			}
 		} else {
 			$controller->expects($this->never())

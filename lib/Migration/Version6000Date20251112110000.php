@@ -11,7 +11,6 @@ namespace OCA\Notifications\Migration;
 
 use Closure;
 use OCP\DB\ISchemaWrapper;
-use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\DB\Types;
 use OCP\IDBConnection;
 use OCP\Migration\IOutput;
