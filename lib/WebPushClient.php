@@ -65,7 +65,7 @@ class WebPushClient {
 	 * @psalm-return array{publicKey: string, privateKey: string}
 	 */
 	private function getVapid(): array {
-		if (isset($this->vapid) && array_key_exists('publicKey', $this->vapid) && array_key_exists('privateKey', $this->vapid)) {
+		if (!empty($this->vapid) && array_key_exists('publicKey', $this->vapid) && array_key_exists('privateKey', $this->vapid)) {
 			return $this->vapid;
 		}
 		$publicKey = $this->appConfig->getValueString(
@@ -128,7 +128,7 @@ class WebPushClient {
 
 	/**
 	 * Send one notification - blocking (should be avoided most of the time)
-	 * @throws ErrorException
+	 * @throws \ErrorException
 	 */
 	public function enqueue(string $endpoint, string $uaPublicKey, string $auth, string $body, string $urgency = 'normal'): void {
 		$c = $this->getClient();

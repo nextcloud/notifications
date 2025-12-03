@@ -603,7 +603,7 @@ class Push {
 					// The nextcloud application, requested with the proxy push,
 					// use to not support `delete-multiple`
 					if (!\in_array($app, ['spreed', 'talk', 'admin_notification_talk'], true)) {
-						foreach ($notificationIds as $notificationId) {
+						foreach ($notificationIds ?? [] as $notificationId) {
 							$data = $this->encryptAndSignDelete($userKey, $device, [$notificationId]);
 							try {
 								$this->payloadsToSend[$proxyServer][] = json_encode($data['payload'], JSON_THROW_ON_ERROR);
@@ -841,7 +841,7 @@ class Push {
 
 		// Max length of encryption is ~240, so we need to make sure the subject is shorter.
 		// Also, subtract two for encapsulating quotes will be added.
-		$maxDataLength = $maxLength - strlen(json_encode($data)) - 2;
+		$maxDataLength = $maxLength - strlen((string)json_encode($data)) - 2;
 		$data['subject'] = Util::shortenMultibyteString($notification->getParsedSubject(), $maxDataLength);
 		if ($notification->getParsedSubject() !== $data['subject']) {
 			$data['subject'] .= '…';
