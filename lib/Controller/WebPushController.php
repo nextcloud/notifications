@@ -127,14 +127,14 @@ class WebPushController extends OCSController {
 
 		if ($status === NewSubStatus::CREATED) {
 			$wp = $this->getWPClient();
-			$wp->notify($endpoint, $uaPublicKey, $auth, json_encode(['activationToken' => $activationToken]));
+			$wp->notify($endpoint, $uaPublicKey, $auth, (string)json_encode(['activationToken' => $activationToken]));
 		}
 
 		return match($status) {
 			NewSubStatus::UPDATED => new DataResponse([], Http::STATUS_OK),
 			NewSubStatus::CREATED => new DataResponse([], Http::STATUS_CREATED),
 			// This should not happen
-			NewSubStatus::ERROR => new DataResponse(['message' => 'DB_ERROR'], Http::STATUS_BAD_REQUEST),
+			default => new DataResponse(['message' => 'DB_ERROR'], Http::STATUS_BAD_REQUEST),
 		};
 	}
 
@@ -213,9 +213,10 @@ class WebPushController extends OCSController {
 
 	/**
 	 * @param string $apptypes comma separated list of types
-	 * @return array{0: NewSubStatus, 1: ?string}:
-	 *     - CREATED if the user didn't have an activated subscription with this endpoint, pubkey and auth
-	 *     - UPDATED if the subscription has been updated (use to change apptypes)
+	 * @return array{0: NewSubStatus, 1: ?string}
+	 *
+	 * - CREATED if the user didn't have an activated subscription with this endpoint, pubkey and auth
+	 * - UPDATED if the subscription has been updated (use to change apptypes)
 	 */
 	protected function saveSubscription(IUser $user, IToken $token, string $endpoint, string $uaPublicKey, string $auth, string $apptypes): array {
 		$query = $this->db->getQueryBuilder();
@@ -250,11 +251,12 @@ class WebPushController extends OCSController {
 	}
 
 	/**
-	 * @return ActivationSubStatus:
-	 *     - OK if it was already activated
-	 *     - CREATED If the entry was updated
-	 *     - NO_TOKEN if we don't have this token
-	 *     - NO_SUB if we don't have this subscription
+	 * @return ActivationSubStatus
+	 *
+	 * - OK if it was already activated
+	 * - CREATED If the entry was updated
+	 * - NO_TOKEN if we don't have this token
+	 * - NO_SUB if we don't have this subscription
 	 */
 	protected function activateSubscription(IUser $user, IToken $token, string $activationToken): ActivationSubStatus {
 		$query = $this->db->getQueryBuilder();
