@@ -67,7 +67,7 @@ class WebPushController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'GET', url: '/api/{apiVersion}/webpush/vapid', requirements: ['apiVersion' => '(v2)'])]
-	public function getVapid(string $apiVersion): DataResponse {
+	public function getVapid(): DataResponse {
 		return new DataResponse(['vapid' => $this->getWPClient()->getVapidPublicKey()], Http::STATUS_OK);
 	}
 
@@ -142,7 +142,7 @@ class WebPushController extends OCSController {
 	 * Activate subscription for push notifications
 	 *
 	 * @param string $activationToken Random token sent via a push notification during registration to enable the subscription
-	 * @return DataResponse<Http::STATUS_OK|Http::STATUS_ACCEPTED|Http::STATUS_UNAUTHORIZED, list<empty>, array{}>|DataResponse<Http::STATUS_BAD_REQUEST, array{message: string}, array{}>
+	 * @return DataResponse<Http::STATUS_OK|Http::STATUS_ACCEPTED|Http::STATUS_UNAUTHORIZED, list<empty>, array{}>|DataResponse<Http::STATUS_BAD_REQUEST|Http::STATUS_NOT_FOUND, array{message: string}, array{}>
 	 *
 	 * 200: Subscription was already activated
 	 * 202: Subscription activated successfully
