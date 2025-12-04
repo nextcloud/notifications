@@ -55,7 +55,7 @@ class WebPushClient {
 		if (isset($this->client)) {
 			return $this->client;
 		}
-		$this->client = new WebPush(auth: $this->getVapid());
+		$this->client = new WebPush(auth: ["VAPID" => $this->getVapid()]);
 		$this->client->setReuseVAPIDHeaders(true);
 		return $this->client;
 	}
@@ -100,6 +100,7 @@ class WebPushClient {
 				'privateKey' => $privateKey,
 			];
 		}
+		$this->vapid["subject"] = "https://github.com/nextcloud/notifications";
 		return $this->vapid;
 	}
 
