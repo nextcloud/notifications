@@ -55,7 +55,7 @@ class Version6000Date20251112110000 extends SimpleMigrationStep {
 			]);
 			$table->addColumn('endpoint', Types::STRING, [
 				'notnull' => true,
-				'length' => 1024,
+				'length' => 767,
 			]);
 			$table->addColumn('p256dh', Types::STRING, [
 				'notnull' => true,
