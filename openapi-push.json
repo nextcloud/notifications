@@ -802,7 +802,7 @@
                                 "properties": {
                                     "endpoint": {
                                         "type": "string",
-                                        "description": "Push Server URL (RFC8030)"
+                                        "description": "Push Server URL, max 765 chars (RFC8030)"
                                     },
                                     "uaPublicKey": {
                                         "type": "string",

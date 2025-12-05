@@ -74,7 +74,7 @@ class WebPushController extends OCSController {
 	/**
 	 * Register a subscription for push notifications
 	 *
-	 * @param string $endpoint Push Server URL (RFC8030)
+	 * @param string $endpoint Push Server URL, max 765 chars (RFC8030)
 	 * @param string $uaPublicKey Public key of the device, uncompress base64url encoded (RFC8291)
 	 * @param string $auth Authentication tag, base64url encoded (RFC8291)
 	 * @param string $apptypes comma seperated list of types used to filter incoming notifications - apptypes are alphanum - use "all" to get all notifications, prefix with `-` to exclude (eg. 'all,-talk')
@@ -103,7 +103,7 @@ class WebPushController extends OCSController {
 
 		if (
 			!filter_var($endpoint, FILTER_VALIDATE_URL)
-			|| \strlen($endpoint) > 1000
+			|| \strlen($endpoint) > 765
 			|| !preg_match('/^https\:\/\//', $endpoint)
 		) {
 			return new DataResponse(['message' => 'INVALID_ENDPOINT'], Http::STATUS_BAD_REQUEST);
