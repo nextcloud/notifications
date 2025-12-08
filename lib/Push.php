@@ -642,8 +642,8 @@ class Push {
 		if ($report->isSubscriptionExpired()) {
 			$this->deleteWebPushTokenByEndpoint($report->getEndpoint());
 		} elseif ($report->getResponse()?->getStatusCode() === 429) {
-			$retryAfter = $report->getResponse()?->getHeader('Retry-After');
-			$this->cache->set('wp.' . $report->getEndpoint(), true, $retryAfter ?? 60);
+			$retryAfter = (int)($report->getResponse()?->getHeader('Retry-After')[0] ?? "60");
+			$this->cache->set('wp.' . $report->getEndpoint(), true, $retryAfter);
 		}
 	}
 
@@ -852,7 +852,7 @@ class Push {
 	/**
 	 * @param ?int[] $ids
 	 * @return array
-	 * @psalm-return array{remaining: list<int>, data: array{delete-all: bool, nid: int, delete: bool, nids: int[], delete-multiple: int}}
+	 * @psalm-return array{data: array{'delete-all'?: true, 'delete-multiple'?: true, delete?: true, nid?: int, nids?: int[]}, remaining: int[]}
 	 */
 	protected function encodeDeleteNotifs(?array $ids): array {
 		$remainingIds = [];
