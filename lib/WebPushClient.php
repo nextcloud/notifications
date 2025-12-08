@@ -19,7 +19,7 @@ use OCP\IAppConfig;
 
 class WebPushClient {
 	private WebPush $client;
-	/** @psalm-var array{publicKey: string, privateKey: string} */
+	/** @psalm-var array{publicKey: string, privateKey: string, subject: string} */
 	private array $vapid;
 
 	public function __construct(
@@ -62,10 +62,10 @@ class WebPushClient {
 
 	/**
 	 * @return array
-	 * @psalm-return array{publicKey: string, privateKey: string}
+	 * @psalm-return array{publicKey: string, privateKey: string, subject: string}
 	 */
 	private function getVapid(): array {
-		if (!empty($this->vapid) && array_key_exists('publicKey', $this->vapid) && array_key_exists('privateKey', $this->vapid)) {
+		if (array_key_exists('publicKey', $this->vapid) && array_key_exists('privateKey', $this->vapid) && array_key_exists('subject', $this->vapid) ) {
 			return $this->vapid;
 		}
 		$publicKey = $this->appConfig->getValueString(
@@ -79,7 +79,8 @@ class WebPushClient {
 			lazy: true
 		);
 		if ($publicKey === '' || $privateKey === '') {
-			$this->vapid = VAPID::createVapidKeys();
+			/** @var array{publicKey: string, privateKey: string} $vapid */
+			$vapid = VAPID::createVapidKeys();
 			$this->appConfig->setValueString(
 				Application::APP_ID,
 				'webpush_vapid_pubkey',
@@ -95,13 +96,13 @@ class WebPushClient {
 				sensitive: true
 			);
 		} else {
-			$this->vapid = [
+			$vapid = [
 				'publicKey' => $publicKey,
 				'privateKey' => $privateKey,
 			];
 		}
-		$this->vapid['subject'] = 'https://github.com/nextcloud/notifications';
-		return $this->vapid;
+		$vapid['subject'] = 'https://github.com/nextcloud/notifications';
+		return $this->vapid = $vapid;
 	}
 
 	/**

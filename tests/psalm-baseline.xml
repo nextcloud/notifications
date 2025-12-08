@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="6.12.0@cf420941d061a57050b6c468ef2c778faf40aee2">
+<files psalm-version="6.13.1@1e3b7f0a8ab32b23197b91107adc0a7ed8a05b51">
   <file src="lib/Controller/PushController.php">
     <UndefinedClass>
       <code><![CDATA[$this->identityProof]]></code>
@@ -9,29 +9,48 @@
       <code><![CDATA[protected]]></code>
     </UndefinedClass>
   </file>
+  <file src="lib/Controller/WebPushController.php">
+    <UndefinedClass>
+      <code><![CDATA[$this->tokenProvider]]></code>
+      <code><![CDATA[$this->tokenProvider]]></code>
+      <code><![CDATA[$this->tokenProvider]]></code>
+      <code><![CDATA[Uuid]]></code>
+      <code><![CDATA[protected]]></code>
+      <code><![CDATA[protected]]></code>
+    </UndefinedClass>
+  </file>
   <file src="lib/Push.php">
     <LessSpecificReturnStatement>
+      <code><![CDATA[$devices]]></code>
       <code><![CDATA[$devices]]></code>
       <code><![CDATA[$otherDevices]]></code>
       <code><![CDATA[$otherDevices]]></code>
       <code><![CDATA[$talkDevices]]></code>
+      <code><![CDATA[array_filter($devices, function ($device) use ($app) {
+			$apptypes = explode(',', $device['apptypes']);
+			return $device['activated'] && (\in_array($app, $apptypes)
+				|| (\in_array('all', $apptypes) && !\in_array('-' . $app, $apptypes)));
+		})]]></code>
     </LessSpecificReturnStatement>
     <MoreSpecificReturnType>
       <code><![CDATA[list<array{id: int, uid: string, token: int, deviceidentifier: string, devicepublickey: string, devicepublickeyhash: string, pushtokenhash: string, proxyserver: string, apptype: string}>]]></code>
       <code><![CDATA[list<array{id: int, uid: string, token: int, deviceidentifier: string, devicepublickey: string, devicepublickeyhash: string, pushtokenhash: string, proxyserver: string, apptype: string}>]]></code>
+      <code><![CDATA[list<array{id: int, uid: string, token: int, endpoint: string, p256dh: string, auth: string, apptypes: string, activated: bool, activation_token: string}>]]></code>
+      <code><![CDATA[list<array{id: int, uid: string, token: int, endpoint: string, p256dh: string, auth: string, apptypes: string, activated: bool, activation_token: string}>]]></code>
     </MoreSpecificReturnType>
     <UndefinedClass>
-      <code><![CDATA[$e]]></code>
-      <code><![CDATA[$e]]></code>
       <code><![CDATA[$this->keyManager]]></code>
       <code><![CDATA[$this->keyManager]]></code>
       <code><![CDATA[$this->tokenProvider]]></code>
-      <code><![CDATA[ClientException]]></code>
       <code><![CDATA[Key]]></code>
       <code><![CDATA[Key]]></code>
-      <code><![CDATA[ServerException]]></code>
       <code><![CDATA[protected]]></code>
       <code><![CDATA[protected]]></code>
     </UndefinedClass>
+  </file>
+  <file src="lib/WebPushClient.php">
+    <RedundantPropertyInitializationCheck>
+      <code><![CDATA[isset($this->client)]]></code>
+    </RedundantPropertyInitializationCheck>
   </file>
 </files>
