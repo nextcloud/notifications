@@ -50,6 +50,7 @@
 	},
 	"extra": {
 		"mozart": {
+			"delete_vendor_directories": false,
 			"dep_namespace": "OCA\\Notifications\\Vendor\\",
 			"dep_directory": "/lib/Vendor/",
 			"classmap_directory": "/lib/autoload/",
