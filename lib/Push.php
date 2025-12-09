@@ -642,7 +642,7 @@ class Push {
 		if ($report->isSubscriptionExpired()) {
 			$this->deleteWebPushTokenByEndpoint($report->getEndpoint());
 		} elseif ($report->getResponse()?->getStatusCode() === 429) {
-			$retryAfter = (int)($report->getResponse()?->getHeader('Retry-After')[0] ?? "60");
+			$retryAfter = (int)($report->getResponse()?->getHeader('Retry-After')[0] ?? '60');
 			$this->cache->set('wp.' . $report->getEndpoint(), true, $retryAfter);
 		}
 	}
