@@ -65,7 +65,7 @@ class WebPushClient {
 	 * @psalm-return array{publicKey: string, privateKey: string, subject: string}
 	 */
 	private function getVapid(): array {
-		if (array_key_exists('publicKey', $this->vapid) && array_key_exists('privateKey', $this->vapid) && array_key_exists('subject', $this->vapid) ) {
+		if (array_key_exists('publicKey', $this->vapid) && array_key_exists('privateKey', $this->vapid) && array_key_exists('subject', $this->vapid)) {
 			return $this->vapid;
 		}
 		$publicKey = $this->appConfig->getValueString(
