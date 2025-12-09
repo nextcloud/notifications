@@ -25,6 +25,7 @@ class WebPushClient {
 	public function __construct(
 		protected IAppConfig $appConfig,
 	) {
+		$this->vapid = $this->getVapid();
 	}
 
 	public static function isValidP256dh(string $key): bool {
@@ -55,7 +56,7 @@ class WebPushClient {
 		if (isset($this->client)) {
 			return $this->client;
 		}
-		$this->client = new WebPush(auth: ['VAPID' => $this->getVapid()]);
+		$this->client = new WebPush(auth: ['VAPID' => $this->vapid]);
 		$this->client->setReuseVAPIDHeaders(true);
 		return $this->client;
 	}
@@ -65,9 +66,6 @@ class WebPushClient {
 	 * @psalm-return array{publicKey: string, privateKey: string, subject: string}
 	 */
 	private function getVapid(): array {
-		if (array_key_exists('publicKey', $this->vapid) && array_key_exists('privateKey', $this->vapid) && array_key_exists('subject', $this->vapid)) {
-			return $this->vapid;
-		}
 		$publicKey = $this->appConfig->getValueString(
 			Application::APP_ID,
 			'webpush_vapid_pubkey',
@@ -84,14 +82,14 @@ class WebPushClient {
 			$this->appConfig->setValueString(
 				Application::APP_ID,
 				'webpush_vapid_pubkey',
-				$this->vapid['publicKey'],
+				$vapid['publicKey'],
 				lazy: true,
 				sensitive: true
 			);
 			$this->appConfig->setValueString(
 				Application::APP_ID,
 				'webpush_vapid_privkey',
-				$this->vapid['privateKey'],
+				$vapid['privateKey'],
 				lazy: true,
 				sensitive: true
 			);
@@ -102,14 +100,14 @@ class WebPushClient {
 			];
 		}
 		$vapid['subject'] = 'https://github.com/nextcloud/notifications';
-		return $this->vapid = $vapid;
+		return $vapid;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getVapidPublicKey(): string {
-		return $this->getVapid()['publicKey'];
+		return $this->vapid['publicKey'];
 	}
 
 	/**
