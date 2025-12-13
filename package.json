@@ -30,7 +30,7 @@
     "@nextcloud/router": "^3.1.0",
     "@nextcloud/vue": "^9.3.0",
     "howler": "^2.2.4",
-    "ua-parser-js": "^2.0.6",
+    "ua-parser-js": "^2.0.7",
     "v-click-outside": "^3.2.0",
     "vue": "^3.5.16",
     "vue-material-design-icons": "^5.3.1"
