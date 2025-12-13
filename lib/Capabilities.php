@@ -46,6 +46,7 @@ class Capabilities implements ICapability {
 					'test-push',
 				],
 				'push' => [
+					'webpush',
 					'devices',
 					'object-data',
 					'delete',
