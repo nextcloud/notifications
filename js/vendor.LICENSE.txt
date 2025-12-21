@@ -33,7 +33,7 @@ version: 1.2.1
 license: GPL-3.0-or-later
 
 @nextcloud/dialogs
-version: 6.4.1
+version: 6.4.2
 license: AGPL-3.0-or-later
 
 @nextcloud/event-bus
@@ -49,7 +49,7 @@ version: 3.4.1
 license: GPL-3.0-or-later
 
 @nextcloud/logger
-version: 3.0.2
+version: 3.0.3
 license: GPL-3.0-or-later
 
 @nextcloud/moment
@@ -286,10 +286,6 @@ license: MIT
 
 moment
 version: 2.30.1
-license: MIT
-
-path-browserify
-version: 1.0.1
 license: MIT
 
 property-information
