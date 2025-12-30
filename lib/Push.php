@@ -210,6 +210,8 @@ class Push {
 			return;
 		}
 
+		$this->log->error('Start pushToDevice without defer', [ 'app' => 'notifications-debug' ]);
+
 		$user = $this->createFakeUserObject($notification->getUser());
 
 		if (!array_key_exists($notification->getUser(), $this->userStatuses)) {
@@ -307,6 +309,8 @@ class Push {
 		if (!$this->deferPayloads) {
 			$this->sendNotificationsToProxies();
 		}
+
+		$this->log->error('End pushToDevice', [ 'app' => 'notifications-debug' ]);
 	}
 
 	/**
@@ -431,6 +435,8 @@ class Push {
 			return;
 		}
 
+		$this->log->error('Start sendNotificationsToProxies', [ 'app' => 'notifications-debug' ]);
+
 		$subscriptionAwareServer = rtrim($this->config->getAppValue(Application::APP_ID, 'subscription_aware_server', 'https://push-notifications.nextcloud.com'), '/');
 		if ($subscriptionAwareServer === 'https://push-notifications.nextcloud.com') {
 			$subscriptionKey = $this->config->getAppValue('support', 'subscription_key');
@@ -455,9 +461,14 @@ class Push {
 					$requestData['headers']['X-Nextcloud-Subscription-Key'] = $subscriptionKey;
 				}
 
+				$this->log->error('Before proxy request', [ 'app' => 'notifications-debug', 'notification-count' => count($notifications) ]);
+
 				$response = $client->post($proxyServer . '/notifications', $requestData);
 				$status = $response->getStatusCode();
 				$body = (string)$response->getBody();
+
+				$this->log->error('After proxy request', [ 'app' => 'notifications-debug' ]);
+
 				try {
 					$bodyData = json_decode($body, true);
 				} catch (\JsonException) {
@@ -532,6 +543,8 @@ class Push {
 				]);
 			}
 		}
+
+		$this->log->error('End sendNotificationsToProxies', [ 'app' => 'notifications-debug' ]);
 	}
 
 	protected function validateToken(int $tokenId, int $maxAge): bool {
