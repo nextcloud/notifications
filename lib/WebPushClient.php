@@ -83,8 +83,7 @@ class WebPushClient {
 				Application::APP_ID,
 				'webpush_vapid_pubkey',
 				$vapid['publicKey'],
-				lazy: true,
-				sensitive: true
+				lazy: true
 			);
 			$this->appConfig->setValueString(
 				Application::APP_ID,
