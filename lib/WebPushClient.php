@@ -126,7 +126,7 @@ class WebPushClient {
 	}
 
 	/**
-	 * Send one notification - blocking (should be avoided most of the time)
+	 * Queue one notification. [flush] needs to be called to actually send the notifications
 	 * @throws \ErrorException
 	 */
 	public function enqueue(string $endpoint, string $uaPublicKey, string $auth, string $body, string $urgency = 'normal'): void {
