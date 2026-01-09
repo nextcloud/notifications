@@ -104,7 +104,7 @@ class WebPushController extends OCSController {
 		if (
 			!filter_var($endpoint, FILTER_VALIDATE_URL)
 			|| \strlen($endpoint) > 765
-			|| !preg_match('/^https\:\/\//', $endpoint)
+			|| !str_starts_with($endpoint, 'https://')
 		) {
 			return new DataResponse(['message' => 'INVALID_ENDPOINT'], Http::STATUS_BAD_REQUEST);
 		}
@@ -233,7 +233,7 @@ class WebPushController extends OCSController {
 		$result->closeCursor();
 
 		if (!$row) {
-			// In case the user has already a subscription, but inactive or with a different enpoint, pubkey or auth secret
+			// In case the user has already a subscription, but inactive or with a different endpoint, pubkey or auth secret
 			$this->deleteSubscription($user, $token);
 			$activationToken = Uuid::v4()->toRfc4122();
 			if ($this->insertSubscription($user, $token, $endpoint, $uaPublicKey, $auth, $activationToken, $appTypes)) {

@@ -17,13 +17,9 @@ use OCP\Migration\IOutput;
 use OCP\Migration\SimpleMigrationStep;
 
 /**
- * Recreate notifications_pushtoken(s) with a primary key for cluster support
+ * Create database table to webpush support
  */
 class Version6000Date20251112110000 extends SimpleMigrationStep {
-	public function __construct(
-		protected IDBConnection $connection,
-	) {
-	}
 
 	/**
 	 * @param IOutput $output
@@ -38,7 +34,7 @@ class Version6000Date20251112110000 extends SimpleMigrationStep {
 
 		if (!$schema->hasTable('notifications_webpush')) {
 			$table = $schema->createTable('notifications_webpush');
-			$table->addColumn('id', Types::INTEGER, [
+			$table->addColumn('id', Types::BIGINT, [
 				'autoincrement' => true,
 				'notnull' => true,
 				'length' => 4,
@@ -48,9 +44,7 @@ class Version6000Date20251112110000 extends SimpleMigrationStep {
 				'notnull' => true,
 				'length' => 64,
 			]);
-			$table->addColumn('token', Types::INTEGER, [
-				'notnull' => true,
-				'length' => 4,
+			$table->addColumn('token', Types::BIGINT, [
 				'default' => 0,
 			]);
 			$table->addColumn('endpoint', Types::STRING, [
@@ -80,10 +74,11 @@ class Version6000Date20251112110000 extends SimpleMigrationStep {
 
 			$table->setPrimaryKey(['id']);
 			// Allow a single push subscription per device
-			$table->addUniqueIndex(['uid', 'token'], 'oc_npushwp_uid');
+			$table->addUniqueIndex(['uid', 'token'], 'notifwebpush_uid_token');
 			// If the push endpoint is removed, we will delete the row based on the endpoint
-			$table->addIndex(['endpoint'], 'oc_npushwp_endpoint');
+			$table->addIndex(['endpoint'], 'notifwebpush_endpoint');
+			return $schema;
 		}
-		return $schema;
+		return null;
 	}
 }
