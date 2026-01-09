@@ -23,7 +23,6 @@ use OCP\Authentication\Token\IToken as OCPIToken;
 use OCP\Http\Client\IClient;
 use OCP\Http\Client\IClientService;
 use OCP\Http\Client\IResponse;
-use OCP\IAppConfig;
 use OCP\ICache;
 use OCP\ICacheFactory;
 use OCP\IConfig;
@@ -52,7 +51,7 @@ class PushTest extends TestCase {
 	protected IDBConnection $db;
 	protected INotificationManager&MockObject $notificationManager;
 	protected IConfig&MockObject $config;
-	protected IAppConfig&MockObject $appConfig;
+	protected WebPushClient&MockObject $wpClient;
 	protected IProvider&MockObject $tokenProvider;
 	protected Manager&MockObject $keyManager;
 	protected IClientService&MockObject $clientService;
@@ -71,7 +70,7 @@ class PushTest extends TestCase {
 		$this->db = \OCP\Server::get(IDBConnection::class);
 		$this->notificationManager = $this->createMock(INotificationManager::class);
 		$this->config = $this->createMock(IConfig::class);
-		$this->appConfig = $this->createMock(IAppConfig::class);
+		$this->wpClient = $this->createMock(WebPushClient::class);
 		$this->tokenProvider = $this->createMock(IProvider::class);
 		$this->keyManager = $this->createMock(Manager::class);
 		$this->clientService = $this->createMock(IClientService::class);
@@ -798,9 +797,7 @@ class PushTest extends TestCase {
 	}
 
 	public function testWebPushToDeviceNoDevices(): void {
-		$push = $this->getPush(['createFakeUserObject', 'getWpClient', 'getWebPushDevicesForUser']);
-		$push->expects($this->never())
-			->method('getWpClient');
+		$push = $this->getPush(['createFakeUserObject', 'getWebPushDevicesForUser']);
 
 		$this->config->expects($this->once())
 			->method('getSystemValueBool')
@@ -833,9 +830,7 @@ class PushTest extends TestCase {
 	}
 
 	public function testWebPushToDeviceNotPrepared(): void {
-		$push = $this->getPush(['createFakeUserObject', 'getWpClient', 'getWebPushDevicesForUser']);
-		$push->expects($this->never())
-			->method('getWpClient');
+		$push = $this->getPush(['createFakeUserObject', 'getWebPushDevicesForUser']);
 
 		$this->config->expects($this->once())
 			->method('getSystemValueBool')
@@ -884,10 +879,7 @@ class PushTest extends TestCase {
 	}
 
 	public function testWebPushToDeviceInvalidToken(): void {
-		$push = $this->getPush(['createFakeUserObject', 'getWpClient', 'getWebPushDevicesForUser', 'encodeNotif', 'deleteWebPushToken']);
-		// Called once to flush
-		$push->expects($this->once())
-			->method('getWpClient');
+		$push = $this->getPush(['createFakeUserObject', 'getWebPushDevicesForUser', 'encodeNotif', 'deleteWebPushToken']);
 
 		$this->config->expects($this->once())
 			->method('getSystemValueBool')
@@ -948,7 +940,7 @@ class PushTest extends TestCase {
 	}
 
 	public function testWebPushToDeviceEncryptionError(): void {
-		$push = $this->getPush(['createFakeUserObject', 'getWpClient', 'getWebPushDevicesForUser', 'deleteWebPushToken', 'validateToken']);
+		$push = $this->getPush(['createFakeUserObject', 'getWebPushDevicesForUser', 'deleteWebPushToken', 'validateToken']);
 
 		$this->config->expects($this->once())
 			->method('getSystemValueBool')
@@ -998,13 +990,8 @@ class PushTest extends TestCase {
 			->method('validateToken')
 			->willReturn(true);
 
-		$wpClient = $this->createMock(WebPushClient::class);
-		$wpClient->method('enqueue')
+		$this->wpClient->method('enqueue')
 			->willThrowException(new \InvalidArgumentException());
-
-		$push->expects($this->exactly(2))
-			->method('getWpClient')
-			->willReturn($wpClient);
 
 		$push->expects($this->once())
 			->method('deleteWebPushToken')
@@ -1024,7 +1011,7 @@ class PushTest extends TestCase {
 	 * @dataProvider dataWebPushToDeviceSending
 	 */
 	public function testWebPushToDeviceSending(bool $isRateLimited): void {
-		$push = $this->getPush(['createFakeUserObject', 'getWpClient', 'getWebPushDevicesForUser', 'encodeNotif', 'deleteWebPushToken', 'validateToken']);
+		$push = $this->getPush(['createFakeUserObject', 'getWebPushDevicesForUser', 'encodeNotif', 'deleteWebPushToken', 'validateToken']);
 
 		/** @var INotification&MockObject $notification */
 		$notification = $this->createMock(INotification::class);
@@ -1093,14 +1080,7 @@ class PushTest extends TestCase {
 		$push->expects($this->never())
 			->method('deleteWebPushToken');
 
-		/** @var WebPushClient&MockObject $client */
-		$wpClient = $this->createMock(WebPushClient::class);
-
-		$push->expects($this->exactly($isRateLimited ? 2 : 3))
-			->method('getWpClient')
-			->willReturn($wpClient);
-
-		$wpClient->expects($this->exactly($isRateLimited ? 1 : 2))
+		$this->wpClient->expects($this->exactly($isRateLimited ? 1 : 2))
 			->method('enqueue');
 
 		if ($isRateLimited) {
@@ -1110,7 +1090,7 @@ class PushTest extends TestCase {
 				->willReturn(true, false);
 		}
 
-		$wpClient->expects($this->once())
+		$this->wpClient->expects($this->once())
 			->method('flush');
 
 		$this->config->expects($this->once())
@@ -1188,7 +1168,7 @@ class PushTest extends TestCase {
 	 * @param string[] $deviceTypes
 	 */
 	public function testWebPushToDeviceFilterApp(array $deviceTypes, string $notificationApp, ?int $pushedDevice): void {
-		$push = $this->getPush(['createFakeUserObject', 'getWpClient', 'getWebPushDevicesForUser', 'encodeNotif', 'deleteWebPushToken', 'validateToken']);
+		$push = $this->getPush(['createFakeUserObject', 'getWebPushDevicesForUser', 'encodeNotif', 'deleteWebPushToken', 'validateToken']);
 
 		/** @var INotification&MockObject $notification */
 		$notification = $this->createMock(INotification::class);
@@ -1238,9 +1218,6 @@ class PushTest extends TestCase {
 
 			$push->expects($this->never())
 				->method('encodeNotif');
-
-			$push->expects($this->never())
-				->method('getWpClient');
 		} else {
 			$push->expects($this->exactly(1))
 				->method('validateToken')
@@ -1256,14 +1233,7 @@ class PushTest extends TestCase {
 					'id' => 'someId'
 				]);
 
-			/** @var WebPushClient&MockObject $client */
-			$wpClient = $this->createMock(WebPushClient::class);
-
-			$push->expects($this->exactly(2))
-				->method('getWpClient')
-				->willReturn($wpClient);
-
-			$wpClient->expects($this->once())
+			$this->wpClient->expects($this->once())
 				->method('enqueue')
 				->with(
 					'endpoint',

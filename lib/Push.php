@@ -77,15 +77,13 @@ class Push {
 	protected array $loadDevicesForUsers = [];
 	/** @var string[] */
 	protected array $loadStatusForUsers = [];
-	/** @var WebPushClient */
-	protected WebPushClient $wpClient;
 
 	public function __construct(
 		protected IDBConnection $db,
 		protected IUserManager $userManager,
 		protected INotificationManager $notificationManager,
 		protected IConfig $config,
-		protected IAppConfig $appConfig,
+		protected WebPushClient $wpClient,
 		protected IProvider $tokenProvider,
 		protected Manager $keyManager,
 		protected IClientService $clientService,
@@ -97,11 +95,6 @@ class Push {
 		protected LoggerInterface $log,
 	) {
 		$this->cache = $cacheFactory->createDistributed('pushtokens');
-		$this->wpClient = new WebPushClient($appConfig);
-	}
-
-	protected function getWpClient(): WebPushClient {
-		return $this->wpClient;
 	}
 
 	public function setOutput(OutputInterface $output): void {
@@ -177,7 +170,7 @@ class Push {
 		}
 
 		$this->deferPayloads = false;
-		$this->getWpClient()->flush(fn ($r) => $this->webPushCallback($r));
+		$this->wpClient->flush(fn ($r) => $this->webPushCallback($r));
 		$this->sendNotificationsToProxies();
 	}
 
@@ -348,7 +341,7 @@ class Push {
 			try {
 				$data = $this->encodeNotif($id, $notification, 3000);
 				$urgency = $this->getNotifTopicAndUrgency($data['app'], $data['type'])['urgency'];
-				$this->getWpClient()->enqueue(
+				$this->wpClient->enqueue(
 					$device['endpoint'],
 					$device['p256dh'],
 					$device['auth'],
@@ -367,7 +360,7 @@ class Push {
 		$this->printInfo('');
 
 		if (!$this->deferPayloads) {
-			$this->getWpClient()->flush(fn ($r) => $this->webPushCallback($r));
+			$this->wpClient->flush(fn ($r) => $this->webPushCallback($r));
 		}
 	}
 
@@ -533,7 +526,7 @@ class Push {
 					$data = $this->encodeDeleteNotifs(null);
 					try {
 						$payload = json_encode($data['data'], JSON_THROW_ON_ERROR);
-						$this->getWpClient()->enqueue($device['endpoint'], $device['p256dh'], $device['auth'], $payload);
+						$this->wpClient->enqueue($device['endpoint'], $device['p256dh'], $device['auth'], $payload);
 					} catch (\JsonException $e) {
 						$this->log->error('JSON error while encoding push notification: ' . $e->getMessage(), ['exception' => $e]);
 					}
@@ -545,7 +538,7 @@ class Push {
 						$temp = $data['remaining'];
 						try {
 							$payload = json_encode($data['data'], JSON_THROW_ON_ERROR);
-							$this->getWpClient()->enqueue($device['endpoint'], $device['p256dh'], $device['auth'], $payload);
+							$this->wpClient->enqueue($device['endpoint'], $device['p256dh'], $device['auth'], $payload);
 						} catch (\JsonException $e) {
 							$this->log->error('JSON error while encoding push notification: ' . $e->getMessage(), ['exception' => $e]);
 						}
