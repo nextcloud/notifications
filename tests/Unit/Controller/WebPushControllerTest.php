@@ -181,7 +181,7 @@ class WebPushControllerTest extends TestCase {
 				['message' => 'INVALID_ENDPOINT'],
 				Http::STATUS_BAD_REQUEST,
 			],
-			'too many apptypes' => [
+			'too many app_types' => [
 				'https://localhost/',
 				self::$uaPublicKey,
 				self::$auth,
@@ -235,7 +235,7 @@ class WebPushControllerTest extends TestCase {
 	/**
 	 * @dataProvider dataRegisterWP
 	 */
-	public function testRegisterWP(string $endpoint, string $uaPublicKey, string $auth, string $apptypes, bool $userIsValid, int $tokenId, bool $tokenIsValid, int $subStatus, array $payload, int $status): void {
+	public function testRegisterWP(string $endpoint, string $uaPublicKey, string $auth, string $appTypes, bool $userIsValid, int $tokenId, bool $tokenIsValid, int $subStatus, array $payload, int $status): void {
 		$controller = $this->getController([
 			'saveSubscription',
 			'getWPClient'
@@ -285,7 +285,7 @@ class WebPushControllerTest extends TestCase {
 				->willThrowException(new InvalidTokenException());
 		}
 
-		$response = $controller->registerWP($endpoint, $uaPublicKey, $auth, $apptypes);
+		$response = $controller->registerWP($endpoint, $uaPublicKey, $auth, $appTypes);
 		$this->assertInstanceOf(DataResponse::class, $response);
 		$this->assertSame($status, $response->getStatus());
 		$this->assertSame($payload, $response->getData());
