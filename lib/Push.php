@@ -39,6 +39,12 @@ use OCP\Util;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+enum TokenValidation: int {
+	case VALID = 0;
+	case INVALID = 1;
+	case OLD = 2;
+}
+
 class Push {
 	protected ICache $cache;
 	protected ?OutputInterface $output = null;
@@ -321,10 +327,14 @@ class Push {
 			$this->printInfo('');
 			$this->printInfo('Device token: ' . $device['token']);
 
-			if (!$this->validateToken($device['token'], $maxAge)) {
-				// Token does not exist anymore
-				$this->deleteWebPushToken($device['token']);
-				continue;
+			switch ($this->validateToken($device['token'], $maxAge)) {
+				case TokenValidation::VALID:
+					break;
+				case TokenValidation::INVALID:
+					// Token does not exist anymore
+					$this->deleteWebPushToken($device['token']);
+				case TokenValidation::OLD:
+					continue;
 			}
 
 			// If the endpoint got a 429 TOO_MANY_REQUESTS,
@@ -393,10 +403,14 @@ class Push {
 			$this->printInfo('');
 			$this->printInfo('Device token: ' . $device['token']);
 
-			if (!$this->validateToken($device['token'], $maxAge)) {
-				// Token does not exist anymore
-				$this->deleteProxyPushToken($device['token']);
-				continue;
+			switch ($this->validateToken($device['token'], $maxAge)) {
+				case TokenValidation::VALID:
+					break;
+				case TokenValidation::INVALID:
+					// Token does not exist anymore
+					$this->deleteProxyPushToken($device['token']);
+				case TokenValidation::OLD:
+					continue;
 			}
 
 			try {
@@ -504,10 +518,14 @@ class Push {
 
 		foreach ($devices as $device) {
 			$device['token'] = (int)$device['token'];
-			if (!$this->validateToken($device['token'], $maxAge)) {
-				// Token does not exist anymore
-				$this->deleteWebPushToken($device['token']);
-				continue;
+			switch ($this->validateToken($device['token'], $maxAge)) {
+				case TokenValidation::VALID:
+					break;
+				case TokenValidation::INVALID:
+					// Token does not exist anymore
+					$this->deleteWebPushToken($device['token']);
+				case TokenValidation::OLD:
+					continue;
 			}
 
 			// If the endpoint got a 429 TOO_MANY_REQUESTS,
@@ -572,10 +590,14 @@ class Push {
 		$userKey = $this->keyManager->getKey($user);
 		foreach ($devices as $device) {
 			$device['token'] = (int)$device['token'];
-			if (!$this->validateToken($device['token'], $maxAge)) {
-				// Token does not exist anymore
-				$this->deleteProxyPushToken($device['token']);
-				continue;
+			switch ($this->validateToken($device['token'], $maxAge)) {
+				case TokenValidation::VALID:
+					break;
+				case TokenValidation::INVALID:
+					// Token does not exist anymore
+					$this->deleteProxyPushToken($device['token']);
+				case TokenValidation::OLD:
+					continue;
 			}
 
 			try {
@@ -758,7 +780,7 @@ class Push {
 		}
 	}
 
-	protected function validateToken(int $tokenId, int $maxAge): bool {
+	protected function validateToken(int $tokenId, int $maxAge): TokenValidation {
 		$age = $this->cache->get('t' . $tokenId);
 
 		if ($age === null) {
@@ -770,7 +792,7 @@ class Push {
 					// Token does not exist any more, should drop the push device entry
 					$this->printInfo('Device token is marked for remote wipe');
 					$this->cache->set('t' . $tokenId, 0, 600);
-					return false;
+					return TokenValidation::INVALID;
 				}
 
 				$age = $token->getLastCheck();
@@ -783,17 +805,17 @@ class Push {
 				// Token does not exist any more, should drop the push device entry
 				$this->printInfo('<error>InvalidTokenException is thrown</error>');
 				$this->cache->set('t' . $tokenId, 0, 600);
-				return false;
+				return TokenValidation::INVALID;
 			}
 		}
 
 		if ($age > $maxAge) {
 			$this->printInfo('Device token is valid');
-			return true;
+			return TokenValidation::VALID;
 		}
 
 		$this->printInfo('<comment>Device token "last checked" is older than 60 days: ' . $age . '</comment>');
-		return false;
+		return TokenValidation::OLD;
 	}
 
 	/**
