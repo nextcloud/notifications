@@ -300,7 +300,7 @@ class WebPushController extends OCSController {
 				'endpoint' => $query->createNamedParameter($endpoint),
 				'p256dh' => $query->createNamedParameter($uaPublicKey),
 				'auth' => $query->createNamedParameter($auth),
-				'apptypes' => $query->createNamedParameter($appTypes),
+				'app_types' => $query->createNamedParameter($appTypes),
 				'activation_token' => $query->createNamedParameter($activationToken),
 			]);
 		return $query->executeStatement() > 0;
@@ -316,7 +316,7 @@ class WebPushController extends OCSController {
 			->set('endpoint', $query->createNamedParameter($endpoint))
 			->set('p256dh', $query->createNamedParameter($uaPublicKey))
 			->set('auth', $query->createNamedParameter($auth))
-			->set('apptypes', $query->createNamedParameter($appTypes))
+			->set('app_types', $query->createNamedParameter($appTypes))
 			->where($query->expr()->eq('uid', $query->createNamedParameter($user->getUID())))
 			->andWhere($query->expr()->eq('token', $query->createNamedParameter($token->getId(), IQueryBuilder::PARAM_INT)));
 
