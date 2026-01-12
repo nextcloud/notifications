@@ -71,7 +71,7 @@ class Push {
 	 */
 	protected array $userStatuses = [];
 	/**
-	 * @psalm-var array<string, list<array{id: int, uid: string, token: int, endpoint: string, p256dh: string, auth: string, apptypes: string, activated: bool, activation_token: string}>>
+	 * @psalm-var array<string, list<array{id: int, uid: string, token: int, endpoint: string, p256dh: string, auth: string, appTypes: string, activated: bool, activation_token: string}>>
 	 */
 	protected array $userWebPushDevices = [];
 	/**
@@ -181,10 +181,10 @@ class Push {
 
 	/**
 	 * @param array $devices
-	 * @psalm-param $devices list<array{id: int, uid: string, token: int, endpoint: string, p256dh: string, auth: string, apptypes: string, activated: bool, activation_token: string}>
+	 * @psalm-param $devices list<array{id: int, uid: string, token: int, endpoint: string, p256dh: string, auth: string, appTypes: string, activated: bool, activation_token: string}>
 	 * @param string $app
 	 * @return array
-	 * @psalm-return list<array{id: int, uid: string, token: int, endpoint: string, p256dh: string, auth: string, apptypes: string, activated: bool, activation_token: string}>
+	 * @psalm-return list<array{id: int, uid: string, token: int, endpoint: string, p256dh: string, auth: string, appTypes: string, activated: bool, activation_token: string}>
 	 */
 	public function filterWebPushDeviceList(array $devices, string $app): array {
 		// Consider all 3 options as 'talk'
@@ -193,9 +193,9 @@ class Push {
 		}
 
 		return array_filter($devices, function ($device) use ($app) {
-			$apptypes = explode(',', $device['apptypes']);
-			return $device['activated'] && (\in_array($app, $apptypes)
-				|| (\in_array('all', $apptypes) && !\in_array('-' . $app, $apptypes)));
+			$appTypes = explode(',', $device['app_types']);
+			return $device['activated'] && (\in_array($app, $appTypes)
+				|| (\in_array('all', $appTypes) && !\in_array('-' . $app, $appTypes)));
 		});
 	}
 
@@ -1045,7 +1045,7 @@ class Push {
 	/**
 	 * @param string $uid
 	 * @return array[]
-	 * @psalm-return list<array{id: int, uid: string, token: int, endpoint: string, p256dh: string, auth: string, apptypes: string, activated: bool, activation_token: string}>
+	 * @psalm-return list<array{id: int, uid: string, token: int, endpoint: string, p256dh: string, auth: string, appTypes: string, activated: bool, activation_token: string}>
 	 */
 	protected function getWebPushDevicesForUser(string $uid): array {
 		$query = $this->db->getQueryBuilder();
@@ -1063,7 +1063,7 @@ class Push {
 	/**
 	 * @param string[] $userIds
 	 * @return array[]
-	 * @psalm-return array<string, list<array{id: int, uid: string, token: int, endpoint: string, p256dh: string, auth: string, apptypes: string, activated: bool, activation_token: string}>>
+	 * @psalm-return array<string, list<array{id: int, uid: string, token: int, endpoint: string, p256dh: string, auth: string, appTypes: string, activated: bool, activation_token: string}>>
 	 */
 	protected function getWebPushDevicesForUsers(array $userIds): array {
 		$query = $this->db->getQueryBuilder();

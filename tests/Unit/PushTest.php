@@ -912,7 +912,7 @@ class PushTest extends TestCase {
 				'p256dh' => 'BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcx aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4',
 				'auth' => 'BTBZMqHH6r4Tts7J_aSIgg',
 				'token' => 23,
-				'apptypes' => 'all',
+				'app_types' => 'all',
 			]]);
 
 		$this->l10nFactory
@@ -973,7 +973,7 @@ class PushTest extends TestCase {
 				'p256dh' => 'BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcx aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4',
 				'auth' => 'BTBZMqHH6r4Tts7J_aSIgg',
 				'token' => 23,
-				'apptypes' => 'all',
+				'app_types' => 'all',
 			]]);
 
 		$this->l10nFactory
@@ -1040,7 +1040,7 @@ class PushTest extends TestCase {
 					'p256dh' => 'BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcx aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4',
 					'auth' => 'BTBZMqHH6r4Tts7J_aSIgg',
 					'token' => 16,
-					'apptypes' => 'all',
+					'app_types' => 'all',
 				],
 				[
 					'activated' => true,
@@ -1048,7 +1048,7 @@ class PushTest extends TestCase {
 					'p256dh' => 'BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcx aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4',
 					'auth' => 'BTBZMqHH6r4Tts7J_aSIgg',
 					'token' => 23,
-					'apptypes' => 'all',
+					'app_types' => 'all',
 				]
 			]);
 
@@ -1123,7 +1123,7 @@ class PushTest extends TestCase {
 		$push = $this->getPush([]);
 		$devices = [[
 			'activated' => $activated,
-			'apptypes' => $deviceApptypes,
+			'app_types' => $deviceApptypes,
 		]];
 		if ($pass) {
 			$result = $devices;
@@ -1195,7 +1195,7 @@ class PushTest extends TestCase {
 				'p256dh' => 'BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcx aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4',
 				'auth' => 'BTBZMqHH6r4Tts7J_aSIgg',
 				'token' => strlen($deviceType),
-				'apptypes' => $deviceType,
+				'app_types' => $deviceType,
 			];
 		}
 		$push->expects($this->once())
