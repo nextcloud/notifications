@@ -98,7 +98,7 @@ class WebPushClient {
 				'privateKey' => $privateKey,
 			];
 		}
-		$vapid['subject'] = 'https://github.com/nextcloud/notifications';
+		$vapid['subject'] = 'https://nextcloud.com/contact/';
 		return $vapid;
 	}
 
