@@ -335,7 +335,7 @@ class Push {
 					$this->deleteWebPushToken($device['token']);
 					// no break
 				case TokenValidation::OLD:
-					continue;
+					continue 2;
 			}
 
 			// If the endpoint got a 429 TOO_MANY_REQUESTS,
@@ -412,7 +412,7 @@ class Push {
 					$this->deleteProxyPushToken($device['token']);
 					// no break
 				case TokenValidation::OLD:
-					continue;
+					continue 2;
 			}
 
 			try {
@@ -528,7 +528,7 @@ class Push {
 					$this->deleteWebPushToken($device['token']);
 					// no break
 				case TokenValidation::OLD:
-					continue;
+					continue 2;
 			}
 
 			// If the endpoint got a 429 TOO_MANY_REQUESTS,
@@ -601,7 +601,7 @@ class Push {
 					$this->deleteProxyPushToken($device['token']);
 					// no break
 				case TokenValidation::OLD:
-					continue;
+					continue 2;
 			}
 
 			try {
