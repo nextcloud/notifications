@@ -333,6 +333,7 @@ class Push {
 				case TokenValidation::INVALID:
 					// Token does not exist anymore
 					$this->deleteWebPushToken($device['token']);
+					// no break
 				case TokenValidation::OLD:
 					continue;
 			}
@@ -409,6 +410,7 @@ class Push {
 				case TokenValidation::INVALID:
 					// Token does not exist anymore
 					$this->deleteProxyPushToken($device['token']);
+					// no break
 				case TokenValidation::OLD:
 					continue;
 			}
@@ -524,6 +526,7 @@ class Push {
 				case TokenValidation::INVALID:
 					// Token does not exist anymore
 					$this->deleteWebPushToken($device['token']);
+					// no break
 				case TokenValidation::OLD:
 					continue;
 			}
@@ -596,6 +599,7 @@ class Push {
 				case TokenValidation::INVALID:
 					// Token does not exist anymore
 					$this->deleteProxyPushToken($device['token']);
+					// no break
 				case TokenValidation::OLD:
 					continue;
 			}
