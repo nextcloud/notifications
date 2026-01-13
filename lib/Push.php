@@ -39,12 +39,6 @@ use OCP\Util;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-enum TokenValidation: int {
-	case VALID = 0;
-	case INVALID = 1;
-	case OLD = 2;
-}
-
 class Push {
 	protected ICache $cache;
 	protected ?OutputInterface $output = null;
