@@ -16,6 +16,7 @@ use OC\Authentication\Token\PublicKeyToken;
 use OC\Security\IdentityProof\Key;
 use OC\Security\IdentityProof\Manager;
 use OCA\Notifications\Push;
+use OCA\Notifications\TokenValidation;
 use OCA\Notifications\WebPushClient;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Utility\ITimeFactory;
@@ -94,7 +95,7 @@ class PushTest extends TestCase {
 					$this->db,
 					$this->notificationManager,
 					$this->config,
-					$this->appConfig,
+					$this->wpClient,
 					$this->tokenProvider,
 					$this->keyManager,
 					$this->clientService,
@@ -113,7 +114,7 @@ class PushTest extends TestCase {
 			$this->db,
 			$this->notificationManager,
 			$this->config,
-			$this->appConfig,
+			$this->wpClient,
 			$this->tokenProvider,
 			$this->keyManager,
 			$this->clientService,
@@ -342,7 +343,7 @@ class PushTest extends TestCase {
 
 		$push->expects($this->once())
 			->method('validateToken')
-			->willReturn(true);
+			->willReturn(TokenValidation::VALID);
 
 		$push->expects($this->once())
 			->method('encryptAndSign')
@@ -406,7 +407,7 @@ class PushTest extends TestCase {
 
 		$push->expects($this->exactly(1))
 			->method('validateToken')
-			->willReturn(true);
+			->willReturn(TokenValidation::VALID);
 
 		$push->expects($this->exactly(1))
 			->method('encryptAndSign')
@@ -526,7 +527,7 @@ class PushTest extends TestCase {
 
 		$push->expects($this->exactly(6))
 			->method('validateToken')
-			->willReturn(true);
+			->willReturn(TokenValidation::VALID);
 
 		$push->expects($this->exactly(6))
 			->method('encryptAndSign')
@@ -741,7 +742,7 @@ class PushTest extends TestCase {
 		} else {
 			$push->expects($this->exactly(1))
 				->method('validateToken')
-				->willReturn(true);
+				->willReturn(TokenValidation::VALID);
 
 			$push->expects($this->exactly(1))
 				->method('encryptAndSign')
@@ -983,7 +984,7 @@ class PushTest extends TestCase {
 
 		$push->expects($this->once())
 			->method('validateToken')
-			->willReturn(true);
+			->willReturn(TokenValidation::VALID);
 
 		$this->wpClient->method('enqueue')
 			->willThrowException(new \InvalidArgumentException());
@@ -1060,7 +1061,7 @@ class PushTest extends TestCase {
 
 		$push->expects($this->exactly(2))
 			->method('validateToken')
-			->willReturn(true);
+			->willReturn(TokenValidation::VALID);
 
 		$push->expects($this->exactly($isRateLimited ? 1 : 2))
 			->method('encodeNotif')
@@ -1216,7 +1217,7 @@ class PushTest extends TestCase {
 		} else {
 			$push->expects($this->exactly(1))
 				->method('validateToken')
-				->willReturn(true);
+				->willReturn(TokenValidation::VALID);
 
 			$push->expects($this->exactly(1))
 				->method('encodeNotif')
@@ -1249,18 +1250,18 @@ class PushTest extends TestCase {
 
 	public static function dataValidateToken(): array {
 		return [
-			[1239999999, 1230000000, OCPIToken::WIPE_TOKEN, false],
-			[1230000000, 1239999999, OCPIToken::WIPE_TOKEN, false],
-			[1230000000, 1239999999, OCPIToken::PERMANENT_TOKEN, true],
-			[1239999999, 1230000000, OCPIToken::PERMANENT_TOKEN, true],
-			[1230000000, 1230000000, OCPIToken::PERMANENT_TOKEN, false],
+			[1239999999, 1230000000, OCPIToken::WIPE_TOKEN, TokenValidation::INVALID],
+			[1230000000, 1239999999, OCPIToken::WIPE_TOKEN, TokenValidation::INVALID],
+			[1230000000, 1239999999, OCPIToken::PERMANENT_TOKEN, TokenValidation::VALID],
+			[1239999999, 1230000000, OCPIToken::PERMANENT_TOKEN, TokenValidation::VALID],
+			[1230000000, 1230000000, OCPIToken::PERMANENT_TOKEN, TokenValidation::OLD],
 		];
 	}
 
 	/**
 	 * @dataProvider dataValidateToken
 	 */
-	public function testValidateToken(int $lastCheck, int $lastActivity, int $type, bool $expected): void {
+	public function testValidateToken(int $lastCheck, int $lastActivity, int $type, TokenValidation $expected): void {
 		$token = PublicKeyToken::fromParams([
 			'lastCheck' => $lastCheck,
 			'lastActivity' => $lastActivity,
