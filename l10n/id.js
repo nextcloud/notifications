@@ -3,6 +3,8 @@ OC.L10N.register(
     {
     "Hello %s" : "Halo %s",
     "Hello %s," : "Halo %s,",
+    "You can change the frequency of these emails or disable them in the <a href=\"%s\">settings</a>." : "Anda dapat mengubah frekuensi email ini atau menonaktifkannya di <a href=\"%s\">pengaturan</a>.",
+    "You can change the frequency of these emails or disable them in the settings: %s" : "Anda dapat mengubah frekuensi email ini atau menonaktifkannya di pengaturan: %s",
     "Notifications" : "Pemberitahuan",
     "Dismiss" : "Abaikan",
     "in {path}" : "di {path}",
