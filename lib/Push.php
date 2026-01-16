@@ -455,7 +455,12 @@ class Push {
 					$requestData['headers']['X-Nextcloud-Subscription-Key'] = $subscriptionKey;
 				}
 
+				$postStartTime = microtime(true);
 				$response = $client->post($proxyServer . '/notifications', $requestData);
+				$postEndTime = microtime(true);
+
+				$this->printInfo('<comment>Request to push proxy [' . $proxyServer . '] took ' . (string)round($postEndTime - $postStartTime, 2) . 's</comment>');
+
 				$status = $response->getStatusCode();
 				$body = (string)$response->getBody();
 				try {
