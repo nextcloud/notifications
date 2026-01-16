@@ -1,0 +1,12 @@
+SPDX-License-Identifier: AGPL-3.0-only
+SPDX-License-Identifier: GPL-3.0-or-later
+SPDX-FileCopyrightText: Christoph Wurst
+SPDX-FileCopyrightText: Joas Schilling <coding@schilljs.com>
+
+This file is generated from multiple sources. Included packages:
+- @nextcloud/browser-storage
+	- version: 0.4.0
+	- license: GPL-3.0-or-later
+- notifications
+	- version: 5.0.0-dev.0
+	- license: AGPL-3.0-only
