@@ -6,6 +6,7 @@ OC.L10N.register(
     "Hello %s," : "Xin chào %s,",
     "_New notification for %s_::_%n new notifications for %s_" : ["%n thông báo mới cho %s"],
     "_You have a new notification for %s_::_You have %n new notifications for %s_" : ["Bạn có %n thông báo mới cho %s"],
+    "You can change the frequency of these emails or disable them in the <a href=\"%s\">settings</a>." : "Bạn có thể điều chỉnh tần suất gửi hoặc vô hiệu hóa các email này trong <a href=\"%s\">cài đặt</a>.",
     "You can change the frequency of these emails or disable them in the settings: %s" : "Bạn có thể thay đổi tần suất nhận những email này hoặc tắt chúng trong cài đặt: %s",
     "Admin notifications" : "Thông báo quản trị",
     "Notifications" : "Thông báo",
