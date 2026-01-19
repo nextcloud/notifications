@@ -36,7 +36,7 @@ OC.L10N.register(
     "An error occurred while updating your settings." : "Під час оновлення налаштувань сталася помилка.",
     "Notifications defaults" : "Сповіщення",
     "Configure the default notification settings" : "Типові налаштування сповіщень",
-    "Send email reminders about unhandled notifications after:" : "Надсилати нагадування електронною поштою про необроблені сповіщення після:",
+    "Send email reminders about unhandled notifications after:" : "Надсилати нагадування електронною поштою про необроблені сповіщення через:",
     "Play sound when a new notification arrives" : "Відтворювати звук, коли надходить нове сповіщення",
     "Play sound when a call started (requires Nextcloud Talk)" : "Відтворення звуку під час виклику (має бути встановолено Nextcloud Talk)",
     "None" : "Нічого",
