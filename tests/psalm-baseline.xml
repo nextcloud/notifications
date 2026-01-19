@@ -27,16 +27,16 @@
       <code><![CDATA[$otherDevices]]></code>
       <code><![CDATA[$talkDevices]]></code>
       <code><![CDATA[array_filter($devices, function ($device) use ($app) {
-			$apptypes = explode(',', $device['apptypes']);
-			return $device['activated'] && (\in_array($app, $apptypes)
-				|| (\in_array('all', $apptypes) && !\in_array('-' . $app, $apptypes)));
+			$appTypes = explode(',', $device['app_types']);
+			return $device['activated'] && (\in_array($app, $appTypes)
+				|| (\in_array('all', $appTypes) && !\in_array('-' . $app, $appTypes)));
 		})]]></code>
     </LessSpecificReturnStatement>
     <MoreSpecificReturnType>
       <code><![CDATA[list<array{id: int, uid: string, token: int, deviceidentifier: string, devicepublickey: string, devicepublickeyhash: string, pushtokenhash: string, proxyserver: string, apptype: string}>]]></code>
       <code><![CDATA[list<array{id: int, uid: string, token: int, deviceidentifier: string, devicepublickey: string, devicepublickeyhash: string, pushtokenhash: string, proxyserver: string, apptype: string}>]]></code>
-      <code><![CDATA[list<array{id: int, uid: string, token: int, endpoint: string, p256dh: string, auth: string, apptypes: string, activated: bool, activation_token: string}>]]></code>
-      <code><![CDATA[list<array{id: int, uid: string, token: int, endpoint: string, p256dh: string, auth: string, apptypes: string, activated: bool, activation_token: string}>]]></code>
+      <code><![CDATA[list<array{id: int, uid: string, token: int, endpoint: string, p256dh: string, auth: string, appTypes: string, activated: bool, activation_token: string}>]]></code>
+      <code><![CDATA[list<array{id: int, uid: string, token: int, endpoint: string, p256dh: string, auth: string, appTypes: string, activated: bool, activation_token: string}>]]></code>
     </MoreSpecificReturnType>
     <UndefinedClass>
       <code><![CDATA[$this->keyManager]]></code>
