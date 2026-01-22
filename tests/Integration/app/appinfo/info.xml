@@ -11,7 +11,7 @@
 	<summary><![CDATA[1]]></summary>
 	<description><![CDATA[2]]></description>
 
-	<version>0.3.0</version>
+	<version>0.5.0</version>
 	<licence>agpl</licence>
 	<author>Joas Schilling</author>
 	<namespace>NotificationsIntegrationTesting</namespace>
@@ -27,6 +27,6 @@
 	<repository>https://github.com/nextcloud/notifications.git</repository>
 
 	<dependencies>
-		<nextcloud min-version="32" max-version="32" />
+		<nextcloud min-version="34" max-version="34" />
 	</dependencies>
 </info>
