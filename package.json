@@ -32,7 +32,7 @@
     "howler": "^2.2.4",
     "ua-parser-js": "^2.0.8",
     "v-click-outside": "^3.2.0",
-    "vue": "^3.5.16",
+    "vue": "^3.5.27",
     "vue-material-design-icons": "^5.3.1"
   },
   "devDependencies": {
