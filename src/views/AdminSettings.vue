@@ -16,19 +16,19 @@
 				v-model="currentBatchTime"
 				class="notification-frequency__select"
 				:clearable="false"
-				label-outside
+				labelOutside
 				:options="BATCHTIME_OPTIONS"
-				@update:model-value="updateSettings" />
+				@update:modelValue="updateSettings" />
 		</div>
 
 		<NcCheckboxRadioSwitch
 			v-model="config.sound_notification"
-			@update:model-value="updateSettings">
+			@update:modelValue="updateSettings">
 			{{ t('notifications', 'Play sound when a new notification arrives') }}
 		</NcCheckboxRadioSwitch>
 		<NcCheckboxRadioSwitch
 			v-model="config.sound_talk"
-			@update:model-value="updateSettings">
+			@update:modelValue="updateSettings">
 			{{ t('notifications', 'Play sound when a call started (requires Nextcloud Talk)') }}
 		</NcCheckboxRadioSwitch>
 	</NcSettingsSection>

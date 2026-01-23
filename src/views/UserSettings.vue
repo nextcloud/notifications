@@ -17,19 +17,19 @@
 				v-model="currentBatchTime"
 				class="notification-frequency__select"
 				:clearable="false"
-				label-outside
+				labelOutside
 				:options="BATCHTIME_OPTIONS"
-				@update:model-value="updateSettings" />
+				@update:modelValue="updateSettings" />
 		</div>
 
 		<NcCheckboxRadioSwitch
 			v-model="config.sound_notification"
-			@update:model-value="updateSettings">
+			@update:modelValue="updateSettings">
 			{{ t('notifications', 'Play sound when a new notification arrives') }}
 		</NcCheckboxRadioSwitch>
 		<NcCheckboxRadioSwitch
 			v-model="config.sound_talk"
-			@update:model-value="updateSettings">
+			@update:modelValue="updateSettings">
 			{{ t('notifications', 'Play sound when a call started (requires Nextcloud Talk)') }}
 		</NcCheckboxRadioSwitch>
 
@@ -38,7 +38,7 @@
 				v-model="storage.secondary_speaker"
 				class="additional-margin-top"
 				:disabled="isSafari"
-				@update:model-value="updateLocalSettings">
+				@update:modelValue="updateLocalSettings">
 				{{ t('notifications', 'Also repeat sound on a secondary speaker') }}
 			</NcCheckboxRadioSwitch>
 			<div v-if="isSafari" class="notification-frequency__warning">
@@ -47,14 +47,14 @@
 			<NcSelect
 				v-if="!isSafari && storage.secondary_speaker"
 				v-model="storage.secondary_speaker_device"
-				input-id="device-selector-audio-output"
+				inputId="device-selector-audio-output"
 				:options="devices"
 				label="label"
 				:aria-label-combobox="t('notifications', 'Select a device')"
 				:clearable="false"
 				:placeholder="t('notifications', 'Select a device')"
 				@open="initializeDevices"
-				@update:model-value="updateLocalSettings" />
+				@update:modelValue="updateLocalSettings" />
 		</template>
 	</NcSettingsSection>
 </template>
