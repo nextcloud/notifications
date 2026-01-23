@@ -8,15 +8,15 @@
 		id="notifications"
 		v-model:open="open"
 		class="notifications-button"
-		:exclude-click-outside-selectors="['.popover']"
+		:excludeClickOutsideSelectors="['.popover']"
 		:aria-label="t('notifications', 'Notifications')"
 		:title="t('notifications', 'Notifications')"
 		@opened="onOpen">
 		<template #trigger>
 			<IconNotification
 				:size="20"
-				:show-dot="notifications.length !== 0 || webNotificationsGranted === null"
-				:show-warning="hasThrottledPushNotifications" />
+				:showDot="notifications.length !== 0 || webNotificationsGranted === null"
+				:showWarning="hasThrottledPushNotifications" />
 		</template>
 
 		<!-- Notifications list content -->

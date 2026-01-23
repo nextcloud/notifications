@@ -7,7 +7,7 @@
 	<div class="mention">
 		<NcUserBubble
 			v-if="!cloudId"
-			:display-name="name"
+			:displayName="name"
 			:user="id" />
 		<strong
 			v-else
