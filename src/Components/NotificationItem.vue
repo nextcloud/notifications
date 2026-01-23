@@ -13,7 +13,7 @@
 			<NcDateTime
 				v-if="timestamp"
 				class="notification-time"
-				ignore-seconds
+				ignoreSeconds
 				:format="{ timeStyle: 'short', dateStyle: 'long' }"
 				:timestamp="timestamp" />
 			<NcButton
