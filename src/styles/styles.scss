@@ -89,7 +89,7 @@ svg {
 		& > .rich-text--wrapper,
 		& > a > .rich-text--wrapper {
 			padding-inline-start: 10px;
-			word-wrap: anywhere;
+			overflow-wrap: anywhere;
 		}
 	}
 
