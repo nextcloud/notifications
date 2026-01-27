@@ -4,7 +4,7 @@
     "An unexpected error occurred, ask your administration to check the logs." : "Произошла непредвиденная ошибка, обратитесь к администратору.",
     "Hello %s" : "Здравствуйте, %s!",
     "Hello %s," : "Здравствуйте, %s,",
-    "_New notification for %s_::_%n new notifications for %s_" : ["Новое уведомление для %s","%n новых уведомления для %s","%n новых уведомления для %s","%n новых уведомления для %s"],
+    "_New notification for %s_::_%n new notifications for %s_" : ["Новое уведомление %s","%n новых уведомления  %s","%n новых уведомления  %s","%n новых уведомления  %s"],
     "_You have a new notification for %s_::_You have %n new notifications for %s_" : ["Новое уведомление от %s","У вас %n новых уведомления от %s","У вас %n новых уведомлений от %s","У вас %n новых уведомлений от %s"],
     "You can change the frequency of these emails or disable them in the <a href=\"%s\">settings</a>." : "Вы можете <a href=\"%s\">настроить</a> частоту отправления таких писем или даже вообще отключить рассылку.",
     "You can change the frequency of these emails or disable them in the settings: %s" : "Вы можете настроить частоту отправления таких писем или отключить рассылку в настройках: %s",
