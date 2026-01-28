@@ -8,6 +8,6 @@
 	"require-dev": {
 		"behat/behat": "^3.29.0",
 		"guzzlehttp/guzzle": "^7.10.0",
-		"phpunit/phpunit": "^10.5.46"
+		"phpunit/phpunit": "^10.5.62"
 	}
 }
