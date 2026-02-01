@@ -65,7 +65,7 @@ class Push {
 	 */
 	protected array $userStatuses = [];
 	/**
-	 * @psalm-var array<string, list<array{id: int, uid: string, token: int, endpoint: string, p256dh: string, auth: string, appTypes: string, activated: bool, activation_token: string}>>
+	 * @psalm-var array<string, list<array{id: int, uid: string, token: int, endpoint: string, ua_public: string, auth: string, appTypes: string, activated: bool, activation_token: string}>>
 	 */
 	protected array $userWebPushDevices = [];
 	/**
@@ -175,10 +175,10 @@ class Push {
 
 	/**
 	 * @param array $devices
-	 * @psalm-param $devices list<array{id: int, uid: string, token: int, endpoint: string, p256dh: string, auth: string, appTypes: string, activated: bool, activation_token: string}>
+	 * @psalm-param $devices list<array{id: int, uid: string, token: int, endpoint: string, ua_public: string, auth: string, appTypes: string, activated: bool, activation_token: string}>
 	 * @param string $app
 	 * @return array
-	 * @psalm-return list<array{id: int, uid: string, token: int, endpoint: string, p256dh: string, auth: string, appTypes: string, activated: bool, activation_token: string}>
+	 * @psalm-return list<array{id: int, uid: string, token: int, endpoint: string, ua_public: string, auth: string, appTypes: string, activated: bool, activation_token: string}>
 	 */
 	public function filterWebPushDeviceList(array $devices, string $app): array {
 		// Consider all 3 options as 'talk'
@@ -347,7 +347,7 @@ class Push {
 				$urgency = $this->getNotifTopicAndUrgency($data['app'], $data['type'])['urgency'];
 				$this->wpClient->enqueue(
 					$device['endpoint'],
-					$device['p256dh'],
+					$device['ua_public'],
 					$device['auth'],
 					json_encode($data, JSON_THROW_ON_ERROR),
 					urgency: $urgency
@@ -540,7 +540,7 @@ class Push {
 					$data = $this->encodeDeleteNotifs(null);
 					try {
 						$payload = json_encode($data['data'], JSON_THROW_ON_ERROR);
-						$this->wpClient->enqueue($device['endpoint'], $device['p256dh'], $device['auth'], $payload);
+						$this->wpClient->enqueue($device['endpoint'], $device['ua_public'], $device['auth'], $payload);
 					} catch (\JsonException $e) {
 						$this->log->error('JSON error while encoding push notification: ' . $e->getMessage(), ['exception' => $e]);
 					}
@@ -552,7 +552,7 @@ class Push {
 						$temp = $data['remaining'];
 						try {
 							$payload = json_encode($data['data'], JSON_THROW_ON_ERROR);
-							$this->wpClient->enqueue($device['endpoint'], $device['p256dh'], $device['auth'], $payload);
+							$this->wpClient->enqueue($device['endpoint'], $device['ua_public'], $device['auth'], $payload);
 						} catch (\JsonException $e) {
 							$this->log->error('JSON error while encoding push notification: ' . $e->getMessage(), ['exception' => $e]);
 						}
@@ -1043,7 +1043,7 @@ class Push {
 	/**
 	 * @param string $uid
 	 * @return array[]
-	 * @psalm-return list<array{id: int, uid: string, token: int, endpoint: string, p256dh: string, auth: string, appTypes: string, activated: bool, activation_token: string}>
+	 * @psalm-return list<array{id: int, uid: string, token: int, endpoint: string, ua_public: string, auth: string, appTypes: string, activated: bool, activation_token: string}>
 	 */
 	protected function getWebPushDevicesForUser(string $uid): array {
 		$query = $this->db->getQueryBuilder();
@@ -1061,7 +1061,7 @@ class Push {
 	/**
 	 * @param string[] $userIds
 	 * @return array[]
-	 * @psalm-return array<string, list<array{id: int, uid: string, token: int, endpoint: string, p256dh: string, auth: string, appTypes: string, activated: bool, activation_token: string}>>
+	 * @psalm-return array<string, list<array{id: int, uid: string, token: int, endpoint: string, ua_public: string, auth: string, appTypes: string, activated: bool, activation_token: string}>>
 	 */
 	protected function getWebPushDevicesForUsers(array $userIds): array {
 		$query = $this->db->getQueryBuilder();

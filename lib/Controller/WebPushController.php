@@ -225,7 +225,7 @@ class WebPushController extends OCSController {
 			->where($query->expr()->eq('uid', $query->createNamedParameter($user->getUID())))
 			->andWhere($query->expr()->eq('token', $query->createNamedParameter($token->getId())))
 			->andWhere($query->expr()->eq('endpoint', $query->createNamedParameter($endpoint)))
-			->andWhere($query->expr()->eq('p256dh', $query->createNamedParameter($uaPublicKey)))
+			->andWhere($query->expr()->eq('ua_public', $query->createNamedParameter($uaPublicKey)))
 			->andWhere($query->expr()->eq('auth', $query->createNamedParameter($auth)))
 			->andWhere($query->expr()->eq('activated', $query->createNamedParameter(true)));
 		$result = $query->executeQuery();
@@ -298,7 +298,7 @@ class WebPushController extends OCSController {
 				'uid' => $query->createNamedParameter($user->getUID()),
 				'token' => $query->createNamedParameter($token->getId(), IQueryBuilder::PARAM_INT),
 				'endpoint' => $query->createNamedParameter($endpoint),
-				'p256dh' => $query->createNamedParameter($uaPublicKey),
+				'ua_public' => $query->createNamedParameter($uaPublicKey),
 				'auth' => $query->createNamedParameter($auth),
 				'app_types' => $query->createNamedParameter($appTypes),
 				'activation_token' => $query->createNamedParameter($activationToken),
@@ -314,7 +314,7 @@ class WebPushController extends OCSController {
 		$query = $this->db->getQueryBuilder();
 		$query->update('notifications_webpush')
 			->set('endpoint', $query->createNamedParameter($endpoint))
-			->set('p256dh', $query->createNamedParameter($uaPublicKey))
+			->set('ua_public', $query->createNamedParameter($uaPublicKey))
 			->set('auth', $query->createNamedParameter($auth))
 			->set('app_types', $query->createNamedParameter($appTypes))
 			->where($query->expr()->eq('uid', $query->createNamedParameter($user->getUID())))

@@ -861,7 +861,7 @@ class PushTest extends TestCase {
 			->willReturn([[
 				'activated' => true,
 				'endpoint' => 'endpoint1',
-				'p256dh' => 'BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcx aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4',
+				'ua_public' => 'BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcx aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4',
 				'auth' => 'BTBZMqHH6r4Tts7J_aSIgg',
 				'token' => 'token1',
 			]]);
@@ -910,7 +910,7 @@ class PushTest extends TestCase {
 			->willReturn([[
 				'activated' => true,
 				'endpoint' => 'endpoint1',
-				'p256dh' => 'BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcx aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4',
+				'ua_public' => 'BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcx aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4',
 				'auth' => 'BTBZMqHH6r4Tts7J_aSIgg',
 				'token' => 23,
 				'app_types' => 'all',
@@ -971,7 +971,7 @@ class PushTest extends TestCase {
 			->willReturn([[
 				'activated' => true,
 				'endpoint' => 'endpoint1',
-				'p256dh' => 'BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcx aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4',
+				'ua_public' => 'BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcx aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4',
 				'auth' => 'BTBZMqHH6r4Tts7J_aSIgg',
 				'token' => 23,
 				'app_types' => 'all',
@@ -1038,7 +1038,7 @@ class PushTest extends TestCase {
 				[
 					'activated' => true,
 					'endpoint' => 'endpoint1',
-					'p256dh' => 'BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcx aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4',
+					'ua_public' => 'BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcx aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4',
 					'auth' => 'BTBZMqHH6r4Tts7J_aSIgg',
 					'token' => 16,
 					'app_types' => 'all',
@@ -1046,7 +1046,7 @@ class PushTest extends TestCase {
 				[
 					'activated' => true,
 					'endpoint' => 'endpoint2',
-					'p256dh' => 'BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcx aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4',
+					'ua_public' => 'BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcx aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4',
 					'auth' => 'BTBZMqHH6r4Tts7J_aSIgg',
 					'token' => 23,
 					'app_types' => 'all',
@@ -1193,7 +1193,7 @@ class PushTest extends TestCase {
 			$devices[] = [
 				'activated' => true,
 				'endpoint' => 'endpoint',
-				'p256dh' => 'BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcx aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4',
+				'ua_public' => 'BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcx aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4',
 				'auth' => 'BTBZMqHH6r4Tts7J_aSIgg',
 				'token' => strlen($deviceType),
 				'app_types' => $deviceType,
