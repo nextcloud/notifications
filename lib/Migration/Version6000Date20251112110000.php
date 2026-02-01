@@ -50,7 +50,7 @@ class Version6000Date20251112110000 extends SimpleMigrationStep {
 				'notnull' => true,
 				'length' => 767,
 			]);
-			$table->addColumn('p256dh', Types::STRING, [
+			$table->addColumn('ua_public', Types::STRING, [
 				'notnull' => true,
 				'length' => 128,
 			]);
