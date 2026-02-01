@@ -1,7 +1,7 @@
 {
     "openapi": "3.0.3",
     "info": {
-        "title": "notifications-push",
+        "title": "notifications-webpush",
         "version": "0.0.1",
         "description": "This app provides a backend and frontend for the notification API available in Nextcloud.",
         "license": {
@@ -79,36 +79,16 @@
                         "type": "string"
                     }
                 }
-            },
-            "PushDevice": {
-                "type": "object",
-                "required": [
-                    "publicKey",
-                    "deviceIdentifier",
-                    "signature"
-                ],
-                "properties": {
-                    "publicKey": {
-                        "type": "string"
-                    },
-                    "deviceIdentifier": {
-                        "type": "string"
-                    },
-                    "signature": {
-                        "type": "string"
-                    }
-                }
             }
         }
     },
     "paths": {
-        "/ocs/v2.php/apps/notifications/api/{apiVersion3}/test/self": {
-            "post": {
-                "operationId": "api-self-test-push",
-                "summary": "Send a test notification to push registered mobile apps",
-                "description": "Required capability: `ocs-endpoints > test-push`",
+        "/ocs/v2.php/apps/notifications/api/{apiVersion}/webpush/vapid": {
+            "get": {
+                "operationId": "web_push-get-vapid",
+                "summary": "Return the server VAPID public key",
                 "tags": [
-                    "api"
+                    "web_push"
                 ],
                 "security": [
                     {
@@ -120,12 +100,15 @@
                 ],
                 "parameters": [
                     {
-                        "name": "apiVersion3",
+                        "name": "apiVersion",
                         "in": "path",
                         "required": true,
                         "schema": {
                             "type": "string",
-                            "pattern": "^(v3)$"
+                            "enum": [
+                                "v2"
+                            ],
+                            "default": "v2"
                         }
                     },
                     {
@@ -141,7 +124,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Test notification generated successfully, but the device should still show the message to the user",
+                        "description": "The VAPID key",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -163,53 +146,10 @@
                                                 "data": {
                                                     "type": "object",
                                                     "required": [
-                                                        "message",
-                                                        "nid"
+                                                        "vapid"
                                                     ],
                                                     "properties": {
-                                                        "message": {
-                                                            "type": "string"
-                                                        },
-                                                        "nid": {
-                                                            "type": "integer",
-                                                            "format": "int64"
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Test notification could not be generated, show the message to the user",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "required": [
-                                        "ocs"
-                                    ],
-                                    "properties": {
-                                        "ocs": {
-                                            "type": "object",
-                                            "required": [
-                                                "meta",
-                                                "data"
-                                            ],
-                                            "properties": {
-                                                "meta": {
-                                                    "$ref": "#/components/schemas/OCSMeta"
-                                                },
-                                                "data": {
-                                                    "type": "object",
-                                                    "required": [
-                                                        "message"
-                                                    ],
-                                                    "properties": {
-                                                        "message": {
+                                                        "vapid": {
                                                             "type": "string"
                                                         }
                                                     }
@@ -252,12 +192,12 @@
                 }
             }
         },
-        "/ocs/v2.php/apps/notifications/api/{apiVersion}/push": {
+        "/ocs/v2.php/apps/notifications/api/{apiVersion}/webpush": {
             "post": {
-                "operationId": "push-register-device",
-                "summary": "Register device for push notifications",
+                "operationId": "web_push-registerwp",
+                "summary": "Register a subscription for push notifications",
                 "tags": [
-                    "push"
+                    "web_push"
                 ],
                 "security": [
                     {
@@ -274,22 +214,27 @@
                             "schema": {
                                 "type": "object",
                                 "required": [
-                                    "pushTokenHash",
-                                    "devicePublicKey",
-                                    "proxyServer"
+                                    "endpoint",
+                                    "uaPublicKey",
+                                    "auth",
+                                    "appTypes"
                                 ],
                                 "properties": {
-                                    "pushTokenHash": {
+                                    "endpoint": {
                                         "type": "string",
-                                        "description": "Hash of the push token"
+                                        "description": "Push Server URL, max 765 chars (RFC8030)"
                                     },
-                                    "devicePublicKey": {
+                                    "uaPublicKey": {
                                         "type": "string",
-                                        "description": "Public key of the device"
+                                        "description": "Public key of the device, uncompress base64url encoded (RFC8291)"
                                     },
-                                    "proxyServer": {
+                                    "auth": {
                                         "type": "string",
-                                        "description": "Proxy server to be used"
+                                        "description": "Authentication tag, base64url encoded (RFC8291)"
+                                    },
+                                    "appTypes": {
+                                        "type": "string",
+                                        "description": "comma seperated list of types used to filter incoming notifications - appTypes are alphanum - use \"all\" to get all notifications, prefix with `-` to exclude (eg. 'all,-talk')"
                                     }
                                 }
                             }
@@ -322,7 +267,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Device was already registered",
+                        "description": "A subscription was already registered and activated",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -341,9 +286,7 @@
                                                 "meta": {
                                                     "$ref": "#/components/schemas/OCSMeta"
                                                 },
-                                                "data": {
-                                                    "$ref": "#/components/schemas/PushDevice"
-                                                }
+                                                "data": {}
                                             }
                                         }
                                     }
@@ -352,7 +295,88 @@
                         }
                     },
                     "201": {
-                        "description": "Device registered successfully",
+                        "description": "New subscription registered successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "ocs"
+                                    ],
+                                    "properties": {
+                                        "ocs": {
+                                            "type": "object",
+                                            "required": [
+                                                "meta",
+                                                "data"
+                                            ],
+                                            "properties": {
+                                                "meta": {
+                                                    "$ref": "#/components/schemas/OCSMeta"
+                                                },
+                                                "data": {}
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Missing permissions to register",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "type": "object",
+                                            "required": [
+                                                "ocs"
+                                            ],
+                                            "properties": {
+                                                "ocs": {
+                                                    "type": "object",
+                                                    "required": [
+                                                        "meta",
+                                                        "data"
+                                                    ],
+                                                    "properties": {
+                                                        "meta": {
+                                                            "$ref": "#/components/schemas/OCSMeta"
+                                                        },
+                                                        "data": {}
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "type": "object",
+                                            "required": [
+                                                "ocs"
+                                            ],
+                                            "properties": {
+                                                "ocs": {
+                                                    "type": "object",
+                                                    "required": [
+                                                        "meta",
+                                                        "data"
+                                                    ],
+                                                    "properties": {
+                                                        "meta": {
+                                                            "$ref": "#/components/schemas/OCSMeta"
+                                                        },
+                                                        "data": {}
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Registering is not possible",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -372,7 +396,15 @@
                                                     "$ref": "#/components/schemas/OCSMeta"
                                                 },
                                                 "data": {
-                                                    "$ref": "#/components/schemas/PushDevice"
+                                                    "type": "object",
+                                                    "required": [
+                                                        "message"
+                                                    ],
+                                                    "properties": {
+                                                        "message": {
+                                                            "type": "string"
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }
@@ -380,9 +412,368 @@
                                 }
                             }
                         }
+                    }
+                }
+            },
+            "delete": {
+                "operationId": "web_push-removewp",
+                "summary": "Remove a subscription from push notifications",
+                "tags": [
+                    "web_push"
+                ],
+                "security": [
+                    {
+                        "bearer_auth": []
+                    },
+                    {
+                        "basic_auth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "apiVersion",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "v2"
+                            ],
+                            "default": "v2"
+                        }
+                    },
+                    {
+                        "name": "OCS-APIRequest",
+                        "in": "header",
+                        "description": "Required to be true for the API request to pass",
+                        "required": true,
+                        "schema": {
+                            "type": "boolean",
+                            "default": true
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "No subscription for the device",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "ocs"
+                                    ],
+                                    "properties": {
+                                        "ocs": {
+                                            "type": "object",
+                                            "required": [
+                                                "meta",
+                                                "data"
+                                            ],
+                                            "properties": {
+                                                "meta": {
+                                                    "$ref": "#/components/schemas/OCSMeta"
+                                                },
+                                                "data": {}
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "202": {
+                        "description": "Subscription removed successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "ocs"
+                                    ],
+                                    "properties": {
+                                        "ocs": {
+                                            "type": "object",
+                                            "required": [
+                                                "meta",
+                                                "data"
+                                            ],
+                                            "properties": {
+                                                "meta": {
+                                                    "$ref": "#/components/schemas/OCSMeta"
+                                                },
+                                                "data": {}
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Missing permissions to remove subscription",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "type": "object",
+                                            "required": [
+                                                "ocs"
+                                            ],
+                                            "properties": {
+                                                "ocs": {
+                                                    "type": "object",
+                                                    "required": [
+                                                        "meta",
+                                                        "data"
+                                                    ],
+                                                    "properties": {
+                                                        "meta": {
+                                                            "$ref": "#/components/schemas/OCSMeta"
+                                                        },
+                                                        "data": {}
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "type": "object",
+                                            "required": [
+                                                "ocs"
+                                            ],
+                                            "properties": {
+                                                "ocs": {
+                                                    "type": "object",
+                                                    "required": [
+                                                        "meta",
+                                                        "data"
+                                                    ],
+                                                    "properties": {
+                                                        "meta": {
+                                                            "$ref": "#/components/schemas/OCSMeta"
+                                                        },
+                                                        "data": {}
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        }
                     },
                     "400": {
-                        "description": "Registering device is not possible",
+                        "description": "Removing subscription is not possible",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "ocs"
+                                    ],
+                                    "properties": {
+                                        "ocs": {
+                                            "type": "object",
+                                            "required": [
+                                                "meta",
+                                                "data"
+                                            ],
+                                            "properties": {
+                                                "meta": {
+                                                    "$ref": "#/components/schemas/OCSMeta"
+                                                },
+                                                "data": {
+                                                    "type": "object",
+                                                    "required": [
+                                                        "message"
+                                                    ],
+                                                    "properties": {
+                                                        "message": {
+                                                            "type": "string"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/ocs/v2.php/apps/notifications/api/{apiVersion}/webpush/activate": {
+            "post": {
+                "operationId": "web_push-activatewp",
+                "summary": "Activate subscription for push notifications",
+                "tags": [
+                    "web_push"
+                ],
+                "security": [
+                    {
+                        "bearer_auth": []
+                    },
+                    {
+                        "basic_auth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "activationToken"
+                                ],
+                                "properties": {
+                                    "activationToken": {
+                                        "type": "string",
+                                        "description": "Random token sent via a push notification during registration to enable the subscription"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "apiVersion",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "v2"
+                            ],
+                            "default": "v2"
+                        }
+                    },
+                    {
+                        "name": "OCS-APIRequest",
+                        "in": "header",
+                        "description": "Required to be true for the API request to pass",
+                        "required": true,
+                        "schema": {
+                            "type": "boolean",
+                            "default": true
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Subscription was already activated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "ocs"
+                                    ],
+                                    "properties": {
+                                        "ocs": {
+                                            "type": "object",
+                                            "required": [
+                                                "meta",
+                                                "data"
+                                            ],
+                                            "properties": {
+                                                "meta": {
+                                                    "$ref": "#/components/schemas/OCSMeta"
+                                                },
+                                                "data": {}
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "202": {
+                        "description": "Subscription activated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "ocs"
+                                    ],
+                                    "properties": {
+                                        "ocs": {
+                                            "type": "object",
+                                            "required": [
+                                                "meta",
+                                                "data"
+                                            ],
+                                            "properties": {
+                                                "meta": {
+                                                    "$ref": "#/components/schemas/OCSMeta"
+                                                },
+                                                "data": {}
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Missing permissions to activate subscription",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "type": "object",
+                                            "required": [
+                                                "ocs"
+                                            ],
+                                            "properties": {
+                                                "ocs": {
+                                                    "type": "object",
+                                                    "required": [
+                                                        "meta",
+                                                        "data"
+                                                    ],
+                                                    "properties": {
+                                                        "meta": {
+                                                            "$ref": "#/components/schemas/OCSMeta"
+                                                        },
+                                                        "data": {}
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "type": "object",
+                                            "required": [
+                                                "ocs"
+                                            ],
+                                            "properties": {
+                                                "ocs": {
+                                                    "type": "object",
+                                                    "required": [
+                                                        "meta",
+                                                        "data"
+                                                    ],
+                                                    "properties": {
+                                                        "meta": {
+                                                            "$ref": "#/components/schemas/OCSMeta"
+                                                        },
+                                                        "data": {}
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Activating subscription is not possible, may be because of a wrong activation token",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -419,211 +810,8 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Missing permissions to register device",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "anyOf": [
-                                        {
-                                            "type": "object",
-                                            "required": [
-                                                "ocs"
-                                            ],
-                                            "properties": {
-                                                "ocs": {
-                                                    "type": "object",
-                                                    "required": [
-                                                        "meta",
-                                                        "data"
-                                                    ],
-                                                    "properties": {
-                                                        "meta": {
-                                                            "$ref": "#/components/schemas/OCSMeta"
-                                                        },
-                                                        "data": {}
-                                                    }
-                                                }
-                                            }
-                                        },
-                                        {
-                                            "type": "object",
-                                            "required": [
-                                                "ocs"
-                                            ],
-                                            "properties": {
-                                                "ocs": {
-                                                    "type": "object",
-                                                    "required": [
-                                                        "meta",
-                                                        "data"
-                                                    ],
-                                                    "properties": {
-                                                        "meta": {
-                                                            "$ref": "#/components/schemas/OCSMeta"
-                                                        },
-                                                        "data": {}
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    ]
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "operationId": "push-remove-device",
-                "summary": "Remove a device from push notifications",
-                "tags": [
-                    "push"
-                ],
-                "security": [
-                    {
-                        "bearer_auth": []
-                    },
-                    {
-                        "basic_auth": []
-                    }
-                ],
-                "parameters": [
-                    {
-                        "name": "apiVersion",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "enum": [
-                                "v2"
-                            ],
-                            "default": "v2"
-                        }
-                    },
-                    {
-                        "name": "OCS-APIRequest",
-                        "in": "header",
-                        "description": "Required to be true for the API request to pass",
-                        "required": true,
-                        "schema": {
-                            "type": "boolean",
-                            "default": true
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "No device registered",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "required": [
-                                        "ocs"
-                                    ],
-                                    "properties": {
-                                        "ocs": {
-                                            "type": "object",
-                                            "required": [
-                                                "meta",
-                                                "data"
-                                            ],
-                                            "properties": {
-                                                "meta": {
-                                                    "$ref": "#/components/schemas/OCSMeta"
-                                                },
-                                                "data": {}
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "202": {
-                        "description": "Device removed successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "required": [
-                                        "ocs"
-                                    ],
-                                    "properties": {
-                                        "ocs": {
-                                            "type": "object",
-                                            "required": [
-                                                "meta",
-                                                "data"
-                                            ],
-                                            "properties": {
-                                                "meta": {
-                                                    "$ref": "#/components/schemas/OCSMeta"
-                                                },
-                                                "data": {}
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Missing permissions to remove device",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "anyOf": [
-                                        {
-                                            "type": "object",
-                                            "required": [
-                                                "ocs"
-                                            ],
-                                            "properties": {
-                                                "ocs": {
-                                                    "type": "object",
-                                                    "required": [
-                                                        "meta",
-                                                        "data"
-                                                    ],
-                                                    "properties": {
-                                                        "meta": {
-                                                            "$ref": "#/components/schemas/OCSMeta"
-                                                        },
-                                                        "data": {}
-                                                    }
-                                                }
-                                            }
-                                        },
-                                        {
-                                            "type": "object",
-                                            "required": [
-                                                "ocs"
-                                            ],
-                                            "properties": {
-                                                "ocs": {
-                                                    "type": "object",
-                                                    "required": [
-                                                        "meta",
-                                                        "data"
-                                                    ],
-                                                    "properties": {
-                                                        "meta": {
-                                                            "$ref": "#/components/schemas/OCSMeta"
-                                                        },
-                                                        "data": {}
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    ]
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Removing device is not possible",
+                    "404": {
+                        "description": "No subscription found for the device",
                         "content": {
                             "application/json": {
                                 "schema": {

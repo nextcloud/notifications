@@ -42,7 +42,7 @@ enum ActivationSubStatus: int {
 	case NO_SUB = 3;
 }
 
-#[OpenAPI(scope: 'push')]
+#[OpenAPI(scope: 'webpush')]
 class WebPushController extends OCSController {
 	public function __construct(
 		string $appName,
