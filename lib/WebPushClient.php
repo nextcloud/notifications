@@ -66,15 +66,14 @@ class WebPushClient {
 	 * @psalm-return array{publicKey: string, privateKey: string, subject: string}
 	 */
 	private function getVapid(): array {
+		// Do not use lazy for now
 		$publicKey = $this->appConfig->getValueString(
 			Application::APP_ID,
-			'webpush_vapid_pubkey',
-			lazy: true
+			'webpush_vapid_pubkey'
 		);
 		$privateKey = $this->appConfig->getValueString(
 			Application::APP_ID,
-			'webpush_vapid_privkey',
-			lazy: true
+			'webpush_vapid_privkey'
 		);
 		if ($publicKey === '' || $privateKey === '') {
 			/** @var array{publicKey: string, privateKey: string} $vapid */
@@ -82,14 +81,12 @@ class WebPushClient {
 			$this->appConfig->setValueString(
 				Application::APP_ID,
 				'webpush_vapid_pubkey',
-				$vapid['publicKey'],
-				lazy: true
+				$vapid['publicKey']
 			);
 			$this->appConfig->setValueString(
 				Application::APP_ID,
 				'webpush_vapid_privkey',
 				$vapid['privateKey'],
-				lazy: true,
 				sensitive: true
 			);
 		} else {
