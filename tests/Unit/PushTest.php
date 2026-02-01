@@ -65,6 +65,9 @@ class PushTest extends TestCase {
 	protected LoggerInterface&MockObject $logger;
 	protected IUserManager&MockObject $userManager;
 
+	const EX_UA_PUBLIC = 'BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcx aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4';
+	const EX_AUTH = 'BTBZMqHH6r4Tts7J_aSIgg';
+
 	protected function setUp(): void {
 		parent::setUp();
 
@@ -861,8 +864,8 @@ class PushTest extends TestCase {
 			->willReturn([[
 				'activated' => true,
 				'endpoint' => 'endpoint1',
-				'ua_public' => 'BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcx aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4',
-				'auth' => 'BTBZMqHH6r4Tts7J_aSIgg',
+				'ua_public' => self::EX_UA_PUBLIC,
+				'auth' => self::EX_AUTH,
 				'token' => 'token1',
 			]]);
 
@@ -910,8 +913,8 @@ class PushTest extends TestCase {
 			->willReturn([[
 				'activated' => true,
 				'endpoint' => 'endpoint1',
-				'ua_public' => 'BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcx aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4',
-				'auth' => 'BTBZMqHH6r4Tts7J_aSIgg',
+				'ua_public' => self::EX_UA_PUBLIC,
+				'auth' => self::EX_AUTH,
 				'token' => 23,
 				'app_types' => 'all',
 			]]);
@@ -971,8 +974,8 @@ class PushTest extends TestCase {
 			->willReturn([[
 				'activated' => true,
 				'endpoint' => 'endpoint1',
-				'ua_public' => 'BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcx aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4',
-				'auth' => 'BTBZMqHH6r4Tts7J_aSIgg',
+				'ua_public' => self::EX_UA_PUBLIC,
+				'auth' => self::EX_AUTH,
 				'token' => 23,
 				'app_types' => 'all',
 			]]);
@@ -1038,16 +1041,16 @@ class PushTest extends TestCase {
 				[
 					'activated' => true,
 					'endpoint' => 'endpoint1',
-					'ua_public' => 'BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcx aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4',
-					'auth' => 'BTBZMqHH6r4Tts7J_aSIgg',
+					'ua_public' => self::EX_UA_PUBLIC,
+					'auth' => self::EX_AUTH,
 					'token' => 16,
 					'app_types' => 'all',
 				],
 				[
 					'activated' => true,
 					'endpoint' => 'endpoint2',
-					'ua_public' => 'BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcx aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4',
-					'auth' => 'BTBZMqHH6r4Tts7J_aSIgg',
+					'ua_public' => self::EX_UA_PUBLIC,
+					'auth' => self::EX_AUTH,
 					'token' => 23,
 					'app_types' => 'all',
 				]
@@ -1193,8 +1196,8 @@ class PushTest extends TestCase {
 			$devices[] = [
 				'activated' => true,
 				'endpoint' => 'endpoint',
-				'ua_public' => 'BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcx aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4',
-				'auth' => 'BTBZMqHH6r4Tts7J_aSIgg',
+				'ua_public' => self::EX_UA_PUBLIC,
+				'auth' => self::EX_AUTH,
 				'token' => strlen($deviceType),
 				'app_types' => $deviceType,
 			];
@@ -1238,8 +1241,8 @@ class PushTest extends TestCase {
 				->method('enqueue')
 				->with(
 					'endpoint',
-					'BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcx aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4',
-					'BTBZMqHH6r4Tts7J_aSIgg',
+					self::EX_UA_PUBLIC,
+					self::EX_AUTH,
 					$this->anything(),
 					$this->anything()
 				);
