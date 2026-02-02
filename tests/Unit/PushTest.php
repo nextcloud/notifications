@@ -645,7 +645,7 @@ class PushTest extends TestCase {
 			->willReturn(true);
 
 		$push->method('deletePushTokenByDeviceIdentifier')
-			->with('123456');
+			->with('badrequest-with-devices', '123456');
 
 		$push->pushToDevice(207787, $notification);
 	}
