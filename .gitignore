@@ -70,5 +70,6 @@ nbproject
 # Build related files
 /npm-debug.log
 /build
+/lib/Vendor
 /vendor
 /vendor-bin/*/vendor
