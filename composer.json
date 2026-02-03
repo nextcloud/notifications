@@ -22,6 +22,13 @@
 			"bamarni/composer-bin-plugin": true
 		}
 	},
+	"provide": {
+		"guzzlehttp/guzzle": "^7.10",
+		"guzzlehttp/promise": "^2.3",
+		"guzzlehttp/psr7": "^2.8",
+		"psr/clock": "^1.0",
+		"psr/http-client": "^1.0"
+	},
 	"scripts": {
 		"post-install-cmd": [
 			"@composer bin all install --ansi",
@@ -50,13 +57,20 @@
 	},
 	"extra": {
 		"mozart": {
-			"delete_vendor_directories": false,
 			"dep_namespace": "OCA\\Notifications\\Vendor\\",
 			"dep_directory": "/lib/Vendor/",
 			"classmap_directory": "/lib/autoload/",
-			"classmap_prefix": "Notifications_",
+			"classmap_prefix": "NEXTCLOUDNOTIFICATIONS_",
 			"packages": [
 				"minishlink/web-push"
+			],
+			"excluded_packages": [
+				"guzzlehttp/guzzle",
+				"guzzlehttp/promise",
+				"guzzlehttp/psr7",
+				"psr/clock",
+				"psr/http-client",
+				"symfony/polyfill-php82"
 			]
 		}
 	}
