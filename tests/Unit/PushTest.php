@@ -62,8 +62,8 @@ class PushTest extends TestCase {
 	protected ISecureRandom&MockObject $random;
 	protected LoggerInterface&MockObject $logger;
 
-	const EX_UA_PUBLIC = 'BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcx aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4';
-	const EX_AUTH = 'BTBZMqHH6r4Tts7J_aSIgg';
+	public const EX_UA_PUBLIC = 'BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcx aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4';
+	public const EX_AUTH = 'BTBZMqHH6r4Tts7J_aSIgg';
 
 	protected function setUp(): void {
 		parent::setUp();
