@@ -27,6 +27,7 @@ use OCP\ICacheFactory;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IUser;
+use OCP\IUserManager;
 use OCP\L10N\IFactory;
 use OCP\Notification\IManager as INotificationManager;
 use OCP\Notification\INotification;
@@ -58,6 +59,7 @@ class PushTest extends TestCase {
 	protected ITimeFactory&MockObject $timeFactory;
 	protected ISecureRandom&MockObject $random;
 	protected LoggerInterface&MockObject $logger;
+	protected IUserManager&MockObject $userManager;
 
 	protected function setUp(): void {
 		parent::setUp();
@@ -75,6 +77,7 @@ class PushTest extends TestCase {
 		$this->timeFactory = $this->createMock(ITimeFactory::class);
 		$this->random = $this->createMock(ISecureRandom::class);
 		$this->logger = $this->createMock(LoggerInterface::class);
+		$this->userManager = $this->createMock(IUserManager::class);
 
 		$this->cacheFactory->method('createDistributed')
 			->with('pushtokens')
@@ -89,6 +92,7 @@ class PushTest extends TestCase {
 			return $this->getMockBuilder(Push::class)
 				->setConstructorArgs([
 					$this->db,
+					$this->userManager,
 					$this->notificationManager,
 					$this->config,
 					$this->tokenProvider,
@@ -107,6 +111,7 @@ class PushTest extends TestCase {
 
 		return new Push(
 			$this->db,
+			$this->userManager,
 			$this->notificationManager,
 			$this->config,
 			$this->tokenProvider,
@@ -122,7 +127,7 @@ class PushTest extends TestCase {
 	}
 
 	public function testPushToDeviceNoInternet(): void {
-		$push = $this->getPush(['createFakeUserObject']);
+		$push = $this->getPush();
 
 		$this->config->expects($this->once())
 			->method('getSystemValueBool')
@@ -132,8 +137,8 @@ class PushTest extends TestCase {
 			->method('getKey');
 		$this->clientService->expects($this->never())
 			->method('newClient');
-		$push->expects($this->never())
-			->method('createFakeUserObject');
+		$this->userManager->expects($this->never())
+			->method('getExistingUser');
 
 		/** @var INotification&MockObject$notification */
 		$notification = $this->createMock(INotification::class);
@@ -142,7 +147,7 @@ class PushTest extends TestCase {
 	}
 
 	public function testPushToDeviceNoDevices(): void {
-		$push = $this->getPush(['createFakeUserObject', 'getDevicesForUser']);
+		$push = $this->getPush(['getDevicesForUser']);
 		$this->keyManager->expects($this->never())
 			->method('getKey');
 		$this->clientService->expects($this->never())
@@ -162,8 +167,8 @@ class PushTest extends TestCase {
 		/** @var IUser&MockObject $user */
 		$user = $this->createMock(IUser::class);
 
-		$push->expects($this->once())
-			->method('createFakeUserObject')
+		$this->userManager->expects($this->once())
+			->method('getExistingUser')
 			->with('valid')
 			->willReturn($user);
 
@@ -175,7 +180,7 @@ class PushTest extends TestCase {
 	}
 
 	public function testPushToDeviceNotPrepared(): void {
-		$push = $this->getPush(['createFakeUserObject', 'getDevicesForUser']);
+		$push = $this->getPush(['getDevicesForUser']);
 		$this->keyManager->expects($this->never())
 			->method('getKey');
 		$this->clientService->expects($this->never())
@@ -195,8 +200,8 @@ class PushTest extends TestCase {
 		/** @var IUser&MockObject $user */
 		$user = $this->createMock(IUser::class);
 
-		$push->expects($this->once())
-			->method('createFakeUserObject')
+		$this->userManager->expects($this->once())
+			->method('getExistingUser')
 			->with('valid')
 			->willReturn($user);
 
@@ -221,7 +226,7 @@ class PushTest extends TestCase {
 	}
 
 	public function testPushToDeviceInvalidToken(): void {
-		$push = $this->getPush(['createFakeUserObject', 'getDevicesForUser', 'encryptAndSign', 'deletePushToken']);
+		$push = $this->getPush(['getDevicesForUser', 'encryptAndSign', 'deletePushToken']);
 		$this->clientService->expects($this->never())
 			->method('newClient');
 
@@ -239,8 +244,8 @@ class PushTest extends TestCase {
 		/** @var IUser&MockObject $user */
 		$user = $this->createMock(IUser::class);
 
-		$push->expects($this->once())
-			->method('createFakeUserObject')
+		$this->userManager->expects($this->once())
+			->method('getExistingUser')
 			->with('valid')
 			->willReturn($user);
 
@@ -286,7 +291,7 @@ class PushTest extends TestCase {
 	}
 
 	public function testPushToDeviceEncryptionError(): void {
-		$push = $this->getPush(['createFakeUserObject', 'getDevicesForUser', 'encryptAndSign', 'deletePushToken', 'validateToken']);
+		$push = $this->getPush(['getDevicesForUser', 'encryptAndSign', 'deletePushToken', 'validateToken']);
 		$this->clientService->expects($this->never())
 			->method('newClient');
 
@@ -304,8 +309,8 @@ class PushTest extends TestCase {
 		/** @var IUser&MockObject $user */
 		$user = $this->createMock(IUser::class);
 
-		$push->expects($this->once())
-			->method('createFakeUserObject')
+		$this->userManager->expects($this->once())
+			->method('getExistingUser')
 			->with('valid')
 			->willReturn($user);
 
@@ -350,7 +355,7 @@ class PushTest extends TestCase {
 		$push->pushToDevice(1970, $notification);
 	}
 	public function testPushToDeviceNoFairUse(): void {
-		$push = $this->getPush(['createFakeUserObject', 'getDevicesForUser', 'encryptAndSign', 'deletePushToken', 'validateToken', 'deletePushTokenByDeviceIdentifier']);
+		$push = $this->getPush(['getDevicesForUser', 'encryptAndSign', 'deletePushToken', 'validateToken', 'deletePushTokenByDeviceIdentifier']);
 
 		/** @var INotification&MockObject $notification */
 		$notification = $this->createMock(INotification::class);
@@ -361,8 +366,8 @@ class PushTest extends TestCase {
 		/** @var IUser&MockObject $user */
 		$user = $this->createMock(IUser::class);
 
-		$push->expects($this->once())
-			->method('createFakeUserObject')
+		$this->userManager->expects($this->once())
+			->method('getExistingUser')
 			->with('valid')
 			->willReturn($user);
 
@@ -438,7 +443,7 @@ class PushTest extends TestCase {
 	 * @dataProvider dataPushToDeviceSending
 	 */
 	public function testPushToDeviceSending(bool $isDebug): void {
-		$push = $this->getPush(['createFakeUserObject', 'getDevicesForUser', 'encryptAndSign', 'deletePushToken', 'validateToken', 'deletePushTokenByDeviceIdentifier']);
+		$push = $this->getPush(['getDevicesForUser', 'encryptAndSign', 'deletePushToken', 'validateToken', 'deletePushTokenByDeviceIdentifier']);
 
 		/** @var INotification&MockObject $notification */
 		$notification = $this->createMock(INotification::class);
@@ -449,8 +454,8 @@ class PushTest extends TestCase {
 		/** @var IUser&MockObject $user */
 		$user = $this->createMock(IUser::class);
 
-		$push->expects($this->once())
-			->method('createFakeUserObject')
+		$this->userManager->expects($this->once())
+			->method('getExistingUser')
 			->with('valid')
 			->willReturn($user);
 
@@ -668,7 +673,7 @@ class PushTest extends TestCase {
 	 * @param string[] $deviceTypes
 	 */
 	public function testPushToDeviceTalkNotification(array $deviceTypes, bool $isTalkNotification, ?int $pushedDevice): void {
-		$push = $this->getPush(['createFakeUserObject', 'getDevicesForUser', 'encryptAndSign', 'deletePushToken', 'validateToken']);
+		$push = $this->getPush(['getDevicesForUser', 'encryptAndSign', 'deletePushToken', 'validateToken']);
 
 		/** @var INotification&MockObject $notification */
 		$notification = $this->createMock(INotification::class);
@@ -689,8 +694,8 @@ class PushTest extends TestCase {
 		/** @var IUser&MockObject $user */
 		$user = $this->createMock(IUser::class);
 
-		$push->expects($this->once())
-			->method('createFakeUserObject')
+		$this->userManager->expects($this->once())
+			->method('getExistingUser')
 			->with('valid')
 			->willReturn($user);
 
