@@ -26,6 +26,7 @@ use OCP\ICacheFactory;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IUser;
+use OCP\IUserManager;
 use OCP\L10N\IFactory;
 use OCP\Notification\AlreadyProcessedException;
 use OCP\Notification\IManager as INotificationManager;
@@ -74,6 +75,7 @@ class Push {
 
 	public function __construct(
 		protected IDBConnection $db,
+		protected IUserManager $userManager,
 		protected INotificationManager $notificationManager,
 		protected IConfig $config,
 		protected IProvider $tokenProvider,
@@ -210,7 +212,7 @@ class Push {
 			return;
 		}
 
-		$user = $this->createFakeUserObject($notification->getUser());
+		$user = $this->userManager->getExistingUser($notification->getUser());
 
 		if (!array_key_exists($notification->getUser(), $this->userStatuses)) {
 			$userStatus = $this->userStatusManager->getUserStatuses([
@@ -350,7 +352,7 @@ class Push {
 
 		$deleteAll = $notificationIds === null;
 
-		$user = $this->createFakeUserObject($userId);
+		$user = $this->userManager->getExistingUser($userId);
 
 		if (!array_key_exists($userId, $this->userDevices)) {
 			$devices = $this->getDevicesForUser($userId);
@@ -775,10 +777,6 @@ class Push {
 			->where($query->expr()->eq('deviceidentifier', $query->createNamedParameter($deviceIdentifier)));
 
 		return $query->executeStatement() !== 0;
-	}
-
-	protected function createFakeUserObject(string $userId): IUser {
-		return new FakeUser($userId);
 	}
 
 	protected function createPushSubscriptionKey(): string {
