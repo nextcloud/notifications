@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * SPDX-FileCopyrightText: 2017 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-FileCopyrightText: 2026 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
@@ -34,7 +34,7 @@ class WebPushClient {
 		}
 		try {
 			Utils::unserializePublicKey(Base64Url::decode($key));
-		} catch (\InvalidArgumentException $e) {
+		} catch (\InvalidArgumentException) {
 			return false;
 		}
 		return true;
@@ -46,7 +46,7 @@ class WebPushClient {
 		}
 		try {
 			$a = Base64Url::decode($auth);
-		} catch (\InvalidArgumentException $e) {
+		} catch (\InvalidArgumentException) {
 			return false;
 		}
 		return strlen($a) === 16;
@@ -118,7 +118,8 @@ class WebPushClient {
 		// the callback could be defined by the caller
 		// For the moment, it is used during registration only - no need to catch 404 &co
 		// as the registration isn't activated
-		$callback = function ($r) {};
+		$callback = function ($r) {
+		};
 		$c->flushPooled($callback);
 	}
 

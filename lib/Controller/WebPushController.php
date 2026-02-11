@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * SPDX-FileCopyrightText: 2017 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-FileCopyrightText: 2026 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
@@ -238,16 +238,14 @@ class WebPushController extends OCSController {
 			$activationToken = Uuid::v4()->toRfc4122();
 			if ($this->insertSubscription($user, $token, $endpoint, $uaPublicKey, $auth, $activationToken, $appTypes)) {
 				return [NewSubStatus::CREATED, $activationToken];
-			} else {
-				return [NewSubStatus::ERROR, null];
 			}
+			return [NewSubStatus::ERROR, null];
 		}
 
 		if ($this->updateSubscription($user, $token, $endpoint, $uaPublicKey, $auth, $appTypes)) {
 			return [NewSubStatus::UPDATED, null];
-		} else {
-			return [NewSubStatus::ERROR, null];
 		}
+		return [NewSubStatus::ERROR, null];
 	}
 
 	/**
@@ -282,9 +280,8 @@ class WebPushController extends OCSController {
 
 		if ($query->executeStatement() !== 0) {
 			return ActivationSubStatus::CREATED;
-		} else {
-			return ActivationSubStatus::NO_TOKEN;
 		}
+		return ActivationSubStatus::NO_TOKEN;
 	}
 
 	/**
