@@ -15,11 +15,13 @@
 		<ignoreFiles>
 			<directory name="lib/Vendor" />
 			<directory name="vendor" />
+			<directory name="vendor-bin/nextcloud-ocp" />
 		</ignoreFiles>
 	</projectFiles>
 	<extraFiles>
 		<directory name="lib/Vendor" />
 		<directory name="vendor" />
+		<directory name="vendor-bin/nextcloud-ocp" />
 	</extraFiles>
 	<issueHandlers>
 		<LessSpecificReturnStatement errorLevel="error"/>
