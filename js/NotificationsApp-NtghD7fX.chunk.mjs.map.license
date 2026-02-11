@@ -62,7 +62,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 14.2.0
 	- license: MIT
 - axios
-	- version: 1.12.2
+	- version: 1.13.5
 	- license: MIT
 - bail
 	- version: 2.0.2
