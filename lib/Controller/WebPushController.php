@@ -27,6 +27,7 @@ use OCP\IRequest;
 use OCP\ISession;
 use OCP\IUser;
 use OCP\IUserSession;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Uid\Uuid;
 
 enum NewSubStatus: int {
@@ -53,6 +54,7 @@ class WebPushController extends OCSController {
 		protected IUserSession $userSession,
 		protected IProvider $tokenProvider,
 		protected Manager $identityProof,
+		protected LoggerInterface $logger,
 	) {
 		parent::__construct($appName, $request);
 	}
@@ -114,13 +116,15 @@ class WebPushController extends OCSController {
 		}
 
 		$tokenId = $this->session->get('token-id');
-		if (!\is_int($tokenId)) {
-			return new DataResponse(['message' => 'INVALID_SESSION_TOKEN'], Http::STATUS_BAD_REQUEST);
-		}
-		try {
-			$token = $this->tokenProvider->getTokenById($tokenId);
-		} catch (InvalidTokenException) {
-			return new DataResponse(['message' => 'INVALID_SESSION_TOKEN'], Http::STATUS_BAD_REQUEST);
+		if (\is_null($tokenId)) {
+			$token = $this->session;
+		} else {
+			try {
+				$token = $this->tokenProvider->getTokenById($tokenId);
+			} catch (InvalidTokenException $e) {
+				$this->logger->error('Invalid  token exception', ['exception' => $e]);
+				return new DataResponse(['message' => 'INVALID_SESSION_TOKEN'], Http::STATUS_BAD_REQUEST);
+			}
 		}
 
 		[$status, $activationToken] = $this->saveSubscription($user, $token, $endpoint, $uaPublicKey, $auth, $appTypes);
@@ -158,11 +162,16 @@ class WebPushController extends OCSController {
 			return new DataResponse([], Http::STATUS_UNAUTHORIZED);
 		}
 
-		$tokenId = (int)$this->session->get('token-id');
-		try {
-			$token = $this->tokenProvider->getTokenById($tokenId);
-		} catch (InvalidTokenException) {
-			return new DataResponse(['message' => 'INVALID_SESSION_TOKEN'], Http::STATUS_BAD_REQUEST);
+		$tokenId = $this->session->get('token-id');
+		if (\is_null($tokenId)) {
+			$token = $this->session;
+		} else {
+			try {
+				$token = $this->tokenProvider->getTokenById($tokenId);
+			} catch (InvalidTokenException $e) {
+				$this->logger->error('Invalid  token exception', ['exception' => $e]);
+				return new DataResponse(['message' => 'INVALID_SESSION_TOKEN'], Http::STATUS_BAD_REQUEST);
+			}
 		}
 
 		$status = $this->activateSubscription($user, $token, $activationToken);
@@ -193,11 +202,16 @@ class WebPushController extends OCSController {
 			return new DataResponse([], Http::STATUS_UNAUTHORIZED);
 		}
 
-		$tokenId = (int)$this->session->get('token-id');
-		try {
-			$token = $this->tokenProvider->getTokenById($tokenId);
-		} catch (InvalidTokenException) {
-			return new DataResponse(['message' => 'INVALID_SESSION_TOKEN'], Http::STATUS_BAD_REQUEST);
+		$tokenId = $this->session->get('token-id');
+		if (\is_null($tokenId)) {
+			$token = $this->session;
+		} else {
+			try {
+				$token = $this->tokenProvider->getTokenById($tokenId);
+			} catch (InvalidTokenException $e) {
+				$this->logger->error('Invalid  token exception', ['exception' => $e]);
+				return new DataResponse(['message' => 'INVALID_SESSION_TOKEN'], Http::STATUS_BAD_REQUEST);
+			}
 		}
 
 		if ($this->deleteSubscription($user, $token)) {
@@ -218,12 +232,12 @@ class WebPushController extends OCSController {
 	 * - CREATED if the user didn't have an activated subscription with this endpoint, pubkey and auth
 	 * - UPDATED if the subscription has been updated (use to change appTypes)
 	 */
-	protected function saveSubscription(IUser $user, IToken $token, string $endpoint, string $uaPublicKey, string $auth, string $appTypes): array {
+	protected function saveSubscription(IUser $user, IToken|ISession $token, string $endpoint, string $uaPublicKey, string $auth, string $appTypes): array {
 		$query = $this->db->getQueryBuilder();
 		$query->select('*')
 			->from('notifications_webpush')
 			->where($query->expr()->eq('uid', $query->createNamedParameter($user->getUID())))
-			->andWhere($query->expr()->eq('token', $query->createNamedParameter($token->getId())))
+			->andWhere($query->expr()->eq('token', $query->createNamedParameter($this->getId($token))))
 			->andWhere($query->expr()->eq('endpoint', $query->createNamedParameter($endpoint)))
 			->andWhere($query->expr()->eq('ua_public', $query->createNamedParameter($uaPublicKey)))
 			->andWhere($query->expr()->eq('auth', $query->createNamedParameter($auth)))
@@ -256,12 +270,12 @@ class WebPushController extends OCSController {
 	 * - NO_TOKEN if we don't have this token
 	 * - NO_SUB if we don't have this subscription
 	 */
-	protected function activateSubscription(IUser $user, IToken $token, string $activationToken): ActivationSubStatus {
+	protected function activateSubscription(IUser $user, IToken|ISession $token, string $activationToken): ActivationSubStatus {
 		$query = $this->db->getQueryBuilder();
 		$query->select('*')
 			->from('notifications_webpush')
 			->where($query->expr()->eq('uid', $query->createNamedParameter($user->getUID())))
-			->andWhere($query->expr()->eq('token', $query->createNamedParameter($token->getId())));
+			->andWhere($query->expr()->eq('token', $query->createNamedParameter($this->getId($token))));
 		$result = $query->executeQuery();
 		$row = $result->fetch();
 		$result->closeCursor();
@@ -275,7 +289,7 @@ class WebPushController extends OCSController {
 		$query->update('notifications_webpush')
 			->set('activated', $query->createNamedParameter(true))
 			->where($query->expr()->eq('uid', $query->createNamedParameter($user->getUID())))
-			->andWhere($query->expr()->eq('token', $query->createNamedParameter($token->getId(), IQueryBuilder::PARAM_INT)))
+			->andWhere($query->expr()->eq('token', $query->createNamedParameter($this->getId($token), IQueryBuilder::PARAM_INT)))
 			->andWhere($query->expr()->eq('activation_token', $query->createNamedParameter($activationToken)));
 
 		if ($query->executeStatement() !== 0) {
@@ -288,12 +302,12 @@ class WebPushController extends OCSController {
 	 * @param string $appTypes comma separated list of types
 	 * @return bool If the entry was created
 	 */
-	protected function insertSubscription(IUser $user, IToken $token, string $endpoint, string $uaPublicKey, string $auth, string $activationToken, string $appTypes): bool {
+	protected function insertSubscription(IUser $user, IToken|ISession $token, string $endpoint, string $uaPublicKey, string $auth, string $activationToken, string $appTypes): bool {
 		$query = $this->db->getQueryBuilder();
 		$query->insert('notifications_webpush')
 			->values([
 				'uid' => $query->createNamedParameter($user->getUID()),
-				'token' => $query->createNamedParameter($token->getId(), IQueryBuilder::PARAM_INT),
+				'token' => $query->createNamedParameter($this->getId($token), IQueryBuilder::PARAM_INT),
 				'endpoint' => $query->createNamedParameter($endpoint),
 				'ua_public' => $query->createNamedParameter($uaPublicKey),
 				'auth' => $query->createNamedParameter($auth),
@@ -307,7 +321,7 @@ class WebPushController extends OCSController {
 	 * @param string $appTypes comma separated list of types
 	 * @return bool If the entry was updated
 	 */
-	protected function updateSubscription(IUser $user, IToken $token, string $endpoint, string $uaPublicKey, string $auth, string $appTypes): bool {
+	protected function updateSubscription(IUser $user, IToken|ISession $token, string $endpoint, string $uaPublicKey, string $auth, string $appTypes): bool {
 		$query = $this->db->getQueryBuilder();
 		$query->update('notifications_webpush')
 			->set('endpoint', $query->createNamedParameter($endpoint))
@@ -315,7 +329,7 @@ class WebPushController extends OCSController {
 			->set('auth', $query->createNamedParameter($auth))
 			->set('app_types', $query->createNamedParameter($appTypes))
 			->where($query->expr()->eq('uid', $query->createNamedParameter($user->getUID())))
-			->andWhere($query->expr()->eq('token', $query->createNamedParameter($token->getId(), IQueryBuilder::PARAM_INT)));
+			->andWhere($query->expr()->eq('token', $query->createNamedParameter($this->getId($token), IQueryBuilder::PARAM_INT)));
 
 		return $query->executeStatement() !== 0;
 	}
@@ -323,12 +337,22 @@ class WebPushController extends OCSController {
 	/**
 	 * @return bool If the entry was deleted
 	 */
-	protected function deleteSubscription(IUser $user, IToken $token): bool {
+	protected function deleteSubscription(IUser $user, IToken|ISession $token): bool {
 		$query = $this->db->getQueryBuilder();
 		$query->delete('notifications_webpush')
 			->where($query->expr()->eq('uid', $query->createNamedParameter($user->getUID())))
-			->andWhere($query->expr()->eq('token', $query->createNamedParameter($token->getId(), IQueryBuilder::PARAM_INT)));
+			->andWhere($query->expr()->eq('token', $query->createNamedParameter($this->getId($token), IQueryBuilder::PARAM_INT)));
 
 		return $query->executeStatement() !== 0;
+	}
+
+	/**
+	 * @return Int tokenId from IToken or ISession, negative in case of Session id, positive otherwise
+	 */
+	private function getId(IToken|ISession $token): Int {
+		return match(true) {
+			$token instanceof IToken => $token->getId(),
+			$token instanceof ISession => -1 * $token->getId(),
+		};
 	}
 }

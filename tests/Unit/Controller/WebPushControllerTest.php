@@ -26,6 +26,7 @@ use OCP\IUser;
 use OCP\IUserSession;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
+use Psr\Log\LoggerInterface;
 use Test\TestCase;
 
 class WebPushControllerTest extends TestCase {
@@ -36,6 +37,7 @@ class WebPushControllerTest extends TestCase {
 	protected IUserSession&MockObject $userSession;
 	protected IProvider&MockObject $tokenProvider;
 	protected Manager&MockObject $identityProof;
+	protected LoggerInterface&MockObject $logger;
 	protected IUser&MockObject $user;
 	protected WebPushController $controller;
 
@@ -53,6 +55,7 @@ class WebPushControllerTest extends TestCase {
 		$this->userSession = $this->createMock(IUserSession::class);
 		$this->tokenProvider = $this->createMock(IProvider::class);
 		$this->identityProof = $this->createMock(Manager::class);
+		$this->logger = $this->createMock(LoggerInterface::class);
 	}
 
 	protected function getController(array $methods = []): WebPushController|MockObject {
@@ -65,7 +68,8 @@ class WebPushControllerTest extends TestCase {
 				$this->session,
 				$this->userSession,
 				$this->tokenProvider,
-				$this->identityProof
+				$this->identityProof,
+				$this->logger,
 			);
 		}
 
@@ -79,6 +83,7 @@ class WebPushControllerTest extends TestCase {
 				$this->userSession,
 				$this->tokenProvider,
 				$this->identityProof,
+				$this->logger,
 			])
 			->onlyMethods($methods)
 			->getMock();
