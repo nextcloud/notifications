@@ -304,7 +304,7 @@ export default {
 							this._fetchAfterNotifyPush(true)
 						}
 					}
-				} else if (event.data.type === 'pushEndoint') {
+				} else if (event.data.type === 'pushEndpoint') {
 					this.registerPush(registration)
 						.catch((er) => console.error(er))
 				}
