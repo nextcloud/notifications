@@ -441,10 +441,12 @@ export default {
 
 		/**
 		 * Performs the AJAX request to retrieve the notifications
+		 *
+		 * @param {boolean} force to not check if we are the last tab before fetching events. This is useful with web push, as the service worker sends the event to only one tab, that may not be the last one
 		 */
 		_fetchAfterNotifyPush(force = false) {
 			this.backgroundFetching = true
-			if (force || (this.hasNotifyPush && this.tabId !== this.lastTabId)) {
+			if (!force && (this.hasNotifyPush && this.tabId !== this.lastTabId)) {
 				console.debug('Deferring notification refresh from browser storage are notify_push event to give the last tab the chance to do it')
 				setTimeout(() => {
 					this._fetch()
