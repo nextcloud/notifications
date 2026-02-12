@@ -8,8 +8,7 @@
 	"description": "notifications",
 	"license": "AGPL",
 	"require-dev": {
-		"bamarni/composer-bin-plugin": "^1.9",
-		"nextcloud/ocp": "dev-master"
+		"bamarni/composer-bin-plugin": "^1.9"
 	},
 	"config": {
 		"optimize-autoloader": true,
@@ -24,7 +23,13 @@
 	},
 	"scripts": {
 		"post-install-cmd": [
-			"[ $COMPOSER_DEV_MODE -eq 0 ] || composer bin all install",
+			"@composer bin all install --ansi",
+			"\"vendor/bin/mozart\" compose",
+			"composer dump-autoload"
+		],
+		"post-update-cmd": [
+			"@composer bin all install --ansi",
+			"\"vendor/bin/mozart\" compose",
 			"composer dump-autoload"
 		],
 		"lint": "find . -name \\*.php -not -path './vendor/*' -not -path './build/*' -print0 | xargs -0 -n1 php -l",
@@ -38,5 +43,22 @@
 		"rector:fix": "rector",
 		"test:unit": "phpunit --color -c tests/Unit/phpunit.xml",
 		"test:integration": "cd tests/Integration && ./run.sh"
+	},
+	"require": {
+		"minishlink/web-push": "^9.0"
+	},
+	"extra": {
+		"mozart": {
+			"dep_namespace": "OCA\\Notifications\\Vendor\\",
+			"dep_directory": "/lib/Vendor/",
+			"classmap_directory": "/lib/autoload/",
+			"classmap_prefix": "NEXTCLOUDNOTIFICATIONS_",
+			"packages": [
+				"minishlink/web-push"
+			],
+			"excluded_packages": [
+				"symfony/polyfill-php82"
+			]
+		}
 	}
 }

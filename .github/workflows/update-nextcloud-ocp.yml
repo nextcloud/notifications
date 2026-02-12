@@ -66,7 +66,7 @@ jobs:
       - name: Composer update nextcloud/ocp # zizmor: ignore[template-injection]
         id: update_branch
         if: ${{ steps.checkout.outcome == 'success' && matrix.branches != 'main' }}
-        run: composer require --dev 'nextcloud/ocp:dev-${{ matrix.branches }}'
+        run: composer bin nextcloud-ocp require --dev 'nextcloud/ocp:dev-${{ matrix.branches }}'
 
       - name: Raise on issue on failure
         uses: dacbd/create-issue-action@cdb57ab6ff8862aa09fee2be6ba77a59581921c2 # v2.0.0

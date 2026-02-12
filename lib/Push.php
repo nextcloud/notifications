@@ -15,6 +15,7 @@ use OC\Authentication\Token\IProvider;
 use OC\Security\IdentityProof\Key;
 use OC\Security\IdentityProof\Manager;
 use OCA\Notifications\AppInfo\Application;
+use OCA\Notifications\Vendor\Minishlink\WebPush\MessageSentReport;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Authentication\Exceptions\InvalidTokenException;
@@ -25,6 +26,7 @@ use OCP\ICache;
 use OCP\ICacheFactory;
 use OCP\IConfig;
 use OCP\IDBConnection;
+use OCP\IUser;
 use OCP\IUserManager;
 use OCP\L10N\IFactory;
 use OCP\Notification\AlreadyProcessedException;
@@ -64,9 +66,13 @@ class Push {
 	 */
 	protected array $userStatuses = [];
 	/**
+	 * @psalm-var array<string, list<array{id: int, uid: string, token: int, endpoint: string, ua_public: string, auth: string, appTypes: string, activated: bool, activation_token: string}>>
+	 */
+	protected array $userWebPushDevices = [];
+	/**
 	 * @psalm-var array<string, list<array{id: int, uid: string, token: int, deviceidentifier: string, devicepublickey: string, devicepublickeyhash: string, pushtokenhash: string, proxyserver: string, apptype: string}>>
 	 */
-	protected array $userDevices = [];
+	protected array $userProxyDevices = [];
 	/** @var string[] */
 	protected array $loadDevicesForUsers = [];
 	/** @var string[] */
@@ -77,6 +83,7 @@ class Push {
 		protected IUserManager $userManager,
 		protected INotificationManager $notificationManager,
 		protected IConfig $config,
+		protected WebPushClient $wpClient,
 		protected IProvider $tokenProvider,
 		protected Manager $keyManager,
 		protected IClientService $clientService,
@@ -114,10 +121,17 @@ class Push {
 
 		if (!empty($this->loadDevicesForUsers)) {
 			$this->loadDevicesForUsers = array_unique($this->loadDevicesForUsers);
-			$missingDevicesFor = array_diff($this->loadDevicesForUsers, array_keys($this->userDevices));
-			$newUserDevices = $this->getDevicesForUsers($missingDevicesFor);
-			foreach ($missingDevicesFor as $userId) {
-				$this->userDevices[$userId] = $newUserDevices[$userId] ?? [];
+			// Add missing web push devices
+			$missingWebPushDevicesFor = array_diff($this->loadDevicesForUsers, array_keys($this->userWebPushDevices));
+			$newUserWebPushDevices = $this->getWebPushDevicesForUsers($missingWebPushDevicesFor);
+			foreach ($missingWebPushDevicesFor as $userId) {
+				$this->userWebPushDevices[$userId] = $newUserWebPushDevices[$userId] ?? [];
+			}
+			// Add missing proxy devices
+			$missingProxyDevicesFor = array_diff($this->loadDevicesForUsers, array_keys($this->userProxyDevices));
+			$newUserProxyDevices = $this->getProxyDevicesForUsers($missingProxyDevicesFor);
+			foreach ($missingProxyDevicesFor as $userId) {
+				$this->userProxyDevices[$userId] = $newUserProxyDevices[$userId] ?? [];
 			}
 			$this->loadDevicesForUsers = [];
 		}
@@ -148,22 +162,38 @@ class Push {
 
 		if (!empty($this->deletesToPush)) {
 			foreach ($this->deletesToPush as $userId => $data) {
-				foreach ($data as $client => $notificationIds) {
-					if ($client === 'talk') {
-						$this->pushDeleteToDevice((string)$userId, $notificationIds, $client);
-					} else {
-						foreach ($notificationIds as $notificationId) {
-							$this->pushDeleteToDevice((string)$userId, [$notificationId], $client);
-						}
-					}
+				foreach ($data as $app => $notificationIds) {
+					$this->pushDeleteToDevice((string)$userId, $notificationIds, $app);
 				}
 			}
 			$this->deletesToPush = [];
 		}
 
 		$this->deferPayloads = false;
+		$this->wpClient->flush(fn ($r) => $this->webPushCallback($r));
 		$this->sendNotificationsToProxies();
 	}
+
+	/**
+	 * @param array $devices
+	 * @psalm-param $devices list<array{id: int, uid: string, token: int, endpoint: string, ua_public: string, auth: string, appTypes: string, activated: bool, activation_token: string}>
+	 * @param string $app
+	 * @return array
+	 * @psalm-return list<array{id: int, uid: string, token: int, endpoint: string, ua_public: string, auth: string, appTypes: string, activated: bool, activation_token: string}>
+	 */
+	public function filterWebPushDeviceList(array $devices, string $app): array {
+		// Consider all 3 options as 'talk'
+		if (\in_array($app, ['spreed', 'talk', 'admin_notification_talk'], true)) {
+			$app = 'talk';
+		}
+
+		return array_filter($devices, function ($device) use ($app) {
+			$appTypes = explode(',', $device['app_types']);
+			return $device['activated'] && (\in_array($app, $appTypes)
+				|| (\in_array('all', $appTypes) && !\in_array('-' . $app, $appTypes)));
+		});
+	}
+
 
 	/**
 	 * @param array $devices
@@ -172,7 +202,7 @@ class Push {
 	 * @return array
 	 * @psalm-return list<array{id: int, uid: string, token: int, deviceidentifier: string, devicepublickey: string, devicepublickeyhash: string, pushtokenhash: string, proxyserver: string, apptype: string}>
 	 */
-	public function filterDeviceList(array $devices, string $app): array {
+	public function filterProxyDeviceList(array $devices, string $app): array {
 		$isTalkNotification = \in_array($app, ['spreed', 'talk', 'admin_notification_talk'], true);
 
 		$talkDevices = array_filter($devices, static fn ($device) => $device['apptype'] === 'talk');
@@ -231,14 +261,20 @@ class Push {
 			}
 		}
 
-		if (!array_key_exists($notification->getUser(), $this->userDevices)) {
-			$devices = $this->getDevicesForUser($notification->getUser());
-			$this->userDevices[$notification->getUser()] = $devices;
+		if (!array_key_exists($notification->getUser(), $this->userWebPushDevices)) {
+			$webPushDevices = $this->getWebPushDevicesForUser($notification->getUser());
+			$this->userWebPushDevices[$notification->getUser()] = $webPushDevices;
 		} else {
-			$devices = $this->userDevices[$notification->getUser()];
+			$webPushDevices = $this->userWebPushDevices[$notification->getUser()];
+		}
+		if (!array_key_exists($notification->getUser(), $this->userProxyDevices)) {
+			$proxyDevices = $this->getProxyDevicesForUser($notification->getUser());
+			$this->userProxyDevices[$notification->getUser()] = $proxyDevices;
+		} else {
+			$proxyDevices = $this->userProxyDevices[$notification->getUser()];
 		}
 
-		if (empty($devices)) {
+		if (empty($proxyDevices) && empty($webPushDevices)) {
 			$this->printInfo('<comment>No devices found for user</comment>');
 			return;
 		}
@@ -259,16 +295,19 @@ class Push {
 			}
 		}
 
-		$userKey = $this->keyManager->getKey($user);
+		$this->webPushToDevice($id, $user, $webPushDevices, $notification, $output);
+		$this->proxyPushToDevice($id, $user, $proxyDevices, $notification, $output);
+	}
 
-		$this->printInfo('Private user key size: ' . strlen($userKey->getPrivate()));
-		$this->printInfo('Public user key size: ' . strlen($userKey->getPublic()));
-
+	public function webPushToDevice(int $id, IUser $user, array $devices, INotification $notification, ?OutputInterface $output = null): void {
+		if (empty($devices)) {
+			$this->printInfo('<comment>No web push devices found for user</comment>');
+			return;
+		}
 
 		$this->printInfo('');
 		$this->printInfo('Found ' . count($devices) . ' devices registered for push notifications');
-		$isTalkNotification = \in_array($notification->getApp(), ['spreed', 'talk', 'admin_notification_talk'], true);
-		$devices = $this->filterDeviceList($devices, $notification->getApp());
+		$devices = $this->filterWebPushDeviceList($devices, $notification->getApp());
 		if (empty($devices)) {
 			$this->printInfo('<comment>No devices left after filtering</comment>');
 			return;
@@ -283,9 +322,92 @@ class Push {
 			$this->printInfo('');
 			$this->printInfo('Device token: ' . $device['token']);
 
-			if (!$this->validateToken($device['token'], $maxAge)) {
-				// Token does not exist anymore
+			switch ($this->validateToken($device['token'], $maxAge)) {
+				case TokenValidation::VALID:
+					break;
+				case TokenValidation::INVALID:
+					// Token does not exist anymore
+					$this->deleteWebPushToken($device['token']);
+					// no break
+				case TokenValidation::OLD:
+					continue 2;
+			}
+
+			// If the endpoint got a 429 TOO_MANY_REQUESTS,
+			// we wait for the time sent by the server
+			if ($this->cache->get('wp.' . $device['endpoint'])) {
+				// It would be better to cache the notification to send it later
+				// in this case, but
+				// 429 is rare, and ~ an emergency response: dropping the notification
+				// is a solution good enough to not overload the push server
 				continue;
+			}
+
+			try {
+				$data = $this->encodeNotif($id, $notification, 3000);
+				$urgency = $this->getNotifTopicAndUrgency($data['app'], $data['type'])['urgency'];
+				$this->wpClient->enqueue(
+					$device['endpoint'],
+					$device['ua_public'],
+					$device['auth'],
+					json_encode($data, JSON_THROW_ON_ERROR),
+					urgency: $urgency
+				);
+			} catch (\JsonException $e) {
+				$this->log->error('JSON error while encoding push notification: ' . $e->getMessage(), ['exception' => $e]);
+			} catch (\ErrorException $e) {
+				$this->log->error('Error while sending push notification: ' . $e->getMessage(), ['exception' => $e]);
+			} catch (\InvalidArgumentException) {
+				// Failed to encrypt message for device: public key is invalid
+				$this->deleteWebPushToken($device['token']);
+			}
+		}
+		$this->printInfo('');
+
+		if (!$this->deferPayloads) {
+			$this->wpClient->flush(fn ($r) => $this->webPushCallback($r));
+		}
+	}
+
+	public function proxyPushToDevice(int $id, IUser $user, array $devices, INotification $notification, ?OutputInterface $output = null): void {
+		if (empty($devices)) {
+			$this->printInfo('<comment>No proxy devices found for user</comment>');
+			return;
+		}
+
+		$userKey = $this->keyManager->getKey($user);
+
+		$this->printInfo('Private user key size: ' . strlen($userKey->getPrivate()));
+		$this->printInfo('Public user key size: ' . strlen($userKey->getPublic()));
+
+
+		$this->printInfo('');
+		$this->printInfo('Found ' . count($devices) . ' devices registered for push notifications');
+		$isTalkNotification = \in_array($notification->getApp(), ['spreed', 'talk', 'admin_notification_talk'], true);
+		$devices = $this->filterProxyDeviceList($devices, $notification->getApp());
+		if (empty($devices)) {
+			$this->printInfo('<comment>No devices left after filtering</comment>');
+			return;
+		}
+		$this->printInfo('Trying to push to ' . count($devices) . ' devices');
+
+		// We don't push to devices that are older than 60 days
+		$maxAge = time() - 60 * 24 * 60 * 60;
+
+		foreach ($devices as $device) {
+			$device['token'] = (int)$device['token'];
+			$this->printInfo('');
+			$this->printInfo('Device token: ' . $device['token']);
+
+			switch ($this->validateToken($device['token'], $maxAge)) {
+				case TokenValidation::VALID:
+					break;
+				case TokenValidation::INVALID:
+					// Token does not exist anymore
+					$this->deleteProxyPushToken($device['token']);
+					// no break
+				case TokenValidation::OLD:
+					continue 2;
 			}
 
 			try {
@@ -300,7 +422,7 @@ class Push {
 				$this->log->error('JSON error while encoding push notification: ' . $e->getMessage(), ['exception' => $e]);
 			} catch (\InvalidArgumentException) {
 				// Failed to encrypt message for device: public key is invalid
-				$this->deletePushToken($device['token']);
+				$this->deleteProxyPushToken($device['token']);
 			}
 		}
 		$this->printInfo('');
@@ -332,7 +454,7 @@ class Push {
 				}
 
 				$isTalkNotification = \in_array($app, ['spreed', 'talk', 'admin_notification_talk'], true);
-				$clientGroup = $isTalkNotification ? 'talk' : 'files';
+				$clientGroup = $isTalkNotification ? 'talk' : $app;
 
 				if (!isset($this->deletesToPush[$userId])) {
 					$this->deletesToPush[$userId] = [];
@@ -353,17 +475,109 @@ class Push {
 
 		$user = $this->userManager->getExistingUser($userId);
 
-		if (!array_key_exists($userId, $this->userDevices)) {
-			$devices = $this->getDevicesForUser($userId);
-			$this->userDevices[$userId] = $devices;
+		if (!array_key_exists($userId, $this->userWebPushDevices)) {
+			$webPushDevices = $this->getWebPushDevicesForUser($userId);
+			$this->userWebPushDevices[$userId] = $webPushDevices;
 		} else {
-			$devices = $this->userDevices[$userId];
+			$webPushDevices = $this->userWebPushDevices[$userId];
+		}
+		if (!array_key_exists($userId, $this->userProxyDevices)) {
+			$proxyDevices = $this->getProxyDevicesForUser($userId);
+			$this->userProxyDevices[$userId] = $proxyDevices;
+		} else {
+			$proxyDevices = $this->userProxyDevices[$userId];
 		}
 
 		if (!$deleteAll) {
 			// Only filter when it's not delete-all
-			$devices = $this->filterDeviceList($devices, $app);
+			$proxyDevices = $this->filterProxyDeviceList($proxyDevices, $app);
+			//TODO filter webpush devices
 		}
+
+		$this->webPushDeleteToDevice($userId, $user, $webPushDevices, $deleteAll, $notificationIds, $app);
+		$this->proxyPushDeleteToDevice($userId, $user, $proxyDevices, $deleteAll, $notificationIds, $app);
+	}
+
+	/**
+	 * @param string $userId
+	 * @param IUser $user
+	 * @param bool $deleteAll
+	 * @param ?int[] $notificationIds
+	 * @param string $app
+	 */
+	public function webPushDeleteToDevice(string $userId, IUser $user, array $devices, bool $deleteAll, ?array $notificationIds, string $app = ''): void {
+		if (empty($devices)) {
+			return;
+		}
+
+		// We don't push to devices that are older than 60 days
+		$maxAge = time() - 60 * 24 * 60 * 60;
+
+		foreach ($devices as $device) {
+			$device['token'] = (int)$device['token'];
+			switch ($this->validateToken($device['token'], $maxAge)) {
+				case TokenValidation::VALID:
+					break;
+				case TokenValidation::INVALID:
+					// Token does not exist anymore
+					$this->deleteWebPushToken($device['token']);
+					// no break
+				case TokenValidation::OLD:
+					continue 2;
+			}
+
+			// If the endpoint got a 429 TOO_MANY_REQUESTS,
+			// we wait for the time sent by the server
+			if ($this->cache->get('wp.' . $device['endpoint'])) {
+				// It would be better to cache the notification to send it later
+				// in this case, but
+				// 429 is rare, and ~ an emergency response: dropping the notification
+				// is a solution good enough to not overload the push server
+				continue;
+			}
+
+			try {
+				if ($deleteAll) {
+					$data = $this->encodeDeleteNotifs(null);
+					try {
+						$payload = json_encode($data['data'], JSON_THROW_ON_ERROR);
+						$this->wpClient->enqueue($device['endpoint'], $device['ua_public'], $device['auth'], $payload);
+					} catch (\JsonException $e) {
+						$this->log->error('JSON error while encoding push notification: ' . $e->getMessage(), ['exception' => $e]);
+					}
+				} else {
+					$temp = $notificationIds;
+
+					while (!empty($temp)) {
+						$data = $this->encodeDeleteNotifs($temp);
+						$temp = $data['remaining'];
+						try {
+							$payload = json_encode($data['data'], JSON_THROW_ON_ERROR);
+							$this->wpClient->enqueue($device['endpoint'], $device['ua_public'], $device['auth'], $payload);
+						} catch (\JsonException $e) {
+							$this->log->error('JSON error while encoding push notification: ' . $e->getMessage(), ['exception' => $e]);
+						}
+					}
+				}
+			} catch (\InvalidArgumentException) {
+				// Failed to encrypt message for device: public key is invalid
+				$this->deleteWebPushToken($device['token']);
+			}
+		}
+
+		if (!$this->deferPayloads) {
+			$this->sendNotificationsToProxies();
+		}
+	}
+
+	/**
+	 * @param string $userId
+	 * @param IUser $user
+	 * @param bool $deleteAll
+	 * @param ?int[] $notificationIds
+	 * @param string $app
+	 */
+	public function proxyPushDeleteToDevice(string $userId, IUser $user, array $devices, bool $deleteAll, ?array $notificationIds, string $app = ''): void {
 		if (empty($devices)) {
 			return;
 		}
@@ -374,9 +588,15 @@ class Push {
 		$userKey = $this->keyManager->getKey($user);
 		foreach ($devices as $device) {
 			$device['token'] = (int)$device['token'];
-			if (!$this->validateToken($device['token'], $maxAge)) {
-				// Token does not exist anymore
-				continue;
+			switch ($this->validateToken($device['token'], $maxAge)) {
+				case TokenValidation::VALID:
+					break;
+				case TokenValidation::INVALID:
+					// Token does not exist anymore
+					$this->deleteProxyPushToken($device['token']);
+					// no break
+				case TokenValidation::OLD:
+					continue 2;
 			}
 
 			try {
@@ -393,26 +613,50 @@ class Push {
 						$this->log->error('JSON error while encoding push notification: ' . $e->getMessage(), ['exception' => $e]);
 					}
 				} else {
-					$temp = $notificationIds;
-
-					while (!empty($temp)) {
-						$data = $this->encryptAndSignDelete($userKey, $device, $temp);
-						$temp = $data['remaining'];
-						try {
-							$this->payloadsToSend[$proxyServer][] = json_encode($data['payload'], JSON_THROW_ON_ERROR);
-						} catch (\JsonException $e) {
-							$this->log->error('JSON error while encoding push notification: ' . $e->getMessage(), ['exception' => $e]);
+					// The nextcloud application, requested with the proxy push,
+					// use to not support `delete-multiple`
+					if (!\in_array($app, ['spreed', 'talk', 'admin_notification_talk'], true)) {
+						foreach ($notificationIds ?? [] as $notificationId) {
+							$data = $this->encryptAndSignDelete($userKey, $device, [$notificationId]);
+							try {
+								$this->payloadsToSend[$proxyServer][] = json_encode($data['payload'], JSON_THROW_ON_ERROR);
+							} catch (\JsonException $e) {
+								$this->log->error('JSON error while encoding push notification: ' . $e->getMessage(), ['exception' => $e]);
+							}
+						}
+					} else {
+						$temp = $notificationIds;
+						while (!empty($temp)) {
+							$data = $this->encryptAndSignDelete($userKey, $device, $temp);
+							$temp = $data['remaining'];
+							try {
+								$this->payloadsToSend[$proxyServer][] = json_encode($data['payload'], JSON_THROW_ON_ERROR);
+							} catch (\JsonException $e) {
+								$this->log->error('JSON error while encoding push notification: ' . $e->getMessage(), ['exception' => $e]);
+							}
 						}
 					}
 				}
 			} catch (\InvalidArgumentException) {
 				// Failed to encrypt message for device: public key is invalid
-				$this->deletePushToken($device['token']);
+				$this->deleteProxyPushToken($device['token']);
 			}
 		}
 
 		if (!$this->deferPayloads) {
 			$this->sendNotificationsToProxies();
+		}
+	}
+
+	/**
+	 * Delete expired web push subscriptions
+	 */
+	protected function webPushCallback(MessageSentReport $report): void {
+		if ($report->isSubscriptionExpired()) {
+			$this->deleteWebPushTokenByEndpoint($report->getEndpoint());
+		} elseif ($report->getResponse()?->getStatusCode() === 429) {
+			$retryAfter = (int)($report->getResponse()?->getHeader('Retry-After')[0] ?? '60');
+			$this->cache->set('wp.' . $report->getEndpoint(), true, $retryAfter);
 		}
 	}
 
@@ -503,7 +747,7 @@ class Push {
 					// Proxy returns null when the array is empty
 					foreach ($bodyData['unknown'] as $unknownDevice) {
 						$this->printInfo('<comment>Deleting device because it is unknown by the push server: ' . $unknownDevice . '</comment>');
-						$this->deletePushTokenByDeviceIdentifier($unknownDevice);
+						$this->deleteProxyPushTokenByDeviceIdentifier($unknownDevice);
 					}
 				}
 
@@ -535,7 +779,7 @@ class Push {
 		}
 	}
 
-	protected function validateToken(int $tokenId, int $maxAge): bool {
+	protected function validateToken(int $tokenId, int $maxAge): TokenValidation {
 		$age = $this->cache->get('t' . $tokenId);
 
 		if ($age === null) {
@@ -546,9 +790,8 @@ class Push {
 				if ($type === IToken::WIPE_TOKEN) {
 					// Token does not exist any more, should drop the push device entry
 					$this->printInfo('Device token is marked for remote wipe');
-					$this->deletePushToken($tokenId);
 					$this->cache->set('t' . $tokenId, 0, 600);
-					return false;
+					return TokenValidation::INVALID;
 				}
 
 				$age = $token->getLastCheck();
@@ -560,19 +803,18 @@ class Push {
 			} catch (InvalidTokenException) {
 				// Token does not exist any more, should drop the push device entry
 				$this->printInfo('<error>InvalidTokenException is thrown</error>');
-				$this->deletePushToken($tokenId);
 				$this->cache->set('t' . $tokenId, 0, 600);
-				return false;
+				return TokenValidation::INVALID;
 			}
 		}
 
 		if ($age > $maxAge) {
 			$this->printInfo('Device token is valid');
-			return true;
+			return TokenValidation::VALID;
 		}
 
 		$this->printInfo('<comment>Device token "last checked" is older than 60 days: ' . $age . '</comment>');
-		return false;
+		return TokenValidation::OLD;
 	}
 
 	/**
@@ -595,6 +837,86 @@ class Push {
 	}
 
 	/**
+	 * @param int $id
+	 * @param INotification $notification
+	 * @param int $maxLength max length of the push notification (shorter than 240 for proxy push, 3993 for webpush)
+	 * @return array
+	 * @psalm-return array{nid: int, app: string, subject: string, type: string, id: string}
+	 */
+	protected function encodeNotif(int $id, INotification $notification, int $maxLength): array {
+		$data = [
+			'nid' => $id,
+			'app' => $notification->getApp(),
+			'subject' => '',
+			'type' => $notification->getObjectType(),
+			'id' => $notification->getObjectId(),
+		];
+
+		// Max length of encryption is ~240, so we need to make sure the subject is shorter.
+		// Also, subtract two for encapsulating quotes will be added.
+		$maxDataLength = $maxLength - strlen((string)json_encode($data)) - 2;
+		$data['subject'] = Util::shortenMultibyteString($notification->getParsedSubject(), $maxDataLength);
+		if ($notification->getParsedSubject() !== $data['subject']) {
+			$data['subject'] .= '…';
+		}
+		return $data;
+	}
+
+	/**
+	 * @param ?int[] $ids
+	 * @return array
+	 * @psalm-return array{data: array{'delete-all'?: true, 'delete-multiple'?: true, delete?: true, nid?: int, nids?: int[]}, remaining: int[]}
+	 */
+	protected function encodeDeleteNotifs(?array $ids): array {
+		$remainingIds = [];
+		if ($ids === null) {
+			$data = [
+				'delete-all' => true,
+			];
+		} elseif (count($ids) === 1) {
+			$data = [
+				'nid' => array_pop($ids),
+				'delete' => true,
+			];
+		} else {
+			$remainingIds = array_splice($ids, 10);
+			$data = [
+				'nids' => $ids,
+				'delete-multiple' => true,
+			];
+		}
+		return [
+			'remaining' => $remainingIds,
+			'data' => $data
+		];
+	}
+
+	/**
+	 * Get notification urgency (priority) and topic, the urgency is compatible with
+	 * [RFC8030's Urgency](https://www.rfc-editor.org/rfc/rfc8030#section-5.3)
+	 *
+	 *
+	 * @param string app
+	 * @param string type
+	 * @return array
+	 * @psalm-return array{urgency: string, type: string}
+	 */
+	protected function getNotifTopicAndUrgency(string $app, string $type): array {
+		$res = [];
+		if (\in_array($app, ['spreed', 'talk', 'admin_notification_talk'], true)) {
+			$res['urgency'] = 'high';
+			$res['type'] = $type === 'call' ? 'voip' : 'alert';
+		} elseif ($app === 'twofactor_nextcloud_notification' || $app === 'phonetrack') {
+			$res['urgency'] = 'high';
+			$res['type'] = 'alert';
+		} else {
+			$res['urgency'] = 'normal';
+			$res['type'] = 'alert';
+		}
+		return $res;
+	}
+
+	/**
 	 * @param Key $userKey
 	 * @param array $device
 	 * @param int $id
@@ -606,32 +928,10 @@ class Push {
 	 * @throws \InvalidArgumentException
 	 */
 	protected function encryptAndSign(Key $userKey, array $device, int $id, INotification $notification, bool $isTalkNotification): array {
-		$data = [
-			'nid' => $id,
-			'app' => $notification->getApp(),
-			'subject' => '',
-			'type' => $notification->getObjectType(),
-			'id' => $notification->getObjectId(),
-		];
-
-		// Max length of encryption is ~240, so we need to make sure the subject is shorter.
-		// Also, subtract two for encapsulating quotes will be added.
-		$maxDataLength = 200 - strlen(json_encode($data)) - 2;
-		$data['subject'] = Util::shortenMultibyteString($notification->getParsedSubject(), $maxDataLength);
-		if ($notification->getParsedSubject() !== $data['subject']) {
-			$data['subject'] .= '…';
-		}
-
-		if ($isTalkNotification) {
-			$priority = 'high';
-			$type = $data['type'] === 'call' ? 'voip' : 'alert';
-		} elseif ($data['app'] === 'twofactor_nextcloud_notification' || $data['app'] === 'phonetrack') {
-			$priority = 'high';
-			$type = 'alert';
-		} else {
-			$priority = 'normal';
-			$type = 'alert';
-		}
+		$data = $this->encodeNotif($id, $notification, 200);
+		$ret = $this->getNotifTopicAndUrgency($data['app'], $data['type']);
+		$priority = $ret['urgency'];
+		$type = $ret['type'];
 
 		$this->printInfo('Device public key size: ' . strlen($device['devicepublickey']));
 		$this->printInfo('Data to encrypt is: ' . json_encode($data));
@@ -671,23 +971,9 @@ class Push {
 	 * @throws \InvalidArgumentException
 	 */
 	protected function encryptAndSignDelete(Key $userKey, array $device, ?array $ids): array {
-		$remainingIds = [];
-		if ($ids === null) {
-			$data = [
-				'delete-all' => true,
-			];
-		} elseif (count($ids) === 1) {
-			$data = [
-				'nid' => array_pop($ids),
-				'delete' => true,
-			];
-		} else {
-			$remainingIds = array_splice($ids, 10);
-			$data = [
-				'nids' => $ids,
-				'delete-multiple' => true,
-			];
-		}
+		$ret = $this->encodeDeleteNotifs($ids);
+		$remainingIds = $ret['remaining'];
+		$data = $ret['data'];
 
 		if (!openssl_public_encrypt(json_encode($data), $encryptedSubject, $device['devicepublickey'], OPENSSL_PKCS1_PADDING)) {
 			$this->log->error(openssl_error_string(), ['app' => 'notifications']);
@@ -716,7 +1002,7 @@ class Push {
 	 * @return array[]
 	 * @psalm-return list<array{id: int, uid: string, token: int, deviceidentifier: string, devicepublickey: string, devicepublickeyhash: string, pushtokenhash: string, proxyserver: string, apptype: string}>
 	 */
-	protected function getDevicesForUser(string $uid): array {
+	protected function getProxyDevicesForUser(string $uid): array {
 		$query = $this->db->getQueryBuilder();
 		$query->select('*')
 			->from('notifications_pushhash')
@@ -731,13 +1017,54 @@ class Push {
 
 	/**
 	 * @param string[] $userIds
-	 * @return array[]
-	 * @psalm-return array<string, list<array{id: int, uid: string, token: int, deviceidentifier: string, devicepublickey: string, devicepublickeyhash: string, pushtokenhash: string, proxyserver: string, apptype: string}>>
+	 * @return array<string, list<array{id: int, uid: string, token: int, deviceidentifier: string, devicepublickey: string, devicepublickeyhash: string, pushtokenhash: string, proxyserver: string, apptype: string}>>
 	 */
-	protected function getDevicesForUsers(array $userIds): array {
+	protected function getProxyDevicesForUsers(array $userIds): array {
 		$query = $this->db->getQueryBuilder();
 		$query->select('*')
 			->from('notifications_pushhash')
+			->where($query->expr()->in('uid', $query->createNamedParameter($userIds, IQueryBuilder::PARAM_STR_ARRAY)));
+
+		$devices = [];
+		$result = $query->executeQuery();
+		while ($row = $result->fetch()) {
+			if (!isset($devices[$row['uid']])) {
+				$devices[$row['uid']] = [];
+			}
+			$devices[$row['uid']][] = $row;
+		}
+
+		$result->closeCursor();
+
+		return $devices;
+	}
+
+
+	/**
+	 * @param string $uid
+	 * @return list<array{id: int, uid: string, token: int, endpoint: string, ua_public: string, auth: string, appTypes: string, activated: bool, activation_token: string}>
+	 */
+	protected function getWebPushDevicesForUser(string $uid): array {
+		$query = $this->db->getQueryBuilder();
+		$query->select('*')
+			->from('notifications_webpush')
+			->where($query->expr()->eq('uid', $query->createNamedParameter($uid)));
+
+		$result = $query->executeQuery();
+		$devices = $result->fetchAll();
+		$result->closeCursor();
+
+		return $devices;
+	}
+
+	/**
+	 * @param string[] $userIds
+	 * @return array<string, list<array{id: int, uid: string, token: int, endpoint: string, ua_public: string, auth: string, appTypes: string, activated: bool, activation_token: string}>>
+	 */
+	protected function getWebPushDevicesForUsers(array $userIds): array {
+		$query = $this->db->getQueryBuilder();
+		$query->select('*')
+			->from('notifications_webpush')
 			->where($query->expr()->in('uid', $query->createNamedParameter($userIds, IQueryBuilder::PARAM_STR_ARRAY)));
 
 		$devices = [];
@@ -758,7 +1085,31 @@ class Push {
 	 * @param int $tokenId
 	 * @return bool
 	 */
-	protected function deletePushToken(int $tokenId): bool {
+	protected function deleteWebPushToken(int $tokenId): bool {
+		$query = $this->db->getQueryBuilder();
+		$query->delete('notifications_webpush')
+			->where($query->expr()->eq('token', $query->createNamedParameter($tokenId, IQueryBuilder::PARAM_INT)));
+
+		return $query->executeStatement() !== 0;
+	}
+
+	/**
+	 * @param string $endpoint
+	 * @return bool
+	 */
+	protected function deleteWebPushTokenByEndpoint(string $endpoint): bool {
+		$query = $this->db->getQueryBuilder();
+		$query->delete('notifications_webpush')
+			->where($query->expr()->eq('endpoint', $query->createNamedParameter($endpoint)));
+
+		return $query->executeStatement() !== 0;
+	}
+
+	/**
+	 * @param int $tokenId
+	 * @return bool
+	 */
+	protected function deleteProxyPushToken(int $tokenId): bool {
 		$query = $this->db->getQueryBuilder();
 		$query->delete('notifications_pushhash')
 			->where($query->expr()->eq('token', $query->createNamedParameter($tokenId, IQueryBuilder::PARAM_INT)));
@@ -770,7 +1121,7 @@ class Push {
 	 * @param string $deviceIdentifier
 	 * @return bool
 	 */
-	protected function deletePushTokenByDeviceIdentifier(string $deviceIdentifier): bool {
+	protected function deleteProxyPushTokenByDeviceIdentifier(string $deviceIdentifier): bool {
 		$query = $this->db->getQueryBuilder();
 		$query->delete('notifications_pushhash')
 			->where($query->expr()->eq('deviceidentifier', $query->createNamedParameter($deviceIdentifier)));
