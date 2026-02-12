@@ -1017,8 +1017,7 @@ class Push {
 
 	/**
 	 * @param string[] $userIds
-	 * @return array[]
-	 * @psalm-return array<string, list<array{id: int, uid: string, token: int, deviceidentifier: string, devicepublickey: string, devicepublickeyhash: string, pushtokenhash: string, proxyserver: string, apptype: string}>>
+	 * @return array<string, list<array{id: int, uid: string, token: int, deviceidentifier: string, devicepublickey: string, devicepublickeyhash: string, pushtokenhash: string, proxyserver: string, apptype: string}>>
 	 */
 	protected function getProxyDevicesForUsers(array $userIds): array {
 		$query = $this->db->getQueryBuilder();
@@ -1043,8 +1042,7 @@ class Push {
 
 	/**
 	 * @param string $uid
-	 * @return array[]
-	 * @psalm-return list<array{id: int, uid: string, token: int, endpoint: string, ua_public: string, auth: string, appTypes: string, activated: bool, activation_token: string}>
+	 * @return list<array{id: int, uid: string, token: int, endpoint: string, ua_public: string, auth: string, appTypes: string, activated: bool, activation_token: string}>
 	 */
 	protected function getWebPushDevicesForUser(string $uid): array {
 		$query = $this->db->getQueryBuilder();
@@ -1061,8 +1059,7 @@ class Push {
 
 	/**
 	 * @param string[] $userIds
-	 * @return array[]
-	 * @psalm-return array<string, list<array{id: int, uid: string, token: int, endpoint: string, ua_public: string, auth: string, appTypes: string, activated: bool, activation_token: string}>>
+	 * @return array<string, list<array{id: int, uid: string, token: int, endpoint: string, ua_public: string, auth: string, appTypes: string, activated: bool, activation_token: string}>>
 	 */
 	protected function getWebPushDevicesForUsers(array $userIds): array {
 		$query = $this->db->getQueryBuilder();
