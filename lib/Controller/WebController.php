@@ -26,9 +26,9 @@ class WebController extends Controller {
 	) {
 		parent::__construct($appName, $request);
 	}
-    /**
-     * @return StreamResponse<Http::STATUS_*,array<string,mixed>>
-     */
+	/**
+	 * @return StreamResponse<Http::STATUS_*,array<string,mixed>>
+	 */
 	#[PublicPage]
 	#[NoCSRFRequired]
 	#[FrontpageRoute(verb: 'GET', url: '/service-worker.js')]
