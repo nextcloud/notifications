@@ -87,7 +87,7 @@ import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { loadState } from '@nextcloud/initial-state'
 import { t } from '@nextcloud/l10n'
 import { listen } from '@nextcloud/notify_push'
-import { generateOcsUrl, imagePath, generateUrl } from '@nextcloud/router'
+import { generateOcsUrl, generateUrl, imagePath } from '@nextcloud/router'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcHeaderMenu from '@nextcloud/vue/components/NcHeaderMenu'
@@ -232,7 +232,7 @@ export default {
 			this.hasNotifyPush = true
 		}
 
-	  // set the polling interval after checking web push status
+		// set the polling interval after checking web push status
 		// if web push may be configured
 		if (this.webNotificationsGranted === true) {
 			// We dont fetch on push if notify_push is enabled, to avoid concurrency fetch.
@@ -268,48 +268,50 @@ export default {
 	methods: {
 		t,
 
-    loadServiceWorker() {
+		loadServiceWorker() {
 			return navigator.serviceWorker.register(
 				generateUrl('/apps/notifications/service-worker.js', {}, { noRewrite: true }),
-				{scope: "/"}
+				{ scope: '/' },
 			).then((registration) => {
 				console.info('ServiceWorker registered')
 				return registration
 			})
 		},
-    listenForPush(registration, syncOnPush) {
+
+		listenForPush(registration, syncOnPush) {
 			navigator.serviceWorker.addEventListener('message', (event) => {
-			  console.debug("Received from serviceWorker: ", JSON.stringify(event.data))
-			  if (event.data.type == 'push') {
-				  const activationToken = event.data.content.activationToken
-				  if (activationToken) {
+				console.debug('Received from serviceWorker: ', JSON.stringify(event.data))
+				if (event.data.type === 'push') {
+					const activationToken = event.data.content.activationToken
+					if (activationToken) {
 						const form = new FormData()
 						form.append('activationToken', activationToken)
 						axios.post(generateOcsUrl('apps/notifications/api/v2/webpush/activate'), form)
 							.then((r) => {
-							  if (r.status === 200 || r.status === 202) {
-									console.debug("Push notifications activated, slowing polling to 15 minutes")
+								if (r.status === 200 || r.status === 202) {
+									console.debug('Push notifications activated, slowing polling to 15 minutes')
 									this.pollIntervalBase = 15 * 60 * 1000
 									this.hasNotifyPush = true
 									this._setPollingInterval(this.pollIntervalBase)
 								} else {
-									console.warn("An error occured while activating push registration", r)
+									console.warn('An error occured while activating push registration', r)
 								}
 							})
 					} else {
-					  if (syncOnPush) {
+						if (syncOnPush) {
 							// force=true: we don't have to check if we're the last tab,
 							// the serviceworker send the event to a single tab
 							this._fetchAfterNotifyPush(true)
 						}
 					}
-				} else if (event.data.type == 'pushEndoint') {
-					registerPush(registration)
-						.catch(er => console.error(er))
+				} else if (event.data.type === 'pushEndoint') {
+					this.registerPush(registration)
+						.catch((er) => console.error(er))
 				}
 			})
 		},
-    registerPush(registration) {
+
+		registerPush(registration) {
 			return registration.pushManager.subscribe().then((sub) => {
 				const form = new FormData()
 				form.append('endpoint', sub.endpoint)
@@ -319,20 +321,21 @@ export default {
 				return axios.post(generateOcsUrl('apps/notifications/api/v2/webpush'), form)
 			})
 		},
+
 		/**
-		 * syncOnPush: boolean, if we fetch for notifications on push. Param used to avoid concurrency
+		 * @param {boolean} syncOnPush if we fetch for notifications on push. Param used to avoid concurrency
 		 *    fetch if another mechanism is in place
-		 * callback(boolean) if the push notifications has been subscribed (statusCode == 200)
+		 * @param {boolean} callback if the push notifications has been subscribed (statusCode == 200)
 		 */
-    setWebPush(syncOnPush, callback) {
+		setWebPush(syncOnPush, callback) {
 			if ('serviceWorker' in navigator) {
 				this.loadServiceWorker()
 					.then((r) => {
 						this.listenForPush(r, syncOnPush)
 						return this.registerPush(r)
 					})
-					.then((r) => callback(r.status == 200))
-					.catch(er => {
+					.then((r) => callback(r.status === 200))
+					.catch((er) => {
 						console.error(er)
 						callback(false)
 					})
@@ -344,9 +347,10 @@ export default {
 				this.userStatus = state.status
 			}
 		},
+
 		b64UrlEncode(inArr) {
 			return new Uint8Array(inArr)
-			  .toBase64()
+				.toBase64()
 				.replaceAll('+', '-')
 				.replaceAll('/', '_')
 				.replaceAll('=', '')
@@ -584,7 +588,7 @@ export default {
 		 */
 		requestWebNotificationPermissions() {
 			if (this.webNotificationsGranted !== null) {
-				return new Promise((resolve, reject) => resolve(this.webNotificationsGranted))
+				return new Promise((resolve) => resolve(this.webNotificationsGranted))
 			}
 
 			console.info('Requesting notifications permissions')
