@@ -23,6 +23,8 @@
     <LessSpecificReturnStatement>
       <code><![CDATA[$devices]]></code>
       <code><![CDATA[$devices]]></code>
+      <code><![CDATA[$devices]]></code>
+      <code><![CDATA[$devices]]></code>
       <code><![CDATA[$otherDevices]]></code>
       <code><![CDATA[$otherDevices]]></code>
       <code><![CDATA[$talkDevices]]></code>
@@ -33,6 +35,8 @@
 		})]]></code>
     </LessSpecificReturnStatement>
     <MoreSpecificReturnType>
+      <code><![CDATA[array<string, list<array{id: int, uid: string, token: int, deviceidentifier: string, devicepublickey: string, devicepublickeyhash: string, pushtokenhash: string, proxyserver: string, apptype: string}>>]]></code>
+      <code><![CDATA[array<string, list<array{id: int, uid: string, token: int, endpoint: string, ua_public: string, auth: string, appTypes: string, activated: bool, activation_token: string}>>]]></code>
       <code><![CDATA[list<array{id: int, uid: string, token: int, deviceidentifier: string, devicepublickey: string, devicepublickeyhash: string, pushtokenhash: string, proxyserver: string, apptype: string}>]]></code>
       <code><![CDATA[list<array{id: int, uid: string, token: int, deviceidentifier: string, devicepublickey: string, devicepublickeyhash: string, pushtokenhash: string, proxyserver: string, apptype: string}>]]></code>
       <code><![CDATA[list<array{id: int, uid: string, token: int, endpoint: string, ua_public: string, auth: string, appTypes: string, activated: bool, activation_token: string}>]]></code>
