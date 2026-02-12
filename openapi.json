@@ -1143,6 +1143,36 @@
                     }
                 }
             }
+        },
+        "/index.php/apps/notifications/service-worker.js": {
+            "get": {
+                "operationId": "web-service-worker",
+                "tags": [
+                    "web"
+                ],
+                "security": [
+                    {},
+                    {
+                        "bearer_auth": []
+                    },
+                    {
+                        "basic_auth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "string",
+                                    "format": "binary"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "tags": []
