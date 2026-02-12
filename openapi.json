@@ -1147,6 +1147,7 @@
         "/index.php/apps/notifications/service-worker.js": {
             "get": {
                 "operationId": "web-service-worker",
+                "summary": "Return the service worker with `Service-Worker-Allowed: /` header",
                 "tags": [
                     "web"
                 ],
@@ -1161,7 +1162,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "The service worker",
                         "content": {
                             "*/*": {
                                 "schema": {
