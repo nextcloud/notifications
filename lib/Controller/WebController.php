@@ -27,7 +27,11 @@ class WebController extends Controller {
 		parent::__construct($appName, $request);
 	}
 	/**
+	 * Return the service worker with `Service-Worker-Allowed: /` header
+	 *
 	 * @return StreamResponse<Http::STATUS_OK, array{}>
+	 *
+	 * 200: The service worker
 	 */
 	#[PublicPage]
 	#[NoCSRFRequired]
