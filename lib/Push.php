@@ -780,6 +780,10 @@ class Push {
 	}
 
 	protected function validateToken(int $tokenId, int $maxAge): TokenValidation {
+		// This is a web session token
+		if ($tokenId < 0) {
+			return TokenValidation::VALID;
+		}
 		$age = $this->cache->get('t' . $tokenId);
 
 		if ($age === null) {
