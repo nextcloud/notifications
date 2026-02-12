@@ -315,7 +315,7 @@ export default {
 				form.append('endpoint', sub.endpoint)
 				form.append('uaPublicKey', this.b64UrlEncode(sub.getKey('p256dh')))
 				form.append('auth', this.b64UrlEncode(sub.getKey('auth')))
-				form.append('apptypes', ['all'])
+				form.append('appTypes', 'all')
 				return axios.post(generateOcsUrl('apps/notifications/api/v2/webpush'), form)
 			})
 		},
