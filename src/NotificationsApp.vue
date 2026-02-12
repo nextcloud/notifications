@@ -312,7 +312,11 @@ export default {
 		},
 
 		registerPush(registration) {
-			return registration.pushManager.subscribe().then((sub) => {
+			// TODO: add applicationServerKey, Some browsers like Chrome require it
+			const options = {
+				userVisibleOnly: true,
+			};
+			return registration.pushManager.subscribe(options).then((sub) => {
 				const form = new FormData()
 				form.append('endpoint', sub.endpoint)
 				form.append('uaPublicKey', this.b64UrlEncode(sub.getKey('p256dh')))
