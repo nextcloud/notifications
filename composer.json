@@ -7,9 +7,6 @@
 	"name": "nextcloud/notifications",
 	"description": "notifications",
 	"license": "AGPL",
-	"require-dev": {
-		"bamarni/composer-bin-plugin": "^1.9"
-	},
 	"config": {
 		"optimize-autoloader": true,
 		"classmap-authoritative": true,
@@ -45,6 +42,7 @@
 		"test:integration": "cd tests/Integration && ./run.sh"
 	},
 	"require": {
+		"bamarni/composer-bin-plugin": "^1.9.1",
 		"minishlink/web-push": "^9.0"
 	},
 	"extra": {
