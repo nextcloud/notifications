@@ -746,8 +746,8 @@ class Push {
 				if (is_array($bodyData['unknown'])) {
 					// Proxy returns null when the array is empty
 					foreach ($bodyData['unknown'] as $unknownDevice) {
-						$this->printInfo('<comment>Deleting device because it is unknown by the push server: ' . $unknownDevice . '</comment>');
-						$this->deleteProxyPushTokenByDeviceIdentifier($unknownDevice);
+						$this->printInfo('<comment>Deleting device because it is unknown by the push server [' . $proxyServer . ']: ' . $unknownDevice . '</comment>');
+						$this->deleteProxyPushTokenByDeviceIdentifier($proxyServer, $unknownDevice);
 					}
 				}
 
@@ -1121,10 +1121,11 @@ class Push {
 	 * @param string $deviceIdentifier
 	 * @return bool
 	 */
-	protected function deleteProxyPushTokenByDeviceIdentifier(string $deviceIdentifier): bool {
+	protected function deleteProxyPushTokenByDeviceIdentifier(string $proxyServer, string $deviceIdentifier): bool {
 		$query = $this->db->getQueryBuilder();
 		$query->delete('notifications_pushhash')
-			->where($query->expr()->eq('deviceidentifier', $query->createNamedParameter($deviceIdentifier)));
+			->where($query->expr()->eq('proxyserver', $query->createNamedParameter($proxyServer)))
+			->andWhere($query->expr()->eq('deviceidentifier', $query->createNamedParameter($deviceIdentifier)));
 
 		return $query->executeStatement() !== 0;
 	}
