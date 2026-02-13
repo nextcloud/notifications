@@ -1,10 +1,14 @@
 'use strict'
 
 /**
- * @param {string} title shown in UI notification
+ * @param {string} content received by Nextcloud, splitted to be shown in UI notification
  */
-function showBgNotification(title) {
-	self.registration.showNotification(title)
+function showBgNotification(content) {
+	let [title, ...msg] = content.split('\n')
+	const options = {
+		body: msg.join('\n'),
+	}
+	self.registration.showNotification(title, options)
 }
 
 self.addEventListener('push', function(event) {
