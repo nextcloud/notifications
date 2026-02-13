@@ -24,6 +24,7 @@ use OCP\IRequest;
 use OCP\ISession;
 use OCP\IUser;
 use OCP\IUserSession;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
 
@@ -232,9 +233,7 @@ class WebPushControllerTest extends TestCase {
 		];
 	}
 
-	/**
-	 * @dataProvider dataRegisterWP
-	 */
+	#[DataProvider(methodName: 'dataRegisterWP')]
 	public function testRegisterWP(string $endpoint, string $uaPublicKey, string $auth, string $appTypes, bool $userIsValid, int $tokenId, bool $tokenIsValid, int $subStatus, array $payload, int $status): void {
 		$controller = $this->getController([
 			'saveSubscription',
@@ -344,9 +343,7 @@ class WebPushControllerTest extends TestCase {
 		];
 	}
 
-	/**
-	 * @dataProvider dataActivateWP
-	 */
+	#[DataProvider(methodName: 'dataActivateWP')]
 	public function testActivateWP(bool $userIsValid, int $tokenId, bool $tokenIsValid, int $subStatus, array $payload, int $status): void {
 		$controller = $this->getController([
 			'activateSubscription',
@@ -432,9 +429,7 @@ class WebPushControllerTest extends TestCase {
 		];
 	}
 
-	/**
-	 * @dataProvider dataRemoveSubscription
-	 */
+	#[DataProvider(methodName: 'dataRemoveSubscription')]
 	public function testRemoveSubscription(bool $userIsValid, int $tokenId, bool $tokenIsValid, ?bool $subDeleted, array $payload, int $status): void {
 		$controller = $this->getController([
 			'deleteSubscription',

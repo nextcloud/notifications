@@ -16,6 +16,7 @@ use OCP\IUserManager;
 use OCP\L10N\IFactory;
 use OCP\Notification\INotification;
 use OCP\Notification\UnknownNotificationException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
 
@@ -87,9 +88,7 @@ class NotifierTest extends TestCase {
 		];
 	}
 
-	/**
-	 * @dataProvider dataPrepare
-	 */
+	#[DataProvider(methodName: 'dataPrepare')]
 	public function testPrepare(string $subject, array $subjectParams, array $messageParams, bool $setMessage): void {
 		/** @var INotification&MockObject $notification */
 		$notification = $this->createMock(INotification::class);

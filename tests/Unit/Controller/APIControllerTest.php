@@ -22,16 +22,13 @@ use OCP\Notification\IManager;
 use OCP\Notification\IncompleteNotificationException;
 use OCP\Notification\INotification;
 use OCP\RichObjectStrings\IValidator;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Test\TestCase;
 
-/**
- * Class APIControllerTest
- *
- * @package OCA\Notifications\Tests\Unit\Controller
- * @group DB
- */
+#[Group(name: 'DB')]
 class APIControllerTest extends TestCase {
 	protected ITimeFactory&MockObject $timeFactory;
 	protected IUserManager&MockObject $userManager;
@@ -84,9 +81,7 @@ class APIControllerTest extends TestCase {
 		];
 	}
 
-	/**
-	 * @dataProvider dataGenerateNotification
-	 */
+	#[DataProvider(methodName: 'dataGenerateNotification')]
 	public function testGenerateNotification(string $userId, string $short, string $long, bool $createNotification, ?bool $notifyThrows, bool $validLong, ?string $user, int $time, ?string $hexTime, int $statusCode): void {
 		if ($user !== null) {
 			$u = $this->createMock(IUser::class);

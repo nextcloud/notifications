@@ -25,6 +25,7 @@ use OCP\Notification\IAction;
 use OCP\Notification\IManager;
 use OCP\Notification\INotification;
 use OCP\UserStatus\IManager as IUserStatusManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
 
@@ -126,9 +127,7 @@ class EndpointControllerTest extends TestCase {
 		];
 	}
 
-	/**
-	 * @dataProvider dataListNotifications
-	 */
+	#[DataProvider(methodName: 'dataListNotifications')]
 	public function testListNotifications(string $apiVersion, array $notifications, string $expectedETag, array $expectedData): void {
 		$notifications = array_fill_keys($notifications, $this->createMock(INotification::class));
 
@@ -189,9 +188,7 @@ class EndpointControllerTest extends TestCase {
 		];
 	}
 
-	/**
-	 * @dataProvider dataListNotificationsThrows
-	 */
+	#[DataProvider(methodName: 'dataListNotificationsThrows')]
 	public function testListNotificationsThrows(string $apiVersion, array $notifications, string $expectedETag, array $expectedData): void {
 		$notifications = array_fill_keys($notifications, $this->createMock(INotification::class));
 
@@ -258,10 +255,7 @@ class EndpointControllerTest extends TestCase {
 		];
 	}
 
-	/**
-	 * @dataProvider dataListNotificationsNoNotifiers
-	 * @param string $apiVersion
-	 */
+	#[DataProvider(methodName: 'dataListNotificationsNoNotifiers')]
 	public function testListNotificationsNoNotifiers(string $apiVersion): void {
 		$controller = $this->getController();
 		$this->manager->expects($this->once())
@@ -280,9 +274,7 @@ class EndpointControllerTest extends TestCase {
 		];
 	}
 
-	/**
-	 * @dataProvider dataGetNotification
-	 */
+	#[DataProvider(methodName: 'dataGetNotification')]
 	public function testGetNotification(string $apiVersion, int $id, string $username): void {
 		$controller = $this->getController([
 			'notificationToArray',
@@ -328,9 +320,7 @@ class EndpointControllerTest extends TestCase {
 		];
 	}
 
-	/**
-	 * @dataProvider dataGetNotificationNoId
-	 */
+	#[DataProvider(methodName: 'dataGetNotificationNoId')]
 	public function testGetNotificationNoId(string $apiVersion, bool $hasNotifiers, int $id, bool $called, ?NotificationNotFoundException $notification): void {
 		if ($notification === null) {
 			$notification = $this->createMock(INotification::class);
@@ -376,9 +366,7 @@ class EndpointControllerTest extends TestCase {
 		];
 	}
 
-	/**
-	 * @dataProvider dataDeleteNotification
-	 */
+	#[DataProvider(methodName: 'dataDeleteNotification')]
 	public function testDeleteNotification(int $id, string $username): void {
 		$controller = $this->getController([], $username);
 
@@ -402,9 +390,7 @@ class EndpointControllerTest extends TestCase {
 		$this->assertSame(Http::STATUS_NOT_FOUND, $response->getStatus());
 	}
 
-	/**
-	 * @dataProvider dataDeleteNotification
-	 */
+	#[DataProvider(methodName: 'dataDeleteNotification')]
 	public function testDeleteAllNotifications(int $_, string $username): void {
 		$controller = $this->getController([], $username);
 
@@ -431,9 +417,7 @@ class EndpointControllerTest extends TestCase {
 		];
 	}
 
-	/**
-	 * @dataProvider dataNotificationToArray
-	 */
+	#[DataProvider(methodName: 'dataNotificationToArray')]
 	public function testNotificationToArray(string $apiVersion, int $id, string $app, string $user, int $timestamp, string $objectType, string $objectId, string $subject, string $subjectRich, array $subjectRichParameters, string $message, string $messageRich, array $messageRichParameters, string $link, string $icon, int $actionsCount, array $actionsExpected): void {
 		$actions = [];
 		for ($i = 0; $i < $actionsCount; $i++) {
@@ -543,9 +527,7 @@ class EndpointControllerTest extends TestCase {
 		];
 	}
 
-	/**
-	 * @dataProvider dataActionToArray
-	 */
+	#[DataProvider(methodName: 'dataActionToArray')]
 	public function testActionToArray(string $label, string $link, string $requestType, bool $isPrimary): void {
 		$action = $this->getMockBuilder(IAction::class)
 			->getMock();

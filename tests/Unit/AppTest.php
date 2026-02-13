@@ -13,6 +13,7 @@ use OCA\Notifications\App;
 use OCA\Notifications\Handler;
 use OCA\Notifications\Push;
 use OCP\Notification\INotification;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Test\TestCase;
@@ -46,11 +47,7 @@ class AppTest extends TestCase {
 		];
 	}
 
-	/**
-	 * @dataProvider dataNotify
-	 *
-	 * @param int $id
-	 */
+	#[DataProvider(methodName: 'dataNotify')]
 	public function testNotify(int $id): void {
 		$this->handler->expects($this->once())
 			->method('add')
@@ -70,9 +67,7 @@ class AppTest extends TestCase {
 		];
 	}
 
-	/**
-	 * @dataProvider dataGetCount
-	 */
+	#[DataProvider(methodName: 'dataGetCount')]
 	public function testGetCount(int $count): void {
 		$this->handler->expects($this->once())
 			->method('count')

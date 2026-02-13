@@ -21,14 +21,11 @@ use OCP\AppFramework\OCSController;
 use OCP\Capabilities\ICapability;
 use OCP\Notification\IApp;
 use OCP\Server;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use Test\TestCase;
 
-/**
- * Class ApplicationTest
- *
- * @group DB
- * @package OCA\Notifications\Tests\AppInfo
- */
+#[Group(name: 'DB')]
 class ApplicationTest extends TestCase {
 	protected Application $app;
 
@@ -52,9 +49,7 @@ class ApplicationTest extends TestCase {
 		];
 	}
 
-	/**
-	 * @dataProvider dataContainerQuery
-	 */
+	#[DataProvider(methodName: 'dataContainerQuery')]
 	public function testContainerQuery(string $service, ?string $expected = null): void {
 		if ($expected === null) {
 			$expected = $service;

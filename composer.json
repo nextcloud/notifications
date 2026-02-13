@@ -38,7 +38,7 @@
 		"psalm:update-baseline": "psalm --threads=1 --update-baseline",
 		"rector:check": "rector --dry-run --clear-cache",
 		"rector:fix": "rector",
-		"test:unit": "phpunit --color -c tests/Unit/phpunit.xml",
+		"test:unit": "phpunit -c tests/Unit/phpunit.xml --colors=always --fail-on-warning --fail-on-risky --display-deprecations --display-phpunit-deprecations",
 		"test:integration": "cd tests/Integration && ./run.sh"
 	},
 	"require": {
