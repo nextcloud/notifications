@@ -36,18 +36,14 @@ use OCP\Notification\INotification;
 use OCP\Security\ISecureRandom;
 use OCP\UserStatus\IManager as IUserStatusManager;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Log\LoggerInterface;
 use Test\TestCase;
 
-/**
- * Class PushTest
- *
- * @package OCA\Notifications\Tests\Unit
- * @group DB
- */
+#[Group(name: 'DB')]
 class PushTest extends TestCase {
 	protected IDBConnection $db;
 	protected INotificationManager&MockObject $notificationManager;
@@ -1012,9 +1008,7 @@ class PushTest extends TestCase {
 		];
 	}
 
-	/**
-	 * @dataProvider dataWebPushToDeviceSending
-	 */
+	#[DataProvider(methodName: 'dataWebPushToDeviceSending')]
 	public function testWebPushToDeviceSending(bool $isRateLimited): void {
 		$push = $this->getPush(['getWebPushDevicesForUser', 'encodeNotif', 'deleteWebPushToken', 'validateToken']);
 
@@ -1121,9 +1115,9 @@ class PushTest extends TestCase {
 	}
 
 	/**
-	 * @dataProvider dataFilterWebPushDeviceList
 	 * @param string[] $deviceTypes
 	 */
+	#[DataProvider(methodName: 'dataFilterWebPushDeviceList')]
 	public function testFilterWebPushDeviceList(bool $activated, string $deviceApptypes, string $app, bool $pass): void {
 		$push = $this->getPush([]);
 		$devices = [[
@@ -1169,9 +1163,9 @@ class PushTest extends TestCase {
 	}
 
 	/**
-	 * @dataProvider dataWebPushToDeviceFilterApp
 	 * @param string[] $deviceTypes
 	 */
+	#[DataProvider(methodName: 'dataWebPushToDeviceFilterApp')]
 	public function testWebPushToDeviceFilterApp(array $deviceTypes, string $notificationApp, ?int $pushedDevice): void {
 		$push = $this->getPush(['getWebPushDevicesForUser', 'encodeNotif', 'deleteWebPushToken', 'validateToken']);
 
@@ -1267,9 +1261,7 @@ class PushTest extends TestCase {
 		];
 	}
 
-	/**
-	 * @dataProvider dataValidateToken
-	 */
+	#[DataProvider(methodName: 'dataValidateToken')]
 	public function testValidateToken(int $lastCheck, int $lastActivity, int $type, TokenValidation $expected): void {
 		$token = PublicKeyToken::fromParams([
 			'lastCheck' => $lastCheck,

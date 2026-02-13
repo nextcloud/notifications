@@ -15,15 +15,11 @@ use OCP\IDBConnection;
 use OCP\Notification\IAction;
 use OCP\Notification\IManager;
 use OCP\Notification\INotification;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
 
-/**
- * Class HandlerTest
- *
- * @group DB
- * @package OCA\Notifications\Tests\Lib
- */
+#[Group(name: 'DB')]
 class HandlerTest extends TestCase {
 	/** @var Handler */
 	protected $handler;

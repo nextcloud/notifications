@@ -21,6 +21,7 @@ use OCP\IRequest;
 use OCP\ISession;
 use OCP\IUser;
 use OCP\IUserSession;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
 
@@ -302,9 +303,7 @@ FwIDAQAB
 		];
 	}
 
-	/**
-	 * @dataProvider dataRegisterDevice
-	 */
+	#[DataProvider(methodName: 'dataRegisterDevice')]
 	public function testRegisterDevice(string $pushTokenHash, string $devicePublicKey, string $proxyServer, bool $userIsValid, int $tokenId, bool $tokenIsValid, ?bool $deviceCreated, array $payload, int $status): void {
 		$controller = $this->getController([
 			'savePushToken',
@@ -414,10 +413,7 @@ FwIDAQAB
 		];
 	}
 
-
-	/**
-	 * @dataProvider dataRemoveDevice
-	 */
+	#[DataProvider(methodName: 'dataRemoveDevice')]
 	public function testRemoveDevice(bool $userIsValid, int $tokenId, bool $tokenIsValid, ?bool $deviceDeleted, array $payload, int $status): void {
 		$controller = $this->getController([
 			'deletePushToken',

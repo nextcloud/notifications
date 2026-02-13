@@ -16,17 +16,14 @@ use OCP\IUserManager;
 use OCP\Notification\IManager;
 use OCP\Notification\INotification;
 use OCP\RichObjectStrings\IValidator;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Test\TestCase;
 
-/**
- * Class GenerateTest
- *
- * @package OCA\Notifications\Tests\Unit\Command
- * @group DB
- */
+#[Group(name: 'DB')]
 class GenerateTest extends TestCase {
 	protected ITimeFactory&MockObject $timeFactory;
 	protected IUserManager&MockObject $userManager;
@@ -65,9 +62,7 @@ class GenerateTest extends TestCase {
 		];
 	}
 
-	/**
-	 * @dataProvider dataExecute
-	 */
+	#[DataProvider(methodName: 'dataExecute')]
 	public function testExecute(string $userId, string $short, string $long, bool $createNotification, ?bool $notifyThrows, bool $validLong, ?string $user, bool $isCreated, int $exitCode): void {
 		if ($user !== null) {
 			$u = $this->createMock(IUser::class);
