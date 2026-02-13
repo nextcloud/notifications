@@ -438,7 +438,7 @@ class PushTest extends TestCase {
 			->willReturn(false);
 
 		$push->method('deleteProxyPushTokenByDeviceIdentifier')
-			->with('123456');
+			->with('proxyserver', '123456');
 
 		$push->pushToDevice(207787, $notification);
 	}
@@ -659,7 +659,7 @@ class PushTest extends TestCase {
 			->willReturn(true);
 
 		$push->method('deleteProxyPushTokenByDeviceIdentifier')
-			->with('123456');
+			->with('badrequest-with-devices', '123456');
 
 		$push->pushToDevice(207787, $notification);
 	}
