@@ -43,7 +43,7 @@
 	},
 	"require": {
 		"bamarni/composer-bin-plugin": "^1.9.1",
-		"minishlink/web-push": "^9.0"
+		"minishlink/web-push": "^10.0"
 	},
 	"extra": {
 		"mozart": {
