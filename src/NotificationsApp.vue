@@ -311,14 +311,14 @@ export default {
 			})
 		},
 
-		registerPush(registration) {
+		registerPush(registration, userVisibleOnly = false) {
 			return axios.get(generateOcsUrl('apps/notifications/api/v2/webpush/vapid'))
 				.then((r) => r.data.ocs.data.vapid)
 				.then((vapid) => {
 					console.log('Server vapid key=' + vapid)
 					const options = {
 						applicationServerKey: vapid,
-						userVisibleOnly: true,
+						userVisibleOnly,
 					}
 					return registration.pushManager.getSubscription().then((sub) => {
 						if (sub !== null && this.b64UrlEncode(sub.options.applicationServerKey) !== vapid) {
@@ -357,7 +357,21 @@ export default {
 					.then((r) => callback(r.status === 200))
 					.catch((er) => {
 						console.error(er)
-						callback(false)
+						if (er.name === 'NotAllowedError') {
+							// try again with userVisibleOnly = true
+							// Because Chrome.
+							console.log('Try to register for with with userVisibleOnly=true')
+							this.loadServiceWorker().then((r) => {
+								this.registerPush(r, true)
+									.then((r) => callback(r.status === 200))
+									.catch((er) => {
+										console.error(er)
+										callback(false)
+									})
+							})
+						} else {
+							callback(false)
+						}
 					})
 			}
 		},
