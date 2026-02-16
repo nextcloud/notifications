@@ -4,11 +4,11 @@
  * @param {string} content received by Nextcloud, splitted to be shown in UI notification
  */
 function showBgNotification(content) {
-	let [title, ...msg] = content.split('\n')
+	const [title, ...msg] = content.split('\n')
 	const options = {
 		body: msg.join('\n'),
 	}
-	self.registration.showNotification(title, options)
+	return self.registration.showNotification(title, options)
 }
 
 /**
@@ -16,22 +16,18 @@ function showBgNotification(content) {
  * We need to show a silent notification that we remove to avoid being unregistered,
  * because they require userVisibleOnly=true registrations, and so forbid silent notifs.
  */
-function silentNotificationHack() {
-	const tag = (Math.random() + 1).toString(36).substring(2)
+function silentNotification() {
+	const tag = 'silent'
 	const options = {
 		silent: true,
-		tag: tag,
+		tag,
+		body: 'This site has been updated from the background',
 	}
-	self.registration.showNotification("Got a background event", options).then(() =>{
-		const options = {
-			tag: tag
+	return self.registration.pushManager.getSubscription().then((sub) => {
+		if (sub.options.userVisibleOnly) {
+			return self.registration.showNotification(location.host, options)
 		}
-		return self.registration.getNotifications(options)
-	}).then((notification) => {
-		if (notification[0]) {
-			notification[0].close()
-		}
-	});
+	})
 }
 
 self.addEventListener('push', function(event) {
@@ -52,18 +48,18 @@ self.addEventListener('push', function(event) {
 					// Here, the user has an active tab, we don't need to show a notification from the sw
 				} else if (content.subject) {
 					console.debug('No valid client to send notif - showing bg notif')
-					showBgNotification(content.subject)
+					return showBgNotification(content.subject)
 				} else {
 					console.warn('No valid client to send notif')
-					silentNotificationHack()
+					return silentNotification()
 				}
 			})
 			.catch((err) => {
 				console.error("Couldn't send message: ", err)
-				silentNotificationHack()
+				return silentNotification()
 			}))
 	} else {
-		silentNotificationHack()
+		event.waitUntil(silentNotification())
 	}
 })
 
