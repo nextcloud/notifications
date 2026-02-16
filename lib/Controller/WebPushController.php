@@ -352,7 +352,8 @@ class WebPushController extends OCSController {
 	private function getId(IToken|ISession $token): Int {
 		return match(true) {
 			$token instanceof IToken => $token->getId(),
-			$token instanceof ISession => -1 * $token->getId(),
+			// (-id - 1) to avoid session with id = 0
+			$token instanceof ISession => -1 - (int)$token->getId(),
 		};
 	}
 }
