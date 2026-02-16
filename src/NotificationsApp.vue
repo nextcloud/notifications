@@ -311,12 +311,6 @@ export default {
 			})
 		},
 
-		b64EncodeApplicationServerKey(applicationServerKey) {
-			return (new Uint8Array(applicationServerKey))
-				.toBase64({ alphabet: 'base64url' })
-				.replaceAll('=', '')
-		},
-
 		registerPush(registration) {
 			return axios.get(generateOcsUrl('apps/notifications/api/v2/webpush/vapid'))
 				.then((r) => r.data.ocs.data.vapid)
@@ -327,7 +321,7 @@ export default {
 						userVisibleOnly: true,
 					}
 					return registration.pushManager.getSubscription().then((sub) => {
-						if (sub !== null && this.b64EncodeApplicationServerKey(sub.options.applicationServerKey) !== vapid) {
+						if (sub !== null && this.b64UrlEncode(sub.options.applicationServerKey) !== vapid) {
 							console.log('VAPID key changed, unsubscribing first')
 							return sub.unsubscribe().then(() => {
 								console.log('Unsubscribed')
@@ -376,9 +370,7 @@ export default {
 
 		b64UrlEncode(inArr) {
 			return new Uint8Array(inArr)
-				.toBase64()
-				.replaceAll('+', '-')
-				.replaceAll('/', '_')
+				.toBase64({ alphabet: 'base64url' })
 				.replaceAll('=', '')
 		},
 
