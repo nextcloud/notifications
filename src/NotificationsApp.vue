@@ -311,19 +311,41 @@ export default {
 			})
 		},
 
+		b64EncodeApplicationServerKey(applicationServerKey) {
+			return (new Uint8Array(applicationServerKey))
+				.toBase64({ alphabet: 'base64url' })
+				.replaceAll('=', '')
+		},
+
 		registerPush(registration) {
-			// TODO: add applicationServerKey, Some browsers like Chrome require it
-			const options = {
-				userVisibleOnly: true,
-			};
-			return registration.pushManager.subscribe(options).then((sub) => {
-				const form = new FormData()
-				form.append('endpoint', sub.endpoint)
-				form.append('uaPublicKey', this.b64UrlEncode(sub.getKey('p256dh')))
-				form.append('auth', this.b64UrlEncode(sub.getKey('auth')))
-				form.append('appTypes', 'all')
-				return axios.post(generateOcsUrl('apps/notifications/api/v2/webpush'), form)
-			})
+			return axios.get(generateOcsUrl('apps/notifications/api/v2/webpush/vapid'))
+				.then((r) => r.data.ocs.data.vapid)
+				.then((vapid) => {
+					console.log('Server vapid key=' + vapid)
+					const options = {
+						applicationServerKey: vapid,
+						userVisibleOnly: true,
+					}
+					return registration.pushManager.getSubscription().then((sub) => {
+						if (sub !== null && this.b64EncodeApplicationServerKey(sub.options.applicationServerKey) !== vapid) {
+							console.log('VAPID key changed, unsubscribing first')
+							return sub.unsubscribe().then(() => {
+								console.log('Unsubscribed')
+								return registration.pushManager.subscribe(options)
+							})
+						} else {
+							return registration.pushManager.subscribe(options)
+						}
+					})
+				}).then((sub) => {
+					console.log(sub)
+					const form = new FormData()
+					form.append('endpoint', sub.endpoint)
+					form.append('uaPublicKey', this.b64UrlEncode(sub.getKey('p256dh')))
+					form.append('auth', this.b64UrlEncode(sub.getKey('auth')))
+					form.append('appTypes', 'all')
+					return axios.post(generateOcsUrl('apps/notifications/api/v2/webpush'), form)
+				})
 		},
 
 		/**
