@@ -622,7 +622,7 @@ export default {
 		/**
 		 * Check if we can do web notifications
 		 */
-		requestWebNotificationPermissions() {
+		async requestWebNotificationPermissions() {
 			if (this.webNotificationsGranted !== null) {
 				return new Promise((resolve) => resolve(this.webNotificationsGranted))
 			}
