@@ -284,7 +284,7 @@ export default {
 				},
 				// onPush=
 				() => {
-					if (!hasPush) {
+					if (!this.hasNotifyPush) {
 						this._fetchAfterWebPush()
 					} else {
 						console.debug('Has notify_push, no need to fetch from web push.')
