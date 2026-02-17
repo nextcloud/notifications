@@ -41,6 +41,7 @@ class Application extends \OCP\AppFramework\App implements IBootstrap {
 
 		$context->registerNotifierService(AdminNotifications::class);
 
+		$context->registerEventListener(AddContentSecurityPolicyEvent::class, CSPListener::class);
 		$context->registerEventListener(AddMissingIndicesEvent::class, AddMissingIndicesListener::class);
 		$context->registerEventListener(UserDeletedEvent::class, UserDeletedListener::class);
 		$context->registerEventListener(BeforeTemplateRenderedEvent::class, BeforeTemplateRenderedListener::class);
