@@ -242,26 +242,7 @@ export default {
 			// We could do the other way: fallback to notify_push only if we don't have
 			// web push
 			window.addEventListener('load', () => {
-				setWebPush(
-					// onActivated=
-					(hasWebPush) => {
-						if (hasWebPush) {
-							console.debug('Has web push, slowing polling to 15 minutes')
-							this.pollIntervalBase = 15 * 60 * 1000
-							this.hasNotifyPush = true
-						}
-						// Set polling interval for the default or new value
-						this._setPollingInterval(this.pollIntervalBase)
-					},
-					// onPush=
-					() => {
-						if (!hasPush) {
-							this._fetchAfterNotifyPush(true)
-						} else {
-							console.debug('Has notify_push, no need to fetch from web push.')
-						}
-					},
-				)
+				this._setWebPush()
 			})
 		} else {
 			// Set up the background checker
@@ -289,19 +270,35 @@ export default {
 			}
 		},
 
+		async _setWebPush() {
+			return setWebPush(
+				// onActivated=
+				(hasWebPush) => {
+					if (hasWebPush) {
+						console.debug('Has web push, slowing polling to 15 minutes')
+						this.pollIntervalBase = 15 * 60 * 1000
+						this.hasNotifyPush = true
+					}
+					// Set polling interval for the default or new value
+					this._setPollingInterval(this.pollIntervalBase)
+				},
+				// onPush=
+				() => {
+					if (!hasPush) {
+						this._fetchAfterNotifyPush(true)
+					} else {
+						console.debug('Has notify_push, no need to fetch from web push.')
+					}
+				},
+			)
+		},
+
 		async onOpen() {
 			if (this.webNotificationsGranted === null) {
 				this.requestWebNotificationPermissions()
 					.then((granted) => {
 						if (granted) {
-							setWebPush(!this.hasNotifyPush, (hasWebPush) => {
-								if (hasWebPush) {
-									console.debug('Has web push, slowing polling to 15 minutes')
-									this.pollIntervalBase = 15 * 60 * 1000
-									this.hasNotifyPush = true
-								}
-								this._setPollingInterval(this.pollIntervalBase)
-							})
+							this._setWebPutsh()
 						}
 					})
 			}
