@@ -18,7 +18,7 @@ use OCP\AppFramework\Http\ContentSecurityPolicy;
 use OCP\AppFramework\Http\StreamResponse;
 use OCP\IRequest;
 
-#[OpenAPI(scope: OpenAPI::SCOPE_DEFAULT)]
+#[OpenAPI(scope: OpenAPI::SCOPE_IGNORE)]
 class WebController extends Controller {
 	public function __construct(
 		string $appName,
