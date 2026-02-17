@@ -102,6 +102,8 @@ import {
 } from './services/notificationsService.js'
 import { createWebNotification } from './services/webNotificationsService.js'
 
+window.axios = axios
+
 const sessionKeepAlive = loadState('core', 'config', { session_keepalive: true }).session_keepalive
 const hasThrottledPushNotifications = loadState('notifications', 'throttled_push_notifications')
 
@@ -373,6 +375,8 @@ export default {
 							callback(false)
 						}
 					})
+			} else {
+				callback(false)
 			}
 		},
 
