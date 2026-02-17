@@ -285,7 +285,7 @@ export default {
 				// onPush=
 				() => {
 					if (!hasPush) {
-						this._fetchAfterNotifyPush(true)
+						this._fetchAfterWebPush()
 					} else {
 						console.debug('Has notify_push, no need to fetch from web push.')
 					}
@@ -375,31 +375,42 @@ export default {
 
 		/**
 		 * Performs the AJAX request to retrieve the notifications
-		 *
-		 * @param {boolean} force to not check if we are the last tab before fetching events. This is useful with web push, as the service worker sends the event to only one tab, that may not be the last one
 		 */
-		_fetchAfterNotifyPush(force = false) {
+		_fetchAfterNotifyPush() {
 			this.backgroundFetching = true
-			if (!force && (this.hasNotifyPush && this.tabId !== this.lastTabId)) {
+			if (this.hasNotifyPush && this.tabId !== this.lastTabId) {
 				console.debug('Deferring notification refresh from browser storage are notify_push event to give the last tab the chance to do it')
 				setTimeout(() => {
 					this._fetch()
 				}, 5000)
 			} else {
-				console.debug('Refreshing notifications following push event')
+				console.debug('Refreshing notifications are notify_push event')
 				this._fetch()
 			}
 		},
 
 		/**
 		 * Performs the AJAX request to retrieve the notifications
+		 *
+		 * Unlike with notify_push, we don't have to check if we are the last tab before
+		 * fetching events. The service worker sends the event to only one tab, that may
+		 * not be the last one
 		 */
-		async _fetch() {
+		_fetchAfterWebPush() {
+			this.backgroundFetching = true
+			console.debug('Refreshing notifications following web push event')
+			this._fetch(true)
+		},
+
+		/**
+		 * Performs the AJAX request to retrieve the notifications
+		 */
+		async _fetch(force = false) {
 			if (this.notifications.length && this.notifications[0].notificationId > this.webNotificationsThresholdId) {
 				this.webNotificationsThresholdId = this.notifications[0].notificationId
 			}
 
-			const response = await getNotificationsData(this.tabId, this.lastETag, !this.backgroundFetching, this.hasNotifyPush)
+			const response = await getNotificationsData(this.tabId, this.lastETag, force || !this.backgroundFetching, this.hasNotifyPush)
 
 			if (response.status === 204) {
 				// 204 No Content - Intercept when no notifiers are there.
