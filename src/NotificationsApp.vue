@@ -508,7 +508,7 @@ export default {
 				return
 			}
 
-			if (window.location.protocol === 'http:' && window.location.hostname !== 'localhost') {
+			if (!window.isSecureContext) {
 				console.debug('Notifications require HTTPS')
 				this.webNotificationsGranted = false
 				return
