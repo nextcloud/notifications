@@ -289,14 +289,14 @@ export default {
 						const form = new FormData()
 						form.append('activationToken', activationToken)
 						axios.post(generateOcsUrl('apps/notifications/api/v2/webpush/activate'), form)
-							.then((r) => {
-								if (r.status === 200 || r.status === 202) {
+							.then((response) => {
+								if (response.status === 200 || response.status === 202) {
 									console.debug('Push notifications activated, slowing polling to 15 minutes')
 									this.pollIntervalBase = 15 * 60 * 1000
 									this.hasNotifyPush = true
 									this._setPollingInterval(this.pollIntervalBase)
 								} else {
-									console.warn('An error occured while activating push registration', r)
+									console.warn('An error occured while activating push registration', response)
 								}
 							})
 					} else {
@@ -315,7 +315,7 @@ export default {
 
 		registerPush(registration, userVisibleOnly = false) {
 			return axios.get(generateOcsUrl('apps/notifications/api/v2/webpush/vapid'))
-				.then((r) => r.data.ocs.data.vapid)
+				.then((response) => response.data.ocs.data.vapid)
 				.then((vapid) => {
 					console.log('Server vapid key=' + vapid)
 					const options = {
@@ -352,20 +352,20 @@ export default {
 		setWebPush(syncOnPush, callback) {
 			if ('serviceWorker' in navigator) {
 				this.loadServiceWorker()
-					.then((r) => {
-						this.listenForPush(r, syncOnPush)
-						return this.registerPush(r)
+					.then((registration) => {
+						this.listenForPush(registration, syncOnPush)
+						return this.registerPush(registration)
 					})
-					.then((r) => callback(r.status === 200))
+					.then((response) => callback(response.status === 200))
 					.catch((er) => {
 						console.error(er)
 						if (er.name === 'NotAllowedError') {
 							// try again with userVisibleOnly = true
 							// Because Chrome.
 							console.log('Try to register for with with userVisibleOnly=true')
-							this.loadServiceWorker().then((r) => {
-								this.registerPush(r, true)
-									.then((r) => callback(r.status === 200))
+							this.loadServiceWorker().then((registration) => {
+								this.registerPush(registration, true)
+									.then((response) => callback(response.status === 200))
 									.catch((er) => {
 										console.error(er)
 										callback(false)
