@@ -87,7 +87,7 @@ import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { loadState } from '@nextcloud/initial-state'
 import { t } from '@nextcloud/l10n'
 import { listen } from '@nextcloud/notify_push'
-import { generateOcsUrl, generateUrl, imagePath } from '@nextcloud/router'
+import { generateOcsUrl, imagePath } from '@nextcloud/router'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcHeaderMenu from '@nextcloud/vue/components/NcHeaderMenu'
@@ -101,6 +101,9 @@ import {
 	setCurrentTabAsActive,
 } from './services/notificationsService.js'
 import { createWebNotification } from './services/webNotificationsService.js'
+import {
+	setWebPush,
+} from './services/webPushService.js'
 
 window.axios = axios
 
@@ -241,14 +244,26 @@ export default {
 			// We could do the other way: fallback to notify_push only if we don't have
 			// web push
 			window.addEventListener('load', () => {
-				this.setWebPush(!hasPush, (hasWebPush) => {
-					if (hasWebPush) {
-						console.debug('Has web push, slowing polling to 15 minutes')
-						this.pollIntervalBase = 15 * 60 * 1000
-						this.hasNotifyPush = true
-					}
-					this._setPollingInterval(this.pollIntervalBase)
-				})
+				setWebPush(
+					// onActivated=
+					(hasWebPush) => {
+						if (hasWebPush) {
+							console.debug('Has web push, slowing polling to 15 minutes')
+							this.pollIntervalBase = 15 * 60 * 1000
+							this.hasNotifyPush = true
+						}
+						// Set polling interval for the default or new value
+						this._setPollingInterval(this.pollIntervalBase)
+					},
+					// onPush=
+					() => {
+						if (!hasPush) {
+							this._fetchAfterNotifyPush(true)
+						} else {
+							console.debug('Has notify_push, no need to fetch from web push.')
+						}
+					},
+				)
 			})
 		} else {
 			// Set up the background checker
@@ -270,126 +285,10 @@ export default {
 	methods: {
 		t,
 
-		loadServiceWorker() {
-			return navigator.serviceWorker.register(
-				generateUrl('/apps/notifications/service-worker.js', {}, { noRewrite: true }),
-				{ scope: '/' },
-			).then((registration) => {
-				console.info('ServiceWorker registered')
-				return registration
-			})
-		},
-
-		listenForPush(registration, syncOnPush) {
-			navigator.serviceWorker.addEventListener('message', (event) => {
-				console.debug('Received from serviceWorker: ', JSON.stringify(event.data))
-				if (event.data.type === 'push') {
-					const activationToken = event.data.content.activationToken
-					if (activationToken) {
-						const form = new FormData()
-						form.append('activationToken', activationToken)
-						axios.post(generateOcsUrl('apps/notifications/api/v2/webpush/activate'), form)
-							.then((response) => {
-								if (response.status === 200 || response.status === 202) {
-									console.debug('Push notifications activated, slowing polling to 15 minutes')
-									this.pollIntervalBase = 15 * 60 * 1000
-									this.hasNotifyPush = true
-									this._setPollingInterval(this.pollIntervalBase)
-								} else {
-									console.warn('An error occured while activating push registration', response)
-								}
-							})
-					} else {
-						if (syncOnPush) {
-							// force=true: we don't have to check if we're the last tab,
-							// the serviceworker send the event to a single tab
-							this._fetchAfterNotifyPush(true)
-						}
-					}
-				} else if (event.data.type === 'pushEndpoint') {
-					this.registerPush(registration)
-						.catch((er) => console.error(er))
-				}
-			})
-		},
-
-		registerPush(registration, userVisibleOnly = false) {
-			return axios.get(generateOcsUrl('apps/notifications/api/v2/webpush/vapid'))
-				.then((response) => response.data.ocs.data.vapid)
-				.then((vapid) => {
-					console.log('Server vapid key=' + vapid)
-					const options = {
-						applicationServerKey: vapid,
-						userVisibleOnly,
-					}
-					return registration.pushManager.getSubscription().then((sub) => {
-						if (sub !== null && this.b64UrlEncode(sub.options.applicationServerKey) !== vapid) {
-							console.log('VAPID key changed, unsubscribing first')
-							return sub.unsubscribe().then(() => {
-								console.log('Unsubscribed')
-								return registration.pushManager.subscribe(options)
-							})
-						} else {
-							return registration.pushManager.subscribe(options)
-						}
-					})
-				}).then((sub) => {
-					console.log(sub)
-					const form = new FormData()
-					form.append('endpoint', sub.endpoint)
-					form.append('uaPublicKey', this.b64UrlEncode(sub.getKey('p256dh')))
-					form.append('auth', this.b64UrlEncode(sub.getKey('auth')))
-					form.append('appTypes', 'all')
-					return axios.post(generateOcsUrl('apps/notifications/api/v2/webpush'), form)
-				})
-		},
-
-		/**
-		 * @param {boolean} syncOnPush if we fetch for notifications on push. Param used to avoid concurrency
-		 *    fetch if another mechanism is in place
-		 * @param {boolean} callback if the push notifications has been subscribed (statusCode == 200)
-		 */
-		setWebPush(syncOnPush, callback) {
-			if ('serviceWorker' in navigator) {
-				this.loadServiceWorker()
-					.then((registration) => {
-						this.listenForPush(registration, syncOnPush)
-						return this.registerPush(registration)
-					})
-					.then((response) => callback(response.status === 200))
-					.catch((er) => {
-						console.error(er)
-						if (er.name === 'NotAllowedError') {
-							// try again with userVisibleOnly = true
-							// Because Chrome.
-							console.log('Try to register for with with userVisibleOnly=true')
-							this.loadServiceWorker().then((registration) => {
-								this.registerPush(registration, true)
-									.then((response) => callback(response.status === 200))
-									.catch((er) => {
-										console.error(er)
-										callback(false)
-									})
-							})
-						} else {
-							callback(false)
-						}
-					})
-			} else {
-				callback(false)
-			}
-		},
-
 		userStatusUpdated(state) {
 			if (getCurrentUser().uid === state.userId) {
 				this.userStatus = state.status
 			}
-		},
-
-		b64UrlEncode(inArr) {
-			return new Uint8Array(inArr)
-				.toBase64({ alphabet: 'base64url' })
-				.replaceAll('=', '')
 		},
 
 		async onOpen() {
@@ -397,7 +296,7 @@ export default {
 				this.requestWebNotificationPermissions()
 					.then((granted) => {
 						if (granted) {
-							this.setWebPush(!this.hasNotifyPush, (hasWebPush) => {
+							setWebPush(!this.hasNotifyPush, (hasWebPush) => {
 								if (hasWebPush) {
 									console.debug('Has web push, slowing polling to 15 minutes')
 									this.pollIntervalBase = 15 * 60 * 1000
@@ -492,7 +391,7 @@ export default {
 					this._fetch()
 				}, 5000)
 			} else {
-				console.debug('Refreshing notifications are notify_push event')
+				console.debug('Refreshing notifications following push event')
 				this._fetch()
 			}
 		},
