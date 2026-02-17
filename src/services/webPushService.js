@@ -49,16 +49,15 @@ function listenForPush(registration, onActivated, onPush) {
 /**
  *
  * @param {ServiceWorkerRegistration} registration current SW registration
- * @param {boolean} userVisibleOnly if push subscription should set `userVisibleOnly` options (for Chrome)
  */
-function registerPush(registration, userVisibleOnly = false) {
+function registerPush(registration) {
 	return axios.get(generateOcsUrl('apps/notifications/api/v2/webpush/vapid'))
 		.then((response) => response.data.ocs.data.vapid)
 		.then((vapid) => {
 			console.log('Server vapid key=' + vapid)
 			const options = {
 				applicationServerKey: vapid,
-				userVisibleOnly,
+				userVisibleOnly: false,
 			}
 			return registration.pushManager.getSubscription().then((sub) => {
 				if (sub !== null && b64UrlEncode(sub.options.applicationServerKey) !== vapid) {
@@ -66,9 +65,27 @@ function registerPush(registration, userVisibleOnly = false) {
 					return sub.unsubscribe().then(() => {
 						console.log('Unsubscribed')
 						return registration.pushManager.subscribe(options)
+							.catch((er) => {
+								if (er.name === 'NotAllowedError') {
+									// if push subscription should set `userVisibleOnly` options (for Chrome)
+									console.log('Browser probably require `userVisibleOnly=true`')
+									return registration.pushManager.subscribe({ ...options, userVisibleOnly: true })
+								} else {
+									throw er
+								}
+							})
 					})
 				} else {
 					return registration.pushManager.subscribe(options)
+						.catch((er) => {
+							if (er.name === 'NotAllowedError') {
+								// if push subscription should set `userVisibleOnly` options (for Chrome)
+								console.log('Browser probably require `userVisibleOnly=true`')
+								return registration.pushManager.subscribe({ ...options, userVisibleOnly: true })
+							} else {
+								throw er
+							}
+						})
 				}
 			})
 		}).then((sub) => {
@@ -95,20 +112,7 @@ function setWebPush(onActivated, onPush) {
 			})
 			.catch((er) => {
 				console.error(er)
-				if (er.name === 'NotAllowedError') {
-					// try again with userVisibleOnly = true
-					// Because Chrome.
-					console.log('Try to register for with with userVisibleOnly=true')
-					loadServiceWorker().then((registration) => {
-						registerPush(registration, true)
-							.catch((er) => {
-								console.error(er)
-								onActivated(false)
-							})
-					})
-				} else {
-					onActivated(false)
-				}
+				onActivated(false)
 			})
 	} else {
 		onActivated(false)
