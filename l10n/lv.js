@@ -20,7 +20,6 @@ OC.L10N.register(
     "1 week" : "1 nedēļa",
     "Your settings have been updated." : "Iestatījumi tika atjaunināti.",
     "None" : "Nav",
-    "You need to set up your email address before you can receive notification emails." : "Ir nepieciešams iestatīt e-pasta adresi, lai varētu saņemt paziņojumus e-pastā.",
-    "seconds ago" : "pirms vairākām sekundēm"
+    "You need to set up your email address before you can receive notification emails." : "Ir nepieciešams iestatīt e-pasta adresi, lai varētu saņemt paziņojumus e-pastā."
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);");

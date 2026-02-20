@@ -43,8 +43,6 @@ OC.L10N.register(
     "You need to set up your email address before you can receive notification emails." : "Bildirim e-postalarını alabilmek için e-posta adresinizi belirtmelisiniz.",
     "Also repeat sound on a secondary speaker" : "Ses ikinci bir hoparlörde yinelensin",
     "Selection of the speaker device is currently not supported by Safari" : "Safari şu anda hoparlör seçilmesini desteklemiyor",
-    "Select a device" : "Bir aygıt seçin",
-    "seconds ago" : "saniye önce",
-    "Configure the default notification settings for new users" : "Yeni kullanıcılar için varsayılan bildirim ayarlarını yapılandırın"
+    "Select a device" : "Bir aygıt seçin"
 },
 "nplurals=2; plural=(n > 1);");

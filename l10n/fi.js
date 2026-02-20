@@ -34,8 +34,6 @@ OC.L10N.register(
     "Play sound when a call started (requires Nextcloud Talk)" : "Toista ääni kun puhelu on aloitettu (vaatii Nextcloud Talkin)",
     "None" : "Ei mitään",
     "You need to set up your email address before you can receive notification emails." : "Aseta sähköpostiosoite, jotta voit vastaanottaa sähköposti-ilmoituksia.",
-    "Select a device" : "Valitse laite",
-    "seconds ago" : "sekuntia sitten",
-    "Configure the default notification settings for new users" : "Määritä uusien käyttäjien oletusarvoiset ilmoitusasetukset"
+    "Select a device" : "Valitse laite"
 },
 "nplurals=2; plural=(n != 1);");

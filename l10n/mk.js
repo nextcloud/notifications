@@ -43,8 +43,6 @@ OC.L10N.register(
     "You need to set up your email address before you can receive notification emails." : "Треба да ја внесете Вашата адреса на е-пошта за да можете да примате известувања по електронска пошта.",
     "Also repeat sound on a secondary speaker" : "Повтори го звукот на секундарен звучник",
     "Selection of the speaker device is currently not supported by Safari" : "Изборот на уредот со звучници моментално не е поддржан од Safari",
-    "Select a device" : "Избери уред",
-    "seconds ago" : "пред неколку секунди",
-    "Configure the default notification settings for new users" : "Конфигурирај ги стандардните поставки за известување за нови корисници"
+    "Select a device" : "Избери уред"
 },
 "nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;");

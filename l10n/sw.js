@@ -43,8 +43,6 @@ OC.L10N.register(
     "You need to set up your email address before you can receive notification emails." : "Unahitaji kusanidi barua pepe yako kabla ya kupokea barua pepe za arifa.",
     "Also repeat sound on a secondary speaker" : "Pia rudia sauti kwenye kipaza sauti cha pili",
     "Selection of the speaker device is currently not supported by Safari" : "Uteuzi wa kifaa cha spika hautumiki kwa sasa na Safari",
-    "Select a device" : "Chagua kifaa",
-    "seconds ago" : "sukunde zilizopita",
-    "Configure the default notification settings for new users" : "Sanidi mipangilio ya arifa chaguo-msingi kwa watumiaji wapya"
+    "Select a device" : "Chagua kifaa"
 },
 "nplurals=2; plural=(n != 1);");

@@ -9,7 +9,6 @@ OC.L10N.register(
     "Never" : "Aldri",
     "Your settings have been updated." : "Innstillingane dine har blitt oppdaterte.",
     "None" : "Ingen",
-    "You need to set up your email address before you can receive notification emails." : "Du må skriva inn e-postadressa di før du kan få e-postvarsel.",
-    "seconds ago" : "sekund sidan"
+    "You need to set up your email address before you can receive notification emails." : "Du må skriva inn e-postadressa di før du kan få e-postvarsel."
 },
 "nplurals=2; plural=(n != 1);");

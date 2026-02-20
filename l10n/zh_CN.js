@@ -43,8 +43,6 @@ OC.L10N.register(
     "You need to set up your email address before you can receive notification emails." : "您需要设置您的电子邮件地址，然后才能收到通知电子邮件。",
     "Also repeat sound on a secondary speaker" : "还要在辅助扬声器上重复声音",
     "Selection of the speaker device is currently not supported by Safari" : "Safari 当前不支持选择扬声器设备",
-    "Select a device" : "选择设备",
-    "seconds ago" : "几秒前",
-    "Configure the default notification settings for new users" : "配置新用户的默认通知设置"
+    "Select a device" : "选择设备"
 },
 "nplurals=1; plural=0;");

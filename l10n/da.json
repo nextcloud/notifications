@@ -41,8 +41,6 @@
     "You need to set up your email address before you can receive notification emails." : "Du skal konfigurere din e-mailadresse, før du kan modtage notifikations-e-mails.",
     "Also repeat sound on a secondary speaker" : "Gentag lyd på sekundær højtaler",
     "Selection of the speaker device is currently not supported by Safari" : "Valg af lydenhed er ikke muligt i Safari",
-    "Select a device" : "Vælg en enhed",
-    "seconds ago" : "få sekunder siden",
-    "Configure the default notification settings for new users" : "Konfigurer standardmeddelelsesindstillingerne for nye brugere"
+    "Select a device" : "Vælg en enhed"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

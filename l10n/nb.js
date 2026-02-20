@@ -40,8 +40,6 @@ OC.L10N.register(
     "You need to set up your email address before you can receive notification emails." : "Du må sette opp e-postadressen din før du kan motta varslinger på e-post.",
     "Also repeat sound on a secondary speaker" : "Gjenta også lyden på en sekundær høyttaler",
     "Selection of the speaker device is currently not supported by Safari" : "Valg av høyttalerenhet støttes for øyeblikket ikke av Safari",
-    "Select a device" : "Velg en enhet",
-    "seconds ago" : "sekunder siden",
-    "Configure the default notification settings for new users" : "Konfigurer standard varslingsinnstillinger for nye brukere"
+    "Select a device" : "Velg en enhet"
 },
 "nplurals=2; plural=(n != 1);");

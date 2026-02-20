@@ -43,8 +43,6 @@ OC.L10N.register(
     "You need to set up your email address before you can receive notification emails." : "通知メールを受け取る前にメールアドレスを設定してください。",
     "Also repeat sound on a secondary speaker" : "セカンダリスピーカーでも音をリピートする",
     "Selection of the speaker device is currently not supported by Safari" : "スピーカーデバイスの選択は現在Safariではサポートされていません",
-    "Select a device" : "デバイスを選択する",
-    "seconds ago" : "数秒前",
-    "Configure the default notification settings for new users" : "新規ユーザーの通知設定の既定値を設定する"
+    "Select a device" : "デバイスを選択する"
 },
 "nplurals=1; plural=0;");
