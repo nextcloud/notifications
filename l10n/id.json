@@ -40,8 +40,6 @@
     "You need to set up your email address before you can receive notification emails." : "Anda perlu menyetel alamat email sebelum Anda dapat menerima email pemberitahuan.",
     "Also repeat sound on a secondary speaker" : "Juga ulangi suara pada speaker sekunder",
     "Selection of the speaker device is currently not supported by Safari" : "Pemilihan perangkat speaker saat ini tidak didukung oleh Safari",
-    "Select a device" : "Pilih perangkat",
-    "seconds ago" : "beberapa detik yang lalu",
-    "Configure the default notification settings for new users" : "Konfigurasikan pengaturan default notifikasi untuk pengguna baru"
+    "Select a device" : "Pilih perangkat"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

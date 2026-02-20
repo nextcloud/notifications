@@ -35,8 +35,6 @@ OC.L10N.register(
     "Play sound when a new notification arrives" : "Phát âm thanh khi có thông báo mới",
     "Play sound when a call started (requires Nextcloud Talk)" : "Phát âm thanh khi cuộc gọi bắt đầu (yêu cầu Talk)",
     "None" : "Không có",
-    "You need to set up your email address before you can receive notification emails." : "Bạn cần phải thiết lập địa chỉ email trước khi nhận được email thông báo.",
-    "seconds ago" : "vài giây trước",
-    "Configure the default notification settings for new users" : "Định cấu hình cài đặt thông báo mặc định cho người dùng mới"
+    "You need to set up your email address before you can receive notification emails." : "Bạn cần phải thiết lập địa chỉ email trước khi nhận được email thông báo."
 },
 "nplurals=1; plural=0;");

@@ -41,8 +41,6 @@
     "You need to set up your email address before you can receive notification emails." : "Πρέπει να ρυθμίσετε τη διεύθυνση email σας για να μπορείτε να λαμβάνετε μηνύματα ηλεκτρονικού ταχυδρομείου ειδοποίησης.",
     "Also repeat sound on a secondary speaker" : "Επανάληψη ήχου και σε δευτερεύον ηχείο",
     "Selection of the speaker device is currently not supported by Safari" : "Η επιλογή συσκευής ηχείου δεν υποστηρίζεται προς το παρόν από το Safari",
-    "Select a device" : "Επιλογή συσκευής",
-    "seconds ago" : " δευτερόλεπτα πριν ",
-    "Configure the default notification settings for new users" : "Καθορίστε τις προεπιλεγμένες ρυθμίσεις ειδοποιήσεων για νέους χρήστες."
+    "Select a device" : "Επιλογή συσκευής"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

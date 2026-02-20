@@ -7,7 +7,6 @@ OC.L10N.register(
     "in {path}" : "ក្នុង {path}",
     "Your settings have been updated." : "ការ​កំណត់​របស់​អ្នក​ត្រូវ​បាន​ធ្វើ​បច្ចុប្បន្នភាព។",
     "None" : "គ្មាន",
-    "You need to set up your email address before you can receive notification emails." : "អ្នក​ចាំបាច់​ត្រូវតែដំឡើង​អាសយដ្ឋាន​អ៊ីមែលរបស់អ្នកមុនពេល​ដែលអ្នកអាចទទួលបានការជូន​ដំណឹង​ទៅកាន់​អ៊ីមែល ។",
-    "seconds ago" : "វិនាទី​មុន"
+    "You need to set up your email address before you can receive notification emails." : "អ្នក​ចាំបាច់​ត្រូវតែដំឡើង​អាសយដ្ឋាន​អ៊ីមែលរបស់អ្នកមុនពេល​ដែលអ្នកអាចទទួលបានការជូន​ដំណឹង​ទៅកាន់​អ៊ីមែល ។"
 },
 "nplurals=1; plural=0;");

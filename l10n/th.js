@@ -12,7 +12,6 @@ OC.L10N.register(
     "1 hour" : "1 ชั่วโมง",
     "Your settings have been updated." : "อัปเดตการตั้งค่าของคุณแล้ว",
     "None" : "ไม่มี",
-    "You need to set up your email address before you can receive notification emails." : "คุณต้องตั้งค่าที่อยู่อีเมลของคุณก่อนที่จะสามารถรับอีเมลแจ้งเตือน",
-    "seconds ago" : "วินาทีที่ผ่านมา"
+    "You need to set up your email address before you can receive notification emails." : "คุณต้องตั้งค่าที่อยู่อีเมลของคุณก่อนที่จะสามารถรับอีเมลแจ้งเตือน"
 },
 "nplurals=1; plural=0;");

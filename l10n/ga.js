@@ -43,8 +43,6 @@ OC.L10N.register(
     "You need to set up your email address before you can receive notification emails." : "Ní mór duit do sheoladh ríomhphoist a shocrú sula mbeidh tú in ann ríomhphoist fógra a fháil.",
     "Also repeat sound on a secondary speaker" : "Déan fuaim arís ar chainteoir tánaisteach freisin",
     "Selection of the speaker device is currently not supported by Safari" : "Ní thacaíonn Safari le roghnú gléas an chainteora faoi láthair",
-    "Select a device" : "Roghnaigh gléas",
-    "seconds ago" : "soicind ó shin",
-    "Configure the default notification settings for new users" : "Cumraigh na socruithe fógra réamhshocraithe d'úsáideoirí nua"
+    "Select a device" : "Roghnaigh gléas"
 },
 "nplurals=5; plural=(n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n<11 ? 3 : 4);");

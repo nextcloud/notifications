@@ -41,8 +41,6 @@
     "You need to set up your email address before you can receive notification emails." : "Vous devez définir votre adresse e-mail avant de pouvoir recevoir des e-mails de notification.",
     "Also repeat sound on a secondary speaker" : "Répéter aussi le son sur le haut-parleur secondaire",
     "Selection of the speaker device is currently not supported by Safari" : "La sélection du périphérique de haut-parleur n'est actuellement pas prise en charge par Safari",
-    "Select a device" : "Sélectionner un appareil",
-    "seconds ago" : "à l'instant",
-    "Configure the default notification settings for new users" : "Configurer les paramètres de notification par défaut pour les nouveaux utilisateurs"
+    "Select a device" : "Sélectionner un appareil"
 },"pluralForm" :"nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }

@@ -23,7 +23,6 @@ OC.L10N.register(
     "Your settings have been updated." : "As suas definições foram atualizadas.",
     "An error occurred while updating your settings." : "Ocorreu um erro ao atualizar as suas definições.",
     "None" : "Nenhum",
-    "You need to set up your email address before you can receive notification emails." : "Precisa de configurar o seu endereço de e-mail antes de poder receber mensagens de notificação.",
-    "seconds ago" : "segundos atrás"
+    "You need to set up your email address before you can receive notification emails." : "Precisa de configurar o seu endereço de e-mail antes de poder receber mensagens de notificação."
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

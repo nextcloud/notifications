@@ -43,8 +43,6 @@ OC.L10N.register(
     "You need to set up your email address before you can receive notification emails." : "Требуется настроить адрес электронной почты в настройках профиля для получения уведомлений.",
     "Also repeat sound on a secondary speaker" : "Также повторять звук на дополнительном динамике",
     "Selection of the speaker device is currently not supported by Safari" : "Выбор динамика в настоящее время не поддерживается браузером Safari",
-    "Select a device" : "Выберите устройство",
-    "seconds ago" : "несколько секунд назад",
-    "Configure the default notification settings for new users" : "Настройте параметры уведомлений по умолчанию для новых пользователей"
+    "Select a device" : "Выберите устройство"
 },
 "nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);");

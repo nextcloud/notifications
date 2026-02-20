@@ -27,7 +27,6 @@ OC.L10N.register(
     "Play sound when a new notification arrives" : "השמעת צליל כאשר התרעה חדשה מגיעה",
     "Play sound when a call started (requires Nextcloud Talk)" : "השמעת צליל כאשר נכנסת שיחה (דורש Nextcloud Talk)",
     "None" : "ללא",
-    "You need to set up your email address before you can receive notification emails." : "יש להגדיר כתובת דואר אלקטרוני לפני שניתן יהיה לקבל דיווחים.",
-    "seconds ago" : "לפני מספר שניות"
+    "You need to set up your email address before you can receive notification emails." : "יש להגדיר כתובת דואר אלקטרוני לפני שניתן יהיה לקבל דיווחים."
 },
 "nplurals=3; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: 2;");

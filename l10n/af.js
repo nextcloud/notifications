@@ -17,7 +17,6 @@ OC.L10N.register(
     "1 week" : "1 week",
     "Your settings have been updated." : "U instellings is bygewerk.",
     "None" : "Geen",
-    "You need to set up your email address before you can receive notification emails." : "U moet u e-posadres opstel alvorens u kennisgewings per e-pos kan ontvang.",
-    "seconds ago" : "sekondes gelede"
+    "You need to set up your email address before you can receive notification emails." : "U moet u e-posadres opstel alvorens u kennisgewings per e-pos kan ontvang."
 },
 "nplurals=2; plural=(n != 1);");

@@ -16,7 +16,6 @@ OC.L10N.register(
     "3 hours" : "3 საათი",
     "Your settings have been updated." : "თქვენი პარამეტრები განახლდა.",
     "None" : "არც ერთი",
-    "You need to set up your email address before you can receive notification emails." : "ელ-ფოსტაზე შეტყობინების მიღებამდე, საჭიროა მიუთითოთ თქვენი მისამართი.",
-    "seconds ago" : "წამის წინ"
+    "You need to set up your email address before you can receive notification emails." : "ელ-ფოსტაზე შეტყობინების მიღებამდე, საჭიროა მიუთითოთ თქვენი მისამართი."
 },
 "nplurals=2; plural=(n!=1);");

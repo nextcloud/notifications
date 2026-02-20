@@ -13,7 +13,6 @@ OC.L10N.register(
     "1 day" : "1 ditë ",
     "Your settings have been updated." : "Rregullimet tuaja u përditësuan",
     "None" : "Asnjë",
-    "You need to set up your email address before you can receive notification emails." : "Kërkohet të caktoni adresën tuaj email, përpara se të mund të merrni email-e njoftimesh.",
-    "seconds ago" : "sekonda më parë"
+    "You need to set up your email address before you can receive notification emails." : "Kërkohet të caktoni adresën tuaj email, përpara se të mund të merrni email-e njoftimesh."
 },
 "nplurals=2; plural=(n != 1);");
