@@ -43,8 +43,6 @@ OC.L10N.register(
     "You need to set up your email address before you can receive notification emails." : "Enne teavituskirjade saamist pead sa lisama oma e-posti aadressi.",
     "Also repeat sound on a secondary speaker" : "Lisaks korda heli tagavara kõlaril",
     "Selection of the speaker device is currently not supported by Safari" : "Kõlariseadme valimine ei ole hetkel Safaril toetatud",
-    "Select a device" : "Vali seade",
-    "seconds ago" : "sekundit tagasi",
-    "Configure the default notification settings for new users" : "Määra uute kasutajate teavituste vaikimisi seadistused"
+    "Select a device" : "Vali seade"
 },
 "nplurals=2; plural=(n != 1);");

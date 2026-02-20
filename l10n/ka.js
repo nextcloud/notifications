@@ -37,8 +37,6 @@ OC.L10N.register(
     "Play sound when a new notification arrives" : "Play sound when a new notification arrives",
     "Play sound when a call started (requires Nextcloud Talk)" : "Play sound when a call started (requires Nextcloud Talk)",
     "None" : "None",
-    "You need to set up your email address before you can receive notification emails." : "You need to set up your email address before you can receive notification emails.",
-    "seconds ago" : "seconds ago",
-    "Configure the default notification settings for new users" : "Configure the default notification settings for new users"
+    "You need to set up your email address before you can receive notification emails." : "You need to set up your email address before you can receive notification emails."
 },
 "nplurals=2; plural=(n!=1);");

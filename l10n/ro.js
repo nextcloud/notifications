@@ -36,8 +36,6 @@ OC.L10N.register(
     "Play sound when a new notification arrives" : "Avertizează sonor când sosește o notificare",
     "Play sound when a call started (requires Nextcloud Talk)" : "Avertizează sonor când începe o videoconferință (necesită Nextcloud Talk)",
     "None" : "Niciuna",
-    "You need to set up your email address before you can receive notification emails." : "Trebuie să-ți configurezi adresa de email înainte de a putea primi emailurile de notificare.",
-    "seconds ago" : "secunde în urmă",
-    "Configure the default notification settings for new users" : "Configurează setările implicite pentru notificări ale noilor utilizatori"
+    "You need to set up your email address before you can receive notification emails." : "Trebuie să-ți configurezi adresa de email înainte de a putea primi emailurile de notificare."
 },
 "nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));");

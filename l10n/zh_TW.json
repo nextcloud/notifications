@@ -41,8 +41,6 @@
     "You need to set up your email address before you can receive notification emails." : "在您開始接收通知電子郵件前，您必須先設定您的電子郵件地址。",
     "Also repeat sound on a secondary speaker" : "在次要喇叭上重複播放音效",
     "Selection of the speaker device is currently not supported by Safari" : "Safari 目前不支援選擇喇叭裝置",
-    "Select a device" : "選取裝置",
-    "seconds ago" : "幾秒前",
-    "Configure the default notification settings for new users" : "設定新使用者的預設通知設定"
+    "Select a device" : "選取裝置"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

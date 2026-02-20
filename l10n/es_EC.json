@@ -33,8 +33,6 @@
     "Play sound when a new notification arrives" : "Reproducir sonido cuando llega una nueva notificación",
     "Play sound when a call started (requires Nextcloud Talk)" : "Reproducir sonido cuando se inicia una llamada (requiere Nextcloud Talk)",
     "None" : "Ninguno",
-    "You need to set up your email address before you can receive notification emails." : "Necesitas configurar tu dirección de correo electrónico antes de que puedas recibir correos de notificación",
-    "seconds ago" : "hace segundos",
-    "Configure the default notification settings for new users" : "Configura la configuración predeterminada de las notificaciones para nuevos usuarios"
+    "You need to set up your email address before you can receive notification emails." : "Necesitas configurar tu dirección de correo electrónico antes de que puedas recibir correos de notificación"
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }

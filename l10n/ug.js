@@ -43,8 +43,6 @@ OC.L10N.register(
     "You need to set up your email address before you can receive notification emails." : "ئۇقتۇرۇش ئېلېكترونلۇق خەتلىرىنى تاپشۇرۇۋېلىشتىن بۇرۇن ئېلېكترونلۇق خەت ئادرېسىڭىزنى تەڭشىشىڭىز كېرەك.",
     "Also repeat sound on a secondary speaker" : "ئىككىلەمچى ياڭراتقۇدا ئاۋازنى تەكرارلاڭ",
     "Selection of the speaker device is currently not supported by Safari" : "ياڭراتقۇ ئۈسكۈنىسىنى تاللاش ھازىر Safari نى قوللىمايدۇ",
-    "Select a device" : "ئۈسكۈنىنى تاللاڭ",
-    "seconds ago" : "سېكۇنت بۇرۇن",
-    "Configure the default notification settings for new users" : "يېڭى ئىشلەتكۈچىلەرنىڭ سۈكۈتتىكى ئۇقتۇرۇش تەڭشىكىنى سەپلەڭ"
+    "Select a device" : "ئۈسكۈنىنى تاللاڭ"
 },
 "nplurals=2; plural=(n != 1);");

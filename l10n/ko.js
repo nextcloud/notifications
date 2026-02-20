@@ -35,8 +35,6 @@ OC.L10N.register(
     "Play sound when a call started (requires Nextcloud Talk)" : "새 통화가 시작될 때 소리 재생하기 (Nextcloud 토크 필요}",
     "None" : "없음",
     "You need to set up your email address before you can receive notification emails." : "알림 이메일을 받으려면 이메일 주소를 설정해야 합니다.",
-    "Select a device" : "장치 선택",
-    "seconds ago" : "초 전",
-    "Configure the default notification settings for new users" : "새 사용자의 기본 알림 설정값을 변경합니다"
+    "Select a device" : "장치 선택"
 },
 "nplurals=1; plural=0;");

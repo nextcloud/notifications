@@ -19,7 +19,6 @@ OC.L10N.register(
     "1 hour" : "1 horo",
     "Your settings have been updated." : "Viaj agordoj ĝisdatiĝis.",
     "None" : "Nenio",
-    "You need to set up your email address before you can receive notification emails." : "Vi bezonas agordi vian retpoŝtadreson, por povi ricevi sciigojn retmesaĝe.",
-    "seconds ago" : "antaŭ kelkaj sekundoj"
+    "You need to set up your email address before you can receive notification emails." : "Vi bezonas agordi vian retpoŝtadreson, por povi ricevi sciigojn retmesaĝe."
 },
 "nplurals=2; plural=(n != 1);");

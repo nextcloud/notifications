@@ -27,8 +27,6 @@
     "Send email reminders about unhandled notifications after:" : "Siųsti el. paštu priminimus apie neapdorotus pranešimus po:",
     "None" : "Nėra",
     "You need to set up your email address before you can receive notification emails." : "Prieš galėdami gauti pranešimus el. laiškais, turite nusistatyti el. pašto adresą.",
-    "Select a device" : "Pasirinkti įrenginį",
-    "seconds ago" : "prieš keletą sekundžių",
-    "Configure the default notification settings for new users" : "Konfigūruoti numatytuosius naujų naudotojų pranešimų nustatymus"
+    "Select a device" : "Pasirinkti įrenginį"
 },"pluralForm" :"nplurals=4; plural=(n % 10 == 1 && (n % 100 > 19 || n % 100 < 11) ? 0 : (n % 10 >= 2 && n % 10 <=9) && (n % 100 > 19 || n % 100 < 11) ? 1 : n % 1 != 0 ? 2: 3);"
 }

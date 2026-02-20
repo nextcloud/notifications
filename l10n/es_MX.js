@@ -40,8 +40,6 @@ OC.L10N.register(
     "You need to set up your email address before you can receive notification emails." : "Necesitas configurar tu dirección de correo electrónico antes de que puedas recibir correos de notificación",
     "Also repeat sound on a secondary speaker" : "Repetir el sonido también en un altavoz secundario",
     "Selection of the speaker device is currently not supported by Safari" : "La selección del dispositivo altavoz no está actualmente soportada por Safari",
-    "Select a device" : "Seleccionar un dispositivo",
-    "seconds ago" : "hace segundos",
-    "Configure the default notification settings for new users" : "Configure las opciones predeterminadas de notificaciones para nuevos usuarios"
+    "Select a device" : "Seleccionar un dispositivo"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

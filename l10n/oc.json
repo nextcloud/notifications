@@ -17,7 +17,6 @@
     "1 week" : "1 setmana",
     "Your settings have been updated." : "Paramètres actualizats.",
     "An error occurred while updating your settings." : "Una error s’es producha pendent l’actualizacion dels paramètres.",
-    "None" : "Cap",
-    "seconds ago" : "fa qualques segondas"
+    "None" : "Cap"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }

@@ -35,8 +35,6 @@ OC.L10N.register(
     "Play sound when a new notification arrives" : "پخش صدا هنگام دریافت اعلان جدید",
     "Play sound when a call started (requires Nextcloud Talk)" : "پخش صدا به محض برقراری تماس (درصورت استفاده از Nextcloud Talk)",
     "None" : "هیچ‌کدام",
-    "You need to set up your email address before you can receive notification emails." : "قبل از دریافت ایمیل های هشدار می بایست ادرس ایمیل خود را تنظیم کنید",
-    "seconds ago" : "ثانیه‌هایی پیش",
-    "Configure the default notification settings for new users" : "Configure the default notification settings for new users"
+    "You need to set up your email address before you can receive notification emails." : "قبل از دریافت ایمیل های هشدار می بایست ادرس ایمیل خود را تنظیم کنید"
 },
 "nplurals=2; plural=(n > 1);");

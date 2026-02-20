@@ -40,8 +40,6 @@ OC.L10N.register(
     "None" : "Ekkert",
     "You need to set up your email address before you can receive notification emails." : "Þú verður að gefa upp tölvupóstfangið þitt svo að þú farir að fá tilkynningapósta.",
     "Also repeat sound on a secondary speaker" : "Einnig endurtaka hljóð á aukahátalara",
-    "Select a device" : "Veldu tæki",
-    "seconds ago" : "sekúndum síðan",
-    "Configure the default notification settings for new users" : "Ákvarðaðu sjálfgefnar stillingar tilkynninga fyrir nýja notendur"
+    "Select a device" : "Veldu tæki"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");

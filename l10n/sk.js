@@ -43,8 +43,6 @@ OC.L10N.register(
     "You need to set up your email address before you can receive notification emails." : "Ak chcete dostávať oznámenia emailom, musíte najskôr vyplniť vašu emailovú adresu.",
     "Also repeat sound on a secondary speaker" : "Zopakovať zvuk aj na sekundárnom reproduktore",
     "Selection of the speaker device is currently not supported by Safari" : "Výber zariadenia reproduktora momentálne nie je podporovaný prehliadačom Safari",
-    "Select a device" : "Vyberte zariadenie",
-    "seconds ago" : "pred niekoľkými sekundami",
-    "Configure the default notification settings for new users" : "Predvolené nastavenia upozornení pre nových používateľov"
+    "Select a device" : "Vyberte zariadenie"
 },
 "nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);");

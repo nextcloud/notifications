@@ -43,8 +43,6 @@ OC.L10N.register(
     "You need to set up your email address before you can receive notification emails." : "E-pochta xabarnomalarini olishdan oldin elektron pochta manzilingizni sozlashingiz kerak.",
     "Also repeat sound on a secondary speaker" : "Shuningdek, ovozni ikkinchi darajali karnayda takrorlang",
     "Selection of the speaker device is currently not supported by Safari" : "Dinamik qurilmani tanlash hozirda Safari tomonidan qo'llab-quvvatlanmaydi",
-    "Select a device" : "Qurilmani tanlang",
-    "seconds ago" : "soniya avval",
-    "Configure the default notification settings for new users" : "Yangi foydalanuvchilar uchun standart bildirishnoma sozlamalarini sozlang"
+    "Select a device" : "Qurilmani tanlang"
 },
 "nplurals=1; plural=0;");

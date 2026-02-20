@@ -43,8 +43,6 @@ OC.L10N.register(
     "You need to set up your email address before you can receive notification emails." : "Be kell állítania az e-mail-címét, mielőtt értesítési leveleket kaphatna.",
     "Also repeat sound on a secondary speaker" : "Hang megismétlése egy másodlagos hangszórón is",
     "Selection of the speaker device is currently not supported by Safari" : "A Safari jelenleg nem támogatja a hangszóró eszköz kiválasztását.",
-    "Select a device" : "Eszköz kiválasztása",
-    "seconds ago" : "másodperce",
-    "Configure the default notification settings for new users" : "Az új felhasználók alapértelmezett értesítési beállításainak megadása"
+    "Select a device" : "Eszköz kiválasztása"
 },
 "nplurals=2; plural=(n != 1);");
