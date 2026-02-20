@@ -66,7 +66,7 @@ class Push {
 	 */
 	protected array $userStatuses = [];
 	/**
-	 * @psalm-var array<string, list<array{id: int, uid: string, token: int, endpoint: string, ua_public: string, auth: string, appTypes: string, activated: bool, activation_token: string}>>
+	 * @psalm-var array<string, list<array{id: int, uid: string, token: int, endpoint: string, ua_public: string, auth: string, app_types: string, activated: bool, activation_token: string}>>
 	 */
 	protected array $userWebPushDevices = [];
 	/**
@@ -175,11 +175,8 @@ class Push {
 	}
 
 	/**
-	 * @param array $devices
-	 * @psalm-param $devices list<array{id: int, uid: string, token: int, endpoint: string, ua_public: string, auth: string, appTypes: string, activated: bool, activation_token: string}>
-	 * @param string $app
-	 * @return array
-	 * @psalm-return list<array{id: int, uid: string, token: int, endpoint: string, ua_public: string, auth: string, appTypes: string, activated: bool, activation_token: string}>
+	 * @psalm-param list<array{id: int, uid: string, token: int, endpoint: string, ua_public: string, auth: string, app_types: string, activated: bool, activation_token: string}> $devices
+	 * @psalm-return list<array{id: int, uid: string, token: int, endpoint: string, ua_public: string, auth: string, app_types: string, activated: bool, activation_token: string}>
 	 */
 	public function filterWebPushDeviceList(array $devices, string $app): array {
 		// Consider all 3 options as 'talk'
@@ -187,11 +184,11 @@ class Push {
 			$app = 'talk';
 		}
 
-		return array_filter($devices, function ($device) use ($app) {
+		return array_values(array_filter($devices, function ($device) use ($app) {
 			$appTypes = explode(',', $device['app_types']);
 			return $device['activated'] && (\in_array($app, $appTypes)
 				|| (\in_array('all', $appTypes) && !\in_array('-' . $app, $appTypes)));
-		});
+		}));
 	}
 
 
@@ -299,6 +296,9 @@ class Push {
 		$this->proxyPushToDevice($id, $user, $proxyDevices, $notification, $output);
 	}
 
+	/**
+	 * @param list<array{id: int, uid: string, token: int, endpoint: string, ua_public: string, auth: string, app_types: string, activated: bool, activation_token: string}> $devices
+	 */
 	public function webPushToDevice(int $id, IUser $user, array $devices, INotification $notification, ?OutputInterface $output = null): void {
 		if (empty($devices)) {
 			$this->printInfo('<comment>No web push devices found for user</comment>');
@@ -1042,7 +1042,7 @@ class Push {
 
 	/**
 	 * @param string $uid
-	 * @return list<array{id: int, uid: string, token: int, endpoint: string, ua_public: string, auth: string, appTypes: string, activated: bool, activation_token: string}>
+	 * @return list<array{id: int, uid: string, token: int, endpoint: string, ua_public: string, auth: string, app_types: string, activated: bool, activation_token: string}>
 	 */
 	protected function getWebPushDevicesForUser(string $uid): array {
 		$query = $this->db->getQueryBuilder();
@@ -1051,6 +1051,7 @@ class Push {
 			->where($query->expr()->eq('uid', $query->createNamedParameter($uid)));
 
 		$result = $query->executeQuery();
+		/** @var list<array{id: int, uid: string, token: int, endpoint: string, ua_public: string, auth: string, app_types: string, activated: bool, activation_token: string}> $devices */
 		$devices = $result->fetchAll();
 		$result->closeCursor();
 
@@ -1059,7 +1060,7 @@ class Push {
 
 	/**
 	 * @param string[] $userIds
-	 * @return array<string, list<array{id: int, uid: string, token: int, endpoint: string, ua_public: string, auth: string, appTypes: string, activated: bool, activation_token: string}>>
+	 * @return array<string, list<array{id: int, uid: string, token: int, endpoint: string, ua_public: string, auth: string, app_types: string, activated: bool, activation_token: string}>>
 	 */
 	protected function getWebPushDevicesForUsers(array $userIds): array {
 		$query = $this->db->getQueryBuilder();
@@ -1070,6 +1071,7 @@ class Push {
 		$devices = [];
 		$result = $query->executeQuery();
 		while ($row = $result->fetch()) {
+			/** @psalm-var array{id: int, uid: string, token: int, endpoint: string, ua_public: string, auth: string, app_types: string, activated: bool, activation_token: string} $row */
 			if (!isset($devices[$row['uid']])) {
 				$devices[$row['uid']] = [];
 			}

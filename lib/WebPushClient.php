@@ -118,7 +118,7 @@ class WebPushClient {
 		// the callback could be defined by the caller
 		// For the moment, it is used during registration only - no need to catch 404 &co
 		// as the registration isn't activated
-		$callback = function ($r) {
+		$callback = function ($r): void {
 		};
 		$c->flushPooled($callback);
 	}
