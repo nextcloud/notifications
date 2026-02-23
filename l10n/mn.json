@@ -1,5 +1,6 @@
 { "translations": {
     "User not found" : "Хэрэглэгч олдсонгүй",
+    "An unexpected error occurred, ask your administration to check the logs." : "Гэнэтийн алдаа гарлаа, админаас логуудыг шалгахыг хүснэ үү.",
     "Hello %s" : "–°–∞–π–Ω –±–∞–π–Ω–∞ —É—É, %s",
     "Hello %s," : "–°–∞–π–Ω –±–∞–π–Ω–∞ —É—É, %s,",
     "_New notification for %s_::_%n new notifications for %s_" : ["%s-д шинэ мэдэгдэл","%s-д %n шинэ мэдэгдэл"],
