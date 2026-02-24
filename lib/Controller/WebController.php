@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace OCA\Notifications\Controller;
 
 use OCP\AppFramework\Controller;
+use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\FrontpageRoute;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\Attribute\OpenAPI;
@@ -29,7 +30,7 @@ class WebController extends Controller {
 	/**
 	 * Return the service worker with `Service-Worker-Allowed: /` header
 	 *
-	 * @return StreamResponse<Http::STATUS_OK, array{}>
+	 * @return StreamResponse<Http::STATUS_OK, array{'Content-Type': 'application/javascript', 'Service-Worker-Allowed': '/'}>
 	 *
 	 * 200: The service worker
 	 */
@@ -37,11 +38,13 @@ class WebController extends Controller {
 	#[NoCSRFRequired]
 	#[FrontpageRoute(verb: 'GET', url: '/service-worker.js')]
 	public function serviceWorker(): StreamResponse {
-		$response = new StreamResponse(__DIR__ . '/../../service-worker.js');
-		$response->setHeaders([
-			'Content-Type' => 'application/javascript',
-			'Service-Worker-Allowed' => '/'
-		]);
+		$response = new StreamResponse(
+			__DIR__ . '/../../service-worker.js',
+			headers: [
+				'Content-Type' => 'application/javascript',
+				'Service-Worker-Allowed' => '/'
+			]
+		);
 		$policy = new ContentSecurityPolicy();
 		$policy->addAllowedWorkerSrcDomain("'self'");
 		$policy->addAllowedScriptDomain("'self'");
