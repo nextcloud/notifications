@@ -1143,37 +1143,6 @@
                     }
                 }
             }
-        },
-        "/index.php/apps/notifications/service-worker.js": {
-            "get": {
-                "operationId": "web-service-worker",
-                "summary": "Return the service worker with `Service-Worker-Allowed: /` header",
-                "tags": [
-                    "web"
-                ],
-                "security": [
-                    {},
-                    {
-                        "bearer_auth": []
-                    },
-                    {
-                        "basic_auth": []
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "The service worker",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "type": "string",
-                                    "format": "binary"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
         }
     },
     "tags": []
