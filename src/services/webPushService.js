@@ -9,9 +9,16 @@ import { generateOcsUrl, generateUrl } from '@nextcloud/router'
  * Load service worker
  */
 function loadServiceWorker() {
+	let scope = getRootUrl()
+	// If the instance is not in a subfolder an empty string will be returned.
+	// The service worker registration will use the current path if it receives an empty string,
+	// which will result in a service worker registration for every single path the user visits.
+	if (scope === '') {
+		scope = '/'
+	}
 	return navigator.serviceWorker.register(
 		generateUrl('/apps/notifications/service-worker.js', {}, { noRewrite: true }),
-		{ scope: '/' },
+		{ scope: scope },
 	).then((registration) => {
 		console.info('ServiceWorker registered')
 		return registration
