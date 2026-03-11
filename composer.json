@@ -55,7 +55,8 @@
 				"minishlink/web-push"
 			],
 			"excluded_packages": [
-				"symfony/polyfill-php82"
+				"symfony/polyfill-php82",
+				"symfony/deprecation-contracts"
 			]
 		}
 	}
