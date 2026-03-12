@@ -24,11 +24,13 @@
 
 		<NcCheckboxRadioSwitch
 			v-model="config.sound_notification"
+			type="switch"
 			@update:modelValue="updateSettings">
 			{{ t('notifications', 'Play sound when a new notification arrives') }}
 		</NcCheckboxRadioSwitch>
 		<NcCheckboxRadioSwitch
 			v-model="config.sound_talk"
+			type="switch"
 			@update:modelValue="updateSettings">
 			{{ t('notifications', 'Play sound when a call started (requires Nextcloud Talk)') }}
 		</NcCheckboxRadioSwitch>
@@ -36,7 +38,7 @@
 		<template v-if="config.sound_talk">
 			<NcCheckboxRadioSwitch
 				v-model="storage.secondary_speaker"
-				class="additional-margin-top"
+				type="switch"
 				:disabled="isSafari"
 				@update:modelValue="updateLocalSettings">
 				{{ t('notifications', 'Also repeat sound on a secondary speaker') }}
@@ -192,10 +194,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.additional-margin-top {
-	margin-top: 12px;
-}
-
 .notification-frequency__wrapper {
 	display: flex;
 	flex-direction: column;

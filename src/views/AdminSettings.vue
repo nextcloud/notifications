@@ -23,13 +23,32 @@
 
 		<NcCheckboxRadioSwitch
 			v-model="config.sound_notification"
+			type="switch"
 			@update:modelValue="updateSettings">
 			{{ t('notifications', 'Play sound when a new notification arrives') }}
 		</NcCheckboxRadioSwitch>
 		<NcCheckboxRadioSwitch
 			v-model="config.sound_talk"
+			type="switch"
 			@update:modelValue="updateSettings">
 			{{ t('notifications', 'Play sound when a call started (requires Nextcloud Talk)') }}
+		</NcCheckboxRadioSwitch>
+
+		<h3>{{ t('notifications', 'Web push settings') }}</h3>
+		<NcNoteCard v-if="showWebpushSwitch" type="warning">
+			{{ t('notifications', 'Web push notifications are encrypted but routed through services provided by Microsoft, Apple, and Google. While the content is protected, metadata such as timing and frequency of notifications may be exposed to these providers.') }}
+		</NcNoteCard>
+		<NcButton
+			v-if="!showWebpushSwitch"
+			@click="showWebpushSwitch = true">
+			{{ t('notifications', 'Enable web push notifications') }}
+		</NcButton>
+		<NcCheckboxRadioSwitch
+			v-else
+			v-model="config.webpush_enabled"
+			type="switch"
+			@update:modelValue="updateSettings">
+			{{ t('notifications', 'Enable web push notifications') }}
 		</NcCheckboxRadioSwitch>
 	</NcSettingsSection>
 </template>
@@ -40,8 +59,10 @@ import { showError, showSuccess } from '@nextcloud/dialogs'
 import { loadState } from '@nextcloud/initial-state'
 import { t } from '@nextcloud/l10n'
 import { generateOcsUrl } from '@nextcloud/router'
-import { computed, reactive } from 'vue'
+import { computed, reactive, ref } from 'vue'
+import NcButton from '@nextcloud/vue/components/NcButton'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
+import NcNoteCard from '@nextcloud/vue/components/NcNoteCard'
 import NcSelect from '@nextcloud/vue/components/NcSelect'
 import NcSettingsSection from '@nextcloud/vue/components/NcSettingsSection'
 
@@ -64,13 +85,16 @@ const BATCHTIME_OPTIONS = [
 export default {
 	name: 'AdminSettings',
 	components: {
-		NcSelect,
+		NcButton,
 		NcCheckboxRadioSwitch,
+		NcNoteCard,
+		NcSelect,
 		NcSettingsSection,
 	},
 
 	setup() {
 		const config = reactive(loadState('notifications', 'config', {}))
+		const showWebpushSwitch = ref(config.webpush_enabled)
 
 		const currentBatchTime = computed({
 			get() {
@@ -85,6 +109,7 @@ export default {
 			BATCHTIME_OPTIONS,
 			config,
 			currentBatchTime,
+			showWebpushSwitch,
 		}
 	},
 
@@ -97,6 +122,7 @@ export default {
 				form.append('batchSetting', this.config.setting_batchtime)
 				form.append('soundNotification', this.config.sound_notification ? 'yes' : 'no')
 				form.append('soundTalk', this.config.sound_talk ? 'yes' : 'no')
+				form.append('webpushEnabled', this.config.webpush_enabled ? 'yes' : 'no')
 				await axios.post(generateOcsUrl('apps/notifications/api/v2/settings/admin'), form)
 				showSuccess(t('notifications', 'Your settings have been updated.'))
 			} catch (error) {
