@@ -19,11 +19,13 @@ use OCA\Notifications\Push;
 use OCA\Notifications\TokenValidation;
 use OCA\Notifications\WebPushClient;
 use OCP\AppFramework\Http;
+use OCP\AppFramework\Services\IAppConfig;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Authentication\Token\IToken as OCPIToken;
 use OCP\Http\Client\IClient;
 use OCP\Http\Client\IClientService;
 use OCP\Http\Client\IResponse;
+use OCP\IAppConfig as IGlobalAppConfig;
 use OCP\ICache;
 use OCP\ICacheFactory;
 use OCP\IConfig;
@@ -48,6 +50,8 @@ class PushTest extends TestCase {
 	protected IDBConnection $db;
 	protected INotificationManager&MockObject $notificationManager;
 	protected IConfig&MockObject $config;
+	protected IAppConfig&MockObject $appConfig;
+	protected IGlobalAppConfig&MockObject $globalAppConfig;
 	protected WebPushClient&MockObject $wpClient;
 	protected IProvider&MockObject $tokenProvider;
 	protected Manager&MockObject $keyManager;
@@ -70,6 +74,8 @@ class PushTest extends TestCase {
 		$this->db = \OCP\Server::get(IDBConnection::class);
 		$this->notificationManager = $this->createMock(INotificationManager::class);
 		$this->config = $this->createMock(IConfig::class);
+		$this->appConfig = $this->createMock(IAppConfig::class);
+		$this->globalAppConfig = $this->createMock(IGlobalAppConfig::class);
 		$this->wpClient = $this->createMock(WebPushClient::class);
 		$this->tokenProvider = $this->createMock(IProvider::class);
 		$this->keyManager = $this->createMock(Manager::class);
@@ -99,6 +105,8 @@ class PushTest extends TestCase {
 					$this->userManager,
 					$this->notificationManager,
 					$this->config,
+					$this->appConfig,
+					$this->globalAppConfig,
 					$this->wpClient,
 					$this->tokenProvider,
 					$this->keyManager,
@@ -119,6 +127,8 @@ class PushTest extends TestCase {
 			$this->userManager,
 			$this->notificationManager,
 			$this->config,
+			$this->appConfig,
+			$this->globalAppConfig,
 			$this->wpClient,
 			$this->tokenProvider,
 			$this->keyManager,
@@ -504,12 +514,15 @@ class PushTest extends TestCase {
 			->with('debug', false)
 			->willReturn($isDebug);
 
-		$this->config
-			->method('getAppValue')
-			->willReturnMap([
-				['notifications', 'subscription_aware_server', 'https://push-notifications.nextcloud.com', 'https://push-notifications.nextcloud.com'],
-				['support', 'subscription_key', '', ''],
-			]);
+		$this->appConfig
+			->method('getAppValueString')
+			->with('subscription_aware_server', 'https://push-notifications.nextcloud.com')
+			->willReturn('https://push-notifications.nextcloud.com');
+
+		$this->globalAppConfig
+			->method('getValueString')
+			->with('support', 'subscription_key')
+			->willReturn('');
 
 		$this->l10nFactory
 			->method('getUserLanguage')
@@ -783,12 +796,15 @@ class PushTest extends TestCase {
 			->with('has_internet_connection', true)
 			->willReturn(true);
 
-		$this->config
-			->method('getAppValue')
-			->willReturnMap([
-				['notifications', 'subscription_aware_server', 'https://push-notifications.nextcloud.com', 'https://push-notifications.nextcloud.com'],
-				['support', 'subscription_key', '', ''],
-			]);
+		$this->appConfig
+			->method('getAppValueString')
+			->with('subscription_aware_server', 'https://push-notifications.nextcloud.com')
+			->willReturn('https://push-notifications.nextcloud.com');
+
+		$this->globalAppConfig
+			->method('getValueString')
+			->with('support', 'subscription_key')
+			->willReturn('');
 
 		$this->notificationManager->method('isFairUseOfFreePushService')
 			->willReturn(true);

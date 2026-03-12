@@ -9,17 +9,16 @@ declare(strict_types=1);
 
 namespace OCA\Notifications\Settings;
 
-use OCA\Notifications\AppInfo\Application;
 use OCA\Notifications\Model\Settings;
 use OCP\AppFramework\Http\TemplateResponse;
+use OCP\AppFramework\Services\IAppConfig;
 use OCP\AppFramework\Services\IInitialState;
-use OCP\IConfig;
 use OCP\Settings\ISettings;
 use OCP\Util;
 
 class Admin implements ISettings {
 	public function __construct(
-		protected IConfig $config,
+		protected IAppConfig $appConfig,
 		protected IInitialState $initialState,
 	) {
 	}
@@ -29,9 +28,9 @@ class Admin implements ISettings {
 		Util::addStyle('notifications', 'notifications-admin-settings');
 		Util::addScript('notifications', 'notifications-admin-settings');
 
-		$defaultSoundNotification = $this->config->getAppValue(Application::APP_ID, 'sound_notification') === 'yes' ? 'yes' : 'no';
-		$defaultSoundTalk = $this->config->getAppValue(Application::APP_ID, 'sound_talk') === 'yes' ? 'yes' : 'no';
-		$defaultBatchtime = (int)$this->config->getAppValue(Application::APP_ID, 'setting_batchtime');
+		$defaultSoundNotification = $this->appConfig->getAppValueBool('sound_notification');
+		$defaultSoundTalk = $this->appConfig->getAppValueBool('sound_talk');
+		$defaultBatchtime = $this->appConfig->getAppValueInt('setting_batchtime');
 
 		if ($defaultBatchtime !== Settings::EMAIL_SEND_WEEKLY
 			&& $defaultBatchtime !== Settings::EMAIL_SEND_DAILY
@@ -44,8 +43,8 @@ class Admin implements ISettings {
 		$this->initialState->provideInitialState('config', [
 			'setting' => 'admin',
 			'setting_batchtime' => $defaultBatchtime,
-			'sound_notification' => $defaultSoundNotification === 'yes',
-			'sound_talk' => $defaultSoundTalk === 'yes',
+			'sound_notification' => $defaultSoundNotification,
+			'sound_talk' => $defaultSoundTalk,
 		]);
 
 		return new TemplateResponse('notifications', 'settings/admin');

@@ -17,14 +17,16 @@ use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\OpenAPI;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
-use OCP\IConfig;
+use OCP\AppFramework\Services\IAppConfig;
+use OCP\Config\IUserConfig;
 use OCP\IRequest;
 
 class SettingsController extends OCSController {
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		protected IConfig $config,
+		protected IAppConfig $appConfig,
+		protected IUserConfig $userConfig,
 		protected SettingsMapper $settingsMapper,
 		protected string $userId,
 	) {
@@ -47,8 +49,8 @@ class SettingsController extends OCSController {
 	public function personal(int $batchSetting, string $soundNotification, string $soundTalk): DataResponse {
 		$this->settingsMapper->setBatchSettingForUser($this->settingsMapper->getSettingsByUser($this->userId), $batchSetting);
 
-		$this->config->setUserValue($this->userId, Application::APP_ID, 'sound_notification', $soundNotification !== 'no' ? 'yes' : 'no');
-		$this->config->setUserValue($this->userId, Application::APP_ID, 'sound_talk', $soundTalk !== 'no' ? 'yes' : 'no');
+		$this->userConfig->setValueBool($this->userId, Application::APP_ID, 'sound_notification', $soundNotification === 'yes');
+		$this->userConfig->setValueBool($this->userId, Application::APP_ID, 'sound_talk', $soundTalk === 'yes');
 
 		return new DataResponse();
 	}
@@ -66,9 +68,9 @@ class SettingsController extends OCSController {
 	#[OpenAPI(scope: OpenAPI::SCOPE_ADMINISTRATION)]
 	#[ApiRoute(verb: 'POST', url: '/api/{apiVersion}/settings/admin', requirements: ['apiVersion' => '(v2)'])]
 	public function admin(int $batchSetting, string $soundNotification, string $soundTalk): DataResponse {
-		$this->config->setAppValue(Application::APP_ID, 'setting_batchtime', (string)$batchSetting);
-		$this->config->setAppValue(Application::APP_ID, 'sound_notification', $soundNotification !== 'no' ? 'yes' : 'no');
-		$this->config->setAppValue(Application::APP_ID, 'sound_talk', $soundTalk !== 'no' ? 'yes' : 'no');
+		$this->appConfig->setAppValueInt('setting_batchtime', $batchSetting);
+		$this->appConfig->setAppValueBool('sound_notification', $soundNotification === 'yes');
+		$this->appConfig->setAppValueBool('sound_talk', $soundTalk === 'yes');
 
 		return new DataResponse();
 	}

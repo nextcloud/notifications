@@ -14,14 +14,15 @@ use GuzzleHttp\Exception\ServerException;
 use OC\Authentication\Token\IProvider;
 use OC\Security\IdentityProof\Key;
 use OC\Security\IdentityProof\Manager;
-use OCA\Notifications\AppInfo\Application;
 use OCA\Notifications\Vendor\Minishlink\WebPush\MessageSentReport;
 use OCP\AppFramework\Http;
+use OCP\AppFramework\Services\IAppConfig;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Authentication\Exceptions\InvalidTokenException;
 use OCP\Authentication\Token\IToken;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Http\Client\IClientService;
+use OCP\IAppConfig as IGlobalAppConfig;
 use OCP\ICache;
 use OCP\ICacheFactory;
 use OCP\IConfig;
@@ -83,6 +84,8 @@ class Push {
 		protected IUserManager $userManager,
 		protected INotificationManager $notificationManager,
 		protected IConfig $config,
+		protected IAppConfig $appConfig,
+		protected IGlobalAppConfig $globalAppConfig,
 		protected WebPushClient $wpClient,
 		protected IProvider $tokenProvider,
 		protected Manager $keyManager,
@@ -676,14 +679,14 @@ class Push {
 			return;
 		}
 
-		$subscriptionAwareServer = rtrim($this->config->getAppValue(Application::APP_ID, 'subscription_aware_server', 'https://push-notifications.nextcloud.com'), '/');
+		$subscriptionAwareServer = rtrim($this->appConfig->getAppValueString('subscription_aware_server', 'https://push-notifications.nextcloud.com'), '/');
 		if ($subscriptionAwareServer === 'https://push-notifications.nextcloud.com') {
-			$subscriptionKey = $this->config->getAppValue('support', 'subscription_key');
+			$subscriptionKey = $this->globalAppConfig->getValueString('support', 'subscription_key');
 		} else {
-			$subscriptionKey = $this->config->getAppValue(Application::APP_ID, 'push_subscription_key');
+			$subscriptionKey = $this->appConfig->getAppValueString('push_subscription_key');
 			if ($subscriptionKey === '') {
 				$subscriptionKey = $this->createPushSubscriptionKey();
-				$this->config->setAppValue(Application::APP_ID, 'push_subscription_key', $subscriptionKey);
+				$this->appConfig->setAppValueString('push_subscription_key', $subscriptionKey);
 			}
 		}
 
@@ -758,7 +761,7 @@ class Push {
 				}
 			} elseif ($status !== Http::STATUS_OK) {
 				if ($status === Http::STATUS_TOO_MANY_REQUESTS) {
-					$this->config->setAppValue(Application::APP_ID, 'rate_limit_reached', (string)$this->timeFactory->getTime());
+					$this->appConfig->setAppValueInt('rate_limit_reached', $this->timeFactory->getTime());
 				}
 				$error = $body && $bodyData === null ? $body : 'no reason given';
 				$this->printInfo('<error>Could not send notification to push server [' . $proxyServer . ']: ' . $error . '</error>');

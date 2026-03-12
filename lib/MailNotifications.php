@@ -13,6 +13,8 @@ use OCA\Notifications\Model\Settings;
 use OCA\Notifications\Model\SettingsMapper;
 use OCP\AppFramework\Services\IAppConfig;
 use OCP\AppFramework\Utility\ITimeFactory;
+use OCP\Config\IUserConfig;
+use OCP\Config\ValueType;
 use OCP\Defaults;
 use OCP\IConfig;
 use OCP\IDateTimeFormatter;
@@ -35,7 +37,8 @@ class MailNotifications {
 	public const BATCH_SIZE_WEB = 25;
 
 	public function __construct(
-		protected IConfig $config,
+		protected IConfig $systemConfig,
+		protected IUserConfig $userConfig,
 		protected IAppConfig $appConfig,
 		protected IManager $manager,
 		protected Handler $handler,
@@ -69,18 +72,18 @@ class MailNotifications {
 		// Batch-read settings
 		$fallbackTimeZone = date_default_timezone_get();
 		/** @psalm-var array<string, string> $userTimezones */
-		$userTimezones = $this->config->getUserValueForUsers('core', 'timezone', $userIds);
-		$userEnabled = $this->config->getUserValueForUsers('core', 'enabled', $userIds);
+		$userTimezones = $this->userConfig->getValuesByUsers('core', 'timezone', ValueType::STRING, $userIds);
+		$userEnabled = $this->userConfig->getValuesByUsers('core', 'enabled', ValueType::BOOL, $userIds);
 		$defaultBatchTime = SettingsMapper::batchSettingToTime($this->appConfig->getAppValueInt('setting_batchtime'));
 
-		$fallbackLang = $this->config->getSystemValue('force_language', null);
-		if (is_string($fallbackLang)) {
+		$fallbackLang = $this->systemConfig->getSystemValueString('force_language');
+		if ($fallbackLang !== '') {
 			/** @psalm-var array<string, string> $userLanguages */
 			$userLanguages = [];
 		} else {
-			$fallbackLang = $this->config->getSystemValueString('default_language', 'en');
+			$fallbackLang = $this->systemConfig->getSystemValueString('default_language', 'en');
 			/** @psalm-var array<string, string> $userLanguages */
-			$userLanguages = $this->config->getUserValueForUsers('core', 'lang', $userIds);
+			$userLanguages = $this->userConfig->getValuesByUsers('core', 'lang', ValueType::STRING, $userIds);
 		}
 
 		foreach ($userSettings as $settings) {
