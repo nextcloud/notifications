@@ -55,6 +55,7 @@
 				"minishlink/web-push"
 			],
 			"excluded_packages": [
+				"symfony/polyfill-php83",
 				"symfony/polyfill-php82"
 			]
 		}
