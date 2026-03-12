@@ -92,6 +92,10 @@ class PushTest extends TestCase {
 		$this->cacheFactory->method('createDistributed')
 			->with('pushtokens')
 			->willReturn($this->cache);
+
+		$this->appConfig->method('getAppValueBool')
+			->with('webpush_enabled')
+			->willReturn(true);
 	}
 
 	/**
