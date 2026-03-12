@@ -31,6 +31,7 @@ class Admin implements ISettings {
 		$defaultSoundNotification = $this->appConfig->getAppValueBool('sound_notification');
 		$defaultSoundTalk = $this->appConfig->getAppValueBool('sound_talk');
 		$defaultBatchtime = $this->appConfig->getAppValueInt('setting_batchtime');
+		$webpushEnabled = $this->appConfig->getAppValueBool('webpush_enabled');
 
 		if ($defaultBatchtime !== Settings::EMAIL_SEND_WEEKLY
 			&& $defaultBatchtime !== Settings::EMAIL_SEND_DAILY
@@ -45,6 +46,7 @@ class Admin implements ISettings {
 			'setting_batchtime' => $defaultBatchtime,
 			'sound_notification' => $defaultSoundNotification,
 			'sound_talk' => $defaultSoundTalk,
+			'webpush_enabled' => $webpushEnabled,
 		]);
 
 		return new TemplateResponse('notifications', 'settings/admin');

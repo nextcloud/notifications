@@ -56,6 +56,10 @@ class WebPushControllerTest extends TestCase {
 		$this->tokenProvider = $this->createMock(IProvider::class);
 		$this->identityProof = $this->createMock(Manager::class);
 		$this->logger = $this->createMock(LoggerInterface::class);
+
+		$this->appConfig->method('getAppValueBool')
+			->with('webpush_enabled')
+			->willReturn(true);
 	}
 
 	protected function getController(array $methods = []): WebPushController|MockObject {
