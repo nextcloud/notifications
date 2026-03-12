@@ -18,7 +18,7 @@ use OCA\Notifications\Controller\WebPushController;
 use OCA\Notifications\WebPushClient;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
-use OCP\IAppConfig;
+use OCP\AppFramework\Services\IAppConfig;
 use OCP\IDBConnection;
 use OCP\IRequest;
 use OCP\ISession;

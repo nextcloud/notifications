@@ -9,16 +9,15 @@ declare(strict_types=1);
 
 namespace OCA\Notifications\Settings;
 
-use OCA\Notifications\AppInfo\Application;
+use OCP\AppFramework\Services\IAppConfig;
 use OCP\AppFramework\Utility\ITimeFactory;
-use OCP\IConfig;
 use OCP\IL10N;
 use OCP\SetupCheck\ISetupCheck;
 use OCP\SetupCheck\SetupResult;
 
 class SetupWarningOnRateLimitReached implements ISetupCheck {
 	public function __construct(
-		private IConfig $config,
+		private IAppConfig $appConfig,
 		private ITimeFactory $timeFactory,
 		private IL10N $l,
 	) {
@@ -36,7 +35,7 @@ class SetupWarningOnRateLimitReached implements ISetupCheck {
 
 	#[\Override]
 	public function run(): SetupResult {
-		$lastReached = (int)$this->config->getAppValue(Application::APP_ID, 'rate_limit_reached', '0');
+		$lastReached = $this->appConfig->getAppValueInt('rate_limit_reached');
 		if ($lastReached < ($this->timeFactory->getTime() - 7 * 24 * 3600)) {
 			return SetupResult::success();
 		}

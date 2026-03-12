@@ -12,7 +12,6 @@ use OCA\Notifications\Model\Settings;
 use OCA\Notifications\Model\SettingsMapper;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
-use OCP\IConfig;
 use OCP\User\Events\UserCreatedEvent;
 
 /**
@@ -21,7 +20,6 @@ use OCP\User\Events\UserCreatedEvent;
 class UserCreatedListener implements IEventListener {
 	public function __construct(
 		private SettingsMapper $settingsMapper,
-		private IConfig $config,
 	) {
 	}
 

@@ -14,9 +14,9 @@ use OCP\AppFramework\Http\Events\BeforeTemplateRenderedEvent;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Services\IAppConfig;
 use OCP\AppFramework\Services\IInitialState;
+use OCP\Config\IUserConfig;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
-use OCP\IConfig;
 use OCP\IUser;
 use OCP\IUserSession;
 use OCP\Notification\IManager;
@@ -27,7 +27,7 @@ use OCP\Util;
  */
 class BeforeTemplateRenderedListener implements IEventListener {
 	public function __construct(
-		protected IConfig $config,
+		protected IUserConfig $userConfig,
 		protected IUserSession $userSession,
 		protected IInitialState $initialState,
 		protected IManager $notificationManager,
@@ -51,10 +51,10 @@ class BeforeTemplateRenderedListener implements IEventListener {
 			return;
 		}
 
-		$defaultSoundNotification = $this->appConfig->getAppValueString(Application::APP_ID, 'sound_notification') === 'yes' ? 'yes' : 'no';
-		$userSoundNotification = $this->config->getUserValue($user->getUID(), Application::APP_ID, 'sound_notification', $defaultSoundNotification) === 'yes';
-		$defaultSoundTalk = $this->appConfig->getAppValueString(Application::APP_ID, 'sound_talk') === 'yes' ? 'yes' : 'no';
-		$userSoundTalk = $this->config->getUserValue($user->getUID(), Application::APP_ID, 'sound_talk', $defaultSoundTalk) === 'yes';
+		$defaultSoundNotification = $this->appConfig->getAppValueBool('sound_notification');
+		$userSoundNotification = $this->userConfig->getValueBool($user->getUID(), Application::APP_ID, 'sound_notification', $defaultSoundNotification);
+		$defaultSoundTalk = $this->appConfig->getAppValueBool('sound_talk');
+		$userSoundTalk = $this->userConfig->getValueBool($user->getUID(), Application::APP_ID, 'sound_talk', $defaultSoundTalk);
 
 		$this->initialState->provideInitialState('sound_notification', $userSoundNotification);
 

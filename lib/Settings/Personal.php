@@ -16,7 +16,7 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Services\IAppConfig;
 use OCP\AppFramework\Services\IInitialState;
-use OCP\IConfig;
+use OCP\Config\IUserConfig;
 use OCP\IL10N;
 use OCP\IUser;
 use OCP\IUserSession;
@@ -25,7 +25,7 @@ use OCP\Util;
 
 class Personal implements ISettings {
 	public function __construct(
-		protected IConfig $config,
+		protected IUserConfig $userConfig,
 		protected IAppConfig $appConfig,
 		protected IL10N $l10n,
 		protected IUserSession $session,
@@ -57,10 +57,10 @@ class Personal implements ISettings {
 			$settingBatchTime = $this->appConfig->getAppValueInt('setting_batchtime');
 		}
 
-		$defaultSoundNotification = $this->appConfig->getAppValueBool('sound_notification') ? 'yes' : 'no';
-		$userSoundNotification = $this->config->getUserValue($user->getUID(), Application::APP_ID, 'sound_notification', $defaultSoundNotification) === 'yes';
-		$defaultSoundTalk = $this->appConfig->getAppValueBool('sound_talk') ? 'yes' : 'no';
-		$userSoundTalk = $this->config->getUserValue($user->getUID(), Application::APP_ID, 'sound_talk', $defaultSoundTalk) === 'yes';
+		$defaultSoundNotification = $this->appConfig->getAppValueBool('sound_notification');
+		$userSoundNotification = $this->userConfig->getValueBool($user->getUID(), Application::APP_ID, 'sound_notification', $defaultSoundNotification);
+		$defaultSoundTalk = $this->appConfig->getAppValueBool('sound_talk');
+		$userSoundTalk = $this->userConfig->getValueBool($user->getUID(), Application::APP_ID, 'sound_talk', $defaultSoundTalk);
 
 		$this->initialState->provideInitialState('config', [
 			'setting' => 'personal',
