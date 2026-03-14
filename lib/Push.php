@@ -1048,6 +1048,10 @@ class Push {
 	 * @return list<array{id: int, uid: string, token: int, endpoint: string, ua_public: string, auth: string, app_types: string, activated: bool, activation_token: string}>
 	 */
 	protected function getWebPushDevicesForUser(string $uid): array {
+		if (!$this->appConfig->getAppValueBool('webpush_enabled')) {
+			return [];
+		}
+
 		$query = $this->db->getQueryBuilder();
 		$query->select('*')
 			->from('notifications_webpush')
@@ -1066,6 +1070,10 @@ class Push {
 	 * @return array<string, list<array{id: int, uid: string, token: int, endpoint: string, ua_public: string, auth: string, app_types: string, activated: bool, activation_token: string}>>
 	 */
 	protected function getWebPushDevicesForUsers(array $userIds): array {
+		if (!$this->appConfig->getAppValueBool('webpush_enabled')) {
+			return [];
+		}
+
 		$query = $this->db->getQueryBuilder();
 		$query->select('*')
 			->from('notifications_webpush')

@@ -1,12 +1,7 @@
-SPDX-License-Identifier: AGPL-3.0-only
 SPDX-License-Identifier: AGPL-3.0-or-later
-SPDX-FileCopyrightText: Joas Schilling <coding@schilljs.com>
 SPDX-FileCopyrightText: Nextcloud GmbH and Nextcloud contributors
 
 This file is generated from multiple sources. Included packages:
 - @nextcloud/vue
 	- version: 9.5.0
 	- license: AGPL-3.0-or-later
-- notifications
-	- version: 7.0.0-dev.0
-	- license: AGPL-3.0-only
