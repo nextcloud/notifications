@@ -1,0 +1,17 @@
+diff --git a/.github/workflows/phpunit-oci.yml b/.github/workflows/phpunit-oci.yml
+index 6b6fb3f6..428fd518 100644
+--- a/.github/workflows/phpunit-oci.yml
++++ b/.github/workflows/phpunit-oci.yml
+@@ -169,6 +169,12 @@ jobs:
+         run: |
+           composer run --list | grep '^  test:integration ' | wc -l | grep 1
+
++      - name: Enable debug logging
++        if: steps.check_integration.outcome == 'success'
++        run: |
++          ./occ config:system:set debug --value true --type bool
++          ./occ log:manage --level debug
++
+       - name: Run Nextcloud
+         # Only run if phpunit integration config file exists
+         if: steps.check_integration.outcome == 'success'

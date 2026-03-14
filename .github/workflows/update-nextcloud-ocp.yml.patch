@@ -1,0 +1,13 @@
+diff --git a/.github/workflows/update-nextcloud-ocp.yml b/.github/workflows/update-nextcloud-ocp.yml
+index 873bf119..760faece 100644
+--- a/.github/workflows/update-nextcloud-ocp.yml
++++ b/.github/workflows/update-nextcloud-ocp.yml
+@@ -11,7 +11,7 @@ name: Update nextcloud/ocp
+ on:
+   workflow_dispatch:
+   schedule:
+-    - cron: "5 2 * * 0"
++    - cron: "5 2 * * *"
+
+ permissions:
+   contents: read
