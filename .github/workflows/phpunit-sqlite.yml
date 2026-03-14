@@ -149,6 +149,12 @@ jobs:
         run: |
           composer run --list | grep '^  test:integration ' | wc -l | grep 1
 
+      - name: Enable debug logging
+        if: steps.check_integration.outcome == 'success'
+        run: |
+          ./occ config:system:set debug --value true --type bool
+          ./occ log:manage --level debug
+
       - name: Run Nextcloud
         # Only run if phpunit integration config file exists
         if: steps.check_integration.outcome == 'success'
