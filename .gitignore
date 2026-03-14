@@ -70,6 +70,7 @@ nbproject
 # Build related files
 /npm-debug.log
 /build
+/lib/autoload
 /lib/Vendor
 /vendor
 /vendor-bin/*/vendor

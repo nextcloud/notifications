@@ -13,6 +13,7 @@
 	<projectFiles>
 		<directory name="lib" />
 		<ignoreFiles>
+			<directory name="lib/autoload" />
 			<directory name="lib/Vendor" />
 			<directory name="vendor" />
 			<directory name="vendor-bin/nextcloud-ocp" />
