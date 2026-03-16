@@ -20,6 +20,7 @@ SPDX-FileCopyrightText: Rob Cresswell <robcresswell@pm.me>
 SPDX-FileCopyrightText: Sindre Sorhus
 SPDX-FileCopyrightText: Stefan Thomas <justmoon@members.fsf.org> (http://www.justmoon.net)
 SPDX-FileCopyrightText: Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)
+SPDX-FileCopyrightText: Victor Felder <victor@draft.li> (https://draft.li)
 SPDX-FileCopyrightText: inline-style-parser developers
 SPDX-FileCopyrightText: rhysd <lin90162@yahoo.co.jp>
 SPDX-FileCopyrightText: ts-md5 developers
@@ -50,16 +51,16 @@ This file is generated from multiple sources. Included packages:
 	- version: 3.1.0
 	- license: GPL-3.0-or-later
 - @nextcloud/sharing
-	- version: 0.3.0
+	- version: 0.4.0
 	- license: GPL-3.0-or-later
 - @nextcloud/vue
-	- version: 9.5.0
+	- version: 9.6.0
 	- license: AGPL-3.0-or-later
 - @ungap/structured-clone
 	- version: 1.3.0
 	- license: ISC
 - @vueuse/components
-	- version: 14.2.0
+	- version: 14.2.1
 	- license: MIT
 - axios
 	- version: 1.13.5
@@ -106,6 +107,9 @@ This file is generated from multiple sources. Included packages:
 - is-plain-obj
 	- version: 4.1.0
 	- license: MIT
+- longest-streak
+	- version: 3.1.0
+	- license: MIT
 - mdast-squeeze-paragraphs
 	- version: 6.0.0
 	- license: MIT
@@ -118,8 +122,14 @@ This file is generated from multiple sources. Included packages:
 - mdast-util-newline-to-break
 	- version: 2.0.0
 	- license: MIT
+- mdast-util-phrasing
+	- version: 4.1.0
+	- license: MIT
 - mdast-util-to-hast
 	- version: 13.2.1
+	- license: MIT
+- mdast-util-to-markdown
+	- version: 2.1.2
 	- license: MIT
 - mdast-util-to-string
 	- version: 4.0.0
@@ -199,6 +209,9 @@ This file is generated from multiple sources. Included packages:
 - remark-rehype
 	- version: 11.1.2
 	- license: MIT
+- remark-stringify
+	- version: 11.0.0
+	- license: MIT
 - remark-unlink-protocols
 	- version: 1.0.0
 	- license: MIT
@@ -254,5 +267,8 @@ This file is generated from multiple sources. Included packages:
 	- version: 5.3.1
 	- license: MIT
 - vue-router
-	- version: 5.0.2
+	- version: 5.0.3
+	- license: MIT
+- zwitch
+	- version: 2.0.4
 	- license: MIT
