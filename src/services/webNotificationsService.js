@@ -11,21 +11,67 @@ import { Howl } from 'howler'
 import BrowserStorage from './BrowserStorage.js'
 
 /**
+ * Add primary-element background and color the icon in matching text color
+ *
+ * @param {string} iconUrl URL of the icon (typically black on transparent)
+ * @return {Promise<string>} data URL of the themed icon
+ */
+function invertIconColors(iconUrl) {
+	return new Promise((resolve, reject) => {
+		const img = new Image()
+		img.crossOrigin = 'anonymous'
+		img.onload = () => {
+			const canvas = document.createElement('canvas')
+			const size = 32 + 4 * (Math.max(img.width, img.height) || 16)
+			canvas.width = size
+			canvas.height = size
+			const ctx = canvas.getContext('2d')
+
+			ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--color-primary-element')
+			ctx.beginPath()
+			ctx.arc(size / 2, size / 2, size / 2, 0, 2 * Math.PI)
+			ctx.fill()
+
+			// Apply invert filter when the font-color is not supposed to be black
+			if (getComputedStyle(document.body).getPropertyValue('--color-primary-text') !== '#000000') {
+				ctx.filter = 'invert(100%)'
+			}
+			const x = (size - 4 * img.width) / 2
+			const y = (size - 4 * img.height) / 2
+			ctx.drawImage(img, x, y, img.width * 4, img.height * 4)
+
+			resolve(canvas.toDataURL('image/png'))
+		}
+		img.onerror = reject
+		img.src = iconUrl
+	})
+}
+
+/**
  * Create a browser notification
  *
  * @param {object} notification notification object
  * @see https://developer.mozilla.org/en/docs/Web/API/notification
  */
-function createWebNotification(notification) {
+async function createWebNotification(notification) {
 	if (!notification.shouldNotify) {
 		return
+	}
+
+	let icon = notification.icon
+	if (icon) {
+		try {
+			icon = await invertIconColors(icon)
+		} catch (e) {
+			console.info('Failed to apply coloring to notification icon, using original', e)
+		}
 	}
 
 	const n = new Notification(notification.subject, {
 		title: notification.subject,
 		lang: getLanguage(),
 		body: notification.message,
-		icon: notification.icon,
+		icon,
 		tag: notification.notificationId,
 	})
 
