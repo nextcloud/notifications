@@ -62,17 +62,19 @@ class SettingsController extends OCSController {
 	 * @param string $soundNotification Enable sound for notifications ('yes' or 'no')
 	 * @param string $soundTalk Enable sound for Talk notifications ('yes' or 'no')
 	 * @param string $webpushEnabled Enable web push notifications ('yes' or 'no')
+	 * @param string $webpushBrowsersEnabled Enable web push for browsers ('yes' or 'no')
 	 * @return DataResponse<Http::STATUS_OK, list<empty>, array{}>
 	 *
 	 * 200: Admin settings updated
 	 */
 	#[OpenAPI(scope: OpenAPI::SCOPE_ADMINISTRATION)]
 	#[ApiRoute(verb: 'POST', url: '/api/{apiVersion}/settings/admin', requirements: ['apiVersion' => '(v2)'])]
-	public function admin(int $batchSetting, string $soundNotification, string $soundTalk, string $webpushEnabled): DataResponse {
+	public function admin(int $batchSetting, string $soundNotification, string $soundTalk, string $webpushEnabled, string $webpushBrowsersEnabled): DataResponse {
 		$this->appConfig->setAppValueInt('setting_batchtime', $batchSetting);
 		$this->appConfig->setAppValueBool('sound_notification', $soundNotification === 'yes');
 		$this->appConfig->setAppValueBool('sound_talk', $soundTalk === 'yes');
 		$this->appConfig->setAppValueBool('webpush_enabled', $webpushEnabled === 'yes');
+		$this->appConfig->setAppValueBool('webpush_browsers_enabled', $webpushBrowsersEnabled === 'yes');
 
 		return new DataResponse();
 	}
