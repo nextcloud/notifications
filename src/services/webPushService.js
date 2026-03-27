@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 import axios from '@nextcloud/axios'
-import { generateOcsUrl, generateUrl } from '@nextcloud/router'
+import { generateOcsUrl, generateUrl, getRootUrl } from '@nextcloud/router'
 
 /**
  * Load service worker
@@ -18,7 +18,7 @@ function loadServiceWorker() {
 	}
 	return navigator.serviceWorker.register(
 		generateUrl('/apps/notifications/service-worker.js', {}, { noRewrite: true }),
-		{ scope: scope },
+		{ scope },
 	).then((registration) => {
 		console.info('ServiceWorker registered')
 		return registration
