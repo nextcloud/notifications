@@ -13,6 +13,7 @@ use OCA\Notifications\App;
 use OCA\Notifications\Capabilities;
 use OCA\Notifications\Listener\AddMissingIndicesListener;
 use OCA\Notifications\Listener\BeforeTemplateRenderedListener;
+use OCA\Notifications\Listener\CSPListener;
 use OCA\Notifications\Listener\UserCreatedListener;
 use OCA\Notifications\Listener\UserDeletedListener;
 use OCA\Notifications\Notifier\AdminNotifications;
@@ -23,6 +24,7 @@ use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\AppFramework\Http\Events\BeforeTemplateRenderedEvent;
 use OCP\DB\Events\AddMissingIndicesEvent;
 use OCP\Notification\IManager;
+use OCP\Security\CSP\AddContentSecurityPolicyEvent;
 use OCP\User\Events\UserCreatedEvent;
 use OCP\User\Events\UserDeletedEvent;
 
@@ -41,6 +43,7 @@ class Application extends \OCP\AppFramework\App implements IBootstrap {
 
 		$context->registerNotifierService(AdminNotifications::class);
 
+		$context->registerEventListener(AddContentSecurityPolicyEvent::class, CSPListener::class);
 		$context->registerEventListener(AddMissingIndicesEvent::class, AddMissingIndicesListener::class);
 		$context->registerEventListener(UserDeletedEvent::class, UserDeletedListener::class);
 		$context->registerEventListener(BeforeTemplateRenderedEvent::class, BeforeTemplateRenderedListener::class);

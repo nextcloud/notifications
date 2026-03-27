@@ -101,6 +101,9 @@ import {
 	setCurrentTabAsActive,
 } from './services/notificationsService.js'
 import { createWebNotification } from './services/webNotificationsService.js'
+import {
+	setWebPush,
+} from './services/webPushService.js'
 
 const sessionKeepAlive = loadState('core', 'config', { session_keepalive: true }).session_keepalive
 const hasThrottledPushNotifications = loadState('notifications', 'throttled_push_notifications')
@@ -232,8 +235,19 @@ export default {
 			this.hasNotifyPush = true
 		}
 
-		// Set up the background checker
-		this._setPollingInterval(this.pollIntervalBase)
+		// set the polling interval after checking web push status
+		// if web push may be configured
+		if (this.webNotificationsGranted === true) {
+			// We dont fetch on push if notify_push is enabled, to avoid concurrency fetch.
+			// We could do the other way: fallback to notify_push only if we don't have
+			// web push
+			window.addEventListener('load', () => {
+				this._setWebPush()
+			})
+		} else {
+			// Set up the background checker
+			this._setPollingInterval(this.pollIntervalBase)
+		}
 
 		this._watchTabVisibility()
 		subscribe('networkOffline', this.handleNetworkOffline)
@@ -256,8 +270,38 @@ export default {
 			}
 		},
 
+		async _setWebPush() {
+			return setWebPush(
+				// onActivated=
+				(hasWebPush) => {
+					if (hasWebPush) {
+						console.debug('Has web push, slowing polling to 15 minutes')
+						this.pollIntervalBase = 15 * 60 * 1000
+						this.hasNotifyPush = true
+					}
+					// Set polling interval for the default or new value
+					this._setPollingInterval(this.pollIntervalBase)
+				},
+				// onPush=
+				() => {
+					if (!this.hasNotifyPush) {
+						this._fetchAfterWebPush()
+					} else {
+						console.debug('Has notify_push, no need to fetch from web push.')
+					}
+				},
+			)
+		},
+
 		async onOpen() {
-			this.requestWebNotificationPermissions()
+			if (this.webNotificationsGranted === null) {
+				this.requestWebNotificationPermissions()
+					.then((granted) => {
+						if (granted) {
+							this._setWebPutsh()
+						}
+					})
+			}
 
 			await setCurrentTabAsActive(this.tabId)
 			await this._fetch()
@@ -347,13 +391,26 @@ export default {
 
 		/**
 		 * Performs the AJAX request to retrieve the notifications
+		 *
+		 * Unlike with notify_push, we don't have to check if we are the last tab before
+		 * fetching events. The service worker sends the event to only one tab, that may
+		 * not be the last one
 		 */
-		async _fetch() {
+		_fetchAfterWebPush() {
+			this.backgroundFetching = true
+			console.debug('Refreshing notifications following web push event')
+			this._fetch(true)
+		},
+
+		/**
+		 * Performs the AJAX request to retrieve the notifications
+		 */
+		async _fetch(force = false) {
 			if (this.notifications.length && this.notifications[0].notificationId > this.webNotificationsThresholdId) {
 				this.webNotificationsThresholdId = this.notifications[0].notificationId
 			}
 
-			const response = await getNotificationsData(this.tabId, this.lastETag, !this.backgroundFetching, this.hasNotifyPush)
+			const response = await getNotificationsData(this.tabId, this.lastETag, force || !this.backgroundFetching, this.hasNotifyPush)
 
 			if (response.status === 204) {
 				// 204 No Content - Intercept when no notifiers are there.
@@ -457,7 +514,7 @@ export default {
 				return
 			}
 
-			if (window.location.protocol === 'http:') {
+			if (!window.isSecureContext) {
 				console.debug('Notifications require HTTPS')
 				this.webNotificationsGranted = false
 				return
@@ -472,13 +529,13 @@ export default {
 		 */
 		async requestWebNotificationPermissions() {
 			if (this.webNotificationsGranted !== null) {
-				return
+				return new Promise((resolve) => resolve(this.webNotificationsGranted))
 			}
 
 			console.info('Requesting notifications permissions')
-			window.Notification.requestPermission()
+			return window.Notification.requestPermission()
 				.then((permissions) => {
-					this.webNotificationsGranted = permissions === 'granted'
+					return this.webNotificationsGranted = permissions === 'granted'
 				})
 		},
 
