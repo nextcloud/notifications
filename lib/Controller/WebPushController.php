@@ -78,16 +78,21 @@ class WebPushController extends OCSController {
 	 * @param string $uaPublicKey Public key of the device, uncompress base64url encoded (RFC8291)
 	 * @param string $auth Authentication tag, base64url encoded (RFC8291)
 	 * @param string $appTypes comma seperated list of types used to filter incoming notifications - appTypes are alphanum - use "all" to get all notifications, prefix with `-` to exclude (eg. 'all,-talk')
-	 * @return DataResponse<Http::STATUS_OK|Http::STATUS_CREATED|Http::STATUS_UNAUTHORIZED, list<empty>, array{}>|DataResponse<Http::STATUS_BAD_REQUEST, array{message: string}, array{}>
+	 * @return DataResponse<Http::STATUS_OK|Http::STATUS_CREATED|Http::STATUS_UNAUTHORIZED, list<empty>, array{}>|DataResponse<Http::STATUS_BAD_REQUEST|Http::STATUS_FORBIDDEN, array{message: string}, array{}>
 	 *
 	 * 200: A subscription was already registered and activated
 	 * 201: New subscription registered successfully
 	 * 400: Registering is not possible
 	 * 401: Missing permissions to register
+	 * 403: Web push is disabled by the administrator
 	 */
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'POST', url: '/api/{apiVersion}/webpush', requirements: ['apiVersion' => '(v2)'])]
 	public function registerWP(string $endpoint, string $uaPublicKey, string $auth, string $appTypes): DataResponse {
+		if (!$this->appConfig->getAppValueBool('webpush_enabled')) {
+			return new DataResponse(['message' => 'WEBPUSH_DISABLED'], Http::STATUS_FORBIDDEN);
+		}
+
 		$user = $this->userSession->getUser();
 		if (!$user instanceof IUser) {
 			return new DataResponse([], Http::STATUS_UNAUTHORIZED);
@@ -142,17 +147,22 @@ class WebPushController extends OCSController {
 	 * Activate subscription for push notifications
 	 *
 	 * @param string $activationToken Random token sent via a push notification during registration to enable the subscription
-	 * @return DataResponse<Http::STATUS_OK|Http::STATUS_ACCEPTED|Http::STATUS_UNAUTHORIZED, list<empty>, array{}>|DataResponse<Http::STATUS_BAD_REQUEST|Http::STATUS_NOT_FOUND, array{message: string}, array{}>
+	 * @return DataResponse<Http::STATUS_OK|Http::STATUS_ACCEPTED|Http::STATUS_UNAUTHORIZED, list<empty>, array{}>|DataResponse<Http::STATUS_BAD_REQUEST|Http::STATUS_FORBIDDEN|Http::STATUS_NOT_FOUND, array{message: string}, array{}>
 	 *
 	 * 200: Subscription was already activated
 	 * 202: Subscription activated successfully
 	 * 400: Activating subscription is not possible, may be because of a wrong activation token
 	 * 401: Missing permissions to activate subscription
+	 * 403: Web push is disabled by the administrator
 	 * 404: No subscription found for the device
 	 */
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'POST', url: '/api/{apiVersion}/webpush/activate', requirements: ['apiVersion' => '(v2)'])]
 	public function activateWP(string $activationToken): DataResponse {
+		if (!$this->appConfig->getAppValueBool('webpush_enabled')) {
+			return new DataResponse(['message' => 'WEBPUSH_DISABLED'], Http::STATUS_FORBIDDEN);
+		}
+
 		$user = $this->userSession->getUser();
 		if (!$user instanceof IUser) {
 			return new DataResponse([], Http::STATUS_UNAUTHORIZED);

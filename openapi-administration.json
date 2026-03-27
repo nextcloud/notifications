@@ -690,7 +690,9 @@
                                 "required": [
                                     "batchSetting",
                                     "soundNotification",
-                                    "soundTalk"
+                                    "soundTalk",
+                                    "webpushEnabled",
+                                    "webpushBrowsersEnabled"
                                 ],
                                 "properties": {
                                     "batchSetting": {
@@ -705,6 +707,14 @@
                                     "soundTalk": {
                                         "type": "string",
                                         "description": "Enable sound for Talk notifications ('yes' or 'no')"
+                                    },
+                                    "webpushEnabled": {
+                                        "type": "string",
+                                        "description": "Enable web push notifications ('yes' or 'no')"
+                                    },
+                                    "webpushBrowsersEnabled": {
+                                        "type": "string",
+                                        "description": "Enable web push for browsers ('yes' or 'no')"
                                     }
                                 }
                             }
