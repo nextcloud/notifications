@@ -39,7 +39,7 @@ class WebController extends Controller {
 	#[FrontpageRoute(verb: 'GET', url: '/service-worker.js')]
 	public function serviceWorker(): StreamResponse {
 		$response = new StreamResponse(
-			__DIR__ . '/../../service-worker.js',
+			__DIR__ . '/../../js/service-worker.js',
 			headers: [
 				'Content-Type' => 'application/javascript',
 				'Service-Worker-Allowed' => '/'

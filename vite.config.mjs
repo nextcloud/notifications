@@ -5,6 +5,7 @@
 
 import { createAppConfig } from '@nextcloud/vite-config'
 import { join, resolve } from 'node:path'
+import rollupPluginCopy from 'rollup-plugin-copy'
 
 export default createAppConfig({
 	main: resolve(join('src', 'main.js')),
@@ -41,5 +42,13 @@ export default createAppConfig({
 				},
 			},
 		},
+		plugins: [
+			rollupPluginCopy({
+				targets: [
+					{ src: 'src/workers/service-worker.js', dest: 'js' },
+				],
+				hook: 'writeBundle',
+			}),
+		],
 	},
 })
