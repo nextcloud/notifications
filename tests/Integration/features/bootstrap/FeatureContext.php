@@ -8,6 +8,11 @@ require __DIR__ . '/../../vendor/autoload.php';
 
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\TableNode;
+use Behat\Hook\AfterScenario;
+use Behat\Hook\BeforeScenario;
+use Behat\Step\Given;
+use Behat\Step\Then;
+use Behat\Step\When;
 use GuzzleHttp\Client;
 use GuzzleHttp\Cookie\CookieJar;
 use GuzzleHttp\Exception\ClientException;
@@ -55,34 +60,19 @@ class FeatureContext implements Context {
 		$this->baseUrl = getenv('TEST_SERVER_URL');
 	}
 
-	/**
-	 * @Given /^user "([^"]*)" has notifications$/
-	 *
-	 * @param string $user
-	 */
+	#[Given('/^user "([^"]*)" has notifications$/')]
 	public function hasNotifications(string $user) {
 		$response = $this->setTestingValue('POST', 'apps/notificationsintegrationtesting/notifications?userId=' . $user, null);
 		$this->assertStatusCode($response, 200);
 	}
 
-	/**
-	 * @Given /^user "([^"]*)" receives notification with$/
-	 *
-	 * @param string $user
-	 * @param TableNode|null $formData
-	 */
+	#[Given('/^user "([^"]*)" receives notification with$/')]
 	public function receiveNotification(string $user, TableNode $formData) {
 		$response = $this->setTestingValue('POST', 'apps/notificationsintegrationtesting/notifications?userId=' . $user, $formData);
 		$this->assertStatusCode($response, 200);
 	}
 
-	/**
-	 * @Given /^user "([^"]*)" sends admin notification to "([^"]*)" with$/
-	 *
-	 * @param string $sender
-	 * @param string $recipient
-	 * @param TableNode|null $formData
-	 */
+	#[Given('/^user "([^"]*)" sends admin notification to "([^"]*)" with$/')]
 	public function sendAdminNotification(string $sender, string $recipient, TableNode $formData) {
 		$currentUser = $this->currentUser;
 		$this->setCurrentUser($sender);
@@ -91,11 +81,7 @@ class FeatureContext implements Context {
 		$this->setCurrentUser($currentUser);
 	}
 
-	/**
-	 * @When /^getting notifications on (v\d+)(| with different etag| with matching etag)$/
-	 * @param string $api
-	 * @param string $eTag
-	 */
+	#[When('/^getting notifications on (v\d+)(| with different etag| with matching etag)$/')]
 	public function gettingNotifications(string $api, string $eTag) {
 		$headers = [];
 		if ($eTag === ' with different etag') {
@@ -109,18 +95,12 @@ class FeatureContext implements Context {
 		$this->lastEtag = array_pop($etagHeaders);
 	}
 
-	/**
-	 * @Then /^response body is empty$/
-	 */
+	#[Then('/^response body is empty$/')]
 	public function checkResponseBodyIsEmpty() {
 		Assert::assertSame('', $this->response->getBody()->getContents());
 	}
 
-	/**
-	 * @Then /^list of notifications has (\d+) entries$/
-	 *
-	 * @param int $numNotifications
-	 */
+	#[Then('/^list of notifications has (\d+) entries$/')]
 	public function checkNumNotifications(int $numNotifications) {
 		$notifications = $this->getArrayOfNotificationsResponded($this->response);
 		Assert::assertCount((int)$numNotifications, $notifications);
@@ -133,9 +113,7 @@ class FeatureContext implements Context {
 		$this->notificationIds[] = $notificationIds;
 	}
 
-	/**
-	 * @Then /^confirms previously fetched notification ids exist on (v\d+)$/
-	 */
+	#[Then('/^confirms previously fetched notification ids exist on (v\d+)$/')]
 	public function checkNotificationsExists(string $api) {
 		$notificationIds = end($this->notificationIds);
 
@@ -166,14 +144,7 @@ class FeatureContext implements Context {
 		return $jsonBody['ocs']['data'];
 	}
 
-	/**
-	 * @Then /^user "([^"]*)" has (\d+) notifications on (v\d+)(| missing the last one| missing the first one)$/
-	 *
-	 * @param string $user
-	 * @param int $numNotifications
-	 * @param string $api
-	 * @param string $missingLast
-	 */
+	#[Then('/^user "([^"]*)" has (\d+) notifications on (v\d+)(| missing the last one| missing the first one)$/')]
 	public function userNumNotifications(string $user, int $numNotifications, string $api, string $missingLast) {
 		$this->sendingTo('GET', '/apps/notifications/api/' . $api . '/notifications?format=json');
 		$this->assertStatusCode($this->response, 200);
@@ -198,13 +169,7 @@ class FeatureContext implements Context {
 		}
 	}
 
-	/**
-	 * @Then /^(first|last) notification on (v\d+) matches$/
-	 *
-	 * @param string $notification
-	 * @param string $api
-	 * @param TableNode|null $formData
-	 */
+	#[Then('/^(first|last) notification on (v\d+) matches$/')]
 	public function matchNotification(string $notification, string $api, ?TableNode $formData = null) {
 		$lastNotifications = end($this->notificationIds);
 		if ($notification === 'first') {
@@ -223,12 +188,7 @@ class FeatureContext implements Context {
 		}
 	}
 
-	/**
-	 * @Then /^delete (first|last|same|faulty) notification on (v\d+)$/
-	 *
-	 * @param string $toDelete
-	 * @param string $api
-	 */
+	#[Then('/^delete (first|last|same|faulty) notification on (v\d+)$/')]
 	public function deleteNotification(string $toDelete, string $api) {
 		Assert::assertNotEmpty($this->notificationIds);
 		$lastNotificationIds = end($this->notificationIds);
@@ -242,21 +202,13 @@ class FeatureContext implements Context {
 		$this->sendingTo('DELETE', '/apps/notifications/api/' . $api . '/notifications/' . $this->deletedNotification);
 	}
 
-	/**
-	 * @Then /^delete all notifications on (v\d+)$/
-	 *
-	 * @param string $api
-	 */
+	#[Then('/^delete all notifications on (v\d+)$/')]
 	public function deleteAllNotification($api) {
 		Assert::assertNotEmpty($this->notificationIds);
 		$this->sendingTo('DELETE', '/apps/notifications/api/' . $api . '/notifications');
 	}
 
-	/**
-	 * @Then /^user "([^"]*)" unregisters from push notifications/
-	 *
-	 * @param string $user
-	 */
+	#[Then('/^user "([^"]*)" unregisters from push notifications/')]
 	public function unregisterForPushNotifications(string $user) {
 		$currentUser = $this->currentUser;
 		$this->setCurrentUser($user);
@@ -264,12 +216,7 @@ class FeatureContext implements Context {
 		$this->setCurrentUser($currentUser);
 	}
 
-	/**
-	 * @Then /^user "([^"]*)" registers for push notifications with$/
-	 *
-	 * @param string $user
-	 * @param TableNode|null $formData
-	 */
+	#[Then('/^user "([^"]*)" registers for push notifications with$/')]
 	public function registerForPushNotifications(string $user, TableNode $formData) {
 		$data = $formData->getRowsHash();
 
@@ -292,9 +239,7 @@ class FeatureContext implements Context {
 		$this->setCurrentUser($currentUser);
 	}
 
-	/**
-	 * @Then /^can validate the response and (skip verifying|verify) signature$/
-	 */
+	#[Then('/^can validate the response and (skip verifying|verify) signature$/')]
 	public function validateResponseAndSignature(string $verify): void {
 		$response = $this->getArrayOfNotificationsResponded($this->response);
 
@@ -317,11 +262,7 @@ class FeatureContext implements Context {
 		}
 	}
 
-	/**
-	 * @Then /^user "([^"]*)" creates an app password$/
-	 *
-	 * @param string $user
-	 */
+	#[Then('/^user "([^"]*)" creates an app password$/')]
 	public function createAppPassword(string $user) {
 		$currentUser = $this->currentUser;
 		$this->setCurrentUser($user);
@@ -333,21 +274,12 @@ class FeatureContext implements Context {
 		$this->appPasswords[$user] = $response['apppassword'];
 	}
 
-	/**
-	 * @Then /^user "([^"]*)" forgets the app password$/
-	 *
-	 * @param string $user
-	 */
+	#[Then('/^user "([^"]*)" forgets the app password$/')]
 	public function removeAppPassword(string $user) {
 		unset($this->appPasswords[$user]);
 	}
 
-	/**
-	 * @Then /^error "([^"]*)" is expected with status code ([0-9]*)$/
-	 *
-	 * @param string $error
-	 * @param int $statusCode
-	 */
+	#[Then('/^error "([^"]*)" is expected with status code ([0-9]*)$/')]
 	public function expectedErrorOnLastRequest(string $error, int $statusCode) {
 		$this->assertStatusCode($this->response, $statusCode);
 		$response = $this->getArrayOfNotificationsResponded($this->response);
@@ -355,11 +287,7 @@ class FeatureContext implements Context {
 		Assert::assertEquals($error, $response['message']);
 	}
 
-	/**
-	 * @Then /^status code is ([0-9]*)$/
-	 *
-	 * @param int $statusCode
-	 */
+	#[Then('/^status code is ([0-9]*)$/')]
 	public function isStatusCode(int $statusCode) {
 		$this->assertStatusCode($this->response, $statusCode);
 	}
@@ -373,12 +301,6 @@ class FeatureContext implements Context {
 		$this->assertStatusCode($response, 200);
 	}
 
-	/**
-	 * @param string $verb
-	 * @param string $url
-	 * @param TableNode $body
-	 * @return \GuzzleHttp\Message\FutureResponse|ResponseInterface|null
-	 */
 	protected function setTestingValue(string $verb, string $url, ?TableNode $body = null) {
 		$fullUrl = $this->baseUrl . 'ocs/v2.php/' . $url;
 		$client = new Client();
@@ -403,18 +325,12 @@ class FeatureContext implements Context {
 	 * User management
 	 */
 
-	/**
-	 * @Given /^as user "([^"]*)"$/
-	 * @param string $user
-	 */
+	#[Given('/^as user "([^"]*)"$/')]
 	public function setCurrentUser(string $user) {
 		$this->currentUser = $user;
 	}
 
-	/**
-	 * @Given /^user "([^"]*)" exists$/
-	 * @param string $user
-	 */
+	#[Given('/^user "([^"]*)" exists$/')]
 	public function assureUserExists(string $user) {
 		try {
 			$this->userExists($user);
@@ -470,22 +386,15 @@ class FeatureContext implements Context {
 	 * Requests
 	 */
 
-	/**
-	 * @When /^sending "([^"]*)" to "([^"]*)"$/
-	 * @param string $verb
-	 * @param string $url
-	 */
+	#[When('/^sending "([^"]*)" to "([^"]*)"$/')]
 	public function sendingTo(string $verb, string $url) {
 		$this->sendingToWith($verb, $url, null);
 	}
 
 	/**
-	 * @When /^sending "([^"]*)" to "([^"]*)" with$/
-	 * @param string $verb
-	 * @param string $url
 	 * @param TableNode|array|null $body
-	 * @param array $headers
 	 */
+	#[When('/^sending "([^"]*)" to "([^"]*)" with$/')]
 	public function sendingToWith(string $verb, string $url, $body = null, array $headers = []) {
 		$fullUrl = $this->baseUrl . 'ocs/v2.php' . $url;
 		$client = new Client();
@@ -515,10 +424,6 @@ class FeatureContext implements Context {
 		}
 	}
 
-	/**
-	 * @param ResponseInterface $response
-	 * @param int $statusCode
-	 */
 	protected function assertStatusCode(ResponseInterface $response, int $statusCode) {
 		Assert::assertEquals($statusCode, $response->getStatusCode());
 	}
