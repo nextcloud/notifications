@@ -11,6 +11,8 @@ namespace OCA\Notifications\Controller;
 
 use OC\Authentication\Token\IProvider;
 use OC\Security\IdentityProof\Manager;
+use OCA\Notifications\WebPush\ActivationSubStatus;
+use OCA\Notifications\WebPush\NewSubStatus;
 use OCA\Notifications\WebPushClient;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\ApiRoute;
@@ -29,19 +31,6 @@ use OCP\IUser;
 use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Uid\Uuid;
-
-enum NewSubStatus: int {
-	case CREATED = 0;
-	case UPDATED = 1;
-	case ERROR = 2;
-}
-
-enum ActivationSubStatus: int {
-	case CREATED = 0;
-	case OK = 1;
-	case NO_TOKEN = 2;
-	case NO_SUB = 3;
-}
 
 #[OpenAPI(scope: 'webpush')]
 class WebPushController extends OCSController {

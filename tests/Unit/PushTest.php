@@ -16,7 +16,7 @@ use OC\Authentication\Token\PublicKeyToken;
 use OC\Security\IdentityProof\Key;
 use OC\Security\IdentityProof\Manager;
 use OCA\Notifications\Push;
-use OCA\Notifications\TokenValidation;
+use OCA\Notifications\WebPush\TokenValidation;
 use OCA\Notifications\WebPushClient;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Services\IAppConfig;
