@@ -107,6 +107,7 @@ import {
 
 const sessionKeepAlive = loadState('core', 'config', { session_keepalive: true }).session_keepalive
 const hasThrottledPushNotifications = loadState('notifications', 'throttled_push_notifications')
+const webPushForBrowsersEnabled = loadState('notifications', 'webpush_browsers_enabled')
 
 const fairUsePolicyNotification = {
 	// Required properties
@@ -237,8 +238,8 @@ export default {
 
 		// set the polling interval after checking web push status
 		// if web push may be configured
-		if (this.webNotificationsGranted === true) {
-			// We dont fetch on push if notify_push is enabled, to avoid concurrency fetch.
+		if (webPushForBrowsersEnabled && this.webNotificationsGranted === true) {
+			// We don't fetch on push if notify_push is enabled, to avoid concurrency fetch.
 			// We could do the other way: fallback to notify_push only if we don't have
 			// web push
 			window.addEventListener('load', () => {
@@ -297,8 +298,8 @@ export default {
 			if (this.webNotificationsGranted === null) {
 				this.requestWebNotificationPermissions()
 					.then((granted) => {
-						if (granted) {
-							this._setWebPutsh()
+						if (granted && webPushForBrowsersEnabled) {
+							this._setWebPush()
 						}
 					})
 			}

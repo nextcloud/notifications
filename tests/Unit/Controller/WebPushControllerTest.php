@@ -56,6 +56,10 @@ class WebPushControllerTest extends TestCase {
 		$this->tokenProvider = $this->createMock(IProvider::class);
 		$this->identityProof = $this->createMock(Manager::class);
 		$this->logger = $this->createMock(LoggerInterface::class);
+
+		$this->appConfig->method('getAppValueBool')
+			->with('webpush_enabled')
+			->willReturn(true);
 	}
 
 	protected function getController(array $methods = []): WebPushController|MockObject {
@@ -256,10 +260,12 @@ class WebPushControllerTest extends TestCase {
 				->willReturn(null);
 		}
 
-		$this->session->expects($tokenId > 0 ? $this->once() : $this->never())
+		$this->session->expects($tokenId > 0 ? $this->atLeastOnce() : $this->never())
 			->method('get')
-			->with('token-id')
-			->willReturn($tokenId);
+			->willReturnMap([
+				['app_password', $tokenId > 0 ? '12345-67890' : null],
+				['token-id', $tokenId],
+			]);
 
 		if ($tokenIsValid) {
 			$token = $this->createMock(IToken::class);
@@ -365,10 +371,12 @@ class WebPushControllerTest extends TestCase {
 				->willReturn(null);
 		}
 
-		$this->session->expects($tokenId > 0 ? $this->once() : $this->never())
+		$this->session->expects($tokenId > 0 ? $this->atLeastOnce() : $this->never())
 			->method('get')
-			->with('token-id')
-			->willReturn($tokenId);
+			->willReturnMap([
+				['app_password', $tokenId > 0 ? '12345-67890' : null],
+				['token-id', $tokenId],
+			]);
 
 		if ($tokenIsValid) {
 			$token = $this->createMock(IToken::class);

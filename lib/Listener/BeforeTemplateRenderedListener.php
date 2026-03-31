@@ -51,11 +51,13 @@ class BeforeTemplateRenderedListener implements IEventListener {
 			return;
 		}
 
+		$webPushBrowserEnabled = $this->appConfig->getAppValueBool('webpush_browsers_enabled');
 		$defaultSoundNotification = $this->appConfig->getAppValueBool('sound_notification');
 		$userSoundNotification = $this->userConfig->getValueBool($user->getUID(), Application::APP_ID, 'sound_notification', $defaultSoundNotification);
 		$defaultSoundTalk = $this->appConfig->getAppValueBool('sound_talk');
 		$userSoundTalk = $this->userConfig->getValueBool($user->getUID(), Application::APP_ID, 'sound_talk', $defaultSoundTalk);
 
+		$this->initialState->provideInitialState('webpush_browsers_enabled', $webPushBrowserEnabled);
 		$this->initialState->provideInitialState('sound_notification', $userSoundNotification);
 
 		$this->initialState->provideInitialState('sound_talk', $userSoundTalk);
