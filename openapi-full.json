@@ -801,7 +801,9 @@
                                 "required": [
                                     "batchSetting",
                                     "soundNotification",
-                                    "soundTalk"
+                                    "soundTalk",
+                                    "webpushEnabled",
+                                    "webpushBrowsersEnabled"
                                 ],
                                 "properties": {
                                     "batchSetting": {
@@ -816,6 +818,14 @@
                                     "soundTalk": {
                                         "type": "string",
                                         "description": "Enable sound for Talk notifications ('yes' or 'no')"
+                                    },
+                                    "webpushEnabled": {
+                                        "type": "string",
+                                        "description": "Enable web push notifications ('yes' or 'no')"
+                                    },
+                                    "webpushBrowsersEnabled": {
+                                        "type": "string",
+                                        "description": "Enable web push for browsers ('yes' or 'no')"
                                     }
                                 }
                             }
@@ -2679,6 +2689,44 @@
                                 }
                             }
                         }
+                    },
+                    "403": {
+                        "description": "Web push is disabled by the administrator",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "ocs"
+                                    ],
+                                    "properties": {
+                                        "ocs": {
+                                            "type": "object",
+                                            "required": [
+                                                "meta",
+                                                "data"
+                                            ],
+                                            "properties": {
+                                                "meta": {
+                                                    "$ref": "#/components/schemas/OCSMeta"
+                                                },
+                                                "data": {
+                                                    "type": "object",
+                                                    "required": [
+                                                        "message"
+                                                    ],
+                                                    "properties": {
+                                                        "message": {
+                                                            "type": "string"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             },
@@ -3041,6 +3089,44 @@
                     },
                     "400": {
                         "description": "Activating subscription is not possible, may be because of a wrong activation token",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "ocs"
+                                    ],
+                                    "properties": {
+                                        "ocs": {
+                                            "type": "object",
+                                            "required": [
+                                                "meta",
+                                                "data"
+                                            ],
+                                            "properties": {
+                                                "meta": {
+                                                    "$ref": "#/components/schemas/OCSMeta"
+                                                },
+                                                "data": {
+                                                    "type": "object",
+                                                    "required": [
+                                                        "message"
+                                                    ],
+                                                    "properties": {
+                                                        "message": {
+                                                            "type": "string"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Web push is disabled by the administrator",
                         "content": {
                             "application/json": {
                                 "schema": {
