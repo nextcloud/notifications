@@ -46,6 +46,12 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	/** @var string[] */
 	protected $appPasswords;
 
+	/** @var string */
+	protected $webPushPublicKey;
+
+	/** @var string */
+	protected $webPushAuth;
+
 	use CommandLineTrait;
 
 	/**
@@ -363,6 +369,125 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	 */
 	public function isStatusCode(int $statusCode) {
 		$this->assertStatusCode($this->response, $statusCode);
+	}
+
+	/**
+	 * @Given /^webpush is enabled$/
+	 */
+	public function enableWebPush() {
+		$this->runOcc(['config:app:set', 'notifications', 'webpush_enabled', '--value=1']);
+	}
+
+	/**
+	 * @Given /^webpush is disabled$/
+	 */
+	public function disableWebPush() {
+		$this->runOcc(['config:app:set', 'notifications', 'webpush_enabled', '--value=0']);
+	}
+
+	/**
+	 * Generate a valid P256dh key and auth secret for WebPush testing
+	 */
+	protected function generateWebPushKeys(): void {
+		// Generate EC P-256 key pair
+		$key = openssl_pkey_new([
+			'curve_name' => 'prime256v1',
+			'private_key_type' => OPENSSL_KEYTYPE_EC,
+		]);
+		$details = openssl_pkey_get_details($key);
+		// Build uncompressed public key: 0x04 || x || y (65 bytes)
+		$x = str_pad($details['ec']['x'], 32, "\0", STR_PAD_LEFT);
+		$y = str_pad($details['ec']['y'], 32, "\0", STR_PAD_LEFT);
+		$uncompressed = "\x04" . $x . $y;
+		$this->webPushPublicKey = rtrim(strtr(base64_encode($uncompressed), '+/', '-_'), '=');
+
+		// Generate 16 bytes of random auth
+		$authBytes = random_bytes(16);
+		$this->webPushAuth = rtrim(strtr(base64_encode($authBytes), '+/', '-_'), '=');
+	}
+
+	/**
+	 * @When /^user "([^"]*)" fetches the VAPID public key$/
+	 */
+	public function fetchVapidPublicKey(string $user) {
+		$currentUser = $this->currentUser;
+		$this->setCurrentUser($user);
+		$this->sendingToWith('GET', '/apps/notifications/api/v2/webpush/vapid?format=json');
+		$this->setCurrentUser($currentUser);
+	}
+
+	/**
+	 * @Then /^the VAPID key is not empty$/
+	 */
+	public function vapidKeyIsNotEmpty() {
+		$response = $this->getDataFromOCSResponse($this->response);
+		Assert::assertNotEmpty($response['vapid'], 'VAPID public key should not be empty');
+	}
+
+	/**
+	 * @Given /^user "([^"]*)" registers for webpush with$/
+	 */
+	public function registerForWebPush(string $user, TableNode $formData) {
+		$data = $formData->getRowsHash();
+
+		if ($data['uaPublicKey'] === 'VALID_KEY' || $data['auth'] === 'VALID_AUTH') {
+			$this->generateWebPushKeys();
+		}
+		if ($data['uaPublicKey'] === 'VALID_KEY') {
+			$data['uaPublicKey'] = $this->webPushPublicKey;
+		}
+		if ($data['auth'] === 'VALID_AUTH') {
+			$data['auth'] = $this->webPushAuth;
+		}
+
+		$currentUser = $this->currentUser;
+		$this->setCurrentUser($user);
+		$this->sendingToWith('POST', '/apps/notifications/api/v2/webpush?format=json', $data);
+		$this->setCurrentUser($currentUser);
+	}
+
+	/**
+	 * @Given /^user "([^"]*)" activates webpush with the activation token$/
+	 */
+	public function activateWebPushWithDbToken(string $user) {
+		// Fetch activation token from the database via the testing helper
+		$currentUser = $this->currentUser;
+		$this->setCurrentUser('admin');
+		$this->sendingToWith('GET', '/apps/notificationsintegrationtesting/webpush/activation-token?format=json&userId=' . $user);
+		$this->setCurrentUser($user);
+
+		$this->assertStatusCode($this->response, 200);
+		$jsonBody = json_decode($this->response->getBody()->getContents(), true);
+		Assert::assertIsArray($jsonBody, 'Response body should be valid JSON');
+		$activationToken = $jsonBody['ocs']['data']['activationToken'] ?? '';
+		Assert::assertNotEmpty($activationToken, 'Activation token should not be empty');
+
+		$this->sendingToWith('POST', '/apps/notifications/api/v2/webpush/activate?format=json', [
+			'activationToken' => $activationToken,
+		]);
+		$this->setCurrentUser($currentUser);
+	}
+
+	/**
+	 * @Given /^user "([^"]*)" activates webpush with token "([^"]*)"$/
+	 */
+	public function activateWebPushWithToken(string $user, string $token) {
+		$currentUser = $this->currentUser;
+		$this->setCurrentUser($user);
+		$this->sendingToWith('POST', '/apps/notifications/api/v2/webpush/activate?format=json', [
+			'activationToken' => $token,
+		]);
+		$this->setCurrentUser($currentUser);
+	}
+
+	/**
+	 * @Given /^user "([^"]*)" removes webpush subscription$/
+	 */
+	public function removeWebPushSubscription(string $user) {
+		$currentUser = $this->currentUser;
+		$this->setCurrentUser($user);
+		$this->sendingToWith('DELETE', '/apps/notifications/api/v2/webpush?format=json');
+		$this->setCurrentUser($currentUser);
 	}
 
 	/**

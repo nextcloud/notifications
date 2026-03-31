@@ -13,6 +13,7 @@ use OCP\AppFramework\Http\Attribute\ApiRoute;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
+use OCP\IDBConnection;
 use OCP\IRequest;
 use OCP\Notification\IManager;
 
@@ -21,6 +22,7 @@ class EndpointController extends OCSController {
 		string $appName,
 		IRequest $request,
 		protected IManager $manager,
+		protected IDBConnection $db,
 	) {
 		parent::__construct($appName, $request);
 	}
@@ -43,10 +45,28 @@ class EndpointController extends OCSController {
 	}
 
 	#[NoCSRFRequired]
+	#[ApiRoute(verb: 'GET', url: '/webpush/activation-token')]
+	public function getWebPushActivationToken(string $userId): DataResponse {
+		$query = $this->db->getQueryBuilder();
+		$query->select('activation_token')
+			->from('notifications_webpush')
+			->where($query->expr()->eq('uid', $query->createNamedParameter($userId)));
+		$result = $query->executeQuery();
+		$row = $result->fetch();
+		$result->closeCursor();
+
+		return new DataResponse(['activationToken' => $row ? $row['activation_token'] : '']);
+	}
+
+	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'DELETE', url: '')]
 	public function deleteNotifications(): DataResponse {
 		$notification = $this->manager->createNotification();
 		$this->manager->markProcessed($notification);
+
+		$query = $this->db->getQueryBuilder();
+		$query->delete('notifications_webpush');
+		$query->executeStatement();
 
 		return new DataResponse();
 	}
