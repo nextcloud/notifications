@@ -120,14 +120,17 @@ class WebPushController extends OCSController {
 			return new DataResponse(['message' => 'TOO_MANY_APP_TYPES'], Http::STATUS_BAD_REQUEST);
 		}
 
-		$tokenId = $this->session->get('token-id');
-		if (\is_null($tokenId)) {
+		if ($this->session->get('app_password') === null) {
+			if (!$this->appConfig->getAppValueBool('webpush_browsers_enabled')) {
+				return new DataResponse(['message' => 'WEBPUSH_DISABLED'], Http::STATUS_FORBIDDEN);
+			}
 			$token = $this->session;
 		} else {
 			try {
+				$tokenId = $this->session->get('token-id');
 				$token = $this->tokenProvider->getTokenById($tokenId);
 			} catch (InvalidTokenException $e) {
-				$this->logger->error('Invalid  token exception', ['exception' => $e]);
+				$this->logger->error('Invalid token exception', ['exception' => $e]);
 				return new DataResponse(['message' => 'INVALID_SESSION_TOKEN'], Http::STATUS_BAD_REQUEST);
 			}
 		}
@@ -172,14 +175,17 @@ class WebPushController extends OCSController {
 			return new DataResponse([], Http::STATUS_UNAUTHORIZED);
 		}
 
-		$tokenId = $this->session->get('token-id');
-		if (\is_null($tokenId)) {
+		if ($this->session->get('app_password') === null) {
+			if (!$this->appConfig->getAppValueBool('webpush_browsers_enabled')) {
+				return new DataResponse(['message' => 'WEBPUSH_DISABLED'], Http::STATUS_FORBIDDEN);
+			}
 			$token = $this->session;
 		} else {
 			try {
+				$tokenId = $this->session->get('token-id');
 				$token = $this->tokenProvider->getTokenById($tokenId);
 			} catch (InvalidTokenException $e) {
-				$this->logger->error('Invalid  token exception', ['exception' => $e]);
+				$this->logger->error('Invalid token exception', ['exception' => $e]);
 				return new DataResponse(['message' => 'INVALID_SESSION_TOKEN'], Http::STATUS_BAD_REQUEST);
 			}
 		}
@@ -219,7 +225,7 @@ class WebPushController extends OCSController {
 			try {
 				$token = $this->tokenProvider->getTokenById($tokenId);
 			} catch (InvalidTokenException $e) {
-				$this->logger->error('Invalid  token exception', ['exception' => $e]);
+				$this->logger->error('Invalid token exception', ['exception' => $e]);
 				return new DataResponse(['message' => 'INVALID_SESSION_TOKEN'], Http::STATUS_BAD_REQUEST);
 			}
 		}
