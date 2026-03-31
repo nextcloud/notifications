@@ -15,6 +15,7 @@ use OC\Authentication\Token\IProvider;
 use OC\Security\IdentityProof\Key;
 use OC\Security\IdentityProof\Manager;
 use OCA\Notifications\Vendor\Minishlink\WebPush\MessageSentReport;
+use OCA\Notifications\WebPush\TokenValidation;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Services\IAppConfig;
 use OCP\AppFramework\Utility\ITimeFactory;
