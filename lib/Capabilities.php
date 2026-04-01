@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace OCA\Notifications;
 
+use OCP\AppFramework\Services\IAppConfig;
 use OCP\Capabilities\ICapability;
 
 /**
@@ -18,6 +19,11 @@ use OCP\Capabilities\ICapability;
  * @package OCA\Notifications
  */
 class Capabilities implements ICapability {
+	public function __construct(
+		protected IAppConfig $appConfig,
+	) {
+	}
+
 	/**
 	 * Return this classes capabilities
 	 *
@@ -31,7 +37,7 @@ class Capabilities implements ICapability {
 	 */
 	#[\Override]
 	public function getCapabilities(): array {
-		return [
+		$capabilities = [
 			'notifications' => [
 				'ocs-endpoints' => [
 					'list',
@@ -46,7 +52,6 @@ class Capabilities implements ICapability {
 					'test-push',
 				],
 				'push' => [
-					'webpush',
 					'devices',
 					'object-data',
 					'delete',
@@ -57,5 +62,14 @@ class Capabilities implements ICapability {
 				],
 			],
 		];
+
+		if ($this->appConfig->getAppValueBool('webpush_enabled')) {
+			$capabilities['notifications']['push'][] = 'webpush';
+			if ($this->appConfig->getAppValueBool('webpush_browsers_enabled')) {
+				$capabilities['notifications']['push'][] = 'webpush-browsers';
+			}
+		}
+
+		return $capabilities;
 	}
 }
