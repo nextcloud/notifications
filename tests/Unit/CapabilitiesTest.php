@@ -10,11 +10,49 @@ declare(strict_types=1);
 namespace OCA\Notifications\Tests\Unit;
 
 use OCA\Notifications\Capabilities;
+use OCP\AppFramework\Services\IAppConfig;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Test\TestCase;
 
 class CapabilitiesTest extends TestCase {
-	public function testGetCapabilities(): void {
-		$capabilities = new Capabilities();
+	public static function dataGetCapabilities(): array {
+		return [
+			[false, false, [
+				'devices',
+				'object-data',
+				'delete',
+			]],
+			[false, true, [
+				'devices',
+				'object-data',
+				'delete',
+			]],
+			[true, false, [
+				'devices',
+				'object-data',
+				'delete',
+				'webpush',
+			]],
+			[true, true, [
+				'devices',
+				'object-data',
+				'delete',
+				'webpush',
+				'webpush-browsers',
+			]],
+		];
+	}
+
+	#[DataProvider(methodName: 'dataGetCapabilities')]
+	public function testGetCapabilities(bool $webpush, bool $webpushBrowser, array $expected): void {
+		$appConfig = $this->createMock(IAppConfig::class);
+		$appConfig->method('getAppValueBool')
+			->willReturnMap([
+				['webpush_enabled', false, $webpush],
+				['webpush_browsers_enabled', false, $webpushBrowser],
+			]);
+
+		$capabilities = new Capabilities($appConfig);
 
 		$this->assertSame([
 			'notifications' => [
@@ -30,12 +68,7 @@ class CapabilitiesTest extends TestCase {
 					'exists',
 					'test-push',
 				],
-				'push' => [
-					'webpush',
-					'devices',
-					'object-data',
-					'delete',
-				],
+				'push' => $expected,
 				'admin-notifications' => [
 					'ocs',
 					'cli',

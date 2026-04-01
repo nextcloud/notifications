@@ -82,6 +82,7 @@
 <script>
 import { getCurrentUser, getRequestToken } from '@nextcloud/auth'
 import axios from '@nextcloud/axios'
+import { getCapabilities } from '@nextcloud/capabilities'
 import { showError } from '@nextcloud/dialogs'
 import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { loadState } from '@nextcloud/initial-state'
@@ -107,7 +108,7 @@ import {
 
 const sessionKeepAlive = loadState('core', 'config', { session_keepalive: true }).session_keepalive
 const hasThrottledPushNotifications = loadState('notifications', 'throttled_push_notifications')
-const webPushForBrowsersEnabled = loadState('notifications', 'webpush_browsers_enabled')
+const webPushForBrowsersEnabled = getCapabilities()?.notifications?.push?.includes('webpush-browsers')
 
 const fairUsePolicyNotification = {
 	// Required properties
