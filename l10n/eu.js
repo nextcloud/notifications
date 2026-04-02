@@ -1,7 +1,7 @@
 OC.L10N.register(
     "notifications",
     {
-    "We want to keep offering our push notification service for free, but large number of users overload our infrastructure. For this reason we have to rate-limit the use of push notifications. If you need this feature, consider using Nextcloud Enterprise." : "Gure push jakinarazpen zerbitzua doan eskaintzen jarraitu nahi dugu, baina erabiltzaile kopuru handiek gure azpiegiturak gainkargatzen dituzte. Hori dela eta, push akinarazpenen erabilera mugatu behar dugu. Ezaugarri hau behar baduzu, Nextcloud Enterprise erabili.",
+    "We want to keep offering our push notification service for free, but large number of users overload our infrastructure. For this reason we have to rate-limit the use of push notifications. If you need this feature, consider using Nextcloud Enterprise." : "Gure push jakinarazpen zerbitzua doan eskaintzen jarraitu nahi dugu, baina erabiltzaile kopuru handiek gure azpiegiturak gainkargatzen dituzte. Hori dela eta, push jakinarazpenen erabilera mugatu behar dugu. Ezaugarri hau behar baduzu, Nextcloud Enterprise erabili.",
     "User not found" : "Ez da erabiltzailea aurkitu",
     "An unexpected error occurred, ask your administration to check the logs." : "Ezusteko akats bat gertatu da. Eskatu zure administrazioari egunkariak egiaztatzeko.",
     "Hello %s" : "Kaixo %s",
@@ -39,6 +39,11 @@ OC.L10N.register(
     "Send email reminders about unhandled notifications after:" : "Bidali e-posta abisuak kudeatu gabeko jakinarazpenei buruz honen ondoren:",
     "Play sound when a new notification arrives" : "Erreproduzitu soinua jakinarazpen berri bat iristen denean",
     "Play sound when a call started (requires Nextcloud Talk)" : "Erreproduzitu soinua deia hasten denean (Nextcloud Talk behar da)",
+    "Web push settings" : "Web push ezarpenak",
+    "Web push is a push notification system that lets web applications send notifications to users´ mobile apps or browser, even when the app is not open in a tab." : "Web push web aplikazioei erabiltzaileen mugikorreko aplikazioetara edo arakatzaileetara jakinarazpenak bidaltzeko aukera ematen dien push jakinarazpen sistema bat da, aplikazioa fitxa batean irekita ez dagoenean ere.",
+    "Web push notifications are encrypted but routed through services provided by Mozilla, Microsoft, Apple, Google or user-choosen ones in case of mobile apps. While the content is protected, metadata such as timing and frequency of notifications may be exposed to these providers." : "Web push jakinarazpenak enkriptatuta daude baina Mozillak, Microsoftek, Applek, Googlek edo erabiltzaileak aukeratutako zerbitzuen bidez bideratzen dira mugikorreko aplikazioen kasuan. Edukia babestuta baina metadatuak (adibidez, jakinarazpenen denbora eta maiztasuna bezalako metadatuak) hornitzaile horiek eskura ditzakete.",
+    "Allow web push to be used" : "Baimendu web push-aren erabilera",
+    "Allow web push for browsers" : "Baimendu web push-ak nabigatzileei",
     "None" : "Bat ere ez",
     "You need to set up your email address before you can receive notification emails." : "Zure helbide elektronikoa konfiguratu behar duzu jakinarazpenak posta elektronikoz jasotzeko.",
     "Also repeat sound on a secondary speaker" : "Errepikatu soinua bigarren mailako bozgorailu batean ere",
