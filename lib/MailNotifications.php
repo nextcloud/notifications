@@ -284,7 +284,11 @@ class MailNotifications {
 		$HTMLSubject = $this->getHTMLSubject($notification);
 		$link = $notification->getLink();
 		if ($link !== '') {
-			$HTMLSubject = '<a href="' . $link . '">' . $HTMLSubject . '</a>';
+			// Only render absolute links
+			$scheme = strtolower((string)parse_url($link, PHP_URL_SCHEME));
+			if ($scheme === 'http' || $scheme === 'https') {
+				$HTMLSubject = '<a href="' . htmlspecialchars($link) . '">' . $HTMLSubject . '</a>';
+			}
 		}
 
 		return $HTMLSubject . '<br>' . $this->getHTMLMessage($notification);
@@ -338,8 +342,17 @@ class MailNotifications {
 				$replacement = $parameter['name'];
 			}
 
-			if (isset($parameter['link'])) {
-				$replacements[] = '<a href="' . $parameter['link'] . '">' . htmlspecialchars($replacement) . '</a>';
+			// Only render absolute links
+			$href = '';
+			if (isset($parameter['link']) && is_string($parameter['link'])) {
+				$scheme = strtolower((string)parse_url($parameter['link'], PHP_URL_SCHEME));
+				if ($scheme === 'http' || $scheme === 'https') {
+					$href = htmlspecialchars($parameter['link']);
+				}
+			}
+
+			if ($href !== '') {
+				$replacements[] = '<a href="' . $href . '">' . htmlspecialchars($replacement) . '</a>';
 			} else {
 				$replacements[] = '<strong>' . htmlspecialchars($replacement) . '</strong>';
 			}
