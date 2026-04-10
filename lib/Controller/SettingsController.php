@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace OCA\Notifications\Controller;
 
 use OCA\Notifications\AppInfo\Application;
+use OCA\Notifications\Model\Settings;
 use OCA\Notifications\Model\SettingsMapper;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\ApiRoute;
@@ -36,7 +37,8 @@ class SettingsController extends OCSController {
 	/**
 	 * Update personal notification settings
 	 *
-	 * @param int $batchSetting How often E-mails about missed notifications should be sent (hourly: 1; every three hours: 2; daily: 3; weekly: 4)
+	 * @param int<0, 4> $batchSetting How often E-mails about missed notifications should be sent (off: 0; hourly: 1; every three hours: 2; daily: 3; weekly: 4)
+	 * @psalm-param Settings::EMAIL_SEND_* $batchSetting
 	 * @param string $soundNotification Enable sound for notifications ('yes' or 'no')
 	 * @param string $soundTalk Enable sound for Talk notifications ('yes' or 'no')
 	 * @return DataResponse<Http::STATUS_OK, list<empty>, array{}>
@@ -58,7 +60,8 @@ class SettingsController extends OCSController {
 	/**
 	 * Update default notification settings for new users
 	 *
-	 * @param int $batchSetting How often E-mails about missed notifications should be sent (hourly: 1; every three hours: 2; daily: 3; weekly: 4)
+	 * @param int<0, 4> $batchSetting How often E-mails about missed notifications should be sent (off: 0; hourly: 1; every three hours: 2; daily: 3; weekly: 4)
+	 * @psalm-param Settings::EMAIL_SEND_* $batchSetting
 	 * @param string $soundNotification Enable sound for notifications ('yes' or 'no')
 	 * @param string $soundTalk Enable sound for Talk notifications ('yes' or 'no')
 	 * @param string $webpushEnabled Enable web push notifications ('yes' or 'no')
