@@ -1045,7 +1045,9 @@
                                     "batchSetting": {
                                         "type": "integer",
                                         "format": "int64",
-                                        "description": "How often E-mails about missed notifications should be sent (hourly: 1; every three hours: 2; daily: 3; weekly: 4)"
+                                        "description": "How often E-mails about missed notifications should be sent (off: 0; hourly: 1; every three hours: 2; daily: 3; weekly: 4)",
+                                        "minimum": 0,
+                                        "maximum": 4
                                     },
                                     "soundNotification": {
                                         "type": "string",
