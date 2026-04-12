@@ -5,10 +5,10 @@
 			"severity": "error",
 			"pattern": [
 				{
-					"regexp": "^.*--- Failed scenarios:$"
+					"regexp": "Failed scenarios:"
 				},
 				{
-					"regexp": "^\\s*$"
+					"regexp": "^.*$"
 				},
 				{
 					"regexp": "(([^\\s]+\\/tests\\/.*\\.feature):(\\d+)) \\(on line (\\d+)\\)",
