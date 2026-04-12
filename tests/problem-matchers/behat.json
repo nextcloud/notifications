@@ -11,7 +11,7 @@
 					"regexp": "^.*$"
 				},
 				{
-					"regexp": "(([^\\s]+\\/tests\\/.*\\.feature):(\\d+)) \\(on line (\\d+)\\)",
+					"regexp": "([^\\s]+(\\/tests\\/.*\\.feature):(\\d+)) \\(on line (\\d+)\\)",
 					"message": 1,
 					"file": 2,
 					"line": 4,
