@@ -14,9 +14,9 @@
 					"regexp": "^\\s*$"
 				},
 				{
-					"regexp": "^(.*):(\\d+)$",
+					"regexp": "^(.*/tests/.*\\.feature):(\\d+) \\(on line (\\d+)\\)\n$",
 					"file": 1,
-					"line": 2
+					"line": 3
 				}
 			]
 		}
