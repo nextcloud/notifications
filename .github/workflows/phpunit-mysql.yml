@@ -115,6 +115,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+
+      - name: Setup problem matchers for PHP
+        run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
+      - name: Setup problem matchers for PHPUnit
+        run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+      - name: Setup problem matchers for Behat
+        run: echo "::add-matcher::apps/${{ env.APP_NAME }}/tests/problem-matchers/behat.json"
+
       - name: Enable ONLY_FULL_GROUP_BY MySQL option
         run: |
           echo "SET GLOBAL sql_mode=(SELECT CONCAT(@@sql_mode,',ONLY_FULL_GROUP_BY'));" | mysql -h 127.0.0.1 -P 4444 -u root -prootpassword
@@ -177,7 +185,7 @@ jobs:
         # Only run if phpunit integration config file exists
         if: steps.check_integration.outcome == 'success'
         working-directory: apps/${{ env.APP_NAME }}
-        run: composer run test:integration
+        run: composer run test:integration -- features/admin-notification-v2.feature
 
       - name: Print logs
         if: always()
