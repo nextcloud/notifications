@@ -117,9 +117,9 @@ jobs:
 
 
       - name: Setup problem matchers for PHP
-        run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
+        run: echo "::add-matcher::apps/${{ env.APP_NAME }}/tests/problem-matchers/php.json"
       - name: Setup problem matchers for PHPUnit
-        run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+        run: echo "::add-matcher::apps/${{ env.APP_NAME }}/tests/problem-matchers/phpunit.json"
       - name: Setup problem matchers for Behat
         run: echo "::add-matcher::apps/${{ env.APP_NAME }}/tests/problem-matchers/behat.json"
 
