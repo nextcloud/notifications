@@ -5,11 +5,10 @@
 			"severity": "error",
 			"pattern": [
 				{
-					"regexp": "^\\d+\\)\\s.*$"
-				},
-				{
-					"regexp": "^(.*Failed.*)$",
-					"message": 1
+					"regexp": "^(.*/tests/.*\\.php):(\\d+)$",
+					"message": 1,
+					"file": 1,
+					"line": 2
 				}
 			]
 		}
