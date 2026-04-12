@@ -156,7 +156,7 @@ jobs:
         continue-on-error: true
         working-directory: apps/${{ env.APP_NAME }}
         run: |
-          composer run --list | grep '^  test:unit3 ' | wc -l | grep 1
+          composer run --list | grep '^  test:unit ' | wc -l | grep 1
 
       - name: PHPUnit
         # Only run if phpunit config file exists
