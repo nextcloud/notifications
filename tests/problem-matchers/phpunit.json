@@ -5,6 +5,9 @@
 			"severity": "error",
 			"pattern": [
 				{
+					"regexp": "^\\d+\\)\\s.*$"
+				},
+				{
 					"regexp": "^(.*Failed.*)$",
 					"message": 1
 				}
