@@ -126,7 +126,7 @@ class APIControllerTest extends TestCase {
 			if ($validLong) {
 				$n->expects($this->once())
 					->method('setMessage')
-					->with('ocs', ['message' => $long, 'parameters' => []])
+					->with('ocs', ['message' => $long, 'parameteers' => []])
 					->willReturnSelf();
 			} else {
 				$n->expects($this->never())
