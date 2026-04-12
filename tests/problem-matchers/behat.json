@@ -2,13 +2,10 @@
 	"problemMatcher": [
 		{
 			"owner": "behat",
+			"severity": "error",
 			"pattern": [
 				{
-					"regexp": "^\\d+\\)\\s.*$"
-				},
-				{
-					"regexp": "^(.*Failed\\sasserting\\sthat.*)$",
-					"message": 1
+					"regexp": "^.*--- Failed scenarios:$"
 				},
 				{
 					"regexp": "^\\s*$"
@@ -16,7 +13,8 @@
 				{
 					"regexp": "^(.*/tests/.*\\.feature):(\\d+) \\(on line (\\d+)\\)\n$",
 					"file": 1,
-					"line": 3
+					"line": 3,
+					"loop": true
 				}
 			]
 		}
