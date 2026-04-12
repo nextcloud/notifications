@@ -69,6 +69,7 @@ jobs:
 
     strategy:
       matrix: ${{ fromJson(needs.matrix.outputs.matrix) }}
+      fail-fast: false
 
     name: MySQL ${{ matrix.mysql-versions }} PHP ${{ matrix.php-versions }} Nextcloud ${{ matrix.server-versions }}
 
