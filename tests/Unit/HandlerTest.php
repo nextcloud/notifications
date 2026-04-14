@@ -41,6 +41,18 @@ class HandlerTest extends TestCase {
 		]));
 	}
 
+	protected function tearDown(): void {
+		$this->handler = new Handler(
+			\OCP\Server::get(IDBConnection::class),
+			\OCP\Server::get(IManager::class),
+		);
+
+		$this->handler->delete($this->getNotification([
+			'getApp' => 'testing_notifications',
+		]));
+		parent::tearDown();
+	}
+
 	public function testFull(): void {
 		$notification = $this->getNotification([
 			'getApp' => 'testing_notifications',
@@ -52,12 +64,12 @@ class HandlerTest extends TestCase {
 			'getSubjectParameters' => [],
 			'getMessage' => 'message',
 			'getMessageParameters' => [],
-			'getLink' => 'link',
-			'getIcon' => 'icon',
+			'getLink' => 'https://link',
+			'getIcon' => 'https://icon',
 			'getActions' => [
 				[
 					'getLabel' => 'action_label',
-					'getLink' => 'action_link',
+					'getLink' => 'https://action_link',
 					'getRequestType' => 'GET',
 					'isPrimary' => false,
 				]
@@ -108,12 +120,12 @@ class HandlerTest extends TestCase {
 			'getSubjectParameters' => [],
 			'getMessage' => '',
 			'getMessageParameters' => [],
-			'getLink' => 'link',
-			'getIcon' => 'icon',
+			'getLink' => 'https://link',
+			'getIcon' => 'https://icon',
 			'getActions' => [
 				[
 					'getLabel' => 'action_label',
-					'getLink' => 'action_link',
+					'getLink' => 'https://action_link',
 					'getRequestType' => 'GET',
 					'isPrimary' => false,
 				]
@@ -164,12 +176,12 @@ class HandlerTest extends TestCase {
 			'getSubjectParameters' => [],
 			'getMessage' => 'message',
 			'getMessageParameters' => [],
-			'getLink' => 'link',
-			'getIcon' => 'icon',
+			'getLink' => 'https://link',
+			'getIcon' => 'https://icon',
 			'getActions' => [
 				[
 					'getLabel' => 'action_label',
-					'getLink' => 'action_link',
+					'getLink' => 'https://action_link',
 					'getRequestType' => 'GET',
 					'isPrimary' => true,
 				]
