@@ -25,6 +25,21 @@ Feature: Push registration
     | devicePublicKey | VALID_KEY |
     | proxyServer | nextcloud |
     Then error "INVALID_PROXY_SERVER" is expected with status code 400
+    Given user "test1" registers for push notifications with
+    | pushTokenHash | 12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678 |
+    | devicePublicKey | VALID_KEY |
+    | proxyServer | https://localhost/nextcloud |
+    Then error "INVALID_PROXY_SERVER" is expected with status code 400
+    Given user "test1" registers for push notifications with
+    | pushTokenHash | 12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678 |
+    | devicePublicKey | VALID_KEY |
+    | proxyServer | http://localhost/nextcloud |
+    Then error "INVALID_PROXY_SERVER" is expected with status code 400
+    Given user "test1" registers for push notifications with
+      | pushTokenHash | 12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678 |
+      | devicePublicKey | VALID_KEY |
+      | proxyServer | http://push-notifications.nextcloud.com/ |
+    Then error "INVALID_PROXY_SERVER" is expected with status code 400
 
   Scenario: Invalid session token: not using an app password
     Given user "test1" registers for push notifications with

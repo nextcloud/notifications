@@ -83,3 +83,24 @@ Feature: WebPush registration
       | auth | VALID_AUTH |
       | appTypes | all |
     Then error "WEBPUSH_DISABLED" is expected with status code 403
+
+  Scenario: Don't allow registering with local URLs
+    Given user "test1" creates an app password
+    Given user "test1" registers for webpush with
+      | endpoint | http://push.example.com/test |
+      | uaPublicKey | VALID_KEY |
+      | auth | VALID_AUTH |
+      | appTypes | all |
+    Then error "INVALID_ENDPOINT" is expected with status code 400
+    Given user "test1" registers for webpush with
+      | endpoint | http://localhost/test |
+      | uaPublicKey | VALID_KEY |
+      | auth | VALID_AUTH |
+      | appTypes | all |
+    Then error "INVALID_ENDPOINT" is expected with status code 400
+    Given user "test1" registers for webpush with
+      | endpoint | https://localhost/test |
+      | uaPublicKey | VALID_KEY |
+      | auth | VALID_AUTH |
+      | appTypes | all |
+    Then error "INVALID_ENDPOINT" is expected with status code 400
