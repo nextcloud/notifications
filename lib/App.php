@@ -42,8 +42,8 @@ class App implements IDeferrableApp {
 		$this->push = $push;
 	}
 
-	public function setOutput(OutputInterface $output): void {
-		$this->push->setOutput($output);
+	public function setOutput(OutputInterface $output, bool $limitedOutput = true): void {
+		$this->push->setOutput($output, $limitedOutput);
 	}
 
 	/**

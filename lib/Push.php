@@ -148,13 +148,17 @@ class Push {
 		$this->log = $log;
 	}
 
-	public function setOutput(OutputInterface $output): void {
+	public function setOutput(OutputInterface $output, bool $limitedOutput = true): void {
 		$this->output = $output;
+		$this->limitedOutput = $limitedOutput;
 	}
 
-	protected function printInfo(string $message): void {
+	protected function printInfo(string $message, string $verboseMessage = ''): void {
 		if ($this->output) {
 			$this->output->writeln($message);
+			if ($verboseMessage !== '' && !$this->limitedOutput) {
+				$this->output->writeln($verboseMessage);
+			}
 		}
 	}
 
@@ -259,7 +263,7 @@ class Push {
 		return $talkDevices;
 	}
 
-	public function pushToDevice(int $id, INotification $notification, ?OutputInterface $output = null): void {
+	public function pushToDevice(int $id, INotification $notification): void {
 		if (!$this->config->getSystemValueBool('has_internet_connection', true)) {
 			$this->printInfo('<error>Internet connectivity is disabled in configuration file - no push notifications will be sent</error>');
 
