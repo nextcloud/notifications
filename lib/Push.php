@@ -133,13 +133,17 @@ class Push {
 		$this->log = $log;
 	}
 
-	public function setOutput(OutputInterface $output): void {
+	public function setOutput(OutputInterface $output, bool $limitedOutput = true): void {
 		$this->output = $output;
+		$this->limitedOutput = $limitedOutput;
 	}
 
-	protected function printInfo(string $message): void {
+	protected function printInfo(string $message, string $verboseMessage = ''): void {
 		if ($this->output) {
 			$this->output->writeln($message);
+			if ($verboseMessage !== '' && !$this->limitedOutput) {
+				$this->output->writeln($verboseMessage);
+			}
 		}
 	}
 
@@ -244,7 +248,7 @@ class Push {
 		return $talkDevices;
 	}
 
-	public function pushToDevice(int $id, INotification $notification, ?OutputInterface $output = null): void {
+	public function pushToDevice(int $id, INotification $notification): void {
 		if (!$this->config->getSystemValueBool('has_internet_connection', true)) {
 			$this->printInfo('<error>Internet connectivity is disabled in configuration file - no push notifications will be sent</error>');
 
@@ -532,7 +536,7 @@ class Push {
 					'app' => 'notifications',
 				]);
 
-				$this->printInfo('<error>Could not send notification to push server [' . $proxyServer . ']: ' . $error . '</error>');
+				$this->printInfo('<error>Could not send notification to push server [' . $proxyServer . ']</error>', '<error>' . $error . '</error>');
 				continue;
 			} catch (\Exception $e) {
 				$this->log->error($e->getMessage(), [
@@ -563,7 +567,7 @@ class Push {
 					$this->config->setAppValue(Application::APP_ID, 'rate_limit_reached', (string) $this->timeFactory->getTime());
 				}
 				$error = $body && $bodyData === null ? $body : 'no reason given';
-				$this->printInfo('<error>Could not send notification to push server [' . $proxyServer . ']: ' . $error . '</error>');
+				$this->printInfo('<error>Could not send notification to push server [' . $proxyServer . ']</error>', '<error>' . $error . '</error>');
 				$this->log->warning('Could not send notification to push server [{url}]: {error}', [
 					'error' => $error,
 					'url' => $proxyServer,
@@ -571,7 +575,7 @@ class Push {
 				]);
 			} else {
 				$error = $body && $bodyData === null ? $body : 'no reason given';
-				$this->printInfo('<comment>Push notification sent but response was not parsable, using an outdated push proxy? [' . $proxyServer . ']: ' . $error . '</comment>');
+				$this->printInfo('<comment>Push notification sent but response was not parsable, using an outdated push proxy? [' . $proxyServer . ']</comment>', '<comment>' . $error . '</comment>');
 				$this->log->info('Push notification sent but response was not parsable, using an outdated push proxy? [{url}]: {error}', [
 					'error' => $error,
 					'url' => $proxyServer,
