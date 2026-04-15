@@ -14,8 +14,8 @@ use GuzzleHttp\Exception\ServerException;
 use OC\Authentication\Token\IProvider;
 use OC\Security\IdentityProof\Key;
 use OC\Security\IdentityProof\Manager;
+use OCA\Notifications\Exceptions\InvalidDeviceTokenException;
 use OCA\Notifications\Vendor\Minishlink\WebPush\MessageSentReport;
-use OCA\Notifications\WebPush\TokenValidation;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Services\IAppConfig;
 use OCP\AppFramework\Utility\ITimeFactory;
@@ -42,7 +42,20 @@ use OCP\Util;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ *
+ */
 class Push {
+	/**
+	 * Only push to devices that were online in the last 60 days
+	 */
+	public const MAX_PUSH_AGE = 60 * 24 * 60 * 60;
+
+	/**
+	 * Only push to the X most recent devices
+	 */
+	public const DEVICE_LIMIT = 20;
+
 	protected ICache $cache;
 	protected ?OutputInterface $output = null;
 	protected bool $limitedOutput = true;
@@ -194,11 +207,13 @@ class Push {
 			$app = 'talk';
 		}
 
-		return array_values(array_filter($devices, function ($device) use ($app) {
+		$devices = array_values(array_filter($devices, function ($device) use ($app) {
 			$appTypes = explode(',', $device['app_types']);
 			return $device['activated'] && (\in_array($app, $appTypes)
 				|| (\in_array('all', $appTypes) && !\in_array('-' . $app, $appTypes)));
 		}));
+
+		return $this->filterByTokenAge($devices);
 	}
 
 
@@ -217,21 +232,75 @@ class Push {
 
 		$this->printInfo('Identified ' . count($talkDevices) . ' Talk devices and ' . count($otherDevices) . ' others.');
 
-		if (!$isTalkNotification) {
-			if (empty($otherDevices)) {
-				// We only send file notifications to the files app.
-				// If you don't have such a device, bye!
-				return [];
-			}
-			return $otherDevices;
+		if ($isTalkNotification) {
+			// If you don't have a talk device, we fall back to the files app.
+			$devices = $talkDevices ?: $otherDevices;
+		} else {
+			// We only send file notifications to the files app.
+			// If you don't have such a device, we don't fall back
+			$devices = $otherDevices;
 		}
 
-		if (empty($talkDevices)) {
-			// If you don't have a talk device,
-			// we fall back to the files app.
-			return $otherDevices;
+		if (empty($devices)) {
+			return [];
 		}
-		return $talkDevices;
+
+		return $this->filterByTokenAge(array_values($devices));
+	}
+
+	/**
+	 * @template H
+	 * @param list<H> $devices
+	 * @return list<H>
+	 */
+	protected function filterByTokenAge(array $devices): array {
+
+		// We don't push to devices that are older than 60 days
+		$maxAge = $this->timeFactory->getTime() - self::MAX_PUSH_AGE;
+
+		$tokenAgeList = $deviceList = [];
+		foreach ($devices as $device) {
+			$device['token'] = (int)$device['token'];
+			$this->printInfo('');
+			$this->printInfo('Device token: ' . $device['token']);
+
+			try {
+				$tokenAge = $this->validateTokenAndGetAge($device['token']);
+			} catch (InvalidDeviceTokenException) {
+				if (isset($device['endpoint'])) {
+					$this->deleteWebPushToken($device['token']);
+				} else {
+					$this->deleteProxyPushToken($device['token']);
+				}
+				continue;
+			}
+
+			if ($tokenAge !== 0 && $tokenAge <= $maxAge) {
+				$this->printInfo('<comment>Device token ' . $device['token'] . ' "last checked" is older than 60 days: ' . $tokenAge . '</comment>');
+				continue;
+			}
+
+			$tokenAgeList[$device['token']] = $tokenAge;
+			$deviceList[$device['token']] = $device;
+		}
+
+		if (count($deviceList) < self::DEVICE_LIMIT) {
+			return array_values($deviceList);
+		}
+
+		arsort($tokenAgeList);
+		$tokenAgeList = array_slice($tokenAgeList, 0, self::DEVICE_LIMIT);
+		$devices = [];
+		foreach ($deviceList as $device) {
+			if (!isset($tokenAgeList[$device['token']]) && $tokenAgeList[$device['token']] !== 0) {
+				$this->printInfo('<comment>Device token ' . $device['token'] . ' is not in the most recent 20 devices: ' . $tokenAgeList[$device['token']] . '</comment>');
+				continue;
+			}
+
+			$devices[] = $device;
+		}
+
+		return $devices;
 	}
 
 	public function pushToDevice(int $id, INotification $notification): void {
@@ -324,24 +393,10 @@ class Push {
 		}
 		$this->printInfo('Trying to push to ' . count($devices) . ' devices');
 
-		// We don't push to devices that are older than 60 days
-		$maxAge = time() - 60 * 24 * 60 * 60;
-
 		foreach ($devices as $device) {
 			$device['token'] = (int)$device['token'];
 			$this->printInfo('');
 			$this->printInfo('Device token: ' . $device['token']);
-
-			switch ($this->validateToken($device['token'], $maxAge)) {
-				case TokenValidation::VALID:
-					break;
-				case TokenValidation::INVALID:
-					// Token does not exist anymore
-					$this->deleteWebPushToken($device['token']);
-					// no break
-				case TokenValidation::OLD:
-					continue 2;
-			}
 
 			// If the endpoint got a 429 TOO_MANY_REQUESTS,
 			// we wait for the time sent by the server
@@ -390,7 +445,6 @@ class Push {
 		$this->printInfo('Private user key size: ' . strlen($userKey->getPrivate()));
 		$this->printInfo('Public user key size: ' . strlen($userKey->getPublic()));
 
-
 		$this->printInfo('');
 		$this->printInfo('Found ' . count($devices) . ' devices registered for push notifications');
 		$isTalkNotification = \in_array($notification->getApp(), ['spreed', 'talk', 'admin_notification_talk'], true);
@@ -401,24 +455,10 @@ class Push {
 		}
 		$this->printInfo('Trying to push to ' . count($devices) . ' devices');
 
-		// We don't push to devices that are older than 60 days
-		$maxAge = time() - 60 * 24 * 60 * 60;
-
 		foreach ($devices as $device) {
 			$device['token'] = (int)$device['token'];
 			$this->printInfo('');
 			$this->printInfo('Device token: ' . $device['token']);
-
-			switch ($this->validateToken($device['token'], $maxAge)) {
-				case TokenValidation::VALID:
-					break;
-				case TokenValidation::INVALID:
-					// Token does not exist anymore
-					$this->deleteProxyPushToken($device['token']);
-					// no break
-				case TokenValidation::OLD:
-					continue 2;
-			}
 
 			try {
 				$payload = json_encode($this->encryptAndSign($userKey, $device, $id, $notification, $isTalkNotification), JSON_THROW_ON_ERROR);
@@ -500,8 +540,8 @@ class Push {
 
 		if (!$deleteAll) {
 			// Only filter when it's not delete-all
+			$webPushDevices = $this->filterWebPushDeviceList($webPushDevices, $app);
 			$proxyDevices = $this->filterProxyDeviceList($proxyDevices, $app);
-			//TODO filter webpush devices
 		}
 
 		$this->webPushDeleteToDevice($userId, $user, $webPushDevices, $deleteAll, $notificationIds, $app);
@@ -520,21 +560,8 @@ class Push {
 			return;
 		}
 
-		// We don't push to devices that are older than 60 days
-		$maxAge = time() - 60 * 24 * 60 * 60;
-
 		foreach ($devices as $device) {
 			$device['token'] = (int)$device['token'];
-			switch ($this->validateToken($device['token'], $maxAge)) {
-				case TokenValidation::VALID:
-					break;
-				case TokenValidation::INVALID:
-					// Token does not exist anymore
-					$this->deleteWebPushToken($device['token']);
-					// no break
-				case TokenValidation::OLD:
-					continue 2;
-			}
 
 			// If the endpoint got a 429 TOO_MANY_REQUESTS,
 			// we wait for the time sent by the server
@@ -592,23 +619,9 @@ class Push {
 			return;
 		}
 
-		// We don't push to devices that are older than 60 days
-		$maxAge = time() - 60 * 24 * 60 * 60;
-
 		$userKey = $this->keyManager->getKey($user);
 		foreach ($devices as $device) {
 			$device['token'] = (int)$device['token'];
-			switch ($this->validateToken($device['token'], $maxAge)) {
-				case TokenValidation::VALID:
-					break;
-				case TokenValidation::INVALID:
-					// Token does not exist anymore
-					$this->deleteProxyPushToken($device['token']);
-					// no break
-				case TokenValidation::OLD:
-					continue 2;
-			}
-
 			try {
 				$proxyServer = rtrim($device['proxyserver'], '/');
 				if (!isset($this->payloadsToSend[$proxyServer])) {
@@ -794,11 +807,16 @@ class Push {
 		}
 	}
 
-	protected function validateToken(int $tokenId, int $maxAge): TokenValidation {
+	/**
+	 * @throws InvalidDeviceTokenException
+	 */
+	protected function validateTokenAndGetAge(int $tokenId): int {
 		// This is a web session token
 		if ($tokenId < 0) {
-			return TokenValidation::VALID;
+			// Temporarily allowing all
+			return 0;
 		}
+
 		$age = $this->cache->get('t' . $tokenId);
 
 		if ($age === null) {
@@ -808,9 +826,9 @@ class Push {
 				$type = $this->callSafelyForToken($token, 'getType');
 				if ($type === IToken::WIPE_TOKEN) {
 					// Token does not exist any more, should drop the push device entry
-					$this->printInfo('Device token is marked for remote wipe');
+					$this->printInfo('Device token ' . $tokenId . ' is marked for remote wipe');
 					$this->cache->set('t' . $tokenId, 0, 600);
-					return TokenValidation::INVALID;
+					throw new InvalidDeviceTokenException('wipe');
 				}
 
 				$age = $token->getLastCheck();
@@ -821,19 +839,13 @@ class Push {
 				$this->cache->set('t' . $tokenId, $age, 600);
 			} catch (InvalidTokenException) {
 				// Token does not exist any more, should drop the push device entry
-				$this->printInfo('<error>InvalidTokenException is thrown</error>');
+				$this->printInfo('<error>InvalidTokenException is thrown for ' . $tokenId . '</error>');
 				$this->cache->set('t' . $tokenId, 0, 600);
-				return TokenValidation::INVALID;
+				throw new InvalidDeviceTokenException('invalid');
 			}
 		}
 
-		if ($age > $maxAge) {
-			$this->printInfo('Device token is valid');
-			return TokenValidation::VALID;
-		}
-
-		$this->printInfo('<comment>Device token "last checked" is older than 60 days: ' . $age . '</comment>');
-		return TokenValidation::OLD;
+		return $age;
 	}
 
 	/**

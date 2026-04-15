@@ -15,8 +15,8 @@ use OC\Authentication\Token\IProvider;
 use OC\Authentication\Token\PublicKeyToken;
 use OC\Security\IdentityProof\Key;
 use OC\Security\IdentityProof\Manager;
+use OCA\Notifications\Exceptions\InvalidDeviceTokenException;
 use OCA\Notifications\Push;
-use OCA\Notifications\WebPush\TokenValidation;
 use OCA\Notifications\WebPushClient;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Services\IAppConfig;
@@ -311,7 +311,7 @@ class PushTest extends TestCase {
 	}
 
 	public function testProxyPushToDeviceEncryptionError(): void {
-		$push = $this->getPush(['getProxyDevicesForUser', 'encryptAndSign', 'deleteProxyPushToken', 'validateToken']);
+		$push = $this->getPush(['getProxyDevicesForUser', 'encryptAndSign', 'deleteProxyPushToken', 'filterByTokenAge']);
 		$this->clientService->expects($this->never())
 			->method('newClient');
 
@@ -361,8 +361,8 @@ class PushTest extends TestCase {
 			->willReturn($key);
 
 		$push->expects($this->once())
-			->method('validateToken')
-			->willReturn(TokenValidation::VALID);
+			->method('filterByTokenAge')
+			->willReturnArgument(0);
 
 		$push->expects($this->once())
 			->method('encryptAndSign')
@@ -376,7 +376,7 @@ class PushTest extends TestCase {
 	}
 
 	public function testProxyPushToDeviceNoFairUse(): void {
-		$push = $this->getPush(['getProxyDevicesForUser', 'encryptAndSign', 'deleteProxyPushToken', 'validateToken', 'deleteProxyPushTokenByDeviceIdentifier']);
+		$push = $this->getPush(['getProxyDevicesForUser', 'encryptAndSign', 'deleteProxyPushToken', 'filterByTokenAge', 'deleteProxyPushTokenByDeviceIdentifier']);
 
 		/** @var INotification&MockObject $notification */
 		$notification = $this->createMock(INotification::class);
@@ -425,9 +425,9 @@ class PushTest extends TestCase {
 			->with($user)
 			->willReturn($key);
 
-		$push->expects($this->exactly(1))
-			->method('validateToken')
-			->willReturn(TokenValidation::VALID);
+		$push->expects($this->once())
+			->method('filterByTokenAge')
+			->willReturnArgument(0);
 
 		$push->expects($this->exactly(1))
 			->method('encryptAndSign')
@@ -462,7 +462,7 @@ class PushTest extends TestCase {
 
 	#[DataProvider(methodName: 'dataProxyPushToDeviceSending')]
 	public function testPushToDeviceSending(bool $isDebug): void {
-		$push = $this->getPush(['getProxyDevicesForUser', 'encryptAndSign', 'deleteProxyPushToken', 'validateToken', 'deleteProxyPushTokenByDeviceIdentifier']);
+		$push = $this->getPush(['getProxyDevicesForUser', 'encryptAndSign', 'deleteProxyPushToken', 'filterByTokenAge', 'deleteProxyPushTokenByDeviceIdentifier']);
 
 		/** @var INotification&MockObject $notification */
 		$notification = $this->createMock(INotification::class);
@@ -546,9 +546,9 @@ class PushTest extends TestCase {
 			->with($user)
 			->willReturn($key);
 
-		$push->expects($this->exactly(6))
-			->method('validateToken')
-			->willReturn(TokenValidation::VALID);
+		$push->expects($this->once())
+			->method('filterByTokenAge')
+			->willReturnArgument(0);
 
 		$push->expects($this->exactly(6))
 			->method('encryptAndSign')
@@ -695,7 +695,7 @@ class PushTest extends TestCase {
 	 */
 	#[DataProvider(methodName: 'dataProxyPushToDeviceTalkNotification')]
 	public function testProxyPushToDeviceTalkNotification(array $deviceTypes, bool $isTalkNotification, ?int $pushedDevice): void {
-		$push = $this->getPush(['getProxyDevicesForUser', 'encryptAndSign', 'deleteProxyPushToken', 'validateToken']);
+		$push = $this->getPush(['getProxyDevicesForUser', 'encryptAndSign', 'deleteProxyPushToken', 'filterByTokenAge']);
 
 		/** @var INotification&MockObject $notification */
 		$notification = $this->createMock(INotification::class);
@@ -753,7 +753,7 @@ class PushTest extends TestCase {
 
 		if ($pushedDevice === null) {
 			$push->expects($this->never())
-				->method('validateToken');
+				->method('filterByTokenAge');
 
 			$push->expects($this->never())
 				->method('encryptAndSign');
@@ -761,9 +761,9 @@ class PushTest extends TestCase {
 			$this->clientService->expects($this->never())
 				->method('newClient');
 		} else {
-			$push->expects($this->exactly(1))
-				->method('validateToken')
-				->willReturn(TokenValidation::VALID);
+			$push->expects($this->once())
+				->method('filterByTokenAge')
+				->willReturnArgument(0);
 
 			$push->expects($this->exactly(1))
 				->method('encryptAndSign')
@@ -961,7 +961,7 @@ class PushTest extends TestCase {
 	}
 
 	public function testWebPushToDeviceEncryptionError(): void {
-		$push = $this->getPush(['getWebPushDevicesForUser', 'deleteWebPushToken', 'validateToken']);
+		$push = $this->getPush(['getWebPushDevicesForUser', 'deleteWebPushToken', 'filterByTokenAge']);
 
 		$this->config->expects($this->once())
 			->method('getSystemValueBool')
@@ -1008,8 +1008,8 @@ class PushTest extends TestCase {
 			->willReturnArgument(0);
 
 		$push->expects($this->once())
-			->method('validateToken')
-			->willReturn(TokenValidation::VALID);
+			->method('filterByTokenAge')
+			->willReturnArgument(0);
 
 		$this->wpClient->method('enqueue')
 			->willThrowException(new \InvalidArgumentException());
@@ -1030,7 +1030,7 @@ class PushTest extends TestCase {
 
 	#[DataProvider(methodName: 'dataWebPushToDeviceSending')]
 	public function testWebPushToDeviceSending(bool $isRateLimited): void {
-		$push = $this->getPush(['getWebPushDevicesForUser', 'encodeNotif', 'deleteWebPushToken', 'validateToken']);
+		$push = $this->getPush(['getWebPushDevicesForUser', 'encodeNotif', 'deleteWebPushToken', 'filterByTokenAge']);
 
 		/** @var INotification&MockObject $notification */
 		$notification = $this->createMock(INotification::class);
@@ -1082,9 +1082,9 @@ class PushTest extends TestCase {
 			->with($notification, 'ru')
 			->willReturnArgument(0);
 
-		$push->expects($this->exactly(2))
-			->method('validateToken')
-			->willReturn(TokenValidation::VALID);
+		$push->expects($this->once())
+			->method('filterByTokenAge')
+			->willReturnArgument(0);
 
 		$push->expects($this->exactly($isRateLimited ? 1 : 2))
 			->method('encodeNotif')
@@ -1139,7 +1139,10 @@ class PushTest extends TestCase {
 	 */
 	#[DataProvider(methodName: 'dataFilterWebPushDeviceList')]
 	public function testFilterWebPushDeviceList(bool $activated, string $deviceApptypes, string $app, bool $pass): void {
-		$push = $this->getPush([]);
+		$push = $this->getPush(['filterByTokenAge']);
+		$push->method('filterByTokenAge')
+			->willReturnArgument(0);
+
 		$devices = [[
 			'activated' => $activated,
 			'app_types' => $deviceApptypes,
@@ -1187,7 +1190,7 @@ class PushTest extends TestCase {
 	 */
 	#[DataProvider(methodName: 'dataWebPushToDeviceFilterApp')]
 	public function testWebPushToDeviceFilterApp(array $deviceTypes, string $notificationApp, ?int $pushedDevice): void {
-		$push = $this->getPush(['getWebPushDevicesForUser', 'encodeNotif', 'deleteWebPushToken', 'validateToken']);
+		$push = $this->getPush(['getWebPushDevicesForUser', 'encodeNotif', 'deleteWebPushToken', 'filterByTokenAge']);
 
 		/** @var INotification&MockObject $notification */
 		$notification = $this->createMock(INotification::class);
@@ -1231,17 +1234,13 @@ class PushTest extends TestCase {
 			->with($notification, 'ru')
 			->willReturnArgument(0);
 
-		if ($pushedDevice === null) {
-			$push->expects($this->never())
-				->method('validateToken');
+		$push->method('filterByTokenAge')
+			->willReturnArgument(0);
 
+		if ($pushedDevice === null) {
 			$push->expects($this->never())
 				->method('encodeNotif');
 		} else {
-			$push->expects($this->exactly(1))
-				->method('validateToken')
-				->willReturn(TokenValidation::VALID);
-
 			$push->expects($this->exactly(1))
 				->method('encodeNotif')
 				->willReturn([
@@ -1271,28 +1270,105 @@ class PushTest extends TestCase {
 		$push->pushToDevice(200718, $notification);
 	}
 
-	public static function dataValidateToken(): array {
+	public static function dataValidateTokenAndGetAge(): array {
 		return [
-			[1239999999, 1230000000, OCPIToken::WIPE_TOKEN, TokenValidation::INVALID],
-			[1230000000, 1239999999, OCPIToken::WIPE_TOKEN, TokenValidation::INVALID],
-			[1230000000, 1239999999, OCPIToken::PERMANENT_TOKEN, TokenValidation::VALID],
-			[1239999999, 1230000000, OCPIToken::PERMANENT_TOKEN, TokenValidation::VALID],
-			[1230000000, 1230000000, OCPIToken::PERMANENT_TOKEN, TokenValidation::OLD],
+			'lastCheck newer' => [1239999999, 1230000000, 1239999999],
+			'lastActivity newer' => [1230000000, 1239999999, 1239999999],
+			'both equal' => [1230000000, 1230000000, 1230000000],
 		];
 	}
 
-	#[DataProvider(methodName: 'dataValidateToken')]
-	public function testValidateToken(int $lastCheck, int $lastActivity, int $type, TokenValidation $expected): void {
+	#[DataProvider(methodName: 'dataValidateTokenAndGetAge')]
+	public function testValidateTokenAndGetAge(int $lastCheck, int $lastActivity, int $expected): void {
 		$token = PublicKeyToken::fromParams([
 			'lastCheck' => $lastCheck,
 			'lastActivity' => $lastActivity,
-			'type' => $type,
+			'type' => OCPIToken::PERMANENT_TOKEN,
 		]);
 
-		$this->tokenProvider->method('getTokenById')
+		$this->cache->expects($this->once())
+			->method('get')
+			->with('t42')
+			->willReturn(null);
+		$this->cache->expects($this->once())
+			->method('set')
+			->with('t42', $expected, 600);
+
+		$this->tokenProvider->expects($this->once())
+			->method('getTokenById')
+			->with(42)
 			->willReturn($token);
 
 		$push = $this->getPush();
-		$this->assertSame($expected, self::invokePrivate($push, 'validateToken', [42, 1234567890]));
+		$this->assertSame($expected, self::invokePrivate($push, 'validateTokenAndGetAge', [42]));
+	}
+
+	public function testValidateTokenAndGetAgeWipeToken(): void {
+		$token = PublicKeyToken::fromParams([
+			'lastCheck' => 1234567890,
+			'lastActivity' => 1234567890,
+			'type' => OCPIToken::WIPE_TOKEN,
+		]);
+
+		$this->cache->expects($this->once())
+			->method('get')
+			->with('t42')
+			->willReturn(null);
+		$this->cache->expects($this->once())
+			->method('set')
+			->with('t42', 0, 600);
+
+		$this->tokenProvider->expects($this->once())
+			->method('getTokenById')
+			->with(42)
+			->willReturn($token);
+
+		$push = $this->getPush();
+		$this->expectException(InvalidDeviceTokenException::class);
+		self::invokePrivate($push, 'validateTokenAndGetAge', [42]);
+	}
+
+	public function testValidateTokenAndGetAgeInvalidToken(): void {
+		$this->cache->expects($this->once())
+			->method('get')
+			->with('t42')
+			->willReturn(null);
+		$this->cache->expects($this->once())
+			->method('set')
+			->with('t42', 0, 600);
+
+		$this->tokenProvider->expects($this->once())
+			->method('getTokenById')
+			->with(42)
+			->willThrowException(new InvalidTokenException());
+
+		$push = $this->getPush();
+		$this->expectException(InvalidDeviceTokenException::class);
+		self::invokePrivate($push, 'validateTokenAndGetAge', [42]);
+	}
+
+	public function testValidateTokenAndGetAgeSessionToken(): void {
+		$this->cache->expects($this->never())
+			->method('get');
+		$this->tokenProvider->expects($this->never())
+			->method('getTokenById');
+
+		$push = $this->getPush();
+		$this->assertSame(0, self::invokePrivate($push, 'validateTokenAndGetAge', [-1]));
+	}
+
+	public function testValidateTokenAndGetAgeCached(): void {
+		$this->cache->expects($this->once())
+			->method('get')
+			->with('t42')
+			->willReturn(1234567890);
+		$this->cache->expects($this->never())
+			->method('set');
+
+		$this->tokenProvider->expects($this->never())
+			->method('getTokenById');
+
+		$push = $this->getPush();
+		$this->assertSame(1234567890, self::invokePrivate($push, 'validateTokenAndGetAge', [42]));
 	}
 }
