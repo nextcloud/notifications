@@ -109,7 +109,7 @@ class TestPush extends Command {
 				->setObject('admin_notifications', dechex($datetime->getTimestamp()))
 				->setSubject('cli', ['Testing push notifications']);
 
-			$this->app->setOutput($output);
+			$this->app->setOutput($output, false);
 			$this->notificationManager->notify($notification);
 		} catch (\InvalidArgumentException) {
 			$output->writeln('Error while sending the notification');
