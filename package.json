@@ -18,7 +18,7 @@
     "extends @nextcloud/browserslist-config"
   ],
   "dependencies": {
-    "@nextcloud/auth": "^2.5.3",
+    "@nextcloud/auth": "^2.6.0",
     "@nextcloud/axios": "^2.5.1",
     "@nextcloud/browser-storage": "^0.5.0",
     "@nextcloud/capabilities": "^1.2.1",
