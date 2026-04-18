@@ -5,7 +5,6 @@ SPDX-License-Identifier: ISC
 SPDX-License-Identifier: MIT
 SPDX-FileCopyrightText: @nextcloud/dialogs developers
 SPDX-FileCopyrightText: Anthony Fu <https://github.com/antfu>
-SPDX-FileCopyrightText: Christoph Wurst
 SPDX-FileCopyrightText: David Clark
 SPDX-FileCopyrightText: David Myers <hello@davidmyers.dev>
 SPDX-FileCopyrightText: Dr.-Ing. Mario Heiderich, Cure53 <mario@cure53.de> (https://cure53.de/)
@@ -34,7 +33,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 0.2.11
 	- license: MIT
 - @nextcloud/auth
-	- version: 2.5.3
+	- version: 2.6.0
 	- license: GPL-3.0-or-later
 - @nextcloud/axios
 	- version: 2.5.2
