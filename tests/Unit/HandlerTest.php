@@ -60,12 +60,12 @@ class HandlerTest extends TestCase {
 			'getSubjectParameters' => [],
 			'getMessage' => 'message',
 			'getMessageParameters' => [],
-			'getLink' => 'https://link',
-			'getIcon' => 'https://icon',
+			'getLink' => 'https://example.tld/notification',
+			'getIcon' => 'https://example.tld/icon',
 			'getActions' => [
 				[
 					'getLabel' => 'action_label',
-					'getLink' => 'https://action_link',
+					'getLink' => 'https://example.tld/action',
 					'getRequestType' => 'GET',
 					'isPrimary' => false,
 				]
@@ -116,12 +116,12 @@ class HandlerTest extends TestCase {
 			'getSubjectParameters' => [],
 			'getMessage' => '',
 			'getMessageParameters' => [],
-			'getLink' => 'https://link',
-			'getIcon' => 'https://icon',
+			'getLink' => 'https://example.tld/notification',
+			'getIcon' => 'https://example.tld/icon',
 			'getActions' => [
 				[
 					'getLabel' => 'action_label',
-					'getLink' => 'https://action_link',
+					'getLink' => 'https://example.tld/action',
 					'getRequestType' => 'GET',
 					'isPrimary' => false,
 				]
@@ -172,12 +172,12 @@ class HandlerTest extends TestCase {
 			'getSubjectParameters' => [],
 			'getMessage' => 'message',
 			'getMessageParameters' => [],
-			'getLink' => 'https://link',
-			'getIcon' => 'https://icon',
+			'getLink' => 'https://example.tld/notification',
+			'getIcon' => 'https://example.tld/icon',
 			'getActions' => [
 				[
 					'getLabel' => 'action_label',
-					'getLink' => 'https://action_link',
+					'getLink' => 'https://example.tld/action',
 					'getRequestType' => 'GET',
 					'isPrimary' => true,
 				]
