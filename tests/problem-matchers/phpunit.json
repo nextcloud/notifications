@@ -1,0 +1,16 @@
+{
+	"problemMatcher": [
+		{
+			"owner": "phpunit",
+			"severity": "error",
+			"pattern": [
+				{
+					"regexp": "^(.*/tests/.*\\.php):(\\d+)$",
+					"message": 1,
+					"file": 1,
+					"line": 2
+				}
+			]
+		}
+	]
+}

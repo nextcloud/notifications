@@ -22,7 +22,7 @@ Feature: admin-notification
       | longMessage | this is long message |
     Then user "test1" has 1 notifications on v2
     And last notification on v2 matches
-      | app | admin_notifications |
+      | app | admin_notific2ations |
       | subject | with long message |
       | link | |
       | message | this is long message |

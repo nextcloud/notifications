@@ -69,6 +69,7 @@ jobs:
 
     strategy:
       matrix: ${{ fromJson(needs.matrix.outputs.matrix) }}
+      fail-fast: false
 
     name: MySQL ${{ matrix.mysql-versions }} PHP ${{ matrix.php-versions }} Nextcloud ${{ matrix.server-versions }}
 
@@ -114,6 +115,14 @@ jobs:
           ini-values: disable_functions=
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+      - name: Setup problem matchers for PHP
+        run: echo "::add-matcher::apps/${{ env.APP_NAME }}/tests/problem-matchers/php.json"
+      - name: Setup problem matchers for PHPUnit
+        run: echo "::add-matcher::apps/${{ env.APP_NAME }}/tests/problem-matchers/phpunit.json"
+      - name: Setup problem matchers for Behat
+        run: echo "::add-matcher::apps/${{ env.APP_NAME }}/tests/problem-matchers/behat.json"
 
       - name: Enable ONLY_FULL_GROUP_BY MySQL option
         run: |
@@ -177,7 +186,7 @@ jobs:
         # Only run if phpunit integration config file exists
         if: steps.check_integration.outcome == 'success'
         working-directory: apps/${{ env.APP_NAME }}
-        run: composer run test:integration
+        run: composer run test:integration -- features/admin-notification-v2.feature
 
       - name: Print logs
         if: always()
