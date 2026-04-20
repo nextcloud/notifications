@@ -29,6 +29,7 @@ use OCP\IRequest;
 use OCP\ISession;
 use OCP\IUser;
 use OCP\IUserSession;
+use OCP\Security\IRemoteHostValidator;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Uid\Uuid;
 
@@ -43,6 +44,7 @@ class WebPushController extends OCSController {
 		protected IUserSession $userSession,
 		protected IProvider $tokenProvider,
 		protected Manager $identityProof,
+		protected IRemoteHostValidator $hostValidator,
 		protected LoggerInterface $logger,
 	) {
 		parent::__construct($appName, $request);
@@ -97,11 +99,16 @@ class WebPushController extends OCSController {
 			return new DataResponse(['message' => 'INVALID_AUTH'], Http::STATUS_BAD_REQUEST);
 		}
 
-		if (
-			!filter_var($endpoint, FILTER_VALIDATE_URL)
-			|| \strlen($endpoint) > 765
-			|| !str_starts_with($endpoint, 'https://')
-		) {
+		if (strlen($endpoint) > 765 || !filter_var($endpoint, FILTER_VALIDATE_URL)) {
+			return new DataResponse(['message' => 'INVALID_ENDPOINT'], Http::STATUS_BAD_REQUEST);
+		}
+
+		$url = parse_url($endpoint);
+		if (!isset($url['scheme']) || $url['scheme'] !== 'https') {
+			return new DataResponse(['message' => 'INVALID_ENDPOINT'], Http::STATUS_BAD_REQUEST);
+		}
+
+		if (!isset($url['host']) || !$this->hostValidator->isValid($url['host'])) {
 			return new DataResponse(['message' => 'INVALID_ENDPOINT'], Http::STATUS_BAD_REQUEST);
 		}
 

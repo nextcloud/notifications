@@ -26,6 +26,7 @@ use OCP\IRequest;
 use OCP\ISession;
 use OCP\IUser;
 use OCP\IUserSession;
+use OCP\Security\IRemoteHostValidator;
 
 /**
  * @psalm-import-type NotificationsPushDevice from ResponseDefinitions
@@ -39,6 +40,7 @@ class PushController extends OCSController {
 		protected ISession $session,
 		protected IUserSession $userSession,
 		protected IProvider $tokenProvider,
+		protected IRemoteHostValidator $hostValidator,
 		protected Manager $identityProof,
 	) {
 		parent::__construct($appName, $request);
@@ -77,11 +79,21 @@ class PushController extends OCSController {
 			return new DataResponse(['message' => 'INVALID_DEVICE_KEY'], Http::STATUS_BAD_REQUEST);
 		}
 
+		$allowedLocalHost = preg_match('/^(https\:\/\/|http\:\/\/(localhost|[a-z0-9\.-]*\.(internal|local))(\:\d{0,5})?\/)/', $proxyServer);
 		if (
 			!filter_var($proxyServer, FILTER_VALIDATE_URL)
 			|| \strlen($proxyServer) > 256
-			|| !preg_match('/^(https\:\/\/|http\:\/\/(localhost|[a-z0-9\.-]*\.(internal|local))(\:\d{0,5})?\/)/', $proxyServer)
+			|| !$allowedLocalHost
 		) {
+			return new DataResponse(['message' => 'INVALID_PROXY_SERVER'], Http::STATUS_BAD_REQUEST);
+		}
+
+		$url = parse_url($proxyServer);
+		if (!isset($url['scheme']) || ($url['scheme'] !== 'https' && !$allowedLocalHost)) {
+			return new DataResponse(['message' => 'INVALID_PROXY_SERVER'], Http::STATUS_BAD_REQUEST);
+		}
+
+		if (!isset($url['host']) || !$this->hostValidator->isValid($url['host'])) {
 			return new DataResponse(['message' => 'INVALID_PROXY_SERVER'], Http::STATUS_BAD_REQUEST);
 		}
 

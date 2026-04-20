@@ -21,6 +21,7 @@ use OCP\IRequest;
 use OCP\ISession;
 use OCP\IUser;
 use OCP\IUserSession;
+use OCP\Security\IRemoteHostValidator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
@@ -31,6 +32,7 @@ class PushControllerTest extends TestCase {
 	protected ISession&MockObject $session;
 	protected IUserSession&MockObject $userSession;
 	protected IProvider&MockObject $tokenProvider;
+	protected IRemoteHostValidator&MockObject $hostValidator;
 	protected Manager&MockObject $identityProof;
 	protected IUser&MockObject $user;
 	protected PushController $controller;
@@ -95,6 +97,7 @@ FwIDAQAB
 		$this->session = $this->createMock(ISession::class);
 		$this->userSession = $this->createMock(IUserSession::class);
 		$this->tokenProvider = $this->createMock(IProvider::class);
+		$this->hostValidator = $this->createMock(IRemoteHostValidator::class);
 		$this->identityProof = $this->createMock(Manager::class);
 	}
 
@@ -107,7 +110,8 @@ FwIDAQAB
 				$this->session,
 				$this->userSession,
 				$this->tokenProvider,
-				$this->identityProof
+				$this->hostValidator,
+				$this->identityProof,
 			);
 		}
 
@@ -119,6 +123,7 @@ FwIDAQAB
 				$this->session,
 				$this->userSession,
 				$this->tokenProvider,
+				$this->hostValidator,
 				$this->identityProof,
 			])
 			->onlyMethods($methods)
@@ -361,6 +366,10 @@ FwIDAQAB
 				->with($tokenId)
 				->willThrowException(new InvalidTokenException());
 		}
+
+		$this->hostValidator->expects($this->any())
+			->method('isValid')
+			->willReturn(true);
 
 		$response = $controller->registerDevice($pushTokenHash, $devicePublicKey, $proxyServer);
 		$this->assertInstanceOf(DataResponse::class, $response);

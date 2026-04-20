@@ -24,6 +24,7 @@ use OCP\IRequest;
 use OCP\ISession;
 use OCP\IUser;
 use OCP\IUserSession;
+use OCP\Security\IRemoteHostValidator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
@@ -36,6 +37,7 @@ class WebPushControllerTest extends TestCase {
 	protected ISession&MockObject $session;
 	protected IUserSession&MockObject $userSession;
 	protected IProvider&MockObject $tokenProvider;
+	protected IRemoteHostValidator&MockObject $hostValidator;
 	protected Manager&MockObject $identityProof;
 	protected LoggerInterface&MockObject $logger;
 	protected IUser&MockObject $user;
@@ -55,6 +57,7 @@ class WebPushControllerTest extends TestCase {
 		$this->userSession = $this->createMock(IUserSession::class);
 		$this->tokenProvider = $this->createMock(IProvider::class);
 		$this->identityProof = $this->createMock(Manager::class);
+		$this->hostValidator = $this->createMock(IRemoteHostValidator::class);
 		$this->logger = $this->createMock(LoggerInterface::class);
 
 		$this->appConfig->method('getAppValueBool')
@@ -73,6 +76,7 @@ class WebPushControllerTest extends TestCase {
 				$this->userSession,
 				$this->tokenProvider,
 				$this->identityProof,
+				$this->hostValidator,
 				$this->logger,
 			);
 		}
@@ -87,6 +91,7 @@ class WebPushControllerTest extends TestCase {
 				$this->userSession,
 				$this->tokenProvider,
 				$this->identityProof,
+				$this->hostValidator,
 				$this->logger,
 			])
 			->onlyMethods($methods)
@@ -294,6 +299,10 @@ class WebPushControllerTest extends TestCase {
 				->with($tokenId)
 				->willThrowException(new InvalidTokenException());
 		}
+
+		$this->hostValidator->expects($this->any())
+			->method('isValid')
+			->willReturn(true);
 
 		$response = $controller->registerWP($endpoint, $uaPublicKey, $auth, $appTypes);
 		$this->assertInstanceOf(DataResponse::class, $response);
