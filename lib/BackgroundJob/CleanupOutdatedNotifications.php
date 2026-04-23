@@ -10,6 +10,7 @@ namespace OCA\Notifications\BackgroundJob;
 
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\BackgroundJob\TimedJob;
+use OCP\DB\IQueryBuilder;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use Psr\Log\LoggerInterface;
@@ -53,66 +54,17 @@ class CleanupOutdatedNotifications extends TimedJob {
 	}
 
 	private function cleanupExcessNotifications(int $limit): int {
-		$usersWithExcessNotifications = $this->getUsersWithExcessNotifications($limit);
+		$qb = $this->db->getQueryBuilder();
 
-		$deleted = 0;
-		foreach ($usersWithExcessNotifications as $user) {
-			$thresholdId = $this->getThresholdNotificationId($user, $limit);
-
-			if ($thresholdId === null) {
-				continue;
-			}
-
-			$qb = $this->db->getQueryBuilder();
-			$deleted += $qb->delete('notifications')
-				->where($qb->expr()->eq('user', $qb->createNamedParameter($user)))
-				->andWhere(
-					$qb->expr()->lt('notification_id', $qb->createNamedParameter($thresholdId)),
+		return $qb->delete('notifications', 'n')
+			->where(
+				$qb->expr()->gte(
+					$qb->createFunction(
+						'(SELECT COUNT(*) FROM notifications n2 WHERE n2.user = n.user AND n2.notification_id > n.notification_id)'
+					),
+					$qb->createNamedParameter($limit, IQueryBuilder::PARAM_INT)
 				)
-				->executeStatement();
-		}
-
-		return $deleted;
-	}
-
-	/**
-	 * @return string[]
-	 */
-	private function getUsersWithExcessNotifications(int $limit): array {
-		$qb = $this->db->getQueryBuilder();
-
-		return $qb
-			->select('user')
-			->from('notifications')
-			->groupBy('user')
-			->having(
-				$qb->expr()->gt(
-					$qb->func()->count(),
-					$qb->createNamedParameter($limit),
-				),
 			)
-			->setMaxResults(1000)
-			->executeQuery()
-			->fetchAll(\PDO::FETCH_COLUMN);
-	}
-
-	/**
-	 * Returns the notification_id at position LIMIT_BY_COUNT_PER_USER (ordered DESC)
-	 * All notifications with ID less than this threshold will be deleted
-	 */
-	private function getThresholdNotificationId(string $user, int $limit): ?int {
-		$qb = $this->db->getQueryBuilder();
-
-		$result = $qb
-			->select('notification_id')
-			->from('notifications')
-			->where($qb->expr()->eq('user', $qb->createNamedParameter($user)))
-			->orderBy('notification_id', 'DESC')
-			->setFirstResult($limit)
-			->setMaxResults(1)
-			->executeQuery()
-			->fetchOne();
-
-		return $result !== false ? (int)$result : null;
+			->executeStatement();
 	}
 }
