@@ -16,6 +16,27 @@
 				ignoreSeconds
 				:format="{ timeStyle: 'short', dateStyle: 'long' }"
 				:timestamp="timestamp" />
+			<NcActions
+				v-if="timestamp"
+				class="notification-snooze-button"
+				:aria-label="t('notifications', 'Snooze')"
+				force-menu>
+				<template #icon>
+					<IconClockOutline :size="18" />
+				</template>
+				<NcActionButton @click="onSnooze(60)">
+					<template #icon><IconClockOutline :size="20" /></template>
+					{{ t('notifications', '1 hour') }}
+				</NcActionButton>
+				<NcActionButton @click="onSnooze(4 * 60)">
+					<template #icon><IconClockOutline :size="20" /></template>
+					{{ t('notifications', '4 hours') }}
+				</NcActionButton>
+				<NcActionButton @click="onSnooze(24 * 60)">
+					<template #icon><IconClockOutline :size="20" /></template>
+					{{ t('notifications', 'Tomorrow') }}
+				</NcActionButton>
+			</NcActions>
 			<NcButton
 				v-if="timestamp"
 				class="notification-dismiss-button"
@@ -34,11 +55,13 @@
 			class="notification-subject full-subject-link external"
 			target="_blank"
 			rel="noreferrer noopener">
-			<span v-if="notification.icon" class="image"><img :src="notification.icon" class="notification-icon" alt=""></span>
+			<NcAvatar v-if="mentionUser" :user="mentionUser.id" :display-name="mentionUser.name" :size="44" style="flex-shrink:0" />
+			<span v-else-if="notification.icon" class="image"><img :src="notification.icon" class="notification-icon" alt=""></span>
 			<span class="subject">{{ notification.subject }} ↗</span>
 		</a>
 		<a v-else-if="useLink" :href="notification.link" class="notification-subject full-subject-link">
-			<span v-if="notification.icon" class="image"><img :src="notification.icon" class="notification-icon" alt=""></span>
+			<NcAvatar v-if="mentionUser" :user="mentionUser.id" :display-name="mentionUser.name" :size="44" style="flex-shrink:0" />
+			<span v-else-if="notification.icon" class="image"><img :src="notification.icon" class="notification-icon" alt=""></span>
 			<NcRichText
 				v-if="notification.subjectRich"
 				:text="notification.subjectRich"
@@ -46,7 +69,8 @@
 			<span v-else class="subject">{{ notification.subject }}</span>
 		</a>
 		<div v-else class="notification-subject">
-			<span v-if="notification.icon" class="image"><img :src="notification.icon" class="notification-icon" alt=""></span>
+			<NcAvatar v-if="mentionUser" :user="mentionUser.id" :display-name="mentionUser.name" :size="44" style="flex-shrink:0" />
+			<span v-else-if="notification.icon" class="image"><img :src="notification.icon" class="notification-icon" alt=""></span>
 			<NcRichText
 				v-if="notification.subjectRich"
 				:text="notification.subjectRich"
@@ -87,6 +111,41 @@
 				{{ t('notifications', 'Contact Nextcloud GmbH') }} ↗
 			</NcButton>
 		</div>
+
+		<!-- Inline reply for Nextcloud Talk conversations -->
+		<div v-if="isTalkChat" class="notification-talk-reply">
+			<div v-if="showReply" class="notification-talk-reply__form">
+				<textarea
+					v-model="replyText"
+					class="notification-talk-reply__input"
+					:placeholder="t('notifications', 'Write a reply…')"
+					rows="2"
+					autofocus
+					@keydown.ctrl.enter.prevent="sendReply"
+					@keydown.meta.enter.prevent="sendReply" />
+				<div class="notification-talk-reply__buttons">
+					<NcButton variant="tertiary" @click="showReply = false; replyText = ''">
+						{{ t('notifications', 'Cancel') }}
+					</NcButton>
+					<NcButton
+						variant="primary"
+						:disabled="!replyText.trim() || sendingReply"
+						@click="sendReply">
+						{{ t('notifications', 'Send') }}
+					</NcButton>
+				</div>
+			</div>
+			<NcButton
+				v-else
+				variant="tertiary"
+				class="notification-talk-reply__toggle"
+				@click="showReply = true">
+				<template #icon>
+					<IconReply :size="16" />
+				</template>
+				{{ t('notifications', 'Reply') }}
+			</NcButton>
+		</div>
 	</li>
 </template>
 
@@ -96,11 +155,16 @@ import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
 import { generateOcsUrl } from '@nextcloud/router'
+import NcAvatar from '@nextcloud/vue/components/NcAvatar'
+import NcActionButton from '@nextcloud/vue/components/NcActionButton'
+import NcActions from '@nextcloud/vue/components/NcActions'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcDateTime from '@nextcloud/vue/components/NcDateTime'
 import NcRichText from '@nextcloud/vue/components/NcRichText'
+import IconClockOutline from 'vue-material-design-icons/ClockOutline.vue'
 import IconClose from 'vue-material-design-icons/Close.vue'
 import IconMessageOutline from 'vue-material-design-icons/MessageOutline.vue'
+import IconReply from 'vue-material-design-icons/Reply.vue'
 import ActionButton from './ActionButton.vue'
 import DefaultParameter from './Parameters/DefaultParameter.vue'
 import FileParameter from './Parameters/FileParameter.vue'
@@ -139,10 +203,15 @@ export default {
 
 	components: {
 		ActionButton,
-		NcButton,
-		NcDateTime,
+		IconClockOutline,
 		IconClose,
 		IconMessageOutline,
+		IconReply,
+		NcAvatar,
+		NcActionButton,
+		NcActions,
+		NcButton,
+		NcDateTime,
 		NcRichText,
 	},
 
@@ -154,11 +223,14 @@ export default {
 		},
 	},
 
-	emits: ['remove'],
+	emits: ['remove', 'dismiss', 'snooze'],
 
 	data() {
 		return {
 			showFullMessage: false,
+			showReply: false,
+			replyText: '',
+			sendingReply: false,
 		}
 	},
 
@@ -194,6 +266,18 @@ export default {
 
 		isCollapsedMessage() {
 			return this.notification.message.length > 200 && !this.showFullMessage
+		},
+
+		mentionUser() {
+			if (this.notification.objectType !== 'mention') return null
+			const params = this.notification.subjectRichParameters || {}
+			return Object.values(params).find(p => p.type === 'user') || null
+		},
+
+		isTalkChat() {
+			return this.notification.app === 'spreed'
+				&& this.notification.objectType !== 'call'
+				&& !!this.notification.objectId
 		},
 	},
 
@@ -270,15 +354,28 @@ export default {
 			}
 		},
 
+		onSnooze(minutes) {
+			this.$emit('snooze', { notification: this.notification, minutes })
+		},
+
+		async sendReply() {
+			if (!this.replyText.trim() || this.sendingReply) return
+			this.sendingReply = true
+			try {
+				await axios.post(
+					generateOcsUrl('apps/spreed/api/v1/chat/{token}', { token: this.notification.objectId }),
+					{ message: this.replyText.trim() },
+				)
+				this.$emit('remove')
+			} catch {
+				showError(t('notifications', 'Failed to send reply'))
+			} finally {
+				this.sendingReply = false
+			}
+		},
+
 		onDismissNotification() {
-			axios
-				.delete(generateOcsUrl('apps/notifications/api/v2/notifications/{id}', { id: this.notification.notificationId }))
-				.then(() => {
-					this.$emit('remove')
-				})
-				.catch(() => {
-					showError(t('notifications', 'Failed to dismiss notification'))
-				})
+			this.$emit('dismiss', this.notification)
 		},
 	},
 }
