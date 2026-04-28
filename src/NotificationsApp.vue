@@ -34,6 +34,7 @@
 					<NotificationItem
 						v-for="(notification, index) in notifications"
 						:key="notification.notificationId"
+						:class="{ 'notification--new': notification.notificationId > lastOpenMaxId }"
 						:notification="notification"
 						@remove="onRemove(index)" />
 				</transition-group>
@@ -44,7 +45,14 @@
 					:name="emptyContentMessage"
 					:description="emptyContentDescription">
 					<template #icon>
-						<IconBellOutline v-if="!hasThrottledPushNotifications" />
+						<div v-if="showInboxZero && !hasThrottledPushNotifications" class="inbox-zero-celebrate">
+							<span v-for="i in 8" :key="i" class="confetti-dot" :style="`--confetti-i: ${i - 1}`" />
+							<svg class="inbox-zero-check" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+								<circle class="inbox-zero-circle" cx="26" cy="26" r="22" />
+								<polyline class="inbox-zero-checkmark" points="14,26 22,34 38,18" />
+							</svg>
+						</div>
+						<IconBellOutline v-else-if="!hasThrottledPushNotifications" />
 						<span v-else class="icon icon-alert-outline" />
 					</template>
 
@@ -187,6 +195,11 @@ export default {
 			pushEndpoints: null,
 
 			open: false,
+
+			/** Highest notification ID seen when the popup was last opened; items above this are "new" */
+			lastOpenMaxId: 0,
+			/** True for 2.5 s after all notifications are cleared — inbox zero celebration */
+			showInboxZero: false,
 		}
 	},
 
@@ -216,6 +229,15 @@ export default {
 			}
 
 			return ''
+		},
+	},
+
+	watch: {
+		'notifications.length'(newLen, oldLen) {
+			if (newLen === 0 && oldLen > 0) {
+				this.showInboxZero = true
+				setTimeout(() => { this.showInboxZero = false }, 2500)
+			}
 		},
 	},
 
@@ -296,6 +318,9 @@ export default {
 		},
 
 		async onOpen() {
+			// Capture the current max ID before fetching so newly arrived items are marked "new"
+			this.lastOpenMaxId = this.notifications.reduce((max, n) => Math.max(max, n.notificationId), 0)
+
 			if (this.webNotificationsGranted === null) {
 				this.requestWebNotificationPermissions()
 					.then((granted) => {

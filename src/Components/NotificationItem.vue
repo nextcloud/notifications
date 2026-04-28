@@ -34,11 +34,13 @@
 			class="notification-subject full-subject-link external"
 			target="_blank"
 			rel="noreferrer noopener">
-			<span v-if="notification.icon" class="image"><img :src="notification.icon" class="notification-icon" alt=""></span>
+			<NcAvatar v-if="mentionUser" :user="mentionUser.id" :display-name="mentionUser.name" :size="44" style="flex-shrink:0" />
+			<span v-else-if="notification.icon" class="image"><img :src="notification.icon" class="notification-icon" alt=""></span>
 			<span class="subject">{{ notification.subject }} ↗</span>
 		</a>
 		<a v-else-if="useLink" :href="notification.link" class="notification-subject full-subject-link">
-			<span v-if="notification.icon" class="image"><img :src="notification.icon" class="notification-icon" alt=""></span>
+			<NcAvatar v-if="mentionUser" :user="mentionUser.id" :display-name="mentionUser.name" :size="44" style="flex-shrink:0" />
+			<span v-else-if="notification.icon" class="image"><img :src="notification.icon" class="notification-icon" alt=""></span>
 			<NcRichText
 				v-if="notification.subjectRich"
 				:text="notification.subjectRich"
@@ -46,7 +48,8 @@
 			<span v-else class="subject">{{ notification.subject }}</span>
 		</a>
 		<div v-else class="notification-subject">
-			<span v-if="notification.icon" class="image"><img :src="notification.icon" class="notification-icon" alt=""></span>
+			<NcAvatar v-if="mentionUser" :user="mentionUser.id" :display-name="mentionUser.name" :size="44" style="flex-shrink:0" />
+			<span v-else-if="notification.icon" class="image"><img :src="notification.icon" class="notification-icon" alt=""></span>
 			<NcRichText
 				v-if="notification.subjectRich"
 				:text="notification.subjectRich"
@@ -96,6 +99,7 @@ import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
 import { generateOcsUrl } from '@nextcloud/router'
+import NcAvatar from '@nextcloud/vue/components/NcAvatar'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcDateTime from '@nextcloud/vue/components/NcDateTime'
 import NcRichText from '@nextcloud/vue/components/NcRichText'
@@ -139,10 +143,11 @@ export default {
 
 	components: {
 		ActionButton,
-		NcButton,
-		NcDateTime,
 		IconClose,
 		IconMessageOutline,
+		NcAvatar,
+		NcButton,
+		NcDateTime,
 		NcRichText,
 	},
 
@@ -194,6 +199,12 @@ export default {
 
 		isCollapsedMessage() {
 			return this.notification.message.length > 200 && !this.showFullMessage
+		},
+
+		mentionUser() {
+			if (this.notification.objectType !== 'mention') return null
+			const params = this.notification.subjectRichParameters || {}
+			return Object.values(params).find(p => p.type === 'user') || null
 		},
 	},
 
