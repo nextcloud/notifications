@@ -15,28 +15,81 @@
 		<template #trigger>
 			<IconNotification
 				:size="20"
-				:showDot="notifications.length !== 0 || webNotificationsGranted === null"
+				:count="isDnd ? 0 : notifications.length"
+				:showDot="!isDnd && (notifications.length !== 0 || webNotificationsGranted === null)"
 				:showWarning="hasThrottledPushNotifications" />
 		</template>
 
 		<!-- Notifications list content -->
 		<div class="notification-container">
+			<!-- Panel header with Do Not Disturb toggle -->
+			<div class="notification-panel-header">
+				<span class="notification-panel-title">{{ t('notifications', 'Notifications') }}</span>
+				<NcButton
+					variant="tertiary"
+					:class="{ 'dnd-active': isDnd }"
+					:title="isDnd ? t('notifications', 'Disable Do Not Disturb') : t('notifications', 'Enable Do Not Disturb')"
+					:aria-label="isDnd ? t('notifications', 'Disable Do Not Disturb') : t('notifications', 'Enable Do Not Disturb')"
+					@click="toggleDnd">
+					<template #icon>
+						<IconBellOff :size="18" />
+					</template>
+				</NcButton>
+			</div>
+			<!-- "New while DND" banner -->
+			<div v-if="dndBanner > 0" class="notification-dnd-banner">
+				<span>{{ dndBannerText }}</span>
+				<NcButton variant="tertiary" @click="dndBanner = 0">
+					<template #icon><IconClose :size="16" /></template>
+				</NcButton>
+			</div>
+			<!-- Filter tabs: only shown when notifications span 3+ categories -->
+			<div v-if="showFilterTabs" class="notification-filter-tabs" role="tablist">
+				<button
+					v-for="tab in filterTabs"
+					:key="tab.id"
+					role="tab"
+					:aria-selected="activeFilter === tab.id"
+					:class="['notification-filter-tab', { 'notification-filter-tab--active': activeFilter === tab.id }]"
+					@click="activeFilter = tab.id">
+					{{ tab.label }}
+					<span v-if="tab.count" class="notification-filter-count">{{ tab.count }}</span>
+				</button>
+			</div>
+
 			<transition name="fade" mode="out-in">
-				<transition-group
-					v-if="notifications.length > 0"
-					class="notification-wrapper"
-					name="list"
-					tag="ul">
+				<ul v-if="notificationGroups.length > 0" class="notification-wrapper">
 					<NotificationItem
 						v-if="hasThrottledPushNotifications"
-						:key="-2016"
 						:notification="fairUsePolicyNotification" />
-					<NotificationItem
-						v-for="(notification, index) in notifications"
-						:key="notification.notificationId"
-						:notification="notification"
-						@remove="onRemove(index)" />
-				</transition-group>
+					<template v-for="(group, groupIdx) in notificationGroups" :key="group.app">
+						<!-- Group header: only shown when there are multiple apps -->
+						<li
+							v-if="notificationGroups.length > 1"
+							class="notification-group-header"
+							role="button"
+							tabindex="0"
+							@click="toggleGroup(group.app)"
+							@keydown.enter="toggleGroup(group.app)"
+							@keydown.space.prevent="toggleGroup(group.app)">
+							<span class="notification-group-name">{{ formatAppName(group.app) }}</span>
+							<span class="notification-group-badge">{{ group.items.length }}</span>
+							<IconChevronDown
+								:size="14"
+								:class="{ 'notification-group-chevron--collapsed': collapsedGroups.has(group.app) }" />
+						</li>
+						<NotificationItem
+							v-for="(notification, itemIdx) in group.items"
+							v-show="!collapsedGroups.has(group.app)"
+							:key="`${notification.notificationId}-${activeFilter}`"
+							:style="{ '--anim-index': visibleIndex(groupIdx, itemIdx) }"
+							:class="{ 'notification--new': notification.notificationId > lastOpenMaxId, 'notification--collapsing': collapsingIds.has(notification.notificationId) }"
+							:notification="notification"
+							@remove="onRemove(notification)"
+							@dismiss="onDismiss"
+							@snooze="onSnooze" />
+					</template>
+				</ul>
 
 				<!-- No notifications -->
 				<NcEmptyContent
@@ -44,7 +97,14 @@
 					:name="emptyContentMessage"
 					:description="emptyContentDescription">
 					<template #icon>
-						<IconBellOutline v-if="!hasThrottledPushNotifications" />
+						<div v-if="showInboxZero && !hasThrottledPushNotifications" class="inbox-zero-celebrate">
+							<span v-for="i in 8" :key="i" class="confetti-dot" :style="`--confetti-i: ${i - 1}`" />
+							<svg class="inbox-zero-check" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+								<circle class="inbox-zero-circle" cx="26" cy="26" r="22" />
+								<polyline class="inbox-zero-checkmark" points="14,26 22,34 38,18" />
+							</svg>
+						</div>
+						<IconBellOutline v-else-if="!hasThrottledPushNotifications" />
 						<span v-else class="icon icon-alert-outline" />
 					</template>
 
@@ -61,6 +121,16 @@
 						</NcButton>
 					</template>
 				</NcEmptyContent>
+			</transition>
+
+			<!-- Undo dismiss bar -->
+			<transition name="fade">
+				<div v-if="pendingUndo" class="notification-undo-bar">
+					<span>{{ t('notifications', 'Notification dismissed') }}</span>
+					<NcButton variant="tertiary" @click="onUndoDismiss">
+						{{ t('notifications', 'Undo') }}
+					</NcButton>
+				</div>
 			</transition>
 
 			<!-- Dismiss all -->
@@ -92,7 +162,9 @@ import { generateOcsUrl, imagePath } from '@nextcloud/router'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcHeaderMenu from '@nextcloud/vue/components/NcHeaderMenu'
+import IconBellOff from 'vue-material-design-icons/BellOff.vue'
 import IconBellOutline from 'vue-material-design-icons/BellOutline.vue'
+import IconChevronDown from 'vue-material-design-icons/ChevronDown.vue'
 import IconClose from 'vue-material-design-icons/Close.vue'
 import IconMessageOutline from 'vue-material-design-icons/MessageOutline.vue'
 import IconNotification from './Components/IconNotification.vue'
@@ -131,7 +203,9 @@ export default {
 	name: 'NotificationsApp',
 
 	components: {
+		IconBellOff,
 		IconBellOutline,
+		IconChevronDown,
 		IconClose,
 		IconMessageOutline,
 		IconNotification,
@@ -187,6 +261,26 @@ export default {
 			pushEndpoints: null,
 
 			open: false,
+
+		/** Highest notification ID seen when the popup was last opened; items above this are "new" */
+		lastOpenMaxId: 0,
+		/** Set of app names whose group is currently collapsed */
+		collapsedGroups: new Set(),
+
+		/** Whether Do Not Disturb is enabled locally (suppresses badge, sounds, browser notifications) */
+		isDnd: JSON.parse(localStorage.getItem('notifications:dnd') ?? 'false'),
+		/** Map of notificationId → timestamp when the snooze expires */
+		snoozed: JSON.parse(localStorage.getItem('notifications:snoozed') ?? '{}'),
+		/** Active filter tab: 'all' | 'mentions' | 'files' | 'other' */
+		activeFilter: 'all',
+		/** Pending optimistic dismiss: { notification, execute, timerId, collapseTimerId } */
+		pendingUndo: null,
+		/** Set of notification IDs currently playing collapse animation */
+		collapsingIds: new Set(),
+		/** Count of notifications that arrived while DND was on (> 0 shows banner) */
+		dndBanner: 0,
+		/** True for 2.5 s after all notifications are cleared — inbox zero celebration */
+		showInboxZero: false,
 		}
 	},
 
@@ -195,6 +289,7 @@ export default {
 			return this.backgroundFetching
 				&& this.webNotificationsGranted
 				&& this.userStatus !== 'dnd'
+				&& !this.isDnd
 				&& this.tabId === this.lastTabId
 		},
 
@@ -202,11 +297,12 @@ export default {
 			if (this.webNotificationsGranted === null) {
 				return t('notifications', 'Requesting browser permissions to show notifications')
 			}
-
 			if (this.hasThrottledPushNotifications) {
 				return this.fairUsePolicyNotification.subject
 			}
-
+			if (this.activeFilter !== 'all' && this.notifications.length > 0) {
+				return t('notifications', 'No notifications in this category')
+			}
 			return t('notifications', 'No notifications')
 		},
 
@@ -216,6 +312,61 @@ export default {
 			}
 
 			return ''
+		},
+
+		notificationGroups() {
+			const now = Date.now()
+			const groups = new Map()
+			for (const n of this.notifications) {
+				if ((this.snoozed[n.notificationId] ?? 0) > now) continue
+				if (this.activeFilter === 'mentions' && n.objectType !== 'mention') continue
+				if (this.activeFilter === 'files' && !['files', 'files_sharing'].includes(n.app)) continue
+				if (this.activeFilter === 'other' && (n.objectType === 'mention' || ['files', 'files_sharing'].includes(n.app))) continue
+				if (!groups.has(n.app)) groups.set(n.app, [])
+				groups.get(n.app).push(n)
+			}
+			return [...groups.entries()].map(([app, items]) => ({ app, items }))
+		},
+
+		filterTabs() {
+			const now = Date.now()
+			const counts = { mentions: 0, files: 0, other: 0 }
+			for (const n of this.notifications) {
+				if ((this.snoozed[n.notificationId] ?? 0) > now) continue
+				if (n.objectType === 'mention') counts.mentions++
+				else if (['files', 'files_sharing'].includes(n.app)) counts.files++
+				else counts.other++
+			}
+			const tabs = [{ id: 'all', label: t('notifications', 'All') }]
+			if (counts.mentions) tabs.push({ id: 'mentions', label: t('notifications', 'Mentions'), count: counts.mentions })
+			if (counts.files) tabs.push({ id: 'files', label: t('notifications', 'Files'), count: counts.files })
+			if (counts.other) tabs.push({ id: 'other', label: t('notifications', 'Other'), count: counts.other })
+			return tabs
+		},
+
+		showFilterTabs() {
+			return this.filterTabs.length > 2
+		},
+
+		dndBannerText() {
+			const c = this.dndBanner
+			return c === 1
+				? t('notifications', '1 new notification received while in Do Not Disturb')
+				: t('notifications', '{count} new notifications received while in Do Not Disturb', { count: c })
+		},
+	},
+
+	watch: {
+		notificationGroups(groups) {
+			if (groups.length === 0 && this.activeFilter !== 'all') {
+				this.activeFilter = 'all'
+			}
+		},
+		'notifications.length'(newLen, oldLen) {
+			if (newLen === 0 && oldLen > 0) {
+				this.showInboxZero = true
+				setTimeout(() => { this.showInboxZero = false }, 2500)
+			}
 		},
 	},
 
@@ -296,6 +447,9 @@ export default {
 		},
 
 		async onOpen() {
+			// Capture the current max ID before fetching so any newly arrived items are marked "new"
+			this.lastOpenMaxId = this.notifications.reduce((max, n) => Math.max(max, n.notificationId), 0)
+
 			if (this.webNotificationsGranted === null) {
 				this.requestWebNotificationPermissions()
 					.then((granted) => {
@@ -342,9 +496,116 @@ export default {
 				})
 		},
 
-		onRemove(index) {
-			this.notifications.splice(index, 1)
+		onRemove(notification) {
+			const idx = this.notifications.findIndex(n => n.notificationId === notification.notificationId)
+			if (idx !== -1) {
+				this.notifications.splice(idx, 1)
+			}
 			setCurrentTabAsActive(this.tabId)
+		},
+
+		async onDismiss(notification) {
+			// Flush any prior pending dismiss immediately
+			if (this.pendingUndo) {
+				clearTimeout(this.pendingUndo.timerId)
+				clearTimeout(this.pendingUndo.collapseTimerId)
+				const prevIdx = this.notifications.findIndex(n => n.notificationId === this.pendingUndo.notification.notificationId)
+				if (prevIdx !== -1) this.notifications.splice(prevIdx, 1)
+				this.collapsingIds.delete(this.pendingUndo.notification.notificationId)
+				await this.pendingUndo.execute()
+			}
+
+			setCurrentTabAsActive(this.tabId)
+
+			// Trigger collapse animation — item stays in array until animation finishes (280 ms)
+			this.collapsingIds.add(notification.notificationId)
+
+			const execute = () => axios
+				.delete(generateOcsUrl('apps/notifications/api/v2/notifications/{id}', { id: notification.notificationId }))
+				.catch(() => showError(t('notifications', 'Failed to dismiss notification')))
+
+			const collapseTimerId = setTimeout(() => {
+				const idx = this.notifications.findIndex(n => n.notificationId === notification.notificationId)
+				if (idx !== -1) this.notifications.splice(idx, 1)
+				this.collapsingIds.delete(notification.notificationId)
+			}, 280)
+
+			this.pendingUndo = {
+				notification,
+				execute,
+				collapseTimerId,
+				timerId: setTimeout(() => {
+					this.pendingUndo = null
+					execute()
+				}, 4000),
+			}
+		},
+
+		onUndoDismiss() {
+			if (!this.pendingUndo) return
+			clearTimeout(this.pendingUndo.timerId)
+			clearTimeout(this.pendingUndo.collapseTimerId)
+			const { notification } = this.pendingUndo
+			this.pendingUndo = null
+			// Stop collapse animation
+			this.collapsingIds.delete(notification.notificationId)
+			// Re-insert if the collapse timer already removed it from the array
+			if (!this.notifications.find(n => n.notificationId === notification.notificationId)) {
+				const insertIdx = this.notifications.findIndex(n => n.notificationId < notification.notificationId)
+				if (insertIdx === -1) this.notifications.push(notification)
+				else this.notifications.splice(insertIdx, 0, notification)
+			}
+			setCurrentTabAsActive(this.tabId)
+		},
+
+		toggleDnd() {
+			if (!this.isDnd) {
+				// Turning ON: snapshot current max ID so we can count new arrivals on re-enable
+				this._dndMaxIdAtEnable = this.notifications.reduce((max, n) => Math.max(max, n.notificationId), 0)
+			} else {
+				// Turning OFF: surface a banner for any notifications that arrived while DND was active
+				const newCount = this.notifications.filter(n => n.notificationId > (this._dndMaxIdAtEnable || 0)).length
+				if (newCount > 0) this.dndBanner = newCount
+			}
+			this.isDnd = !this.isDnd
+			localStorage.setItem('notifications:dnd', JSON.stringify(this.isDnd))
+		},
+
+		onSnooze({ notification, minutes }) {
+			const wakeAt = Date.now() + minutes * 60 * 1000
+			this.snoozed = { ...this.snoozed, [notification.notificationId]: wakeAt }
+			localStorage.setItem('notifications:snoozed', JSON.stringify(this.snoozed))
+		},
+
+		_clearExpiredSnooze() {
+			const now = Date.now()
+			const active = Object.fromEntries(
+				Object.entries(this.snoozed).filter(([, wakeAt]) => wakeAt > now),
+			)
+			if (Object.keys(active).length !== Object.keys(this.snoozed).length) {
+				this.snoozed = active
+				localStorage.setItem('notifications:snoozed', JSON.stringify(active))
+			}
+		},
+
+		formatAppName(app) {
+			return app.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
+		},
+
+		toggleGroup(app) {
+			if (this.collapsedGroups.has(app)) {
+				this.collapsedGroups.delete(app)
+			} else {
+				this.collapsedGroups.add(app)
+			}
+		},
+
+		visibleIndex(groupIdx, itemIdx) {
+			let idx = 0
+			for (let g = 0; g < groupIdx; g++) {
+				idx += this.notificationGroups[g].items.length
+			}
+			return idx + itemIdx
 		},
 
 		/**
@@ -408,6 +669,8 @@ export default {
 		 * Performs the AJAX request to retrieve the notifications
 		 */
 		async _fetch(force = false) {
+			this._clearExpiredSnooze()
+
 			if (this.notifications.length && this.notifications[0].notificationId > this.webNotificationsThresholdId) {
 				this.webNotificationsThresholdId = this.notifications[0].notificationId
 			}
@@ -422,8 +685,13 @@ export default {
 				this.userStatus = response.headers['x-nextcloud-user-status']
 				this.lastETag = response.headers.etag
 				this.lastTabId = response.tabId
-				this.notifications = response.data
-				this.processWebNotifications(response.data)
+				// Keep the pending-undo item out of the list during its grace period
+				const pendingId = this.pendingUndo?.notification?.notificationId
+				const data = pendingId
+					? response.data.filter(n => n.notificationId !== pendingId)
+					: response.data
+				this.notifications = data
+				this.processWebNotifications(data)
 				console.debug('Got notification data, restoring default polling interval.')
 				this._setPollingInterval(this.pollIntervalBase)
 				this._updateDocTitleOnNewNotifications(this.notifications)
