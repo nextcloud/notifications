@@ -35,21 +35,21 @@
 			target="_blank"
 			rel="noreferrer noopener">
 			<NcAvatar
-				v-if="mentionUser"
-				:user="mentionUser.id"
-				:displayName="mentionUser.name"
-				:size="44"
-				style="flex-shrink:0" />
+				v-if="getAuthorOfChatNotification"
+				:user="getAuthorOfChatNotification.id"
+				:server="getAuthorOfChatNotification.server"
+				:displayName="getAuthorOfChatNotification.name"
+				:size="44" />
 			<span v-else-if="notification.icon" class="image"><img :src="notification.icon" class="notification-icon" alt=""></span>
 			<span class="subject">{{ notification.subject }} ↗</span>
 		</a>
 		<a v-else-if="useLink" :href="notification.link" class="notification-subject full-subject-link">
 			<NcAvatar
-				v-if="mentionUser"
-				:user="mentionUser.id"
-				:displayName="mentionUser.name"
-				:size="44"
-				style="flex-shrink:0" />
+				v-if="getAuthorOfChatNotification"
+				:user="getAuthorOfChatNotification.id"
+				:server="getAuthorOfChatNotification.server"
+				:displayName="getAuthorOfChatNotification.name"
+				:size="44" />
 			<span v-else-if="notification.icon" class="image"><img :src="notification.icon" class="notification-icon" alt=""></span>
 			<NcRichText
 				v-if="notification.subjectRich"
@@ -59,11 +59,11 @@
 		</a>
 		<div v-else class="notification-subject">
 			<NcAvatar
-				v-if="mentionUser"
-				:user="mentionUser.id"
-				:displayName="mentionUser.name"
-				:size="44"
-				style="flex-shrink:0" />
+				v-if="getAuthorOfChatNotification"
+				:user="getAuthorOfChatNotification.id"
+				:server="getAuthorOfChatNotification.server"
+				:displayName="getAuthorOfChatNotification.name"
+				:size="44" />
 			<span v-else-if="notification.icon" class="image"><img :src="notification.icon" class="notification-icon" alt=""></span>
 			<NcRichText
 				v-if="notification.subjectRich"
@@ -216,8 +216,8 @@ export default {
 			return this.notification.message.length > 200 && !this.showFullMessage
 		},
 
-		mentionUser() {
-			if (this.notification.objectType !== 'mention') {
+		getAuthorOfChatNotification() {
+			if (this.notification.objectType !== 'chat') {
 				return null
 			}
 			const params = this.notification.subjectRichParameters || {}
