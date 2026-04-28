@@ -123,3 +123,34 @@ svg {
 		}
 	}
 }
+
+// Panel header with the Do Not Disturb toggle
+.notification-panel-header {
+	display: flex;
+	align-items: center;
+	padding: 2px 4px 2px 16px;
+	border-bottom: 1px solid var(--color-border);
+
+	.notification-panel-title {
+		flex: 1;
+		font-size: 13px;
+		font-weight: 600;
+		color: var(--color-text-maxcontrast);
+	}
+
+	.dnd-active {
+		color: var(--color-error) !important;
+	}
+}
+
+// "New while DND" summary banner shown after disabling DND
+.notification-dnd-banner {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 4px 4px 4px 16px;
+	border-bottom: 1px solid var(--color-border);
+	background: color-mix(in srgb, var(--color-warning) 10%, var(--color-main-background));
+	font-size: 12px;
+	color: var(--color-text-maxcontrast);
+}
