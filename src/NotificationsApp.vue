@@ -46,9 +46,17 @@
 					:description="emptyContentDescription">
 					<template #icon>
 						<div v-if="showInboxZero && !hasThrottledPushNotifications" class="inbox-zero-celebrate">
-							<span v-for="i in 8" :key="i" class="confetti-dot" :style="`--confetti-i: ${i - 1}`" />
+							<span
+								v-for="i in 8"
+								:key="i"
+								class="confetti-dot"
+								:style="`--confetti-i: ${i - 1}`" />
 							<svg class="inbox-zero-check" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
-								<circle class="inbox-zero-circle" cx="26" cy="26" r="22" />
+								<circle
+									class="inbox-zero-circle"
+									cx="26"
+									cy="26"
+									r="22" />
 								<polyline class="inbox-zero-checkmark" points="14,26 22,34 38,18" />
 							</svg>
 						</div>
@@ -233,10 +241,12 @@ export default {
 	},
 
 	watch: {
-		'notifications.length'(newLen, oldLen) {
+		'notifications.length': function(newLen, oldLen) {
 			if (newLen === 0 && oldLen > 0) {
 				this.showInboxZero = true
-				setTimeout(() => { this.showInboxZero = false }, 5000)
+				setTimeout(() => {
+					this.showInboxZero = false
+				}, 5000)
 			}
 		},
 	},
@@ -431,6 +441,8 @@ export default {
 
 		/**
 		 * Performs the AJAX request to retrieve the notifications
+		 *
+		 * @param {bool} force Refresh the list of notifications right away
 		 */
 		async _fetch(force = false) {
 			if (this.notifications.length && this.notifications[0].notificationId > this.webNotificationsThresholdId) {

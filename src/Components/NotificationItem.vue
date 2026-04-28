@@ -34,12 +34,22 @@
 			class="notification-subject full-subject-link external"
 			target="_blank"
 			rel="noreferrer noopener">
-			<NcAvatar v-if="mentionUser" :user="mentionUser.id" :display-name="mentionUser.name" :size="44" style="flex-shrink:0" />
+			<NcAvatar
+				v-if="mentionUser"
+				:user="mentionUser.id"
+				:displayName="mentionUser.name"
+				:size="44"
+				style="flex-shrink:0" />
 			<span v-else-if="notification.icon" class="image"><img :src="notification.icon" class="notification-icon" alt=""></span>
 			<span class="subject">{{ notification.subject }} ↗</span>
 		</a>
 		<a v-else-if="useLink" :href="notification.link" class="notification-subject full-subject-link">
-			<NcAvatar v-if="mentionUser" :user="mentionUser.id" :display-name="mentionUser.name" :size="44" style="flex-shrink:0" />
+			<NcAvatar
+				v-if="mentionUser"
+				:user="mentionUser.id"
+				:displayName="mentionUser.name"
+				:size="44"
+				style="flex-shrink:0" />
 			<span v-else-if="notification.icon" class="image"><img :src="notification.icon" class="notification-icon" alt=""></span>
 			<NcRichText
 				v-if="notification.subjectRich"
@@ -48,7 +58,12 @@
 			<span v-else class="subject">{{ notification.subject }}</span>
 		</a>
 		<div v-else class="notification-subject">
-			<NcAvatar v-if="mentionUser" :user="mentionUser.id" :display-name="mentionUser.name" :size="44" style="flex-shrink:0" />
+			<NcAvatar
+				v-if="mentionUser"
+				:user="mentionUser.id"
+				:displayName="mentionUser.name"
+				:size="44"
+				style="flex-shrink:0" />
 			<span v-else-if="notification.icon" class="image"><img :src="notification.icon" class="notification-icon" alt=""></span>
 			<NcRichText
 				v-if="notification.subjectRich"
@@ -202,9 +217,11 @@ export default {
 		},
 
 		mentionUser() {
-			if (this.notification.objectType !== 'mention') return null
+			if (this.notification.objectType !== 'mention') {
+				return null
+			}
 			const params = this.notification.subjectRichParameters || {}
-			return Object.values(params).find(p => p.type === 'user') || null
+			return Object.values(params).find((p) => p.type === 'user') || null
 		},
 	},
 
