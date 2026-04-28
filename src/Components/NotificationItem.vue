@@ -87,6 +87,41 @@
 				{{ t('notifications', 'Contact Nextcloud GmbH') }} ↗
 			</NcButton>
 		</div>
+
+		<!-- Inline reply for Nextcloud Talk conversations -->
+		<div v-if="isTalkChat" class="notification-talk-reply">
+			<div v-if="showReply" class="notification-talk-reply__form">
+				<textarea
+					v-model="replyText"
+					class="notification-talk-reply__input"
+					:placeholder="t('notifications', 'Write a reply…')"
+					rows="2"
+					autofocus
+					@keydown.ctrl.enter.prevent="sendReply"
+					@keydown.meta.enter.prevent="sendReply" />
+				<div class="notification-talk-reply__buttons">
+					<NcButton variant="tertiary" @click="showReply = false; replyText = ''">
+						{{ t('notifications', 'Cancel') }}
+					</NcButton>
+					<NcButton
+						variant="primary"
+						:disabled="!replyText.trim() || sendingReply"
+						@click="sendReply">
+						{{ t('notifications', 'Send') }}
+					</NcButton>
+				</div>
+			</div>
+			<NcButton
+				v-else
+				variant="tertiary"
+				class="notification-talk-reply__toggle"
+				@click="showReply = true">
+				<template #icon>
+					<IconReply :size="16" />
+				</template>
+				{{ t('notifications', 'Reply') }}
+			</NcButton>
+		</div>
 	</li>
 </template>
 
@@ -101,6 +136,7 @@ import NcDateTime from '@nextcloud/vue/components/NcDateTime'
 import NcRichText from '@nextcloud/vue/components/NcRichText'
 import IconClose from 'vue-material-design-icons/Close.vue'
 import IconMessageOutline from 'vue-material-design-icons/MessageOutline.vue'
+import IconReply from 'vue-material-design-icons/Reply.vue'
 import ActionButton from './ActionButton.vue'
 import DefaultParameter from './Parameters/DefaultParameter.vue'
 import FileParameter from './Parameters/FileParameter.vue'
@@ -139,10 +175,11 @@ export default {
 
 	components: {
 		ActionButton,
-		NcButton,
-		NcDateTime,
 		IconClose,
 		IconMessageOutline,
+		IconReply,
+		NcButton,
+		NcDateTime,
 		NcRichText,
 	},
 
@@ -159,6 +196,9 @@ export default {
 	data() {
 		return {
 			showFullMessage: false,
+			showReply: false,
+			replyText: '',
+			sendingReply: false,
 		}
 	},
 
@@ -194,6 +234,12 @@ export default {
 
 		isCollapsedMessage() {
 			return this.notification.message.length > 200 && !this.showFullMessage
+		},
+
+		isTalkChat() {
+			return this.notification.app === 'spreed'
+				&& this.notification.objectType !== 'call'
+				&& !!this.notification.objectId
 		},
 	},
 
@@ -267,6 +313,22 @@ export default {
 			} catch (error) {
 				console.error('Failed to perform action', error)
 				showError(t('notifications', 'Failed to perform action'))
+			}
+		},
+
+		async sendReply() {
+			if (!this.replyText.trim() || this.sendingReply) return
+			this.sendingReply = true
+			try {
+				await axios.post(
+					generateOcsUrl('apps/spreed/api/v1/chat/{token}', { token: this.notification.objectId }),
+					{ message: this.replyText.trim() },
+				)
+				this.$emit('remove')
+			} catch {
+				showError(t('notifications', 'Failed to send reply'))
+			} finally {
+				this.sendingReply = false
 			}
 		},
 
