@@ -16,6 +16,27 @@
 				ignoreSeconds
 				:format="{ timeStyle: 'short', dateStyle: 'long' }"
 				:timestamp="timestamp" />
+			<NcActions
+				v-if="timestamp"
+				class="notification-snooze-button"
+				:aria-label="t('notifications', 'Snooze')"
+				force-menu>
+				<template #icon>
+					<IconClockOutline :size="18" />
+				</template>
+				<NcActionButton @click="onSnooze(60)">
+					<template #icon><IconClockOutline :size="20" /></template>
+					{{ t('notifications', '1 hour') }}
+				</NcActionButton>
+				<NcActionButton @click="onSnooze(4 * 60)">
+					<template #icon><IconClockOutline :size="20" /></template>
+					{{ t('notifications', '4 hours') }}
+				</NcActionButton>
+				<NcActionButton @click="onSnooze(24 * 60)">
+					<template #icon><IconClockOutline :size="20" /></template>
+					{{ t('notifications', 'Tomorrow') }}
+				</NcActionButton>
+			</NcActions>
 			<NcButton
 				v-if="timestamp"
 				class="notification-dismiss-button"
@@ -96,9 +117,12 @@ import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
 import { generateOcsUrl } from '@nextcloud/router'
+import NcActionButton from '@nextcloud/vue/components/NcActionButton'
+import NcActions from '@nextcloud/vue/components/NcActions'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcDateTime from '@nextcloud/vue/components/NcDateTime'
 import NcRichText from '@nextcloud/vue/components/NcRichText'
+import IconClockOutline from 'vue-material-design-icons/ClockOutline.vue'
 import IconClose from 'vue-material-design-icons/Close.vue'
 import IconMessageOutline from 'vue-material-design-icons/MessageOutline.vue'
 import ActionButton from './ActionButton.vue'
@@ -139,10 +163,13 @@ export default {
 
 	components: {
 		ActionButton,
-		NcButton,
-		NcDateTime,
+		IconClockOutline,
 		IconClose,
 		IconMessageOutline,
+		NcActionButton,
+		NcActions,
+		NcButton,
+		NcDateTime,
 		NcRichText,
 	},
 
@@ -154,7 +181,7 @@ export default {
 		},
 	},
 
-	emits: ['remove'],
+	emits: ['remove', 'snooze'],
 
 	data() {
 		return {
@@ -222,6 +249,10 @@ export default {
 				}
 			})
 			return richParameters
+		},
+
+		onSnooze(minutes) {
+			this.$emit('snooze', { notification: this.notification, minutes })
 		},
 
 		onClickMessage(e) {
