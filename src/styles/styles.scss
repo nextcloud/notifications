@@ -192,7 +192,7 @@ img.notification-icon {
 
 .inbox-zero-circle {
 	fill: none;
-	stroke: var(--color-success);
+	stroke: var(--color-element-success);
 	stroke-width: 3;
 	stroke-dasharray: 138;
 	stroke-dashoffset: 138;
@@ -201,7 +201,7 @@ img.notification-icon {
 
 .inbox-zero-checkmark {
 	fill: none;
-	stroke: var(--color-success);
+	stroke: var(--color-element-success);
 	stroke-width: 3;
 	stroke-linecap: round;
 	stroke-linejoin: round;
