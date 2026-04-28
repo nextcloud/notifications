@@ -173,11 +173,14 @@ svg {
 		& > .collapsed {
 			overflow: hidden;
 			max-height: 70px;
+			// Fade the bottom of clipped messages by masking the text itself,
+			// so the fade works on any backdrop including the frosted-glass panel.
+			-webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent 100%);
+			        mask-image: linear-gradient(to bottom, #000 70%, transparent 100%);
 		}
 
 		& > .notification-overflow {
-			box-shadow: 0 0 20px 20px var(--color-main-background);
-			position: relative;
+			display: none;
 		}
 	}
 
