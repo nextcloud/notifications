@@ -221,20 +221,19 @@ img.notification-icon {
 	width: 6px;
 	height: 6px;
 	border-radius: 50%;
-	animation: confetti-burst 0.55s ease-out calc(0.35s + var(--confetti-i, 0) * 0.025s) both;
-	rotate: calc(var(--confetti-i, 0) * 45deg);
+	animation: confetti-burst 1s ease-out calc(0.5s + var(--confetti-i, 0) * 0.1s) both;
 
 	&:nth-child(1) { background: #ff5555; }
 	&:nth-child(2) { background: #ff9900; }
 	&:nth-child(3) { background: #ffcc00; }
 	&:nth-child(4) { background: #55cc55; }
-	&:nth-child(5) { background: var(--color-primary-element); }
+	&:nth-child(5) { background: #00679e; }
 	&:nth-child(6) { background: #aa55ff; }
 	&:nth-child(7) { background: #ff55aa; }
 	&:nth-child(8) { background: #55cccc; }
 }
 
 @keyframes confetti-burst {
-	from { translate: 0 0; scale: 1; opacity: 1; }
-	to   { translate: 0 -34px; scale: 0; opacity: 0; }
+	from { transform: rotate(calc(45deg * var(--confetti-i, 0))) translateY(0) scale(1); opacity: 1; }
+	to   { transform: rotate(calc(45deg * var(--confetti-i, 0))) translateY(-34px) scale(0); opacity: .8; }
 }
