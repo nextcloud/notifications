@@ -198,7 +198,7 @@ export default {
 
 			/** Highest notification ID seen when the popup was last opened; items above this are "new" */
 			lastOpenMaxId: 0,
-			/** True for 2.5 s after all notifications are cleared — inbox zero celebration */
+			/** True for 5 s after all notifications are cleared — inbox zero celebration */
 			showInboxZero: false,
 		}
 	},
@@ -236,7 +236,7 @@ export default {
 		'notifications.length'(newLen, oldLen) {
 			if (newLen === 0 && oldLen > 0) {
 				this.showInboxZero = true
-				setTimeout(() => { this.showInboxZero = false }, 2500)
+				setTimeout(() => { this.showInboxZero = false }, 5000)
 			}
 		},
 	},
