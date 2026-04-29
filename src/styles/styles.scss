@@ -83,8 +83,19 @@ svg {
 
 	// "New since last open" indicator — primary-colored bar on the inline-start edge
 	&.notification--new {
-		box-shadow: inset 3px 0 0 var(--color-primary-element);
-		background: color-mix(in srgb, var(--color-primary-element) 5%, transparent);
+		position: relative;
+		background-color: color-mix(in srgb, var(--color-primary-element) 16%, transparent) !important;
+
+		&::before {
+			content: '';
+			position: absolute;
+			inset-block: calc(var(--default-grid-baseline, 4px) * 2);
+			inset-inline-start: 0;
+			width: 3px;
+			background-color: var(--color-primary-element);
+			border-radius: 999px;
+			animation: nc-nav-stripe-in var(--animation-quick, 200ms) ease-out;
+		}
 	}
 
 	.notification-heading {
