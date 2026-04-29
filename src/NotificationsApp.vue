@@ -15,7 +15,7 @@
 		<template #trigger>
 			<IconNotification
 				:size="20"
-				:showDot="notifications.length !== 0 || webNotificationsGranted === null"
+				:showDot="visibleNotifications.length !== 0 || webNotificationsGranted === null"
 				:showWarning="hasThrottledPushNotifications" />
 		</template>
 
@@ -23,7 +23,7 @@
 		<div class="notification-container">
 			<transition name="fade" mode="out-in">
 				<transition-group
-					v-if="notifications.length > 0"
+					v-if="visibleNotifications.length > 0"
 					class="notification-wrapper"
 					name="list"
 					tag="ul">
@@ -32,10 +32,11 @@
 						:key="-2016"
 						:notification="fairUsePolicyNotification" />
 					<NotificationItem
-						v-for="(notification, index) in notifications"
+						v-for="notification in visibleNotifications"
 						:key="notification.notificationId"
 						:notification="notification"
-						@remove="onRemove(index)" />
+						@remove="onRemove(notification)"
+						@snooze="onSnooze" />
 				</transition-group>
 
 				<!-- No notifications -->
@@ -187,6 +188,9 @@ export default {
 			pushEndpoints: null,
 
 			open: false,
+
+			/** Map of notificationId → timestamp when the snooze expires */
+			snoozed: JSON.parse(localStorage.getItem('notifications:snoozed') ?? '{}'),
 		}
 	},
 
@@ -216,6 +220,11 @@ export default {
 			}
 
 			return ''
+		},
+
+		visibleNotifications() {
+			const now = Date.now()
+			return this.notifications.filter(n => (this.snoozed[n.notificationId] ?? 0) <= now)
 		},
 	},
 
@@ -342,9 +351,29 @@ export default {
 				})
 		},
 
-		onRemove(index) {
-			this.notifications.splice(index, 1)
+		onRemove(notification) {
+			const idx = this.notifications.findIndex(n => n.notificationId === notification.notificationId)
+			if (idx !== -1) {
+				this.notifications.splice(idx, 1)
+			}
 			setCurrentTabAsActive(this.tabId)
+		},
+
+		onSnooze({ notification, minutes }) {
+			const wakeAt = Date.now() + minutes * 60 * 1000
+			this.snoozed = { ...this.snoozed, [notification.notificationId]: wakeAt }
+			localStorage.setItem('notifications:snoozed', JSON.stringify(this.snoozed))
+		},
+
+		_clearExpiredSnooze() {
+			const now = Date.now()
+			const active = Object.fromEntries(
+				Object.entries(this.snoozed).filter(([, wakeAt]) => wakeAt > now),
+			)
+			if (Object.keys(active).length !== Object.keys(this.snoozed).length) {
+				this.snoozed = active
+				localStorage.setItem('notifications:snoozed', JSON.stringify(active))
+			}
 		},
 
 		/**
@@ -408,6 +437,8 @@ export default {
 		 * Performs the AJAX request to retrieve the notifications
 		 */
 		async _fetch(force = false) {
+			this._clearExpiredSnooze()
+
 			if (this.notifications.length && this.notifications[0].notificationId > this.webNotificationsThresholdId) {
 				this.webNotificationsThresholdId = this.notifications[0].notificationId
 			}
