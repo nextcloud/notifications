@@ -123,3 +123,40 @@ svg {
 		}
 	}
 }
+
+// Inline Talk reply: textarea + Send/Cancel buttons, or a tertiary "Reply" toggle
+.notification-talk-reply {
+	margin: 0 12px 12px;
+
+	&__input {
+		display: block;
+		width: 100%;
+		box-sizing: border-box;
+		padding: 8px 10px;
+		border: 1px solid var(--color-border);
+		border-radius: var(--border-radius-large);
+		background: var(--color-main-background);
+		color: var(--color-main-text);
+		font-family: inherit;
+		font-size: inherit;
+		line-height: 1.4;
+		resize: none;
+		transition: border-color 0.15s ease;
+
+		&:focus {
+			border-color: var(--color-primary-element);
+			outline: none;
+		}
+	}
+
+	&__buttons {
+		display: flex;
+		justify-content: flex-end;
+		gap: 4px;
+		margin-top: 6px;
+	}
+
+	&__toggle {
+		margin-inline-start: -6px; // align with content
+	}
+}
