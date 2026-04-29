@@ -34,23 +34,11 @@
 			class="notification-subject full-subject-link external"
 			target="_blank"
 			rel="noreferrer noopener">
-			<NcAvatar
-				v-if="getAuthorOfChatNotification"
-				:user="getAuthorOfChatNotification.id"
-				:server="getAuthorOfChatNotification.server"
-				:displayName="getAuthorOfChatNotification.name"
-				:size="44" />
-			<span v-else-if="notification.icon" class="image"><img :src="notification.icon" class="notification-icon" alt=""></span>
+			<span v-if="notification.icon" class="image"><img :src="notification.icon" class="notification-icon" alt=""></span>
 			<span class="subject">{{ notification.subject }} ↗</span>
 		</a>
 		<a v-else-if="useLink" :href="notification.link" class="notification-subject full-subject-link">
-			<NcAvatar
-				v-if="getAuthorOfChatNotification"
-				:user="getAuthorOfChatNotification.id"
-				:server="getAuthorOfChatNotification.server"
-				:displayName="getAuthorOfChatNotification.name"
-				:size="44" />
-			<span v-else-if="notification.icon" class="image"><img :src="notification.icon" class="notification-icon" alt=""></span>
+			<span v-if="notification.icon" class="image"><img :src="notification.icon" class="notification-icon" alt=""></span>
 			<NcRichText
 				v-if="notification.subjectRich"
 				:text="notification.subjectRich"
@@ -58,13 +46,7 @@
 			<span v-else class="subject">{{ notification.subject }}</span>
 		</a>
 		<div v-else class="notification-subject">
-			<NcAvatar
-				v-if="getAuthorOfChatNotification"
-				:user="getAuthorOfChatNotification.id"
-				:server="getAuthorOfChatNotification.server"
-				:displayName="getAuthorOfChatNotification.name"
-				:size="44" />
-			<span v-else-if="notification.icon" class="image"><img :src="notification.icon" class="notification-icon" alt=""></span>
+			<span v-if="notification.icon" class="image"><img :src="notification.icon" class="notification-icon" alt=""></span>
 			<NcRichText
 				v-if="notification.subjectRich"
 				:text="notification.subjectRich"
@@ -114,7 +96,6 @@ import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
 import { generateOcsUrl } from '@nextcloud/router'
-import NcAvatar from '@nextcloud/vue/components/NcAvatar'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcDateTime from '@nextcloud/vue/components/NcDateTime'
 import NcRichText from '@nextcloud/vue/components/NcRichText'
@@ -160,7 +141,6 @@ export default {
 		ActionButton,
 		IconClose,
 		IconMessageOutline,
-		NcAvatar,
 		NcButton,
 		NcDateTime,
 		NcRichText,
@@ -214,14 +194,6 @@ export default {
 
 		isCollapsedMessage() {
 			return this.notification.message.length > 200 && !this.showFullMessage
-		},
-
-		getAuthorOfChatNotification() {
-			if (this.notification.objectType !== 'chat') {
-				return null
-			}
-			const params = this.notification.subjectRichParameters || {}
-			return Object.values(params).find((p) => p.type === 'user') || null
 		},
 	},
 
