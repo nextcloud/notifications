@@ -15,12 +15,34 @@
 		<template #trigger>
 			<IconNotification
 				:size="20"
-				:showDot="notifications.length !== 0 || webNotificationsGranted === null"
+				:showDot="!isDnd && (notifications.length !== 0 || webNotificationsGranted === null)"
 				:showWarning="hasThrottledPushNotifications" />
 		</template>
 
 		<!-- Notifications list content -->
 		<div class="notification-container">
+			<!-- Panel header with Do Not Disturb toggle -->
+			<div class="notification-panel-header">
+				<span class="notification-panel-title">{{ t('notifications', 'Notifications') }}</span>
+				<NcButton
+					variant="tertiary"
+					:class="{ 'dnd-active': isDnd }"
+					:title="isDnd ? t('notifications', 'Disable Do Not Disturb') : t('notifications', 'Enable Do Not Disturb')"
+					:aria-label="isDnd ? t('notifications', 'Disable Do Not Disturb') : t('notifications', 'Enable Do Not Disturb')"
+					@click="toggleDnd">
+					<template #icon>
+						<IconBellOff :size="18" />
+					</template>
+				</NcButton>
+			</div>
+			<!-- "New while DND" banner -->
+			<div v-if="dndBanner > 0" class="notification-dnd-banner">
+				<span>{{ dndBannerText }}</span>
+				<NcButton variant="tertiary" @click="dndBanner = 0">
+					<template #icon><IconClose :size="16" /></template>
+				</NcButton>
+			</div>
+
 			<transition name="fade" mode="out-in">
 				<transition-group
 					v-if="notifications.length > 0"
@@ -92,6 +114,7 @@ import { generateOcsUrl, imagePath } from '@nextcloud/router'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcHeaderMenu from '@nextcloud/vue/components/NcHeaderMenu'
+import IconBellOff from 'vue-material-design-icons/BellOff.vue'
 import IconBellOutline from 'vue-material-design-icons/BellOutline.vue'
 import IconClose from 'vue-material-design-icons/Close.vue'
 import IconMessageOutline from 'vue-material-design-icons/MessageOutline.vue'
@@ -131,6 +154,7 @@ export default {
 	name: 'NotificationsApp',
 
 	components: {
+		IconBellOff,
 		IconBellOutline,
 		IconClose,
 		IconMessageOutline,
@@ -187,6 +211,11 @@ export default {
 			pushEndpoints: null,
 
 			open: false,
+
+			/** Whether Do Not Disturb is enabled locally (suppresses dot, sounds, browser notifications) */
+			isDnd: JSON.parse(localStorage.getItem('notifications:dnd') ?? 'false'),
+			/** Count of notifications that arrived while DND was on (> 0 shows banner) */
+			dndBanner: 0,
 		}
 	},
 
@@ -195,7 +224,15 @@ export default {
 			return this.backgroundFetching
 				&& this.webNotificationsGranted
 				&& this.userStatus !== 'dnd'
+				&& !this.isDnd
 				&& this.tabId === this.lastTabId
+		},
+
+		dndBannerText() {
+			const c = this.dndBanner
+			return c === 1
+				? t('notifications', '1 new notification received while in Do Not Disturb')
+				: t('notifications', '{count} new notifications received while in Do Not Disturb', { count: c })
 		},
 
 		emptyContentMessage() {
@@ -345,6 +382,19 @@ export default {
 		onRemove(index) {
 			this.notifications.splice(index, 1)
 			setCurrentTabAsActive(this.tabId)
+		},
+
+		toggleDnd() {
+			if (!this.isDnd) {
+				// Turning ON: snapshot current max ID so we can count new arrivals on re-enable
+				this._dndMaxIdAtEnable = this.notifications.reduce((max, n) => Math.max(max, n.notificationId), 0)
+			} else {
+				// Turning OFF: surface a banner for any notifications that arrived while DND was active
+				const newCount = this.notifications.filter(n => n.notificationId > (this._dndMaxIdAtEnable || 0)).length
+				if (newCount > 0) this.dndBanner = newCount
+			}
+			this.isDnd = !this.isDnd
+			localStorage.setItem('notifications:dnd', JSON.stringify(this.isDnd))
 		},
 
 		/**
