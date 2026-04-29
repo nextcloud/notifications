@@ -31,11 +31,13 @@
 
 // Frosted glass notification popup
 #notifications .header-menu__wrapper {
-	background-color: color-mix(in srgb, var(--color-main-background) 82%, transparent) !important;
-	backdrop-filter: blur(16px);
-	-webkit-backdrop-filter: blur(16px);
+	background-color: var(--color-main-background-blur, var(--color-main-background));
+	backdrop-filter: var(--filter-background-blur, none);
+	-webkit-backdrop-filter: var(--filter-background-blur, none);
+	transform-origin: center top;
 }
 
+#notifications.header-menu--opened .header-menu__caret,
 #notifications.header-menu--opened .header-menu__wrapper {
 	animation: nc-notif-panel-open 0.45s cubic-bezier(0.2, 0, 0, 1) both;
 }
@@ -52,7 +54,8 @@
 }
 
 #notifications .header-menu__caret {
-	border-bottom-color: color-mix(in srgb, var(--color-main-background) 82%, transparent) !important;
+	border-bottom-color: var(--color-main-background-blur, var(--color-main-background));
+	transform-origin: center bottom;
 }
 
 svg {
