@@ -369,7 +369,9 @@ export default {
 				.delete(generateOcsUrl('apps/notifications/api/v2/notifications'))
 				.then(() => {
 					this.notifications = []
-					this.open = false
+					setTimeout(() => {
+						this.open = false
+					}, 3_000) // confetti-burst animation length + a bit of extra time
 					setCurrentTabAsActive(this.tabId)
 				})
 				.catch(() => {
