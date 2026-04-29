@@ -21,22 +21,50 @@
 
 		<!-- Notifications list content -->
 		<div class="notification-container">
+			<!-- Filter tabs: only shown when notifications span 3+ categories -->
+			<div v-if="showFilterTabs" class="notification-filter-tabs" role="tablist">
+				<button
+					v-for="tab in filterTabs"
+					:key="tab.id"
+					role="tab"
+					:aria-selected="activeFilter === tab.id"
+					:class="['notification-filter-tab', { 'notification-filter-tab--active': activeFilter === tab.id }]"
+					@click="activeFilter = tab.id">
+					{{ tab.label }}
+					<span v-if="tab.count" class="notification-filter-count">{{ tab.count }}</span>
+				</button>
+			</div>
+
 			<transition name="fade" mode="out-in">
-				<transition-group
-					v-if="notifications.length > 0"
-					class="notification-wrapper"
-					name="list"
-					tag="ul">
+				<ul v-if="notificationGroups.length > 0" class="notification-wrapper">
 					<NotificationItem
 						v-if="hasThrottledPushNotifications"
-						:key="-2016"
 						:notification="fairUsePolicyNotification" />
-					<NotificationItem
-						v-for="(notification, index) in notifications"
-						:key="notification.notificationId"
-						:notification="notification"
-						@remove="onRemove(index)" />
-				</transition-group>
+					<template v-for="(group, groupIdx) in notificationGroups" :key="group.app">
+						<!-- Group header: only shown when there are multiple apps -->
+						<li
+							v-if="notificationGroups.length > 1"
+							class="notification-group-header"
+							role="button"
+							tabindex="0"
+							@click="toggleGroup(group.app)"
+							@keydown.enter="toggleGroup(group.app)"
+							@keydown.space.prevent="toggleGroup(group.app)">
+							<span class="notification-group-name">{{ formatAppName(group.app) }}</span>
+							<span class="notification-group-badge">{{ group.items.length }}</span>
+							<IconChevronDown
+								:size="14"
+								:class="{ 'notification-group-chevron--collapsed': collapsedGroups.has(group.app) }" />
+						</li>
+						<NotificationItem
+							v-for="(notification, itemIdx) in group.items"
+							v-show="!collapsedGroups.has(group.app)"
+							:key="`${notification.notificationId}-${activeFilter}`"
+							:style="{ '--anim-index': visibleIndex(groupIdx, itemIdx) }"
+							:notification="notification"
+							@remove="onRemove(notification)" />
+					</template>
+				</ul>
 
 				<!-- No notifications -->
 				<NcEmptyContent
@@ -64,7 +92,7 @@
 			</transition>
 
 			<!-- Dismiss all -->
-			<div v-if="notifications.length > 0" class="dismiss-all">
+			<div v-if="notificationGroups.length > 0" class="dismiss-all">
 				<NcButton
 					variant="tertiary"
 					wide
@@ -93,6 +121,7 @@ import NcButton from '@nextcloud/vue/components/NcButton'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcHeaderMenu from '@nextcloud/vue/components/NcHeaderMenu'
 import IconBellOutline from 'vue-material-design-icons/BellOutline.vue'
+import IconChevronDown from 'vue-material-design-icons/ChevronDown.vue'
 import IconClose from 'vue-material-design-icons/Close.vue'
 import IconMessageOutline from 'vue-material-design-icons/MessageOutline.vue'
 import IconNotification from './Components/IconNotification.vue'
@@ -132,6 +161,7 @@ export default {
 
 	components: {
 		IconBellOutline,
+		IconChevronDown,
 		IconClose,
 		IconMessageOutline,
 		IconNotification,
@@ -187,6 +217,11 @@ export default {
 			pushEndpoints: null,
 
 			open: false,
+
+			/** Set of app names whose group is currently collapsed */
+			collapsedGroups: new Set(),
+			/** Active filter tab: 'all' | 'mentions' | 'files' | 'other' */
+			activeFilter: 'all',
 		}
 	},
 
@@ -202,11 +237,12 @@ export default {
 			if (this.webNotificationsGranted === null) {
 				return t('notifications', 'Requesting browser permissions to show notifications')
 			}
-
 			if (this.hasThrottledPushNotifications) {
 				return this.fairUsePolicyNotification.subject
 			}
-
+			if (this.activeFilter !== 'all' && this.notifications.length > 0) {
+				return t('notifications', 'No notifications in this category')
+			}
 			return t('notifications', 'No notifications')
 		},
 
@@ -216,6 +252,44 @@ export default {
 			}
 
 			return ''
+		},
+
+		notificationGroups() {
+			const groups = new Map()
+			for (const n of this.notifications) {
+				if (this.activeFilter === 'mentions' && n.objectType !== 'mention') continue
+				if (this.activeFilter === 'files' && !['files', 'files_sharing'].includes(n.app)) continue
+				if (this.activeFilter === 'other' && (n.objectType === 'mention' || ['files', 'files_sharing'].includes(n.app))) continue
+				if (!groups.has(n.app)) groups.set(n.app, [])
+				groups.get(n.app).push(n)
+			}
+			return [...groups.entries()].map(([app, items]) => ({ app, items }))
+		},
+
+		filterTabs() {
+			const counts = { mentions: 0, files: 0, other: 0 }
+			for (const n of this.notifications) {
+				if (n.objectType === 'mention') counts.mentions++
+				else if (['files', 'files_sharing'].includes(n.app)) counts.files++
+				else counts.other++
+			}
+			const tabs = [{ id: 'all', label: t('notifications', 'All') }]
+			if (counts.mentions) tabs.push({ id: 'mentions', label: t('notifications', 'Mentions'), count: counts.mentions })
+			if (counts.files) tabs.push({ id: 'files', label: t('notifications', 'Files'), count: counts.files })
+			if (counts.other) tabs.push({ id: 'other', label: t('notifications', 'Other'), count: counts.other })
+			return tabs
+		},
+
+		showFilterTabs() {
+			return this.filterTabs.length > 2
+		},
+	},
+
+	watch: {
+		notificationGroups(groups) {
+			if (groups.length === 0 && this.activeFilter !== 'all') {
+				this.activeFilter = 'all'
+			}
 		},
 	},
 
@@ -342,9 +416,32 @@ export default {
 				})
 		},
 
-		onRemove(index) {
-			this.notifications.splice(index, 1)
+		onRemove(notification) {
+			const idx = this.notifications.findIndex(n => n.notificationId === notification.notificationId)
+			if (idx !== -1) {
+				this.notifications.splice(idx, 1)
+			}
 			setCurrentTabAsActive(this.tabId)
+		},
+
+		formatAppName(app) {
+			return app.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
+		},
+
+		toggleGroup(app) {
+			if (this.collapsedGroups.has(app)) {
+				this.collapsedGroups.delete(app)
+			} else {
+				this.collapsedGroups.add(app)
+			}
+		},
+
+		visibleIndex(groupIdx, itemIdx) {
+			let idx = 0
+			for (let g = 0; g < groupIdx; g++) {
+				idx += this.notificationGroups[g].items.length
+			}
+			return idx + itemIdx
 		},
 
 		/**
