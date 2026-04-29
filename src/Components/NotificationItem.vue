@@ -139,10 +139,10 @@ export default {
 
 	components: {
 		ActionButton,
-		NcButton,
-		NcDateTime,
 		IconClose,
 		IconMessageOutline,
+		NcButton,
+		NcDateTime,
 		NcRichText,
 	},
 

@@ -29,6 +29,35 @@
 	}
 }
 
+// Frosted glass notification popup
+#notifications .header-menu__wrapper {
+	background-color: var(--color-main-background-blur, var(--color-main-background));
+	backdrop-filter: var(--filter-background-blur, none);
+	-webkit-backdrop-filter: var(--filter-background-blur, none);
+	transform-origin: center top;
+}
+
+#notifications.header-menu--opened .header-menu__caret,
+#notifications.header-menu--opened .header-menu__wrapper {
+	animation: nc-notif-panel-open 0.45s cubic-bezier(0.2, 0, 0, 1) both;
+}
+
+@keyframes nc-notif-panel-open {
+	from {
+		opacity: 0;
+		transform: translateY(-10px) scale(0.97);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+	}
+}
+
+#notifications .header-menu__caret {
+	border-bottom-color: var(--color-main-background-blur, var(--color-main-background));
+	transform-origin: center bottom;
+}
+
 svg {
 	@keyframes pulse {
 		0% {
@@ -50,6 +79,23 @@ svg {
 
 	&:not(:last-child) {
 		border-bottom: 1px solid var(--color-border);
+	}
+
+	// "New since last open" indicator — primary-colored bar on the inline-start edge
+	&.notification--new {
+		position: relative;
+		background-color: color-mix(in srgb, var(--color-primary-element) 16%, transparent) !important;
+
+		&::before {
+			content: '';
+			position: absolute;
+			inset-block: calc(var(--default-grid-baseline, 4px) * 2);
+			inset-inline-start: 0;
+			width: 3px;
+			background-color: var(--color-primary-element);
+			border-radius: 999px;
+			animation: nc-nav-stripe-in var(--animation-quick, 200ms) ease-out;
+		}
 	}
 
 	.notification-heading {
@@ -80,8 +126,16 @@ svg {
 		display: flex;
 		align-items: center;
 
+		// Rounded avatar-style icon container
 		& > .image {
-			align-self: flex-start;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			flex-shrink: 0;
+			width: 44px;
+			height: 44px;
+			border-radius: 50%;
+			background: var(--color-background-hover);
 		}
 
 		& > span.subject,
@@ -95,17 +149,20 @@ svg {
 
 	.notification-message,
 	.notification-full-message {
-		padding-inline-start: 42px; // 32px icon + 10px title padding
+		padding-inline-start: 54px; // 44px icon container + 10px title padding
 		color: var(--color-text-maxcontrast);
 
 		& > .collapsed {
 			overflow: hidden;
 			max-height: 70px;
+			// Fade the bottom of clipped messages by masking the text itself,
+			// so the fade works on any backdrop including the frosted-glass panel.
+			-webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent 100%);
+			        mask-image: linear-gradient(to bottom, #000 70%, transparent 100%);
 		}
 
 		& > .notification-overflow {
-			box-shadow: 0 0 20px 20px var(--color-main-background);
-			position: relative;
+			display: none;
 		}
 	}
 
@@ -122,4 +179,75 @@ svg {
 			margin: 2px 8px;
 		}
 	}
+}
+
+// Larger icon size to fit inside the rounded container
+img.notification-icon {
+	width: 26px !important;
+	height: 26px !important;
+}
+
+// Inbox-zero celebration: animated checkmark + confetti burst
+.inbox-zero-celebrate {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 64px;
+	height: 64px;
+}
+
+.inbox-zero-check {
+	width: 52px;
+	height: 52px;
+	position: relative;
+	z-index: 1;
+}
+
+.inbox-zero-circle {
+	fill: none;
+	stroke: var(--color-element-success);
+	stroke-width: 3;
+	stroke-dasharray: 138;
+	stroke-dashoffset: 138;
+	animation: inbox-zero-circle-draw 0.8s cubic-bezier(0.65, 0, 0.35, 1) 0.2s both;
+}
+
+.inbox-zero-checkmark {
+	fill: none;
+	stroke: var(--color-element-success);
+	stroke-width: 3;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	stroke-dasharray: 36;
+	stroke-dashoffset: 36;
+	animation: inbox-zero-check-draw 0.6s cubic-bezier(0.65, 0, 0.35, 1) 0.9s both;
+}
+
+@keyframes inbox-zero-circle-draw { to { stroke-dashoffset: 0; } }
+@keyframes inbox-zero-check-draw  { to { stroke-dashoffset: 0; } }
+
+// Confetti dots burst outward in 8 directions
+.confetti-dot {
+	position: absolute;
+	top: calc(50% - 3px);
+	left: calc(50% - 3px);
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+	animation: confetti-burst 1s ease-out calc(0.5s + var(--confetti-i, 0) * 0.1s) both;
+
+	&:nth-child(1) { background: #ff5555; }
+	&:nth-child(2) { background: #ff9900; }
+	&:nth-child(3) { background: #ffcc00; }
+	&:nth-child(4) { background: #55cc55; }
+	&:nth-child(5) { background: #00679e; }
+	&:nth-child(6) { background: #aa55ff; }
+	&:nth-child(7) { background: #ff55aa; }
+	&:nth-child(8) { background: #55cccc; }
+}
+
+@keyframes confetti-burst {
+	from { transform: rotate(calc(45deg * var(--confetti-i, 0))) translateY(0) scale(1); opacity: 1; }
+	to   { transform: rotate(calc(45deg * var(--confetti-i, 0))) translateY(-34px) scale(0); opacity: .8; }
 }
