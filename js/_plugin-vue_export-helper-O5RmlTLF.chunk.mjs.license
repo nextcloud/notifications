@@ -60,8 +60,11 @@ This file is generated from multiple sources. Included packages:
 	- version: 3.1.0
 	- license: GPL-3.0-or-later
 - @nextcloud/vue
-	- version: 9.6.0
+	- version: 9.7.0
 	- license: AGPL-3.0-or-later
+- @nextcloud/vue-select
+	- version: 4.1.0
+	- license: MIT
 - @vitejs/plugin-vue
 	- version: 6.0.1
 	- license: MIT
@@ -75,7 +78,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 1.15.0
 	- license: MIT
 - dompurify
-	- version: 3.4.0
+	- version: 3.4.2
 	- license: (MPL-2.0 OR Apache-2.0)
 - escape-html
 	- version: 1.0.3
@@ -84,7 +87,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 5.2.2
 	- license: MIT
 - focus-trap
-	- version: 8.0.0
+	- version: 8.1.0
 	- license: MIT
 - semver
 	- version: 7.7.4
@@ -102,8 +105,5 @@ This file is generated from multiple sources. Included packages:
 	- version: 0.24.0
 	- license: MIT
 - vue-router
-	- version: 5.0.3
-	- license: MIT
-- vue-select
-	- version: 4.0.0-beta.6
+	- version: 5.0.6
 	- license: MIT
