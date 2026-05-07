@@ -22,16 +22,16 @@ SPDX-FileCopyrightText: escape-html developers
 
 This file is generated from multiple sources. Included packages:
 - @floating-ui/core
-	- version: 1.7.3
+	- version: 1.7.5
 	- license: MIT
 - @floating-ui/dom
 	- version: 1.1.1
 	- license: MIT
 - @floating-ui/dom
-	- version: 1.7.4
+	- version: 1.7.6
 	- license: MIT
 - @floating-ui/utils
-	- version: 0.2.10
+	- version: 0.2.11
 	- license: MIT
 - @nextcloud/auth
 	- version: 2.5.3
@@ -73,10 +73,10 @@ This file is generated from multiple sources. Included packages:
 	- version: 14.1.0
 	- license: MIT
 - axios
-	- version: 1.13.5
+	- version: 1.16.0
 	- license: MIT
 - dompurify
-	- version: 3.3.2
+	- version: 3.4.2
 	- license: (MPL-2.0 OR Apache-2.0)
 - escape-html
 	- version: 1.0.3
@@ -97,7 +97,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 1.12.0
 	- license: MIT
 - vite
-	- version: 7.1.12
+	- version: 7.3.3
 	- license: MIT
 - vite-plugin-node-polyfills
 	- version: 0.24.0
