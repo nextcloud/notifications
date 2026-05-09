@@ -60,7 +60,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 3.1.0
 	- license: GPL-3.0-or-later
 - @nextcloud/vue
-	- version: 9.7.0
+	- version: 9.8.0
 	- license: AGPL-3.0-or-later
 - @nextcloud/vue-select
 	- version: 4.1.0
@@ -69,10 +69,10 @@ This file is generated from multiple sources. Included packages:
 	- version: 6.0.1
 	- license: MIT
 - @vueuse/core
-	- version: 14.2.1
+	- version: 14.3.0
 	- license: MIT
 - @vueuse/shared
-	- version: 14.2.1
+	- version: 14.3.0
 	- license: MIT
 - axios
 	- version: 1.16.0
