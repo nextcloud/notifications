@@ -1,12 +1,18 @@
 {
 	"config": {
 		"platform": {
-			"php": "8.1"
+			"php": "8.2"
 		},
 		"sort-packages": true
 	},
 	"require-dev": {
-		"nextcloud/rector": "^0.5",
+		"nextcloud/rector": "^0.5.1",
 		"rector/rector": "^2.4"
+	},
+	"autoload": {
+		"psr-4": {
+			"OCP\\": "vendor-bin/nextcloud-ocp/vendor/nextcloud/ocp/OCP/",
+			"NCU\\": "vendor-bin/nextcloud-ocp/vendor/nextcloud/ocp/NCU/"
+		}
 	}
 }
