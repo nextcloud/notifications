@@ -17,7 +17,7 @@ use OCA\Notifications\Vendor\Minishlink\WebPush\WebPush;
 use OCP\AppFramework\Services\IAppConfig;
 
 class WebPushClient {
-	private WebPush $client;
+	private ?WebPush $client = null;
 	/** @psalm-var array{publicKey: string, privateKey: string, subject: string} */
 	private array $vapid;
 
@@ -52,7 +52,7 @@ class WebPushClient {
 	}
 
 	private function getClient(): WebPush {
-		if (isset($this->client)) {
+		if ($this->client !== null) {
 			return $this->client;
 		}
 		$this->client = new WebPush(auth: ['VAPID' => $this->vapid]);
