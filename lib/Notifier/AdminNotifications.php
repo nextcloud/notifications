@@ -77,12 +77,12 @@ class AdminNotifications implements INotifier {
 					}
 				}
 
-				$path1 = rtrim($file1->getPath(), '/');
+				$path1 = rtrim((string)$file1->getPath(), '/');
 				if (str_starts_with($path1, '/' . $notification->getUser() . '/files/')) {
 					// Remove /user/files/...
 					[,,, $path1] = explode('/', $path1, 4);
 				}
-				$path2 = rtrim($file2->getPath(), '/');
+				$path2 = rtrim((string)$file2->getPath(), '/');
 				if (str_starts_with($path2, '/' . $notification->getUser() . '/files/')) {
 					// Remove /user/files/...
 					[,,, $path2] = explode('/', $path2, 4);

@@ -256,7 +256,7 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 		Assert::assertNotEmpty($response['signature'], 'Signature should not be empty');
 
 		if ($verify === 'verify') {
-			$result = openssl_verify($response['deviceIdentifier'], base64_decode($response['signature']), $response['publicKey'], OPENSSL_ALGO_SHA512);
+			$result = openssl_verify($response['deviceIdentifier'], base64_decode((string)$response['signature']), $response['publicKey'], OPENSSL_ALGO_SHA512);
 			Assert::assertEquals(true, $result, 'Failed to verify the signature');
 		} else {
 			/**
@@ -320,8 +320,8 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 		]);
 		$details = openssl_pkey_get_details($key);
 		// Build uncompressed public key: 0x04 || x || y (65 bytes)
-		$x = str_pad($details['ec']['x'], 32, "\0", STR_PAD_LEFT);
-		$y = str_pad($details['ec']['y'], 32, "\0", STR_PAD_LEFT);
+		$x = str_pad((string)$details['ec']['x'], 32, "\0", STR_PAD_LEFT);
+		$y = str_pad((string)$details['ec']['y'], 32, "\0", STR_PAD_LEFT);
 		$uncompressed = "\x04" . $x . $y;
 		$this->webPushPublicKey = rtrim(strtr(base64_encode($uncompressed), '+/', '-_'), '=');
 

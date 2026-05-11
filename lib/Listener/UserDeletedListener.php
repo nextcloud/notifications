@@ -20,8 +20,8 @@ use OCP\User\Events\UserDeletedEvent;
  */
 class UserDeletedListener implements IEventListener {
 	public function __construct(
-		private Handler $handler,
-		private SettingsMapper $settingsMapper,
+		private readonly Handler $handler,
+		private readonly SettingsMapper $settingsMapper,
 	) {
 	}
 

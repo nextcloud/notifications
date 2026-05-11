@@ -36,7 +36,7 @@ class ClientService {
 
 		$result = $query->executeQuery();
 		while ($row = $result->fetch()) {
-			if (preg_match('/ \(Talk Desktop Client - [A-Za-z ]+\)$/', $row['name'])) {
+			if (preg_match('/ \(Talk Desktop Client - [A-Za-z ]+\)$/', (string)$row['name'])) {
 				$result->closeCursor();
 				return true;
 			}

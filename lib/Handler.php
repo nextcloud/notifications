@@ -335,10 +335,10 @@ class Handler {
 			->setUser($row['user'])
 			->setDateTime($dateTime)
 			->setObject($row['object_type'], $row['object_id'])
-			->setSubject($row['subject'], (array)json_decode($row['subject_parameters'], true));
+			->setSubject($row['subject'], (array)json_decode((string)$row['subject_parameters'], true));
 
 		if ($row['message'] !== '' && $row['message'] !== null) {
-			$notification->setMessage($row['message'], (array)json_decode($row['message_parameters'], true));
+			$notification->setMessage($row['message'], (array)json_decode((string)$row['message_parameters'], true));
 		}
 		if ($row['link'] !== '' && $row['link'] !== null) {
 			$notification->setLink($row['link']);
@@ -347,7 +347,7 @@ class Handler {
 			$notification->setIcon($row['icon']);
 		}
 
-		$actions = (array)json_decode($row['actions'], true);
+		$actions = (array)json_decode((string)$row['actions'], true);
 		foreach ($actions as $actionData) {
 			$action = $notification->createAction();
 			$action->setLabel($actionData['label'])

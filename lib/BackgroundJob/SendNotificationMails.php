@@ -15,8 +15,8 @@ use OCP\BackgroundJob\TimedJob;
 class SendNotificationMails extends TimedJob {
 	public function __construct(
 		ITimeFactory $timeFactory,
-		private MailNotifications $mailNotifications,
-		private bool $isCLI,
+		private readonly MailNotifications $mailNotifications,
+		private readonly bool $isCLI,
 	) {
 		parent::__construct($timeFactory);
 	}

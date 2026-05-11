@@ -52,7 +52,7 @@ class Application extends \OCP\AppFramework\App implements IBootstrap {
 
 	#[\Override]
 	public function boot(IBootContext $context): void {
-		$context->injectFn(\Closure::fromCallable([$this, 'registerApp']));
+		$context->injectFn($this->registerApp(...));
 	}
 
 	public function registerApp(IManager $notificationManager): void {

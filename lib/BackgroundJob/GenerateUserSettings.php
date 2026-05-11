@@ -19,9 +19,9 @@ use OCP\IUserManager;
 class GenerateUserSettings extends TimedJob {
 	public function __construct(
 		ITimeFactory $time,
-		private IDBConnection $connection,
-		private IUserManager $userManager,
-		private SettingsMapper $settingsMapper,
+		private readonly IDBConnection $connection,
+		private readonly IUserManager $userManager,
+		private readonly SettingsMapper $settingsMapper,
 	) {
 		parent::__construct($time);
 

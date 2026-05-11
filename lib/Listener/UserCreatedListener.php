@@ -19,7 +19,7 @@ use OCP\User\Events\UserCreatedEvent;
  */
 class UserCreatedListener implements IEventListener {
 	public function __construct(
-		private SettingsMapper $settingsMapper,
+		private readonly SettingsMapper $settingsMapper,
 	) {
 	}
 
