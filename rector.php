@@ -6,7 +6,9 @@ declare(strict_types=1);
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+use Nextcloud\Rector\Set\NextcloudSets;
 use Rector\Config\RectorConfig;
+use Rector\PHPUnit\Set\PHPUnitSetList;
 
 return RectorConfig::configure()
 	->withPaths([
@@ -16,5 +18,12 @@ return RectorConfig::configure()
 		__DIR__ . '/tests/Integration',
 		__DIR__ . '/tests/Unit',
 	])
-	->withPhpSets(php81: true)
+	->withSkipPath(__DIR__ . '/lib/autoload')
+	->withSkipPath(__DIR__ . '/lib/Vendor')
+	->withSkipPath(__DIR__ . '/tests/Integration/vendor')
+	->withPhpSets(php82: true)
+	->withSets([
+		PHPUnitSetList::PHPUNIT_110,
+		NextcloudSets::NEXTCLOUD_34,
+	])
 	->withTypeCoverageLevel(0);
