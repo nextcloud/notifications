@@ -208,7 +208,7 @@ class Push {
 		}
 
 		$devices = array_values(array_filter($devices, function ($device) use ($app) {
-			$appTypes = explode(',', $device['app_types']);
+			$appTypes = explode(',', (string)$device['app_types']);
 			return $device['activated'] && (\in_array($app, $appTypes)
 				|| (\in_array('all', $appTypes) && !\in_array('-' . $app, $appTypes)));
 		}));
@@ -364,7 +364,7 @@ class Push {
 				$notification = $this->notificationManager->prepare($notification, $language);
 			} catch (AlreadyProcessedException|IncompleteParsedNotificationException|\InvalidArgumentException $e) {
 				// FIXME remove \InvalidArgumentException in Nextcloud 39
-				$this->printInfo('Error when preparing notification for push: ' . get_class($e));
+				$this->printInfo('Error when preparing notification for push: ' . $e::class);
 				return;
 			} finally {
 				$this->notificationManager->setPreparingPushNotification(false);
@@ -442,8 +442,8 @@ class Push {
 
 		$userKey = $this->keyManager->getKey($user);
 
-		$this->printInfo('Private user key size: ' . strlen($userKey->getPrivate()));
-		$this->printInfo('Public user key size: ' . strlen($userKey->getPublic()));
+		$this->printInfo('Private user key size: ' . strlen((string)$userKey->getPrivate()));
+		$this->printInfo('Public user key size: ' . strlen((string)$userKey->getPublic()));
 
 		$this->printInfo('');
 		$this->printInfo('Found ' . count($devices) . ' devices registered for push notifications');
@@ -623,7 +623,7 @@ class Push {
 		foreach ($devices as $device) {
 			$device['token'] = (int)$device['token'];
 			try {
-				$proxyServer = rtrim($device['proxyserver'], '/');
+				$proxyServer = rtrim((string)$device['proxyserver'], '/');
 				if (!isset($this->payloadsToSend[$proxyServer])) {
 					$this->payloadsToSend[$proxyServer] = [];
 				}
@@ -964,7 +964,7 @@ class Push {
 		$priority = $ret['urgency'];
 		$type = $ret['type'];
 
-		$this->printInfo('Device public key size: ' . strlen($device['devicepublickey']));
+		$this->printInfo('Device public key size: ' . strlen((string)$device['devicepublickey']));
 		$this->printInfo('Data to encrypt is: ' . json_encode($data));
 
 		$padding = $this->appConfig->getAppValueString('push_encryption_padding', 'PKCS1') === 'OAEP' ? OPENSSL_PKCS1_OAEP_PADDING : OPENSSL_PKCS1_PADDING;
@@ -980,8 +980,8 @@ class Push {
 		} else {
 			$this->printInfo('<error>Failed to signed encrypted push subject</error>');
 		}
-		$base64EncryptedSubject = base64_encode($encryptedSubject);
-		$base64Signature = base64_encode($signature);
+		$base64EncryptedSubject = base64_encode((string)$encryptedSubject);
+		$base64Signature = base64_encode((string)$signature);
 
 		return [
 			'deviceIdentifier' => $device['deviceidentifier'],
@@ -1014,8 +1014,8 @@ class Push {
 		}
 
 		openssl_sign($encryptedSubject, $signature, $userKey->getPrivate(), OPENSSL_ALGO_SHA512);
-		$base64EncryptedSubject = base64_encode($encryptedSubject);
-		$base64Signature = base64_encode($signature);
+		$base64EncryptedSubject = base64_encode((string)$encryptedSubject);
+		$base64Signature = base64_encode((string)$signature);
 
 		return [
 			'remaining' => $remainingIds,

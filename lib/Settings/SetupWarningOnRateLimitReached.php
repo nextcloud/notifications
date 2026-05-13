@@ -17,9 +17,9 @@ use OCP\SetupCheck\SetupResult;
 
 class SetupWarningOnRateLimitReached implements ISetupCheck {
 	public function __construct(
-		private IAppConfig $appConfig,
-		private ITimeFactory $timeFactory,
-		private IL10N $l,
+		private readonly IAppConfig $appConfig,
+		private readonly ITimeFactory $timeFactory,
+		private readonly IL10N $l,
 	) {
 	}
 

@@ -140,7 +140,7 @@ class PushController extends OCSController {
 		return new DataResponse([
 			'publicKey' => $key->getPublic(),
 			'deviceIdentifier' => $deviceIdentifier,
-			'signature' => base64_encode($signature),
+			'signature' => base64_encode((string)$signature),
 		], $created ? Http::STATUS_CREATED : Http::STATUS_OK);
 	}
 
