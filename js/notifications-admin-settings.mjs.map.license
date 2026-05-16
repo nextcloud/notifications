@@ -8,5 +8,5 @@ This file is generated from multiple sources. Included packages:
 	- version: 9.8.0
 	- license: AGPL-3.0-or-later
 - notifications
-	- version: 7.0.0-dev.0
+	- version: 8.0.0-dev.0
 	- license: AGPL-3.0-only
