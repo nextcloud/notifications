@@ -25,3 +25,4 @@ a965b7d4820a97cc232a24f6caf90d95 psalm.yml
 78bd5cbcc4b48cb9b0d1b0fbbb4403d7 update-nextcloud-ocp-approve-merge.yml
 c62537b3800cce229cae328bd206a3d4 update-nextcloud-ocp.yml
 22604c31b526de270a080eb19967a638 update-stable-titles.yml
+92a9def3f7980550ca63038403f43182 npm-build.yml
