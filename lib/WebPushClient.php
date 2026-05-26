@@ -66,8 +66,14 @@ class WebPushClient {
 	 */
 	private function getVapid(): array {
 		// Do not use lazy for now
-		$publicKey = $this->appConfig->getAppValueString('webpush_vapid_pubkey');
-		$privateKey = $this->appConfig->getAppValueString('webpush_vapid_privkey');
+		try {
+			$publicKey = $this->appConfig->getAppValueString('webpush_vapid_pubkey');
+			$privateKey = $this->appConfig->getAppValueString('webpush_vapid_privkey');
+		} catch (\Throwable) {
+			// Decryption failed (e.g. mismatched instance secret), regenerate keys
+			$publicKey = '';
+			$privateKey = '';
+		}
 		if ($publicKey === '' || $privateKey === '') {
 			/** @var array{publicKey: string, privateKey: string} $vapid */
 			$vapid = VAPID::createVapidKeys();
