@@ -447,7 +447,7 @@ class Push {
 
 		$this->printInfo('');
 		$this->printInfo('Found ' . count($devices) . ' devices registered for push notifications');
-		$isTalkNotification = \in_array($notification->getApp(), ['spreed', 'talk', 'admin_notification_talk'], true);
+
 		$devices = $this->filterProxyDeviceList($devices, $notification->getApp());
 		if (empty($devices)) {
 			$this->printInfo('<comment>No devices left after filtering</comment>');
@@ -461,7 +461,7 @@ class Push {
 			$this->printInfo('Device token: ' . $device['token']);
 
 			try {
-				$payload = json_encode($this->encryptAndSign($userKey->getPrivate(), $device, $id, $notification, $isTalkNotification), JSON_THROW_ON_ERROR);
+				$payload = json_encode($this->encryptAndSign($userKey->getPrivate(), $device, $id, $notification), JSON_THROW_ON_ERROR);
 
 				$proxyServer = rtrim($device['proxyserver'], '/');
 				if (!isset($this->payloadsToSend[$proxyServer])) {
@@ -952,13 +952,12 @@ class Push {
 	 * @param array $device
 	 * @param int $id
 	 * @param INotification $notification
-	 * @param bool $isTalkNotification
 	 * @return array
 	 * @psalm-return array{deviceIdentifier: string, pushTokenHash: string, subject: string, signature: string, priority: string, type: string}
 	 * @throws InvalidTokenException
 	 * @throws \InvalidArgumentException
 	 */
-	protected function encryptAndSign(string $userPrivateKey, array $device, int $id, INotification $notification, bool $isTalkNotification): array {
+	protected function encryptAndSign(string $userPrivateKey, array $device, int $id, INotification $notification): array {
 		$data = $this->encodeNotif($id, $notification, 200);
 		$ret = $this->getNotifTopicAndUrgency($data['app'], $data['type']);
 		$priority = $ret['urgency'];
