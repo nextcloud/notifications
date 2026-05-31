@@ -296,7 +296,7 @@ class Push {
 			}
 
 			try {
-				$payload = json_encode($this->encryptAndSign($userKey, $device, $id, $notification, $isTalkNotification), JSON_THROW_ON_ERROR);
+				$payload = json_encode($this->encryptAndSign($userKey->getPrivate(), $device, $id, $notification, $isTalkNotification), JSON_THROW_ON_ERROR);
 
 				$proxyServer = rtrim($device['proxyserver'], '/');
 				if (!isset($this->payloadsToSend[$proxyServer])) {
@@ -393,7 +393,7 @@ class Push {
 				}
 
 				if ($deleteAll) {
-					$data = $this->encryptAndSignDelete($userKey, $device, null);
+					$data = $this->encryptAndSignDelete($userKey->getPrivate(), $device, null);
 					try {
 						$this->payloadsToSend[$proxyServer][] = json_encode($data['payload'], JSON_THROW_ON_ERROR);
 					} catch (\JsonException $e) {
@@ -403,7 +403,7 @@ class Push {
 					$temp = $notificationIds;
 
 					while (!empty($temp)) {
-						$data = $this->encryptAndSignDelete($userKey, $device, $temp);
+						$data = $this->encryptAndSignDelete($userKey->getPrivate(), $device, $temp);
 						$temp = $data['remaining'];
 						try {
 							$this->payloadsToSend[$proxyServer][] = json_encode($data['payload'], JSON_THROW_ON_ERROR);
@@ -602,7 +602,7 @@ class Push {
 	}
 
 	/**
-	 * @param Key $userKey
+	 * @param string $userPrivateKey
 	 * @param array $device
 	 * @param int $id
 	 * @param INotification $notification
@@ -612,7 +612,7 @@ class Push {
 	 * @throws InvalidTokenException
 	 * @throws \InvalidArgumentException
 	 */
-	protected function encryptAndSign(Key $userKey, array $device, int $id, INotification $notification, bool $isTalkNotification): array {
+	protected function encryptAndSign(string $userPrivateKey, array $device, int $id, INotification $notification, bool $isTalkNotification): array {
 		$data = [
 			'nid' => $id,
 			'app' => $notification->getApp(),
@@ -621,9 +621,11 @@ class Push {
 			'id' => $notification->getObjectId(),
 		];
 
+		$jsonData = (string)json_encode($data);
+
 		// Max length of encryption is ~240, so we need to make sure the subject is shorter.
 		// Also, subtract two for encapsulating quotes will be added.
-		$maxDataLength = 200 - strlen(json_encode($data)) - 2;
+		$maxDataLength = 200 - strlen($jsonData) - 2;
 		$data['subject'] = Util::shortenMultibyteString($notification->getParsedSubject(), $maxDataLength);
 		if ($notification->getParsedSubject() !== $data['subject']) {
 			$data['subject'] .= '…';
@@ -641,17 +643,17 @@ class Push {
 		}
 
 		$this->printInfo('Device public key size: ' . strlen($device['devicepublickey']));
-		$this->printInfo('Data to encrypt is: ' . json_encode($data));
+		$this->printInfo('Data to encrypt is: ' . $jsonData);
 
 		$padding = $this->appConfig->getAppValueString('push_encryption_padding', 'PKCS1') === 'OAEP' ? OPENSSL_PKCS1_OAEP_PADDING : OPENSSL_PKCS1_PADDING;
-		if (!openssl_public_encrypt(json_encode($data), $encryptedSubject, $device['devicepublickey'], $padding)) {
-			$error = openssl_error_string();
+		if (!openssl_public_encrypt($jsonData, $encryptedSubject, $device['devicepublickey'], $padding)) {
+			$error = openssl_error_string() ?: 'Unknown OpenSSL error';
 			$this->log->error($error, ['app' => 'notifications']);
 			$this->printInfo('<error>Error while encrypting data: "' . $error . '"</error>');
 			throw new \InvalidArgumentException('Failed to encrypt message for device');
 		}
 
-		if (openssl_sign($encryptedSubject, $signature, $userKey->getPrivate(), OPENSSL_ALGO_SHA512)) {
+		if (openssl_sign($encryptedSubject, $signature, $userPrivateKey, OPENSSL_ALGO_SHA512)) {
 			$this->printInfo('Signed encrypted push subject');
 		} else {
 			$this->printInfo('<error>Failed to signed encrypted push subject</error>');
@@ -670,15 +672,15 @@ class Push {
 	}
 
 	/**
-	 * @param Key $userKey
+	 * @param string $userPrivateKey
 	 * @param array $device
 	 * @param ?int[] $ids
 	 * @return array
-	 * @psalm-return array{remaining: list<int>, payload: array{deviceIdentifier: string, pushTokenHash: string, subject: string, signature: string, priority: string, type: string}}
+	 * @psalm-return array{remaining: array<array-key, int>, payload: array{deviceIdentifier: string, pushTokenHash: string, subject: string, signature: string, priority: string, type: string}}
 	 * @throws InvalidTokenException
 	 * @throws \InvalidArgumentException
 	 */
-	protected function encryptAndSignDelete(Key $userKey, array $device, ?array $ids): array {
+	protected function encryptAndSignDelete(string $userPrivateKey, array $device, ?array $ids): array {
 		$remainingIds = [];
 		if ($ids === null) {
 			$data = [
@@ -698,12 +700,13 @@ class Push {
 		}
 
 		$padding = $this->appConfig->getAppValueString('push_encryption_padding', 'PKCS1') === 'OAEP' ? OPENSSL_PKCS1_OAEP_PADDING : OPENSSL_PKCS1_PADDING;
-		if (!openssl_public_encrypt(json_encode($data), $encryptedSubject, $device['devicepublickey'], $padding)) {
-			$this->log->error(openssl_error_string(), ['app' => 'notifications']);
+		if (!openssl_public_encrypt(json_encode($data, JSON_THROW_ON_ERROR), $encryptedSubject, $device['devicepublickey'], $padding)) {
+			$error = openssl_error_string() ?: 'Unknown OpenSSL error';
+			$this->log->error($error, ['app' => 'notifications']);
 			throw new \InvalidArgumentException('Failed to encrypt message for device');
 		}
 
-		openssl_sign($encryptedSubject, $signature, $userKey->getPrivate(), OPENSSL_ALGO_SHA512);
+		openssl_sign($encryptedSubject, $signature, $userPrivateKey, OPENSSL_ALGO_SHA512);
 		$base64EncryptedSubject = base64_encode($encryptedSubject);
 		$base64Signature = base64_encode($signature);
 
