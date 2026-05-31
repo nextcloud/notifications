@@ -826,7 +826,7 @@ sd7MhWnjKf7EX9GJD0VhLabFY/KrloJkyL7gOY21xFvmnNqwvH60eOxbVPzlYjaN
 
 			$push->expects($this->exactly(1))
 				->method('encryptAndSign')
-				->with($this->anything(), $devices[$pushedDevice], $this->anything(), $this->anything(), $isTalkNotification)
+				->with($this->anything(), $devices[$pushedDevice], $this->anything(), $this->anything())
 				->willReturn(['Payload']);
 
 			/** @var IClient&MockObject $client */
