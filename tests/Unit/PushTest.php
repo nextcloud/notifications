@@ -553,7 +553,7 @@ FQIDAQAB
 			->method('getAppValueString')
 			->willReturnMap([
 				['subscription_aware_server', 'https://push-notifications.nextcloud.com', 'https://push-notifications.nextcloud.com'],
-				['push_encryption_padding', 'PKCS1', $padding],
+				['push_encryption_padding', 'OAEP', $padding],
 			]);
 
 		$this->globalAppConfig
