@@ -10,6 +10,7 @@ namespace OCA\Notifications\BackgroundJob;
 
 use OCA\Notifications\Model\Settings;
 use OCA\Notifications\Model\SettingsMapper;
+use OCP\AppFramework\Services\IAppConfig;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\BackgroundJob\TimedJob;
 use OCP\IDBConnection;
@@ -22,6 +23,7 @@ class GenerateUserSettings extends TimedJob {
 		private readonly IDBConnection $connection,
 		private readonly IUserManager $userManager,
 		private readonly SettingsMapper $settingsMapper,
+		private readonly IAppConfig $appConfig,
 	) {
 		parent::__construct($time);
 
@@ -31,6 +33,18 @@ class GenerateUserSettings extends TimedJob {
 
 	#[\Override]
 	protected function run($argument): void {
+		$update = $this->connection->getQueryBuilder();
+		$update->update('notifications_settings')
+			->set('next_send_time', $update->createNamedParameter(1))
+			->where($update->expr()->eq('next_send_time', $update->createNamedParameter(0)))
+			->andWhere($update->expr()->neq('batch_time', $update->createNamedParameter(Settings::EMAIL_SEND_OFF)));
+
+		$batchTime = $this->appConfig->getAppValueInt('setting_batchtime');
+		if ($batchTime === Settings::EMAIL_SEND_OFF) {
+			$update->andWhere($update->expr()->neq('batch_time', $update->createNamedParameter(Settings::EMAIL_SEND_DEFAULT)));
+		}
+		$update->executeStatement();
+
 		$query = $this->connection->getQueryBuilder();
 		$query->select('notification_id')
 			->from('notifications')
@@ -42,7 +56,7 @@ class GenerateUserSettings extends TimedJob {
 		$result->closeCursor();
 
 		$this->userManager->callForSeenUsers(function (IUser $user) use ($maxId): void {
-			if ($user->isEnabled()) {
+			if (!$user->isEnabled()) {
 				return;
 			}
 
