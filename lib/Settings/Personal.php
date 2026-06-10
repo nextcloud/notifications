@@ -48,13 +48,15 @@ class Personal implements ISettings {
 				$settingBatchTime = $this->appConfig->getAppValueInt('setting_batchtime');
 			}
 		} catch (DoesNotExistException) {
+			$settingBatchTime = $this->appConfig->getAppValueInt('setting_batchtime');
+
 			$settings = new Settings();
 			$settings->setUserId($user->getUID());
 			$settings->setBatchTime(Settings::EMAIL_SEND_DEFAULT);
-			$settings->setNextSendTime(1);
+			if ($settingBatchTime !== Settings::EMAIL_SEND_OFF) {
+				$settings->setNextSendTime(1);
+			}
 			$this->settingsMapper->insert($settings);
-
-			$settingBatchTime = $this->appConfig->getAppValueInt('setting_batchtime');
 		}
 
 		$defaultSoundNotification = $this->appConfig->getAppValueBool('sound_notification') ? 'yes' : 'no';
