@@ -455,14 +455,16 @@ class PushTest extends TestCase {
 
 	public static function dataProxyPushToDeviceSending(): array {
 		return [
-			[true],
-			[false],
+			[true, 'PKCS1'],
+			[true, 'OAEP'],
+			[false, 'PKCS1'],
+			[false, 'OAEP'],
 		];
 	}
 
 	#[DataProvider(methodName: 'dataProxyPushToDeviceSending')]
-	public function testPushToDeviceSending(bool $isDebug): void {
-		$push = $this->getPush(['getProxyDevicesForUser', 'encryptAndSign', 'deleteProxyPushToken', 'filterByTokenAge', 'deleteProxyPushTokenByDeviceIdentifier']);
+	public function testPushToDeviceSending(bool $isDebug, string $padding): void {
+		$push = $this->getPush(['getProxyDevicesForUser', 'deleteProxyPushToken', 'filterByTokenAge', 'deleteProxyPushTokenByDeviceIdentifier']);
 
 		/** @var INotification&MockObject $notification */
 		$notification = $this->createMock(INotification::class);
@@ -478,6 +480,16 @@ class PushTest extends TestCase {
 			->with('valid')
 			->willReturn($user);
 
+		$devicePublicKey = '-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1SN9sDJGNifnEv/y1UkP
+tggJA0xks5b0WN/Ida3GYK4Zy/ZWTa3wAknCerKkZC2rrFbcP55HA/oSp8fuUJC3
+q4b59znuhGoQtvvdAwUx6qSIPheAGs/gfMpNWO/bfH02oBu+98eTkxciuNKPxBFk
+wRdSSUxsHwkzCOw+er6oxriVSkc7tsNVaXg+ZpzW15cUQugjT6JDDjg5ftSeGsLj
+VV70QXge4uD3ege/lsa1N8iUVCjeMJHobyQm/hhGE990b6BzTgOIC1pGsOPbOsZB
+/5n54G4EUX9dixSSF90fDJs83GWQ+AIjf/uHmj3vFMe1bnqIwq9P17+IWe5x9Z04
+FQIDAQAB
+-----END PUBLIC KEY-----';
+
 		$push->expects($this->once())
 			->method('getProxyDevicesForUser')
 			->willReturn([
@@ -485,31 +497,49 @@ class PushTest extends TestCase {
 					'proxyserver' => 'proxyserver1',
 					'token' => 16,
 					'apptype' => 'other',
+					'devicepublickey' => $devicePublicKey,
+					'deviceidentifier' => 'ident16',
+					'pushtokenhash' => 'hash16',
 				],
 				[
 					'proxyserver' => 'proxyserver1/',
 					'token' => 23,
 					'apptype' => 'other',
+					'devicepublickey' => $devicePublicKey,
+					'deviceidentifier' => 'ident23',
+					'pushtokenhash' => 'hash23',
 				],
 				[
 					'proxyserver' => 'badrequest',
 					'token' => 42,
 					'apptype' => 'other',
+					'devicepublickey' => $devicePublicKey,
+					'deviceidentifier' => 'ident42',
+					'pushtokenhash' => 'hash42',
 				],
 				[
 					'proxyserver' => 'unavailable',
 					'token' => 48,
 					'apptype' => 'other',
+					'devicepublickey' => $devicePublicKey,
+					'deviceidentifier' => 'ident48',
+					'pushtokenhash' => 'hash48',
 				],
 				[
 					'proxyserver' => 'ok',
 					'token' => 64,
 					'apptype' => 'other',
+					'devicepublickey' => $devicePublicKey,
+					'deviceidentifier' => 'ident64',
+					'pushtokenhash' => 'hash64',
 				],
 				[
 					'proxyserver' => 'badrequest-with-devices',
 					'token' => 128,
 					'apptype' => 'other',
+					'devicepublickey' => $devicePublicKey,
+					'deviceidentifier' => 'ident128',
+					'pushtokenhash' => 'hash128',
 				],
 			]);
 
@@ -519,9 +549,12 @@ class PushTest extends TestCase {
 			->willReturn($isDebug);
 
 		$this->appConfig
+			->expects($this->exactly(7))
 			->method('getAppValueString')
-			->with('subscription_aware_server', 'https://push-notifications.nextcloud.com')
-			->willReturn('https://push-notifications.nextcloud.com');
+			->willReturnMap([
+				['subscription_aware_server', 'https://push-notifications.nextcloud.com', 'https://push-notifications.nextcloud.com'],
+				['push_encryption_padding', 'PKCS1', $padding],
+			]);
 
 		$this->globalAppConfig
 			->method('getValueString')
@@ -541,6 +574,36 @@ class PushTest extends TestCase {
 		/** @var Key&MockObject $key */
 		$key = $this->createMock(Key::class);
 
+		$key->method('getPrivate')
+			->willReturn('-----BEGIN PRIVATE KEY-----
+MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCkGi7rj6BWi9U8
+lptb1rBKVFENFJjq690Ap8wAdR9cxGYE+nzdFxlcRxh17GwyWaBDEPWtL5WDPxi0
+8XjQWpwfYFzjMLLzGMZaj7Jiam5rJM12qFEvYyw9s26LzebeLTzvp28L2TIWCswi
+dM0OvrYGGvL9f+N+6Oev5cwiSJk0WrHceL+P/wFH3mmOdOBHmKkofeDZoS1XkNOE
+o1EpwepvDibUjc3vHPk1IHg4hsfKk1O9+uHiBf9xqm//M9MKrM9mlOButbo2bOhu
+1YN/2wKww7bU/c7JYgVeljpfN0sMuKmhMiuje2KqOU8v8yIREkKMyxd4+B+s3eNG
+PdVBf57FAgMBAAECggEAAMegdOm3xPyXMk+f0yNlh5kzDKE1itCL4aYIA6LZnLmp
+bHHJWZI4kTT1IHPdgDeYlPBjgAOuEFEsjhLySoXwoF4BIIgErCKD9xa9pBIojmVm
+LovlNfFlvScDKgsjUed+5ZguDLcYO7gyQvqTzS6ivXzq6TezeVDfeUgBTg3JG6n/
+BjgIek1jV4q9OrQTOdR3eAPwW6pbLG820OB87Cx/A0JHdEgCevFCHmMUbk7yXQrh
+W/JwTrnV66LBPjSWQcsHUNWrl2nqV08BYoC1uy32uTpUlejCdWDuHuB1DYOpn0KY
+nyiVTNF/MZ0E9sOsKKgbodBz4n3cc6v7NckpFpKMHwKBgQDUeaakKYwatNg6YEHP
+OB3iH62bAe7Ej6vg0EPYgr6fzRjAETzTrpZZfzmrGwTxFBczFrx8hOPsyDkpiEU5
+77L90jMOb9NSasjS8Pv0GM2LY/8H8Ck4RwXF/E3maSbc2bAY9ZXH6m82YW6iHnfc
+G9L0xVCq549axd1tWUnXdukiuwKBgQDFt9KDtlwMutuQOj+Eup7L0sMAxO4jlghH
+hTxSAqQ5mlodbQhULXRk4QWGMjjKG0y4XY2rw+VgBQzFT8W3jlThR3BMWKNv3P+M
+zlzkoxcoOio7K25im4Yb0NheOnaxaqhLcRwXcxa5E9kn+108xYIYAACZgmkZo7ab
+PCoQicnsfwKBgAzyEIYmBeRGqnn8DWZru95gIbq1BnAxdL5w0gFqDeU8oMprAnK/
+S2fOiZv0PHvXxoYVV4yaqCxwEpOGOvmJsjUmzneNtqlp2iyIBEHeFP/uKsa4Cjrk
+kOR8N97W/0grd0A+Dk8s6HO+wffctV7SzyqcrwqKq0BTl+cmrooTM6crAoGATjjT
+iFh1QnQKuZzR1GkgufLAQ2Wl8V5CGEmV+7wfzMpMLKgeS29QRTjhPp5P6WWzjJ02
+l2YBMWPOEaHlzyD4Y8gnnYzT3EXKtKJQDgSX/MpGOvKL0WdGP2r4rw7iNn7D5lTx
+kDVwH/jCSRchZBGfzm7xzcnSWtpyPCgpXDGnOXECgYEAyqDrBeKlUDDltoe6xs4K
+gEG+V5E5cwZqvSoOlYHqbtP9Dms6z6G8TvPZblwlbgwXFofrd5LN/vK3pZPiU5Y+
+sd7MhWnjKf7EX9GJD0VhLabFY/KrloJkyL7gOY21xFvmnNqwvH60eOxbVPzlYjaN
+96rK6qkqEdUgXj0CpJZHAMw=
+-----END PRIVATE KEY-----');
+
 		$this->keyManager->expects($this->once())
 			->method('getKey')
 			->with($user)
@@ -549,10 +612,6 @@ class PushTest extends TestCase {
 		$push->expects($this->once())
 			->method('filterByTokenAge')
 			->willReturnArgument(0);
-
-		$push->expects($this->exactly(6))
-			->method('encryptAndSign')
-			->willReturn(['Payload']);
 
 		$push->expects($this->never())
 			->method('deleteProxyPushToken');
@@ -767,7 +826,7 @@ class PushTest extends TestCase {
 
 			$push->expects($this->exactly(1))
 				->method('encryptAndSign')
-				->with($this->anything(), $devices[$pushedDevice], $this->anything(), $this->anything(), $isTalkNotification)
+				->with($this->anything(), $devices[$pushedDevice], $this->anything(), $this->anything())
 				->willReturn(['Payload']);
 
 			/** @var IClient&MockObject $client */
