@@ -2,6 +2,8 @@
     "User not found" : "No se encontró el usuario",
     "Hello %s" : "Hola %s",
     "Hello %s," : "Hola %s,",
+    "You can change the frequency of these emails or disable them in the <a href=\"%s\">settings</a>." : "Puedes cambiar la frecuencia de estos correos electrónicos o deshabilitarlos en la <a href=\"%s\">configuración</a>.",
+    "You can change the frequency of these emails or disable them in the settings: %s" : "Puedes cambiar la frecuencia de estos correos electrónicos o deshabilitarlos en la configuración: %s",
     "Admin notifications" : "Notificaciones adminsitrativas",
     "Notifications" : "Notificaciones",
     "Failed to perform action" : "Se presentó una falla al ejeuctar la acción",
