@@ -298,6 +298,8 @@ class WebPushController extends OCSController {
 		if ($row['activated']) {
 			return ActivationSubStatus::OK;
 		}
+
+		$query = $this->db->getQueryBuilder();
 		$query->update('notifications_webpush')
 			->set('activated', $query->createNamedParameter(true))
 			->where($query->expr()->eq('uid', $query->createNamedParameter($user->getUID())))
