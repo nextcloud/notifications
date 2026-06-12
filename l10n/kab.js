@@ -1,12 +1,14 @@
 OC.L10N.register(
     "notifications",
     {
+    "User not found" : "Ur yettwaf ara useqdac",
     "Hello %s" : "Azul %s",
     "Hello %s," : "Azul %s,",
     "Notifications" : "Ilɣa",
     "Dismiss" : "Agi",
     "in {path}" : "deg {ubrid}",
     "No notifications" : "Ulac tisezmal",
+    "Never" : "Weṛǧin",
     "1 hour" : "1 n usrag",
     "1 day" : "1 n wass",
     "Your settings have been updated." : "Iɣewwaren-innek ttwaleqqmen",
