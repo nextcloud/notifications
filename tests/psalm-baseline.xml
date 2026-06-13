@@ -27,8 +27,6 @@
       <code><![CDATA[$this->keyManager]]></code>
       <code><![CDATA[$this->tokenProvider]]></code>
       <code><![CDATA[ClientException]]></code>
-      <code><![CDATA[Key]]></code>
-      <code><![CDATA[Key]]></code>
       <code><![CDATA[ServerException]]></code>
       <code><![CDATA[protected]]></code>
       <code><![CDATA[protected]]></code>
