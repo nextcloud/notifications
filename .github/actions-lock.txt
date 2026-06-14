@@ -23,7 +23,7 @@ e1d06d273d1f32cb839d8b2acc4982bc phpunit-sqlite.yml
 2f5f5a0851cc4bf00a0b89d009ab258a psalm.yml
 e2bd0fc8a290e1a8641487944e27103b reuse.yml
 a3440826636c0fd7c2d20b1de50363da update-nextcloud-ocp-approve-merge.yml
-76423540eed9320753c9e54e96193fe0 update-nextcloud-ocp.yml
+942a700573ae377e4b7777470d5739cf update-nextcloud-ocp.yml
 22604c31b526de270a080eb19967a638 update-stable-titles.yml
 e3c7b8f43850ad1d31c67fc0082b6bb8 sync-workflow-templates.yml
 21036682b2608cb871b19731ffeef31f npm-build.yml
