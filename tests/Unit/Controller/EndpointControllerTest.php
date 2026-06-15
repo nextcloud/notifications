@@ -268,8 +268,8 @@ class EndpointControllerTest extends TestCase {
 
 	public static function dataGetNotification(): array {
 		return [
-			['v1', 42, 'username1', [['$notification']]],
-			['v2', 21, 'username2', [['$notification']]],
+			['v1', 42, 'username1'],
+			['v2', 21, 'username2'],
 		];
 	}
 

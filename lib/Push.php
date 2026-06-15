@@ -980,8 +980,8 @@ class Push {
 		} else {
 			$this->printInfo('<error>Failed to signed encrypted push subject</error>');
 		}
-		$base64EncryptedSubject = base64_encode((string)$encryptedSubject);
-		$base64Signature = base64_encode((string)$signature);
+		$base64EncryptedSubject = base64_encode($encryptedSubject);
+		$base64Signature = base64_encode($signature);
 
 		return [
 			'deviceIdentifier' => $device['deviceidentifier'],
@@ -1015,8 +1015,8 @@ class Push {
 		}
 
 		openssl_sign($encryptedSubject, $signature, $userPrivateKey, OPENSSL_ALGO_SHA512);
-		$base64EncryptedSubject = base64_encode((string)$encryptedSubject);
-		$base64Signature = base64_encode((string)$signature);
+		$base64EncryptedSubject = base64_encode($encryptedSubject);
+		$base64Signature = base64_encode($signature);
 
 		return [
 			'remaining' => $remainingIds,
