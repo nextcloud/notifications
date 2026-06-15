@@ -11,7 +11,7 @@
 		"optimize-autoloader": true,
 		"classmap-authoritative": true,
 		"platform": {
-			"php": "8.2"
+			"php": "8.3"
 		},
 		"sort-packages": true,
 		"allow-plugins": {
@@ -29,7 +29,7 @@
 			"\"vendor/bin/mozart\" compose",
 			"composer dump-autoload"
 		],
-		"lint": "find . -name \\*.php -not -path './vendor/*' -not -path './build/*' -print0 | xargs -0 -n1 php -l",
+		"lint": "find . -name \\*.php -not -path './vendor/*' -not -path './vendor-bin/*' -not -path './tests/Integration/vendor/*' -not -path './build/*' -print0 | xargs -0 -n200 php -l",
 		"cs:check": "php-cs-fixer fix --dry-run --diff",
 		"cs:fix": "php-cs-fixer fix",
 		"openapi": "generate-spec --verbose",
