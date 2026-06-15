@@ -143,7 +143,7 @@ class GenerateTest extends TestCase {
 				['long-message', $long],
 				['dummy', false],
 			]);
-		$output = $this->createMock(OutputInterface::class);
+		$output = $this->createStub(OutputInterface::class);
 
 		$return = self::invokePrivate($this->command, 'execute', [$input, $output]);
 		$this->assertSame($exitCode, $return);

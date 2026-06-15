@@ -162,7 +162,6 @@ class AdminNotifications implements INotifier {
 
 				$notification->setIcon($this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('notifications', 'notifications-dark.svg')));
 				return $notification;
-
 				// Deal with known subjects
 			case 'cli':
 			case 'ocs':
@@ -188,7 +187,6 @@ class AdminNotifications implements INotifier {
 
 				$notification->setIcon($this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('notifications', 'notifications-dark.svg')));
 				return $notification;
-
 			default:
 				throw new UnknownNotificationException('subject');
 		}

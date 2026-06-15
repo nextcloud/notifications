@@ -21,9 +21,9 @@ return RectorConfig::configure()
 	->withSkipPath(__DIR__ . '/lib/autoload')
 	->withSkipPath(__DIR__ . '/lib/Vendor')
 	->withSkipPath(__DIR__ . '/tests/Integration/vendor')
-	->withPhpSets(php82: true)
+	->withPhpSets(php83: true)
 	->withSets([
-		PHPUnitSetList::PHPUNIT_110,
-		NextcloudSets::NEXTCLOUD_34,
+		PHPUnitSetList::PHPUNIT_120,
+		NextcloudSets::NEXTCLOUD_35,
 	])
 	->withTypeCoverageLevel(0);

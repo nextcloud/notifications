@@ -1,12 +1,12 @@
 {
 	"config": {
 		"platform": {
-			"php": "8.2"
+			"php": "8.3"
 		},
 		"sort-packages": true
 	},
 	"require-dev": {
-		"nextcloud/rector": "^0.5.1",
+		"nextcloud/rector": "^0.5.2",
 		"rector/rector": "^2.4"
 	},
 	"autoload": {

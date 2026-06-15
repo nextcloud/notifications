@@ -216,7 +216,6 @@ class Push {
 		return $this->filterByTokenAge($devices);
 	}
 
-
 	/**
 	 * @param array $devices
 	 * @psalm-param $devices list<array{id: int, uid: string, token: int, deviceidentifier: string, devicepublickey: string, devicepublickeyhash: string, pushtokenhash: string, proxyserver: string, apptype: string}>
@@ -1073,7 +1072,6 @@ class Push {
 
 		return $devices;
 	}
-
 
 	/**
 	 * @param string $uid

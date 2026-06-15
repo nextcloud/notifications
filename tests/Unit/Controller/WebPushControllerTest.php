@@ -254,7 +254,7 @@ class WebPushControllerTest extends TestCase {
 			'getWPClient'
 		]);
 
-		$user = $this->createMock(IUser::class);
+		$user = $this->createStub(IUser::class);
 		if ($userIsValid) {
 			$this->userSession->expects($this->any())
 				->method('getUser')
@@ -369,7 +369,7 @@ class WebPushControllerTest extends TestCase {
 			'activateSubscription',
 		]);
 
-		$user = $this->createMock(IUser::class);
+		$user = $this->createStub(IUser::class);
 		if ($userIsValid) {
 			$this->userSession->expects($this->any())
 				->method('getUser')
@@ -457,7 +457,7 @@ class WebPushControllerTest extends TestCase {
 			'deleteSubscription',
 		]);
 
-		$user = $this->createMock(IUser::class);
+		$user = $this->createStub(IUser::class);
 		if ($userIsValid) {
 			$this->userSession->expects($this->any())
 				->method('getUser')

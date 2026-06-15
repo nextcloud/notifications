@@ -50,7 +50,6 @@ class WebPushController extends OCSController {
 		parent::__construct($appName, $request);
 	}
 
-
 	/**
 	 * Return the server VAPID public key
 	 *
