@@ -42,7 +42,6 @@ class EndpointControllerTest extends TestCase {
 	protected Push&MockObject $push;
 	protected EndpointController $controller;
 
-
 	protected function setUp(): void {
 		parent::setUp();
 

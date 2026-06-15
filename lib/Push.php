@@ -216,7 +216,6 @@ class Push {
 		return $this->filterByTokenAge($devices);
 	}
 
-
 	/**
 	 * @param array $devices
 	 * @psalm-param $devices list<array{id: int, uid: string, token: int, deviceidentifier: string, devicepublickey: string, devicepublickeyhash: string, pushtokenhash: string, proxyserver: string, apptype: string}>
@@ -981,8 +980,8 @@ class Push {
 		} else {
 			$this->printInfo('<error>Failed to signed encrypted push subject</error>');
 		}
-		$base64EncryptedSubject = base64_encode($encryptedSubject);
-		$base64Signature = base64_encode($signature);
+		$base64EncryptedSubject = base64_encode((string)$encryptedSubject);
+		$base64Signature = base64_encode((string)$signature);
 
 		return [
 			'deviceIdentifier' => $device['deviceidentifier'],
@@ -1016,8 +1015,8 @@ class Push {
 		}
 
 		openssl_sign($encryptedSubject, $signature, $userPrivateKey, OPENSSL_ALGO_SHA512);
-		$base64EncryptedSubject = base64_encode($encryptedSubject);
-		$base64Signature = base64_encode($signature);
+		$base64EncryptedSubject = base64_encode((string)$encryptedSubject);
+		$base64Signature = base64_encode((string)$signature);
 
 		return [
 			'remaining' => $remainingIds,
@@ -1073,7 +1072,6 @@ class Push {
 
 		return $devices;
 	}
-
 
 	/**
 	 * @param string $uid

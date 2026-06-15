@@ -161,7 +161,7 @@ class PushTest extends TestCase {
 			->method('getExistingUser');
 
 		/** @var INotification&MockObject$notification */
-		$notification = $this->createMock(INotification::class);
+		$notification = $this->createStub(INotification::class);
 
 		$push->pushToDevice(23, $notification);
 	}
@@ -185,7 +185,7 @@ class PushTest extends TestCase {
 			->willReturn('valid');
 
 		/** @var IUser&MockObject $user */
-		$user = $this->createMock(IUser::class);
+		$user = $this->createStub(IUser::class);
 
 		$this->userManager->expects($this->once())
 			->method('getExistingUser')
@@ -218,7 +218,7 @@ class PushTest extends TestCase {
 			->willReturn('valid');
 
 		/** @var IUser&MockObject $user */
-		$user = $this->createMock(IUser::class);
+		$user = $this->createStub(IUser::class);
 
 		$this->userManager->expects($this->once())
 			->method('getExistingUser')
@@ -262,7 +262,7 @@ class PushTest extends TestCase {
 			->willReturn('valid');
 
 		/** @var IUser&MockObject $user */
-		$user = $this->createMock(IUser::class);
+		$user = $this->createStub(IUser::class);
 
 		$this->userManager->expects($this->once())
 			->method('getExistingUser')
@@ -287,9 +287,8 @@ class PushTest extends TestCase {
 			->with($notification, 'ru')
 			->willReturnArgument(0);
 
-
 		/** @var Key&MockObject $key */
-		$key = $this->createMock(Key::class);
+		$key = $this->createStub(Key::class);
 
 		$this->keyManager->expects($this->once())
 			->method('getKey')
@@ -327,7 +326,7 @@ class PushTest extends TestCase {
 			->willReturn('valid');
 
 		/** @var IUser&MockObject $user */
-		$user = $this->createMock(IUser::class);
+		$user = $this->createStub(IUser::class);
 
 		$this->userManager->expects($this->once())
 			->method('getExistingUser')
@@ -353,7 +352,7 @@ class PushTest extends TestCase {
 			->willReturnArgument(0);
 
 		/** @var Key&MockObject $key */
-		$key = $this->createMock(Key::class);
+		$key = $this->createStub(Key::class);
 
 		$this->keyManager->expects($this->once())
 			->method('getKey')
@@ -385,7 +384,7 @@ class PushTest extends TestCase {
 			->willReturn('valid');
 
 		/** @var IUser&MockObject $user */
-		$user = $this->createMock(IUser::class);
+		$user = $this->createStub(IUser::class);
 
 		$this->userManager->expects($this->once())
 			->method('getExistingUser')
@@ -418,7 +417,7 @@ class PushTest extends TestCase {
 			->willReturnArgument(0);
 
 		/** @var Key&MockObject $key */
-		$key = $this->createMock(Key::class);
+		$key = $this->createStub(Key::class);
 
 		$this->keyManager->expects($this->once())
 			->method('getKey')
@@ -473,7 +472,7 @@ class PushTest extends TestCase {
 			->willReturn('valid');
 
 		/** @var IUser&MockObject $user */
-		$user = $this->createMock(IUser::class);
+		$user = $this->createStub(IUser::class);
 
 		$this->userManager->expects($this->once())
 			->method('getExistingUser')
@@ -661,7 +660,6 @@ sd7MhWnjKf7EX9GJD0VhLabFY/KrloJkyL7gOY21xFvmnNqwvH60eOxbVPzlYjaN
 		$exception2->method('getResponse')
 			->willReturn($response2);
 
-
 		// Call 3
 		/** @var IResponse&MockObject $response1 */
 		$response3 = $this->createMock(IResponse::class);
@@ -669,7 +667,7 @@ sd7MhWnjKf7EX9GJD0VhLabFY/KrloJkyL7gOY21xFvmnNqwvH60eOxbVPzlYjaN
 			->method('getStatusCode')
 			->willReturn(Http::STATUS_OK);
 		/** @var StreamInterface&MockObject $body3 */
-		$body3 = $this->createMock(StreamInterface::class);
+		$body3 = $this->createStub(StreamInterface::class);
 		$response3->method('getBody')
 			->willReturn('');
 
@@ -773,7 +771,7 @@ sd7MhWnjKf7EX9GJD0VhLabFY/KrloJkyL7gOY21xFvmnNqwvH60eOxbVPzlYjaN
 		}
 
 		/** @var IUser&MockObject $user */
-		$user = $this->createMock(IUser::class);
+		$user = $this->createStub(IUser::class);
 
 		$this->userManager->expects($this->once())
 			->method('getExistingUser')
@@ -803,7 +801,7 @@ sd7MhWnjKf7EX9GJD0VhLabFY/KrloJkyL7gOY21xFvmnNqwvH60eOxbVPzlYjaN
 			->willReturnArgument(0);
 
 		/** @var Key&MockObject $key */
-		$key = $this->createMock(Key::class);
+		$key = $this->createStub(Key::class);
 
 		$this->keyManager->expects($this->once())
 			->method('getKey')
@@ -894,7 +892,7 @@ sd7MhWnjKf7EX9GJD0VhLabFY/KrloJkyL7gOY21xFvmnNqwvH60eOxbVPzlYjaN
 			->willReturn('someApp');
 
 		/** @var IUser&MockObject $user */
-		$user = $this->createMock(IUser::class);
+		$user = $this->createStub(IUser::class);
 
 		$this->userManager->expects($this->once())
 			->method('getExistingUser')
@@ -927,8 +925,7 @@ sd7MhWnjKf7EX9GJD0VhLabFY/KrloJkyL7gOY21xFvmnNqwvH60eOxbVPzlYjaN
 			->willReturn('someApp');
 
 		/** @var IUser&MockObject $user */
-		$user = $this->createMock(IUser::class);
-
+		$user = $this->createStub(IUser::class);
 
 		$this->userManager->expects($this->once())
 			->method('getExistingUser')
@@ -977,7 +974,7 @@ sd7MhWnjKf7EX9GJD0VhLabFY/KrloJkyL7gOY21xFvmnNqwvH60eOxbVPzlYjaN
 			->willReturn('someApp');
 
 		/** @var IUser&MockObject $user */
-		$user = $this->createMock(IUser::class);
+		$user = $this->createStub(IUser::class);
 
 		$this->userManager->expects($this->once())
 			->method('getExistingUser')
@@ -1038,7 +1035,7 @@ sd7MhWnjKf7EX9GJD0VhLabFY/KrloJkyL7gOY21xFvmnNqwvH60eOxbVPzlYjaN
 			->willReturn('someApp');
 
 		/** @var IUser&MockObject $user */
-		$user = $this->createMock(IUser::class);
+		$user = $this->createStub(IUser::class);
 
 		$this->userManager->expects($this->once())
 			->method('getExistingUser')
@@ -1102,7 +1099,7 @@ sd7MhWnjKf7EX9GJD0VhLabFY/KrloJkyL7gOY21xFvmnNqwvH60eOxbVPzlYjaN
 			->willReturn('someApp');
 
 		/** @var IUser&MockObject $user */
-		$user = $this->createMock(IUser::class);
+		$user = $this->createStub(IUser::class);
 
 		$this->userManager->expects($this->once())
 			->method('getExistingUser')
@@ -1261,7 +1258,7 @@ sd7MhWnjKf7EX9GJD0VhLabFY/KrloJkyL7gOY21xFvmnNqwvH60eOxbVPzlYjaN
 			->willReturn($notificationApp);
 
 		/** @var IUser&MockObject $user */
-		$user = $this->createMock(IUser::class);
+		$user = $this->createStub(IUser::class);
 
 		$this->userManager->expects($this->once())
 			->method('getExistingUser')

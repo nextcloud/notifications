@@ -23,7 +23,7 @@ return RectorConfig::configure()
 	->withSkipPath(__DIR__ . '/tests/Integration/vendor')
 	->withPhpSets(php82: true)
 	->withSets([
-		PHPUnitSetList::PHPUNIT_110,
+		PHPUnitSetList::PHPUNIT_120,
 		NextcloudSets::NEXTCLOUD_34,
 	])
 	->withTypeCoverageLevel(0);

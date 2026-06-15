@@ -88,7 +88,6 @@ FwIDAQAB
 -----END PUBLIC KEY-----
 ';
 
-
 	protected function setUp(): void {
 		parent::setUp();
 
@@ -314,7 +313,7 @@ FwIDAQAB
 			'savePushToken',
 		]);
 
-		$user = $this->createMock(IUser::class);
+		$user = $this->createStub(IUser::class);
 		if ($userIsValid) {
 			$this->userSession->expects($this->any())
 				->method('getUser')
@@ -428,7 +427,7 @@ FwIDAQAB
 			'deletePushToken',
 		]);
 
-		$user = $this->createMock(IUser::class);
+		$user = $this->createStub(IUser::class);
 		if ($userIsValid) {
 			$this->userSession->expects($this->any())
 				->method('getUser')
