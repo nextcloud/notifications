@@ -10,6 +10,7 @@ namespace OCA\Notifications\Model;
 
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\QBMapper;
+use OCP\AppFramework\Services\IAppConfig;
 use OCP\DB\Exception as DBException;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
@@ -22,7 +23,10 @@ use OCP\IDBConnection;
  * @method list<Settings> findEntities(IQueryBuilder $query)
  */
 class SettingsMapper extends QBMapper {
-	public function __construct(IDBConnection $db) {
+	public function __construct(
+		IDBConnection $db,
+		protected readonly IAppConfig $appConfig,
+	) {
 		parent::__construct($db, 'notifications_settings', Settings::class);
 	}
 
@@ -43,6 +47,10 @@ class SettingsMapper extends QBMapper {
 			$settings = new Settings();
 			$settings->setUserId($userId);
 			$settings->setBatchTime(Settings::EMAIL_SEND_DEFAULT);
+			$batchTime = $this->appConfig->getAppValueInt('setting_batchtime');
+			if ($batchTime !== Settings::EMAIL_SEND_OFF) {
+				$settings->setNextSendTime(1);
+			}
 			/** @var Settings $settings */
 			$settings = $this->insert($settings);
 
