@@ -1,6 +1,7 @@
 { "translations": {
     "Hello %s" : "Ndeewo %s",
     "Hello %s," : "Ndeewo %s",
-    "Notifications" : "Nziọkwà"
+    "Notifications" : "Nziọkwà",
+    "Dismiss" : "Dismiss"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

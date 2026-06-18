@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Hello %s" : "Hey %s",
     "Hello %s," : "Hey %s,",
+    "Dismiss" : "Dismiss",
     "in {path}" : "í {path}",
     "Never" : "ongantíð"
 },

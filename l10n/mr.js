@@ -4,6 +4,7 @@ OC.L10N.register(
     "Hello %s" : "नमस्कार %s",
     "Hello %s," : "नमस्कार %s,",
     "Notifications" : "अधिसूचना",
+    "Dismiss" : "Dismiss",
     "in {path}" : " {path} मध्ये",
     "Your settings have been updated." : "तुमच्या सेटिंग अद्ययावत करण्यात आल्या."
 },

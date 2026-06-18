@@ -4,6 +4,7 @@ OC.L10N.register(
     "Hello %s" : "Բարև %s",
     "Hello %s," : "Բարև %s,",
     "Notifications" : "Ծանուցում",
+    "Dismiss" : "Dismiss",
     "in {path}" : "դեպի {ուղի}",
     "Never" : "Երբեք",
     "Your settings have been updated." : "Ձեր կարգավորումներն թարմացվել են։",

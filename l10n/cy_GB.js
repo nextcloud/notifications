@@ -5,6 +5,7 @@ OC.L10N.register(
     "Hello %s" : "Helo %s",
     "Hello %s," : "Helo %s,",
     "Notifications" : "Hysbysiadau",
+    "Dismiss" : "Dismiss",
     "in {path}" : "yn {path}",
     "Your settings have been updated." : "Mae eich gosodiadau wedi'u diweddaru.",
     "None" : "Dim",
