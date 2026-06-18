@@ -4,6 +4,7 @@ OC.L10N.register(
     "Hello %s" : "Hai %s",
     "Hello %s," : "Hai %s,",
     "Notifications" : "Pemberitahuan",
+    "Dismiss" : "Dismiss",
     "in {path}" : "dalam {haluan}",
     "Your settings have been updated." : "Tetapan anda sudah dikemaskini.",
     "You need to set up your email address before you can receive notification emails." : "Anda perlu menyediakan alamat e-mel anda sebelum anda boleh menerima e-mel pemberitahuan."
