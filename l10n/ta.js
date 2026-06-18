@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Hello %s" : "வணக்கம் %s",
     "Hello %s," : "வணக்கம் %s,",
+    "Dismiss" : "Dismiss",
     "Your settings have been updated." : "உங்களின் அமைப்புகள் சேமிக்கப்பட்டன",
     "None" : "ஒன்றுமில்லை"
 },

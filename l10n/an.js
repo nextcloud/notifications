@@ -4,6 +4,7 @@ OC.L10N.register(
     "Hello %s" : "Hola %s",
     "Hello %s," : "Hola %s,",
     "Notifications" : "Notificacions",
+    "Dismiss" : "Dismiss",
     "in {path}" : "en {path}",
     "Never" : "Nunca",
     "Your settings have been updated." : "A suya configuración ha estau actualizada.",

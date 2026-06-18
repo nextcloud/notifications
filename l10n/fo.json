@@ -1,6 +1,7 @@
 { "translations": {
     "Hello %s" : "Hey %s",
     "Hello %s," : "Hey %s,",
+    "Dismiss" : "Dismiss",
     "in {path}" : "í {path}",
     "Never" : "ongantíð"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
