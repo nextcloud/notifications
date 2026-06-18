@@ -2,6 +2,7 @@ OC.L10N.register(
     "notifications",
     {
     "Notifications" : "नोटिफ़िकेशन",
+    "Dismiss" : "Dismiss",
     "in {path}" : "in {path}",
     "Your settings have been updated." : "आपकी सेटिंग अपडेट हो गई हैं",
     "You need to set up your email address before you can receive notification emails." : "अधिसूचना ईमेल प्राप्त करने से पहले आपको अपना ईमेल पता सेट करना होगा।"
