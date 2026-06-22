@@ -621,11 +621,9 @@ class Push {
 			'id' => $notification->getObjectId(),
 		];
 
-		$jsonData = (string)json_encode($data);
-
 		// Max length of encryption is ~240, so we need to make sure the subject is shorter.
 		// Also, subtract two for encapsulating quotes will be added.
-		$maxDataLength = 200 - strlen($jsonData) - 2;
+		$maxDataLength = 200 - strlen((string)json_encode($data)) - 2;
 		$data['subject'] = Util::shortenMultibyteString($notification->getParsedSubject(), $maxDataLength);
 		if ($notification->getParsedSubject() !== $data['subject']) {
 			$data['subject'] .= '…';
@@ -641,6 +639,8 @@ class Push {
 			$priority = 'normal';
 			$type = 'alert';
 		}
+
+		$jsonData = (string)json_encode($data);
 
 		$this->printInfo('Device public key size: ' . strlen($device['devicepublickey']));
 		$this->printInfo('Data to encrypt is: ' . $jsonData);
