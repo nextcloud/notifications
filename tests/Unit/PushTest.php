@@ -43,6 +43,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use Test\TestCase;
 
 #[Group(name: 'DB')]
@@ -471,6 +472,22 @@ class PushTest extends TestCase {
 			->method('getUser')
 			->willReturn('valid');
 
+		$notification
+			->method('getParsedSubject')
+			->willReturn('ParsedSubject');
+
+		$notification
+			->method('getApp')
+			->willReturn('PushTestApp');
+
+		$notification
+			->method('getObjectType')
+			->willReturn('PushTestType');
+
+		$notification
+			->method('getObjectId')
+			->willReturn('PushTestObjectId');
+
 		/** @var IUser&MockObject $user */
 		$user = $this->createStub(IUser::class);
 
@@ -731,7 +748,27 @@ sd7MhWnjKf7EX9GJD0VhLabFY/KrloJkyL7gOY21xFvmnNqwvH60eOxbVPzlYjaN
 		$push->method('deleteProxyPushTokenByDeviceIdentifier')
 			->with('badrequest-with-devices', '123456');
 
+		/** @var OutputInterface&MockObject $user */
+		$output = $this->createMock(OutputInterface::class);
+		$foundExpectedJsonData = false;
+		$output
+			->method('writeln')
+			->willReturnCallback(function ($string) use (&$foundExpectedJsonData) {
+				if (str_contains($string, '"subject":"ParsedSubject"')
+					&& str_contains($string, '"nid":207787')
+					&& str_contains($string, '"type":"PushTestType"')
+					&& str_contains($string, '"id":"PushTestObjectId"')
+					&& str_contains($string, '"app":"PushTestApp"')) {
+
+					$foundExpectedJsonData = true;
+				}
+			});
+
+		$push->setOutput($output);
+
 		$push->pushToDevice(207787, $notification);
+
+		$this->assertTrue($foundExpectedJsonData, 'Failed to find correct subject, nid, type, id or app in json encoded push data');
 	}
 
 	public static function dataProxyPushToDeviceTalkNotification(): array {
