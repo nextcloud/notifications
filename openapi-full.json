@@ -5,7 +5,7 @@
         "version": "0.0.1",
         "description": "This app provides a backend and frontend for the notification API available in Nextcloud.",
         "license": {
-            "name": "agpl"
+            "name": "AGPL-3.0-only"
         }
     },
     "components": {
