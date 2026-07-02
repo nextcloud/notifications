@@ -149,6 +149,9 @@ class EndpointControllerTest extends TestCase {
 		$this->manager->expects($this->once())
 			->method('createNotification')
 			->willReturn($filter);
+		$this->manager->expects(self::once())
+			->method('preloadDataForParsing')
+			->with($notifications, 'en');
 		$this->manager->expects($this->exactly(\count($notifications)))
 			->method('prepare')
 			->willReturnArgument(0);
@@ -215,6 +218,10 @@ class EndpointControllerTest extends TestCase {
 			->willReturn(true);
 		$this->manager->expects($this->once())
 			->method('flush');
+
+		$this->manager->expects(self::once())
+			->method('preloadDataForParsing')
+			->with($notifications, 'en');
 
 		$throw = true;
 		$this->manager->expects($this->exactly(2))
@@ -285,6 +292,9 @@ class EndpointControllerTest extends TestCase {
 		$this->manager->expects($this->once())
 			->method('hasNotifiers')
 			->willReturn(true);
+		$this->manager->expects(self::once())
+			->method('preloadDataForParsing')
+			->with([$notification], 'en');
 		$this->manager->expects($this->once())
 			->method('prepare')
 			->with($notification)
@@ -330,10 +340,15 @@ class EndpointControllerTest extends TestCase {
 			->method('hasNotifiers')
 			->willReturn($hasNotifiers);
 
+
 		if ($notification instanceof NotificationNotFoundException) {
 			$this->handler->expects($called ? $this->once() : $this->never())
 				->method('getById')
 				->willThrowException($notification);
+
+			$this->manager->expects(self::never())
+				->method('preloadDataForParsing')
+				->with([$notification], 'en');
 
 			$this->manager->expects($called && !$notification instanceof NotificationNotFoundException ? $this->once() : $this->never())
 				->method('prepare')
@@ -347,6 +362,10 @@ class EndpointControllerTest extends TestCase {
 				->method('getUserLanguage')
 				->with($this->user)
 				->willReturn('en');
+
+			$this->manager->expects(self::once())
+				->method('preloadDataForParsing')
+				->with([$notification], 'en');
 
 			$this->manager->expects($this->once())
 				->method('prepare')
