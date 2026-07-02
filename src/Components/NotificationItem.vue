@@ -95,7 +95,6 @@ import axios from '@nextcloud/axios'
 import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
-import { generateOcsUrl } from '@nextcloud/router'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcDateTime from '@nextcloud/vue/components/NcDateTime'
 import NcRichText from '@nextcloud/vue/components/NcRichText'
@@ -154,7 +153,7 @@ export default {
 		},
 	},
 
-	emits: ['remove'],
+	emits: ['remove', 'dismiss'],
 
 	data() {
 		return {
@@ -271,14 +270,7 @@ export default {
 		},
 
 		onDismissNotification() {
-			axios
-				.delete(generateOcsUrl('apps/notifications/api/v2/notifications/{id}', { id: this.notification.notificationId }))
-				.then(() => {
-					this.$emit('remove')
-				})
-				.catch(() => {
-					showError(t('notifications', 'Failed to dismiss notification'))
-				})
+			this.$emit('dismiss', this.notification)
 		},
 	},
 }
