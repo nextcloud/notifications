@@ -11,6 +11,7 @@ OC.L10N.register(
     "Admin notifications" : "Notificações de administrador",
     "Notifications" : "Notificações",
     "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server and the limit was reached for this server. For enterprise users, a more scalable gateway is available." : "Nextcloud GmbH patrocina um gateway de notificação push gratuito para usuários privados. Para garantir um bom serviço, o gateway limita o número de notificações push por servidor e o limite foi atingido para este servidor. Para usuários corporativos, está disponível um gateway mais escalável.",
+    "This app provides a backend and frontend for the notification API available in Nextcloud.\n\t\tThe API is used by other apps to notify users in the web UI and sync clients about various things. Some examples are:\n\n📬 Federated file sharing: You received a new remote share\n\n📑 Comments: Another user mentioned you in a comment on a file\n\n🚢 Update notification: Available update for an app or nextcloud itself\n\n📣 Announcement center: An announcement was posted by an admin" : "Este aplicativo fornece uma estrutura e interface para a API de notificação do Nextcloud.\n\t\tA API é usada por outros aplicativos para notificar os usuários na interface web e para sincronizar os clientes em várias coisas. Alguns exemplos são:\n\n📬 Compartilhamento de arquivos federados: você recebeu um novo compartilhamento remoto\n\n📑 Comentários: Um usuário mencionou você num comentário em um arquivo\n\n🚢 Notificação de atualização: Atualização disponível para um aplicativo ou para o nextcloud\n\n📣 Central de anúncios: Um anúncio foi postado por um administrador",
     "Failed to perform action" : "Falhou a executar ação",
     "Failed to dismiss notification" : "Falhou a dispensar notificação",
     "Dismiss" : "Dispensar",
@@ -27,7 +28,9 @@ OC.L10N.register(
     "1 week" : "1 semana",
     "Your settings have been updated." : "As suas definições foram atualizadas.",
     "An error occurred while updating your settings." : "Ocorreu um erro ao atualizar as suas definições.",
+    "Web push notifications are encrypted but routed through services provided by Mozilla, Microsoft, Apple, Google or user-choosen ones in case of mobile apps. While the content is protected, metadata such as timing and frequency of notifications may be exposed to these providers." : "As notificações Web Push são criptografadas, mas encaminhadas por meio de serviços fornecidos pela Mozilla, Microsoft, Apple, Google ou por outros serviços escolhidos pelo usuário, no caso de aplicativos móveis. Embora o conteúdo esteja protegido, metadados como o horário e a frequência das notificações podem ser expostos a esses provedores.",
     "None" : "Nenhum",
-    "You need to set up your email address before you can receive notification emails." : "Precisa de configurar o seu endereço de e-mail antes de poder receber mensagens de notificação."
+    "You need to set up your email address before you can receive notification emails." : "Precisa de configurar o seu endereço de e-mail antes de poder receber mensagens de notificação.",
+    "Select a device" : "Selecionar um dispositivo"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
