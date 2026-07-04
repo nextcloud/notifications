@@ -7,7 +7,7 @@
 	},
 	"require-dev": {
 		"nextcloud/rector": "^0.5.2",
-		"rector/rector": "^2.4"
+		"rector/rector": "^2.5"
 	},
 	"autoload": {
 		"psr-4": {
