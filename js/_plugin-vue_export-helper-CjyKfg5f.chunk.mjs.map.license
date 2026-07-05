@@ -99,10 +99,10 @@ This file is generated from multiple sources. Included packages:
 	- version: 1.12.0
 	- license: MIT
 - vite
-	- version: 7.3.5
+	- version: 7.3.6
 	- license: MIT
 - vite-plugin-node-polyfills
-	- version: 0.24.0
+	- version: 0.28.0
 	- license: MIT
 - vue-router
 	- version: 5.1.0
