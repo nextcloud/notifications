@@ -11,22 +11,13 @@ composer=$(shell which composer 2> /dev/null)
 
 all: dev-setup build-js-production
 
-dev-setup: clean clean-dev npm-init
+dev-setup: clean clean-dev composer-dev npm-init
 
-# Installs and updates the composer dependencies. If composer is not installed
-# a copy is fetched from the web
-composer:
-ifeq (, $(composer))
-	@echo "No composer command available, downloading a copy from the web"
-	mkdir -p $(build_tools_directory)
-	curl -sS https://getcomposer.org/installer | php
-	mv composer.phar $(build_tools_directory)
-	php $(build_tools_directory)/composer.phar install --prefer-dist
-	php $(build_tools_directory)/composer.phar update --prefer-dist
-else
-	composer install --prefer-dist
-	composer update --prefer-dist
-endif
+composer-dev:
+	composer i
+
+composer-production:
+	composer i --no-dev
 
 npm-init:
 	npm ci
@@ -59,7 +50,7 @@ clean:
 clean-dev:
 	rm -rf node_modules
 
-package: dev-setup build-js-production
+package: dev-setup build-js-production composer-production
 	mkdir -p $(source_dir)
 	rsync -a \
 	--exclude=/build \
