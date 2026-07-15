@@ -34,6 +34,7 @@
 					<NotificationItem
 						v-for="(notification, index) in notifications"
 						:key="notification.notificationId"
+						:ref="(el) => setItemRef(el, notification.notificationId)"
 						:class="{ 'notification--new': notification.notificationId > lastOpenMaxId }"
 						:notification="notification"
 						@remove="onRemove(index)" />
@@ -158,9 +159,22 @@ export default {
 	},
 
 	setup() {
+		// Non-reactive, instance-scoped registry of NotificationItem refs.
+		// Used to move focus to a neighbor before an item is removed (focus-trap workaround).
+		const itemRefs = new Map()
+		const setItemRef = (el, notificationId) => {
+			if (el) {
+				itemRefs.set(notificationId, el)
+			} else {
+				itemRefs.delete(notificationId)
+			}
+		}
+
 		return {
 			fairUsePolicyNotification,
 			hasThrottledPushNotifications,
+			itemRefs,
+			setItemRef,
 		}
 	},
 
@@ -380,6 +394,9 @@ export default {
 		},
 
 		onRemove(index) {
+			// Move focus to a neighboring notification before removing this one (focus-trap workaround)
+			const neighbor = this.notifications[index + 1] || this.notifications[index - 1]
+			this.itemRefs.get(neighbor?.notificationId)?.focus()
 			this.notifications.splice(index, 1)
 			setCurrentTabAsActive(this.tabId)
 		},

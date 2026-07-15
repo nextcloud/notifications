@@ -18,6 +18,7 @@
 				:timestamp="timestamp" />
 			<NcButton
 				v-if="timestamp"
+				ref="dismissButton"
 				class="notification-dismiss-button"
 				variant="tertiary"
 				:aria-label="t('notifications', 'Dismiss')"
@@ -156,6 +157,8 @@ export default {
 
 	emits: ['remove'],
 
+	expose: ['focus'],
+
 	data() {
 		return {
 			showFullMessage: false,
@@ -199,6 +202,10 @@ export default {
 
 	methods: {
 		t,
+
+		focus() {
+			this.$refs.dismissButton?.$el?.focus()
+		},
 
 		prepareParameters(parameters = {}) {
 			const richParameters = {}
