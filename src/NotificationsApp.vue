@@ -34,6 +34,7 @@
 					<NotificationItem
 						v-for="(notification, index) in notifications"
 						:key="notification.notificationId"
+						:ref="(el) => setItemRef(el, notification.notificationId)"
 						:class="{ 'notification--new': notification.notificationId > lastOpenMaxId }"
 						:notification="notification"
 						@remove="onRemove(index)" />
@@ -379,7 +380,21 @@ export default {
 				})
 		},
 
+		setItemRef(el, notificationId) {
+			this.itemRefs ??= {}
+			if (el) {
+				this.itemRefs[notificationId] = el
+			} else {
+				delete this.itemRefs[notificationId]
+			}
+		},
+
 		onRemove(index) {
+			// Move focus to a neighboring notification before removing this one.
+			// Otherwise the header menu focus trap catches the lost focus and jumps
+			// it (and the scroll position) to the top of the list.
+			const neighbor = this.notifications[index + 1] || this.notifications[index - 1]
+			this.itemRefs?.[neighbor?.notificationId]?.focus()
 			this.notifications.splice(index, 1)
 			setCurrentTabAsActive(this.tabId)
 		},

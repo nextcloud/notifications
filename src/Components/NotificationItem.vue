@@ -18,6 +18,7 @@
 				:timestamp="timestamp" />
 			<NcButton
 				v-if="timestamp"
+				ref="dismissButton"
 				class="notification-dismiss-button"
 				variant="tertiary"
 				:aria-label="t('notifications', 'Dismiss')"
@@ -199,6 +200,14 @@ export default {
 
 	methods: {
 		t,
+
+		/**
+		 * Focus the dismiss button, used by the parent to keep focus in the
+		 * list when a neighboring notification is removed.
+		 */
+		focus() {
+			this.$refs.dismissButton?.$el?.focus()
+		},
 
 		prepareParameters(parameters = {}) {
 			const richParameters = {}
