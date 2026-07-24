@@ -292,7 +292,7 @@ class Push {
 		$tokenAgeList = array_slice($tokenAgeList, 0, self::DEVICE_LIMIT);
 		$devices = [];
 		foreach ($deviceList as $device) {
-			if (!isset($tokenAgeList[$device['token']]) && $tokenAgeList[$device['token']] !== 0) {
+			if (!isset($tokenAgeList[$device['token']]) || $tokenAgeList[$device['token']] !== 0) {
 				$this->printInfo('<comment>Device token ' . $device['token'] . ' is not in the most recent 20 devices: ' . $tokenAgeList[$device['token']] . '</comment>');
 				continue;
 			}
