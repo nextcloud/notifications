@@ -23,6 +23,8 @@ use OCP\Authentication\Exceptions\InvalidTokenException;
 use OCP\Authentication\Token\IToken;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Http\Client\IClientService;
+use OCP\Http\Client\IPromise;
+use OCP\Http\Client\IResponse;
 use OCP\IAppConfig as IGlobalAppConfig;
 use OCP\ICache;
 use OCP\ICacheFactory;
@@ -710,99 +712,124 @@ class Push {
 		}
 
 		$client = $this->clientService->newClient();
+
+		/** @var list<IPromise> $promises */
+		$promises = [];
 		foreach ($pushNotifications as $proxyServer => $notifications) {
+			$requestData = [
+				'body' => [
+					'notifications' => $notifications,
+				],
+			];
+
+			if ($subscriptionKey !== '' && $proxyServer === $subscriptionAwareServer) {
+				$requestData['headers']['X-Nextcloud-Subscription-Key'] = $subscriptionKey;
+			}
+
+			$postStartTime = microtime(true);
 			try {
-				$requestData = [
-					'body' => [
-						'notifications' => $notifications,
-					],
-				];
-
-				if ($subscriptionKey !== '' && $proxyServer === $subscriptionAwareServer) {
-					$requestData['headers']['X-Nextcloud-Subscription-Key'] = $subscriptionKey;
-				}
-
-				$postStartTime = microtime(true);
-				$response = $client->post($proxyServer . '/notifications', $requestData);
-				$postEndTime = microtime(true);
-
-				$this->printInfo('<comment>Request to push proxy [' . $proxyServer . '] took ' . (string)round($postEndTime - $postStartTime, 2) . 's</comment>');
-
-				$status = $response->getStatusCode();
-				$body = (string)$response->getBody();
-				try {
-					$bodyData = json_decode($body, true);
-				} catch (\JsonException) {
-					$bodyData = null;
-				}
-			} catch (ClientException $e) {
-				// Server responded with 4xx (400 Bad Request mostlikely)
-				$response = $e->getResponse();
-				$status = $response->getStatusCode();
-				$body = $response->getBody()->getContents();
-				try {
-					$bodyData = json_decode($body, true);
-				} catch (\JsonException) {
-					$bodyData = null;
-				}
-			} catch (ServerException $e) {
-				// Server responded with 5xx
-				$response = $e->getResponse();
-				$body = $response->getBody()->getContents();
-				$error = \is_string($body) ? $body : ('no reason given (' . $response->getStatusCode() . ')');
-
-				$this->log->debug('Could not send notification to push server [{url}]: {error}', [
-					'error' => $error,
-					'url' => $proxyServer,
-					'app' => 'notifications',
-				]);
-
-				$this->printInfo('<error>Could not send notification to push server [' . $proxyServer . ']</error>', '<error>' . $error . '</error>');
-				continue;
+				$promises[] = $client->postAsync($proxyServer . '/notifications', $requestData)
+					->then(
+						function (IResponse $response) use ($proxyServer, $postStartTime): void {
+							$this->printInfo('<comment>Request to push proxy [' . $proxyServer . '] took ' . (string)round(microtime(true) - $postStartTime, 2) . 's</comment>');
+							$this->handleProxyResponse($proxyServer, $response->getStatusCode(), (string)$response->getBody());
+						},
+						function (\Exception $e) use ($proxyServer): void {
+							$this->handleProxyException($proxyServer, $e);
+						},
+					);
 			} catch (\Exception $e) {
-				$this->log->error($e->getMessage(), [
-					'exception' => $e,
-				]);
+				// The request failed before it was even sent to the push proxy
+				$this->handleProxyException($proxyServer, $e);
+			}
+		}
 
-				$error = $e->getMessage() ?: 'no reason given';
-				$this->printInfo('<error>Could not send notification to push server [' . $e::class . ']</error>', '<error>' . $error . '</error>');
-				continue;
+		foreach ($promises as $promise) {
+			// Rejections are already taken care of by the handler above, so the
+			// result must not be unwrapped as that would rethrow the exception
+			// and skip the remaining proxy servers.
+			$promise->wait(false);
+		}
+	}
+
+	/**
+	 * Handle a request to a push proxy that did not yield a response
+	 */
+	protected function handleProxyException(string $proxyServer, \Exception $e): void {
+		if ($e instanceof ClientException) {
+			// Server responded with 4xx (400 Bad Request mostlikely)
+			$response = $e->getResponse();
+			$this->handleProxyResponse($proxyServer, $response->getStatusCode(), $response->getBody()->getContents());
+			return;
+		}
+
+		if ($e instanceof ServerException) {
+			// Server responded with 5xx
+			$response = $e->getResponse();
+			$body = $response->getBody()->getContents();
+			$error = \is_string($body) ? $body : ('no reason given (' . $response->getStatusCode() . ')');
+
+			$this->log->debug('Could not send notification to push server [{url}]: {error}', [
+				'error' => $error,
+				'url' => $proxyServer,
+				'app' => 'notifications',
+			]);
+
+			$this->printInfo('<error>Could not send notification to push server [' . $proxyServer . ']</error>', '<error>' . $error . '</error>');
+			return;
+		}
+
+		$this->log->error($e->getMessage(), [
+			'exception' => $e,
+		]);
+
+		$error = $e->getMessage() ?: 'no reason given';
+		$this->printInfo('<error>Could not send notification to push server [' . $e::class . ']</error>', '<error>' . $error . '</error>');
+	}
+
+	/**
+	 * Handle the response of a push proxy
+	 */
+	protected function handleProxyResponse(string $proxyServer, int $status, string $body): void {
+		try {
+			$bodyData = json_decode($body, true);
+		} catch (\JsonException) {
+			$bodyData = null;
+		}
+
+		if (is_array($bodyData) && array_key_exists('unknown', $bodyData) && array_key_exists('failed', $bodyData)) {
+			if (is_array($bodyData['unknown'])) {
+				// Proxy returns null when the array is empty
+				foreach ($bodyData['unknown'] as $unknownDevice) {
+					$this->printInfo('<comment>Deleting device because it is unknown by the push server [' . $proxyServer . ']: ' . $unknownDevice . '</comment>');
+					$this->deleteProxyPushTokenByDeviceIdentifier($proxyServer, $unknownDevice);
+				}
 			}
 
-			if (is_array($bodyData) && array_key_exists('unknown', $bodyData) && array_key_exists('failed', $bodyData)) {
-				if (is_array($bodyData['unknown'])) {
-					// Proxy returns null when the array is empty
-					foreach ($bodyData['unknown'] as $unknownDevice) {
-						$this->printInfo('<comment>Deleting device because it is unknown by the push server [' . $proxyServer . ']: ' . $unknownDevice . '</comment>');
-						$this->deleteProxyPushTokenByDeviceIdentifier($proxyServer, $unknownDevice);
-					}
-				}
-
-				if ($bodyData['failed'] !== 0) {
-					$this->printInfo('<comment>Push notification sent, but ' . $bodyData['failed'] . ' failed</comment>');
-				} else {
-					$this->printInfo('<info>Push notification sent successfully</info>');
-				}
-			} elseif ($status !== Http::STATUS_OK) {
-				if ($status === Http::STATUS_TOO_MANY_REQUESTS) {
-					$this->appConfig->setAppValueInt('rate_limit_reached', $this->timeFactory->getTime());
-				}
-				$error = $body && $bodyData === null ? $body : 'no reason given';
-				$this->printInfo('<error>Could not send notification to push server [' . $proxyServer . ']</error>', '<error>' . $error . '</error>');
-				$this->log->warning('Could not send notification to push server [{url}]: {error}', [
-					'error' => $error,
-					'url' => $proxyServer,
-					'app' => 'notifications',
-				]);
+			if ($bodyData['failed'] !== 0) {
+				$this->printInfo('<comment>Push notification sent, but ' . $bodyData['failed'] . ' failed</comment>');
 			} else {
-				$error = $body && $bodyData === null ? $body : 'no reason given';
-				$this->printInfo('<comment>Push notification sent but response was not parsable, using an outdated push proxy? [' . $proxyServer . ']</comment>', '<comment>' . $error . '</comment>');
-				$this->log->info('Push notification sent but response was not parsable, using an outdated push proxy? [{url}]: {error}', [
-					'error' => $error,
-					'url' => $proxyServer,
-					'app' => 'notifications',
-				]);
+				$this->printInfo('<info>Push notification sent successfully</info>');
 			}
+		} elseif ($status !== Http::STATUS_OK) {
+			if ($status === Http::STATUS_TOO_MANY_REQUESTS) {
+				$this->appConfig->setAppValueInt('rate_limit_reached', $this->timeFactory->getTime());
+			}
+			$error = $body && $bodyData === null ? $body : 'no reason given';
+			$this->printInfo('<error>Could not send notification to push server [' . $proxyServer . ']</error>', '<error>' . $error . '</error>');
+			$this->log->warning('Could not send notification to push server [{url}]: {error}', [
+				'error' => $error,
+				'url' => $proxyServer,
+				'app' => 'notifications',
+			]);
+		} else {
+			$error = $body && $bodyData === null ? $body : 'no reason given';
+			$this->printInfo('<comment>Push notification sent but response was not parsable, using an outdated push proxy? [' . $proxyServer . ']</comment>', '<comment>' . $error . '</comment>');
+			$this->log->info('Push notification sent but response was not parsable, using an outdated push proxy? [{url}]: {error}', [
+				'error' => $error,
+				'url' => $proxyServer,
+				'app' => 'notifications',
+			]);
 		}
 	}
 
