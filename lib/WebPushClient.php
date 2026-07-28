@@ -10,10 +10,10 @@ declare(strict_types=1);
 namespace OCA\Notifications;
 
 use OCA\Notifications\Vendor\Base64Url\Base64Url;
+use OCA\Notifications\Vendor\GuzzleHttp\Promise\PromiseInterface;
 use OCA\Notifications\Vendor\Minishlink\WebPush\Subscription;
 use OCA\Notifications\Vendor\Minishlink\WebPush\Utils;
 use OCA\Notifications\Vendor\Minishlink\WebPush\VAPID;
-use OCA\Notifications\Vendor\Minishlink\WebPush\WebPush;
 use OCA\Notifications\WebPush\LoggerAdapter;
 use OCP\AppFramework\Services\IAppConfig;
 use Psr\Log\LoggerInterface;
@@ -36,7 +36,7 @@ class WebPushClient {
 	 */
 	public const REQUEST_TIMEOUT = 10;
 
-	private WebPush $client;
+	private PooledWebPush $client;
 	/** @psalm-var array{publicKey: string, privateKey: string, subject: string} */
 	private array $vapid;
 
@@ -71,11 +71,11 @@ class WebPushClient {
 		return strlen($a) === 16;
 	}
 
-	private function getClient(): WebPush {
+	private function getClient(): PooledWebPush {
 		if (isset($this->client)) {
 			return $this->client;
 		}
-		$this->client = new WebPush(
+		$this->client = new PooledWebPush(
 			auth: ['VAPID' => $this->vapid],
 			defaultOptions: [
 				'batchSize' => self::BATCH_SIZE,
@@ -145,7 +145,7 @@ class WebPushClient {
 		// as the registration isn't activated
 		$callback = function ($r): void {
 		};
-		$c->flushPooled($callback);
+		$this->flush($callback);
 	}
 
 	/**
@@ -164,11 +164,32 @@ class WebPushClient {
 	}
 
 	/**
+	 * Start sending the queued notifications, the caller has to wait for the
+	 * returned promises to finish the sending.
+	 *
+	 * @param callable $callback
+	 * @psalm-param $callback callable(MessageSentReport): void
+	 * @return list<PromiseInterface>
+	 */
+	public function flushAsync(callable $callback): array {
+		$c = $this->getClient();
+		// The headers are only reused within one flush
+		$c->clearVAPIDHeaderCache();
+		return $c->flushPooledAsync($callback);
+	}
+
+	/**
+	 * Send the queued notifications - blocking
+	 *
 	 * @param callable $callback
 	 * @psalm-param $callback callable(MessageSentReport): void
 	 */
 	public function flush(callable $callback): void {
-		$c = $this->getClient();
-		$c->flushPooled($callback);
+		foreach ($this->flushAsync($callback) as $promise) {
+			// Rejections are already reported to the callback, so the result
+			// must not be unwrapped as that would rethrow the exception and
+			// skip the remaining batches.
+			$promise->wait(false);
+		}
 	}
 }

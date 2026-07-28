@@ -73,4 +73,30 @@ class WebPushClientTest extends TestCase {
 		$client = new WebPushClient($this->appConfig, $this->logger);
 		$this->assertInstanceOf(WebPushClient::class, $client);
 	}
+
+	public function testFlushAsyncWithoutQueuedNotifications(): void {
+		$client = new WebPushClient($this->appConfig, $this->logger);
+
+		$this->assertSame([], $client->flushAsync(static function (): void {
+		}));
+	}
+
+	public function testFlushAsyncSkipsNotificationsThatCanNotBePrepared(): void {
+		$client = new WebPushClient($this->appConfig, $this->logger);
+
+		// Not a valid public key, so the encryption fails while the pool
+		// prepares the request
+		$client->enqueue('https://example.tld/endpoint', str_repeat('A', 87), str_repeat('B', 22), '{"nid":1}');
+
+		// The library logs through the adapter, which only implements log()
+		$this->logger->expects($this->once())
+			->method('log')
+			->with('error', $this->stringContains('Failed to prepare push notification'), $this->anything());
+
+		// One batch, but the request of the broken subscription is skipped,
+		// so nothing is sent and waiting for the promise is not needed
+		$promises = $client->flushAsync(static function (): void {
+		});
+		$this->assertCount(1, $promises);
+	}
 }
