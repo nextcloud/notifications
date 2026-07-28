@@ -1138,6 +1138,10 @@ class Push {
 			->from('notifications_webpush')
 			->where($query->expr()->in('uid', $query->createNamedParameter($userIds, IQueryBuilder::PARAM_STR_ARRAY)));
 
+		if (!$this->appConfig->getAppValueBool('webpush_browsers_enabled')) {
+			$query->andWhere($query->expr()->gte('token', $query->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+		}
+
 		$devices = [];
 		$result = $query->executeQuery();
 		while ($row = $result->fetch()) {
