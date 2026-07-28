@@ -20,7 +20,7 @@ use Psr\Log\LoggerInterface;
  */
 class LoggerAdapter extends AbstractLogger {
 	public function __construct(
-		private LoggerInterface $logger,
+		private readonly LoggerInterface $logger,
 	) {
 	}
 
