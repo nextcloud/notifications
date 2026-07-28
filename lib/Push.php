@@ -604,7 +604,7 @@ class Push {
 		}
 
 		if (!$this->deferPayloads) {
-			$this->sendNotificationsToProxies();
+			$this->wpClient->flush(fn ($r) => $this->webPushCallback($r));
 		}
 	}
 
@@ -734,7 +734,7 @@ class Push {
 							$this->printInfo('<comment>Request to push proxy [' . $proxyServer . '] took ' . (string)round(microtime(true) - $postStartTime, 2) . 's</comment>');
 							$this->handleProxyResponse($proxyServer, $response->getStatusCode(), (string)$response->getBody());
 						},
-						function (\Exception $e) use ($proxyServer): void {
+						function (\Throwable $e) use ($proxyServer): void {
 							$this->handleProxyException($proxyServer, $e);
 						},
 					);
@@ -755,7 +755,7 @@ class Push {
 	/**
 	 * Handle a request to a push proxy that did not yield a response
 	 */
-	protected function handleProxyException(string $proxyServer, \Exception $e): void {
+	protected function handleProxyException(string $proxyServer, \Throwable $e): void {
 		if ($e instanceof ClientException) {
 			// Server responded with 4xx (400 Bad Request mostlikely)
 			$response = $e->getResponse();

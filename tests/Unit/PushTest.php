@@ -1233,6 +1233,40 @@ sd7MhWnjKf7EX9GJD0VhLabFY/KrloJkyL7gOY21xFvmnNqwvH60eOxbVPzlYjaN
 		$push->pushToDevice(207787, $notification);
 	}
 
+	public function testWebPushDeleteToDeviceFlushesWebPush(): void {
+		$push = $this->getPush();
+
+		/** @var IUser&MockObject $user */
+		$user = $this->createStub(IUser::class);
+
+		$this->cache->method('get')
+			->willReturn(false);
+
+		$this->wpClient->expects($this->once())
+			->method('enqueue')
+			->with('endpoint1', self::EX_UA_PUBLIC, self::EX_AUTH);
+
+		// The queued deletes have to be sent right away, they must not leak
+		// into an unrelated later flush
+		$this->wpClient->expects($this->once())
+			->method('flush');
+
+		// Nothing was queued for the push proxies
+		$this->clientService->expects($this->never())
+			->method('newClient');
+
+		$push->webPushDeleteToDevice('valid', $user, [
+			[
+				'activated' => true,
+				'endpoint' => 'endpoint1',
+				'ua_public' => self::EX_UA_PUBLIC,
+				'auth' => self::EX_AUTH,
+				'token' => 16,
+				'app_types' => 'all',
+			],
+		], true, null);
+	}
+
 	public static function dataFilterWebPushDeviceList(): array {
 		return [
 			[false, 'all', 'myApp', false],
