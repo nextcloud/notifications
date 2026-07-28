@@ -32,13 +32,10 @@
       <code><![CDATA[list<array{id: int, uid: string, token: int, deviceidentifier: string, devicepublickey: string, devicepublickeyhash: string, pushtokenhash: string, proxyserver: string, apptype: string}>]]></code>
     </MoreSpecificReturnType>
     <UndefinedClass>
-      <code><![CDATA[$e]]></code>
-      <code><![CDATA[$e]]></code>
       <code><![CDATA[$this->keyManager]]></code>
       <code><![CDATA[$this->keyManager]]></code>
       <code><![CDATA[$this->tokenProvider]]></code>
       <code><![CDATA[ClientException]]></code>
-      <code><![CDATA[ServerException]]></code>
       <code><![CDATA[protected]]></code>
       <code><![CDATA[protected]]></code>
     </UndefinedClass>
