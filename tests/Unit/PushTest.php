@@ -24,6 +24,7 @@ use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Authentication\Token\IToken as OCPIToken;
 use OCP\Http\Client\IClient;
 use OCP\Http\Client\IClientService;
+use OCP\Http\Client\IPromise;
 use OCP\Http\Client\IResponse;
 use OCP\IAppConfig as IGlobalAppConfig;
 use OCP\ICache;
@@ -145,6 +146,25 @@ class PushTest extends TestCase {
 			$this->random,
 			$this->logger,
 		);
+	}
+
+	/**
+	 * Creates a promise that settles as soon as the handlers are attached,
+	 * so the response handling can be tested without a real event loop.
+	 */
+	protected function createPromise(IResponse|\Exception $result): IPromise&MockObject {
+		$promise = $this->createMock(IPromise::class);
+		$promise->method('then')
+			->willReturnCallback(function (?callable $onFulfilled, ?callable $onRejected) use ($promise, $result): IPromise {
+				if ($result instanceof \Exception) {
+					$onRejected($result);
+				} else {
+					$onFulfilled($result);
+				}
+				return $promise;
+			});
+
+		return $promise;
 	}
 
 	public function testPushToDeviceNoInternet(): void {
@@ -715,13 +735,13 @@ sd7MhWnjKf7EX9GJD0VhLabFY/KrloJkyL7gOY21xFvmnNqwvH60eOxbVPzlYjaN
 
 		$exception0 = new \Exception();
 		$client->expects($this->exactly(5))
-			->method('post')
+			->method('postAsync')
 			->willReturnOnConsecutiveCalls(
-				$this->throwException($exception0), // proxyserver1/notifications
-				$this->throwException($exception1), // badrequest/notifications
-				$this->throwException($exception2), // unavailable/notifications
-				$response3, // ok/notifications
-				$this->throwException($exception4),
+				$this->createPromise($exception0), // proxyserver1/notifications
+				$this->createPromise($exception1), // badrequest/notifications
+				$this->createPromise($exception2), // unavailable/notifications
+				$this->createPromise($response3), // ok/notifications
+				$this->createPromise($exception4),
 			);
 
 		$this->logger->expects($this->atLeastOnce())
@@ -882,13 +902,13 @@ sd7MhWnjKf7EX9GJD0VhLabFY/KrloJkyL7gOY21xFvmnNqwvH60eOxbVPzlYjaN
 				->method('getBody')
 				->willReturn('');
 			$client->expects($this->once())
-				->method('post')
+				->method('postAsync')
 				->with('proxyserver/notifications', [
 					'body' => [
 						'notifications' => ['["Payload"]'],
 					],
 				])
-				->willReturn($response);
+				->willReturn($this->createPromise($response));
 		}
 
 		$this->config->expects($this->once())
