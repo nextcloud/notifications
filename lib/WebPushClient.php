@@ -14,15 +14,35 @@ use OCA\Notifications\Vendor\Minishlink\WebPush\Subscription;
 use OCA\Notifications\Vendor\Minishlink\WebPush\Utils;
 use OCA\Notifications\Vendor\Minishlink\WebPush\VAPID;
 use OCA\Notifications\Vendor\Minishlink\WebPush\WebPush;
+use OCA\Notifications\WebPush\LoggerAdapter;
 use OCP\AppFramework\Services\IAppConfig;
+use Psr\Log\LoggerInterface;
 
 class WebPushClient {
+	/**
+	 * Number of notifications that are sent as one pooled batch
+	 */
+	public const BATCH_SIZE = 1000;
+
+	/**
+	 * Number of requests that are in flight at the same time within a batch
+	 */
+	public const REQUEST_CONCURRENCY = 100;
+
+	/**
+	 * Timeout in seconds of a single request to a push endpoint.
+	 * The library default of 30 seconds is way too long, as the sending
+	 * blocks the process it runs in.
+	 */
+	public const REQUEST_TIMEOUT = 10;
+
 	private WebPush $client;
 	/** @psalm-var array{publicKey: string, privateKey: string, subject: string} */
 	private array $vapid;
 
 	public function __construct(
 		protected IAppConfig $appConfig,
+		protected LoggerInterface $logger,
 	) {
 		$this->vapid = $this->getVapid();
 	}
@@ -55,7 +75,15 @@ class WebPushClient {
 		if (isset($this->client)) {
 			return $this->client;
 		}
-		$this->client = new WebPush(auth: ['VAPID' => $this->vapid]);
+		$this->client = new WebPush(
+			auth: ['VAPID' => $this->vapid],
+			defaultOptions: [
+				'batchSize' => self::BATCH_SIZE,
+				'requestConcurrency' => self::REQUEST_CONCURRENCY,
+			],
+			timeout: self::REQUEST_TIMEOUT,
+			logger: new LoggerAdapter($this->logger),
+		);
 		$this->client->setReuseVAPIDHeaders(true);
 		return $this->client;
 	}
