@@ -32,11 +32,12 @@
 						:key="-2016"
 						:notification="fairUsePolicyNotification" />
 					<NotificationItem
-						v-for="(notification, index) in notifications"
+						v-for="notification in notifications"
 						:key="notification.notificationId"
-						:class="{ 'notification--new': notification.notificationId > lastOpenMaxId }"
+						:class="{ 'notification--new': notification.notificationId > lastOpenMaxId, 'notification--collapsing': collapsingIds.has(notification.notificationId) }"
 						:notification="notification"
-						@remove="onRemove(index)" />
+						@remove="onRemove(notification)"
+						@dismiss="onDismiss" />
 				</transition-group>
 
 				<!-- No notifications -->
@@ -77,6 +78,16 @@
 						</NcButton>
 					</template>
 				</NcEmptyContent>
+			</transition>
+
+			<!-- Undo dismiss bar -->
+			<transition name="fade">
+				<div v-if="pendingUndo" class="notification-undo-bar">
+					<span>{{ t('notifications', 'Notification dismissed') }}</span>
+					<NcButton variant="tertiary" @click="onUndoDismiss">
+						{{ t('notifications', 'Undo') }}
+					</NcButton>
+				</div>
 			</transition>
 
 			<!-- Dismiss all -->
@@ -208,6 +219,10 @@ export default {
 			lastOpenMaxId: 0,
 			/** True for 5 s after all notifications are cleared — inbox zero celebration */
 			showInboxZero: false,
+			/** Pending optimistic dismiss: { notification, execute, timerId, collapseTimerId } */
+			pendingUndo: null,
+			/** Set of notification IDs currently playing collapse animation */
+			collapsingIds: new Set(),
 		}
 	},
 
@@ -379,8 +394,64 @@ export default {
 				})
 		},
 
-		onRemove(index) {
-			this.notifications.splice(index, 1)
+		onRemove(notification) {
+			const idx = this.notifications.findIndex(n => n.notificationId === notification.notificationId)
+			if (idx !== -1) {
+				this.notifications.splice(idx, 1)
+			}
+			setCurrentTabAsActive(this.tabId)
+		},
+
+		async onDismiss(notification) {
+			// Flush any prior pending dismiss immediately
+			if (this.pendingUndo) {
+				clearTimeout(this.pendingUndo.timerId)
+				clearTimeout(this.pendingUndo.collapseTimerId)
+				const prevIdx = this.notifications.findIndex(n => n.notificationId === this.pendingUndo.notification.notificationId)
+				if (prevIdx !== -1) this.notifications.splice(prevIdx, 1)
+				this.collapsingIds.delete(this.pendingUndo.notification.notificationId)
+				await this.pendingUndo.execute()
+			}
+
+			setCurrentTabAsActive(this.tabId)
+
+			// Trigger collapse animation — item stays in array until animation finishes (280 ms)
+			this.collapsingIds.add(notification.notificationId)
+
+			const execute = () => axios
+				.delete(generateOcsUrl('apps/notifications/api/v2/notifications/{id}', { id: notification.notificationId }))
+				.catch(() => showError(t('notifications', 'Failed to dismiss notification')))
+
+			const collapseTimerId = setTimeout(() => {
+				const idx = this.notifications.findIndex(n => n.notificationId === notification.notificationId)
+				if (idx !== -1) this.notifications.splice(idx, 1)
+				this.collapsingIds.delete(notification.notificationId)
+			}, 280)
+
+			this.pendingUndo = {
+				notification,
+				execute,
+				collapseTimerId,
+				timerId: setTimeout(() => {
+					this.pendingUndo = null
+					execute()
+				}, 4000),
+			}
+		},
+
+		onUndoDismiss() {
+			if (!this.pendingUndo) return
+			clearTimeout(this.pendingUndo.timerId)
+			clearTimeout(this.pendingUndo.collapseTimerId)
+			const { notification } = this.pendingUndo
+			this.pendingUndo = null
+			this.collapsingIds.delete(notification.notificationId)
+			// Re-insert if the collapse timer already removed it from the array
+			if (!this.notifications.find(n => n.notificationId === notification.notificationId)) {
+				const insertIdx = this.notifications.findIndex(n => n.notificationId < notification.notificationId)
+				if (insertIdx === -1) this.notifications.push(notification)
+				else this.notifications.splice(insertIdx, 0, notification)
+			}
 			setCurrentTabAsActive(this.tabId)
 		},
 
@@ -461,8 +532,13 @@ export default {
 				this.userStatus = response.headers['x-nextcloud-user-status']
 				this.lastETag = response.headers.etag
 				this.lastTabId = response.tabId
-				this.notifications = response.data
-				this.processWebNotifications(response.data)
+				// Keep the pending-undo item out of the list during its grace period
+				const pendingId = this.pendingUndo?.notification?.notificationId
+				const data = pendingId
+					? response.data.filter(n => n.notificationId !== pendingId)
+					: response.data
+				this.notifications = data
+				this.processWebNotifications(data)
 				console.debug('Got notification data, restoring default polling interval.')
 				this._setPollingInterval(this.pollIntervalBase)
 				this._updateDocTitleOnNewNotifications(this.notifications)
