@@ -12,14 +12,17 @@ namespace OCA\Notifications\Tests\Unit;
 use OCA\Notifications\WebPushClient;
 use OCP\AppFramework\Services\IAppConfig;
 use PHPUnit\Framework\MockObject\MockObject;
+use Psr\Log\LoggerInterface;
 use Test\TestCase;
 
 class WebPushClientTest extends TestCase {
 	protected IAppConfig&MockObject $appConfig;
+	protected LoggerInterface&MockObject $logger;
 
 	protected function setUp(): void {
 		parent::setUp();
 		$this->appConfig = $this->createMock(IAppConfig::class);
+		$this->logger = $this->createMock(LoggerInterface::class);
 	}
 
 	public function testConstructSucceedsWhenVapidKeysAreStored(): void {
@@ -31,7 +34,7 @@ class WebPushClientTest extends TestCase {
 
 		$this->appConfig->expects($this->never())->method('setAppValueString');
 
-		$client = new WebPushClient($this->appConfig);
+		$client = new WebPushClient($this->appConfig, $this->logger);
 		$this->assertInstanceOf(WebPushClient::class, $client);
 	}
 
@@ -49,7 +52,7 @@ class WebPushClientTest extends TestCase {
 			));
 
 		// Must not throw — corrupted keys should be transparently regenerated
-		$client = new WebPushClient($this->appConfig);
+		$client = new WebPushClient($this->appConfig, $this->logger);
 		$this->assertInstanceOf(WebPushClient::class, $client);
 	}
 
@@ -67,7 +70,33 @@ class WebPushClientTest extends TestCase {
 				$this->equalTo('webpush_vapid_privkey'),
 			));
 
-		$client = new WebPushClient($this->appConfig);
+		$client = new WebPushClient($this->appConfig, $this->logger);
 		$this->assertInstanceOf(WebPushClient::class, $client);
+	}
+
+	public function testFlushAsyncWithoutQueuedNotifications(): void {
+		$client = new WebPushClient($this->appConfig, $this->logger);
+
+		$this->assertSame([], $client->flushAsync(static function (): void {
+		}));
+	}
+
+	public function testFlushAsyncSkipsNotificationsThatCanNotBePrepared(): void {
+		$client = new WebPushClient($this->appConfig, $this->logger);
+
+		// Not a valid public key, so the encryption fails while the pool
+		// prepares the request
+		$client->enqueue('https://example.tld/endpoint', str_repeat('A', 87), str_repeat('B', 22), '{"nid":1}');
+
+		// The library logs through the adapter, which only implements log()
+		$this->logger->expects($this->once())
+			->method('log')
+			->with('error', $this->stringContains('Failed to prepare push notification'), $this->anything());
+
+		// One batch, but the request of the broken subscription is skipped,
+		// so nothing is sent and waiting for the promise is not needed
+		$promises = $client->flushAsync(static function (): void {
+		});
+		$this->assertCount(1, $promises);
 	}
 }

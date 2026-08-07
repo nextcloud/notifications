@@ -233,7 +233,7 @@ class WebPushController extends OCSController {
 	}
 
 	protected function getWPClient(): WebPushClient {
-		return new WebPushClient($this->appConfig);
+		return new WebPushClient($this->appConfig, $this->logger);
 	}
 
 	/**

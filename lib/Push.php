@@ -114,6 +114,7 @@ class Push {
 		protected ITimeFactory $timeFactory,
 		protected ISecureRandom $random,
 		protected LoggerInterface $log,
+		protected DeferredFlusher $flusher,
 	) {
 		$this->cache = $cacheFactory->createDistributed('pushtokens');
 	}
@@ -195,8 +196,27 @@ class Push {
 		}
 
 		$this->deferPayloads = false;
-		$this->wpClient->flush(fn ($r) => $this->webPushCallback($r));
-		$this->sendNotificationsToProxies();
+		$this->flusher->add($this->wpClient->flushAsync(fn ($r) => $this->webPushCallback($r)));
+		$this->flusher->add($this->startNotificationsToProxies());
+		$this->flusher->schedule();
+	}
+
+	/**
+	 * Start sending the queued web push notifications and hand the pending
+	 * requests over to the flusher
+	 */
+	protected function flushWebPushPayloads(): void {
+		$this->flusher->add($this->wpClient->flushAsync(fn ($r) => $this->webPushCallback($r)));
+		$this->flusher->schedule();
+	}
+
+	/**
+	 * Start sending the queued push proxy notifications and hand the pending
+	 * requests over to the flusher
+	 */
+	protected function flushProxyPayloads(): void {
+		$this->flusher->add($this->startNotificationsToProxies());
+		$this->flusher->schedule();
 	}
 
 	/**
@@ -431,7 +451,7 @@ class Push {
 		$this->printInfo('');
 
 		if (!$this->deferPayloads) {
-			$this->wpClient->flush(fn ($r) => $this->webPushCallback($r));
+			$this->flushWebPushPayloads();
 		}
 	}
 
@@ -479,7 +499,7 @@ class Push {
 		$this->printInfo('');
 
 		if (!$this->deferPayloads) {
-			$this->sendNotificationsToProxies();
+			$this->flushProxyPayloads();
 		}
 	}
 
@@ -604,7 +624,7 @@ class Push {
 		}
 
 		if (!$this->deferPayloads) {
-			$this->sendNotificationsToProxies();
+			$this->flushWebPushPayloads();
 		}
 	}
 
@@ -668,7 +688,7 @@ class Push {
 		}
 
 		if (!$this->deferPayloads) {
-			$this->sendNotificationsToProxies();
+			$this->flushProxyPayloads();
 		}
 	}
 
@@ -684,11 +704,16 @@ class Push {
 		}
 	}
 
-	protected function sendNotificationsToProxies(): void {
+	/**
+	 * Start sending the queued notifications to the push proxies
+	 *
+	 * @return list<IPromise> The caller has to wait for the requests to finish
+	 */
+	protected function startNotificationsToProxies(): array {
 		$pushNotifications = $this->payloadsToSend;
 		$this->payloadsToSend = [];
 		if (empty($pushNotifications)) {
-			return;
+			return [];
 		}
 
 		if (!$this->notificationManager->isFairUseOfFreePushService()) {
@@ -697,7 +722,7 @@ class Push {
 			 * users overload our infrastructure. For this reason we have to rate-limit the
 			 * use of push notifications. If you need this feature, consider using Nextcloud Enterprise.
 			 */
-			return;
+			return [];
 		}
 
 		$subscriptionAwareServer = rtrim($this->appConfig->getAppValueString('subscription_aware_server', 'https://push-notifications.nextcloud.com'), '/');
@@ -734,7 +759,7 @@ class Push {
 							$this->printInfo('<comment>Request to push proxy [' . $proxyServer . '] took ' . (string)round(microtime(true) - $postStartTime, 2) . 's</comment>');
 							$this->handleProxyResponse($proxyServer, $response->getStatusCode(), (string)$response->getBody());
 						},
-						function (\Exception $e) use ($proxyServer): void {
+						function (\Throwable $e) use ($proxyServer): void {
 							$this->handleProxyException($proxyServer, $e);
 						},
 					);
@@ -744,18 +769,13 @@ class Push {
 			}
 		}
 
-		foreach ($promises as $promise) {
-			// Rejections are already taken care of by the handler above, so the
-			// result must not be unwrapped as that would rethrow the exception
-			// and skip the remaining proxy servers.
-			$promise->wait(false);
-		}
+		return $promises;
 	}
 
 	/**
 	 * Handle a request to a push proxy that did not yield a response
 	 */
-	protected function handleProxyException(string $proxyServer, \Exception $e): void {
+	protected function handleProxyException(string $proxyServer, \Throwable $e): void {
 		if ($e instanceof ClientException) {
 			// Server responded with 4xx (400 Bad Request mostlikely)
 			$response = $e->getResponse();

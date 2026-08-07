@@ -15,8 +15,13 @@ use OC\Authentication\Token\IProvider;
 use OC\Authentication\Token\PublicKeyToken;
 use OC\Security\IdentityProof\Key;
 use OC\Security\IdentityProof\Manager;
+use OCA\Notifications\DeferredFlusher;
 use OCA\Notifications\Exceptions\InvalidDeviceTokenException;
 use OCA\Notifications\Push;
+use OCA\Notifications\Vendor\GuzzleHttp\Promise\PromiseInterface;
+use OCA\Notifications\Vendor\GuzzleHttp\Psr7\Request;
+use OCA\Notifications\Vendor\GuzzleHttp\Psr7\Response;
+use OCA\Notifications\Vendor\Minishlink\WebPush\MessageSentReport;
 use OCA\Notifications\WebPushClient;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Services\IAppConfig;
@@ -66,6 +71,7 @@ class PushTest extends TestCase {
 	protected ISecureRandom&MockObject $random;
 	protected LoggerInterface&MockObject $logger;
 	protected IUserManager&MockObject $userManager;
+	protected DeferredFlusher&MockObject $flusher;
 
 	public const EX_UA_PUBLIC = 'BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcx aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4';
 	public const EX_AUTH = 'BTBZMqHH6r4Tts7J_aSIgg';
@@ -90,6 +96,7 @@ class PushTest extends TestCase {
 		$this->random = $this->createMock(ISecureRandom::class);
 		$this->logger = $this->createMock(LoggerInterface::class);
 		$this->userManager = $this->createMock(IUserManager::class);
+		$this->flusher = $this->createMock(DeferredFlusher::class);
 
 		$this->cacheFactory->method('createDistributed')
 			->with('pushtokens')
@@ -123,6 +130,7 @@ class PushTest extends TestCase {
 					$this->timeFactory,
 					$this->random,
 					$this->logger,
+					$this->flusher,
 				])
 				->onlyMethods($methods)
 				->getMock();
@@ -145,6 +153,7 @@ class PushTest extends TestCase {
 			$this->timeFactory,
 			$this->random,
 			$this->logger,
+			$this->flusher,
 		);
 	}
 
@@ -1223,7 +1232,7 @@ sd7MhWnjKf7EX9GJD0VhLabFY/KrloJkyL7gOY21xFvmnNqwvH60eOxbVPzlYjaN
 		}
 
 		$this->wpClient->expects($this->once())
-			->method('flush');
+			->method('flushAsync');
 
 		$this->config->expects($this->once())
 			->method('getSystemValueBool')
@@ -1231,6 +1240,128 @@ sd7MhWnjKf7EX9GJD0VhLabFY/KrloJkyL7gOY21xFvmnNqwvH60eOxbVPzlYjaN
 			->willReturn(true);
 
 		$push->pushToDevice(207787, $notification);
+	}
+
+	public function testWebPushDeleteToDeviceFlushesWebPush(): void {
+		$push = $this->getPush();
+
+		/** @var IUser&MockObject $user */
+		$user = $this->createStub(IUser::class);
+
+		$this->cache->method('get')
+			->willReturn(false);
+
+		$this->wpClient->expects($this->once())
+			->method('enqueue')
+			->with('endpoint1', self::EX_UA_PUBLIC, self::EX_AUTH);
+
+		// The queued deletes have to be sent right away, they must not leak
+		// into an unrelated later flush
+		$this->wpClient->expects($this->once())
+			->method('flushAsync');
+
+		// Nothing was queued for the push proxies
+		$this->clientService->expects($this->never())
+			->method('newClient');
+
+		$push->webPushDeleteToDevice('valid', $user, [
+			[
+				'activated' => true,
+				'endpoint' => 'endpoint1',
+				'ua_public' => self::EX_UA_PUBLIC,
+				'auth' => self::EX_AUTH,
+				'token' => 16,
+				'app_types' => 'all',
+			],
+		], true, null);
+	}
+
+	public function testFlushPayloadsDefersTheSending(): void {
+		$push = $this->getPush(['startNotificationsToProxies']);
+
+		$webPushPromise = $this->createMock(PromiseInterface::class);
+		$proxyPromise = $this->createMock(IPromise::class);
+
+		$this->wpClient->expects($this->once())
+			->method('flushAsync')
+			->willReturn([$webPushPromise]);
+
+		$push->expects($this->once())
+			->method('startNotificationsToProxies')
+			->willReturn([$proxyPromise]);
+
+		$added = [];
+		$this->flusher->expects($this->exactly(2))
+			->method('add')
+			->willReturnCallback(static function (array $promises) use (&$added): void {
+				$added[] = $promises;
+			});
+		$this->flusher->expects($this->once())
+			->method('schedule');
+
+		// The requests must not be waited for while the payloads are flushed
+		$webPushPromise->expects($this->never())
+			->method('wait');
+		$proxyPromise->expects($this->never())
+			->method('wait');
+
+		$push->deferPayloads();
+		$push->flushPayloads();
+
+		$this->assertSame([[$webPushPromise], [$proxyPromise]], $added);
+	}
+
+	/**
+	 * Capture the callback the deferred web push requests report to
+	 */
+	protected function getWebPushCallback(Push $push): callable {
+		$callback = null;
+		$this->wpClient->method('flushAsync')
+			->willReturnCallback(static function (callable $c) use (&$callback): array {
+				$callback = $c;
+				return [];
+			});
+
+		$push->deferPayloads();
+		$push->flushPayloads();
+
+		$this->assertIsCallable($callback);
+		return $callback;
+	}
+
+	public function testWebPushCallbackDeletesExpiredSubscriptionWhenDeferred(): void {
+		$push = $this->getPush(['deleteWebPushTokenByEndpoint']);
+
+		$push->expects($this->once())
+			->method('deleteWebPushTokenByEndpoint')
+			->with('https://push.example.tld/endpoint');
+
+		$callback = $this->getWebPushCallback($push);
+
+		// Happens when the flusher waits for the requests, e.g. at the end of
+		// the request
+		$callback(new MessageSentReport(
+			new Request('POST', 'https://push.example.tld/endpoint'),
+			new Response(410),
+		));
+	}
+
+	public function testWebPushCallbackHandlesRateLimitWhenDeferred(): void {
+		$push = $this->getPush(['deleteWebPushTokenByEndpoint']);
+
+		$push->expects($this->never())
+			->method('deleteWebPushTokenByEndpoint');
+
+		$this->cache->expects($this->once())
+			->method('set')
+			->with('wp.https://push.example.tld/endpoint', true, 120);
+
+		$callback = $this->getWebPushCallback($push);
+
+		$callback(new MessageSentReport(
+			new Request('POST', 'https://push.example.tld/endpoint'),
+			new Response(429, ['Retry-After' => '120']),
+		));
 	}
 
 	public static function dataFilterWebPushDeviceList(): array {
