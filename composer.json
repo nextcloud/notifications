@@ -15,7 +15,8 @@
 		},
 		"sort-packages": true,
 		"allow-plugins": {
-			"bamarni/composer-bin-plugin": true
+			"bamarni/composer-bin-plugin": true,
+			"php-http/discovery": true
 		}
 	},
 	"scripts": {
@@ -43,7 +44,8 @@
 	},
 	"require": {
 		"bamarni/composer-bin-plugin": "^1.9.1",
-		"minishlink/web-push": "^10.0"
+		"guzzlehttp/psr7": "^2.8",
+		"minishlink/web-push": "^11.0"
 	},
 	"extra": {
 		"mozart": {
@@ -52,6 +54,7 @@
 			"classmap_directory": "/lib/autoload/",
 			"classmap_prefix": "NEXTCLOUDNOTIFICATIONS_",
 			"packages": [
+				"guzzlehttp/psr7",
 				"minishlink/web-push"
 			],
 			"excluded_packages": [
