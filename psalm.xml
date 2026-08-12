@@ -29,12 +29,6 @@
 		<LessSpecificReturnType errorLevel="error"/>
 		<LessSpecificImplementedReturnType errorLevel="error"/>
 		<MoreSpecificReturnType errorLevel="error"/>
-		<UndefinedDocblockClass>
-			<errorLevel type="suppress">
-				<referencedClass name="Doctrine\DBAL\Schema\Schema" />
-				<referencedClass name="Doctrine\DBAL\Schema\Table" />
-			</errorLevel>
-		</UndefinedDocblockClass>
 	</issueHandlers>
 	<stubs>
 		<file name="tests/stubs/oc_hooks_emitter.php" />
