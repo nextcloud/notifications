@@ -251,3 +251,37 @@ img.notification-icon {
 	from { transform: rotate(calc(45deg * var(--confetti-i, 0))) translateY(0) scale(1); opacity: 1; }
 	to   { transform: rotate(calc(45deg * var(--confetti-i, 0))) translateY(-34px) scale(0); opacity: .8; }
 }
+
+// Undo dismiss bar — appears below the list during the 4 s grace period
+.notification-undo-bar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 4px 4px 4px 16px;
+	border-top: 1px solid var(--color-border);
+	background: color-mix(in srgb, var(--color-primary-element) 8%, var(--color-main-background));
+	font-size: 13px;
+}
+
+// Smooth collapse animation while the dismiss is pending
+#notifications .notification.notification--collapsing {
+	overflow: hidden;
+	pointer-events: none;
+	animation: notification-collapse 280ms ease-in both;
+}
+
+@keyframes notification-collapse {
+	0% {
+		opacity: 1;
+		max-height: 600px;
+		padding-bottom: 12px;
+	}
+	45% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 0;
+		max-height: 0;
+		padding-bottom: 0;
+	}
+}
