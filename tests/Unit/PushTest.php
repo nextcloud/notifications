@@ -1473,6 +1473,131 @@ sd7MhWnjKf7EX9GJD0VhLabFY/KrloJkyL7gOY21xFvmnNqwvH60eOxbVPzlYjaN
 		$this->assertSame(0, self::invokePrivate($push, 'validateTokenAndGetAge', [-1]));
 	}
 
+	/**
+	 * @return array{id: int, uid: string, token: int}
+	 */
+	protected static function getProxyDevice(int $token): array {
+		return [
+			'id' => 1000 + $token,
+			'uid' => 'valid',
+			'token' => $token,
+		];
+	}
+
+	/**
+	 * @return array{id: int, uid: string, token: int, endpoint: string}
+	 */
+	protected static function getWebPushDevice(int $token): array {
+		return self::getProxyDevice($token) + [
+			'endpoint' => 'https://push.example.com/' . $token,
+		];
+	}
+
+	public function testFilterByTokenAgeBelowLimit(): void {
+		$now = 1234567890;
+		$this->timeFactory->method('getTime')
+			->willReturn($now);
+
+		$devices = [
+			self::getProxyDevice(23),
+			self::getProxyDevice(42),
+		];
+
+		$push = $this->getPush(['validateTokenAndGetAge']);
+		$push->method('validateTokenAndGetAge')
+			->willReturnMap([
+				[23, $now - 100],
+				[42, $now - 200],
+			]);
+
+		$this->assertSame($devices, self::invokePrivate($push, 'filterByTokenAge', [$devices]));
+	}
+
+	public function testFilterByTokenAgeRemovesOutdatedTokens(): void {
+		$now = 1234567890;
+		$this->timeFactory->method('getTime')
+			->willReturn($now);
+
+		$recent = self::getProxyDevice(23);
+		$outdated = self::getProxyDevice(42);
+
+		$push = $this->getPush(['validateTokenAndGetAge']);
+		$push->method('validateTokenAndGetAge')
+			->willReturnMap([
+				[23, $now - 100],
+				[42, $now - Push::MAX_PUSH_AGE - 1],
+			]);
+
+		$this->assertSame([$recent], self::invokePrivate($push, 'filterByTokenAge', [[$recent, $outdated]]));
+	}
+
+	public function testFilterByTokenAgeDeletesInvalidTokens(): void {
+		$this->timeFactory->method('getTime')
+			->willReturn(1234567890);
+
+		$proxyDevice = self::getProxyDevice(23);
+		$webPushDevice = self::getWebPushDevice(42);
+
+		$push = $this->getPush(['validateTokenAndGetAge', 'deleteProxyPushToken', 'deleteWebPushToken']);
+		$push->method('validateTokenAndGetAge')
+			->willThrowException(new InvalidDeviceTokenException());
+
+		$push->expects($this->once())
+			->method('deleteProxyPushToken')
+			->with(23);
+		$push->expects($this->once())
+			->method('deleteWebPushToken')
+			->with(42);
+
+		$this->assertSame([], self::invokePrivate($push, 'filterByTokenAge', [[$proxyDevice, $webPushDevice]]));
+	}
+
+	public function testFilterByTokenAgeKeepsTheNewestDevices(): void {
+		$now = 1234567890;
+		$this->timeFactory->method('getTime')
+			->willReturn($now);
+
+		// Oldest token first, so the device limit has to cut off the head of the list
+		$devices = $ages = [];
+		for ($i = 0; $i < Push::DEVICE_LIMIT + 5; $i++) {
+			$devices[] = self::getProxyDevice($i + 1);
+			$ages[] = [$i + 1, $now - 10000 + $i];
+		}
+
+		$push = $this->getPush(['validateTokenAndGetAge']);
+		$push->method('validateTokenAndGetAge')
+			->willReturnMap($ages);
+
+		$this->assertSame(
+			array_slice($devices, 5),
+			self::invokePrivate($push, 'filterByTokenAge', [$devices]),
+		);
+	}
+
+	public function testFilterByTokenAgeKeepsWebSessionTokensAboveTheLimit(): void {
+		$now = 1234567890;
+		$this->timeFactory->method('getTime')
+			->willReturn($now);
+
+		// Web session tokens have a negative id and an age of 0, so they always
+		// sort last and would be cut off by the device limit
+		$devices = $ages = [];
+		for ($i = 0; $i < Push::DEVICE_LIMIT; $i++) {
+			$devices[] = self::getProxyDevice($i + 1);
+			$ages[] = [$i + 1, $now - 10000 + $i];
+		}
+		for ($i = 1; $i <= 3; $i++) {
+			$devices[] = self::getProxyDevice(-$i);
+			$ages[] = [-$i, 0];
+		}
+
+		$push = $this->getPush(['validateTokenAndGetAge']);
+		$push->method('validateTokenAndGetAge')
+			->willReturnMap($ages);
+
+		$this->assertSame($devices, self::invokePrivate($push, 'filterByTokenAge', [$devices]));
+	}
+
 	public function testValidateTokenAndGetAgeCached(): void {
 		$this->cache->expects($this->once())
 			->method('get')
