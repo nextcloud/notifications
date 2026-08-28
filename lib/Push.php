@@ -291,10 +291,11 @@ class Push {
 		}
 
 		arsort($tokenAgeList);
-		$tokenAgeList = array_slice($tokenAgeList, 0, self::DEVICE_LIMIT);
+		$newestTokens = array_slice($tokenAgeList, 0, self::DEVICE_LIMIT, true);
 		$devices = [];
 		foreach ($deviceList as $device) {
-			if (!isset($tokenAgeList[$device['token']]) || $tokenAgeList[$device['token']] !== 0) {
+			// Web session tokens have an age of 0 and are otherwise never sorted into the newest tokens
+			if (!isset($newestTokens[$device['token']]) && $tokenAgeList[$device['token']] !== 0) {
 				$this->printInfo('<comment>Device token ' . $device['token'] . ' is not in the most recent 20 devices: ' . $tokenAgeList[$device['token']] . '</comment>');
 				continue;
 			}
