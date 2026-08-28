@@ -4,12 +4,12 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5dbd6ae6465ad99765e7d232c3bba5b1",
+    "content-hash": "7d3ed95e010e319128156da226e7dbf2",
     "packages": [],
     "packages-dev": [
         {
             "name": "nextcloud/ocp",
-            "version": "dev-master",
+            "version": "dev-stable35",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nextcloud-deps/ocp.git",
@@ -33,7 +33,6 @@
                 "symfony/polyfill-php85": "^1.41",
                 "symfony/polyfill-php86": "^1.41"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
