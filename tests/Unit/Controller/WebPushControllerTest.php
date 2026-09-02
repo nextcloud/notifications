@@ -19,6 +19,7 @@ use OCA\Notifications\WebPushClient;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Services\IAppConfig;
+use OCP\Http\Client\IClientService;
 use OCP\IDBConnection;
 use OCP\IRequest;
 use OCP\ISession;
@@ -38,6 +39,7 @@ class WebPushControllerTest extends TestCase {
 	protected IUserSession&MockObject $userSession;
 	protected IProvider&MockObject $tokenProvider;
 	protected IRemoteHostValidator&MockObject $hostValidator;
+	protected IClientService&MockObject $clientService;
 	protected Manager&MockObject $identityProof;
 	protected LoggerInterface&MockObject $logger;
 	protected IUser&MockObject $user;
@@ -58,6 +60,7 @@ class WebPushControllerTest extends TestCase {
 		$this->tokenProvider = $this->createMock(IProvider::class);
 		$this->identityProof = $this->createMock(Manager::class);
 		$this->hostValidator = $this->createMock(IRemoteHostValidator::class);
+		$this->clientService = $this->createMock(IClientService::class);
 		$this->logger = $this->createMock(LoggerInterface::class);
 
 		$this->appConfig->method('getAppValueBool')
@@ -77,6 +80,7 @@ class WebPushControllerTest extends TestCase {
 				$this->tokenProvider,
 				$this->identityProof,
 				$this->hostValidator,
+				$this->clientService,
 				$this->logger,
 			);
 		}
@@ -92,6 +96,7 @@ class WebPushControllerTest extends TestCase {
 				$this->tokenProvider,
 				$this->identityProof,
 				$this->hostValidator,
+				$this->clientService,
 				$this->logger,
 			])
 			->onlyMethods($methods)
