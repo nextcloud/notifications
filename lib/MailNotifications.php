@@ -93,7 +93,7 @@ class MailNotifications {
 			}
 
 			$userId = $settings->getUserId();
-			if (isset($userEnabled[$userId]) && $userEnabled[$userId] === 'false') {
+			if (isset($userEnabled[$userId]) && $userEnabled[$userId] === false) {
 				// User is disabled, skip sending the email for them
 				if ($settings->getNextSendTime() <= $sendTime) {
 					$settings->setNextSendTime(
