@@ -10,11 +10,14 @@ declare(strict_types=1);
 namespace OCA\Notifications;
 
 use OCA\Notifications\Vendor\Base64Url\Base64Url;
+use OCA\Notifications\Vendor\GuzzleHttp\Psr7\HttpFactory;
 use OCA\Notifications\Vendor\Minishlink\WebPush\Subscription;
 use OCA\Notifications\Vendor\Minishlink\WebPush\Utils;
 use OCA\Notifications\Vendor\Minishlink\WebPush\VAPID;
 use OCA\Notifications\Vendor\Minishlink\WebPush\WebPush;
+use OCA\Notifications\WebPush\ClientAdapter;
 use OCP\AppFramework\Services\IAppConfig;
+use OCP\Http\Client\IClientService;
 
 class WebPushClient {
 	private WebPush $client;
@@ -23,6 +26,7 @@ class WebPushClient {
 
 	public function __construct(
 		protected IAppConfig $appConfig,
+		protected IClientService $clientService,
 	) {
 		$this->vapid = $this->getVapid();
 	}
@@ -55,7 +59,15 @@ class WebPushClient {
 		if (isset($this->client)) {
 			return $this->client;
 		}
-		$this->client = new WebPush(auth: ['VAPID' => $this->vapid]);
+		$adapter = new ClientAdapter($this->clientService->newClient());
+		$factory = new HttpFactory();
+		$this->client = new WebPush(
+			auth: ['VAPID' => $this->vapid],
+			client: $adapter,
+			requestFactory: $factory,
+			streamFactory: $factory,
+			asyncClient: $adapter,
+		);
 		$this->client->setReuseVAPIDHeaders(true);
 		return $this->client;
 	}
