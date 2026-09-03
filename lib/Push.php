@@ -37,6 +37,7 @@ use OCP\Notification\AlreadyProcessedException;
 use OCP\Notification\IManager as INotificationManager;
 use OCP\Notification\IncompleteParsedNotificationException;
 use OCP\Notification\INotification;
+use OCP\Notification\NotificationPreloadReason;
 use OCP\Security\ISecureRandom;
 use OCP\UserStatus\IManager as IUserStatusManager;
 use OCP\UserStatus\IUserStatus;
@@ -361,8 +362,10 @@ class Push {
 			$language = $this->l10nFactory->getUserLanguage($user);
 			$this->printInfo('Language is set to ' . $language);
 
+			$this->notificationManager->setPreparingPushNotification(true);
+			$this->notificationManager->preloadDataForParsing([$notification], $language, NotificationPreloadReason::Push);
+
 			try {
-				$this->notificationManager->setPreparingPushNotification(true);
 				$notification = $this->notificationManager->prepare($notification, $language);
 			} catch (AlreadyProcessedException|IncompleteParsedNotificationException|\InvalidArgumentException $e) {
 				// FIXME remove \InvalidArgumentException in Nextcloud 39

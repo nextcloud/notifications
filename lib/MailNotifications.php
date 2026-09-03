@@ -29,6 +29,7 @@ use OCP\Notification\IAction;
 use OCP\Notification\IManager;
 use OCP\Notification\IncompleteParsedNotificationException;
 use OCP\Notification\INotification;
+use OCP\Notification\NotificationPreloadReason;
 use OCP\Util;
 use Psr\Log\LoggerInterface;
 
@@ -141,6 +142,8 @@ class MailNotifications {
 	protected function sendEmailToUser(Settings $settings, array $notifications, string $language, string $timezone, int $batchTime): void {
 		$lastSendId = array_key_first($notifications);
 		$lastSendTime = $this->timeFactory->getTime();
+
+		$this->manager->preloadDataForParsing($notifications, $language, NotificationPreloadReason::Email);
 
 		$preparedNotifications = [];
 		foreach ($notifications as $notification) {
