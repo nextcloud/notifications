@@ -18,6 +18,8 @@ use OCP\Notification\IManager;
 use OCP\Notification\INotification;
 
 class Handler {
+	public const string FILTER_OBJECT_TYPE_ONLY = 'noone-uses-this-objectid-c72c4349-00d9-4376-95c2-b1fc90f668d9';
+
 	public function __construct(
 		protected IDBConnection $connection,
 		protected IManager $manager,
@@ -280,7 +282,7 @@ class Handler {
 			$sql->andWhere($sql->expr()->eq('object_type', $sql->createNamedParameter($notification->getObjectType())));
 		}
 
-		if ($notification->getObjectId() !== '') {
+		if ($notification->getObjectId() !== '' && $notification->getObjectId() !== self::FILTER_OBJECT_TYPE_ONLY) {
 			$sql->andWhere($sql->expr()->eq('object_id', $sql->createNamedParameter($notification->getObjectId())));
 		}
 
