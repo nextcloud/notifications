@@ -223,6 +223,57 @@ class HandlerTest extends TestCase {
 		$this->assertSame(0, $this->handler->count($limitedNotification), 'Wrong notification count for user1 after deleting');
 	}
 
+	public function testFilterByObject(): void {
+		$user = 'test_user1';
+		foreach ([['reminder', 'token1'], ['reminder', 'token2'], ['chat', 'token1']] as [$objectType, $objectId]) {
+			$this->handler->add($this->getNotification([
+				'getApp' => 'testing_notifications',
+				'getUser' => $user,
+				'getDateTime' => new \DateTime(),
+				'getObjectType' => $objectType,
+				'getObjectId' => $objectId,
+				'getSubject' => 'subject',
+				'getSubjectParameters' => [],
+				'getMessage' => 'message',
+				'getMessageParameters' => [],
+				'getLink' => 'https://example.tld/notification',
+				'getIcon' => 'https://example.tld/icon',
+				'getActions' => [],
+			]));
+		}
+
+		$unfiltered = $this->getNotification([
+			'getApp' => 'testing_notifications',
+			'getUser' => $user,
+		]);
+		$this->assertCount(3, $this->handler->get($unfiltered), 'Wrong notification count without an object filter');
+
+		$byTypeOnly = $this->getNotification([
+			'getApp' => 'testing_notifications',
+			'getUser' => $user,
+			'getObjectType' => 'reminder',
+			'getObjectId' => Handler::FILTER_OBJECT_TYPE_ONLY,
+		]);
+		$this->assertCount(2, $this->handler->get($byTypeOnly), 'Wrong notification count when filtering by object type only');
+		$this->assertSame(2, $this->handler->count($byTypeOnly), 'Wrong notification count when filtering by object type only');
+
+		$byTypeAndId = $this->getNotification([
+			'getApp' => 'testing_notifications',
+			'getUser' => $user,
+			'getObjectType' => 'reminder',
+			'getObjectId' => 'token1',
+		]);
+		$this->assertCount(1, $this->handler->get($byTypeAndId), 'Wrong notification count when filtering by object type and id');
+
+		$byOtherType = $this->getNotification([
+			'getApp' => 'testing_notifications',
+			'getUser' => $user,
+			'getObjectType' => 'chat',
+			'getObjectId' => Handler::FILTER_OBJECT_TYPE_ONLY,
+		]);
+		$this->assertCount(1, $this->handler->get($byOtherType), 'Wrong notification count when filtering by another object type');
+	}
+
 	protected function getNotification(array $values = []): INotification&MockObject {
 		$notification = $this->getMockBuilder(INotification::class)
 			->getMock();
