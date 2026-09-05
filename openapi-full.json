@@ -1538,6 +1538,33 @@
                         }
                     },
                     {
+                        "name": "app",
+                        "in": "query",
+                        "description": "Limit notifications to a given app",
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "objectType",
+                        "in": "query",
+                        "description": "Limit notifications to a given object type",
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "objectId",
+                        "in": "query",
+                        "description": "Limit notifications to a given object (only considered when object type is also provided)",
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    },
+                    {
                         "name": "OCS-APIRequest",
                         "in": "header",
                         "description": "Required to be true for the API request to pass",
