@@ -23,9 +23,6 @@ SPDX-FileCopyrightText: rhysd <lin90162@yahoo.co.jp>
 SPDX-FileCopyrightText: ts-md5 developers
 
 This file is generated from multiple sources. Included packages:
-- @nextcloud/capabilities
-	- version: 1.2.1
-	- license: GPL-3.0-or-later
 - @nextcloud/notify_push
 	- version: 1.4.0
 	- license: AGPL-3.0-or-later
