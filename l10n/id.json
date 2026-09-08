@@ -1,4 +1,5 @@
 { "translations": {
+    "We want to keep offering our push notification service for free, but large number of users overload our infrastructure. For this reason we have to rate-limit the use of push notifications. If you need this feature, consider using Nextcloud Enterprise." : "Kami ingin tetap menyediakan layanan notifikasi push secara gratis, tetapi jumlah pengguna yang besar membebani infrastruktur kami. Oleh karena itu, kami harus membatasi penggunaan notifikasi push berdasarkan tingkat penggunaan. Jika Anda memerlukan fitur ini, pertimbangkan untuk menggunakan Nextcloud Enterprise.",
     "User not found" : "Pengguna tidak ditemukan",
     "An unexpected error occurred, ask your administration to check the logs." : "Terjadi kesalahan tak terduga, minta administrasi Anda untuk memeriksa log.",
     "Hello %s" : "Halo %s",
@@ -36,6 +37,11 @@
     "Send email reminders about unhandled notifications after:" : "Kirim email pengingat tentang pemberitahuan yang tidak tertangani setelah:",
     "Play sound when a new notification arrives" : "Putar suara saat notifikasi baru tiba",
     "Play sound when a call started (requires Nextcloud Talk)" : "Putar suara saat panggilan dimulai (memerlukan Nextcloud Talk)",
+    "Web push settings" : "Pengaturan web push",
+    "Web push is a push notification system that lets web applications send notifications to users´ mobile apps or browser, even when the app is not open in a tab." : "Web push adalah sistem notifikasi push yang memungkinkan aplikasi web mengirimkan notifikasi ke aplikasi seluler atau peramban pengguna, bahkan ketika aplikasi tidak sedang dibuka dalam tab.",
+    "Web push notifications are encrypted but routed through services provided by Mozilla, Microsoft, Apple, Google or user-choosen ones in case of mobile apps. While the content is protected, metadata such as timing and frequency of notifications may be exposed to these providers." : "Notifikasi web push dienkripsi, tetapi dirutekan melalui layanan yang disediakan oleh Mozilla, Microsoft, Apple, Google, atau penyedia yang dipilih pengguna untuk aplikasi seluler. Meskipun kontennya terlindungi, metadata seperti waktu dan frekuensi notifikasi dapat terekspos kepada penyedia tersebut.",
+    "Allow web push to be used" : "Izinkan penggunaan web push",
+    "Allow web push for browsers" : "Izinkan web push untuk peramban",
     "None" : "Tidak ada",
     "You need to set up your email address before you can receive notification emails." : "Anda perlu menyetel alamat email sebelum Anda dapat menerima email pemberitahuan.",
     "Also repeat sound on a secondary speaker" : "Juga ulangi suara pada speaker sekunder",
