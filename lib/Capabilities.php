@@ -50,6 +50,7 @@ class Capabilities implements ICapability {
 					'user-status',
 					'exists',
 					'test-push',
+					'list-filter',
 				],
 				'push' => [
 					'devices',

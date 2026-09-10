@@ -273,6 +273,70 @@ class EndpointControllerTest extends TestCase {
 		$this->assertSame(Http::STATUS_NO_CONTENT, $response->getStatus());
 	}
 
+	public static function dataListNotificationsFilter(): array {
+		return [
+			'no filter' => ['', '', '', null, null],
+			'app only' => ['spreed', '', '', 'spreed', null],
+			'object type only' => ['', 'reminder', '', null, ['reminder', Handler::FILTER_OBJECT_TYPE_ONLY]],
+			'object type and id' => ['', 'reminder', 'token', null, ['reminder', 'token']],
+			'object id without type' => ['', '', 'token', null, null],
+			'app and object' => ['spreed', 'reminder', 'token', 'spreed', ['reminder', 'token']],
+		];
+	}
+
+	#[DataProvider(methodName: 'dataListNotificationsFilter')]
+	public function testListNotificationsFilter(string $app, string $objectType, string $objectId, ?string $expectedApp, ?array $expectedObject): void {
+		$controller = $this->getController();
+
+		$filter = $this->createMock(INotification::class);
+		$filter->expects($this->once())
+			->method('setUser')
+			->with('username')
+			->willReturn($filter);
+
+		if ($expectedApp === null) {
+			$filter->expects($this->never())
+				->method('setApp');
+		} else {
+			$filter->expects($this->once())
+				->method('setApp')
+				->with($expectedApp)
+				->willReturn($filter);
+		}
+
+		if ($expectedObject === null) {
+			$filter->expects($this->never())
+				->method('setObject');
+		} else {
+			$filter->expects($this->once())
+				->method('setObject')
+				->with($expectedObject[0], $expectedObject[1])
+				->willReturn($filter);
+		}
+
+		$this->manager->expects($this->once())
+			->method('hasNotifiers')
+			->willReturn(true);
+		$this->manager->expects($this->once())
+			->method('createNotification')
+			->willReturn($filter);
+
+		$this->l10nFactory
+			->method('getUserLanguage')
+			->with($this->user)
+			->willReturn('en');
+
+		$this->handler->expects($this->once())
+			->method('get')
+			->with($filter)
+			->willReturn([]);
+
+		$response = $controller->listNotifications('v2', $app, $objectType, $objectId);
+		$this->assertInstanceOf(DataResponse::class, $response);
+		$this->assertSame(Http::STATUS_OK, $response->getStatus());
+		$this->assertSame([], $response->getData());
+	}
+
 	public static function dataGetNotification(): array {
 		return [
 			['v1', 42, 'username1'],
