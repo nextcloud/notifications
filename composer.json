@@ -44,7 +44,7 @@
 	},
 	"require": {
 		"bamarni/composer-bin-plugin": "^1.9.1",
-		"guzzlehttp/psr7": "^2.8",
+		"guzzlehttp/psr7": "^3.1",
 		"minishlink/web-push": "^11.0"
 	},
 	"extra": {
