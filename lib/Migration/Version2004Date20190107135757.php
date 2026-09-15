@@ -84,6 +84,7 @@ class Version2004Date20190107135757 extends SimpleMigrationStep {
 			$table->addIndex(['user'], 'oc_notifications_user');
 			$table->addIndex(['timestamp'], 'oc_notifications_timestamp');
 			$table->addIndex(['object_type', 'object_id'], 'oc_notifications_object');
+			$table->addIndex(['object_type', 'timestamp'], 'oc_notifications_object_ts');
 		}
 
 		// $schema->createTable('notifications_pushtokens') was
