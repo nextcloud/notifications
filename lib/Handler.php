@@ -163,16 +163,20 @@ class Handler {
 	 * long-expired cleanup candidates, not notifications a user is actively dismissing,
 	 * and the point is to remove potentially large backlogs cheaply.
 	 */
-	public function expireOlderThan(string $objectType, int $olderThan, int $batchSize = 1000, int $maxBatches = 50): void {
-		$query = $this->connection->getQueryBuilder();
-		$query->select('notification_id')
+	public function expireOlderThan(string $objectType, int $olderThan, int $maxBatches = 50, int $batchSize = IQueryBuilder::MAX_IN_PARAMETERS): void {
+		$selectQuery = $this->connection->getQueryBuilder();
+		$selectQuery->select('notification_id')
 			->from('notifications')
-			->where($query->expr()->eq('object_type', $query->createNamedParameter($objectType)))
-			->andWhere($query->expr()->lt('timestamp', $query->createNamedParameter($olderThan, IQueryBuilder::PARAM_INT)))
+			->where($selectQuery->expr()->eq('object_type', $selectQuery->createNamedParameter($objectType)))
+			->andWhere($selectQuery->expr()->lt('timestamp', $selectQuery->createNamedParameter($olderThan, IQueryBuilder::PARAM_INT)))
 			->setMaxResults($batchSize);
 
+		$deleteQuery = $this->connection->getQueryBuilder();
+		$deleteQuery->delete('notifications')
+			->where($deleteQuery->expr()->in('notification_id', $deleteQuery->createParameter('ids')));
+
 		for ($i = 0; $i < $maxBatches; $i++) {
-			$result = $query->executeQuery();
+			$result = $selectQuery->executeQuery();
 			$ids = array_map('intval', $result->fetchAll(\PDO::FETCH_COLUMN));
 			$result->closeCursor();
 
@@ -180,7 +184,8 @@ class Handler {
 				return;
 			}
 
-			$this->deleteIds($ids);
+			$deleteQuery->setParameter('ids', $ids, IQueryBuilder::PARAM_INT_ARRAY);
+			$deleteQuery->executeStatement();
 
 			if (count($ids) < $batchSize) {
 				return;

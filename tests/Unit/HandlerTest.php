@@ -351,7 +351,7 @@ class HandlerTest extends TestCase {
 		]);
 		$this->assertSame(3, $this->handler->count($limitedNotification), 'Wrong notification count before expiring');
 
-		$this->handler->expireOlderThan('activity_notification', $now - 200 * 24 * 60 * 60, 1, 2);
+		$this->handler->expireOlderThan('activity_notification', $now - 200 * 24 * 60 * 60, 2, 1);
 
 		$this->assertSame(1, $this->handler->count($limitedNotification), 'Only two batches of one should have been expired');
 	}

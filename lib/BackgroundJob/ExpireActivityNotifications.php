@@ -34,6 +34,6 @@ class ExpireActivityNotifications extends TimedJob {
 		$expireDays = $this->config->getSystemValueInt('activity_expire_days', 365);
 		$olderThan = $this->time->getTime() - (60 * 60 * 24 * max(1, $expireDays));
 
-		$this->handler->expireOlderThan('activity_notification', $olderThan);
+		$this->handler->expireOlderThan('activity_notification', $olderThan, \OC::$CLI ? 1000 : 50);
 	}
 }
