@@ -57,6 +57,9 @@ class EndpointController extends OCSController {
 	 * Get all notifications
 	 *
 	 * @param string $apiVersion Version of the API to use
+	 * @param string $app Limit notifications to a given app
+	 * @param string $objectType Limit notifications to a given object type
+	 * @param string $objectId Limit notifications to a given object (only considered when object type is also provided)
 	 * @return DataResponse<Http::STATUS_OK, list<NotificationsNotification>, array{'X-Nextcloud-User-Status': string}>|DataResponse<Http::STATUS_NO_CONTENT, null, array{X-Nextcloud-User-Status: string}>
 	 *
 	 * 200: Notifications returned
@@ -64,7 +67,7 @@ class EndpointController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'GET', url: '/api/{apiVersion}/notifications', requirements: ['apiVersion' => '(v1|v2)'])]
-	public function listNotifications(string $apiVersion): DataResponse {
+	public function listNotifications(string $apiVersion, string $app = '', string $objectType = '', string $objectId = ''): DataResponse {
 		$userStatus = $this->userStatusManager->getUserStatuses([
 			$this->getCurrentUser(),
 		]);
@@ -84,6 +87,14 @@ class EndpointController extends OCSController {
 		$user = $this->session->getUser();
 		$filter = $this->manager->createNotification();
 		$filter->setUser($this->getCurrentUser());
+
+		if ($app !== '') {
+			$filter->setApp($app);
+		}
+		if ($objectType !== '') {
+			$filter->setObject($objectType, $objectId === '' ? Handler::FILTER_OBJECT_TYPE_ONLY : $objectId);
+		}
+
 		$language = $this->l10nFactory->getUserLanguage($user);
 		$notifications = $this->handler->get($filter);
 
