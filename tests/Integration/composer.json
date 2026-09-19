@@ -6,7 +6,7 @@
 		"sort-packages": true
 	},
 	"require-dev": {
-		"behat/behat": "^3.32.0",
+		"behat/behat": "^3.33.0",
 		"guzzlehttp/guzzle": "^8.1.0",
 		"phpunit/phpunit": "^12.5.29"
 	}
