@@ -29,5 +29,11 @@ class AddMissingIndicesListener implements IEventListener {
 			'oc_npushhash_di',
 			['deviceidentifier'],
 		);
+
+		$event->addMissingIndex(
+			'notifications',
+			'oc_notifications_object_ts',
+			['object_type', 'timestamp'],
+		);
 	}
 }
