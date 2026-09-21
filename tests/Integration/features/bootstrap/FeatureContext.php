@@ -209,6 +209,24 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 		$this->sendingTo('DELETE', '/apps/notifications/api/' . $api . '/notifications/' . $this->deletedNotification);
 	}
 
+	#[Then('/^snooze (first|last|other user\'s|faulty) notification on (v\d+) until (-?\d+)$/')]
+	public function snoozeNotification(string $toSnooze, string $api, string $offset) {
+		Assert::assertNotEmpty($this->notificationIds);
+		$lastNotificationIds = end($this->notificationIds);
+		if ($toSnooze === 'first') {
+			$notificationId = end($lastNotificationIds);
+		} elseif ($toSnooze === 'last' || $toSnooze === "other user's") {
+			$notificationId = reset($lastNotificationIds);
+		} else { /* if ($toSnooze === 'faulty') */
+			$notificationId = 'faulty';
+		}
+		$this->deletedNotification = $notificationId;
+
+		$this->sendingToWith('POST', '/apps/notifications/api/' . $api . '/notifications/' . $notificationId . '/snooze', [
+			'snoozeUntil' => time() + (int)$offset,
+		]);
+	}
+
 	#[Then('/^delete all notifications on (v\d+)$/')]
 	public function deleteAllNotification($api) {
 		Assert::assertNotEmpty($this->notificationIds);

@@ -10,10 +10,12 @@ declare(strict_types=1);
 namespace OCA\Notifications\Tests\Unit\Controller;
 
 use OCA\Notifications\Controller\EndpointController;
+use OCA\Notifications\Exceptions\InvalidSnoozeException;
 use OCA\Notifications\Exceptions\NotificationNotFoundException;
 use OCA\Notifications\Handler;
 use OCA\Notifications\Push;
 use OCA\Notifications\Service\ClientService;
+use OCA\Notifications\Service\SnoozeService;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Utility\ITimeFactory;
@@ -40,6 +42,7 @@ class EndpointControllerTest extends TestCase {
 	protected ITimeFactory&MockObject $timeFactory;
 	protected ClientService&MockObject $clientService;
 	protected Push&MockObject $push;
+	protected SnoozeService&MockObject $snoozeService;
 	protected EndpointController $controller;
 
 	protected function setUp(): void {
@@ -55,6 +58,7 @@ class EndpointControllerTest extends TestCase {
 		$this->timeFactory = $this->createMock(ITimeFactory::class);
 		$this->clientService = $this->createMock(ClientService::class);
 		$this->push = $this->createMock(Push::class);
+		$this->snoozeService = $this->createMock(SnoozeService::class);
 
 		$this->session->expects($this->any())
 			->method('getUser')
@@ -78,6 +82,7 @@ class EndpointControllerTest extends TestCase {
 				$this->userStatusManager,
 				$this->clientService,
 				$this->push,
+				$this->snoozeService,
 			);
 		}
 
@@ -93,6 +98,7 @@ class EndpointControllerTest extends TestCase {
 				$this->userStatusManager,
 				$this->clientService,
 				$this->push,
+				$this->snoozeService,
 			])
 			->onlyMethods($methods)
 			->getMock();
@@ -477,7 +483,7 @@ class EndpointControllerTest extends TestCase {
 
 		$this->handler->expects($this->once())
 			->method('deleteByUser')
-			->with($username);
+			->with($username, includeSnoozed: false);
 		$this->manager->expects($this->once())
 			->method('defer')
 			->willReturn(true);
@@ -487,6 +493,67 @@ class EndpointControllerTest extends TestCase {
 		$response = $controller->deleteAllNotifications();
 		$this->assertInstanceOf(DataResponse::class, $response);
 		$this->assertSame(Http::STATUS_OK, $response->getStatus());
+	}
+
+	public function testSnoozeNotification(): void {
+		$controller = $this->getController([], 'username1');
+		$notification = $this->createMock(INotification::class);
+
+		$this->handler->expects($this->once())
+			->method('getById')
+			->with(42, 'username1', includeSnoozed: true)
+			->willReturn($notification);
+		$this->snoozeService->expects($this->once())
+			->method('snooze')
+			->with($notification, 42, 'username1', 12345);
+
+		$response = $controller->snoozeNotification(42, 12345);
+		$this->assertInstanceOf(DataResponse::class, $response);
+		$this->assertSame(Http::STATUS_OK, $response->getStatus());
+	}
+
+	public function testSnoozeNotificationNotFound(): void {
+		$controller = $this->getController([], 'username1');
+
+		$this->handler->expects($this->once())
+			->method('getById')
+			->willThrowException(new NotificationNotFoundException());
+		$this->snoozeService->expects($this->never())
+			->method('snooze');
+
+		$response = $controller->snoozeNotification(42, 12345);
+		$this->assertInstanceOf(DataResponse::class, $response);
+		$this->assertSame(Http::STATUS_NOT_FOUND, $response->getStatus());
+	}
+
+	public function testSnoozeNotificationInvalidSnooze(): void {
+		$controller = $this->getController([], 'username1');
+		$notification = $this->createMock(INotification::class);
+
+		$this->handler->expects($this->once())
+			->method('getById')
+			->willReturn($notification);
+		$this->snoozeService->expects($this->once())
+			->method('snooze')
+			->willThrowException(new InvalidSnoozeException());
+
+		$response = $controller->snoozeNotification(42, 12345);
+		$this->assertInstanceOf(DataResponse::class, $response);
+		$this->assertSame(Http::STATUS_BAD_REQUEST, $response->getStatus());
+	}
+
+	public function testSnoozeNotificationImpersonated(): void {
+		$controller = $this->getController([], 'username1');
+		$this->session->expects($this->once())
+			->method('getImpersonatingUserID')
+			->willReturn('admin');
+
+		$this->handler->expects($this->never())
+			->method('getById');
+
+		$response = $controller->snoozeNotification(42, 12345);
+		$this->assertInstanceOf(DataResponse::class, $response);
+		$this->assertSame(Http::STATUS_FORBIDDEN, $response->getStatus());
 	}
 
 	public static function dataNotificationToArray(): array {

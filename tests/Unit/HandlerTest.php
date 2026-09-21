@@ -274,6 +274,83 @@ class HandlerTest extends TestCase {
 		$this->assertCount(1, $this->handler->get($byOtherType), 'Wrong notification count when filtering by another object type');
 	}
 
+	public function testSnoozeHidesFromListsButKeepsCount(): void {
+		$limitedNotification = $this->getNotification([
+			'getApp' => 'testing_notifications',
+			'getUser' => 'test_user1',
+		]);
+
+		$notificationId = $this->addTestNotification('test_user1', '1337');
+
+		$this->handler->snooze($notificationId, 'test_user1', time() + 3600);
+
+		$this->assertSame(1, $this->handler->count($limitedNotification), 'count() must still include snoozed notifications');
+		$this->assertCount(0, $this->handler->get($limitedNotification), 'get() must exclude snoozed notifications');
+		$this->assertCount(0, $this->handler->getAfterId(0, 'test_user1'), 'getAfterId() must exclude snoozed notifications');
+		$this->assertSame([], $this->handler->confirmIdsForUser('test_user1', [$notificationId]), 'confirmIdsForUser() must exclude snoozed notifications');
+
+		try {
+			$this->handler->getById($notificationId, 'test_user1');
+			$this->fail('Exception of type NotificationNotFoundException expected');
+		} catch (\Exception $e) {
+			$this->assertInstanceOf(NotificationNotFoundException::class, $e);
+		}
+
+		$snoozed = $this->handler->getById($notificationId, 'test_user1', includeSnoozed: true);
+		$this->assertInstanceOf(INotification::class, $snoozed);
+	}
+
+	public function testDeleteAndDeleteByUserCanSpareSnoozed(): void {
+		$limitedNotification = $this->getNotification([
+			'getApp' => 'testing_notifications',
+			'getUser' => 'test_user1',
+		]);
+
+		$notificationId = $this->addTestNotification('test_user1', '1337');
+		$this->handler->snooze($notificationId, 'test_user1', time() + 3600);
+
+		$deleted = $this->handler->delete($limitedNotification, includeSnoozed: false);
+		$this->assertSame([], $deleted, 'delete() with includeSnoozed:false must spare snoozed notifications');
+		$this->assertSame(1, $this->handler->count($limitedNotification));
+
+		$this->assertFalse($this->handler->deleteByUser('test_user1', includeSnoozed: false), 'deleteByUser() with includeSnoozed:false must spare snoozed notifications');
+		$this->assertSame(1, $this->handler->count($limitedNotification));
+
+		$this->assertTrue($this->handler->deleteByUser('test_user1'), 'deleteByUser() defaults to including snoozed notifications');
+		$this->assertSame(0, $this->handler->count($limitedNotification));
+	}
+
+	public function testGetSnoozedUntilBoundary(): void {
+		$notificationId = $this->addTestNotification('test_user1', '1337');
+
+		$now = time();
+		$this->handler->snooze($notificationId, 'test_user1', $now);
+
+		$this->assertArrayNotHasKey($notificationId, $this->handler->getSnoozedUntil($now - 1), 'A snooze in the future must not be due yet');
+		$this->assertArrayHasKey($notificationId, $this->handler->getSnoozedUntil($now), 'A snooze exactly at now must be due');
+		$this->assertArrayHasKey($notificationId, $this->handler->getSnoozedUntil($now + 60), 'A snooze in the past must be due');
+
+		$neverSnoozedId = $this->addTestNotification('test_user1', '1338');
+		$this->assertArrayNotHasKey($neverSnoozedId, $this->handler->getSnoozedUntil($now + 60), 'snoozed_until = 0 must never be due');
+	}
+
+	protected function addTestNotification(string $user, string $objectId): int {
+		return $this->handler->add($this->getNotification([
+			'getApp' => 'testing_notifications',
+			'getUser' => $user,
+			'getDateTime' => new \DateTime(),
+			'getObjectType' => 'notification',
+			'getObjectId' => $objectId,
+			'getSubject' => 'subject',
+			'getSubjectParameters' => [],
+			'getMessage' => 'message',
+			'getMessageParameters' => [],
+			'getLink' => 'https://example.tld/notification',
+			'getIcon' => 'https://example.tld/icon',
+			'getActions' => [],
+		]));
+	}
+
 	protected function getNotification(array $values = []): INotification&MockObject {
 		$notification = $this->getMockBuilder(INotification::class)
 			->getMock();

@@ -68,6 +68,7 @@ class CapabilitiesTest extends TestCase {
 					'exists',
 					'test-push',
 					'list-filter',
+					'snooze',
 				],
 				'push' => $expected,
 				'admin-notifications' => [
