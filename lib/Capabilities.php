@@ -51,6 +51,7 @@ class Capabilities implements ICapability {
 					'exists',
 					'test-push',
 					'list-filter',
+					'snooze',
 				],
 				'push' => [
 					'devices',

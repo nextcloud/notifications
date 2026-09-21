@@ -10,11 +10,13 @@ declare(strict_types=1);
 
 namespace OCA\Notifications\Controller;
 
+use OCA\Notifications\Exceptions\InvalidSnoozeException;
 use OCA\Notifications\Exceptions\NotificationNotFoundException;
 use OCA\Notifications\Handler;
 use OCA\Notifications\Push;
 use OCA\Notifications\ResponseDefinitions;
 use OCA\Notifications\Service\ClientService;
+use OCA\Notifications\Service\SnoozeService;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\ApiRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
@@ -50,6 +52,7 @@ class EndpointController extends OCSController {
 		protected IUserStatusManager $userStatusManager,
 		protected ClientService $clientService,
 		protected Push $push,
+		protected SnoozeService $snoozeService,
 	) {
 		parent::__construct($appName, $request);
 	}
@@ -259,6 +262,40 @@ class EndpointController extends OCSController {
 	}
 
 	/**
+	 * Snooze a notification until the given timestamp
+	 *
+	 * @param int $id ID of the notification
+	 * @param int $snoozeUntil Unix timestamp to wake the notification up again
+	 * @return DataResponse<Http::STATUS_OK, list<empty>, array{}>|DataResponse<Http::STATUS_BAD_REQUEST|Http::STATUS_FORBIDDEN|Http::STATUS_NOT_FOUND, null, array{}>
+	 *
+	 * 200: Notification snoozed successfully
+	 * 400: snoozeUntil is not a valid point in the future
+	 * 403: Snoozing notification for impersonated user is not allowed
+	 * 404: Notification not found
+	 */
+	#[NoAdminRequired]
+	#[ApiRoute(verb: 'POST', url: '/api/{apiVersion}/notifications/{id}/snooze', requirements: ['apiVersion' => '(v2)', 'id' => '\d+'])]
+	public function snoozeNotification(int $id, int $snoozeUntil): DataResponse {
+		if ($this->session->getImpersonatingUserID() !== null) {
+			return new DataResponse(null, Http::STATUS_FORBIDDEN);
+		}
+
+		try {
+			$notification = $this->handler->getById($id, $this->getCurrentUser(), includeSnoozed: true);
+		} catch (NotificationNotFoundException) {
+			return new DataResponse(null, Http::STATUS_NOT_FOUND);
+		}
+
+		try {
+			$this->snoozeService->snooze($notification, $id, $this->getCurrentUser(), $snoozeUntil);
+		} catch (InvalidSnoozeException) {
+			return new DataResponse(null, Http::STATUS_BAD_REQUEST);
+		}
+
+		return new DataResponse();
+	}
+
+	/**
 	 * Delete all notifications
 	 *
 	 * @return DataResponse<Http::STATUS_OK, list<empty>, array{}>|DataResponse<Http::STATUS_FORBIDDEN, null, array{}>
@@ -275,7 +312,7 @@ class EndpointController extends OCSController {
 
 		$shouldFlush = $this->manager->defer();
 
-		$deletedSomething = $this->handler->deleteByUser($this->getCurrentUser());
+		$deletedSomething = $this->handler->deleteByUser($this->getCurrentUser(), includeSnoozed: false);
 		if ($deletedSomething) {
 			$this->push->pushDeleteToDevice($this->getCurrentUser(), null);
 		}
