@@ -181,3 +181,16 @@ a client can send a POST request against `/ocs/v2.php/apps/notifications/api/v2/
 the integer list provided as `ids` field on the POST body.
 
 **Note:** This endpoint was added for Nextcloud 27 and 26.0.1, so check for the `exists` capability first.
+
+
+## Snoozing a notification for a user
+
+In order to snooze a notification, you can send a POST request against
+`/ocs/v2.php/apps/notifications/api/v2/notifications/{id}/snooze` with a `snoozeUntil` field on the POST
+body, containing the absolute unix timestamp at which the notification should wake up again.
+
+While snoozed, the notification is hidden from the notification list, the `exists` check and the email
+digest. Deleting all notifications does not remove snoozed notifications. When a snoozed notification wakes
+up, it is delivered again under a **new** notification id.
+
+**Note:** This endpoint was added for Nextcloud 36, so check for the `snooze` capability first.
