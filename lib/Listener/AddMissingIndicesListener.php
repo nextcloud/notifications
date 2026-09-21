@@ -29,5 +29,11 @@ class AddMissingIndicesListener implements IEventListener {
 			'oc_npushhash_di',
 			['deviceidentifier'],
 		);
+
+		$event->addMissingIndex(
+			'notifications',
+			'oc_notif_snoozed_until',
+			['snoozed_until'],
+		);
 	}
 }
