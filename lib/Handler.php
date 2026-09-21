@@ -60,12 +60,15 @@ class Handler {
 	 *
 	 * @return array A Map with all deleted notifications [user => [notifications]]
 	 */
-	public function delete(INotification $notification): array {
+	public function delete(INotification $notification, bool $includeSnoozed = true): array {
 		$sql = $this->connection->getQueryBuilder();
 		$sql->select('*')
 			->from('notifications');
 
 		$this->sqlWhere($sql, $notification);
+		if (!$includeSnoozed) {
+			$sql->andWhere($sql->expr()->eq('snoozed_until', $sql->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+		}
 		$statement = $sql->executeQuery();
 
 		$deleted = [];
@@ -115,14 +118,14 @@ class Handler {
 	/**
 	 * Delete the notification of a given user
 	 */
-	public function deleteByUser(string $user): bool {
+	public function deleteByUser(string $user, bool $includeSnoozed = true): bool {
 		$notification = $this->manager->createNotification();
 		try {
 			$notification->setUser($user);
 		} catch (\InvalidArgumentException) {
 			return false;
 		}
-		return !empty($this->delete($notification));
+		return !empty($this->delete($notification, $includeSnoozed));
 	}
 
 	/**
@@ -132,7 +135,7 @@ class Handler {
 	 */
 	public function deleteById(int $id, string $user, ?INotification $notification = null): bool {
 		if (!$notification instanceof INotification) {
-			$notification = $this->getById($id, $user);
+			$notification = $this->getById($id, $user, includeSnoozed: true);
 		}
 
 		$this->manager->dismissNotification($notification);
@@ -161,12 +164,15 @@ class Handler {
 	 *
 	 * @throws NotificationNotFoundException
 	 */
-	public function getById(int $id, string $user): INotification {
+	public function getById(int $id, string $user, bool $includeSnoozed = false): INotification {
 		$sql = $this->connection->getQueryBuilder();
 		$sql->select('*')
 			->from('notifications')
 			->where($sql->expr()->eq('notification_id', $sql->createNamedParameter($id)))
 			->andWhere($sql->expr()->eq('user', $sql->createNamedParameter($user)));
+		if (!$includeSnoozed) {
+			$sql->andWhere($sql->expr()->eq('snoozed_until', $sql->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+		}
 		$statement = $sql->executeQuery();
 		$row = $statement->fetch();
 		$statement->closeCursor();
@@ -193,7 +199,8 @@ class Handler {
 		$query->select('notification_id')
 			->from('notifications')
 			->where($query->expr()->in('notification_id', $query->createNamedParameter($ids, IQueryBuilder::PARAM_INT_ARRAY)))
-			->andWhere($query->expr()->eq('user', $query->createNamedParameter($user)));
+			->andWhere($query->expr()->eq('user', $query->createNamedParameter($user)))
+			->andWhere($query->expr()->eq('snoozed_until', $query->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
 		$result = $query->executeQuery();
 
 		$existing = [];
@@ -216,6 +223,7 @@ class Handler {
 			->from('notifications')
 			->where($sql->expr()->gt('notification_id', $sql->createNamedParameter($startAfterId)))
 			->andWhere($sql->expr()->eq('user', $sql->createNamedParameter($userId)))
+			->andWhere($sql->expr()->eq('snoozed_until', $sql->createNamedParameter(0, IQueryBuilder::PARAM_INT)))
 			->orderBy('notification_id', 'DESC')
 			->setMaxResults($limit);
 		$statement = $sql->executeQuery();
@@ -246,6 +254,57 @@ class Handler {
 			->setMaxResults($limit);
 
 		$this->sqlWhere($sql, $notification);
+		$sql->andWhere($sql->expr()->eq('snoozed_until', $sql->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+		$statement = $sql->executeQuery();
+
+		$notifications = [];
+		while ($row = $statement->fetch()) {
+			try {
+				$notifications[(int)$row['notification_id']] = $this->notificationFromRow($row);
+			} catch (\InvalidArgumentException) {
+				continue;
+			}
+		}
+		$statement->closeCursor();
+
+		return $notifications;
+	}
+
+	/**
+	 * Snooze the notification matching the given id until the given timestamp.
+	 * The originating app is dismissed exactly like a delete, so its
+	 * IDismissableNotifier runs and clients hide the push they already received.
+	 *
+	 * @throws NotificationNotFoundException
+	 */
+	public function snooze(int $id, string $user, int $snoozeUntil, ?INotification $notification = null): bool {
+		if (!$notification instanceof INotification) {
+			$notification = $this->getById($id, $user, includeSnoozed: true);
+		}
+
+		$this->manager->dismissNotification($notification);
+
+		$sql = $this->connection->getQueryBuilder();
+		$sql->update('notifications')
+			->set('snoozed_until', $sql->createNamedParameter($snoozeUntil, IQueryBuilder::PARAM_INT))
+			->where($sql->expr()->eq('notification_id', $sql->createNamedParameter($id)))
+			->andWhere($sql->expr()->eq('user', $sql->createNamedParameter($user)));
+		return (bool)$sql->executeStatement();
+	}
+
+	/**
+	 * Get the notifications whose snooze has expired by the given timestamp
+	 *
+	 * @return array<int, INotification> [notification_id => INotification]
+	 */
+	public function getSnoozedUntil(int $timestamp, int $limit = 1000): array {
+		$sql = $this->connection->getQueryBuilder();
+		$sql->select('*')
+			->from('notifications')
+			->where($sql->expr()->gt('snoozed_until', $sql->createNamedParameter(0, IQueryBuilder::PARAM_INT)))
+			->andWhere($sql->expr()->lte('snoozed_until', $sql->createNamedParameter($timestamp, IQueryBuilder::PARAM_INT)))
+			->orderBy('snoozed_until', 'ASC')
+			->setMaxResults($limit);
 		$statement = $sql->executeQuery();
 
 		$notifications = [];
