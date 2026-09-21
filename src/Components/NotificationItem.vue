@@ -16,6 +16,39 @@
 				ignoreSeconds
 				:format="{ timeStyle: 'short', dateStyle: 'long' }"
 				:timestamp="timestamp" />
+			<NcActions
+				v-if="timestamp && canSnooze"
+				class="notification-snooze-button"
+				:aria-label="t('notifications', 'Snooze')"
+				forceMenu>
+				<template #icon>
+					<IconClockOutline :size="18" />
+				</template>
+				<NcActionButton @click="onSnooze(inHours(1))">
+					<template #icon>
+						<IconClockOutline :size="20" />
+					</template>
+					{{ t('notifications', '1 hour') }}
+				</NcActionButton>
+				<NcActionButton @click="onSnooze(inHours(3))">
+					<template #icon>
+						<IconClockOutline :size="20" />
+					</template>
+					{{ t('notifications', '3 hours') }}
+				</NcActionButton>
+				<NcActionButton @click="onSnooze(nextDayAt(1, 8))">
+					<template #icon>
+						<IconClockOutline :size="20" />
+					</template>
+					{{ t('notifications', 'Tomorrow') }}
+				</NcActionButton>
+				<NcActionButton @click="onSnooze(nextWeekdayAt(1, 8))">
+					<template #icon>
+						<IconClockOutline :size="20" />
+					</template>
+					{{ t('notifications', 'Next week') }}
+				</NcActionButton>
+			</NcActions>
 			<NcButton
 				v-if="timestamp"
 				ref="dismissButton"
@@ -93,19 +126,25 @@
 
 <script>
 import axios from '@nextcloud/axios'
+import { getCapabilities } from '@nextcloud/capabilities'
 import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
 import { generateOcsUrl } from '@nextcloud/router'
+import NcActionButton from '@nextcloud/vue/components/NcActionButton'
+import NcActions from '@nextcloud/vue/components/NcActions'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcDateTime from '@nextcloud/vue/components/NcDateTime'
 import NcRichText from '@nextcloud/vue/components/NcRichText'
+import IconClockOutline from 'vue-material-design-icons/ClockOutline.vue'
 import IconClose from 'vue-material-design-icons/Close.vue'
 import IconMessageOutline from 'vue-material-design-icons/MessageOutline.vue'
 import ActionButton from './ActionButton.vue'
 import DefaultParameter from './Parameters/DefaultParameter.vue'
 import FileParameter from './Parameters/FileParameter.vue'
 import UserParameter from './Parameters/UserParameter.vue'
+
+const snoozeEnabled = getCapabilities()?.notifications?.['ocs-endpoints']?.includes('snooze') ?? false
 
 /**
  * @typedef {object} NotificationItem
@@ -140,8 +179,11 @@ export default {
 
 	components: {
 		ActionButton,
+		IconClockOutline,
 		IconClose,
 		IconMessageOutline,
+		NcActionButton,
+		NcActions,
 		NcButton,
 		NcDateTime,
 		NcRichText,
@@ -197,6 +239,10 @@ export default {
 
 		isCollapsedMessage() {
 			return this.notification.message.length > 200 && !this.showFullMessage
+		},
+
+		canSnooze() {
+			return snoozeEnabled
 		},
 	},
 
@@ -285,6 +331,54 @@ export default {
 				})
 				.catch(() => {
 					showError(t('notifications', 'Failed to dismiss notification'))
+				})
+		},
+
+		/**
+		 * @param {number} hours number of hours from now
+		 * @return {Date} the resulting point in time
+		 */
+		inHours(hours) {
+			const date = new Date()
+			date.setHours(date.getHours() + hours)
+			return date
+		},
+
+		/**
+		 * @param {number} days number of days from now
+		 * @param {number} hour local hour of the day to snooze until
+		 * @return {Date} the resulting point in time
+		 */
+		nextDayAt(days, hour) {
+			const date = new Date()
+			date.setDate(date.getDate() + days)
+			date.setHours(hour, 0, 0, 0)
+			return date
+		},
+
+		/**
+		 * @param {number} weekday target weekday, 0 (Sunday) to 6 (Saturday)
+		 * @param {number} hour local hour of the day to snooze until
+		 * @return {Date} the next occurrence of that weekday, always in the future
+		 */
+		nextWeekdayAt(weekday, hour) {
+			const date = new Date()
+			const daysUntilWeekday = ((weekday - date.getDay() + 7) % 7) || 7
+			date.setDate(date.getDate() + daysUntilWeekday)
+			date.setHours(hour, 0, 0, 0)
+			return date
+		},
+
+		onSnooze(wakeAt) {
+			axios
+				.post(generateOcsUrl('apps/notifications/api/v2/notifications/{id}/snooze', { id: this.notification.notificationId }), {
+					snoozeUntil: Math.floor(wakeAt.getTime() / 1000),
+				})
+				.then(() => {
+					this.$emit('remove')
+				})
+				.catch(() => {
+					showError(t('notifications', 'Failed to snooze notification'))
 				})
 		},
 	},
