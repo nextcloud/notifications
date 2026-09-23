@@ -3,6 +3,8 @@ OC.L10N.register(
     {
     "Hello %s" : "Dag %s",
     "Hello %s," : "Dag %s,",
+    "You can change the frequency of these emails or disable them in the <a href=\"%s\">settings</a>." : "Jy kan die frekwensie van die e-posse verander of afsit in <a href=\"%s\">verstellings</a>.",
+    "You can change the frequency of these emails or disable them in the settings: %s" : "Jy kan die frekwensie van die e-posse verander of afsit in verstellings:%s",
     "Admin notifications" : "Admin kennisgewings",
     "Notifications" : "Kennisgewings",
     "Failed to perform action" : "Kon nie aksie voltooi nie",
