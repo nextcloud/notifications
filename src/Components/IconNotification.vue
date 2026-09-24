@@ -4,9 +4,10 @@
 -->
 
 <template>
-	<span v-if="showDot || showWarning" class="notifications-button__icon">
-		<!-- Modified IconBell from material design icons -->
+	<span class="notifications-button__icon">
+		<!-- Bell with SVG dot: warning state or pending-permission state (showDot but no count) -->
 		<svg
+			v-if="showWarning || (showDot && count === 0)"
 			xmlns="http://www.w3.org/2000/svg"
 			xmlns:xlink="http://www.w3.org/1999/xlink"
 			version="1.1"
@@ -23,8 +24,17 @@
 				}"
 				d="M 21,6.5 C 21,8.43 19.43,10 17.5,10 15.57,10 14,8.43 14,6.5 14,4.57 15.57,3 17.5,3 19.43,3 21,4.57 21,6.5" />
 		</svg>
+		<!-- Plain bell for all other states (count badge handles the indicator) -->
+		<IconBell v-else :size="size" />
+		<!-- Numeric count badge (replaces the dot when there are real notifications) -->
+		<span
+			v-if="count > 0 && !showWarning"
+			:key="count"
+			class="notification__badge"
+			aria-hidden="true">
+			{{ count > 99 ? '99+' : count }}
+		</span>
 	</span>
-	<IconBell v-else class="notifications-button__icon" :size="size" />
 </template>
 
 <script setup>
@@ -40,6 +50,10 @@ defineProps({
 	showWarning: {
 		type: Boolean,
 		default: false,
+	},
+	count: {
+		type: Number,
+		default: 0,
 	},
 	size: {
 		type: Number,
