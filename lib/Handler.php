@@ -157,6 +157,43 @@ class Handler {
 	}
 
 	/**
+	 * Delete notifications of the given object type that are older than the given timestamp
+	 *
+	 * Unlike delete(), this skips IManager::dismissNotification() per row: these are
+	 * long-expired cleanup candidates, not notifications a user is actively dismissing,
+	 * and the point is to remove potentially large backlogs cheaply.
+	 */
+	public function expireOlderThan(string $objectType, int $olderThan, int $maxBatches = 50, int $batchSize = IQueryBuilder::MAX_IN_PARAMETERS): void {
+		$selectQuery = $this->connection->getQueryBuilder();
+		$selectQuery->select('notification_id')
+			->from('notifications')
+			->where($selectQuery->expr()->eq('object_type', $selectQuery->createNamedParameter($objectType)))
+			->andWhere($selectQuery->expr()->lt('timestamp', $selectQuery->createNamedParameter($olderThan, IQueryBuilder::PARAM_INT)))
+			->setMaxResults($batchSize);
+
+		$deleteQuery = $this->connection->getQueryBuilder();
+		$deleteQuery->delete('notifications')
+			->where($deleteQuery->expr()->in('notification_id', $deleteQuery->createParameter('ids')));
+
+		for ($i = 0; $i < $maxBatches; $i++) {
+			$result = $selectQuery->executeQuery();
+			$ids = array_map('intval', $result->fetchAll(\PDO::FETCH_COLUMN));
+			$result->closeCursor();
+
+			if ($ids === []) {
+				return;
+			}
+
+			$deleteQuery->setParameter('ids', $ids, IQueryBuilder::PARAM_INT_ARRAY);
+			$deleteQuery->executeStatement();
+
+			if (count($ids) < $batchSize) {
+				return;
+			}
+		}
+	}
+
+	/**
 	 * Get the notification matching the given id
 	 *
 	 * @throws NotificationNotFoundException
