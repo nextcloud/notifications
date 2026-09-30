@@ -20,7 +20,7 @@
 
 📣 Announcement center: An announcement was posted by an admin]]></description>
 
-	<version>8.0.0</version>
+	<version>8.0.1</version>
 	<licence>AGPL-3.0-only</licence>
 	<author>Joas Schilling</author>
 
@@ -39,6 +39,7 @@
 	</dependencies>
 
 	<background-jobs>
+		<job>OCA\Notifications\BackgroundJob\ExpireActivityNotifications</job>
 		<job>OCA\Notifications\BackgroundJob\GenerateUserSettings</job>
 		<job>OCA\Notifications\BackgroundJob\SendNotificationMails</job>
 	</background-jobs>

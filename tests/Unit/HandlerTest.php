@@ -274,6 +274,88 @@ class HandlerTest extends TestCase {
 		$this->assertCount(1, $this->handler->get($byOtherType), 'Wrong notification count when filtering by another object type');
 	}
 
+	public function testExpireOlderThan(): void {
+		$now = time();
+
+		$old = $this->getNotification([
+			'getApp' => 'testing_notifications',
+			'getUser' => 'test_user1',
+			'getDateTime' => (new \DateTime())->setTimestamp($now - 400 * 24 * 60 * 60),
+			'getObjectType' => 'activity_notification',
+			'getObjectId' => '1',
+			'getSubject' => 'subject',
+		]);
+		$recent = $this->getNotification([
+			'getApp' => 'testing_notifications',
+			'getUser' => 'test_user1',
+			'getDateTime' => (new \DateTime())->setTimestamp($now - 1 * 24 * 60 * 60),
+			'getObjectType' => 'activity_notification',
+			'getObjectId' => '2',
+			'getSubject' => 'subject',
+		]);
+		$otherObjectType = $this->getNotification([
+			'getApp' => 'testing_notifications',
+			'getUser' => 'test_user1',
+			'getDateTime' => (new \DateTime())->setTimestamp($now - 400 * 24 * 60 * 60),
+			'getObjectType' => 'other_type',
+			'getObjectId' => '3',
+			'getSubject' => 'subject',
+		]);
+
+		$this->handler->add($old);
+		$this->handler->add($recent);
+		$this->handler->add($otherObjectType);
+
+		$limitedNotification = $this->getNotification([
+			'getApp' => 'testing_notifications',
+			'getUser' => 'test_user1',
+		]);
+		$this->assertSame(3, $this->handler->count($limitedNotification), 'Wrong notification count before expiring');
+
+		$this->handler->expireOlderThan('activity_notification', $now - 200 * 24 * 60 * 60);
+
+		$this->assertSame(2, $this->handler->count($limitedNotification), 'Wrong notification count after expiring');
+
+		$remaining = $this->handler->get($this->getNotification([
+			'getApp' => 'testing_notifications',
+			'getUser' => 'test_user1',
+			'getObjectType' => 'activity_notification',
+		]));
+		$this->assertCount(1, $remaining, 'Recent activity_notification should not have been expired');
+
+		$remainingOtherType = $this->handler->get($this->getNotification([
+			'getApp' => 'testing_notifications',
+			'getUser' => 'test_user1',
+			'getObjectType' => 'other_type',
+		]));
+		$this->assertCount(1, $remainingOtherType, 'Notification of another object type should not have been expired');
+	}
+
+	public function testExpireOlderThanRespectsBatchLimit(): void {
+		$now = time();
+
+		for ($i = 0; $i < 3; $i++) {
+			$this->handler->add($this->getNotification([
+				'getApp' => 'testing_notifications',
+				'getUser' => 'test_user1',
+				'getDateTime' => (new \DateTime())->setTimestamp($now - 400 * 24 * 60 * 60),
+				'getObjectType' => 'activity_notification',
+				'getObjectId' => (string)$i,
+				'getSubject' => 'subject',
+			]));
+		}
+
+		$limitedNotification = $this->getNotification([
+			'getApp' => 'testing_notifications',
+			'getUser' => 'test_user1',
+		]);
+		$this->assertSame(3, $this->handler->count($limitedNotification), 'Wrong notification count before expiring');
+
+		$this->handler->expireOlderThan('activity_notification', $now - 200 * 24 * 60 * 60, 2, 1);
+
+		$this->assertSame(1, $this->handler->count($limitedNotification), 'Only two batches of one should have been expired');
+	}
+
 	protected function getNotification(array $values = []): INotification&MockObject {
 		$notification = $this->getMockBuilder(INotification::class)
 			->getMock();
