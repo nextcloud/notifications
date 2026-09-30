@@ -18,7 +18,6 @@ return RectorConfig::configure()
 		__DIR__ . '/tests/Integration',
 		__DIR__ . '/tests/Unit',
 	])
-	->withSkipPath(__DIR__ . '/lib/autoload')
 	->withSkipPath(__DIR__ . '/lib/Vendor')
 	->withSkipPath(__DIR__ . '/tests/Integration/vendor')
 	->withPhpSets(php83: true)
