@@ -105,6 +105,7 @@ class WebPushClientTest extends TestCase {
 				$this->callback(static function (array $options): bool {
 					return $options['http_errors'] === false
 						&& $options['headers']['Urgency'] === ['high']
+						&& $options['headers']['Topic'] === ['nid42']
 						&& $options['headers']['Content-Encoding'] === ['aes128gcm']
 						&& $options['body'] !== '';
 				}),
@@ -120,6 +121,7 @@ class WebPushClientTest extends TestCase {
 			self::$auth,
 			'{"message":"test"}',
 			'high',
+			'nid42',
 		);
 
 		$reports = [];
