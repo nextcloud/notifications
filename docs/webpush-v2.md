@@ -238,6 +238,8 @@ Notifications are filtered per subscription using the stored `appTypes` before s
 
 The notification `urgency` ([RFC 8030 §5.3](https://www.rfc-editor.org/rfc/rfc8030#section-5.3)) is derived from the app/type: Talk, two-factor and phonetrack notifications use `high`, everything else `normal`.
 
+Content notifications and single delete notifications are sent with the `Topic` `nid{{nid}}` ([RFC 8030 §5.4](https://www.rfc-editor.org/rfc/rfc8030#section-5.4)). When a notification is removed before the push service delivered it (e.g. the browser was offline and the notification was read on another device), the delete replaces the pending notification, so the browser never shows it.
+
 ### Normal content notification
 
 The web push payload uses the same shape as the [mobile push subject](push-v2.md#encrypted-subject-data), but it is delivered as clear (already-decrypted) JSON and may carry a longer `subject` (the payload budget is ~3000 bytes instead of ~240). If you are missing any information necessary to parse the notification, use the `nid` to fetch the full notification via the [OCS API](ocs-endpoint-v2.md).
@@ -288,6 +290,8 @@ These notifications should not be shown to the user. Instead, delete pending not
 
 ### Silent delete notifications (multiple)
 
+The server sends a single delete notification per `nid` to web push subscriptions, so the `Topic` replacement works. Clients should still handle this payload.
+
 ```json
 {
   "nids" : [1337],
@@ -318,7 +322,7 @@ These notifications should not be shown to the user. Instead, delete pending not
 The app ships a service worker (registered from `/apps/notifications/service-worker.js`) that handles the browser `push` event:
 
 1. If a Nextcloud tab is open, the decrypted payload is forwarded to it via `postMessage` (`{ type: 'push', content }`) and the in-page UI handles it. If the payload carries an `activationToken`, the page performs the activation request instead.
-2. If no tab is open and the payload has a `subject`, the service worker shows a background notification (first line of the subject becomes the title, the rest the body).
+2. If no tab is open and the payload has a `subject`, the service worker shows a background notification (first line of the subject becomes the title, the rest the body) tagged `nid{{nid}}`. A delete payload arriving with no open tab closes the background notifications with the matching tags (all of them for `delete-all`).
 3. If there is no displayable content (e.g. a delete payload arriving with no open tab) and the browser requires `userVisibleOnly`, a short-lived silent placeholder notification is shown so the browser does not unregister the subscription for staying silent.
 
 On `pushsubscriptionchange` the service worker asks the page to re-register (`{ type: 'pushEndpoint' }`), driving the renewal flow described above.
