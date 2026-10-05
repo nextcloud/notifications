@@ -418,7 +418,8 @@ class Push {
 					$device['ua_public'],
 					$device['auth'],
 					json_encode($data, JSON_THROW_ON_ERROR),
-					urgency: $urgency
+					urgency: $urgency,
+					topic: $this->getWebPushTopic($id),
 				);
 			} catch (\JsonException $e) {
 				$this->log->error('JSON error while encoding push notification: ' . $e->getMessage(), ['exception' => $e]);
@@ -585,14 +586,13 @@ class Push {
 						$this->log->error('JSON error while encoding push notification: ' . $e->getMessage(), ['exception' => $e]);
 					}
 				} else {
-					$temp = $notificationIds;
-
-					while (!empty($temp)) {
-						$data = $this->encodeDeleteNotifs($temp);
-						$temp = $data['remaining'];
+					// Single deletes with the notification's topic replace the
+					// content push if it was not delivered yet (RFC 8030 §5.4)
+					foreach ($notificationIds ?? [] as $notificationId) {
+						$data = $this->encodeDeleteNotifs([$notificationId]);
 						try {
 							$payload = json_encode($data['data'], JSON_THROW_ON_ERROR);
-							$this->wpClient->enqueue($device['endpoint'], $device['ua_public'], $device['auth'], $payload);
+							$this->wpClient->enqueue($device['endpoint'], $device['ua_public'], $device['auth'], $payload, topic: $this->getWebPushTopic($notificationId));
 						} catch (\JsonException $e) {
 							$this->log->error('JSON error while encoding push notification: ' . $e->getMessage(), ['exception' => $e]);
 						}
@@ -605,7 +605,7 @@ class Push {
 		}
 
 		if (!$this->deferPayloads) {
-			$this->sendNotificationsToProxies();
+			$this->wpClient->flush(fn ($r) => $this->webPushCallback($r));
 		}
 	}
 
@@ -918,6 +918,14 @@ class Push {
 			$data['subject'] .= '…';
 		}
 		return $data;
+	}
+
+	/**
+	 * Topic of the web push messages of a notification, so a delete replaces
+	 * a not yet delivered notification at the push service (RFC 8030 §5.4)
+	 */
+	protected function getWebPushTopic(int $notificationId): string {
+		return 'nid' . $notificationId;
 	}
 
 	/**

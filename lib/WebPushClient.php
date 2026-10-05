@@ -136,13 +136,14 @@ class WebPushClient {
 	 * Queue one notification. [flush] needs to be called to actually send the notifications
 	 * @throws \ErrorException
 	 */
-	public function enqueue(string $endpoint, string $uaPublicKey, string $auth, string $body, string $urgency = 'normal'): void {
+	public function enqueue(string $endpoint, string $uaPublicKey, string $auth, string $body, string $urgency = 'normal', ?string $topic = null): void {
 		$c = $this->getClient();
 		$c->queueNotification(
 			new Subscription($endpoint, $uaPublicKey, $auth, 'aes128gcm'),
 			$body,
 			options: [
-				'urgency' => $urgency
+				'urgency' => $urgency,
+				'topic' => $topic,
 			]
 		);
 	}

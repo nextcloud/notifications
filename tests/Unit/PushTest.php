@@ -1213,7 +1213,8 @@ sd7MhWnjKf7EX9GJD0VhLabFY/KrloJkyL7gOY21xFvmnNqwvH60eOxbVPzlYjaN
 			->method('deleteWebPushToken');
 
 		$this->wpClient->expects($this->exactly($isRateLimited ? 1 : 2))
-			->method('enqueue');
+			->method('enqueue')
+			->with($this->anything(), self::EX_UA_PUBLIC, self::EX_AUTH, $this->anything(), 'normal', 'nid207787');
 
 		if ($isRateLimited) {
 			$this->cache
@@ -1231,6 +1232,39 @@ sd7MhWnjKf7EX9GJD0VhLabFY/KrloJkyL7gOY21xFvmnNqwvH60eOxbVPzlYjaN
 			->willReturn(true);
 
 		$push->pushToDevice(207787, $notification);
+	}
+
+	public static function dataWebPushDeleteToDevice(): array {
+		return [
+			'single' => [[42], [['{"nid":42,"delete":true}', 'nid42']]],
+			'multiple' => [[42, 1337], [['{"nid":42,"delete":true}', 'nid42'], ['{"nid":1337,"delete":true}', 'nid1337']]],
+			'all' => [null, [['{"delete-all":true}', null]]],
+		];
+	}
+
+	#[DataProvider(methodName: 'dataWebPushDeleteToDevice')]
+	public function testWebPushDeleteToDevice(?array $notificationIds, array $expected): void {
+		$push = $this->getPush(['deleteWebPushToken']);
+
+		$calls = [];
+		$this->wpClient->expects($this->exactly(count($expected)))
+			->method('enqueue')
+			->willReturnCallback(static function (string $endpoint, string $uaPublicKey, string $auth, string $body, string $urgency = 'normal', ?string $topic = null) use (&$calls): void {
+				$calls[] = [$body, $topic];
+			});
+		$this->wpClient->expects($this->once())
+			->method('flush');
+
+		$push->webPushDeleteToDevice('valid', $this->createStub(IUser::class), [
+			[
+				'endpoint' => 'endpoint1',
+				'ua_public' => self::EX_UA_PUBLIC,
+				'auth' => self::EX_AUTH,
+				'token' => 16,
+			],
+		], $notificationIds === null, $notificationIds);
+
+		$this->assertSame($expected, $calls);
 	}
 
 	public static function dataFilterWebPushDeviceList(): array {
