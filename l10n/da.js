@@ -1,7 +1,7 @@
 OC.L10N.register(
     "notifications",
     {
-    "We want to keep offering our push notification service for free, but large number of users overload our infrastructure. For this reason we have to rate-limit the use of push notifications. If you need this feature, consider using Nextcloud Enterprise." : "Vi ønsker at blive ved med at tilbyde vores push notifikationstjeneste gratis, men et stort antal af brugere vil overbelaste vores infrastruktur. Af denne grund er vi nødt til at ratebegrænse brugen af ​​push-meddelelser. Hvis du har brug for denne funktion, kan du overveje at bruge Nextcloud Enterprise.",
+    "We want to keep offering our push notification service for free, but large number of users overload our infrastructure. For this reason we have to rate-limit the use of push notifications. If you need this feature, consider using Nextcloud Enterprise." : "Vi ønsker at blive ved med at tilbyde vores push notifikationstjeneste gratis, men et stort antal af brugere vil overbelaste vores infrastruktur. Af denne grund er vi nødt til at ratebegrænse brugen af push-meddelelser. Hvis du har brug for denne funktion, kan du overveje at bruge Nextcloud Enterprise.",
     "User not found" : "Bruger ikke fundet",
     "An unexpected error occurred, ask your administration to check the logs." : "Der opstod en uventet fejl. Bed din administration om at tjekke loggene.",
     "Hello %s" : "Hej %s",
@@ -35,7 +35,7 @@ OC.L10N.register(
     "Your settings have been updated." : "Dine indstillinger er blevet opdateret.",
     "An error occurred while updating your settings." : "Der opstod en fejl under opdatering af dine indstillinger.",
     "Notifications defaults" : "Standardindstillinger for meddelelser",
-    "Configure the default notification settings" : "Konfigurér standard notifikationsindstillingerne",
+    "Configure the default notification settings" : "Konfigurer standardindstillingerne for notifikationer",
     "Send email reminders about unhandled notifications after:" : "Send e-mail-påmindelser om ubehandlede meddelelser efter:",
     "Play sound when a new notification arrives" : "Afspil lyd, når der kommer en ny notifikation",
     "Play sound when a call started (requires Nextcloud Talk)" : "Afspil lyd, når et opkald startede (kræver Nextcloud Talk)",
@@ -46,7 +46,7 @@ OC.L10N.register(
     "Allow web push for browsers" : "Tillad webpush i browsere",
     "None" : "Ingen",
     "You need to set up your email address before you can receive notification emails." : "Du skal konfigurere din e-mailadresse, før du kan modtage notifikations-e-mails.",
-    "Also repeat sound on a secondary speaker" : "Gentag lyd på sekundær højtaler",
+    "Also repeat sound on a secondary speaker" : "Gentag også lyden på en sekundær højttaler",
     "Selection of the speaker device is currently not supported by Safari" : "Valg af lydenhed er ikke muligt i Safari",
     "Select a device" : "Vælg en enhed"
 },
