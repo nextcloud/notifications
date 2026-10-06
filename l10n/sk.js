@@ -22,7 +22,7 @@ OC.L10N.register(
     "Contact Nextcloud GmbH" : "Kontaktujte Nextcloud GmbH",
     "in {path}" : "v {path}",
     "Push notifications might be unreliable" : "Push notifikácie môžu byť nedostupné.",
-    "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "Nextcloud GmbH sponzoruje bezplatnú bránu push notifikácií pre súkromných užívateľov. Aby sa zabezpečila dobrá služba, brána obmedzuje počet upozornení push na server. Pre podnikových užívateľov je k dispozícii škálovateľnejšia brána. Pre viac informácií kontaktujte Nextcloud GmbH.",
+    "Nextcloud GmbH sponsors a free push notification gateway for private users. To ensure good service, the gateway limits the number of push notifications per server. For enterprise users, a more scalable gateway is available. Contact Nextcloud GmbH for more information." : "Nextcloud GmbH sponzoruje bezplatnú bránu push notifikácií pre súkromných používateľov. Aby sa zabezpečila dobrá služba, brána obmedzuje počet upozornení push na server. Pre podnikových používateľov je k dispozícii škálovateľnejšia brána. Pre viac informácií kontaktujte Nextcloud GmbH.",
     "Requesting browser permissions to show notifications" : "Vyžaduje sa povolenie prehliadača na zobrazovanie upozornení",
     "No notifications" : "Žiadne upozornenia",
     "Failed to dismiss all notifications" : "Nepodarilo sa zatvoriť všetky upozornenia",
