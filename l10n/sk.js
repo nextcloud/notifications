@@ -33,7 +33,7 @@ OC.L10N.register(
     "1 day" : "1 deň",
     "1 week" : "1 týždeň",
     "Your settings have been updated." : "Vaše nastavenia boli aktualizované.",
-    "An error occurred while updating your settings." : "Nastala chyba počas ukladania nastavení.",
+    "An error occurred while updating your settings." : "Nastala chyba počas aktualizácie nastavení.",
     "Notifications defaults" : "Predvolené nastavenia notifikácií",
     "Configure the default notification settings" : "Nastavte predvolené nastavenia upozornení",
     "Send email reminders about unhandled notifications after:" : "Odoslať e-mailové pripomenutia nezachytených upozornení po:",
