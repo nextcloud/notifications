@@ -5,6 +5,8 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
+use Behat\Step\Given;
+use Behat\Step\Then;
 use PHPUnit\Framework\Assert;
 
 // The following attributes are expected to be available in the class that uses
@@ -71,9 +73,7 @@ trait CommandLineTrait {
 		return $this->lastCode;
 	}
 
-	/**
-	 * @Given /^invoking occ with "([^"]*)"$/
-	 */
+	#[Given('/^invoking occ with "([^"]*)"$/')]
 	public function invokingTheCommand(string $cmd, ?\Behat\Gherkin\Node\TableNode $table = null) {
 		if ($cmd !== 'table') {
 			if (str_contains($cmd, '{LAST_COMMAND_OUTPUT}')) {
@@ -122,9 +122,7 @@ trait CommandLineTrait {
 		return $exceptions;
 	}
 
-	/**
-	 * @Then /^the command was successful$/
-	 */
+	#[Then('/^the command was successful$/')]
 	public function theCommandWasSuccessful() {
 		$exceptions = $this->findExceptions();
 		if ($this->lastCode !== 0) {
@@ -144,16 +142,12 @@ trait CommandLineTrait {
 		}
 	}
 
-	/**
-	 * @Then /^the command failed with exit code ([0-9]+)$/
-	 */
+	#[Then('/^the command failed with exit code ([0-9]+)$/')]
 	public function theCommandFailedWithExitCode(int $exitCode) {
 		Assert::assertEquals($exitCode, $this->lastCode, 'The commands exit code did not match');
 	}
 
-	/**
-	 * @Then /^the command failed with exception text "([^"]*)"$/
-	 */
+	#[Then('/^the command failed with exception text "([^"]*)"$/')]
 	public function theCommandFailedWithException($exceptionText) {
 		$exceptions = $this->findExceptions();
 		if (empty($exceptions)) {
@@ -165,10 +159,8 @@ trait CommandLineTrait {
 		}
 	}
 
-	/**
-	 * @Then /^the command output contains the text:$/
-	 * @Then /^the command output contains the text "([^"]*)"$/
-	 */
+	#[Then('/^the command output contains the text:$/')]
+	#[Then('/^the command output contains the text "([^"]*)"$/')]
 	public function theCommandOutputContainsTheText($text) {
 		if ($this->lastStdOut === '' && $this->lastStdErr !== '') {
 			Assert::assertStringContainsString($text, $this->lastStdErr, 'The command did not output the expected text on stdout');
@@ -178,16 +170,12 @@ trait CommandLineTrait {
 		Assert::assertStringContainsString($text, $this->lastStdOut, 'The command did not output the expected text on stdout');
 	}
 
-	/**
-	 * @Then /^the command output is empty$/
-	 */
+	#[Then('/^the command output is empty$/')]
 	public function theCommandOutputIsEmpty() {
 		Assert::assertEmpty($this->lastStdOut, 'The command did output unexpected text on stdout');
 	}
 
-	/**
-	 * @Then /^the command output contains the list entry '([^']*)' with value '([^']*)'$/
-	 */
+	#[Then("/^the command output contains the list entry '([^']*)' with value '([^']*)'$/")]
 	public function theCommandOutputContainsTheListEntry(string $key, string $value): void {
 		if (preg_match('/^"ROOM\(([^"]+)\)"$/', $key, $matches)) {
 			$key = '"' . self::$identifierToToken[$matches[1]] . '"';
@@ -202,9 +190,7 @@ trait CommandLineTrait {
 		Assert::assertStringContainsString($text, $this->lastStdOut, 'The command did not output the expected text on stdout');
 	}
 
-	/**
-	 * @Then /^the command error output contains the text "([^"]*)"$/
-	 */
+	#[Then('/^the command error output contains the text "([^"]*)"$/')]
 	public function theCommandErrorOutputContainsTheText($text) {
 		if ($this->lastStdErr === '' && $this->lastStdOut !== '') {
 			Assert::assertStringContainsString($text, $this->lastStdOut, 'The command did not output the expected text on stdout');
