@@ -13,6 +13,9 @@ function showBgNotification(content) {
 	const options = {
 		body: msg.join('\n'),
 		tag: 'nid' + content.nid,
+		data: {
+			link: content.link,
+		},
 	}
 	return self.registration.showNotification(title, options)
 }
@@ -86,6 +89,25 @@ self.addEventListener('push', function(event) {
 	} else {
 		event.waitUntil(silentNotification())
 	}
+})
+
+self.addEventListener('notificationclick', function(event) {
+	event.notification.close()
+	const link = event.notification.data && event.notification.data.link
+	if (!link) {
+		// no target: focus an existing window of this instance if any
+		event.waitUntil(self.clients.matchAll({ type: 'window' }).then((clientList) => {
+			for (const client of clientList) {
+				if (client.url.startsWith(self.location.origin)) {
+					return client.focus()
+				}
+			}
+		}))
+		return
+	}
+	// always a new tab: existing tabs may be pinned or parked there on purpose
+	// and the client API cannot tell those apart
+	event.waitUntil(self.clients.openWindow(link))
 })
 
 self.addEventListener('pushsubscriptionchange', function(event) {
