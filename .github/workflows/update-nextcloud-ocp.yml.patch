@@ -6,8 +6,8 @@ index 873bf119..760faece 100644
  on:
    workflow_dispatch:
    schedule:
--    - cron: "5 2 * * 0"
-+    - cron: "5 2 * * *"
+-    - cron: "5 22 * * 6"
++    - cron: "5 22 * * *"
 
  permissions:
    contents: read
