@@ -43,6 +43,36 @@ updates:
   labels:
   - 3. to review
   - dependencies
+# Only performance.yml, the other workflows are synced from nextcloud/.github
+- package-ecosystem: github-actions
+  directory: "/"
+  schedule:
+    interval: weekly
+    day: saturday
+    time: "03:00"
+    timezone: Europe/Paris
+  cooldown:
+    default-days: 10
+  commit-message:
+    prefix: "ci"
+    include: "scope"
+  labels:
+  - 3. to review
+  - dependencies
+  exclude-paths:
+    - ".github/workflows/block-*.yml"
+    - ".github/workflows/command-*.yml"
+    - ".github/workflows/dependabot-approve-merge.yml"
+    - ".github/workflows/fixup.yml"
+    - ".github/workflows/lint-*.yml"
+    - ".github/workflows/npm-*.yml"
+    - ".github/workflows/openapi.yml"
+    - ".github/workflows/phpunit-*.yml"
+    - ".github/workflows/pr-feedback.yml"
+    - ".github/workflows/psalm.yml"
+    - ".github/workflows/reuse.yml"
+    - ".github/workflows/sync-workflow-templates.yml"
+    - ".github/workflows/update-*.yml"
 
 # stable35
 - package-ecosystem: composer
@@ -84,6 +114,40 @@ updates:
   labels:
   - 3. to review
   - dependencies
+  ignore:
+    - dependency-name: "*"
+      update-types: ["version-update:semver-major", "version-update:semver-minor"]
+
+- package-ecosystem: github-actions
+  directory: "/"
+  schedule:
+    interval: weekly
+    day: saturday
+    time: "03:00"
+    timezone: Europe/Paris
+  target-branch: stable35
+  cooldown:
+    default-days: 10
+  commit-message:
+    prefix: "ci"
+    include: "scope"
+  labels:
+  - 3. to review
+  - dependencies
+  exclude-paths:
+    - ".github/workflows/block-*.yml"
+    - ".github/workflows/command-*.yml"
+    - ".github/workflows/dependabot-approve-merge.yml"
+    - ".github/workflows/fixup.yml"
+    - ".github/workflows/lint-*.yml"
+    - ".github/workflows/npm-*.yml"
+    - ".github/workflows/openapi.yml"
+    - ".github/workflows/phpunit-*.yml"
+    - ".github/workflows/pr-feedback.yml"
+    - ".github/workflows/psalm.yml"
+    - ".github/workflows/reuse.yml"
+    - ".github/workflows/sync-workflow-templates.yml"
+    - ".github/workflows/update-*.yml"
   ignore:
     - dependency-name: "*"
       update-types: ["version-update:semver-major", "version-update:semver-minor"]
@@ -132,6 +196,40 @@ updates:
     - dependency-name: "*"
       update-types: ["version-update:semver-major", "version-update:semver-minor"]
 
+- package-ecosystem: github-actions
+  directory: "/"
+  schedule:
+    interval: weekly
+    day: saturday
+    time: "03:00"
+    timezone: Europe/Paris
+  target-branch: stable34
+  cooldown:
+    default-days: 10
+  commit-message:
+    prefix: "ci"
+    include: "scope"
+  labels:
+  - 3. to review
+  - dependencies
+  exclude-paths:
+    - ".github/workflows/block-*.yml"
+    - ".github/workflows/command-*.yml"
+    - ".github/workflows/dependabot-approve-merge.yml"
+    - ".github/workflows/fixup.yml"
+    - ".github/workflows/lint-*.yml"
+    - ".github/workflows/npm-*.yml"
+    - ".github/workflows/openapi.yml"
+    - ".github/workflows/phpunit-*.yml"
+    - ".github/workflows/pr-feedback.yml"
+    - ".github/workflows/psalm.yml"
+    - ".github/workflows/reuse.yml"
+    - ".github/workflows/sync-workflow-templates.yml"
+    - ".github/workflows/update-*.yml"
+  ignore:
+    - dependency-name: "*"
+      update-types: ["version-update:semver-major", "version-update:semver-minor"]
+
 # stable33
 - package-ecosystem: composer
   directory: "/"
@@ -172,6 +270,40 @@ updates:
   labels:
   - 3. to review
   - dependencies
+  ignore:
+    - dependency-name: "*"
+      update-types: ["version-update:semver-major", "version-update:semver-minor"]
+
+- package-ecosystem: github-actions
+  directory: "/"
+  schedule:
+    interval: weekly
+    day: saturday
+    time: "03:00"
+    timezone: Europe/Paris
+  target-branch: stable33
+  cooldown:
+    default-days: 10
+  commit-message:
+    prefix: "ci"
+    include: "scope"
+  labels:
+  - 3. to review
+  - dependencies
+  exclude-paths:
+    - ".github/workflows/block-*.yml"
+    - ".github/workflows/command-*.yml"
+    - ".github/workflows/dependabot-approve-merge.yml"
+    - ".github/workflows/fixup.yml"
+    - ".github/workflows/lint-*.yml"
+    - ".github/workflows/npm-*.yml"
+    - ".github/workflows/openapi.yml"
+    - ".github/workflows/phpunit-*.yml"
+    - ".github/workflows/pr-feedback.yml"
+    - ".github/workflows/psalm.yml"
+    - ".github/workflows/reuse.yml"
+    - ".github/workflows/sync-workflow-templates.yml"
+    - ".github/workflows/update-*.yml"
   ignore:
     - dependency-name: "*"
       update-types: ["version-update:semver-major", "version-update:semver-minor"]
