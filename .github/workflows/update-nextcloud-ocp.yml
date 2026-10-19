@@ -11,7 +11,7 @@ name: Update nextcloud/ocp
 on:
   workflow_dispatch:
   schedule:
-    - cron: "5 22 * * 6"
+    - cron: "5 22 * * *"
 
 permissions:
   contents: write
