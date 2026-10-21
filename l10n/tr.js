@@ -38,7 +38,7 @@ OC.L10N.register(
     "Configure the default notification settings" : "Varsayılan bildirim ayarlarını yapılandırın",
     "Send email reminders about unhandled notifications after:" : "Şu kadar zaman sonra işlenmeyen bildirimler için e-posta anımsatıcıları gönderilsin:",
     "Play sound when a new notification arrives" : "Yeni bildirimlerde ses çalınsın",
-    "Play sound when a call started (requires Nextcloud Talk)" : "Bir çağrı başlatıldığında ses çalınsın (Nextcloud Konuş gereklidir)",
+    "Play sound when a call started (requires Nextcloud Talk)" : "Bir arama başlatıldığında ses çalınsın (Nextcloud Konuş gereklidir)",
     "Web push settings" : "Web push ayarları",
     "Web push is a push notification system that lets web applications send notifications to users´ mobile apps or browser, even when the app is not open in a tab." : "Web push, uygulama bir sekmede açık olmasa bile, internet uygulamalarının kullanıcıların mobil uygulamalarına veya tarayıcılarına bildirim gönderilmesini sağlayan bir anında bildirim sistemidir.",
     "Web push notifications are encrypted but routed through services provided by Mozilla, Microsoft, Apple, Google or user-choosen ones in case of mobile apps. While the content is protected, metadata such as timing and frequency of notifications may be exposed to these providers." : "Web push bildirimleri şifrelenir ancak mobil uygulamalar söz konusu olduğunda Mozilla, Microsoft, Apple, Google veya kullanıcı tarafından seçilenler tarafından sağlanan hizmetler üzerinden yönlendirilir. İçerik korunurken, bildirimlerin zamanlaması ve sıklığı gibi üst veriler bu hizmet sağlayıcılarla paylaşılabilir.",
