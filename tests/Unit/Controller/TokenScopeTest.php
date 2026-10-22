@@ -24,6 +24,7 @@ class TokenScopeTest extends TestCase {
 		return [
 			'notifications' => [EndpointController::class],
 			'push registration' => [PushController::class],
+			'web push registration' => [WebPushController::class],
 		];
 	}
 
@@ -33,11 +34,16 @@ class TokenScopeTest extends TestCase {
 		$this->assertSame(TokenScopes::NOTIFICATIONS_READ, $attribute->getArguments()['scope']);
 	}
 
+	public function testPersonalSettingsOnly(): void {
+		$personal = (new \ReflectionMethod(SettingsController::class, 'personal'))->getAttributes(TokenScope::class)[0];
+		$this->assertSame(TokenScopes::NOTIFICATIONS_READ, $personal->getArguments()['scope']);
+		$this->assertSame([], (new \ReflectionMethod(SettingsController::class, 'admin'))->getAttributes(TokenScope::class));
+		$this->assertSame([], (new \ReflectionClass(SettingsController::class))->getAttributes(TokenScope::class));
+	}
+
 	public static function closedControllers(): array {
 		return [
 			'admin' => [APIController::class],
-			'settings' => [SettingsController::class],
-			'web push' => [WebPushController::class],
 		];
 	}
 
