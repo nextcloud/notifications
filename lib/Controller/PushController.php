@@ -9,9 +9,11 @@ declare(strict_types=1);
 
 namespace OCA\Notifications\Controller;
 
+use NCU\AppFramework\Http\Attribute\TokenScope;
 use OC\Authentication\Token\IProvider;
 use OC\Security\IdentityProof\Manager;
 use OCA\Notifications\ResponseDefinitions;
+use OCA\Notifications\TokenScopes;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\ApiRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
@@ -32,6 +34,7 @@ use OCP\Security\IRemoteHostValidator;
  * @psalm-import-type NotificationsPushDevice from ResponseDefinitions
  */
 #[OpenAPI(scope: 'push')]
+#[TokenScope(scope: TokenScopes::NOTIFICATIONS_READ)]
 class PushController extends OCSController {
 	public function __construct(
 		string $appName,
