@@ -5,6 +5,8 @@
 
 .notifications-button {
 	.notifications-button__icon {
+		position: relative;
+		display: inline-flex;
 		height: 20px;
 	}
 
@@ -16,6 +18,33 @@
 		&--white {
 			fill: var(--color-primary-text);
 		}
+	}
+
+	// Numeric count badge — replaces the dot when count > 0
+	.notification__badge {
+		position: absolute;
+		top: -5px;
+		inset-inline-end: -8px;
+		min-width: 16px;
+		height: 16px;
+		padding: 0 3px;
+		border-radius: 8px;
+		background: #ff4402;
+		color: #fff;
+		font-size: 9px;
+		font-weight: 700;
+		line-height: 16px;
+		text-align: center;
+		pointer-events: none;
+		box-sizing: border-box;
+		// :key="count" forces remount on every change → animation re-fires automatically
+		animation: badge-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+	}
+
+	@keyframes badge-pop {
+		0% { transform: scale(0.5); }
+		70% { transform: scale(1.35); }
+		100% { transform: scale(1); }
 	}
 
 	&.hasNotifications {
