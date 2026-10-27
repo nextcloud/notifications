@@ -17,6 +17,7 @@ use OCA\Notifications\WebPush\ActivationSubStatus;
 use OCA\Notifications\WebPush\NewSubStatus;
 use OCA\Notifications\WebPushClient;
 use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\Attribute\UserRateLimit;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Services\IAppConfig;
 use OCP\IDBConnection;
@@ -498,5 +499,13 @@ class WebPushControllerTest extends TestCase {
 		$this->assertInstanceOf(DataResponse::class, $response);
 		$this->assertSame($status, $response->getStatus());
 		$this->assertSame($payload, $response->getData());
+	}
+
+	public function testRegisterIsRateLimited(): void {
+		$attributes = (new \ReflectionMethod(WebPushController::class, 'registerWP'))->getAttributes(UserRateLimit::class);
+		$this->assertCount(1, $attributes);
+		$rateLimit = $attributes[0]->newInstance();
+		$this->assertSame(20, $rateLimit->getLimit());
+		$this->assertSame(600, $rateLimit->getPeriod());
 	}
 }

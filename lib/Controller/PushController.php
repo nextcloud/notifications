@@ -16,6 +16,7 @@ use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\ApiRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\OpenAPI;
+use OCP\AppFramework\Http\Attribute\UserRateLimit;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
 use OCP\Authentication\Exceptions\InvalidTokenException;
@@ -60,6 +61,7 @@ class PushController extends OCSController {
 	 * 401: Missing permissions to register device
 	 */
 	#[NoAdminRequired]
+	#[UserRateLimit(limit: 10, period: 3600)]
 	#[ApiRoute(verb: 'POST', url: '/api/{apiVersion}/push', requirements: ['apiVersion' => '(v2)'])]
 	public function registerDevice(string $pushTokenHash, string $devicePublicKey, string $proxyServer): DataResponse {
 		$user = $this->userSession->getUser();
