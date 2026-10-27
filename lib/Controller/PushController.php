@@ -63,7 +63,7 @@ class PushController extends OCSController {
 	#[NoAdminRequired]
 	#[UserRateLimit(limit: 10, period: 3600)]
 	#[ApiRoute(verb: 'POST', url: '/api/{apiVersion}/push', requirements: ['apiVersion' => '(v2)'])]
-	public function registerDevice(string $pushTokenHash, string $devicePublicKey, string $proxyServer): DataResponse {
+	public function registerDevice(#[\SensitiveParameter] string $pushTokenHash, string $devicePublicKey, string $proxyServer): DataResponse {
 		$user = $this->userSession->getUser();
 		if (!$user instanceof IUser) {
 			return new DataResponse([], Http::STATUS_UNAUTHORIZED);
@@ -181,7 +181,7 @@ class PushController extends OCSController {
 	/**
 	 * @return bool If the hash was new to the database
 	 */
-	protected function savePushToken(IUser $user, IToken $token, string $deviceIdentifier, string $devicePublicKey, string $pushTokenHash, string $proxyServer, string $appType): bool {
+	protected function savePushToken(IUser $user, IToken $token, string $deviceIdentifier, string $devicePublicKey, #[\SensitiveParameter] string $pushTokenHash, string $proxyServer, string $appType): bool {
 		$query = $this->db->getQueryBuilder();
 		$query->select('*')
 			->from('notifications_pushhash')
@@ -204,7 +204,7 @@ class PushController extends OCSController {
 	/**
 	 * @return bool If the entry was created
 	 */
-	protected function insertPushToken(IUser $user, IToken $token, string $deviceIdentifier, string $devicePublicKey, string $pushTokenHash, string $proxyServer, string $appType): bool {
+	protected function insertPushToken(IUser $user, IToken $token, string $deviceIdentifier, string $devicePublicKey, #[\SensitiveParameter] string $pushTokenHash, string $proxyServer, string $appType): bool {
 		$devicePublicKeyHash = hash('sha512', $devicePublicKey);
 
 		$query = $this->db->getQueryBuilder();
@@ -225,7 +225,7 @@ class PushController extends OCSController {
 	/**
 	 * @return bool If the entry was updated
 	 */
-	protected function updatePushToken(IUser $user, IToken $token, string $devicePublicKey, string $pushTokenHash, string $proxyServer, string $appType): bool {
+	protected function updatePushToken(IUser $user, IToken $token, string $devicePublicKey, #[\SensitiveParameter] string $pushTokenHash, string $proxyServer, string $appType): bool {
 		$devicePublicKeyHash = hash('sha512', $devicePublicKey);
 
 		$query = $this->db->getQueryBuilder();
@@ -256,7 +256,7 @@ class PushController extends OCSController {
 	/**
 	 * @return bool If the entry was deleted
 	 */
-	protected function deletePushTokenByHash(IUser $user, string $pushTokenHash): bool {
+	protected function deletePushTokenByHash(IUser $user, #[\SensitiveParameter] string $pushTokenHash): bool {
 		$query = $this->db->getQueryBuilder();
 		$query->delete('notifications_pushhash')
 			->where($query->expr()->eq('uid', $query->createNamedParameter($user->getUID())))

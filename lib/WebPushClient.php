@@ -39,7 +39,7 @@ class WebPushClient {
 		return true;
 	}
 
-	public static function isValidAuth(string $auth): bool {
+	public static function isValidAuth(#[\SensitiveParameter] string $auth): bool {
 		if (!preg_match('/^[A-Za-z0-9_-]{22}=*$/', $auth)) {
 			return false;
 		}
@@ -106,7 +106,7 @@ class WebPushClient {
 	/**
 	 * Send one notification - blocking (should be avoided most of the time)
 	 */
-	public function notify(string $endpoint, string $uaPublicKey, string $auth, string $body): void {
+	public function notify(#[\SensitiveParameter] string $endpoint, string $uaPublicKey, #[\SensitiveParameter] string $auth, #[\SensitiveParameter] string $body): void {
 		$c = $this->getClient();
 		$c->queueNotification(
 			new Subscription($endpoint, $uaPublicKey, $auth, 'aes128gcm'),

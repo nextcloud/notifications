@@ -982,7 +982,7 @@ class Push {
 	/**
 	 * @throws \RuntimeException when the data could not be signed
 	 */
-	protected function sign(string $data, string $userPrivateKey): string {
+	protected function sign(string $data, #[\SensitiveParameter] string $userPrivateKey): string {
 		if (!openssl_sign($data, $signature, $userPrivateKey, OPENSSL_ALGO_SHA512)) {
 			$error = openssl_error_string() ?: 'Unknown OpenSSL error';
 			$this->log->error($error, ['app' => 'notifications']);
@@ -1003,7 +1003,7 @@ class Push {
 	 * @throws \InvalidArgumentException
 	 * @throws \RuntimeException
 	 */
-	protected function encryptAndSign(string $userPrivateKey, array $device, int $id, INotification $notification): array {
+	protected function encryptAndSign(#[\SensitiveParameter] string $userPrivateKey, #[\SensitiveParameter] array $device, int $id, INotification $notification): array {
 		$data = $this->encodeNotif($id, $notification, 200);
 		$ret = $this->getNotifTopicAndUrgency($data['app'], $data['type']);
 		$priority = $ret['urgency'];
@@ -1047,7 +1047,7 @@ class Push {
 	 * @throws \InvalidArgumentException
 	 * @throws \RuntimeException
 	 */
-	protected function encryptAndSignDelete(string $userPrivateKey, array $device, ?array $ids): array {
+	protected function encryptAndSignDelete(#[\SensitiveParameter] string $userPrivateKey, #[\SensitiveParameter] array $device, ?array $ids): array {
 		$ret = $this->encodeDeleteNotifs($ids);
 		$remainingIds = $ret['remaining'];
 		$data = $ret['data'];
@@ -1190,7 +1190,7 @@ class Push {
 	 * @param string $endpoint
 	 * @return bool
 	 */
-	protected function deleteWebPushTokenByEndpoint(string $endpoint): bool {
+	protected function deleteWebPushTokenByEndpoint(#[\SensitiveParameter] string $endpoint): bool {
 		$query = $this->db->getQueryBuilder();
 		$query->delete('notifications_webpush')
 			->where($query->expr()->eq('endpoint', $query->createNamedParameter($endpoint)));
