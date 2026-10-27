@@ -558,15 +558,13 @@ class PushTest extends TestCase {
 
 	public static function dataProxyPushToDeviceSending(): array {
 		return [
-			[true, 'PKCS1'],
-			[true, 'OAEP'],
-			[false, 'PKCS1'],
-			[false, 'OAEP'],
+			[true],
+			[false],
 		];
 	}
 
 	#[DataProvider(methodName: 'dataProxyPushToDeviceSending')]
-	public function testPushToDeviceSending(bool $isDebug, string $padding): void {
+	public function testPushToDeviceSending(bool $isDebug): void {
 		$push = $this->getPush(['getProxyDevicesForUser', 'deleteProxyPushToken', 'filterByTokenAge', 'deleteProxyPushTokenByDeviceIdentifier']);
 
 		/** @var INotification&MockObject $notification */
@@ -668,12 +666,10 @@ FQIDAQAB
 			->willReturn($isDebug);
 
 		$this->appConfig
-			->expects($this->exactly(7))
+			->expects($this->once())
 			->method('getAppValueString')
-			->willReturnMap([
-				['subscription_aware_server', 'https://push-notifications.nextcloud.com', 'https://push-notifications.nextcloud.com'],
-				['push_encryption_padding', 'OAEP', $padding],
-			]);
+			->with('subscription_aware_server', 'https://push-notifications.nextcloud.com')
+			->willReturn('https://push-notifications.nextcloud.com');
 
 		$this->globalAppConfig
 			->method('getValueString')

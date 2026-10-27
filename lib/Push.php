@@ -1031,8 +1031,7 @@ class Push {
 		$this->printInfo('Device public key size: ' . strlen((string)$device['devicepublickey']));
 		$this->printInfo('Data to encrypt is: ' . $jsonData);
 
-		$padding = $this->appConfig->getAppValueString('push_encryption_padding', 'OAEP') === 'OAEP' ? OPENSSL_PKCS1_OAEP_PADDING : OPENSSL_PKCS1_PADDING;
-		if (!openssl_public_encrypt($jsonData, $encryptedSubject, $device['devicepublickey'], $padding)) {
+		if (!openssl_public_encrypt($jsonData, $encryptedSubject, $device['devicepublickey'], OPENSSL_PKCS1_OAEP_PADDING)) {
 			$error = openssl_error_string() ?: 'Unknown OpenSSL error';
 			$this->log->error($error, ['app' => 'notifications']);
 			$this->printInfo('<error>Error while encrypting data: "' . $error . '"</error>');
@@ -1069,8 +1068,7 @@ class Push {
 		$remainingIds = $ret['remaining'];
 		$data = $ret['data'];
 
-		$padding = $this->appConfig->getAppValueString('push_encryption_padding', 'OAEP') === 'OAEP' ? OPENSSL_PKCS1_OAEP_PADDING : OPENSSL_PKCS1_PADDING;
-		if (!openssl_public_encrypt(json_encode($data, JSON_THROW_ON_ERROR), $encryptedSubject, $device['devicepublickey'], $padding)) {
+		if (!openssl_public_encrypt(json_encode($data, JSON_THROW_ON_ERROR), $encryptedSubject, $device['devicepublickey'], OPENSSL_PKCS1_OAEP_PADDING)) {
 			$error = openssl_error_string() ?: 'Unknown OpenSSL error';
 			$this->log->error($error, ['app' => 'notifications']);
 			throw new \InvalidArgumentException('Failed to encrypt message for device');
