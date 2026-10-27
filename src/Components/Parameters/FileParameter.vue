@@ -7,11 +7,12 @@
 	<a
 		:title="title"
 		class="filename"
-		:href="link">{{ name }}</a>
+		:href="safeLink">{{ name }}</a>
 </template>
 
 <script>
 import { t } from '@nextcloud/l10n'
+import { isSafeLink } from '../../utils/link.js'
 
 export default {
 	name: 'FileParameter',
@@ -46,6 +47,10 @@ export default {
 	},
 
 	computed: {
+		safeLink() {
+			return isSafeLink(this.link) ? this.link : undefined
+		},
+
 		title() {
 			const lastSlashPosition = this.path.lastIndexOf('/')
 			const firstSlashPosition = this.path.indexOf('/')
