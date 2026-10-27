@@ -21,11 +21,20 @@ ${ROOT_DIR}/occ app:enable provisioning_api
 ${ROOT_DIR}/occ app:list | grep notifications
 ${ROOT_DIR}/occ app:list | grep provisioning_api
 
+RATELIMIT_ENABLED=$(${ROOT_DIR}/occ config:system:get ratelimit.protection.enabled)
+${ROOT_DIR}/occ config:system:set ratelimit.protection.enabled --value false --type boolean
+
 export TEST_SERVER_URL="http://localhost:8080/"
 ${APP_INTEGRATION_DIR}/vendor/bin/behat --colors -f junit -f pretty $1 $2
 RESULT=$?
 
 #kill $PHPPID
+
+if [ -n "$RATELIMIT_ENABLED" ]; then
+	${ROOT_DIR}/occ config:system:set ratelimit.protection.enabled --value "$RATELIMIT_ENABLED" --type boolean
+else
+	${ROOT_DIR}/occ config:system:delete ratelimit.protection.enabled
+fi
 
 ${ROOT_DIR}/occ app:disable notificationsintegrationtesting
 rm -rf ../../../notificationsintegrationtesting
