@@ -18,6 +18,7 @@ use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\ApiRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\OpenAPI;
+use OCP\AppFramework\Http\Attribute\UserRateLimit;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
 use OCP\AppFramework\Services\IAppConfig;
@@ -80,6 +81,7 @@ class WebPushController extends OCSController {
 	 * 403: Web push is disabled by the administrator
 	 */
 	#[NoAdminRequired]
+	#[UserRateLimit(limit: 20, period: 600)]
 	#[ApiRoute(verb: 'POST', url: '/api/{apiVersion}/webpush', requirements: ['apiVersion' => '(v2)'])]
 	public function registerWP(string $endpoint, string $uaPublicKey, string $auth, string $appTypes): DataResponse {
 		if (!$this->appConfig->getAppValueBool('webpush_enabled')) {
