@@ -6,6 +6,7 @@
 <script setup>
 import { computed } from 'vue'
 import NcButton from '@nextcloud/vue/components/NcButton'
+import { isSafeLink } from '../utils/link.js'
 
 /**
  * @typedef {object} NotificationAction
@@ -25,7 +26,7 @@ const props = defineProps({
 
 const emit = defineEmits(['click'])
 
-const isWebLink = computed(() => props.action.type === 'WEB')
+const isWebLink = computed(() => props.action.type === 'WEB' && isSafeLink(props.action.link))
 
 /**
  * Emits a click event with the action details

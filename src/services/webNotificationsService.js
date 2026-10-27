@@ -8,6 +8,7 @@ import { loadState } from '@nextcloud/initial-state'
 import { getLanguage } from '@nextcloud/l10n'
 import { generateFilePath } from '@nextcloud/router'
 import { Howl } from 'howler'
+import { isSafeLink } from '../utils/link.js'
 import BrowserStorage from './BrowserStorage.js'
 
 /**
@@ -75,7 +76,7 @@ async function createWebNotification(notification) {
 		tag: notification.notificationId,
 	})
 
-	if (notification.link) {
+	if (isSafeLink(notification.link)) {
 		n.onclick = async function() {
 			const event = {
 				cancelAction: false,

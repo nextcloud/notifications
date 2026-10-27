@@ -10,7 +10,7 @@
 		<strong>{{ name }}</strong>
 	</a>
 	<a
-		v-else-if="link"
+		v-else-if="hasSafeLink"
 		:href="link"
 		class="external"
 		target="_blank"
@@ -21,6 +21,8 @@
 </template>
 
 <script>
+import { isSafeLink } from '../../utils/link.js'
+
 export default {
 	name: 'DefaultParameter',
 	props: {
@@ -47,8 +49,12 @@ export default {
 	},
 
 	computed: {
+		hasSafeLink() {
+			return isSafeLink(this.link)
+		},
+
 		hasInternalLink() {
-			return this.link && (
+			return this.hasSafeLink && (
 				this.type === 'deck-board'
 				|| this.type === 'deck-card'
 			)
