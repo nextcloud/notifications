@@ -88,8 +88,9 @@ async function createWebNotification(notification) {
 			await emit('notifications:action:execute', event)
 
 			if (!event.cancelAction) {
-				console.debug('Redirecting because of a click onto a notification', notification.link)
-				window.location.href = notification.link
+				console.debug('Opening a new tab because of a click onto a notification', notification.link)
+				window.open(notification.link, '_blank')
+				return
 			}
 
 			// Best effort try to bring the tab to the foreground (works at least in Chrome, not in Firefox)
