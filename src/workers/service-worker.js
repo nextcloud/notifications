@@ -91,11 +91,27 @@ self.addEventListener('push', function(event) {
 	}
 })
 
+/**
+ * @param {string|undefined} link absolute or relative link
+ * @return {string|null} the absolute link when it points to this instance's origin
+ */
+function sameOriginUrl(link) {
+	if (!link) {
+		return null
+	}
+	try {
+		const url = new URL(link, self.location.origin)
+		return url.origin === self.location.origin ? url.href : null
+	} catch {
+		return null
+	}
+}
+
 self.addEventListener('notificationclick', function(event) {
 	event.notification.close()
-	const link = event.notification.data && event.notification.data.link
+	const link = sameOriginUrl(event.notification.data && event.notification.data.link)
 	if (!link) {
-		// no target: focus an existing window of this instance if any
+		// no or foreign target: focus an existing window of this instance if any
 		event.waitUntil(self.clients.matchAll({ type: 'window' }).then((clientList) => {
 			for (const client of clientList) {
 				if (client.url.startsWith(self.location.origin)) {

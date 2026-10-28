@@ -43,7 +43,7 @@ class WebPushClient {
 		return true;
 	}
 
-	public static function isValidAuth(string $auth): bool {
+	public static function isValidAuth(#[\SensitiveParameter] string $auth): bool {
 		if (!preg_match('/^[A-Za-z0-9_-]{22}=*$/', $auth)) {
 			return false;
 		}
@@ -118,7 +118,7 @@ class WebPushClient {
 	/**
 	 * Send one notification - blocking (should be avoided most of the time)
 	 */
-	public function notify(string $endpoint, string $uaPublicKey, string $auth, string $body): void {
+	public function notify(#[\SensitiveParameter] string $endpoint, string $uaPublicKey, #[\SensitiveParameter] string $auth, #[\SensitiveParameter] string $body): void {
 		$c = $this->getClient();
 		$c->queueNotification(
 			new Subscription($endpoint, $uaPublicKey, $auth, 'aes128gcm'),
@@ -136,7 +136,7 @@ class WebPushClient {
 	 * Queue one notification. [flush] needs to be called to actually send the notifications
 	 * @throws \ErrorException
 	 */
-	public function enqueue(string $endpoint, string $uaPublicKey, string $auth, string $body, string $urgency = 'normal', ?string $topic = null): void {
+	public function enqueue(#[\SensitiveParameter] string $endpoint, string $uaPublicKey, #[\SensitiveParameter] string $auth, #[\SensitiveParameter] string $body, string $urgency = 'normal', ?string $topic = null): void {
 		$c = $this->getClient();
 		$c->queueNotification(
 			new Subscription($endpoint, $uaPublicKey, $auth, 'aes128gcm'),

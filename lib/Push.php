@@ -479,6 +479,8 @@ class Push {
 			} catch (\InvalidArgumentException) {
 				// Failed to encrypt message for device: public key is invalid
 				$this->deleteProxyPushToken($device['token']);
+			} catch (\RuntimeException) {
+				// Failed to sign message, already logged
 			}
 		}
 		$this->printInfo('');
@@ -668,6 +670,8 @@ class Push {
 			} catch (\InvalidArgumentException) {
 				// Failed to encrypt message for device: public key is invalid
 				$this->deleteProxyPushToken($device['token']);
+			} catch (\RuntimeException) {
+				// Failed to sign message, already logged
 			}
 		}
 
@@ -993,6 +997,19 @@ class Push {
 	}
 
 	/**
+	 * @throws \RuntimeException when the data could not be signed
+	 */
+	protected function sign(string $data, #[\SensitiveParameter] string $userPrivateKey): string {
+		if (!openssl_sign($data, $signature, $userPrivateKey, OPENSSL_ALGO_SHA512)) {
+			$error = openssl_error_string() ?: 'Unknown OpenSSL error';
+			$this->log->error($error, ['app' => 'notifications']);
+			$this->printInfo('<error>Failed to sign encrypted push subject: "' . $error . '"</error>');
+			throw new \RuntimeException('Failed to sign message for device');
+		}
+		return $signature;
+	}
+
+	/**
 	 * @param string $userPrivateKey
 	 * @param array $device
 	 * @param int $id
@@ -1001,8 +1018,9 @@ class Push {
 	 * @psalm-return array{deviceIdentifier: string, pushTokenHash: string, subject: string, signature: string, priority: string, type: string}
 	 * @throws InvalidTokenException
 	 * @throws \InvalidArgumentException
+	 * @throws \RuntimeException
 	 */
-	protected function encryptAndSign(string $userPrivateKey, array $device, int $id, INotification $notification): array {
+	protected function encryptAndSign(#[\SensitiveParameter] string $userPrivateKey, #[\SensitiveParameter] array $device, int $id, INotification $notification): array {
 		$data = $this->encodeNotif($id, $notification, 200);
 		$ret = $this->getNotifTopicAndUrgency($data['app'], $data['type']);
 		$priority = $ret['urgency'];
@@ -1013,19 +1031,15 @@ class Push {
 		$this->printInfo('Device public key size: ' . strlen((string)$device['devicepublickey']));
 		$this->printInfo('Data to encrypt is: ' . $jsonData);
 
-		$padding = $this->appConfig->getAppValueString('push_encryption_padding', 'OAEP') === 'OAEP' ? OPENSSL_PKCS1_OAEP_PADDING : OPENSSL_PKCS1_PADDING;
-		if (!openssl_public_encrypt($jsonData, $encryptedSubject, $device['devicepublickey'], $padding)) {
+		if (!openssl_public_encrypt($jsonData, $encryptedSubject, $device['devicepublickey'], OPENSSL_PKCS1_OAEP_PADDING)) {
 			$error = openssl_error_string() ?: 'Unknown OpenSSL error';
 			$this->log->error($error, ['app' => 'notifications']);
 			$this->printInfo('<error>Error while encrypting data: "' . $error . '"</error>');
 			throw new \InvalidArgumentException('Failed to encrypt message for device');
 		}
 
-		if (openssl_sign($encryptedSubject, $signature, $userPrivateKey, OPENSSL_ALGO_SHA512)) {
-			$this->printInfo('Signed encrypted push subject');
-		} else {
-			$this->printInfo('<error>Failed to signed encrypted push subject</error>');
-		}
+		$signature = $this->sign($encryptedSubject, $userPrivateKey);
+		$this->printInfo('Signed encrypted push subject');
 		$base64EncryptedSubject = base64_encode($encryptedSubject);
 		$base64Signature = base64_encode($signature);
 
@@ -1047,20 +1061,20 @@ class Push {
 	 * @psalm-return array{remaining: array<array-key, int>, payload: array{deviceIdentifier: string, pushTokenHash: string, subject: string, signature: string, priority: string, type: string}}
 	 * @throws InvalidTokenException
 	 * @throws \InvalidArgumentException
+	 * @throws \RuntimeException
 	 */
-	protected function encryptAndSignDelete(string $userPrivateKey, array $device, ?array $ids): array {
+	protected function encryptAndSignDelete(#[\SensitiveParameter] string $userPrivateKey, #[\SensitiveParameter] array $device, ?array $ids): array {
 		$ret = $this->encodeDeleteNotifs($ids);
 		$remainingIds = $ret['remaining'];
 		$data = $ret['data'];
 
-		$padding = $this->appConfig->getAppValueString('push_encryption_padding', 'OAEP') === 'OAEP' ? OPENSSL_PKCS1_OAEP_PADDING : OPENSSL_PKCS1_PADDING;
-		if (!openssl_public_encrypt(json_encode($data, JSON_THROW_ON_ERROR), $encryptedSubject, $device['devicepublickey'], $padding)) {
+		if (!openssl_public_encrypt(json_encode($data, JSON_THROW_ON_ERROR), $encryptedSubject, $device['devicepublickey'], OPENSSL_PKCS1_OAEP_PADDING)) {
 			$error = openssl_error_string() ?: 'Unknown OpenSSL error';
 			$this->log->error($error, ['app' => 'notifications']);
 			throw new \InvalidArgumentException('Failed to encrypt message for device');
 		}
 
-		openssl_sign($encryptedSubject, $signature, $userPrivateKey, OPENSSL_ALGO_SHA512);
+		$signature = $this->sign($encryptedSubject, $userPrivateKey);
 		$base64EncryptedSubject = base64_encode($encryptedSubject);
 		$base64Signature = base64_encode($signature);
 
@@ -1190,7 +1204,7 @@ class Push {
 	 * @param string $endpoint
 	 * @return bool
 	 */
-	protected function deleteWebPushTokenByEndpoint(string $endpoint): bool {
+	protected function deleteWebPushTokenByEndpoint(#[\SensitiveParameter] string $endpoint): bool {
 		$query = $this->db->getQueryBuilder();
 		$query->delete('notifications_webpush')
 			->where($query->expr()->eq('endpoint', $query->createNamedParameter($endpoint)));
