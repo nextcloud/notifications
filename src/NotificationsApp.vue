@@ -275,9 +275,11 @@ export default {
 			// We don't fetch on push if notify_push is enabled, to avoid concurrency fetch.
 			// We could do the other way: fallback to notify_push only if we don't have
 			// web push
-			window.addEventListener('load', () => {
+			if (document.readyState === 'complete') {
 				this._setWebPush()
-			})
+			} else {
+				window.addEventListener('load', this._setWebPush, { once: true })
+			}
 		} else {
 			// Set up the background checker
 			this._setPollingInterval(this.pollIntervalBase)
