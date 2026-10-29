@@ -5,6 +5,8 @@
 import axios from '@nextcloud/axios'
 import { generateOcsUrl, generateUrl, getRootUrl } from '@nextcloud/router'
 
+let listening = false
+
 /**
  * Load service worker
  */
@@ -32,6 +34,10 @@ function loadServiceWorker() {
  * @param {function()} onPush called when we receive a push notification
  */
 function listenForPush(registration, onActivated, onPush) {
+	if (listening) {
+		return
+	}
+	listening = true
 	navigator.serviceWorker.addEventListener('message', (event) => {
 		console.debug('Received from serviceWorker: ', JSON.stringify(event.data))
 		if (event.data.type === 'push') {
@@ -137,6 +143,20 @@ function setWebPush(onActivated, onPush) {
 }
 
 /**
+ * Listen for messages from the service worker without registering it.
+ * The service worker sends a push to one open tab only, so every tab must listen.
+ *
+ * @param {function(boolean)} onActivated called when we send activation token
+ * @param {function()} onPush called when we receive a push notification
+ */
+function listenForWebPush(onActivated, onPush) {
+	if ('serviceWorker' in navigator) {
+		navigator.serviceWorker.ready
+			.then((registration) => listenForPush(registration, onActivated, onPush))
+	}
+}
+
+/**
  *
  * @param {Array} inArr input to encode
  */
@@ -149,6 +169,7 @@ function b64UrlEncode(inArr) {
 export {
 	b64UrlEncode,
 	listenForPush,
+	listenForWebPush,
 	loadServiceWorker,
 	registerPush,
 	setWebPush,
