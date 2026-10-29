@@ -286,9 +286,6 @@ export default {
 		// set the polling interval after checking web push status
 		// if web push may be configured
 		if (webPushForBrowsersEnabled && this.webNotificationsGranted === true) {
-			// We don't fetch on push if notify_push is enabled, to avoid concurrency fetch.
-			// We could do the other way: fallback to notify_push only if we don't have
-			// web push
 			if (document.readyState === 'complete') {
 				this._setWebPush()
 			} else {
@@ -321,25 +318,27 @@ export default {
 		},
 
 		async _setWebPush() {
-			return setWebPush(
-				// onActivated=
-				(hasWebPush) => {
-					if (hasWebPush) {
-						console.debug('Has web push, slowing polling to 15 minutes')
-						this.pollIntervalBase = 15 * 60 * 1000
-					}
-					// Set polling interval for the default or new value
-					this._setPollingInterval(this.pollIntervalBase)
-				},
-				// onPush=
-				() => {
-					if (!this.hasNotifyPush) {
-						this._fetchAfterWebPush()
-					} else {
-						console.debug('Has notify_push, no need to fetch from web push.')
-					}
-				},
-			)
+			return setWebPush(this._onWebPushActivated, this._onWebPush)
+		},
+
+		_onWebPushActivated(hasWebPush) {
+			if (hasWebPush) {
+				console.debug('Has web push, slowing polling to 15 minutes')
+				this.pollIntervalBase = 15 * 60 * 1000
+			}
+			// Set polling interval for the default or new value
+			this._setPollingInterval(this.pollIntervalBase)
+		},
+
+		_onWebPush() {
+			// We don't fetch on push if notify_push is enabled, to avoid concurrency fetch.
+			// We could do the other way: fallback to notify_push only if we don't have
+			// web push
+			if (!this.hasNotifyPush) {
+				this._fetchAfterWebPush()
+			} else {
+				console.debug('Has notify_push, no need to fetch from web push.')
+			}
 		},
 
 		async onOpen() {
