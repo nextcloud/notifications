@@ -311,7 +311,6 @@ export default {
 					if (hasWebPush) {
 						console.debug('Has web push, slowing polling to 15 minutes')
 						this.pollIntervalBase = 15 * 60 * 1000
-						this.hasNotifyPush = true
 					}
 					// Set polling interval for the default or new value
 					this._setPollingInterval(this.pollIntervalBase)
