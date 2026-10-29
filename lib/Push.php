@@ -900,7 +900,7 @@ class Push {
 	 * @param INotification $notification
 	 * @param int $maxLength max length of the push notification (shorter than 240 for proxy push, 3993 for webpush)
 	 * @return array
-	 * @psalm-return array{nid: int, app: string, subject: string, type: string, id: string}
+	 * @psalm-return array{nid: int, app: string, subject: string, type: string, id: string, link?: string}
 	 */
 	protected function encodeNotif(int $id, INotification $notification, int $maxLength): array {
 		$data = [
@@ -910,6 +910,13 @@ class Push {
 			'type' => $notification->getObjectType(),
 			'id' => $notification->getObjectId(),
 		];
+
+		// The link lets the service worker navigate on notificationclick; the
+		// subject budget below shrinks accordingly, very long links are dropped
+		$link = $notification->getLink();
+		if ($link !== '' && strlen($link) < 128) {
+			$data['link'] = $link;
+		}
 
 		// Max length of encryption is ~240, so we need to make sure the subject is shorter.
 		// Also, subtract two for encapsulating quotes will be added.
