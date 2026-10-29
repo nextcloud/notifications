@@ -43,6 +43,10 @@ function listenForPush(registration, onActivated, onPush) {
 					.then((response) => {
 						onActivated(response.status === 200 || response.status === 202)
 					})
+					.catch((er) => {
+						console.error(er)
+						onActivated(false)
+					})
 			} else {
 				onPush()
 			}
