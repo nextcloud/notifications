@@ -117,6 +117,12 @@ function setWebPush(onActivated, onPush) {
 				listenForPush(registration, onActivated, onPush)
 				return registerPush(registration)
 			})
+			.then((response) => {
+				// The subscription is already active, so no activation push follows
+				if (response.status === 200) {
+					onActivated(true)
+				}
+			})
 			.catch((er) => {
 				console.error(er)
 				onActivated(false)
