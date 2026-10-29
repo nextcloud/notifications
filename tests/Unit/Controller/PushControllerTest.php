@@ -15,6 +15,7 @@ use OC\Security\IdentityProof\Key;
 use OC\Security\IdentityProof\Manager;
 use OCA\Notifications\Controller\PushController;
 use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\Attribute\UserRateLimit;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IDBConnection;
 use OCP\IRequest;
@@ -469,5 +470,13 @@ FwIDAQAB
 		$this->assertInstanceOf(DataResponse::class, $response);
 		$this->assertSame($status, $response->getStatus());
 		$this->assertSame($payload, $response->getData());
+	}
+
+	public function testRegisterIsRateLimited(): void {
+		$attributes = (new \ReflectionMethod(PushController::class, 'registerDevice'))->getAttributes(UserRateLimit::class);
+		$this->assertCount(1, $attributes);
+		$rateLimit = $attributes[0]->newInstance();
+		$this->assertSame(10, $rateLimit->getLimit());
+		$this->assertSame(3600, $rateLimit->getPeriod());
 	}
 }

@@ -105,6 +105,7 @@ import ActionButton from './ActionButton.vue'
 import DefaultParameter from './Parameters/DefaultParameter.vue'
 import FileParameter from './Parameters/FileParameter.vue'
 import UserParameter from './Parameters/UserParameter.vue'
+import { isSafeLink } from '../utils/link.js'
 
 /**
  * @typedef {object} NotificationItem
@@ -171,7 +172,7 @@ export default {
 		},
 
 		useLink() {
-			if (!this.notification.link) {
+			if (!isSafeLink(this.notification.link)) {
 				return false
 			}
 

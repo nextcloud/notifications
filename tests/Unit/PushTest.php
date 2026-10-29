@@ -396,6 +396,89 @@ class PushTest extends TestCase {
 		$push->pushToDevice(1970, $notification);
 	}
 
+	public function testProxyPushToDeviceSigningError(): void {
+		$push = $this->getPush(['getProxyDevicesForUser', 'encryptAndSign', 'deleteProxyPushToken', 'filterByTokenAge']);
+		$this->clientService->expects($this->never())
+			->method('newClient');
+
+		$this->config->expects($this->once())
+			->method('getSystemValueBool')
+			->with('has_internet_connection', true)
+			->willReturn(true);
+
+		/** @var INotification&MockObject $notification */
+		$notification = $this->createMock(INotification::class);
+		$notification
+			->method('getUser')
+			->willReturn('valid');
+
+		/** @var IUser&MockObject $user */
+		$user = $this->createStub(IUser::class);
+
+		$this->userManager->expects($this->once())
+			->method('getExistingUser')
+			->with('valid')
+			->willReturn($user);
+
+		$push->expects($this->once())
+			->method('getProxyDevicesForUser')
+			->willReturn([[
+				'proxyserver' => 'proxyserver1',
+				'token' => 23,
+				'apptype' => 'other',
+			]]);
+
+		$this->l10nFactory
+			->method('getUserLanguage')
+			->with($user)
+			->willReturn('ru');
+
+		$this->notificationManager->expects($this->once())
+			->method('prepare')
+			->with($notification, 'ru')
+			->willReturnArgument(0);
+
+		/** @var Key&MockObject $key */
+		$key = $this->createStub(Key::class);
+
+		$this->keyManager->expects($this->once())
+			->method('getKey')
+			->with($user)
+			->willReturn($key);
+
+		$push->expects($this->once())
+			->method('filterByTokenAge')
+			->willReturnArgument(0);
+
+		$push->expects($this->once())
+			->method('encryptAndSign')
+			->willThrowException(new \RuntimeException());
+
+		$push->expects($this->never())
+			->method('deleteProxyPushToken');
+
+		$push->pushToDevice(1970, $notification);
+	}
+
+	public function testSign(): void {
+		$key = openssl_pkey_new(['private_key_bits' => 2048]);
+		openssl_pkey_export($key, $privateKey);
+		$publicKey = openssl_pkey_get_details($key)['key'];
+
+		$push = $this->getPush();
+		$signature = self::invokePrivate($push, 'sign', ['data', $privateKey]);
+		$this->assertSame(1, openssl_verify('data', $signature, $publicKey, OPENSSL_ALGO_SHA512));
+	}
+
+	public function testSignFailure(): void {
+		$this->logger->expects($this->once())
+			->method('error');
+
+		$push = $this->getPush();
+		$this->expectException(\RuntimeException::class);
+		@self::invokePrivate($push, 'sign', ['data', 'invalid key']);
+	}
+
 	public function testProxyPushToDeviceNoFairUse(): void {
 		$push = $this->getPush(['getProxyDevicesForUser', 'encryptAndSign', 'deleteProxyPushToken', 'filterByTokenAge', 'deleteProxyPushTokenByDeviceIdentifier']);
 

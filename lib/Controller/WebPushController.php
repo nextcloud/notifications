@@ -18,6 +18,7 @@ use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\ApiRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\OpenAPI;
+use OCP\AppFramework\Http\Attribute\UserRateLimit;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
 use OCP\AppFramework\Services\IAppConfig;
@@ -80,8 +81,9 @@ class WebPushController extends OCSController {
 	 * 403: Web push is disabled by the administrator
 	 */
 	#[NoAdminRequired]
+	#[UserRateLimit(limit: 20, period: 600)]
 	#[ApiRoute(verb: 'POST', url: '/api/{apiVersion}/webpush', requirements: ['apiVersion' => '(v2)'])]
-	public function registerWP(string $endpoint, string $uaPublicKey, string $auth, string $appTypes): DataResponse {
+	public function registerWP(#[\SensitiveParameter] string $endpoint, string $uaPublicKey, #[\SensitiveParameter] string $auth, string $appTypes): DataResponse {
 		if (!$this->appConfig->getAppValueBool('webpush_enabled')) {
 			return new DataResponse(['message' => 'WEBPUSH_DISABLED'], Http::STATUS_FORBIDDEN);
 		}
@@ -161,7 +163,7 @@ class WebPushController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'POST', url: '/api/{apiVersion}/webpush/activate', requirements: ['apiVersion' => '(v2)'])]
-	public function activateWP(string $activationToken): DataResponse {
+	public function activateWP(#[\SensitiveParameter] string $activationToken): DataResponse {
 		if (!$this->appConfig->getAppValueBool('webpush_enabled')) {
 			return new DataResponse(['message' => 'WEBPUSH_DISABLED'], Http::STATUS_FORBIDDEN);
 		}
@@ -244,7 +246,7 @@ class WebPushController extends OCSController {
 	 * - CREATED if the user didn't have an activated subscription with this endpoint, pubkey and auth
 	 * - UPDATED if the subscription has been updated (use to change appTypes)
 	 */
-	protected function saveSubscription(IUser $user, IToken|ISession $token, string $endpoint, string $uaPublicKey, string $auth, string $appTypes): array {
+	protected function saveSubscription(IUser $user, IToken|ISession $token, #[\SensitiveParameter] string $endpoint, string $uaPublicKey, #[\SensitiveParameter] string $auth, string $appTypes): array {
 		$query = $this->db->getQueryBuilder();
 		$query->select('*')
 			->from('notifications_webpush')
@@ -282,7 +284,7 @@ class WebPushController extends OCSController {
 	 * - NO_TOKEN if we don't have this token
 	 * - NO_SUB if we don't have this subscription
 	 */
-	protected function activateSubscription(IUser $user, IToken|ISession $token, string $activationToken): ActivationSubStatus {
+	protected function activateSubscription(IUser $user, IToken|ISession $token, #[\SensitiveParameter] string $activationToken): ActivationSubStatus {
 		$query = $this->db->getQueryBuilder();
 		$query->select('*')
 			->from('notifications_webpush')
@@ -316,7 +318,7 @@ class WebPushController extends OCSController {
 	 * @param string $appTypes comma separated list of types
 	 * @return bool If the entry was created
 	 */
-	protected function insertSubscription(IUser $user, IToken|ISession $token, string $endpoint, string $uaPublicKey, string $auth, string $activationToken, string $appTypes): bool {
+	protected function insertSubscription(IUser $user, IToken|ISession $token, #[\SensitiveParameter] string $endpoint, string $uaPublicKey, #[\SensitiveParameter] string $auth, #[\SensitiveParameter] string $activationToken, string $appTypes): bool {
 		$query = $this->db->getQueryBuilder();
 		$query->insert('notifications_webpush')
 			->values([
@@ -335,7 +337,7 @@ class WebPushController extends OCSController {
 	 * @param string $appTypes comma separated list of types
 	 * @return bool If the entry was updated
 	 */
-	protected function updateSubscription(IUser $user, IToken|ISession $token, string $endpoint, string $uaPublicKey, string $auth, string $appTypes): bool {
+	protected function updateSubscription(IUser $user, IToken|ISession $token, #[\SensitiveParameter] string $endpoint, string $uaPublicKey, #[\SensitiveParameter] string $auth, string $appTypes): bool {
 		$query = $this->db->getQueryBuilder();
 		$query->update('notifications_webpush')
 			->set('endpoint', $query->createNamedParameter($endpoint))
