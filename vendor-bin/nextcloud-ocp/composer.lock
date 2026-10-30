@@ -54,7 +54,8 @@
                 "issues": "https://github.com/nextcloud-deps/ocp/issues",
                 "source": "https://github.com/nextcloud-deps/ocp/tree/stable34"
             },
-            "time": "2026-10-28T02:56:25+00:00"
+            "time": "2026-10-28T02:56:25+00:00",
+            "published-time": "2026-10-28T02:56:30+00:00"
         },
         {
             "name": "psr/clock",
@@ -372,5 +373,5 @@
     "prefer-lowest": false,
     "platform": {},
     "platform-dev": {},
-    "plugin-api-version": "2.9.0"
+    "plugin-api-version": "2.11.0"
 }
