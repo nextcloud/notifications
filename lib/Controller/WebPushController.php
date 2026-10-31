@@ -9,8 +9,10 @@ declare(strict_types=1);
 
 namespace OCA\Notifications\Controller;
 
+use NCU\AppFramework\Http\Attribute\TokenScope;
 use OC\Authentication\Token\IProvider;
 use OC\Security\IdentityProof\Manager;
+use OCA\Notifications\TokenScopes;
 use OCA\Notifications\WebPush\ActivationSubStatus;
 use OCA\Notifications\WebPush\NewSubStatus;
 use OCA\Notifications\WebPushClient;
@@ -36,6 +38,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Uid\Uuid;
 
 #[OpenAPI(scope: 'webpush')]
+#[TokenScope(scope: TokenScopes::NOTIFICATIONS_READ)]
 class WebPushController extends OCSController {
 	public function __construct(
 		string $appName,
