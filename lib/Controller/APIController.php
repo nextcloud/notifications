@@ -17,7 +17,6 @@ use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\OpenAPI;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
-use OCP\AppFramework\Services\IAppConfig;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\IGroupManager;
 use OCP\IL10N;
@@ -110,8 +109,8 @@ class APIController extends OCSController {
 		array $messageParameters = [],
 	): DataResponse {
 		$actor = $this->userSession->getUser();
-		if (!$this->groupManager->isAdmin($actor->getUID())
-			&& $userId !== $actor->getUID()) {
+		if (!$this->groupManager->isAdmin($actor?->getUID() ?? '')
+			&& $userId !== $actor?->getUID()) {
 			return new DataResponse(['error' => 'user'], Http::STATUS_BAD_REQUEST);
 		}
 

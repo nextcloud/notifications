@@ -12,7 +12,6 @@ use OCA\Notifications\App;
 use OCA\Notifications\Controller\APIController;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
-use OCP\AppFramework\Services\IAppConfig;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\IGroupManager;
 use OCP\IL10N;
