@@ -73,6 +73,7 @@ class CapabilitiesTest extends TestCase {
 				'admin-notifications' => [
 					'ocs',
 					'cli',
+					'self',
 				],
 			],
 		], $capabilities->getCapabilities());
