@@ -12,7 +12,9 @@ use OCA\Notifications\App;
 use OCA\Notifications\Controller\APIController;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\Services\IAppConfig;
 use OCP\AppFramework\Utility\ITimeFactory;
+use OCP\IGroupManager;
 use OCP\IL10N;
 use OCP\IRequest;
 use OCP\IUser;
@@ -38,6 +40,7 @@ class APIControllerTest extends TestCase {
 	protected IValidator&MockObject $richValidator;
 	protected IL10N&MockObject $l;
 	protected LoggerInterface&MockObject $logger;
+	protected IGroupManager&MockObject $groupManager;
 
 	protected APIController $controller;
 
@@ -54,6 +57,7 @@ class APIControllerTest extends TestCase {
 		$this->richValidator = $this->createMock(IValidator::class);
 		$this->l = $this->createMock(IL10N::class);
 		$this->logger = $this->createMock(LoggerInterface::class);
+		$this->groupManager = $this->createMock(IGroupManager::class);
 
 		$this->controller = new APIController(
 			'notifications',
@@ -66,6 +70,7 @@ class APIControllerTest extends TestCase {
 			$this->richValidator,
 			$this->l,
 			$this->logger,
+			$this->groupManager,
 		);
 	}
 
@@ -95,6 +100,9 @@ class APIControllerTest extends TestCase {
 			->method('get')
 			->with($userId)
 			->willReturn($u);
+		$this->userSession->expects($this->any())
+			->method('getUser')
+			->willReturn($this->mockUser($userId));
 
 		$dateTime = new \DateTime();
 		$dateTime->setTimestamp($time);
@@ -155,5 +163,11 @@ class APIControllerTest extends TestCase {
 
 		$this->assertInstanceOf(DataResponse::class, $response);
 		$this->assertSame($statusCode, $response->getStatus());
+	}
+
+	private function mockUser(string $uid): IUser&MockObject {
+		$user = $this->createMock(IUser::class);
+		$user->method('getUID')->willReturn($uid);
+		return $user;
 	}
 }

@@ -17,7 +17,9 @@ use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\OpenAPI;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
+use OCP\AppFramework\Services\IAppConfig;
 use OCP\AppFramework\Utility\ITimeFactory;
+use OCP\IGroupManager;
 use OCP\IL10N;
 use OCP\IRequest;
 use OCP\IUser;
@@ -47,6 +49,7 @@ class APIController extends OCSController {
 		protected IValidator $richValidator,
 		protected IL10N $l,
 		protected LoggerInterface $logger,
+		protected IGroupManager $groupManager,
 	) {
 		parent::__construct($appName, $request);
 	}
@@ -96,6 +99,7 @@ class APIController extends OCSController {
 	 * 200: Notification generated successfully, returned id is the notification ID for future delete requests
 	 * 400: Provided data was invalid, check error field of the response of log file for details
 	 */
+	#[NoAdminRequired]
 	#[OpenAPI(scope: OpenAPI::SCOPE_ADMINISTRATION)]
 	#[ApiRoute(verb: 'POST', url: '/api/{apiVersion3}/admin_notifications/{userId}', requirements: ['apiVersion3' => '(v3)'])]
 	public function generateNotificationV3(
@@ -105,6 +109,12 @@ class APIController extends OCSController {
 		array $subjectParameters = [],
 		array $messageParameters = [],
 	): DataResponse {
+		$actor = $this->userSession->getUser();
+		if (!$this->groupManager->isAdmin($actor->getUID())
+			&& $userId !== $actor->getUID()) {
+			return new DataResponse(['error' => 'user'], Http::STATUS_BAD_REQUEST);
+		}
+
 		$user = $this->userManager->get($userId);
 
 		if (!$user instanceof IUser) {

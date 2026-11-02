@@ -60,6 +60,7 @@ class Capabilities implements ICapability {
 				'admin-notifications' => [
 					'ocs',
 					'cli',
+					'self',
 				],
 			],
 		];
