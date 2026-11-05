@@ -26,7 +26,8 @@
 					v-if="notifications.length > 0"
 					class="notification-wrapper"
 					name="list"
-					tag="ul">
+					tag="ul"
+					@beforeLeave="onBeforeLeave">
 					<NotificationItem
 						v-if="hasThrottledPushNotifications"
 						:key="-2016"
@@ -414,6 +415,11 @@ export default {
 				})
 		},
 
+		onBeforeLeave(el) {
+			// Set a fixed height so it can animate to 0
+			el.style.height = `${el.offsetHeight}px`
+		},
+
 		onRemove(index) {
 			// Move focus to a neighboring notification before removing this one (focus-trap workaround)
 			const neighbor = this.notifications[index + 1] || this.notifications[index - 1]
@@ -652,7 +658,9 @@ export default {
 		display: flex;
 		flex-direction: column;
 		max-height: calc(100vh - 50px * 5);
-		overflow: auto;
+		// Hide the horizontal overflow of the dismiss animation
+		overflow-x: hidden;
+		overflow-y: auto;
 	}
 
 	.dismiss-all {
@@ -690,6 +698,21 @@ export default {
 }
 
 .list-leave-active {
-	width: 100%;
+	// Without this, flex shrinks it at once in the scrollable list
+	flex-shrink: 0;
+	overflow: hidden;
+	// Slide out first, then close the gap
+	transition:
+		opacity var(--animation-quick) ease,
+		transform var(--animation-quick) ease,
+		height var(--animation-slow) ease var(--animation-quick),
+		padding var(--animation-slow) ease var(--animation-quick),
+		border-width var(--animation-slow) ease var(--animation-quick);
+}
+
+.list-leave-to {
+	height: 0 !important;
+	padding-block: 0 !important;
+	border-width: 0 !important;
 }
 </style>
