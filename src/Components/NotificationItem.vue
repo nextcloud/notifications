@@ -22,7 +22,7 @@
 				class="notification-dismiss-button"
 				variant="tertiary"
 				:aria-label="t('notifications', 'Dismiss')"
-				@click="onDismissNotification">
+				@click="$emit('dismiss')">
 				<template #icon>
 					<IconClose :size="20" />
 				</template>
@@ -96,7 +96,6 @@ import axios from '@nextcloud/axios'
 import { showError } from '@nextcloud/dialogs/toast'
 import { emit } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
-import { generateOcsUrl } from '@nextcloud/router'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcDateTime from '@nextcloud/vue/components/NcDateTime'
 import NcRichText from '@nextcloud/vue/components/NcRichText'
@@ -156,7 +155,7 @@ export default {
 		},
 	},
 
-	emits: ['remove'],
+	emits: ['remove', 'dismiss'],
 
 	expose: ['focus'],
 
@@ -276,16 +275,6 @@ export default {
 				console.error('Failed to perform action', error)
 				showError(t('notifications', 'Failed to perform action'))
 			}
-		},
-
-		onDismissNotification() {
-			// Remove right away so the animation starts without waiting for the server
-			this.$emit('remove')
-			axios
-				.delete(generateOcsUrl('apps/notifications/api/v2/notifications/{id}', { id: this.notification.notificationId }))
-				.catch(() => {
-					showError(t('notifications', 'Failed to dismiss notification'))
-				})
 		},
 	},
 }
