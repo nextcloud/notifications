@@ -279,11 +279,10 @@ export default {
 		},
 
 		onDismissNotification() {
+			// Remove right away so the animation starts without waiting for the server
+			this.$emit('remove')
 			axios
 				.delete(generateOcsUrl('apps/notifications/api/v2/notifications/{id}', { id: this.notification.notificationId }))
-				.then(() => {
-					this.$emit('remove')
-				})
 				.catch(() => {
 					showError(t('notifications', 'Failed to dismiss notification'))
 				})
