@@ -381,16 +381,21 @@ export default {
 		},
 
 		onDismissAll() {
+			// Clear right away so the animation starts without waiting for the server
+			const notifications = this.notifications
+			this.notifications = []
+			const closeTimeout = setTimeout(() => {
+				this.open = false
+			}, 3_000) // confetti-burst animation length + a bit of extra time
+			setCurrentTabAsActive(this.tabId)
 			axios
 				.delete(generateOcsUrl('apps/notifications/api/v2/notifications'))
-				.then(() => {
-					this.notifications = []
-					setTimeout(() => {
-						this.open = false
-					}, 3_000) // confetti-burst animation length + a bit of extra time
-					setCurrentTabAsActive(this.tabId)
-				})
 				.catch(() => {
+					clearTimeout(closeTimeout)
+					// Put them back, unless a fetch already did
+					if (!this.notifications.length) {
+						this.notifications = notifications
+					}
 					showError(t('notifications', 'Failed to dismiss all notifications'))
 				})
 		},
