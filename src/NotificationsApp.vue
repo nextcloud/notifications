@@ -37,7 +37,8 @@
 						:ref="(el) => setItemRef(el, notification.notificationId)"
 						:class="{ 'notification--new': notification.notificationId > lastOpenMaxId }"
 						:notification="notification"
-						@remove="onRemove(index)" />
+						@remove="onRemove(index)"
+						@dismiss="onDismiss(notification, index)" />
 				</transition-group>
 
 				<!-- No notifications -->
@@ -391,6 +392,20 @@ export default {
 				})
 				.catch(() => {
 					showError(t('notifications', 'Failed to dismiss all notifications'))
+				})
+		},
+
+		onDismiss(notification, index) {
+			// Remove right away so the animation starts without waiting for the server
+			this.onRemove(index)
+			axios
+				.delete(generateOcsUrl('apps/notifications/api/v2/notifications/{id}', { id: notification.notificationId }))
+				.catch(() => {
+					// Put it back, unless a fetch already did
+					if (!this.notifications.some((n) => n.notificationId === notification.notificationId)) {
+						this.notifications.splice(index, 0, notification)
+					}
+					showError(t('notifications', 'Failed to dismiss notification'))
 				})
 		},
 
