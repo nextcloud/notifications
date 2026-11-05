@@ -27,6 +27,7 @@
 					class="notification-wrapper"
 					name="list"
 					tag="ul"
+					:css="listAnimated"
 					@beforeLeave="onBeforeLeave">
 					<NotificationItem
 						v-if="hasThrottledPushNotifications"
@@ -39,7 +40,8 @@
 						:class="{ 'notification--new': notification.notificationId > lastOpenMaxId }"
 						:notification="notification"
 						@remove="onRemove(index)"
-						@dismiss="onDismiss(notification, index)" />
+						@dismiss="onDismiss(notification, index)"
+						@close="onClose(index)" />
 				</transition-group>
 
 				<!-- No notifications -->
@@ -219,6 +221,8 @@ export default {
 			pushEndpoints: null,
 
 			open: false,
+			/** Whether adding and removing list items is animated */
+			listAnimated: true,
 
 			/** Highest notification ID seen when the popup was last opened; items above this are "new" */
 			lastOpenMaxId: 0,
@@ -431,6 +435,21 @@ export default {
 			const neighbor = this.notifications[index + 1] || this.notifications[index - 1]
 			this.itemRefs.get(neighbor?.notificationId)?.focus()
 			this.notifications.splice(index, 1)
+		},
+
+		/**
+		 * Close the menu and remove the notification without animation,
+		 * as the list is hidden before the animation could play
+		 *
+		 * @param {number} index Index of the notification
+		 */
+		async onClose(index) {
+			this.listAnimated = false
+			this.open = false
+			this.notifications.splice(index, 1)
+			setCurrentTabAsActive(this.tabId)
+			await this.$nextTick()
+			this.listAnimated = true
 		},
 
 		/**
