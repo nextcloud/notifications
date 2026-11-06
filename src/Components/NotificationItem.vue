@@ -156,7 +156,7 @@ export default {
 		},
 	},
 
-	emits: ['remove'],
+	emits: ['remove', 'close'],
 
 	expose: ['focus'],
 
@@ -253,7 +253,9 @@ export default {
 
 				if (action.type === 'WEB') {
 					if (executeEvent.cancelAction) {
+						// The app handled the link itself, so the page stays and the menu has to close
 						event.preventDefault()
+						this.$emit('close')
 					}
 					return
 				}
