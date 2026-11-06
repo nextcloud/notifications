@@ -97,7 +97,7 @@
 </template>
 
 <script>
-import { getCurrentUser, getRequestToken } from '@nextcloud/auth'
+import { getCurrentUser } from '@nextcloud/auth'
 import axios from '@nextcloud/axios'
 import { getCapabilities } from '@nextcloud/capabilities'
 import { showError } from '@nextcloud/dialogs'
@@ -114,12 +114,13 @@ import IconClose from 'vue-material-design-icons/Close.vue'
 import IconMessageOutline from 'vue-material-design-icons/MessageOutline.vue'
 import IconNotification from './Components/IconNotification.vue'
 import NotificationItem from './Components/NotificationItem.vue'
+import { useTabSync } from './composables/useTabSync.js'
 import {
 	getNotificationsData,
-	setCurrentTabAsActive,
 } from './services/notificationsService.js'
 import { createWebNotification } from './services/webNotificationsService.js'
 import {
+	listenForWebPush,
 	setWebPush,
 } from './services/webPushService.js'
 
@@ -170,11 +171,17 @@ export default {
 			}
 		}
 
+		// Only the leader tab polls and shows browser notifications
+		const { isLeader, startTabSync, shareData } = useTabSync('notifications-' + getCurrentUser().uid)
+
 		return {
 			fairUsePolicyNotification,
 			hasThrottledPushNotifications,
 			itemRefs,
 			setItemRef,
+			isLeader,
+			startTabSync,
+			shareData,
 		}
 	},
 
@@ -186,9 +193,7 @@ export default {
 			shutdown: false,
 			notifications: [],
 			lastETag: null,
-			lastTabId: null,
 			userStatus: null,
-			tabId: null,
 
 			/**
 			 * Notifications older than this ID will not do a web notification.
@@ -230,7 +235,7 @@ export default {
 			return this.backgroundFetching
 				&& this.webNotificationsGranted
 				&& this.userStatus !== 'dnd'
-				&& this.tabId === this.lastTabId
+				&& this.isLeader
 		},
 
 		emptyContentMessage() {
@@ -266,13 +271,9 @@ export default {
 	},
 
 	mounted() {
-		this.tabId = getRequestToken() || ('' + Math.random())
 		this._oldcount = 0
 
 		this.checkWebNotificationPermissions()
-
-		// Initial call to the notification endpoint
-		this._fetch()
 
 		const hasPush = listen('notify_notification', () => {
 			this._fetchAfterNotifyPush()
@@ -283,21 +284,27 @@ export default {
 			this.hasNotifyPush = true
 		}
 
-		// set the polling interval after checking web push status
-		// if web push may be configured
-		if (webPushForBrowsersEnabled && this.webNotificationsGranted === true) {
-			// We don't fetch on push if notify_push is enabled, to avoid concurrency fetch.
-			// We could do the other way: fallback to notify_push only if we don't have
-			// web push
-			if (document.readyState === 'complete') {
-				this._setWebPush()
-			} else {
-				window.addEventListener('load', this._setWebPush, { once: true })
-			}
-		} else {
-			// Set up the background checker
-			this._setPollingInterval(this.pollIntervalBase)
+		const hasWebPush = webPushForBrowsersEnabled && this.webNotificationsGranted === true
+		if (hasWebPush) {
+			listenForWebPush(this._onWebPushActivated, this._onWebPush)
 		}
+
+		this.startTabSync(() => {
+			// The response sets the polling interval
+			this._fetch()
+			// The push subscription belongs to the browser, so only one tab registers it
+			if (hasWebPush) {
+				if (document.readyState === 'complete') {
+					this._setWebPush()
+				} else {
+					window.addEventListener('load', this._setWebPush, { once: true })
+				}
+			}
+		}, (response) => {
+			// The first data in a follower tab is its initial load
+			this._processResponse(response)
+			this.backgroundFetching = true
+		})
 
 		this._watchTabVisibility()
 		subscribe('networkOffline', this.handleNetworkOffline)
@@ -321,25 +328,27 @@ export default {
 		},
 
 		async _setWebPush() {
-			return setWebPush(
-				// onActivated=
-				(hasWebPush) => {
-					if (hasWebPush) {
-						console.debug('Has web push, slowing polling to 15 minutes')
-						this.pollIntervalBase = 15 * 60 * 1000
-					}
-					// Set polling interval for the default or new value
-					this._setPollingInterval(this.pollIntervalBase)
-				},
-				// onPush=
-				() => {
-					if (!this.hasNotifyPush) {
-						this._fetchAfterWebPush()
-					} else {
-						console.debug('Has notify_push, no need to fetch from web push.')
-					}
-				},
-			)
+			return setWebPush(this._onWebPushActivated, this._onWebPush)
+		},
+
+		_onWebPushActivated(hasWebPush) {
+			if (hasWebPush) {
+				console.debug('Has web push, slowing polling to 15 minutes')
+				this.pollIntervalBase = 15 * 60 * 1000
+			}
+			// Set polling interval for the default or new value
+			this._setPollingInterval(this.pollIntervalBase)
+		},
+
+		_onWebPush() {
+			// We don't fetch on push if notify_push is enabled, to avoid concurrency fetch.
+			// We could do the other way: fallback to notify_push only if we don't have
+			// web push
+			if (!this.hasNotifyPush) {
+				this._fetchAfterWebPush()
+			} else {
+				console.debug('Has notify_push, no need to fetch from web push.')
+			}
 		},
 
 		async onOpen() {
@@ -355,7 +364,6 @@ export default {
 					})
 			}
 
-			await setCurrentTabAsActive(this.tabId)
 			await this._fetch()
 		},
 
@@ -365,12 +373,18 @@ export default {
 		},
 
 		handleNetworkOnline() {
-			this._fetch()
+			if (this.isLeader) {
+				this._fetch()
+			}
 			console.debug('Network is online, reseting pollingInterval to ' + this.pollIntervalBase)
 			this._setPollingInterval(this.pollIntervalBase)
 		},
 
 		setupBackgroundFetcher() {
+			if (!this.isLeader) {
+				return
+			}
+
 			if (sessionKeepAlive) {
 				console.debug('Started background fetcher as session_keepalive is enabled')
 				this.interval = window.setInterval(this._backgroundFetch.bind(this), this.pollIntervalCurrent)
@@ -387,7 +401,7 @@ export default {
 					setTimeout(() => {
 						this.open = false
 					}, 3_000) // confetti-burst animation length + a bit of extra time
-					setCurrentTabAsActive(this.tabId)
+					this._fetch()
 				})
 				.catch(() => {
 					showError(t('notifications', 'Failed to dismiss all notifications'))
@@ -399,7 +413,7 @@ export default {
 			const neighbor = this.notifications[index + 1] || this.notifications[index - 1]
 			this.itemRefs.get(neighbor?.notificationId)?.focus()
 			this.notifications.splice(index, 1)
-			setCurrentTabAsActive(this.tabId)
+			this._fetch()
 		},
 
 		/**
@@ -434,42 +448,44 @@ export default {
 		 * Performs the AJAX request to retrieve the notifications
 		 */
 		_fetchAfterNotifyPush() {
-			this.backgroundFetching = true
-			if (this.hasNotifyPush && this.tabId !== this.lastTabId) {
-				console.debug('Deferring notification refresh from browser storage are notify_push event to give the last tab the chance to do it')
-				setTimeout(() => {
-					this._fetch()
-				}, 5000)
-			} else {
-				console.debug('Refreshing notifications are notify_push event')
-				this._fetch()
+			if (!this.isLeader) {
+				return
 			}
+			this.backgroundFetching = true
+			console.debug('Refreshing notifications after notify_push event')
+			this._fetch()
 		},
 
 		/**
 		 * Performs the AJAX request to retrieve the notifications
 		 *
-		 * Unlike with notify_push, we don't have to check if we are the last tab before
-		 * fetching events. The service worker sends the event to only one tab, that may
-		 * not be the last one
+		 * Unlike with notify_push, any tab fetches, not only the leader.
+		 * The service worker sends the event to only one tab, that may not be the leader
 		 */
 		_fetchAfterWebPush() {
 			this.backgroundFetching = true
 			console.debug('Refreshing notifications following web push event')
-			this._fetch(true)
+			this._fetch()
 		},
 
 		/**
 		 * Performs the AJAX request to retrieve the notifications
-		 *
-		 * @param {bool} force Refresh the list of notifications right away
 		 */
-		async _fetch(force = false) {
+		async _fetch() {
+			const response = await getNotificationsData(this.lastETag)
+			if (response.status === 200) {
+				this.shareData(response)
+			}
+			this._processResponse(response)
+		},
+
+		/**
+		 * @param {object} response notifications data fetched by this or another tab
+		 */
+		_processResponse(response) {
 			if (this.notifications.length && this.notifications[0].notificationId > this.webNotificationsThresholdId) {
 				this.webNotificationsThresholdId = this.notifications[0].notificationId
 			}
-
-			const response = await getNotificationsData(this.tabId, this.lastETag, force || !this.backgroundFetching, this.hasNotifyPush)
 
 			if (response.status === 204) {
 				// 204 No Content - Intercept when no notifiers are there.
@@ -478,7 +494,6 @@ export default {
 			} else if (response.status === 200) {
 				this.userStatus = response.headers['x-nextcloud-user-status']
 				this.lastETag = response.headers.etag
-				this.lastTabId = response.tabId
 				this.notifications = response.data
 				this.processWebNotifications(response.data)
 				console.debug('Got notification data, restoring default polling interval.')
