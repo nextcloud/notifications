@@ -176,4 +176,34 @@ class MailNotificationsTest extends TestCase {
 
 		$this->assertSame($futureSendTime, $settings->getNextSendTime());
 	}
+
+	public function testSendEmailsSkipsDefaultUserWhenDefaultIsOff(): void {
+		$settings = new Settings();
+		$settings->setUserId('user1');
+		$settings->setBatchTime(Settings::EMAIL_SEND_DEFAULT);
+		$settings->setLastSendId(0);
+		$settings->setNextSendTime(1);
+
+		$this->settingsMapper->method('getUsersByNextSendTime')
+			->willReturn([$settings]);
+		$this->userConfig->method('getValuesByUsers')
+			->willReturn([]);
+		$this->appConfig->method('getAppValueInt')
+			->with('setting_batchtime')
+			->willReturn(Settings::EMAIL_SEND_OFF);
+		$this->systemConfig->method('getSystemValueString')
+			->willReturn('');
+
+		$this->handler->expects($this->never())
+			->method('getAfterId');
+		$this->mailer->expects($this->never())
+			->method('send');
+		$this->settingsMapper->expects($this->once())
+			->method('update')
+			->with($settings);
+
+		$this->mailNotifications->sendEmails(MailNotifications::BATCH_SIZE_WEB, 2000);
+
+		$this->assertSame(0, $settings->getNextSendTime());
+	}
 }
