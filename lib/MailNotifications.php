@@ -93,6 +93,13 @@ class MailNotifications {
 				$batchTime = $defaultBatchTime;
 			}
 
+			if ($batchTime === 0) {
+				// Mails are off, so drop the user from the queue of the background job
+				$settings->setNextSendTime(0);
+				$this->settingsMapper->update($settings);
+				continue;
+			}
+
 			$userId = $settings->getUserId();
 			if (isset($userEnabled[$userId]) && $userEnabled[$userId] === false) {
 				// User is disabled, skip sending the email for them
