@@ -6,7 +6,4 @@
 import { createApp } from 'vue'
 import UserSettings from './views/UserSettings.vue'
 
-// Styles
-import '@nextcloud/dialogs/style.css'
-
 export default createApp(UserSettings).mount('#notifications-user-settings')

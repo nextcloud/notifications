@@ -1,21 +1,19 @@
 SPDX-License-Identifier: (MPL-2.0 OR Apache-2.0)
 SPDX-License-Identifier: AGPL-3.0-or-later
+SPDX-License-Identifier: Apache-2.0
 SPDX-License-Identifier: GPL-3.0-or-later
 SPDX-License-Identifier: ISC
 SPDX-License-Identifier: MIT
 SPDX-FileCopyrightText: @nextcloud/dialogs developers
-SPDX-FileCopyrightText: Anthony Fu <https://github.com/antfu>
-SPDX-FileCopyrightText: David Clark
+SPDX-FileCopyrightText: Austin Andrews
 SPDX-FileCopyrightText: David Myers <hello@davidmyers.dev>
 SPDX-FileCopyrightText: Dr.-Ing. Mario Heiderich, Cure53 <mario@cure53.de> (https://cure53.de/)
 SPDX-FileCopyrightText: Eduardo San Martin Morote
 SPDX-FileCopyrightText: Evan You
 SPDX-FileCopyrightText: GitHub Inc.
-SPDX-FileCopyrightText: Guillaume Chau <guillaume.b.chau@gmail.com>
 SPDX-FileCopyrightText: Jeff Sagal <sagalbot@gmail.com>
 SPDX-FileCopyrightText: Matt Zabriskie
 SPDX-FileCopyrightText: Nextcloud GmbH and Nextcloud contributors
-SPDX-FileCopyrightText: Varun A P
 SPDX-FileCopyrightText: atomiks
 SPDX-FileCopyrightText: escape-html developers
 
@@ -24,14 +22,14 @@ This file is generated from multiple sources. Included packages:
 	- version: 1.8.0
 	- license: MIT
 - @floating-ui/dom
-	- version: 1.1.1
-	- license: MIT
-- @floating-ui/dom
 	- version: 1.8.0
 	- license: MIT
 - @floating-ui/utils
 	- version: 0.2.12
 	- license: MIT
+- @mdi/js
+	- version: 7.4.47
+	- license: Apache-2.0
 - @nextcloud/auth
 	- version: 2.6.0
 	- license: GPL-3.0-or-later
@@ -41,8 +39,11 @@ This file is generated from multiple sources. Included packages:
 - @nextcloud/browser-storage
 	- version: 0.5.0
 	- license: GPL-3.0-or-later
+- @nextcloud/capabilities
+	- version: 1.2.1
+	- license: GPL-3.0-or-later
 - @nextcloud/dialogs
-	- version: 7.6.0
+	- version: 8.0.0
 	- license: AGPL-3.0-or-later
 - @nextcloud/event-bus
 	- version: 3.3.3
@@ -52,9 +53,6 @@ This file is generated from multiple sources. Included packages:
 	- license: GPL-3.0-or-later
 - @nextcloud/l10n
 	- version: 3.4.1
-	- license: GPL-3.0-or-later
-- @nextcloud/logger
-	- version: 3.0.3
 	- license: GPL-3.0-or-later
 - @nextcloud/router
 	- version: 3.2.0
@@ -68,12 +66,6 @@ This file is generated from multiple sources. Included packages:
 - @vitejs/plugin-vue
 	- version: 6.0.7
 	- license: MIT
-- @vueuse/core
-	- version: 15.0.0
-	- license: MIT
-- @vueuse/shared
-	- version: 15.0.0
-	- license: MIT
 - axios
 	- version: 1.20.0
 	- license: MIT
@@ -83,21 +75,9 @@ This file is generated from multiple sources. Included packages:
 - escape-html
 	- version: 1.0.3
 	- license: MIT
-- floating-vue
-	- version: 5.2.2
-	- license: MIT
-- focus-trap
-	- version: 8.2.4
-	- license: MIT
 - semver
 	- version: 7.8.5
 	- license: ISC
-- tabbable
-	- version: 6.5.1
-	- license: MIT
-- toastify-js
-	- version: 1.12.0
-	- license: MIT
 - vite
 	- version: 7.3.7
 	- license: MIT

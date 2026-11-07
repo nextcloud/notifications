@@ -7,7 +7,6 @@ import { createApp, defineAsyncComponent } from 'vue'
 
 // Styles
 import './styles/styles.scss'
-import '@nextcloud/dialogs/style.css'
 
 const NotificationsApp = defineAsyncComponent(() => import('./NotificationsApp.vue'))
 export default createApp(NotificationsApp).mount('#notifications')
