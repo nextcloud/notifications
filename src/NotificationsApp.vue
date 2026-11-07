@@ -26,7 +26,8 @@
 					v-if="notifications.length > 0"
 					class="notification-wrapper"
 					name="list"
-					tag="ul">
+					tag="ul"
+					@beforeLeave="onBeforeLeave">
 					<NotificationItem
 						v-if="hasThrottledPushNotifications"
 						:key="-2016"
@@ -37,7 +38,8 @@
 						:ref="(el) => setItemRef(el, notification.notificationId)"
 						:class="{ 'notification--new': notification.notificationId > lastOpenMaxId }"
 						:notification="notification"
-						@remove="onRemove(index)" />
+						@remove="onRemove(index)"
+						@dismiss="onDismiss(notification, index)" />
 				</transition-group>
 
 				<!-- No notifications -->
@@ -380,18 +382,42 @@ export default {
 		},
 
 		onDismissAll() {
+			// Clear right away so the animation starts without waiting for the server
+			const notifications = this.notifications
+			this.notifications = []
+			const closeTimeout = setTimeout(() => {
+				this.open = false
+			}, 3_000) // confetti-burst animation length + a bit of extra time
+			setCurrentTabAsActive(this.tabId)
 			axios
 				.delete(generateOcsUrl('apps/notifications/api/v2/notifications'))
-				.then(() => {
-					this.notifications = []
-					setTimeout(() => {
-						this.open = false
-					}, 3_000) // confetti-burst animation length + a bit of extra time
-					setCurrentTabAsActive(this.tabId)
-				})
 				.catch(() => {
+					clearTimeout(closeTimeout)
+					// Put them back, unless a fetch already did
+					if (!this.notifications.length) {
+						this.notifications = notifications
+					}
 					showError(t('notifications', 'Failed to dismiss all notifications'))
 				})
+		},
+
+		onDismiss(notification, index) {
+			// Remove right away so the animation starts without waiting for the server
+			this.onRemove(index)
+			axios
+				.delete(generateOcsUrl('apps/notifications/api/v2/notifications/{id}', { id: notification.notificationId }))
+				.catch(() => {
+					// Put it back, unless a fetch already did
+					if (!this.notifications.some((n) => n.notificationId === notification.notificationId)) {
+						this.notifications.splice(index, 0, notification)
+					}
+					showError(t('notifications', 'Failed to dismiss notification'))
+				})
+		},
+
+		onBeforeLeave(el) {
+			// Set a fixed height so it can animate to 0
+			el.style.height = `${el.offsetHeight}px`
 		},
 
 		onRemove(index) {
@@ -632,7 +658,9 @@ export default {
 		display: flex;
 		flex-direction: column;
 		max-height: calc(100vh - 50px * 5);
-		overflow: auto;
+		// Hide the horizontal overflow of the dismiss animation
+		overflow-x: hidden;
+		overflow-y: auto;
 	}
 
 	.dismiss-all {
@@ -670,6 +698,21 @@ export default {
 }
 
 .list-leave-active {
-	width: 100%;
+	// Without this, flex shrinks it at once in the scrollable list
+	flex-shrink: 0;
+	overflow: hidden;
+	// Slide out first, then close the gap
+	transition:
+		opacity var(--animation-quick) ease,
+		transform var(--animation-quick) ease,
+		height var(--animation-slow) ease var(--animation-quick),
+		padding var(--animation-slow) ease var(--animation-quick),
+		border-width var(--animation-slow) ease var(--animation-quick);
+}
+
+.list-leave-to {
+	height: 0 !important;
+	padding-block: 0 !important;
+	border-width: 0 !important;
 }
 </style>
