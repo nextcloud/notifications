@@ -388,9 +388,9 @@ export default {
 			const closeTimeout = setTimeout(() => {
 				this.open = false
 			}, 3_000) // confetti-burst animation length + a bit of extra time
-			setCurrentTabAsActive(this.tabId)
 			axios
 				.delete(generateOcsUrl('apps/notifications/api/v2/notifications'))
+				.then(() => setCurrentTabAsActive(this.tabId))
 				.catch(() => {
 					clearTimeout(closeTimeout)
 					// Put them back, unless a fetch already did
@@ -403,9 +403,10 @@ export default {
 
 		onDismiss(notification, index) {
 			// Remove right away so the animation starts without waiting for the server
-			this.onRemove(index)
+			this.removeItem(index)
 			axios
 				.delete(generateOcsUrl('apps/notifications/api/v2/notifications/{id}', { id: notification.notificationId }))
+				.then(() => setCurrentTabAsActive(this.tabId))
 				.catch(() => {
 					// Put it back, unless a fetch already did
 					if (!this.notifications.some((n) => n.notificationId === notification.notificationId)) {
@@ -421,11 +422,15 @@ export default {
 		},
 
 		onRemove(index) {
+			this.removeItem(index)
+			setCurrentTabAsActive(this.tabId)
+		},
+
+		removeItem(index) {
 			// Move focus to a neighboring notification before removing this one (focus-trap workaround)
 			const neighbor = this.notifications[index + 1] || this.notifications[index - 1]
 			this.itemRefs.get(neighbor?.notificationId)?.focus()
 			this.notifications.splice(index, 1)
-			setCurrentTabAsActive(this.tabId)
 		},
 
 		/**
