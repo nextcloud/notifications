@@ -292,10 +292,8 @@ class FeatureContext implements Context {
 		$this->assertStatusCode($this->response, $statusCode);
 	}
 
-	/**
-	 * @BeforeScenario
-	 * @AfterScenario
-	 */
+	#[BeforeScenario]
+	#[AfterScenario]
 	public function clearNotifications() {
 		$response = $this->setTestingValue('DELETE', 'apps/notificationsintegrationtesting', null);
 		$this->assertStatusCode($response, 200);
