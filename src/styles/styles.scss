@@ -121,6 +121,7 @@ svg {
 		& > .rich-text--wrapper,
 		& > a > .rich-text--wrapper {
 			padding-inline-start: 10px;
+			min-width: 0;
 			overflow-wrap: anywhere;
 		}
 	}
