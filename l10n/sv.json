@@ -35,7 +35,7 @@
     "Notifications defaults" : "Standardinställningar för aviseringar",
     "Configure the default notification settings" : "Konfigurera standardinställningar för aviseringar",
     "Send email reminders about unhandled notifications after:" : "Skicka påminnelser via e-post om ohanterade aviseringar efter:",
-    "Play sound when a new notification arrives" : "Spela upp ljud när en ny avisering kommer",
+    "Play sound when a new notification arrives" : "Spela upp ett ljud när en ny avisering kommer",
     "Play sound when a call started (requires Nextcloud Talk)" : "Spela upp ett ljud när ett samtal startar (kräver Nextcloud Talk)",
     "Web push settings" : "Inställningar för webbpush",
     "Web push is a push notification system that lets web applications send notifications to users´ mobile apps or browser, even when the app is not open in a tab." : "Webbpush är ett system för pushaviseringar som gör att webbappar kan skicka aviseringar till användarnas mobilappar eller webbläsare även när appen inte är öppen i en flik.",
