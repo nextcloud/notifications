@@ -36,6 +36,13 @@
 	-webkit-backdrop-filter: var(--filter-background-blur, none);
 }
 
+// Solid background when the theme disabled the blur filter
+@container style(--filter-background-blur: none) {
+	#notifications .header-menu__wrapper {
+		background-color: var(--color-main-background);
+	}
+}
+
 svg {
 	@keyframes pulse {
 		0% {
