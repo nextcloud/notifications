@@ -1,22 +1,29 @@
 # SPDX-FileCopyrightText: 2026 Nextcloud GmbH and Nextcloud contributors
 # SPDX-License-Identifier: CC0-1.0
-# compiled vue templates
-/build/
-/docs/
-/.tx
-/tests/
-/.git/
-/.github/
-/README.md
-/eslint.config.mjs
+/.git
+/.gitattributes
+/.github
 /.gitignore
 /.l10nignore
 /.nextcloudignore
-/node_modules/
-/npm-debug.log
+/.php-cs-fixer.cache
+/.php-cs-fixer.dist.php
+/.tx
+/build
+/docs
+/eslint.config.mjs
+/l10n/.gitkeep
 /Makefile
+/node_modules
+/npm-debug.log
+/psalm.xml
+/README.md
+/rector.php
+/src
+/stylelint.config.js
+/tests
+/vendor-bin
+/vendor/bamarni
+/vendor/bin
+/vendor/symfony
 /vite.config.mjs
-/vendor-bin/
-/vendor/bamarni/
-/vendor/bin/
-/vendor/symfony/
