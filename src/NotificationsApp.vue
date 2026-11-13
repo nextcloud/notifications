@@ -15,6 +15,7 @@
 		<template #trigger>
 			<IconNotification
 				:size="20"
+				:count="notifications.length"
 				:showDot="notifications.length !== 0 || webNotificationsGranted === null"
 				:showWarning="hasThrottledPushNotifications" />
 		</template>
