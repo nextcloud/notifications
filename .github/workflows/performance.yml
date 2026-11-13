@@ -90,7 +90,7 @@ jobs:
           persist-credentials: false
           submodules: true
           repository: nextcloud/server
-          ref: ${{ matrix.server-versions }}
+          ref: feat/noid/app-password-route-gate
 
       - name: Checkout app
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

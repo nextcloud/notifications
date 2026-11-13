@@ -10,11 +10,13 @@ declare(strict_types=1);
 
 namespace OCA\Notifications\Controller;
 
+use NCU\AppFramework\Http\Attribute\TokenScope;
 use OCA\Notifications\Exceptions\NotificationNotFoundException;
 use OCA\Notifications\Handler;
 use OCA\Notifications\Push;
 use OCA\Notifications\ResponseDefinitions;
 use OCA\Notifications\Service\ClientService;
+use OCA\Notifications\TokenScopes;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\ApiRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
@@ -38,6 +40,7 @@ use OCP\UserStatus\IUserStatus;
  * @psalm-import-type NotificationsNotification from ResponseDefinitions
  * @psalm-import-type NotificationsNotificationAction from ResponseDefinitions
  */
+#[TokenScope(scope: TokenScopes::NOTIFICATIONS_READ)]
 class EndpointController extends OCSController {
 	public function __construct(
 		string $appName,
