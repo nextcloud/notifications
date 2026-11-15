@@ -927,6 +927,17 @@ class Push {
 		// Max length of encryption is ~240, so we need to make sure the subject is shorter.
 		// Also, subtract two for encapsulating quotes will be added.
 		$maxDataLength = $maxLength - strlen((string)json_encode($data)) - 2;
+
+		if ($maxDataLength < 0 && isset($data['link'])) {
+			// Remove the link to try saving data bytes
+			unset($data['link']);
+			$maxDataLength = $maxLength - strlen((string)json_encode($data)) - 2;
+		}
+
+		if ($maxDataLength <= 0) {
+			return $data;
+		}
+
 		$data['subject'] = Util::shortenMultibyteString($notification->getParsedSubject(), $maxDataLength);
 		if ($notification->getParsedSubject() !== $data['subject']) {
 			$data['subject'] .= '…';
