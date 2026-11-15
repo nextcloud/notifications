@@ -1726,4 +1726,25 @@ sd7MhWnjKf7EX9GJD0VhLabFY/KrloJkyL7gOY21xFvmnNqwvH60eOxbVPzlYjaN
 		$push = $this->getPush();
 		$this->assertSame(1234567890, self::invokePrivate($push, 'validateTokenAndGetAge', [42]));
 	}
+
+	public static function dataEncodeNotifOverlongFields(): array {
+		return [
+			'link dropped' => [str_repeat('a', 60), 'https://cert.europa.eu/' . str_repeat('x', 100), 'Subject'],
+			'object type and id too long' => [str_repeat('/', 64), '', ''],
+		];
+	}
+
+	#[DataProvider(methodName: 'dataEncodeNotifOverlongFields')]
+	public function testEncodeNotifOverlongFields(string $objectId, string $link, string $expectedSubject): void {
+		$notification = $this->createStub(INotification::class);
+		$notification->method('getApp')->willReturn('announcementcenter');
+		$notification->method('getObjectType')->willReturn($objectId);
+		$notification->method('getObjectId')->willReturn($objectId);
+		$notification->method('getLink')->willReturn($link);
+		$notification->method('getParsedSubject')->willReturn('Subject');
+
+		$data = self::invokePrivate($this->getPush(), 'encodeNotif', [42, $notification, 200]);
+		$this->assertSame($expectedSubject, $data['subject']);
+		$this->assertArrayNotHasKey('link', $data);
+	}
 }
