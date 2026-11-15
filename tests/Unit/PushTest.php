@@ -916,4 +916,25 @@ sd7MhWnjKf7EX9GJD0VhLabFY/KrloJkyL7gOY21xFvmnNqwvH60eOxbVPzlYjaN
 		$push = $this->getPush();
 		$this->assertSame($expected, self::invokePrivate($push, 'validateToken', [42, 1234567890]));
 	}
+
+	public function testEncryptAndSignOverlongObjectTypeAndId(): void {
+		$notification = $this->createStub(INotification::class);
+		$notification->method('getApp')->willReturn('announcementcenter');
+		$notification->method('getObjectType')->willReturn(str_repeat('a', 70));
+		$notification->method('getObjectId')->willReturn(str_repeat('a', 70));
+		$notification->method('getParsedSubject')->willReturn('Subject');
+
+		$deviceKey = openssl_pkey_new(['private_key_bits' => 2048]);
+		$userKey = openssl_pkey_new(['private_key_bits' => 2048]);
+		openssl_pkey_export($userKey, $userPrivateKey);
+		$device = [
+			'deviceidentifier' => 'device',
+			'pushtokenhash' => 'hash',
+			'devicepublickey' => openssl_pkey_get_details($deviceKey)['key'],
+		];
+
+		$payload = self::invokePrivate($this->getPush(), 'encryptAndSign', [$userPrivateKey, $device, 42, $notification, false]);
+		$this->assertTrue(openssl_private_decrypt(base64_decode($payload['subject']), $decrypted, $deviceKey));
+		$this->assertSame('', json_decode($decrypted, true)['subject']);
+	}
 }
