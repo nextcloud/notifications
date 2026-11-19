@@ -9,9 +9,11 @@ declare(strict_types=1);
 
 namespace OCA\Notifications\Controller;
 
+use NCU\AppFramework\Http\Attribute\TokenScope;
 use OCA\Notifications\AppInfo\Application;
 use OCA\Notifications\Model\Settings;
 use OCA\Notifications\Model\SettingsMapper;
+use OCA\Notifications\TokenScopes;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\ApiRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
@@ -48,6 +50,7 @@ class SettingsController extends OCSController {
 	#[NoAdminRequired]
 	#[OpenAPI]
 	#[ApiRoute(verb: 'POST', url: '/api/{apiVersion}/settings', requirements: ['apiVersion' => '(v2)'])]
+	#[TokenScope(scope: TokenScopes::NOTIFICATIONS_READ)]
 	public function personal(int $batchSetting, string $soundNotification, string $soundTalk): DataResponse {
 		$this->settingsMapper->setBatchSettingForUser($this->settingsMapper->getSettingsByUser($this->userId), $batchSetting);
 
