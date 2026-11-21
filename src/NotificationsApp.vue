@@ -27,6 +27,7 @@
 					class="notification-wrapper"
 					name="list"
 					tag="ul"
+					:css="open"
 					@beforeLeave="onBeforeLeave">
 					<NotificationItem
 						v-if="hasThrottledPushNotifications"
@@ -39,7 +40,8 @@
 						:class="{ 'notification--new': notification.notificationId > lastOpenMaxId }"
 						:notification="notification"
 						@remove="onRemove(index)"
-						@dismiss="onDismiss(notification, index)" />
+						@dismiss="onDismiss(notification, index)"
+						@close="open = false" />
 				</transition-group>
 
 				<!-- No notifications -->
