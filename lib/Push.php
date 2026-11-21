@@ -58,6 +58,10 @@ class Push {
 	 */
 	public const DEVICE_LIMIT = 20;
 
+	public const DESIRED_SUBJECT_LENGTH = 160;
+	public const CONTENT_LENGTH_PUSH_PROXY = 200;
+	public const CONTENT_LENGTH_WEBPUSH = 3000;
+
 	protected ICache $cache;
 	protected ?OutputInterface $output = null;
 	protected bool $limitedOutput = true;
@@ -411,7 +415,7 @@ class Push {
 			}
 
 			try {
-				$data = $this->encodeNotif($id, $notification, 3000);
+				$data = $this->encodeNotif($id, $notification, false);
 				$urgency = $this->getNotifTopicAndUrgency($data['app'], $data['type'])['urgency'];
 				$this->wpClient->enqueue(
 					$device['endpoint'],
@@ -899,13 +903,11 @@ class Push {
 	}
 
 	/**
-	 * @param int $id
-	 * @param INotification $notification
-	 * @param int $maxLength max length of the push notification (shorter than 240 for proxy push, 3993 for webpush)
-	 * @return array
 	 * @psalm-return array{nid: int, app: string, subject: string, type: string, id: string, link?: string}
 	 */
-	protected function encodeNotif(int $id, INotification $notification, int $maxLength): array {
+	protected function encodeNotif(int $id, INotification $notification, bool $isPushProxy): array {
+		$maxLength = $isPushProxy ? self::CONTENT_LENGTH_PUSH_PROXY : self::CONTENT_LENGTH_WEBPUSH;
+
 		$data = [
 			'nid' => $id,
 			'app' => $notification->getApp(),
@@ -917,7 +919,7 @@ class Push {
 		// The link lets the service worker navigate on notificationclick; the
 		// subject budget below shrinks accordingly, very long links are dropped
 		$link = $notification->getLink();
-		if ($link !== '' && strlen($link) < 128) {
+		if (!$isPushProxy && $link !== '') {
 			$data['link'] = $link;
 		}
 
@@ -925,7 +927,7 @@ class Push {
 		// Also, subtract two for encapsulating quotes will be added.
 		$maxDataLength = $maxLength - strlen((string)json_encode($data)) - 2;
 
-		if ($maxDataLength < 0 && isset($data['link'])) {
+		if ($maxDataLength < self::DESIRED_SUBJECT_LENGTH && isset($data['link'])) {
 			// Remove the link to try saving data bytes
 			unset($data['link']);
 			$maxDataLength = $maxLength - strlen((string)json_encode($data)) - 2;
@@ -1029,7 +1031,7 @@ class Push {
 	 * @throws \RuntimeException
 	 */
 	protected function encryptAndSign(#[\SensitiveParameter] string $userPrivateKey, #[\SensitiveParameter] array $device, int $id, INotification $notification): array {
-		$data = $this->encodeNotif($id, $notification, 200);
+		$data = $this->encodeNotif($id, $notification, true);
 		$ret = $this->getNotifTopicAndUrgency($data['app'], $data['type']);
 		$priority = $ret['urgency'];
 		$type = $ret['type'];
