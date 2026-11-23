@@ -1727,15 +1727,18 @@ sd7MhWnjKf7EX9GJD0VhLabFY/KrloJkyL7gOY21xFvmnNqwvH60eOxbVPzlYjaN
 		$this->assertSame(1234567890, self::invokePrivate($push, 'validateTokenAndGetAge', [42]));
 	}
 
-	public static function dataEncodeNotifOverlongFields(): array {
+	public static function dataEncodeNotif(): array {
+		$link = 'https://cloud.example.test/apps/files';
 		return [
-			'link dropped' => [str_repeat('a', 60), 'https://cert.europa.eu/' . str_repeat('x', 100), 'Subject'],
-			'object type and id too long' => [str_repeat('/', 64), '', ''],
+			'push proxy omits a fitting link' => ['42', $link, true, 'Subject', null],
+			'web push keeps a fitting link' => ['42', $link, false, 'Subject', $link],
+			'web push drops an oversized link' => ['42', $link . str_repeat('a', Push::CONTENT_LENGTH_WEBPUSH), false, 'Subject', null],
+			'push proxy subject budget exhausted' => [str_repeat('/', 64), '', true, '', null],
 		];
 	}
 
-	#[DataProvider(methodName: 'dataEncodeNotifOverlongFields')]
-	public function testEncodeNotifOverlongFields(string $objectId, string $link, string $expectedSubject): void {
+	#[DataProvider(methodName: 'dataEncodeNotif')]
+	public function testEncodeNotif(string $objectId, string $link, bool $isPushProxy, string $expectedSubject, ?string $expectedLink): void {
 		$notification = $this->createStub(INotification::class);
 		$notification->method('getApp')->willReturn('announcementcenter');
 		$notification->method('getObjectType')->willReturn($objectId);
@@ -1743,8 +1746,13 @@ sd7MhWnjKf7EX9GJD0VhLabFY/KrloJkyL7gOY21xFvmnNqwvH60eOxbVPzlYjaN
 		$notification->method('getLink')->willReturn($link);
 		$notification->method('getParsedSubject')->willReturn('Subject');
 
-		$data = self::invokePrivate($this->getPush(), 'encodeNotif', [42, $notification, 200]);
+		$data = self::invokePrivate($this->getPush(), 'encodeNotif', [42, $notification, $isPushProxy]);
 		$this->assertSame($expectedSubject, $data['subject']);
-		$this->assertArrayNotHasKey('link', $data);
+		if ($expectedLink === null) {
+			$this->assertArrayNotHasKey('link', $data);
+		} else {
+			$this->assertArrayHasKey('link', $data);
+			$this->assertSame($expectedLink, $data['link']);
+		}
 	}
 }
