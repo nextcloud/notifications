@@ -1751,4 +1751,48 @@ sd7MhWnjKf7EX9GJD0VhLabFY/KrloJkyL7gOY21xFvmnNqwvH60eOxbVPzlYjaN
 			$this->assertSame($expectedLink, $data['link']);
 		}
 	}
+
+	public static function dataHandleProxyResponseShortensLoggedError(): array {
+		return [
+			[Http::STATUS_BAD_REQUEST, 'warning'],
+			[Http::STATUS_OK, 'info'],
+		];
+	}
+
+	#[DataProvider(methodName: 'dataHandleProxyResponseShortensLoggedError')]
+	public function testHandleProxyResponseShortensLoggedError(int $status, string $logLevel): void {
+		$this->logger->expects($this->once())
+			->method($logLevel)
+			->with($this->anything(), [
+				'error' => str_repeat('a', Push::MAX_PROXY_ERROR_LENGTH),
+				'url' => 'proxyserver',
+				'app' => 'notifications',
+			]);
+
+		$push = $this->getPush();
+		self::invokePrivate($push, 'handleProxyResponse', ['proxyserver', $status, str_repeat('a', 1024 * 1024)]);
+	}
+
+	public function testHandleProxyExceptionShortensLoggedError(): void {
+		$body = $this->createMock(StreamInterface::class);
+		$body->method('getContents')
+			->willReturn(str_repeat('a', 1024 * 1024));
+		$response = $this->createMock(ResponseInterface::class);
+		$response->method('getBody')
+			->willReturn($body);
+		$exception = $this->createMock(ServerException::class);
+		$exception->method('getResponse')
+			->willReturn($response);
+
+		$this->logger->expects($this->once())
+			->method('debug')
+			->with('Could not send notification to push server [{url}]: {error}', [
+				'error' => str_repeat('a', Push::MAX_PROXY_ERROR_LENGTH),
+				'url' => 'proxyserver',
+				'app' => 'notifications',
+			]);
+
+		$push = $this->getPush();
+		self::invokePrivate($push, 'handleProxyException', ['proxyserver', $exception]);
+	}
 }
