@@ -937,4 +937,74 @@ sd7MhWnjKf7EX9GJD0VhLabFY/KrloJkyL7gOY21xFvmnNqwvH60eOxbVPzlYjaN
 		$this->assertTrue(openssl_private_decrypt(base64_decode($payload['subject']), $decrypted, $deviceKey));
 		$this->assertSame('', json_decode($decrypted, true)['subject']);
 	}
+
+	public static function dataSendNotificationsToProxiesShortensLoggedError(): array {
+		return [
+			[Http::STATUS_BAD_REQUEST, 'warning'],
+			[Http::STATUS_OK, 'info'],
+		];
+	}
+
+	/**
+	 * @dataProvider dataSendNotificationsToProxiesShortensLoggedError
+	 */
+	public function testSendNotificationsToProxiesShortensLoggedError(int $status, string $logLevel): void {
+		$response = $this->createMock(IResponse::class);
+		$response->method('getStatusCode')
+			->willReturn($status);
+		$response->method('getBody')
+			->willReturn(str_repeat('a', 1024 * 1024));
+
+		$this->logger->expects($this->once())
+			->method($logLevel)
+			->with($this->anything(), [
+				'error' => str_repeat('a', Push::MAX_PROXY_ERROR_LENGTH),
+				'url' => 'proxyserver',
+				'app' => 'notifications',
+			]);
+
+		$this->sendNotificationsToProxy($response);
+	}
+
+	public function testSendNotificationsToProxiesShortensLoggedServerError(): void {
+		$body = $this->createMock(StreamInterface::class);
+		$body->method('getContents')
+			->willReturn(str_repeat('a', 1024 * 1024));
+		$response = $this->createMock(ResponseInterface::class);
+		$response->method('getBody')
+			->willReturn($body);
+		$exception = $this->createMock(ServerException::class);
+		$exception->method('getResponse')
+			->willReturn($response);
+
+		$this->logger->expects($this->once())
+			->method('debug')
+			->with('Could not send notification to push server [{url}]: {error}', [
+				'error' => str_repeat('a', Push::MAX_PROXY_ERROR_LENGTH),
+				'url' => 'proxyserver',
+				'app' => 'notifications',
+			]);
+
+		$this->sendNotificationsToProxy($exception);
+	}
+
+	protected function sendNotificationsToProxy(IResponse|\Exception $result): void {
+		$this->notificationManager->method('isFairUseOfFreePushService')
+			->willReturn(true);
+		$this->config->method('getAppValue')
+			->willReturnArgument(2);
+
+		$client = $this->createMock(IClient::class);
+		$this->clientService->method('newClient')
+			->willReturn($client);
+		if ($result instanceof \Exception) {
+			$client->method('post')->willThrowException($result);
+		} else {
+			$client->method('post')->willReturn($result);
+		}
+
+		$push = $this->getPush();
+		self::invokePrivate($push, 'payloadsToSend', [['proxyserver' => ['payload']]]);
+		self::invokePrivate($push, 'sendNotificationsToProxies');
+	}
 }

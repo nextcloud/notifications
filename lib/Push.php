@@ -40,6 +40,8 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Push {
+	public const MAX_PROXY_ERROR_LENGTH = 500;
+
 	protected ICache $cache;
 	protected ?OutputInterface $output = null;
 	protected bool $limitedOutput = true;
@@ -490,7 +492,7 @@ class Push {
 				// Server responded with 5xx
 				$response = $e->getResponse();
 				$body = $response->getBody()->getContents();
-				$error = \is_string($body) ? $body : ('no reason given (' . $response->getStatusCode() . ')');
+				$error = \is_string($body) ? mb_strcut($body, 0, self::MAX_PROXY_ERROR_LENGTH) : ('no reason given (' . $response->getStatusCode() . ')');
 
 				$this->log->debug('Could not send notification to push server [{url}]: {error}', [
 					'error' => $error,
@@ -528,7 +530,7 @@ class Push {
 				if ($status === Http::STATUS_TOO_MANY_REQUESTS) {
 					$this->config->setAppValue(Application::APP_ID, 'rate_limit_reached', (string)$this->timeFactory->getTime());
 				}
-				$error = $body && $bodyData === null ? $body : 'no reason given';
+				$error = $body && $bodyData === null ? mb_strcut($body, 0, self::MAX_PROXY_ERROR_LENGTH) : 'no reason given';
 				$this->printInfo('<error>Could not send notification to push server [' . $proxyServer . ']</error>', '<error>' . $error . '</error>');
 				$this->log->warning('Could not send notification to push server [{url}]: {error}', [
 					'error' => $error,
@@ -536,7 +538,7 @@ class Push {
 					'app' => 'notifications',
 				]);
 			} else {
-				$error = $body && $bodyData === null ? $body : 'no reason given';
+				$error = $body && $bodyData === null ? mb_strcut($body, 0, self::MAX_PROXY_ERROR_LENGTH) : 'no reason given';
 				$this->printInfo('<comment>Push notification sent but response was not parsable, using an outdated push proxy? [' . $proxyServer . ']</comment>', '<comment>' . $error . '</comment>');
 				$this->log->info('Push notification sent but response was not parsable, using an outdated push proxy? [{url}]: {error}', [
 					'error' => $error,
